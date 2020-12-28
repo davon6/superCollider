@@ -39,7 +39,7 @@ Buffer.freeAll;
 {Osc.ar(2  ,164.81);}.play
 
 
-{VOsc.ar(0.,164.81)!2;}.play
+{VOsc.ar(0,164.81)!2;}.play
 
 /* revelation !!*/
 
@@ -51,7 +51,7 @@ Env.new([7,0,0,0],[ 0.3872,0.1936, 0, 0]).plot
 
 (
 SynthDef(\lead, {
-	arg freq= 500, mRatio=1, cRatio=1, index =1, iScale=5, amp=0.4, atk= 0.01, rel=3, cAtk = 4 , cRel = (-4) , pan =0, rateSound = 0.0201171875,  short = 0.3872,mid=0.7744,atkE =0.3872,decE=0.1936, subsE=0, relE=0, sineRate = 0.0000000095262251, sineRangeHigh = 0, sineRangeLow=0, gate = 1, pitch = 0;
+	arg freq= 500, mRatio=1, cRatio=1, index =1, iScale=5, amp=0.04, atk= 0.01, rel=3, cAtk = 4 , cRel = (-4) , pan =0, rateSound = 0.0201171875,  short = 0.3872,mid=0.7744,atkE =0.3872,decE=0.1936, subsE=0, relE=0, sineRate = 0.0000000095262251, sineRangeHigh = 0, sineRangeLow=0, gate = 1, pitch = 0, sRteLPF = 1.3, timeSca= 0.5, pat =[[1,0,1,0,1,0,1,0],[[1/16],0,[1/16],0,[1/16],0,[1/16]], [-1,0,-1,0] ];
 	var car, mod, env, iEnv, mod2, sig, bufpos, envVoice;
 	iEnv = EnvGen.kr(
 
@@ -67,22 +67,126 @@ SynthDef(\lead, {
 	);
 
 
-	env = EnvGen.kr(
+	env = EnvGen.kr(Env.new,   [1,0,1,0],[1,1,1,1],[0,0,0,0],               //doneAction:2
 
-		Env.new([4,0,0,0],[ 0,decE, subsE, relE]),gate, doneAction:2
-		//Env.perc(atk,rel, curve:[cAtk,cRel]),
-		//doneAction:2
-	);
-/*
-	Env.new(
-	[1,1,1,1],
-	[2.5,2.5,10,3],
-	[0,0,0,0]
-	)//.plot
+		//Env.new(pat,
+
+	//	Env.new([4,0,0,0],[ 0,decE, subsE, relE]),gate, doneAction:2
 
 
+
+
+
+
+	//Env(	[1,1,0,0,1,1,0,0], [[1/4],[1/4]],[0,-1,0,0,0,-1,0,0],releaseNode: 5, loopNode: 1),timeScale:0.1
+
+
+
+
+
+		//	Env(
+		//	[1,0,1,0,1,0,1,0], patTime, patCurv ,
+
+
+
+			//[1,0,1,0],[1,1,1,1],[0,0,0,0],
+
+				/*
+
+[1,1,1,0,1,1,0,0,    1,1,1,0,1,1,0,0],
+			[ [1/16],0,[1/16],0,[1/16],0,[1/16],0, [1/16],0,[1/16],0,[1/16],0,[1/16],0],
+			[    0,0,-16,0,0,-16,0,0,  0,0,-16,0,-16,-16,0,-16],
+
+
+
+		*/
+
+
+
+
+			/*trying
+			[0     ,1,0,1,0,1,0,1,0,    1,1,1,0,1,1,0,0,    1,1,1,1,1],
+			[1/8,[1/8],0,[1/8],0,[1/8],0,[1/8],0,  [1/16],0,[1/16],0,[1/16],0,[1/16],0, [1/16],0,[1/16],0,[1/16] ],
+			[1.7,-1,0,-1,0,-1,0,-1,0,     0,0,-16,0,0,-16,0,0,  0,0,-16,0,-16],
+
+
+
+
+
+
+
+
+
+
+			[1,1,1,0,1,1,0,0  ],
+			[[1/16],0,[1/16],0,[1/16],0,[1/16],0],
+			[0,0,-16,0,0,-16,0,0],
+
+
+
+
+
+
+
+
+
+
+
+
+			[0     ,1,0,1,0,1,0,1,0,    1,1,1,0,1,1,0,0,    1,1,1,0,1],
+			[1/8,[1/8],0,[1/8],0,[1/8],0,[1/8],0,  [1/16],0,[1/16],0,[1/16],0,[1/16],0, [1/16],0,[1/16],0,[1/16] ],
+			[1.7,-1,0,-1,0,-1,0,-1,0,     0,0,-16,0,0,-16,0,0,  0,0,-16,0,-16],
+
+
+
+
+
+
+
+
+
+
+			[0     ,1,0,1,0,1,0,1,0,    1,1,1,0,1,1,0,0,    1,1,1,0,1,1,0,0],
+			[1/8,[1/8],0,[1/8],0,[1/8],0,[1/8],0,  [1/16],0,[1/16],0,[1/16],0,[1/16],0, [1/16],0,[1/16],0,[1/16],0,[1/16],0 ],
+			[1.7,-1,0,-1,0,-1,0,-1,0,     0,0,-16,0,0,-16,0,0,  0,0,-16,0,-16,-16,0,-16],
+*/
+
+
+		/*deeper
+
+		Env(
+
+
+			[1,0,1,0,1,0,1,0,    1,1,1,0,1,1,0,0,    1,1,1,0,1,1,0,0],
+			[[1/8],0,[1/8],0,[1/8],0,[1/8],0,  [1/16],0,[1/16],0,[1/16],0,[1/16],0, [1/16],0,[1/16],0,[1/16],0,[1/16],0],
+			[-1,0,-1,0,-1,0,-1,0,     0,0,-16,0,0,-16,0,0,  0,0,-16,0,-16,-16,0,-16],
 
 */
+		/*	shark
+			[1,0,1,0,1,0,1,0],
+			[[1/16],0,[1/16],0,[1/16],0,[1/16]],
+			[-1,0,-1,0],*/
+
+
+
+
+		//	BEAUTIFUL
+
+		/*	[1,1,0.2,0,1,1,0,0],
+			[[1/16],0,[1/16],0],
+			[0,0,-16,0,0,0,0,0],
+			//		[0,-1,0,0,0,-1,0,0],*/
+
+		/*	releaseNode: 5, loopNode: 1
+
+
+		),gate,timeScale:timeSca, doneAction:2
+*/
+
+
+
+	);
+
 
 
 
@@ -184,22 +288,35 @@ mod2 = SinOsc.ar(MouseX.kr(freq/10,0.0201171875), mul:freq/10 * iEnv);
 
 
 	//good good
-	car = HPF.ar(Osc.ar(0,   0.00502929687 * cRatio + mod + pitch  )* amp,100);
 
 
 
+
+/* reverse	car = LPF.ar(HPF.ar(Osc.ar(0,   0.00502929687 * cRatio + mod + pitch  )* amp,100),
+		SinOsc.ar(sRteLPF).range(100,22000));
+
+*/
+
+	car = HPF.ar(LPF.ar(Osc.ar(0,   0.00502929687 * cRatio + mod + pitch  )* amp,SinOsc.ar(sRteLPF).range(100,22000)),
+		100);
+
+
+//1.3
+
+
+	//car = SinOsc.ar(freq * cRatio + mod) * amp;
 
 sig  = LeakDC.ar(car);
 
 
-	//car = Shaper.ar(~tfBuf, SinOsc.ar(freq * cRatio + mod) * env * amp);
+
 
 
 		sig = Shaper.ar(~tfBuf,sig);
 
 
 
-	sig = Pan2.ar(sig, pan);
+	sig = Pan2.ar(sig, pan)* env;
 
 
 	Out.ar(0, sig);
@@ -211,7 +328,7 @@ Synth(\lead, [\freq, 76.midicps, \rateSound, 0.0201171875   ]);//good   0.020117
 
 s.defaultGroup.deepFree;
 
-
+s.plotTree
 
 
 

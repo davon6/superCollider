@@ -199,7 +199,6 @@ var freq = 525.12070612224, freq2 = 1899.3343179398, modAmp = 0.12875 ;
 
 
 
-
 Pdef(\p,
 
 
@@ -233,11 +232,17 @@ Pdef(\c,
 		\instrument, \snare,
 	\carHz, 41.2 ,
 		\modHz, Pseq([0,164.81 ],inf) ,
-		\modAmp,Pseq([0, 1],inf),//3727,
+		\modAmp,Pseq([0, 0.6],inf),//3727,
 	\atk, 0.00502929687,
 	\rel, 0.0968,//0.04840
 	\rel2,0.7744,//0.0968
 		\dur, Pseq([4/2], inf),
+
+	));
+Pdef(\b,
+	Pbind(
+		\instrument, \bass,
+		//\dur, Pseq([16/1], inf),
 
 	)
 	)
@@ -252,13 +257,38 @@ s.freeAll
 q = Pdef(\p).play(t);
 d = Pdef(\d).play(t);
 c = Pdef(\c).play(t);
+b = Pdef(\b).play(t);
+k = Pdef(\k).play(t);
 
+)
+(
+Pdef(\b,
+	Pbind(
+		\instrument, \bass,
+		\freq, 41.2,
+		\dur, Pseq([64/1], 1),
+		\dure, 64
 
-
-
+	)
+	)
 
 
 )
+
+
+(
+Pdef(\k,
+	Pbind(
+		\instrument, \kick,
+		\dur, Pseq([1/1], 1024),
+
+	)
+	)
+
+
+)
+
+
 	q.stop;d.stop;c.stop
 
 /*
