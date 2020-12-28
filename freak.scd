@@ -62,7 +62,7 @@ SynthDef(\lead, {
 EnvGen.kr(Env.new(
 		[0, 1.2875 ,1.2875 ,10.3   ,10.3   , 1.2875,1.2875,10.3,10.3],
 		[0,1.5488 ,0     ,1.5488  ,0       ,    1.5488,0,1.5488  ,0,1.5488  ,0,1.5488,0],
-		releaseNode:5,loopNode:1,offset:(-1.5488 )
+		releaseNode:5,loopNode:1,offset:(1/16)//(-1.5488 )
 
 
 
@@ -106,20 +106,19 @@ EnvGen.kr(Env.new(
 	b = SinOsc.kr(	LFNoise1.kr(2.575).range(0.3,1.0)).range(0,1.0);
 
 
+ c = SinOsc.kr(	LFNoise0.kr(0.64375).range(0.01,0.3872)).range(0,1.0);
 
-	env = EnvGen.kr(
+
+/*dure /4 coz of timescale*/
+	env =EnvGen.kr(
         Env(
 		levels:[0,1, 1 ,b,0,0               ],
-		times: [0,0,0.3872,0,0,0             ],
+			times: [0,(0+c),(0.3872-c),0,0,0             ],
             curve: 0,releaseNode:4,loopNode:1
         ),
 /*dury /4 coz of timescale*/
 		gate: Trig.kr( 1,dur:dure),doneAction:2
 		,timeScale:timeSca);
-
-
-
-
 
 
 

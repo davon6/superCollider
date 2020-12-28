@@ -1,7 +1,8 @@
 Synth(\lead , [\freq, 76.midicps  ]);
 
 
-t = TempoClock.new(11.703592/60).permanent_(true);
+t = TempoClock.new(151.703592/60).permanent_(true);
+
 
 
 Pbindef(\l,\freq, 100.midicps,);
@@ -11,7 +12,8 @@ Pbindef(\l,\freq, 100.midicps,);
 Pdef(\l,
 	Pbind(
 		\instrument, \lead,
-		\dur, Pseq([256/1], 1),
+		\dur, Pseq([4/1], 1),
+		\dure, 16/1,
 		\freq, 76.midicps,
 		\sRteLPF, 0.65
 
@@ -22,6 +24,9 @@ Pdef(\l,
 	);
 
 )
+
+
+Pbindef(\l,\freq, 76.midicps);
 
 l = Pdef(\l).play(t);
 
