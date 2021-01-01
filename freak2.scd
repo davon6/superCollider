@@ -13,8 +13,8 @@ Buffer.freeAll;
 
 (
 SynthDef(\lead, {
-	arg freq= 500, mRatio=1, cRatio=1, index =1, iScale=5, amp=0.01, atk= 0.01, rel=3, cAtk = 4 , cRel = (-4) , pan =0, rateSound = 0.0201171875,  short = 0.3872,mid=0.7744,atkE =0.3872,decE=0.1936, subsE=0, relE=0, sineRate = 0.0000000095262251, sineRangeHigh = 0, sineRangeLow=0, gate = 1, pitch = 0, sRteLPF = 1.3, timeSca= 0.25, dure= 1/1, which = 1, whichMod = 1, whichAmp =0,phRise= 0;
-	var car, mod,modE, env, iEnv, mod2, sig, bufpos, envVoice, filRte,lp,bp,hp,lp2,amp1,amp2,amp3, a1,a2,a3;
+	arg freq= 500, mRatio=1, cRatio=1, index =1, iScale=5, amp=0.01, atk= 0.01, rel=3, cAtk = 4 , cRel = (-4) , pan =0, rateSound = 0.0201171875,  short = 0.3872,mid=0.7744,atkE =0.3872,decE=0.1936, subsE=0, relE=0, sineRate = 0.0000000095262251, sineRangeHigh = 0, sineRangeLow=0, gate = 1, pitch = 0, sRteLPF = 1.3, timeSca= 0.25, dure= 1/1, which = 1, whichMod = 1, whichAmp =0,phRise= 0 , whichEnv = 5;
+	var car, mod,modE, env, env2, env3, env4, iEnv, mod2, sig, bufpos, envVoice, filRte,lp,bp,hp,lp2,amp1,amp2,amp3, a1,a2,a3, b1, b2, b3,b4;
 
 	//1.5488
 	//2.575
@@ -115,6 +115,10 @@ EnvGen.kr(Env.new(
 		          [0,0,0,0.7744,0,0.3872],releaseNode:7,loopNode:1),
 	gate: Trig.kr( 1,dur:dure),doneAction:2);
 
+	env2 = EnvGen.kr(Env([0,1,1   ,1,0     ,0   ,1     ,1   ,0 ,0],
+		          [0,0,1/32,0,1/32,0,1/32,0     ,1/32,0 ,1/32],releaseNode:6 ,loopNode:1),
+	gate: Trig.kr( 1,dur:dure),doneAction:2);
+
 
 
 
@@ -194,14 +198,25 @@ EnvGen.kr(Env.new(
 //slcFil
 	sig = HPF.ar(SelectX.ar(which, [lp, bp,hp,sig]),100) ;//* env* amp;
 
-//tttaaataaaa env env !!! make another row to leave open for options and formula variery
+
 
 
 	a1 = sig * amp1;
 	a2 = sig * amp2;
 	a3 = sig* amp3;
 
-	sig = Pan2.ar(SelectX.ar(whichAmp, [a1, a2,a3, sig]), pan)* amp;//*env
+	b1 =  SelectX.ar(whichAmp, [a1, a2,a3, sig]) * env;
+	b2 =  SelectX.ar(whichAmp, [a1, a2,a3, sig]) * env2;
+	//b3 =  SelectX.ar(whichAmp, [a1, a2,a3, sig]) * env3;
+	//b4 =  SelectX.ar(whichAmp, [a1, a2,a3, sig]) * env4;
+
+
+
+
+	//tttaaataaaa env env !!! make another row to leave open for options and formula variery
+
+
+	sig = Pan2.ar(SelectX.ar(whichEnv, SelectX.ar(whichAmp, [a1, a2,a3, sig])), pan)* amp;
 
 
 	Out.ar(0, sig);
