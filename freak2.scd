@@ -226,6 +226,9 @@ EnvGen.kr(Env.new(
 FreqScope.new
 s.plotTree
 
+{ RLPF.ar(Saw.ar([100,250],0.05), XLine.kr(400,8000,5), 0.05) }.play;
+
+
 Synth(\lead, [\freq, 76.midicps]);
 (
 
@@ -241,7 +244,7 @@ Pdef(\a,Pbind(\instrument,\lead, \dur,Pseq([8/1],1 ),\freq, rrand(0,88.midicps),
 
 (
 
-Pdef(\b,Pbind(\instrument,\lead, \dur,Pseq([8/1],1 ),\freq, 4, \dure,(8/1-1.70),\amp,0.1,\which,2,\whichMod,1,\whichAmp,0));
+Pdef(\b,Pbind(\instrument,\lead, \dur,Pseq([8/1],1 ),\freq, 4, \dure,(8/1-1.70),\amp,0.04,\which,2,\whichMod,1,\whichAmp,0));
 Pdef(\c,Pbind(\instrument,\lead, \dur,Pseq([8/1],1 ),\freq, 76.midicps, \dure,(8/1-1.70),\amp,0.03,\which,0,\whichMod,0,\whichAmp,1));
 Pdef(\a,Pbind(\instrument,\lead, \dur,Pseq([8/1],1 ),\freq, rrand(0,88.midicps), \dure,(8/1-1.70),\amp,0.07,\which,1,\whichMod,1,\whichAmp,2));
 //Pdef(\e,Pbind(\instrument,\lead, \dur,Pseq([16/1],inf ),\freq, rrand(0,88.midicps), \dure,16/1,\amp,0.07,\which,1,\whichMod,1,\whichAmp,2));
@@ -249,6 +252,9 @@ Pdef(\a,Pbind(\instrument,\lead, \dur,Pseq([8/1],1 ),\freq, rrand(0,88.midicps),
 
 ~seq = Ppar([Pdef(\c),Pdef(\b),Pdef(\a),~barwithBre],1);
 ~seqRising = Ppar([~barwithBre, Pdef(\w)],1);
+~bar16  = Pseq([~bassAndKick],16);
+~bar15 = Ppar([~bassPat, ~kickPat], 15);
+~barwithBre= Pseq([~bar15, ~bassRest], 1);
 ~ens = Ppar([Pdef(\p),Pdef(\d),Pdef(\sn),~bar16],1);//must include percu
 ~seqPartRising =  Ppar([~ens, Pdef(\aR),Pdef(\bR),Pdef(\cD)],1);
 ~seqPartRising.play(t)

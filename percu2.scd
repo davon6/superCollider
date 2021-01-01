@@ -97,7 +97,7 @@ Pdef(\p,
 	\carHz, Pseq([0,0,freq,freq,0,freq,freq,0],inf),
 	\modHz,Pseq([0,0,freq2,freq2,0,freq2,freq2,0],inf),
 	\modAmp, Pseq([0,0,modAmp,modAmp,0,modAmp,modAmp,0],inf),
-		\amp,0.2
+		\amp,0.05
 	)
 );
 Pdef(\d,
@@ -111,7 +111,7 @@ Pdef(\d,
 	\atk, 0,
 	\rel,0.04840,
 	\rel2,0.02420,
-		\amp, 0.2
+		\amp, 0.01
 
 	//\rel,2,
 
@@ -121,18 +121,20 @@ Pdef(\sn,
 		\instrument, \snare,
 	\carHz, 41.2 ,
 
-		\type, Pseq([\rest, \note,\rest, \rest], 8),
+		\type, Pseq([\rest,\rest ,\note, \rest], 8),
 	\atk, 0.00502929687,
 	\rel, 0.0968,//0.04840
 	\rel2,0.7744,//0.0968
 		\dur, Pseq([1/2], inf),
+		\amp,0.04
 
 	));
 
 
 )
 
-
+Safety(s).disable;
+Safety(s).enabled;
 	/*THIS WAY*/
 (
 q = Pdef(\p).play(t);
@@ -143,5 +145,8 @@ c = Pdef(\sn).play(t);
 )
 ~bar16.play(t)
 ~ens = Ppar([Pdef(\p),Pdef(\d),Pdef(\sn),~bar16],1).play(t);
+
+~ens = Ppar([Pdef(\d),~bar16],inf).play(t);
+
 ~infPlayer.stop
 q.stop;d.stop;c.stop
