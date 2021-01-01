@@ -66,7 +66,7 @@ SynthDef.new(\snare, {
 
 
 
-	Out.ar(0,HPF.ar( [car,car2]!2* modAmp ,500));
+	Out.ar(0,HPF.ar( car+car2!2* amp ,500));
 }).add;
 
 
@@ -91,20 +91,20 @@ Pdef(\p,
 
 	   Pbind(
 	\instrument, \cymb,
-	\dur,  Pseq([1/4], inf),
+	\dur,  Pseq([1/4], 64),
 	\rel, 0.3872,
 	\rel2,0.0968,
 	\carHz, Pseq([0,0,freq,freq,0,freq,freq,0],inf),
 	\modHz,Pseq([0,0,freq2,freq2,0,freq2,freq2,0],inf),
 	\modAmp, Pseq([0,0,modAmp,modAmp,0,modAmp,modAmp,0],inf),
-		\amp,0.4
+		\amp,0.2
 	)
 );
 Pdef(\d,
 
 	Pbind(
 	\instrument,\percu2,
-		\dur, Pseq([1/4], inf),
+		\dur, Pseq([1/4], 64),
 	\carHz,164.81, //Pseq([164.81,164.81,164.81,164.81,164.81,164.81,164.81,164.81],inf),
 	\modHz,164.81,//Pseq([164.81,164.81,164.81,164.81,164.81,164.81,164.81,164.81],inf),
 	//\modAmp, rrand(0, 10000).postln,
@@ -121,20 +121,14 @@ Pdef(\sn,
 		\instrument, \snare,
 	\carHz, 41.2 ,
 
-		\type, Pseq([\rest, \note,\rest, \rest], inf),
+		\type, Pseq([\rest, \note,\rest, \rest], 8),
 	\atk, 0.00502929687,
 	\rel, 0.0968,//0.04840
 	\rel2,0.7744,//0.0968
 		\dur, Pseq([1/2], inf),
 
 	));
-Pdef(\b,
-	Pbind(
-		\instrument, \bass,
-		//\dur, Pseq([16/1], inf),
 
-	)
-	)
 
 )
 
@@ -147,5 +141,7 @@ c = Pdef(\sn).play(t);
 ~infPlayer = Pseq([~bassAndKick],inf).play(t);
 
 )
+~bar16.play(t)
+~ens = Ppar([Pdef(\p),Pdef(\d),Pdef(\sn),~bar16],1).play(t);
 ~infPlayer.stop
 q.stop;d.stop;c.stop

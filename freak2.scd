@@ -99,7 +99,7 @@ EnvGen.kr(Env.new(
 			releaseNode:5,loopNode:1
         ),
 
-		gate: Trig.kr( 1,dur:dure),doneAction:2,timeScale:SinOsc.kr(0.321875).range(0.25,2));
+		gate: Trig.kr( 1,dur:dure),doneAction:2,timeScale:SinOsc.kr(1.2875).range(0.25,2));
 
 
   amp1 = EnvGen.kr(Env([0,0,0,1     ,1,0     ,0,0     ,0,0],
@@ -189,9 +189,9 @@ EnvGen.kr(Env.new(
 	lp = BLowPass4.ar(sig ,SinOsc.ar(filRte ).range(82.41,22000),6);//82.41     //Varlag ?
 
 
-	lp2 = BLowPass4.ar(sig, (SinOsc.ar(LFNoise1.kr(Lag.kr(2.575,0.0968)).range(0,7.72500)).range(0.08046875,1400)), rq: 0.3);//MouseX.kr(0,7.72500)
+	lp2 = BLowPass4.ar(sig, (SinOsc.ar(LFNoise1.kr(Lag.kr(2.575,0.0968)).range(0,7.72500)).range(82.41,1400)), rq: 0.3);//MouseX.kr(0,7.72500)
 
-	bp = BPF.ar(lp2,(SinOsc.ar(LFNoise1.kr(Lag.kr(2.575,0.0968)).range(0,7.72500)).range(0.08046875,1400)),1);
+	bp = BPF.ar(lp2,(SinOsc.ar(LFNoise1.kr(Lag.kr(2.575,0.0968)).range(0,7.72500)).range(82.41,1400)),1);
 
 	hp = BHiPass4.ar(sig, e, 0.3);
 
@@ -223,6 +223,8 @@ EnvGen.kr(Env.new(
 }).add;
 )
 
+FreqScope.new
+s.plotTree
 
 Synth(\lead, [\freq, 76.midicps]);
 (
@@ -247,10 +249,12 @@ Pdef(\a,Pbind(\instrument,\lead, \dur,Pseq([8/1],1 ),\freq, rrand(0,88.midicps),
 
 ~seq = Ppar([Pdef(\c),Pdef(\b),Pdef(\a),~barwithBre],1);
 ~seqRising = Ppar([~barwithBre, Pdef(\w)],1);
-~seqPartRising =  Ppar([~bar16, Pdef(\aR),Pdef(\bR),Pdef(\cD)],1);
+~ens = Ppar([Pdef(\p),Pdef(\d),Pdef(\sn),~bar16],1);//must include percu
+~seqPartRising =  Ppar([~ens, Pdef(\aR),Pdef(\bR),Pdef(\cD)],1);
 ~seqPartRising.play(t)
 
-~seqRising.play(t);
+~seqRising.play(t)
+;
 
 ~show = Pseq([~seq,~seqRising, ~seq,~seqPartRising],inf).play(t);
 
@@ -279,8 +283,8 @@ Pdef(\aR,Pbind(\instrument,\lead, \dur,Pseq([8/1],1 ),\freq, rrand(0,88.midicps)
 ~seq = Ppar([Pdef(\c),Pdef(\b),Pdef(\a),~infPlayer],1).play(t);
 
 
-
-
+//testing
+Pdef(\t4,Pbind(\instrument,\lead, \dur,Pseq([8/1],inf ),\freq, 4, \dure,(8/1-1.70),\amp,0.1,\which,2,\whichMod,1,\whichAmp,1)).play(t);
 
 
 
