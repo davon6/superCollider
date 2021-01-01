@@ -16,7 +16,7 @@ SynthDef.new(\cymb, {
 
 	car2 = WhiteNoise.ar(modAmp) * env2 ;
 
-sig = HPF.ar(car+car2!2,3000)* amp;
+	sig = HPF.ar(car+car2!2,3000)* [0.0555,amp];
 
 	Out.ar(0, sig);
 }).add;
@@ -39,7 +39,7 @@ SynthDef.new(\percu2, {
 
 car2 = WhiteNoise.ar(0.12875) * env2 ;
 
-sig = HPF.ar(car+car2,3000)!2* amp;
+	sig = HPF.ar(car+car2,3000)!2* [amp,0.027];
 
 
 	Out.ar(0, sig );
@@ -97,7 +97,7 @@ Pdef(\p,
 	\carHz, Pseq([0,0,freq,freq,0,freq,freq,0],inf),
 	\modHz,Pseq([0,0,freq2,freq2,0,freq2,freq2,0],inf),
 	\modAmp, Pseq([0,0,modAmp,modAmp,0,modAmp,modAmp,0],inf),
-		\amp,0.05
+		\amp,0.02
 	)
 );
 Pdef(\d,
@@ -146,7 +146,7 @@ c = Pdef(\sn).play(t);
 ~bar16.play(t)
 ~ens = Ppar([Pdef(\p),Pdef(\d),Pdef(\sn),~bar16],1).play(t);
 
-~ens = Ppar([Pdef(\d),~bar16],inf).play(t);
+~ens = Ppar([Pdef(\p),Pdef(\d),~bar16],inf).play(t);
 
 ~infPlayer.stop
 q.stop;d.stop;c.stop
