@@ -1,6 +1,6 @@
 (
 SynthDef(\lead, {
-	arg freq= 500, mRatio=1, cRatio=1, index =1, iScale=5, amp=0.01, atk= 0.01, rel=3, cAtk = 4 , cRel = (-4) , pan =0, rateSound = 0.0201171875,  short = 0.3872,mid=0.7744,atkE =0.3872,decE=0.1936, subsE=0, relE=0, sineRate = 0.0000000095262251, sineRangeHigh = 0, sineRangeLow=0, gate = 1, pitch = 0, sRteLPF = 1.3, timeSca= 0.25, dure= 1/1, which = 1, whichMod = 1, whichAmp =0,phRise= 0 , whichEnv = 0,timeSca2 =1, in=0, dec=0.645, mix=0.04, lpf1=2000, lpf2= 6000, predel=0.075,out=0,ftime1= 0, ftime2 =1.5488, ftime3 =1.5488;
+	arg freq= 500, mRatio=1, cRatio=1, index =1, iScale=5, amp=0.01, atk= 0.01, rel=3, cAtk = 4 , cRel = (-4) , pan =0, rateSound = 0.0201171875,  short = 0.3872,mid=0.7744,atkE =0.3872,decE=0.1936, subsE=0, relE=0, sineRate = 0.0000000095262251, sineRangeHigh = 0, sineRangeLow=0, gate = 1, pitch = 0, sRteLPF = 1.3, timeSca= 0.25, dure= 1/1, which = 1, whichMod = 1, whichAmp =0,phRise= 0 , whichEnv = 0,timeSca2 =1, in=0, dec=0.645, mix=0.04, lpf1=2000, lpf2= 6000, predel=0.075,out=0,ftime1= 0, ftime2 =1.5488, ftime3 =1.5488,relNode =6, phLF =0,rteLF=1.2875;
 
 
 	var car, mod,modE,modE2, env, env2, env3, env4, iEnv, mod2, sig, bufpos, envVoice, filRte,lp,bp,hp,lp2,amp1,amp2,amp3, a1,a2,a3, b1, b2, b3,b4,dry, wet;
@@ -11,7 +11,7 @@ SynthDef(\lead, {
 	//5.15
 	filRte =
 EnvGen.kr(Env.new(
-		[0     , 1.2875,1.2875     ,10.3    ,10.3  , 1.2875,1.2875,10.3,10.3],
+		[0     , rteLF,rteLF     ,10.3    ,10.3  , rteLF,rteLF,10.3,10.3],
 		[ftime1,ftime2 ,ftime1     ,ftime3  ,ftime1, ftime2,0     ,ftime3  ,ftime1,ftime2  ,ftime1,ftime2,ftime1],
 		releaseNode:5,loopNode:1,offset:(1/16)//-1.5488 ) //(1/16)//  here!!!
 
@@ -104,8 +104,10 @@ EnvGen.kr(Env.new(
 		          [0,0,0,0.7744,0,0.3872],releaseNode:7,loopNode:1),
 	gate: Trig.kr( 1,dur:dure),doneAction:2);
 
+
+
 	env2 = EnvGen.kr(Env([0,1,1   ,1,0     ,0   ,1     ,1   ,0 ,0],
-		          [0,0,1/32,0,1/32,0,1/32,0     ,1/32,0 ,1/32],releaseNode:6 ,loopNode:1),
+		          [0,0,1/32,0,1/32,0,1/32,0     ,1/32,0 ,1/32],releaseNode:relNode ,loopNode:1),
 	gate: Trig.kr( 1,dur:dure),timeScale:timeSca2,doneAction:2);
 
 
@@ -134,9 +136,14 @@ EnvGen.kr(Env.new(
 	modE = SinOsc.ar(freq * mRatio + mod2*SinOsc.kr(sineRate,phRise).range([sineRangeLow]), mul:freq * mRatio * iEnv)!2;
 
 	/*modE2 = SinOsc.ar( LFTri.ar(1).range(SinOsc.ar(0.000001).range( freq * mRatio + mod2,0.0201171875),0.0201171875)*SinOsc.kr(sineRate,phRise).range([sineRangeLow]), mul:freq * mRatio * iEnv)!2;
-*/
 
-	modE2 = SinOsc.ar(VarLag.ar(LFNoise0.kr(3).range( freq * mRatio + mod2,0.0201171875),0.01,-1)*SinOsc.kr(sineRate,phRise).range([sineRangeLow]), mul:freq * mRatio * iEnv)!2;
+		modE2 = SinOsc.ar(VarLag.ar(LFNoise0.kr(0.0000000003).range( freq * mRatio + mod2,0.0201171875),0.000000001,-1,5)*SinOsc.kr(sineRate,phRise).range([sineRangeLow]), mul:freq * mRatio * iEnv)!2;
+
+
+
+	*/
+//0.0201171875
+	modE2 = SinOsc.ar(Lag.ar(  freq * mRatio + mod2,0.6)*SinOsc.kr(sineRate,phRise).range([sineRangeLow]), mul:freq * mRatio * iEnv)!2;
 
 
 
@@ -182,7 +189,7 @@ EnvGen.kr(Env.new(
 
 	//lp = LPF.ar(sig ,SinOsc.ar(filRte ).range(82.41,22000));//82.41     //Varlag ?
 
-	lp = BLowPass4.ar(sig ,SinOsc.ar(filRte ).range(82.41,22000),6);//82.41     //Varlag ?
+	lp = BLowPass4.ar(sig ,SinOsc.ar(filRte,phLF ).range(82.41,22000),6);//82.41     //Varlag ?
 
 
 	lp2 = BLowPass4.ar(sig, (SinOsc.ar(LFNoise1.kr(Lag.kr(2.575,0.0968)).range(0,7.72500)).range(82.41,1400)), rq: 0.3);//MouseX.kr(0,7.72500)

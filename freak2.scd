@@ -278,7 +278,7 @@ Pdef(\cD3,Pbind(\instrument,\lead, \dur,Pseq([1/1],1 ),\freq, 76.midicps, \dure,
 ~ens.play(t)
 
 
-
+//play with ticmescal
 Pdef(\cD4,Pbind(\instrument,\lead, \dur,Pseq([1/1],1 ),\freq, 76.midicps, \dure,(60/151.703592*1),\amp,0.02,\which,3,\whichMod,0,\whichEnv,2,\whichAmp,3,\sineRangeLow, (-10.4),\sineRate,0.01005859375,\phRise,(0),\timeSca2,2));
 Pdef(\cD5,Pbind(\instrument,\lead, \dur,Pseq([1/1],1 ),\freq, 76.midicps, \dure,(60/151.703592*1),\amp,0.02,\which,3,\whichMod,0,\whichEnv,2,\whichAmp,3,\sineRangeLow, (-10.4),\sineRate,0.01005859375,\phRise,(0),\timeSca2,1));
 Pdef(\cD6,Pbind(\instrument,\lead, \dur,Pseq([1/1],1 ),\freq, 76.midicps, \dure,(60/151.703592*1),\amp,0.02,\which,3,\whichMod,0,\whichEnv,2,\whichAmp,3,\sineRangeLow, (-10.4),\sineRate,0.01005859375,\phRise,(0),\timeSca2,4));
@@ -291,7 +291,7 @@ Pdef(\cD8b,Pbind(\instrument,\lead, \dur,Pseq([1/2],1 ),\freq, 76.midicps, \dure
 Pdef(\cD4),Pdef(\cD5),Pdef(\cD6b),Pdef(\cD7),Pdef(\cD8),Pdef(\cD4),Pdef(\cD5),Pdef(\cD6),Pdef(\cD7),Pdef(\cD8b)],1);
 ~bwww2= Ppar([~ens2, ~broken2], 1);
 
-~bwww3= Pseq([~bwww, ~bwww2], inf).play(t);
+~bwww3= Pseq([~bwww, ~bwww2], 1);
 
 //~seqPartRising.play(t)
 

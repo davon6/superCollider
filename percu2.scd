@@ -196,7 +196,7 @@ c = Pdef(\sn).play(t);
 ~ens = Ppar([Pdef(\d),Pdef(\e),Pdef(\sn),~bar15],inf).play(t);//lol atart ok THIS ONE
 ~ens15Cym = Pseq([Ppar([Pdef(\e15),~bar15],1),~bassRest],inf).play(t);//15 cymbal
 ~ens15Hat = Pseq([Ppar([Pdef(\d15),~bar15],1),~bassRest],inf).play(t);
-~ens15Perc = Pseq([Ppar([Pdef(\d15),Pdef(\e15),Pdef(\sn15),~bar15],1),~bassRest],inf).play(t);
+~ens15Perc = Pseq([Ppar([Pdef(\d15),Pdef(\e15),Pdef(\sn15),~bar15],1),~bassRest],1);
 ~ens = Ppar([Pdef(\t),Pdef(\p),Pdef(\sn),~bar15],1).play(t);
 //15 bar percu to come
 
