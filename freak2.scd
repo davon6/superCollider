@@ -3,6 +3,7 @@ s.reboot;
 s.quit
 
 Server.default.options.outDevice_("Audient iD14");
+Server.killAll
 
 Server.default.options.outDevice_("Built-in Output");
 
@@ -13,7 +14,7 @@ Buffer.freeAll;
 
 (
 SynthDef(\lead, {
-	arg freq= 500, mRatio=1, cRatio=1, index =1, iScale=5, amp=0.01, atk= 0.01, rel=3, cAtk = 4 , cRel = (-4) , pan =0, rateSound = 0.0201171875,  short = 0.3872,mid=0.7744,atkE =0.3872,decE=0.1936, subsE=0, relE=0, sineRate = 0.0000000095262251, sineRangeHigh = 0, sineRangeLow=0, gate = 1, pitch = 0, sRteLPF = 1.3, timeSca= 0.25, dure= 1/1, which = 1, whichMod = 1, whichAmp =0,phRise= 0 , whichEnv = 0;
+	arg freq= 500, mRatio=1, cRatio=1, index =1, iScale=5, amp=0.01, atk= 0.01, rel=3, cAtk = 4 , cRel = (-4) , pan =0, rateSound = 0.0201171875,  short = 0.3872,mid=0.7744,atkE =0.3872,decE=0.1936, subsE=0, relE=0, sineRate = 0.0000000095262251, sineRangeHigh = 0, sineRangeLow=0, gate = 1, pitch = 0, sRteLPF = 1.3, timeSca= 0.25, dure= 1/1, which = 1, whichMod = 1, whichAmp =0,phRise= 0 , whichEnv = 0,timeSca2 =1;
 	var car, mod,modE, env, env2, env3, env4, iEnv, mod2, sig, bufpos, envVoice, filRte,lp,bp,hp,lp2,amp1,amp2,amp3, a1,a2,a3, b1, b2, b3,b4;
 
 	//1.5488
@@ -117,7 +118,7 @@ EnvGen.kr(Env.new(
 
 	env2 = EnvGen.kr(Env([0,1,1   ,1,0     ,0   ,1     ,1   ,0 ,0],
 		          [0,0,1/32,0,1/32,0,1/32,0     ,1/32,0 ,1/32],releaseNode:6 ,loopNode:1),
-	gate: Trig.kr( 1,dur:dure),doneAction:2);
+	gate: Trig.kr( 1,dur:dure),timeScale:timeSca2,doneAction:2);
 
 
 
@@ -246,9 +247,20 @@ Pdef(\a,Pbind(\instrument,\lead, \dur,Pseq([8/1],1 ),\freq, rrand(0,88.midicps),
 
 Pdef(\b,Pbind(\instrument,\lead, \dur,Pseq([8/1],1 ),\freq, 4, \dure,(8/1-1.70),\amp,0.03,\which,2,\whichMod,1,\whichAmp,0));
 Pdef(\c,Pbind(\instrument,\lead, \dur,Pseq([8/1],1 ),\freq, 76.midicps, \dure,(8/1-1.70),\amp,0.02,\which,0,\whichMod,0,\whichAmp,1));
-Pdef(\a,Pbind(\instrument,\lead, \dur,Pseq([8/1],1 ),\freq, rrand(0,88.midicps), \dure,(8/1-1.70),\amp,0.05,\which,1,\whichMod,1,\whichAmp,2));
+Pdef(\a,Pbind(\instrument,\lead, \dur,Pseq([8/1],1 ),\freq, rrand(0,88.midicps), \dure,(8/1-1.70),\amp,0.03,\which,1,\whichMod,1,\whichAmp,2));
 //Pdef(\e,Pbind(\instrument,\lead, \dur,Pseq([16/1],inf ),\freq, rrand(0,88.midicps), \dure,16/1,\amp,0.07,\which,1,\whichMod,1,\whichAmp,2));
+Pdef(\aR,Pbind(\instrument,\lead, \dur,Pseq([8/1],1 ),\freq, rrand(0,88.midicps), \dure,(8/1-1.70),\amp,0.03,\which,1,\whichMod,1,\whichAmp,2,\sineRangeLow,(-10.4),\sineRate,0.0201171875,\phRise,(15)));
+Pdef(\bR,Pbind(\instrument,\lead, \dur,Pseq([8/1],1 ),\freq, 4, \dure,(8/1-1.70),\amp,0.03,\which,2,\whichMod,1,\whichAmp,0,\sineRangeLow, (-10.4),\sineRate,0.01005859375,\phRise,(15)));
+Pdef(\cD,Pbind(\instrument,\lead, \dur,Pseq([8/1],1 ),\freq, 76.midicps, \dure,(8/1-1.70),\amp,0.02,\which,0,\whichMod,0,\whichAmp,1,\sineRangeLow, (-10.4),\sineRate,0.01005859375,\phRise,(0)));
+
+Pdef(\w,Pbind(\instrument,\lead, \dur,Pseq([16/1],1 ),\freq, 76.midicps, \dure,(8/1-1.7),\amp,0.02,\which,3,\whichMod,0,\whichAmp,3,\sineRangeLow, (-10.4),\sineRate,0.01005859375,\phRise,(15)));
+
+
+Pdef(\cD2,Pbind(\instrument,\lead, \dur,Pseq([15/1],1 ),\freq, 76.midicps, \dure,(60/151.703592*15),\amp,0.02,\which,3,\whichMod,0,\whichAmp,3,\sineRangeLow, (-10.4),\sineRate,0.01005859375,\phRise,(0)));
+Pdef(\cD3,Pbind(\instrument,\lead, \dur,Pseq([1/1],1 ),\freq, 76.midicps, \dure,(60/151.703592*1),\amp,0.02,\which,3,\whichMod,0,\whichEnv,2,\whichAmp,3,\sineRangeLow, (-10.4),\sineRate,0.01005859375,\phRise,(0)));
 )
+(15/1)-8.70
+//,\type, Pseq([\rest, \note, \note, \note], inf)
 
 ~seq = Ppar([Pdef(\c),Pdef(\b),Pdef(\a),~barwithBre],1);
 ~seqRising = Ppar([~barwithBre, Pdef(\w)],1);
@@ -256,12 +268,35 @@ Pdef(\a,Pbind(\instrument,\lead, \dur,Pseq([8/1],1 ),\freq, rrand(0,88.midicps),
 ~bar15 = Ppar([~bassPat, ~kickPat], 15);
 ~bassRest = Ppar([~kickPat, ~bassRest], 1);
 ~barwithBre= Pseq([~bar15, ~bassRest], 1);
-~ens = Ppar([Pdef(\p),Pdef(\d),Pdef(\sn),~bar16],1);//must include percu
+~ens = Ppar([Pdef(\e),Pdef(\d),Pdef(\sn),~bar16],1);//must include percu
+~ens2 = Ppar([Pdef(\e),Pdef(\d),Pdef(\sn),~bar15],1);//must include percu
 ~seqPartRising =  Ppar([~ens, Pdef(\aR),Pdef(\bR),Pdef(\cD)],1);
+~ens15Perc = Pseq([Ppar([Pdef(\d15),Pdef(\e15),Pdef(\sn15),~bar15],1),~bassRest],inf);
+~broken  = Pseq([Pdef(\cD2),Pdef(\cD3)],1);
+~bwww = Ppar([~ens, ~broken], 1);
+
+~ens.play(t)
+
+
+
+Pdef(\cD4,Pbind(\instrument,\lead, \dur,Pseq([1/1],1 ),\freq, 76.midicps, \dure,(60/151.703592*1),\amp,0.02,\which,3,\whichMod,0,\whichEnv,2,\whichAmp,3,\sineRangeLow, (-10.4),\sineRate,0.01005859375,\phRise,(0),\timeSca2,2));
+Pdef(\cD5,Pbind(\instrument,\lead, \dur,Pseq([1/1],1 ),\freq, 76.midicps, \dure,(60/151.703592*1),\amp,0.02,\which,3,\whichMod,0,\whichEnv,2,\whichAmp,3,\sineRangeLow, (-10.4),\sineRate,0.01005859375,\phRise,(0),\timeSca2,1));
+Pdef(\cD6,Pbind(\instrument,\lead, \dur,Pseq([1/1],1 ),\freq, 76.midicps, \dure,(60/151.703592*1),\amp,0.02,\which,3,\whichMod,0,\whichEnv,2,\whichAmp,3,\sineRangeLow, (-10.4),\sineRate,0.01005859375,\phRise,(0),\timeSca2,4));
+Pdef(\cD6b,Pbind(\instrument,\lead, \dur,Pseq([1/1],1 ),\freq, 76.midicps, \dure,(60/151.703592*1),\amp,0.02,\which,3,\whichMod,0,\whichEnv,2,\whichAmp,3,\sineRangeLow, (-10.4),\sineRate,0.01005859375,\phRise,(0),\timeSca2,8));
+Pdef(\cD7,Pbind(\instrument,\lead, \dur,Pseq([1/2],1 ),\freq, 76.midicps, \dure,(60/151.703592*1/2),\amp,0.02,\which,3,\whichMod,0,\whichEnv,2,\whichAmp,3,\sineRangeLow, (-10.4),\sineRate,0.01005859375,\phRise,(0),\timeSca2,1));
+Pdef(\cD8,Pbind(\instrument,\lead, \dur,Pseq([1/2],1 ),\freq, 76.midicps, \dure,(60/151.703592*1/2),\amp,0.02,\which,3,\whichMod,0,\whichEnv,2,\whichAmp,3,\sineRangeLow, (-10.4),\sineRate,0.01005859375,\phRise,(0),\timeSca2,2));
+Pdef(\cD8b,Pbind(\instrument,\lead, \dur,Pseq([1/2],1 ),\freq, 76.midicps, \dure,(60/151.703592*1/2),\amp,0.02,\which,3,\whichMod,0,\whichEnv,2,\whichAmp,3,\sineRangeLow, (-10.4),\sineRate,0.01005859375,\phRise,(0),\timeSca2,4));
+
+~broken2  = Pseq([Pdef(\cD4),Pdef(\cD5),Pdef(\cD6b),Pdef(\cD7),Pdef(\cD8),Pdef(\cD4),Pdef(\cD5),Pdef(\cD6),Pdef(\cD7),Pdef(\cD8),
+Pdef(\cD4),Pdef(\cD5),Pdef(\cD6b),Pdef(\cD7),Pdef(\cD8),Pdef(\cD4),Pdef(\cD5),Pdef(\cD6),Pdef(\cD7),Pdef(\cD8b)],1);
+~bwww2= Ppar([~ens2, ~broken2], 1);
+
+~bwww3= Pseq([~bwww, ~bwww2], inf).play(t);
+
 //~seqPartRising.play(t)
 
 
-
+s.plotTree
 
 
 ~seqRising.play(t)
@@ -276,7 +311,7 @@ Pdef(\w,Pbind(\instrument,\lead, \dur,Pseq([16/1],1 ),\freq, 76.midicps, \dure,(
 
 
 (
-Pdef(\aR,Pbind(\instrument,\lead, \dur,Pseq([8/1],1 ),\freq, rrand(0,88.midicps), \dure,(8/1-1.70),\amp,0.05,\which,1,\whichMod,1,\whichAmp,2,\sineRangeLow,(-10.4),\sineRate,0.0201171875,\phRise,(15)));
+Pdef(\aR,Pbind(\instrument,\lead, \dur,Pseq([8/1],1 ),\freq, rrand(0,88.midicps), \dure,(8/1-1.70),\amp,0.03,\which,1,\whichMod,1,\whichAmp,2,\sineRangeLow,(-10.4),\sineRate,0.0201171875,\phRise,(15)));
 Pdef(\bR,Pbind(\instrument,\lead, \dur,Pseq([8/1],1 ),\freq, 4, \dure,(8/1-1.70),\amp,0.03,\which,2,\whichMod,1,\whichAmp,0,\sineRangeLow, (-10.4),\sineRate,0.01005859375,\phRise,(15)));
 Pdef(\cD,Pbind(\instrument,\lead, \dur,Pseq([8/1],1 ),\freq, 76.midicps, \dure,(8/1-1.70),\amp,0.02,\which,0,\whichMod,0,\whichAmp,1,\sineRangeLow, (-10.4),\sineRate,0.01005859375,\phRise,(0)));
 )
@@ -297,7 +332,9 @@ Pdef(\aR,Pbind(\instrument,\lead, \dur,Pseq([8/1],1 ),\freq, rrand(0,88.midicps)
 //testing
 Pdef(\t4,Pbind(\instrument,\lead, \dur,Pseq([8/1],inf ),\freq, 4, \dure,(8/1-1.70),\amp,0.1,\which,2,\whichMod,1,\whichAmp,1)).play(t);
 
+s.options.memSize = 1048576;
 
+s.reboot;
 
 
 //now ~seqRising

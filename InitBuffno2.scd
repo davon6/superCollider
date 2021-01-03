@@ -1,3 +1,8 @@
+
+
+
+s.options.memSize = 1048576;
+
 (
 s.waitForBoot({
 	var numSegs;

@@ -181,11 +181,13 @@ Pbindef(\l, \pitch,Pseq([f.(),f.(),f.(),f.(),f.(),f.(),f.(),f.(),f.(),f.(),f.()]
 /*math function*/
 v = 1;
 
+~beat = { ~beat =  60/151.703592};
+~beat.()
 
+~beat
 
 f = { v =  v + v; };
 f.()
-
 v;
 
 

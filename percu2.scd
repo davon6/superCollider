@@ -16,7 +16,7 @@ SynthDef.new(\cymb, {
 
 	car2 = WhiteNoise.ar(modAmp) * env2 ;
 
-	sig = HPF.ar(car+car2!2,3000)* [0.0555,amp];
+	sig = HPF.ar(car+car2!2,3000)* [amp+0.00555,amp];
 
 	Out.ar(0, sig);
 }).add;
@@ -39,7 +39,7 @@ SynthDef.new(\percu2, {
 
 car2 = WhiteNoise.ar(0.12875) * env2 ;
 
-	sig = HPF.ar(car+car2,3000)!2* [amp,0.027];
+	sig = HPF.ar(car+car2,3000)!2* [amp,amp+0.007];
 
 
 	Out.ar(0, sig );
@@ -72,7 +72,7 @@ SynthDef.new(\snare, {
 
 
 )
-
+Synth(\cymb)
 
 
 (
@@ -80,25 +80,72 @@ var freq = 525.12070612224, freq2 = 1899.3343179398, modAmp = 0.12875 ;
 
 
 
-
-
-
-
-
-Pdef(\p,
-
-
-
+Pdef(\e15,
 	   Pbind(
 	\instrument, \cymb,
-	\dur,  Pseq([1/4], 64),
+		\type, Pseq([\rest,\rest,\note,\note ,\rest,\note ,\note, \rest],inf),//\type, Pseq([\rest,\rest ,\note, \note,\rest,\note ,\note, \rest], inf),
+	\dur,  Pseq([1/4],60 ),
 	\rel, 0.3872,
 	\rel2,0.0968,
-	\carHz, Pseq([0,0,freq,freq,0,freq,freq,0],inf),
-	\modHz,Pseq([0,0,freq2,freq2,0,freq2,freq2,0],inf),
-	\modAmp, Pseq([0,0,modAmp,modAmp,0,modAmp,modAmp,0],inf),
-		\amp,0.02
-	)
+
+
+	\carHz, 525.12070612224,
+	\modHz,1899.3343179398,
+	\modAmp, 0.12875 ,
+		\amp,0.08
+	);
+);
+
+Pdef(\sn15,
+	Pbind(
+		\instrument, \snare,
+	\carHz, 41.2 ,
+
+		\type, Pseq([\rest,\rest ,\note, \rest], 7),
+	\atk, 0.00502929687,
+	\rel, 0.0968,//0.04840
+	\rel2,0.7744,//0.0968
+		\dur, Pseq([1/2], inf),
+		\amp,0.04
+
+	));
+
+
+
+Pdef(\d15,
+
+	Pbind(
+	\instrument,\percu2,
+		\dur, Pseq([1/4], 60),
+	\carHz,164.81, //Pseq([164.81,164.81,164.81,164.81,164.81,164.81,164.81,164.81],inf),
+	\modHz,164.81,//Pseq([164.81,164.81,164.81,164.81,164.81,164.81,164.81,164.81],inf),
+	//\modAmp, rrand(0, 10000).postln,
+	\atk, 0,
+	\rel,0.04840,
+	\rel2,0.02420,
+		\amp, 0.08
+
+	//\rel,2,
+
+	));
+
+
+
+
+Pdef(\e,
+	   Pbind(
+	\instrument, \cymb,
+		\type, Pseq([\rest,\rest,\note,\note ,\rest,\note ,\note, \rest],inf),//\type, Pseq([\rest,\rest ,\note, \note,\rest,\note ,\note, \rest], inf),
+	\dur,  Pseq([1/4],64 ),
+	\rel, 0.3872,
+	\rel2,0.0968,
+
+
+	\carHz, 525.12070612224,
+	\modHz,1899.3343179398,
+	\modAmp, 0.12875 ,
+		\amp,0.08
+	);
 );
 Pdef(\d,
 
@@ -111,7 +158,7 @@ Pdef(\d,
 	\atk, 0,
 	\rel,0.04840,
 	\rel2,0.02420,
-		\amp, 0.01
+		\amp, 0.08
 
 	//\rel,2,
 
@@ -132,7 +179,7 @@ Pdef(\sn,
 
 
 )
-
+s.plotTree
 Safety(s).disable;
 Safety(s).enabled;
 	/*THIS WAY*/
@@ -144,9 +191,20 @@ c = Pdef(\sn).play(t);
 
 )
 ~bar16.play(t)
-~ens = Ppar([Pdef(\p),Pdef(\d),Pdef(\sn),~bar16],1).play(t);
 
-~ens = Ppar([Pdef(\p),Pdef(\d),~bar16],inf).play(t);
+/*START WITH THIS ONE*/
+~ens = Ppar([Pdef(\d),Pdef(\e),Pdef(\sn),~bar15],inf).play(t);//lol atart ok THIS ONE
+~ens15Cym = Pseq([Ppar([Pdef(\e15),~bar15],1),~bassRest],inf).play(t);//15 cymbal
+~ens15Hat = Pseq([Ppar([Pdef(\d15),~bar15],1),~bassRest],inf).play(t);
+~ens15Perc = Pseq([Ppar([Pdef(\d15),Pdef(\e15),Pdef(\sn15),~bar15],1),~bassRest],inf).play(t);
+~ens = Ppar([Pdef(\t),Pdef(\p),Pdef(\sn),~bar15],1).play(t);
+//15 bar percu to come
+
+//~bassRest can be used at start too
+~ens = Ppar([Pdef(\t),Pdef(\sn),~bar15],inf).play(t);//lol atart ok
+~seq = Ppar([Pdef(\c),Pdef(\b),Pdef(\a),~bar16],1).play(t);
+~ens = Ppar([Pdef(\t),Pdef(\p),Pdef(\sn),~bar15,Pdef(\c),Pdef(\b),Pdef(\a)],inf).play(t);//lol atart ok
+~ens = Ppar([Pdef(\d),~bar16,Pdef(\sn)],inf).play(t);
 
 ~infPlayer.stop
 q.stop;d.stop;c.stop
