@@ -1,8 +1,10 @@
-
-
+(
+~beat = 60/151.703592;
+~vol1 = 0.06;
+~vol2;
 
 s.options.memSize = 1048576;
-
+)
 (
 s.waitForBoot({
 	var numSegs;
