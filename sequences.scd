@@ -143,9 +143,23 @@ Pdef(\c42b7,Pbind(\instrument,\lead, \dur,Pseq([1/16],48),\freq, 86.727,
 	\dure,60/151.703592/16 ,\amp,~vol1,\which,1,\whichMod,2,\whichAmp,4,\whichEnv,0));
 )
 
+~ph = 0;
+~phase = {
+
+	if(~ph >= (-8)){ ~ph  };
+
+	~ph = ~ph +(-0.5)}
+
+
+
+var a = 1, z;
+z = if (a < 5, { 100 },{ 200 });
+z.postln;
+
+
 
 (
-Pdef(\fuzzy,Pbind(\instrument,\lead, \dur,Pseq([1/4],48),\freq, 657.9895,
+Pdef(\fuzzy,Pbind(\instrument,\lead, \dur,Pseq([1/16],inf),\freq, 657.9895,//1575.3105
 	//\type, Pseq([\note,\rest,\note,\note],inf),
 	//\eFreq,Pseq([1700,0,0,0],inf),
 	//\pitch,Pseq([20,40,60,80,100,120,140],inf),
@@ -155,11 +169,37 @@ Pdef(\fuzzy,Pbind(\instrument,\lead, \dur,Pseq([1/4],48),\freq, 657.9895,
 
 
 
-	\dure,60/151.703592/4 ,\amp,~vol1,\which,3,\whichMod,2,\whichAmp,4,\whichEnv,4,
-	\atkE,Pseq([0.4,0.2,0,0])
-	\decE,Pseq([0.4,0.2,0,0])
+	\dure,60/151.703592/16 ,\amp,~vol1,\which,0,\whichMod,2,\whichAmp,4,\whichEnv,4,
+	//\phLF, Pseq([0,-1,-2,3,-4,-5,-6,-7,-8,-7,-6,-5,-4,-3,-2,-1,0,1,2,3,4,5,6,7,8],inf),
+	\phLF,Pseq([0,0.5,1,1.5,2,2.5,3,3.5,4,4.5,5,5.5,6,6.5,7,7.5,8,8.5,9,9.5,10,10.5,11,11.5,12.5,13.5,14,14.5,15,15.5,16,16.5,17,17.5,18,18.5,19,19.5,20,20.5,21.5,22,22.5,23,23.5,24,24.5,25,25.5,26],inf),
+	\atkE,Pseq([0.4,0.2,0,0],inf),
+	\subsE,Pseq([0,0,0,0],inf),
+	\decEC,Pseq([0,0,0,0],inf)
 )).play(t);
 )
+
+(
+Pdef(\fuzzy,Pbind(\instrument,\lead, \dur,Pseq([1/16],inf),\freq, 657.9895,//1575.3105
+	//\type, Pseq([\note,\rest,\note,\note],inf),
+	//\eFreq,Pseq([1700,0,0,0],inf),
+	//\pitch,Pseq([20,40,60,80,100,120,140],inf),
+
+	//\pitch,Pseq([0,100,200,300,400,500],inf),
+	//\pitch,Pseq([-200,0,400,600,800,1000],inf),
+
+
+
+	\dure,60/151.703592/16 ,\amp,~vol1,\which,0,\whichMod,2,\whichAmp,4,\whichEnv,4,
+	//\phLF, Pseq([0,-1,-2,3,-4,-5,-6,-7,-8,-7,-6,-5,-4,-3,-2,-1,0,1,2,3,4,5,6,7,8],inf),
+	\phLF,Pseq([0,0.2,0.4,0.6,0.8,1,1.2,1.4,1.6,1.8,2,2.2,2.4,2.6,2.8,3,3.2,3.4,3.6,3.8,4,4.2,4.4,4.6,4.8,5,5.2,5.4,5.6,5.8,6,6.2,6.4,6.6,6.8,7,7.2,7.4,7.6,7.8,8],inf),
+	\atkE,Pseq([0.4,0.2,0,0],inf),
+	\subsE,Pseq([0,0,0,0],inf),
+	\decEC,Pseq([0,0,0,0],inf)
+)).play(t);
+)
+
+
+
 
 
 //ok
