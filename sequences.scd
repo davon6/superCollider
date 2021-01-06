@@ -154,9 +154,108 @@ Pdef(\c42b7,Pbind(\instrument,\lead, \dur,Pseq([1/16],48),\freq, 86.727,
 
 var a = 1, z;
 z = if (a < 5, { 100 },{ 200 });
+
 z.postln;
 
 
+
+(
+Pbind(\instrument,\lead, \dur,Pseq([1/16],inf),
+	\freq, 657.9895,
+	\dure,60/151.703592/16,
+
+
+\which,0,\whichMod,2,\whichAmp,4,\whichEnv,4,
+
+	\filF,Pseq([ 0,125,250,375,500,625,750,875,1000,1125,1250,1375,1500,1625,1750,1875,2000
+		 ,1875,1750,1625,1500,1375,1250,1125,1000,875,750,625,500,375,250,125],inf),
+	//\filF,Pseq([ 0,500,700,1000,1500,1700, 2000,0],inf),
+
+).play(t))
+
+
+///////////1.28/////////
+(
+Pdef(\fuzzy2,
+
+Pbind(\instrument,\lead, \dur,Pseq([1/16],32),
+	\freq, 657.9895,
+	\dure,60/151.703592/16,
+
+
+\which,0,\whichMod,2,\whichAmp,4,\whichEnv,4,
+
+	\filF,Pseq([ 0,125,250,375,500,625,750,875,1000,1125,1250,1375,1500,1625,1750,1875,2000
+		 ,1875,1750,1625,1500,1375,1250,1125,1000,875,750,625,500,375,250,125],inf),
+	//\filF,Pseq([ 0,500,700,1000,1500,1700, 2000,0],inf),
+\amp,0.01
+));
+
+
+Pdef(\fuzzy3,
+Pbind(\instrument,\lead, \dur,Pseq([1/16],96),
+	\freq, 657.9895,
+	\dure,60/151.703592/16,
+
+
+\which,0,\whichMod,2,\whichAmp,4,\whichEnv,4,
+
+	\filF,Pseq([ 0,250,500,750,1000,1250,1500, 1750,2000,1750,1500,1250,1000,750,500,250],inf),
+
+	//\filF,Pseq([ 0,500,700,1000,1500,1700, 2000,0],inf),
+	\atkE,Pseq([0.4,0.2,0,0],inf),
+	\subsE,Pseq([0,0,0,0],inf),
+	\decEC,Pseq([0,0,0,0],inf),
+		\amp,0.01
+
+));)
+
+
+
+(
+Pdef(\fuzzy2,
+
+Pbind(\instrument,\lead, \dur,Pseq([1/16],31.32780310528),
+	\freq, 657.9895,
+	\dure,60/151.703592/16,
+
+
+\which,0,\whichMod,2,\whichAmp,4,\whichEnv,4,
+
+	\filF,Pseq([ 0,125,250,375,500,625,750,875,1000,1125,1250,1375,1500,1625,1750,1875,2000
+		 ,1875,1750,1625,1500,1375,1250,1125,1000,875,750,625,500,375,250,125],inf),
+	//\filF,Pseq([ 0,500,700,1000,1500,1700, 2000,0],inf),
+\amp,0.01
+));
+
+
+Pdef(\fuzzy3,
+Pbind(\instrument,\lead, \dur,Pseq([1/16],96.67219689472),
+	\freq, 657.9895,
+	\dure,60/151.703592/16,
+
+
+\which,0,\whichMod,2,\whichAmp,4,\whichEnv,4,
+
+	\filF,Pseq([ 0,250,500,750,1000,1250,1500, 1750,2000,1750,1500,1250,1000,750,500,250],inf),
+
+	//\filF,Pseq([ 0,500,700,1000,1500,1700, 2000,0],inf),
+	\atkE,Pseq([0.4,0.2,0,0],inf),
+	\subsE,Pseq([0,0,0,0],inf),
+	\decEC,Pseq([0,0,0,0],inf),
+		\amp,0.01
+
+)))
+
+
+
+
+
+
+~sq = Pseq([Pdef(\fuzzy3),Pdef(\fuzzy2)],2);
+~ee = Ppar([~barwithBre ,~sq],inf).play(t);
+
+~barwithBre.play(t)
 
 (
 Pdef(\fuzzy,Pbind(\instrument,\lead, \dur,Pseq([1/16],inf),\freq, 657.9895,//1575.3105
