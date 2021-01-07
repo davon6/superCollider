@@ -184,11 +184,12 @@ Pdef(\wNoise,
 	Pbind(
 		\instrument, \wNoise,
 	\dur, Pseq([1/1], 1),
-		\amp,0
+		\amp,0.08
 
 
 
 ));
+
 
 
 
@@ -314,7 +315,7 @@ Pdef(\e15,
 	\carHz, 525.12070612224,
 	\modHz,1899.3343179398,
 	\modAmp, 0.12875 ,
-		\amp,0.08
+		\amp,0.02
 	);
 );
 
@@ -345,7 +346,7 @@ Pdef(\d15,
 	\atk, 0,
 	\rel,0.04840,
 	\rel2,0.02420,
-		\amp, 0.08
+		\amp, 0.062
 
 	//\rel,2,
 

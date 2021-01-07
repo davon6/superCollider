@@ -176,14 +176,14 @@ Pbind(\instrument,\lead, \dur,Pseq([1/16],inf),
 
 ///////////1.28/////////
 (
-Pdef(\fuzzy2,
+Pdef(\fuzzy11,
 
-Pbind(\instrument,\lead, \dur,Pseq([1/16],32),
+Pbind(\instrument,\lead, \dur,Pseq([1/16], 32),//Pseq([1/4],8),
 	\freq, 657.9895,
 	\dure,60/151.703592/16,
 
 
-\which,0,\whichMod,2,\whichAmp,4,\whichEnv,4,
+\which,3,\whichMod,2,\whichAmp,4,\whichEnv,4,
 
 	\filF,Pseq([ 0,125,250,375,500,625,750,875,1000,1125,1250,1375,1500,1625,1750,1875,2000
 		 ,1875,1750,1625,1500,1375,1250,1125,1000,875,750,625,500,375,250,125],inf),
@@ -192,30 +192,140 @@ Pbind(\instrument,\lead, \dur,Pseq([1/16],32),
 ));
 
 
-Pdef(\fuzzy3,
-Pbind(\instrument,\lead, \dur,Pseq([1/16],96),
+Pdef(\fuzzy111,
+	Pbind(\instrument,\lead, \dur,Pseq([1/16],96),
 	\freq, 657.9895,
 	\dure,60/151.703592/16,
 
 
-\which,0,\whichMod,2,\whichAmp,4,\whichEnv,4,
+\which,3,\whichMod,2,\whichAmp,4,\whichEnv,4,
 
 	\filF,Pseq([ 0,250,500,750,1000,1250,1500, 1750,2000,1750,1500,1250,1000,750,500,250],inf),
 
 	//\filF,Pseq([ 0,500,700,1000,1500,1700, 2000,0],inf),
-	\atkE,Pseq([0.4,0.2,0,0],inf),
+	\atkE,Pseq([0.4,0.2,0,0,0.2,0.1,0,0],inf),
 	\subsE,Pseq([0,0,0,0],inf),
 	\decEC,Pseq([0,0,0,0],inf),
 		\amp,0.01
 
 ));)
 
+Pdef(\fusbr2,Pbind(\instrument,\lead, \dur,Pseq([1/16],2-0.01)));
+
+~sq2 = Pseq([Pdef(\fusbr2),Pdef(\fuzzy3),Pdef(\fuzzy2)],2);
+
+~sq2 = Pseq([Pdef(\fuzzy111),Pdef(\fuzzy11)],2);
+~ee2 = Ppar([~ens15Perc ,~sq2],inf).play(t);
+
+
+
+
 
 
 (
+Pdef(\fuzzy112,
+
+Pbind(\instrument,\lead, \dur,Pseq([1/16], 16),//Pseq([1/4],8),
+	\freq, 657.9895,
+	\dure,60/151.703592/16,
+
+
+\which,0,\whichMod,2,\whichAmp,4,\whichEnv,4,
+
+	//\filF,Pseq([ 0,125,250,375,500,625,750,875,1000,1125,1250,1375,1500,1625,1750,1875,2000
+		// ,1875,1750,1625,1500,1375,1250,1125,1000,875,750,625,500,375,250,125],inf),
+	//\filF,Pseq([ 0,500,700,1000,1500,1700, 2000,0],inf),
+\amp,0.015
+));
+
+
+Pdef(\fuzzy11122,
+	Pbind(\instrument,\lead, \dur,Pseq([1/16],48),
+	\freq, 657.9895,
+	\dure,60/151.703592/16,
+
+
+\which,0,\whichMod,2,\whichAmp,4,\whichEnv,4,
+
+		//\filF,Pseq([ 0,250,500,750,1000,1250,1500, 1750,2000,1750,1500,1250,1000,750,500,250],inf),
+
+	//\filF,Pseq([ 0,500,700,1000,1500,1700, 2000,0],inf),
+	//\atkE,Pseq([0.4,0.2,0,0,0.2,0.1,0,0],inf),
+		\atkE,Pseq([0.3,0,0,0,0.2,0.1,0,0],inf),
+	\subsE,Pseq([0,0,0,0],inf),
+	\decEC,Pseq([0,0.2,0.2,0.2],inf),
+		\amp,0.015
+
+));)
+
+~sq2 = Pseq([Pdef(\fusbr2),Pdef(\fuzzy3),Pdef(\fuzzy2)],2);
+
+~sq223 = Pseq([Pdef(\fuzzy11122),Pdef(\fuzzy112)],4);
+
+~sq22pla3 = Pseq([Pdef(\fuzzy11122),Pdef(\fuzzy112)],inf).play(t);
+~ee2 = Ppar([~ens15Perc ,~sq223],inf).play(t);
+
+
+
+
+
+
+
+
+(
+Pdef(\fuzzyhIGH,
+
+Pbind(\instrument,\lead, \dur,Pseq([1/16], 16),//Pseq([1/4],8),
+	\freq, 657.9895,
+	\dure,60/151.703592/16,
+
+
+\which,2,\whichMod,2,\whichAmp,4,\whichEnv,4,
+
+	//\filF,Pseq([ 0,125,250,375,500,625,750,875,1000,1125,1250,1375,1500,1625,1750,1875,2000
+		// ,1875,1750,1625,1500,1375,1250,1125,1000,875,750,625,500,375,250,125],inf),
+	//\filF,Pseq([ 0,500,700,1000,1500,1700, 2000,0],inf),
+\amp,0.015
+));
+
+
+Pdef(\fuzzyhIGH2,
+	Pbind(\instrument,\lead, \dur,Pseq([1/16],48),
+	\freq, 657.9895,
+	\dure,60/151.703592/16,
+
+
+\which,2,\whichMod,2,\whichAmp,4,\whichEnv,4,
+
+		//\filF,Pseq([ 0,250,500,750,1000,1250,1500, 1750,2000,1750,1500,1250,1000,750,500,250],inf),
+
+	//\filF,Pseq([ 0,500,700,1000,1500,1700, 2000,0],inf),
+	//\atkE,Pseq([0.4,0.2,0,0,0.2,0.1,0,0],inf),
+		\atkE,Pseq([0.3,0,0,0,0.2,0.1,0,0],inf),
+	\subsE,Pseq([0,0,0,0],inf),
+	\decEC,Pseq([0,0.2,0.2,0.2],inf),
+		\amp,0.013
+
+));)
+
+~sq22pla3 = Pseq([Pdef(\fuzzyhIGH),Pdef(\fuzzyhIGH2)],inf).play(t);
+(
+~sq22pla33= Pseq([Pdef(\fuzzy11122),Pdef(\fuzzyhIGH),Pdef(\fuzzyhIGH2),Pdef(\fuzzy112),
+	Pdef(\fuzzyhIGH2),Pdef(\fuzzy112),Pdef(\fuzzyhIGH2),Pdef(\fuzzy112)
+],1);)
+~ee2 = Ppar([~ens15Perc ,~sq22pla33],inf).play(t);
+~infkick.play(t)
+
+comD
+
+31.32780310528-0.049438512965468
+//31.32780310528-0.024719256482734  =  31.303083848797
+0.024719256482734*4
+31.32780310528-0.098877025930936
+(
 Pdef(\fuzzy2,
 
-Pbind(\instrument,\lead, \dur,Pseq([1/16],31.32780310528),
+Pbind(\instrument,\lead, \dur,Pseq([1/16], 31.32780310528),//-0.04),
 	\freq, 657.9895,
 	\dure,60/151.703592/16,
 
@@ -230,7 +340,7 @@ Pbind(\instrument,\lead, \dur,Pseq([1/16],31.32780310528),
 
 
 Pdef(\fuzzy3,
-Pbind(\instrument,\lead, \dur,Pseq([1/16],96.67219689472),
+Pbind(\instrument,\lead, \dur,Pseq([1/16],96.6721968947),
 	\freq, 657.9895,
 	\dure,60/151.703592/16,
 
@@ -247,13 +357,42 @@ Pbind(\instrument,\lead, \dur,Pseq([1/16],96.67219689472),
 
 )))
 
+Pdef(\fusbr,Pbind(\instrument,\lead, \dur,Pseq([0.04],1),));
+Pdef(\fusbr,Pbind(\instrument,\lead, \dur,Pseq([1/64],1),));
+
+changed phase of pbind sounded sickk!!!!!!!!
+0.049438512965468
 
 
-
-
-
+~sq = Pseq([Pdef(\fusbr),Pdef(\fuzzy3),Pdef(\fuzzy2)],2);
 ~sq = Pseq([Pdef(\fuzzy3),Pdef(\fuzzy2)],2);
-~ee = Ppar([~barwithBre ,~sq],inf).play(t);
+~ee = Ppar([~ens15Perc ,~sq],inf).play(t);
+
+
+(
+Pdef(\fuzzyEXP,
+Pbind(\instrument,\lead, \dur,Pseq([0.1936],inf),
+	\freq, 657.9895,
+	\dure,60/151.703592/16,
+
+
+\which,0,\whichMod,2,\whichAmp,4,\whichEnv,4,
+
+
+
+		//\filF,800,
+	\filF,Pseq([ 0,250,500,750,1000,1250,1500, 1750,2000,1750,1500,1250,1000,750,500,250],inf),
+
+	//\filF,Pseq([ 0,500,700,1000,1500,1700, 2000,0],inf),
+	\atkE,Pseq([0,0,0,0],inf),
+	\subsE,Pseq([0,0,0,0],inf),
+	\decE,Pseq([1,1,1,1],inf),
+		\amp,0.01
+
+)).play(t)
+)
+
+
 
 ~barwithBre.play(t)
 
@@ -493,22 +632,11 @@ Pdef(\c44444,Pbind(\instrument,\lead, \dur,Pseq([1/4],4),
 )
 
 (
-(
-Pdef(\c44,Pbind(\instrument,\lead, \dur,Pseq([1/4],1),
-	\eFreq, Pseq([76.midicps.rand+ ~inc.()],inf),
-	\type, Pseq([\note,\note,\note,\note],inf),
-	//\eFreq,Pseq([0,1700],inf),
-	\dure,60/151.703592/4 ,\amp,0.006,\which,0,\whichMod,2,\whichAmp,4,\whichEnv,0,\phFm,11));
-
-);
-
-
-)
 
 
 
 
-~yo = Pseq([Pdef(\c42bbbb),Pdef(\c44),Pdef(\c42bbbb2),Pdef(\c444),Pdef(\c42bbbb2),Pdef(\c4444),Pdef(\c42bbbb2),Pdef(\c44444)],1)
+~yo = Pseq([Pdef(\c42bbbb),Pdef(\c44),Pdef(\c42bbbb2),Pdef(\c444),Pdef(\c42bbbb2),Pdef(\c4444),Pdef(\c42bbbb2),Pdef(\c44444)],1);
 
 ~hem = Ppar([~half16, ~yo],1);
 
