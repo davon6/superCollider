@@ -269,7 +269,7 @@ Pdef(\cD3,Pbind(\instrument,\lead, \dur,Pseq([1/1],1 ),\freq, 76.midicps, \dure,
 ~bar8 = Ppar([~bassPat, ~kickPat], 8);
 ~kbassRest = Ppar([~kickPat, ~bassRest], 1);
 ~half16  = Pseq([Ppar([Pseq([~bassAndKick],8),Pdef(\d8),Pdef(\e8),Pdef(\sn8)],1),Pseq([~bassRest],8)],1);
-~barwithBre= Pseq([~bar15, ~bassRest], 1).play(t);//HERE
+~barwithBre= Pseq([~bar15, ~kbassRest], 1);//HERE
 ~ens = Ppar([Pdef(\e),Pdef(\d),Pdef(\sn),~bar16],1);//must include percu
 ~ens2 = Pseq([Ppar([Pdef(\e),Pdef(\d),Pdef(\sn),~bar15],1),~bassRest],1);//must include percu
 ~seqPartRising =  Ppar([~ens, Pdef(\aR),Pdef(\bR),Pdef(\cD)],1);

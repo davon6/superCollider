@@ -19,7 +19,7 @@ s.plotTree
 
 
 
-Pdef(\c3,Pbind(\instrument,\lead, \dur,Pseq([16/1],1 ),\freq, 76.midicps, \dure,60/151.703592*16 ,\amp,0.002,\which,0,\whichMod,0,\whichAmp,3,\ftime2,6.1952,\ftime3,3.0976));
+Pdef(\c3,Pbind(\instrument,\lead, \dur,Pseq([16/1],1 ),\freq, 76.midicps, \dure,60/151.703592*16 ,\amp,0.002,\which,0,\whichMod,0,\whichAmp,3,\ftime2,6.1952,\ftime3,3.0976)).play(t);
 
 
 
@@ -94,18 +94,104 @@ Pdef(\c42b3,Pbind(\instrument,\lead, \dur,Pseq([1/1],1),\freq, 86.727,
 
 
 (
-Pdef(\c42b4,Pbind(\instrument,\lead, \dur,Pseq([1/16],48),\freq, 86.727,
-	\type, Pseq([\note,\rest,\note,\note],inf),
-	\eFreq,Pseq([1700,0,0,0],inf),
+Pdef(\c42b4,Pbind(\instrument,\lead, \dur,Pseq([1/1],48),\freq, 86.727,
+	//\type, Pseq([\note,\rest,\note,\note],inf),
+	//\eFreq,Pseq([1700,0,0,0],inf),
+
+
+
 	//\pitch,Pseq([20,40,60,80,100,120,140],inf),
 
 	//\pitch,Pseq([0,100,200,300,400,500],inf),
-	\pitch,Pseq([-200,0,400,600,800,1000],inf),
+	//\pitch,Pseq([-200,0,400,600,800,1000],inf),
 
 
 
-	\dure,60/151.703592/16 ,\amp,~vol1,\which,1,\whichMod,2,\whichAmp,4,\whichEnv,0));
+	\dure,60/151.703592/16 ,\amp,~vol1,\which,0,\whichMod,2,\whichAmp,3,\whichEnv,0)
+
+).play(t);
 )
+
+
+s.plotTree
+
+~bus9
+(
+
+o = {Out.kr(~bus1, SinOsc.ar(1.2875).range(5274.04,81.41))  ;
+	Out.kr(~bus2, SinOsc.ar(5.15).range(164.81,81.41));
+	Out.kr(~bus3, SinOsc.ar(0.0201171875).range(164.81,2.575));
+	Out.kr(~bus4, SinOsc.ar( 2.575 +SinOsc.kr(0.64375).range(0,2.575)  ).range(10.3,1318.51));
+	Out.kr(~bus5, SinOsc.ar(1.2875).range(5274.04,0.0201171875));//c3
+	Out.kr(~bus6, SinOsc.ar(0.321875).range(0.0201171875,318.51));
+	Out.kr(~bus7, LFNoise1.ar(10.3).range(0.0201171875,1318.51));
+	Out.kr(~bus8,SinOsc.ar( 1.2875).range(0.1609375,164.81) );
+
+	Out.kr(~bus9, SinOsc.ar(LFTri.ar(1.2875).range(0,1.2875)).range(5274.04,0.0201171875));//c3
+ }.play;
+
+
+
+
+
+
+
+
+
+
+
+Pdef(\pre2,
+
+Pbind(\instrument,\lead, \dur,Pseq([1/16], 32),//Pseq([1/4],8),
+		\freq, Pseq([657.9895,(657.9895-(657.9895-60.727/16*1)) ,(657.9895-(657.9895-60.727/16*2)) ,(657.9895-(657.9895-60.727/16*3)) ,(657.9895-(657.9895-60.727/16*4)) ,(657.9895-(657.9895-60.727/16*5)) ,(657.9895-(657.9895-60.727/16*6)) ,(657.9895-(657.9895-60.727/16*7)) ,(657.9895-(657.9895-60.727/16*8)) ,(657.9895-(657.9895-60.727/16*9)) ,(657.9895-(657.9895-60.727/16*10)) ,(657.9895-(657.9895-60.727/16*11)) ,(657.9895-(657.9895-60.727/16*12)) ,(657.9895-(657.9895-60.727/16*13)),(657.9895-(657.9895-60.727/16*14))  ,
+(657.9895-(657.9895-60.727/16*15)),(657.9895-(657.9895-60.727/16*16)),(657.9895-(657.9895-60.727/16*17)),(657.9895-(657.9895-60.727/16*18)),(657.9895-(657.9895-60.727/16*19)),(657.9895-(657.9895-60.727/16*20)),(657.9895-(657.9895-60.727/16*21)),(657.9895-(657.9895-60.727/16*25)),(657.9895-(657.9895-60.727/16*26)),(657.9895-(657.9895-60.727/16*24)),(657.9895-(657.9895-60.727/16*14)),(657.9895-(657.9895-60.727/16*14)),(657.9895-(657.9895-60.727/16*27)),(657.9895-(657.9895-60.727/16*28)),(657.9895-(657.9895-60.727/16*29)),(657.9895-(657.9895-60.727/16*30)),60.727,],1),
+	\dure,60/151.703592/16,
+
+\which,1,\whichMod,2,\whichAmp,4,\whichEnv,3,
+		\eFreq, Pseq([100,200,300,400,500,600,700,800,900,1000,1100,1200,1300,1400,1500,1600,1700,1800,2000,2100,2200,2300,2400,2500,2600,2700,2800,2900,3000,3100,3200,3300],1  )  ,
+
+		//\decE, 0.0986,
+		\bus4,~bus9,
+
+	//\filF,Pseq([ 0,125,250,375,500,625,750,875,1000,1125,1250,1375,1500,1625,1750,1875,2000
+		// ,1875,1750,1625,1500,1375,1250,1125,1000,875,750,625,500,375,250,125],inf),
+	//\filF,Pseq([ 0,500,700,1000,1500,1700, 2000,0],inf),
+\amp,0.135
+));
+
+
+
+
+
+Pdef(\pre,
+
+Pbind(\instrument,\lead, \dur,Pseq([1/1],1),//Pseq([1/4],8),
+	\freq, 60.727,
+	\dure,60/151.703592,
+		\eFreq,700,
+
+\which,1,\whichMod,2,\whichAmp,4,\whichEnv,3,
+
+		\decE, 16,\bus4,~bus5,
+
+	//\filF,Pseq([ 0,125,250,375,500,625,750,875,1000,1125,1250,1375,1500,1625,1750,1875,2000
+		// ,1875,1750,1625,1500,1375,1250,1125,1000,875,750,625,500,375,250,125],inf),
+	//\filF,Pseq([ 0,500,700,1000,1500,1700, 2000,0],inf),
+\amp,0.135
+));
+
+
+
+
+Pseq([Pdef(\fuzzyhIGH2),Pdef(\pre2),Pdef(\pre)],inf).play(t);
+
+
+)
+
+
+Pdef(\fuzzyhIGH2)
+
+
 
 (
 Pdef(\c42b5,Pbind(\instrument,\lead, \dur,Pseq([1/16],48),\freq, 86.727,
@@ -116,7 +202,7 @@ Pdef(\c42b5,Pbind(\instrument,\lead, \dur,Pseq([1/16],48),\freq, 86.727,
 
 
 
-	\dure,60/151.703592/16 ,\amp,~vol1,\which,1,\whichMod,2,\whichAmp,4,\whichEnv,0));
+	\dure,60/151.703592/16 ,\amp,~vol1,\which,1,\whichMod,2,\whichAmp,4,\whichEnv,0)).play(t);
 )
 
 (
@@ -220,7 +306,7 @@ Pdef(\fusbr2,Pbind(\instrument,\lead, \dur,Pseq([1/16],2-0.01)));
 
 
 
-
+//starts here
 
 (
 Pdef(\fuzzy112,
@@ -229,20 +315,23 @@ Pbind(\instrument,\lead, \dur,Pseq([1/16], 16),//Pseq([1/4],8),
 	\freq, 657.9895,
 	\dure,60/151.703592/16,
 
+\bus, ~cd2,
+\bus2, ~cd6,
 
+\bus3,	~cd7,
 \which,0,\whichMod,2,\whichAmp,4,\whichEnv,4,
 
 	//\filF,Pseq([ 0,125,250,375,500,625,750,875,1000,1125,1250,1375,1500,1625,1750,1875,2000
 		// ,1875,1750,1625,1500,1375,1250,1125,1000,875,750,625,500,375,250,125],inf),
 	//\filF,Pseq([ 0,500,700,1000,1500,1700, 2000,0],inf),
-\amp,0.015
+\amp,0.0135
 ));
-
 
 Pdef(\fuzzy11122,
 	Pbind(\instrument,\lead, \dur,Pseq([1/16],48),
 	\freq, 657.9895,
 	\dure,60/151.703592/16,
+		\bus, ~cd5,
 
 
 \which,0,\whichMod,2,\whichAmp,4,\whichEnv,4,
@@ -254,10 +343,10 @@ Pdef(\fuzzy11122,
 		\atkE,Pseq([0.3,0,0,0,0.2,0.1,0,0],inf),
 	\subsE,Pseq([0,0,0,0],inf),
 	\decEC,Pseq([0,0.2,0.2,0.2],inf),
-		\amp,0.015
+		\amp,0.0135
 
 ));)
-
+1+1
 ~sq2 = Pseq([Pdef(\fusbr2),Pdef(\fuzzy3),Pdef(\fuzzy2)],2);
 
 ~sq223 = Pseq([Pdef(\fuzzy11122),Pdef(\fuzzy112)],4);
@@ -266,6 +355,23 @@ Pdef(\fuzzy11122,
 ~ee2 = Ppar([~ens15Perc ,~sq223],inf).play(t);
 
 
+(
+//special
+Pdef(\fuzzyhIGHsoGoood,
+
+Pbind(\instrument,\lead, \dur,Pseq([1/1], 1),//Pseq([1/4],8),
+	\freq, 657.9895,
+	\dure,60/151.703592,
+\decE,1,
+\bus, ~cd2,
+\which,2,\whichMod,2,\whichAmp,4,\whichEnv,4,
+
+	//\filF,Pseq([ 0,125,250,375,500,625,750,875,1000,1125,1250,1375,1500,1625,1750,1875,2000
+		// ,1875,1750,1625,1500,1375,1250,1125,1000,875,750,625,500,375,250,125],inf),
+	//\filF,Pseq([ 0,500,700,1000,1500,1700, 2000,0],inf),
+\amp,0.015
+));
+)
 
 
 
@@ -275,26 +381,28 @@ Pdef(\fuzzy11122,
 (
 Pdef(\fuzzyhIGH,
 
-Pbind(\instrument,\lead, \dur,Pseq([1/16], 16),//Pseq([1/4],8),
+Pbind(\instrument,\lead, \dur,Pseq([1/1], 1),//Pseq([1/4],8),
 	\freq, 657.9895,
-	\dure,60/151.703592/16,
-
-
+	\dure,60/151.703592,
+\decE,1,
+\bus, ~cd3,
 \which,2,\whichMod,2,\whichAmp,4,\whichEnv,4,
 
 	//\filF,Pseq([ 0,125,250,375,500,625,750,875,1000,1125,1250,1375,1500,1625,1750,1875,2000
 		// ,1875,1750,1625,1500,1375,1250,1125,1000,875,750,625,500,375,250,125],inf),
 	//\filF,Pseq([ 0,500,700,1000,1500,1700, 2000,0],inf),
-\amp,0.015
+\amp,0.013
 ));
-
+)
+(
 
 Pdef(\fuzzyhIGH2,
 	Pbind(\instrument,\lead, \dur,Pseq([1/16],48),
 	\freq, 657.9895,
 	\dure,60/151.703592/16,
-
-
+\bus, w,
+\bus2, ~ww,
+		\bus3, ~www,
 \which,2,\whichMod,2,\whichAmp,4,\whichEnv,4,
 
 		//\filF,Pseq([ 0,250,500,750,1000,1250,1500, 1750,2000,1750,1500,1250,1000,750,500,250],inf),
@@ -315,8 +423,184 @@ Pdef(\fuzzyhIGH2,
 ],1);)
 ~ee2 = Ppar([~ens15Perc ,~sq22pla33],inf).play(t);
 ~infkick.play(t)
-
+1+1
 comD
+(
+//~cd = Bus.control(s,1);
+
+~cd2 = Bus.control(s,1);
+
+~cd3 = Bus.control(s,1);
+~cd4 = Bus.control(s,1);
+//~cd5 = Bus.control(s,1);
+
+//~cd6 = Bus.control(s,1);
+//~cd7 = Bus.control(s,1);
+
+)
+~c2 = Bus.control(s,1);
+~c3 = Bus.control(s,1);
+~c4 = Bus.control(s,1);
+(
+w = Bus.control(s,1);
+~ww = Bus.control(s,1);
+~www = Bus.control(s,1);
+)
+Pseq([Pdef(\fuzzy112)],inf).play(t)
+
+Pseq([Pdef(\fuzzyhIGH2)],inf).play(t)
+
+
+
+
+(
+
+o = {Out.kr(w, SinOsc.ar(1.2875).range(3290.63,81.41))  ;
+Out.kr(~ww, SinOsc.ar(5.15).range(329.63,81.41));
+	Out.kr(~www, SinOsc.ar(0.0201171875).range(164.81,2.575));
+
+ }.play;
+		//Out.kr(~cd3, SinOsc.ar(1.2875).range(5274.04,0201171875));
+	//.Out.kr(~cd4, SinOsc.ar(0.0201171875).range(164.81,2.575));
+
+
+//}.play;
+
+Pseq([Pdef(\fuzzyhIGH2)],inf).play(t)
+
+//Pseq([Pdef(\fuzzyhIGH2)],inf).play(t);
+)
+
+(
+
+Pdef(\fuzzyhIGH22,
+	Pbind(\instrument,\lead, \dur,Pseq([1/16],48),
+	\freq, 657.9895,
+	\dure,60/151.703592/16,
+\bus, ~c2,
+\bus2, ~c3,
+		\bus3, ~c4,
+\which,2,\whichMod,2,\whichAmp,4,\whichEnv,4,
+
+		//\filF,Pseq([ 0,250,500,750,1000,1250,1500, 1750,2000,1750,1500,1250,1000,750,500,250],inf),
+
+	//\filF,Pseq([ 0,500,700,1000,1500,1700, 2000,0],inf),
+	//\atkE,Pseq([0.4,0.2,0,0,0.2,0.1,0,0],inf),
+		\atkE,Pseq([0.3,0,0,0,0.2,0.1,0,0],inf),
+	\subsE,Pseq([0,0,0,0],inf),
+	\decEC,Pseq([0,0.2,0.2,0.2],inf),
+		\amp,0.013
+
+));)
+
+(
+
+~gg = { //Out.kr(c, LFTri.ar(0.040234375).range(100,400));
+
+	//Out.kr(~cd, SinOsc.ar(10.3).range(81.41,659.25));
+	Out.kr(~c3, SinOsc.ar(1.2875).range(5274.04,0.0201171875));
+	Out.kr(~c2, SinOsc.ar(5.15).range(329.63,81.41));
+
+	Out.kr(~c4, SinOsc.ar(0.0201171875).range(164.81,2.575));
+
+//	Out.kr(~cd5, SinOsc.ar( 2.575 +SinOsc.ar(0.64375).range(0,2.575)  ).range(10.3,1318.51) );
+
+//	Out.kr(~cd6, SinOsc.ar(1.2875).range(0.0201171875,1318.51));
+
+//	Out.kr(~cd7, LFNoise0.ar(1.2875).range(0.0201171875,659.25));
+
+
+
+}.play;
+
+/*
+
+
+~snewww= Pseq([Pdef(\fuzzy11122),Pdef(\fuzzyhIGH),Pdef(\fuzzyhIGH2),Pdef(\fuzzy112),
+	Pdef(\fuzzyhIGH2),Pdef(\fuzzy112),Pdef(\fuzzyhIGH2),Pdef(\fuzzy112)
+],1);
+
+
+~ee3 = Ppar([~ens15Perc ,~snewww],inf).play(t);
+*/
+
+
+//Pseq([Pdef(\fuzzy112)],inf).play(t)
+
+Pseq([Pdef(\fuzzyhIGH22)],inf).play(t)
+
+
+
+)
+
+
+
+
+(
+
+~yu = {
+	Out.kr(~c3, SinOsc.ar(1.2875).range(5274.04,0201171875));
+	Out.kr(~c2, SinOsc.ar(5.15).range(329.63,81.41));
+
+	Out.kr(~c4, SinOsc.ar(0.0201171875).range(164.81,2.575));
+
+
+
+}.play;
+
+
+Pseq([Pdef(\fuzzyhIGH22)],inf).play(t)
+
+
+)
+
+{SinOsc.ar(432 +SinOsc.ar( 5.15+SinOsc.ar(0.64375).range(0,5.15)    ).range(0,23)      ,mul:0.2)!2}.play
+
+(
+~vh = Bus.control(s,1);
+~vhh = Bus.control(s,1);
+~vhhh = Bus.control(s,1);)
+(
+
+Pdef(\buu,
+	Pbind(\instrument,\lead, \dur,Pseq([1/16],48),
+	\freq, 657.9895,
+	\dure,60/151.703592/16,/*
+\bus, ~vh,
+\bus2, ~vhh,
+		\bus3, ~vhhh,*/
+\which,2,\whichMod,2,\whichAmp,4,\whichEnv,4,
+
+		//\filF,Pseq([ 0,250,500,750,1000,1250,1500, 1750,2000,1750,1500,1250,1000,750,500,250],inf),
+
+	//\filF,Pseq([ 0,500,700,1000,1500,1700, 2000,0],inf),
+	//\atkE,Pseq([0.4,0.2,0,0,0.2,0.1,0,0],inf),
+		\atkE,Pseq([0.3,0,0,0,0.2,0.1,0,0],inf),
+	\subsE,Pseq([0,0,0,0],inf),
+	\decEC,Pseq([0,0.2,0.2,0.2],inf),
+		\amp,0.013
+
+));)
+
+(
+/*
+l = {
+	//Out.kr(~vh, SinOsc.ar(1.2875).range(5274.04,0201171875));
+	//Out.kr(~vhh, SinOsc.ar(5.15).range(329.63,81.41));
+
+	//Out.kr(~vhhh, SinOsc.ar(0.0201171875).range(164.81,2.575));
+
+
+
+}.play;*/
+
+
+Pseq([Pdef(\buu)],inf).play(t)
+
+
+
+)
+
 
 31.32780310528-0.049438512965468
 //31.32780310528-0.024719256482734  =  31.303083848797
