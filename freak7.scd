@@ -1,6 +1,7 @@
 (
+
 SynthDef(\lead, {
-		arg freq= 500, mRatio=1, cRatio=1, index =1, iScale=5, amp=0.01, atk= 0.01  , rel=3, cAtk = 4 , cRel = (-4) , pan =0, rateSound = 0.0201171875,  short = 0.3872,mid=0.7744,atkE =0,decE=0.1936, subsE=50, relE=0, sineRate = 0.0000000095262251, sineRangeHigh = 0, sineRangeLow=0, gate = 1, pitch = 0, sRteLPF = 1.3, timeSca= 0.25, dure= 1/1, which = 1, whichMod = 1, whichAmp =0,phRise= 0 , whichEnv = 0,timeSca2 =1, in=0, dec=0.645, mix=0.04, lpf1=2000, lpf2= 6000, predel=0.075,out=0,ftime1= 0, ftime2 =1.5488, ftime3 =1.5488,relNode =6, phLF =0,phLF2 =0,rteLF=1.2875, eFreq =0 , phFm=8,decEC=0,filF=200, bus,bus2,bus3,bus4,bpFreq;
+		arg freq= 500, mRatio=1, cRatio=1, index =1, iScale=5, amp=0.01, atk= 0.01  , rel=3, cAtk = 4 , cRel = (-4) , pan =0, rateSound = 0.0201171875,  short = 0.3872,mid=0.7744,atkE =0,decE=0.1936, subsE=50, relE=0, sineRate = 0.0000000095262251, sineRangeHigh = 0, sineRangeLow=0, gate = 1, pitch = 0, sRteLPF = 1.3, timeSca= 0.25, dure= 1/1, which = 1, whichMod = 1, whichAmp =0,phRise= 0 , whichEnv = 0,timeSca2 =1, in=0, dec=0.645, mix=0.04, lpf1=2000, lpf2= 6000, predel=0.075,out=0,ftime1= 0, ftime2 =1.5488, ftime3 =1.5488,relNode =6, phLF =0,phLF2 =0,rteLF=1.2875, eFreq =0 , phFm=8,decEC=0,filF=200, bus,bus2,bus3,bus4,bpFreq = 500;
 
 
 	var car, mod,modE,modE2, env, env2, env3, env4, iEnv, mod2, sig, bufpos, envVoice, filRte,lp,bp,hp,lp2,amp1,amp2,amp3, a1,a2,a3, b1, b2, b3,b4,dry, wet;
@@ -190,7 +191,7 @@ EnvGen.kr(Env.new(
 
 	//lp = LPF.ar(sig ,SinOsc.ar(filRte ).range(82.41,22000));//82.41     //Varlag ?
 
-	lp = BLowPass4.ar(sig , In.kr(bus, 1)+In.kr(bus2, 1).poll+ In.kr(bus3, 1)   //LFNoise1.kr(2.575).range(0.2,20.3)
+	lp = BLowPass4.ar(sig , In.kr(bus, 1)+In.kr(bus2, 1)+ In.kr(bus3, 1)   //LFNoise1.kr(2.575).range(0.2,20.3)
 
 		,0.4);//82.41     //Varlag ?   0.4
 //MouseX.kr(1800+ filF,100)
@@ -200,12 +201,10 @@ EnvGen.kr(Env.new(
 	//bp = BPF.ar(lp2,(SinOsc.ar(LFNoise1.kr(Lag.kr(2.575,0.0968)).range(0,7.72500)).range(82.41,1400)),0.1);
 
 
-// bp = BPF.ar(sig,(SinOsc.ar(LFNoise1.kr(Lag.kr(2.575,0.0968)).range(0,7.72500)).range(82.41,1400)),0.1);
+//	bp = BPF.ar(sig,(SinOsc.ar(LFNoise1.kr(Lag.kr(2.575,0.0968)).range(0,7.72500)).range(82.41,1400)),0.1);
 
-	//bp = BPF.ar(sig,MouseY.kr(0,eFreq),0.05);
 
-	bp = BPF.ar(sig,bpFreq,0.05);
-
+			bp = BPF.ar(sig,bpFreq,0.05);
 
 	hp = BHiPass4.ar(sig, In.kr(bus, 1)+In.kr(bus2, 1)+ In.kr(bus3, 1)  ,MouseY.kr(1,0.4,0));
 //MouseX.kr(100,5000+ filF)
@@ -268,4 +267,5 @@ EnvGen.kr(Env.new(
 
 	Out.ar(0, sig);
 }).add;
+
 )

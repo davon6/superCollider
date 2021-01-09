@@ -120,7 +120,7 @@ s.plotTree
 
 
 
-
+~bus11 //not used yet
 
 
 
@@ -136,9 +136,10 @@ o = {Out.kr(~bus1, SinOsc.ar(1.2875).range(5274.04,81.41))  ;
 	Out.kr(~bus8,SinOsc.ar( 1.2875).range(0.1609375,164.81) );
 
 	Out.kr(~bus9, SinOsc.ar(LFTri.ar(1.2875).range(1.2875,0)).range(657.9895,60.727));//c3
-
-
 	Out.kr(~bus10, SinOsc.ar(0.1609375).range(0.0201171875,2637.02));
+	Out.kr(~bus11, LFNoise0.kr(5.15).range(2.575,2637.02));
+
+
 
  }.play;
 
@@ -224,21 +225,6 @@ Pbind(\instrument,\lead, \dur,Pseq([1/1],1),//Pseq([1/4],8),
 ));
 
 
-
-   //Pseq([Pdef(\fuzzyhIGH2),Pdef(\pr22),Pdef(\pre)],inf).play(t);
-
-
-
-
-
-
-
-
-
-
-
-
-
 Pdef(\tokeep,
 
 Pbind(\instrument,\lead, \dur,Pseq([16/1],1),//Pseq([1/4],8),
@@ -278,18 +264,83 @@ Pbind(\instrument,\lead, \dur,Pseq([2/1],1),//Pseq([1/4],8),
 
 
 
+Pdef(\proot,
+
+Pbind(\instrument,\lead, \dur,Pseq([2/1],1),//Pseq([1/4],8),
+	//\freq,30,
+	\dure,60/151.703592*2,
+		//\bpFreq,700,
+\eFreq,81.41,
+\which,1,\whichMod,2,\whichAmp,4,\whichEnv,3,
+
+
+		\decE, 5,\bus4,4,\wCar,1,\bus5,~bus5,\bus6,~bus11,
+
+
+
+	//\filF,Pseq([ 0,125,250,375,500,625,750,875,1000,1125,1250,1375,1500,1625,1750,1875,2000
+		// ,1875,1750,1625,1500,1375,1250,1125,1000,875,750,625,500,375,250,125],inf),
+	//\filF,Pseq([ 0,500,700,1000,1500,1700, 2000,0],inf),
+\amp,0.135
+));
+
+
+
+
+
+
+
+
+//sunday
+
+
+Pdef(\melo,
+
+Pbind(\instrument,\lead,
+		\dur,Pseq([1/3],inf),
+		\type,Pseq([\note,\rest,\note,\rest,\note,\rest,\rest,\rest,\rest,\note],inf),
+	\dure,60/151.703592/3,
+\eFreq,Pseq([300,340,500,580,629],inf),
+\which,2,\whichMod,2,\whichAmp,4,\whichEnv,3,\wCar,1,	\decE, 1,
+
+
+	\bus4,4,\bus5,~bus5,\bus6,~bus11,
+
+\amp,0.135
+)).play(t);
+
+
+
+
+
+
+
+
+/*
 
 ~snewww= Pseq([Pdef(\fuzzy11122),Pdef(\fuzzyhIGH),Pdef(\fuzzyhIGH2),Pdef(\fuzzy112),
-	Pdef(\fuzzyhIGH2),Pdef(\fuzzy112),Pdef(\pr22),Pdef(\pre),Pdef(\fuzzy112),Pdef(\proo)
+	Pdef(\fuzzyhIGH2),Pdef(\fuzzy112),Pdef(\pr22),Pdef(\pre),Pdef(\fuzzy112),Pdef(\proo),Pdef(\proot)
 ],1);
 
 
 ~ee3 = Ppar([       Pseq([~ens15Perc],2),           Pseq([Pdef(\wNoise2) ,~snewww,Pdef(\wNoise2)  ],1)    ],inf).play(t);
+*/
+
+
+
+
+
+
+
+
+
 
 
 
 )
 
+1+1
+//\dure,60/151.703592/4 ,\amp,0.006,\which,0,\whichMod,2,\whichAmp,4,\whichEnv,0,\phFm,11));
 
 Pdef(\fuzzyhIGH2)
 
