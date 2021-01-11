@@ -1,7 +1,15 @@
 s.options.memSize = 1048576;
+~reverbBus = Bus.audio(s,1);
 
 
 
+
+
+
+s.options.numAudioBusChannels;
+s.options.numOutputBusChannels;
+s.options.numInputBusChannels;
+s.meter
 (
 s.waitForBoot({
 
@@ -57,10 +65,10 @@ s.waitForBoot({
 
 
 SynthDef(\lead, {
-		arg freq= 500, mRatio=1, cRatio=1, index =1, iScale=5, amp=0.01, atk= 0.01  , rel=3, cAtk = 4 , cRel = (-4) , pan =0, rateSound = 0.0201171875,  short = 0.3872,mid=0.7744,atkE =0,decE=0.1936, subsE=50, relE=0, sineRate = 0.0000000095262251, sineRangeHigh = 0, sineRangeLow=0, gate = 1, pitch = 0, sRteLPF = 1.3, timeSca= 0.25, dure= 1/1, which = 1, whichMod = 1, whichAmp =0,phRise= 0 , whichEnv = 0,timeSca2 =1, in=0, dec=0.645, mix=0.04, lpf1=2000, lpf2= 6000, predel=0.075,out=0,ftime1= 0, ftime2 =1.5488, ftime3 =1.5488,relNode =6, phLF =0,phLF2 =0,rteLF=1.2875, eFreq =0 , phFm=8,decEC=0,filF=200, bus,bus2=14,bus3=14,bus4=14,bus5=14,bus6=14,   bpFreq = 500,wCar=0;
+		arg freq= 500, mRatio=1, cRatio=1, index =1, iScale=5, amp=0.01, atk= 0.01  , rel=3, cAtk = 4 , cRel = (-4) , pan =0, atkE =0,decE=0.1936, subsE=50, relE=0, sineRate = 0.0000000095262251, sineRangeHigh = 0, sineRangeLow=0, pitch = 0, sRteLPF = 1.3, timeSca= 0.25, dure= 1/1, which = 1, whichMod = 1, whichAmp =0,phRise= 0 , whichEnv = 0,timeSca2 =1,out=0, eFreq =0 , phFm=8,decEC=0,filF=200, bus,bus2=14,bus3=14,bus4=14,bus5=14,bus6=14,   bpFreq = 500,wCar=0;
 
 
-	var car,car2, mod,modE,modE2, env, env2, env3, env4, iEnv, mod2, sig, bufpos, envVoice, filRte,lp,bp,hp,lp2,amp1,amp2,amp3, a1,a2,a3, b1, b2, b3,b4,dry, wet;
+	var car,car2, mod,modE,modE2, env, iEnv, mod2, sig, bufpos, envVoice, filRte,lp,bp,hp,lp2, b1;
 //dec=3.5        predel=0.025    mix=0.08
 	//1.5488
 	//2.575
@@ -68,22 +76,11 @@ SynthDef(\lead, {
 	//5.15
 
 //dont forget 2nd zero used to be 1
-	env3 = EnvGen.kr(Env([0,1,0,0],[atkE,decE, subsE,relE],[-2,-3,0,0]),
-	//	gate: Trig.kr( 1,dur:dure),timeScale:timeSca2,
-		doneAction:2);
+	env = EnvGen.kr(Env([0,1,0,0],[atkE,decE, subsE,relE],[-2,-3,0,0]),
+		doneAction:2
 
-	filRte =
-EnvGen.kr(Env.new(
-		[0     , rteLF,rteLF     ,10.3    ,10.3  , rteLF,rteLF,10.3,10.3],
-		[ftime1,ftime2 ,ftime1     ,ftime3  ,ftime1, ftime2,0     ,ftime3  ,ftime1,ftime2  ,ftime1,ftime2,ftime1],
-		releaseNode:5,loopNode:1,offset:(1/16)//-1.5488 ) //(1/16)//  here!!!
-
-
-
-
-
-	),gate: Trig.kr( 1,dur:dure),doneAction:2
 	);
+
 
 
 
@@ -98,102 +95,14 @@ EnvGen.kr(Env.new(
 );//- 1.604003    here!!!
 
 
-
-
-                             //HERE 1.2875
-	b = SinOsc.kr(	LFNoise1.kr(2.575).range(0.3,1.0)).range(0,1.0);
-
-
- c = SinOsc.kr(	LFNoise0.kr(0.64375).range(0.01,0.3872)).range(0,1.0);
-//c can be changed for LFNOISE
-
-/*dure /4 coz of timescale*/
-	env =EnvGen.kr(
-        Env(
-		    levels:[0,1, 1 ,b,0,0               ],
-			times: [0,(0+c),(0.3872-c),0,0,0             ],
-			curve: LFNoise0.kr(1/4).range(-2,3),releaseNode:4,loopNode:1
-			//CHANGE CURVE TO OSICALLATION -+    +3 is nice
-        ),
-/*dury /4 coz of timescale*/
-		gate: Trig.kr( 1,dur:dure),doneAction:2
-		,timeScale:timeSca);
-
-
-
-
-
-		env2 = EnvGen.kr(Env([0,1,1   ,1,0     ,0   ,1     ,1   ,0 ,0],
-		          [0,0,1/32,0,1/32,0,1/32,0     ,1/32,0 ,1/32],releaseNode:relNode ,loopNode:1),
-	gate: Trig.kr( 1,dur:dure),timeScale:timeSca2,doneAction:2);
-
-
-
-
-
-
-	e=	EnvGen.kr(
-       Env(
-			//[0, 1, 0, 0.2, 0, 0.5, 0.8, 0],
-		levels:[0,3000,100     , 100    ,100,3000,3000 ,   3000,100     , 100    ,100,3000,3000],
-
-			times: [0,0.1936,0.1936,0.0968,0.0968,0,0,0.0968,0.04840,0.04840,0.04840,0,0
-			//	times: [0, 1/8,1/8   ,1/16  ,1/16  ,0,0,1/16,1/32,1/32,1/32,0,0
-
-			],
-			curve:[0,0,3,-3,0,3,-3,0,3,-3,0,3,-3,0,3,-3],
-			//curve: -3
-			//LFNoise1.kr(1/4).range(-3,3)
-			releaseNode:5,loopNode:1
-        ),
-
-		gate: Trig.kr( 1,dur:dure),doneAction:2,timeScale:SinOsc.kr(1.2875).range(0.25,2));
-
-
-  amp1 = EnvGen.kr(Env([0,0,0,1     ,1,0     ,0,0     ,0,0],
-		          [0,0,0,0.3872,0,0.7744],releaseNode:7,loopNode:1),
-	gate: Trig.kr( 1,dur:dure),doneAction:2);
-
-
-	amp2 = EnvGen.kr(Env([0,0,0,0     ,0,1     ,1,0   ,0  ,1,1,0,0,1],
-		          [0,0,0,0.3872,0,0.3872,0,0.7744,0,0.3872,0,0.3872,0],releaseNode:12,loopNode:1),
-	gate: Trig.kr( 1,dur:dure),doneAction:2);
-
-	amp3 = EnvGen.kr(Env([0,0,0,0     ,0,1     ,1,0     ,0,0],
-		          [0,0,0,0.7744,0,0.3872],releaseNode:7,loopNode:1),
-	gate: Trig.kr( 1,dur:dure),doneAction:2);
-
-
-
-
-
-
-
-// good one	mod2 = SinOsc.ar(freq/10, mul:MouseX.kr(1,freq/10 * iEnv));
-
-	//mod = SinOsc.ar(freq * mRatio + mod2 , mul:freq * mRatio * iEnv);
-
-	//mod2 = SinOsc.ar(MouseX.kr(freq/10,0.0201171875), mul:freq/10 * iEnv);
-
 	mod2 = SinOsc.ar(freq/10, mul:freq/10 * iEnv);
-
-
-	// same good one     mod = SinOsc.ar(freq * mRatio + mod2 , mul:MouseX.kr( 1,freq * mRatio * iEnv));
-
-
 
 	//GOOD LAST                                                                                HERE
 	mod = SinOsc.ar(MouseX.kr(freq * mRatio + mod2,0.0201171875)*SinOsc.kr(sineRate,phRise).range([sineRangeLow]), mul:freq * mRatio * iEnv)!2;
 
 	modE = SinOsc.ar(freq * mRatio + mod2*SinOsc.kr(sineRate,phRise).range([sineRangeLow]), mul:freq * mRatio * iEnv)!2;
 
-	/*modE2 = SinOsc.ar( LFTri.ar(1).range(SinOsc.ar(0.000001).range( freq * mRatio + mod2,0.0201171875),0.0201171875)*SinOsc.kr(sineRate,phRise).range([sineRangeLow]), mul:freq * mRatio * iEnv)!2;
 
-		modE2 = SinOsc.ar(VarLag.ar(LFNoise0.kr(0.0000000003).range( freq * mRatio + mod2,0.0201171875),0.000000001,-1,5)*SinOsc.kr(sineRate,phRise).range([sineRangeLow]), mul:freq * mRatio * iEnv)!2;
-
-
-
-	*/
 //0.0201171875
 	modE2 = SinOsc.ar(Lag.ar(  freq * mRatio + mod2 ,0.06)*SinOsc.kr(sineRate,phRise).range([sineRangeLow]), mul:freq * mRatio * iEnv)!2;
 
@@ -216,41 +125,15 @@ EnvGen.kr(Env.new(
 	car =SinOsc.ar(  0.00502929687+eFreq * cRatio +SelectX.ar(SinOsc.kr(0.0020,phFm).range(0,1),[SinOsc.ar(0),SelectX.ar(whichMod,[ mod,modE,modE2])]) + pitch +(In.kr(bus4, 1)/4));
 
 
-
-		/*
-		car2 =LFSaw.ar(  0.00502929687+eFreq * cRatio +SelectX.ar(SinOsc.kr(0.0020,phFm).range(0,1),[SinOsc.ar(0),SelectX.ar(whichMod,[ mod,modE,modE2])]) + pitch +(In.kr(bus4, 1)/4));
-
-*/
-car2 =LFSaw.ar(  0.00502929687+eFreq );
-
-		/* immacule
-
-		car =SinOsc.ar(  0.00502929687+eFreq * cRatio +SelectX.ar(SinOsc.kr(0.0020,phFm).range(0,1),[SinOsc.ar(0),SelectX.ar(whichMod,[ mod,modE,modE2])]) + pitch );*/
+	car2 =LFSaw.ar(  0.00502929687+eFreq );
 
 
 
-//	car = Saw.ar( 0.00502929687 +eFreq + freq+MouseY.kr(0,82.41)* cRatio + pitch );
-
-
-
-
-//1.3
-
-
-	//car = SinOsc.ar(freq * cRatio + mod) * amp;
-
-
-
-
-
-
-		sig = Shaper.ar(~tfBuf,SelectX.ar(wCar,[car,car2]));
+	sig = Shaper.ar(~tfBuf,SelectX.ar(wCar,[car,car2]));
 
 	sig  = LeakDC.ar(sig);
 
 
-
-	//lp = LPF.ar(sig ,SinOsc.ar(filRte ).range(82.41,22000));//82.41     //Varlag ?
 
 	lp = BLowPass4.ar(sig , In.kr(bus, 1)+In.kr(bus2, 1)+ In.kr(bus3, 1)   //LFNoise1.kr(2.575).range(0.2,20.3)
 
@@ -259,79 +142,67 @@ car2 =LFSaw.ar(  0.00502929687+eFreq );
 
 	lp2 = BLowPass4.ar(sig, (SinOsc.ar(LFNoise1.kr(Lag.kr(2.575,0.0968)).range(0,7.72500)).range(82.41,1400)), rq: 0.3);//MouseX.kr(0,7.72500)
 
-	//bp = BPF.ar(lp2,(SinOsc.ar(LFNoise1.kr(Lag.kr(2.575,0.0968)).range(0,7.72500)).range(82.41,1400)),0.1);
-
-
-//	bp = BPF.ar(sig,(SinOsc.ar(LFNoise1.kr(Lag.kr(2.575,0.0968)).range(0,7.72500)).range(82.41,1400)),0.1);
-
-
-			bp = BPF.ar(sig,bpFreq+ In.kr(bus5, 1)+ In.kr(bus6, 1),0.3);//0.05
-
+	bp = BPF.ar(sig,bpFreq+ In.kr(bus5, 1)+ In.kr(bus6, 1),0.3);//0.05
 	hp = BHiPass4.ar(sig, In.kr(bus, 1)+In.kr(bus2, 1)+ In.kr(bus3, 1)  ,MouseY.kr(1,0.4,0));
 //MouseX.kr(100,5000+ filF)
 //slcFil
 	sig =SelectX.ar(which, [lp, bp,hp,sig]);//* env* amp;
 
+	b1 =  sig * env;
 
 
-
-	a1 = sig * amp1;
-	a2 = sig * amp2;
-	a3 = sig* amp3;
-
-	b1 =  SelectX.ar(whichAmp, [a1, a2,a3, sig]) * env;
-	b2 =  SelectX.ar(whichAmp, [a1, a2,a3, sig]) * env2;
-	b3 =  SelectX.ar(whichAmp, [a1, a2,a3, sig]) * env3;
-	//b4 =  SelectX.ar(whichAmp, [a1, a2,a3, sig]) * env4;
-
-
-
-
-
-	//tttaaataaaa env env !!! make another row to leave open for options and formula variery
-
-
-	sig = Pan2.ar( HPF.ar(SelectX.ar(whichEnv, [SelectX.ar(whichAmp, [a1, a2,a3, sig]),b1,b2,b3]),100) , pan)* amp;
-
-
-	dry = sig;
-	wet = sig;
-	wet = DelayN.ar(wet, 0.5, predel.clip(0.0001,0.5));
-	wet = 16.collect{
-		var temp;
-		temp = CombL.ar(
-			wet,
-			0.1,
-			LFNoise1.kr({ExpRand(0.02,0.04)}!2).exprange(0.02,0.999),
-			dec
-		);
-		temp = LPF.ar(temp, lpf1);
-	}.sum * 0.25;
-	8.do{
-		wet = AllpassL.ar(
-			wet,
-			0.1,
-			LFNoise1.kr({ExpRand(0.02,0.04)}!2).exprange(0.02,0.999),
-			dec
-		);
-	};
-	wet = LeakDC.ar(wet);
-	wet = LPF.ar(wet, lpf2, 0.5);
-	sig = dry.blend(wet,mix);
-
-
-
-
-
-
-
-
-	Out.ar(0, sig);
+	sig = Pan2.ar( HPF.ar(SelectX.ar(whichEnv, [sig,b1]),100) , pan)* amp;
+	Out.ar(~reverbBus, sig);//was zero   ~reverbBus
 }).add;
 
 
 
+
 	"init lead".postln;
+SynthDef(\reverb, {
+		|out=0, roomsize, revtime, damping, inputbw, spread = 15, drylevel, earlylevel,
+    taillevel, amp=0.05|
+
+
+
+	var a ,input;
+
+	input = In.ar(~reverbBus,1);
+	a = Resonz.ar(
+
+		input
+
+
+
+		,
+        1760 * [1, 2, 4, 8],
+        0.01
+    ).sum * 10;
+
+
+//1760
+
+    //    var a = SoundIn.ar(0);
+    //    var a = PlayBuf.ar(1, 0);
+
+    Out.ar(out,
+        (GVerb.ar(
+            input,
+            roomsize,
+            revtime,
+            damping,
+            inputbw,
+            spread,
+            drylevel.dbamp,
+            earlylevel.dbamp,
+            taillevel.dbamp,
+            roomsize, amp,)
+		+ input  )*   EnvGen.kr(Env.perc(0,revtime),Trig.kr(2,revtime),doneAction:2) )
+
+
+
+	}).add;
+	"init reverb".postln;
 
 	SynthDef(\bass,{
 		arg freq=41.2, dure=1, amp=0.5,
@@ -529,51 +400,22 @@ SynthDef.new(\hit, {
 
 SynthDef(\wNoise, {
 
-	arg in=0, dec=1.5, mix=0.2, lpf1=2000, lpf2= 6000, predel=0.000003,out=0, maxdelaytime=0.000001, amp = 0.0042, sub =1,sub2 =3, valStart= 10000,valEnd =100, wFil=1;
+	arg in=0, dec=1.5, mix=0.2, lpf1=2000, lpf2= 6000, predel=0.000003,out=0, maxdelaytime=0.000001, amp = 0.0042, sub =1,sub2 =3, valStart= 10000,valEnd =100, wFil=1, pan =0;
 	var env,dry, wet, sig,env2, ori;
 
 	env = EnvGen.kr(Env([1,1,0],[0,sub,0]));
 
-	env2 = EnvGen.kr(Env([1,1,0],[0,sub2,0]),doneAction:2);
+	env2 = EnvGen.kr(Env([amp,amp,0],[0,sub2,0]),doneAction:2);
 
-	ori =  SelectX.ar(wFil,[LPF.ar(WhiteNoise.ar(env),XLine.kr(valStart,valEnd,3)),HPF.ar(WhiteNoise.ar(env),XLine.kr(valStart,valEnd,3))]);
-
-
+	sig =  SelectX.ar(wFil,[LPF.ar(WhiteNoise.ar(env),XLine.kr(valStart,valEnd,3)),HPF.ar(WhiteNoise.ar(env),XLine.kr(valStart,valEnd,3))]);
 
 
 
-
-
-	dry = ori;
-	wet = ori;
-
-
-	wet = DelayN.ar(wet, maxdelaytime, predel.clip(0.0001,0.5));
-	wet = 16.collect{
-		var temp;
-		temp = CombL.ar(
-			wet,
-			0.1,
-			LFNoise1.kr({ExpRand(0.02,0.04)}!2).exprange(0.02,0.999),
-			dec
-		);
-		temp = LPF.ar(temp, lpf1);
-	}.sum * 0.25;
-	8.do{
-		wet = AllpassL.ar(
-			wet,
-			0.1,
-			LFNoise1.kr({ExpRand(0.02,04)}!2).exprange(0.02,0.999),
-			dec
-		);
-	};
-	wet = LeakDC.ar(wet);
-	wet = LPF.ar(wet, lpf2, 0.5);
-	sig = dry.blend(wet,mix);
+sig = Pan2.ar( sig , pan);//0 was pan
 
 
 
-	Out.ar(out,HPF.ar(sig,100)* env2 *amp
+	Out.ar(out,HPF.ar(sig,100)* env2 //*amp
 
     )
 }).add;

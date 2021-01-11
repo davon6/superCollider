@@ -121,7 +121,7 @@ s.plotTree
 
 
 ~bus11 //not used yet
-
+s.scope
 
 
 (
@@ -136,8 +136,9 @@ o = {Out.kr(~bus1, SinOsc.ar(1.2875).range(5274.04,81.41))  ;
 	Out.kr(~bus8,SinOsc.ar( 1.2875).range(0.1609375,164.81) );
 
 	Out.kr(~bus9, SinOsc.ar(LFTri.ar(1.2875).range(1.2875,0)).range(657.9895,60.727));//c3
-	Out.kr(~bus10, SinOsc.ar(0.1609375).range(0.0201171875,2637.02));
+	 Out.kr(~bus10, SinOsc.ar(0.1609375).range(0.0201171875,2637.02));
 	Out.kr(~bus11, LFNoise0.kr(5.15).range(2.575,2637.02));
+ Out.kr(~bus12, SinOsc.ar(0.64375).range(2637.02,0.0201171875));
 
 
 
@@ -145,12 +146,12 @@ o = {Out.kr(~bus1, SinOsc.ar(1.2875).range(5274.04,81.41))  ;
 
 
 
+//s.plotTree
 
 
 
 
-
-
+/*
 
 Pdef(\pr22,
 
@@ -175,7 +176,7 @@ Pbind(\instrument,\lead, \dur,Pseq([1/16], 32),//Pseq([1/4],8),
 ));
 
 
-
+*/
 
 
 
@@ -203,7 +204,7 @@ Pbind(\instrument,\lead, \dur,Pseq([1/16], 32),//Pseq([1/4],8),
 \amp,0.135
 ));
 
-
+/*
 
 
 
@@ -223,7 +224,7 @@ Pbind(\instrument,\lead, \dur,Pseq([1/1],1),//Pseq([1/4],8),
 	//\filF,Pseq([ 0,500,700,1000,1500,1700, 2000,0],inf),
 \amp,0.135
 ));
-
+*/
 
 Pdef(\tokeep,
 
@@ -266,7 +267,7 @@ Pbind(\instrument,\lead, \dur,Pseq([2/1],1),//Pseq([1/4],8),
 
 Pdef(\proot,
 
-Pbind(\instrument,\lead, \dur,Pseq([2/1],1),//Pseq([1/4],8),
+Pbind(\instrument,\lead, \dur,Pseq([1/1],1),//Pseq([1/4],8),
 	//\freq,30,
 	\dure,60/151.703592*2,
 		//\bpFreq,700,
@@ -274,14 +275,14 @@ Pbind(\instrument,\lead, \dur,Pseq([2/1],1),//Pseq([1/4],8),
 \which,1,\whichMod,2,\whichAmp,4,\whichEnv,3,
 
 
-		\decE, 5,\bus4,4,\wCar,1,\bus5,~bus5,\bus6,~bus11,
+		\decE, 60/151.703592*2,\bus4,4,\wCar,1,\bus5,~bus5,\bus6,~bus11,
 
 
 
 	//\filF,Pseq([ 0,125,250,375,500,625,750,875,1000,1125,1250,1375,1500,1625,1750,1875,2000
 		// ,1875,1750,1625,1500,1375,1250,1125,1000,875,750,625,500,375,250,125],inf),
 	//\filF,Pseq([ 0,500,700,1000,1500,1700, 2000,0],inf),
-\amp,0.135
+\amp,0.4
 ));
 
 
@@ -290,41 +291,62 @@ Pbind(\instrument,\lead, \dur,Pseq([2/1],1),//Pseq([1/4],8),
 
 
 
-
 //sunday
+Pdef(\melo,Pbind(\instrument,\lead,		\dur,Pseq([1/3],6),\dure,60/151.703592/3,
+		\type,Pseq([\note,\rest,\note,\rest,\note,\rest,\note,\rest,\rest,\rest,\rest,\rest],inf),
+	\eFreq,        Pseq([  [300 ,297]    ,1,  [340,337],  360,  [360,357],  390,[380,377],400,400,430,450,450,45,45],inf),
+\which,2,\whichMod,2,\whichAmp,4,\whichEnv,3,\wCar,1,	\decE, 1,\bus,~bus12,\bus2,34,\bus3,24,\amp,0.006
+));
 
 
-Pdef(\melo,
+
+Pdef(\melo,Pbind(\instrument,\lead,		\dur,Pseq([1/3],12),\dure,60/151.703592/3,//was 12
+		\type,Pseq([\note,\rest,\note,\rest,\note,\rest,\note,\rest,\rest,\rest,\rest,\rest],inf),
+	\eFreq,        Pseq([  [329.63 ,326.63 ]    ,1,  [369.63,366.63],  360,  [389.63,386.63],  390,[409.63,406.63],400,400,430,450,450,45,45],inf),
+	\which,2,\whichMod,2,\whichAmp,4,\whichEnv,3,\wCar,1,	\decE, 1,\bus,~bus12,\bus2,34,\bus3,24,\amp,0.006,
+));
+
+
+
+Pdef(\r1,Pbind(\instrument,\reverb,\dur,Pseq([1/3],12),\roomsize, 16, \revtime, 3.24, \damping, 0.30, \inputbw, 0.95, \drylevel, (-3), \earlylevel, (-10), \taillevel, (-10)));
+
+
+~melo = Ppar([Pdef(\melo),Pdef(\r1)],1);
+
+
+
+//Ppar([~ens15Perc, Pseq([Pdef(\melo)],8)],inf).play(t);
+
+
+Pdef(\melo2,
 
 Pbind(\instrument,\lead,
 		\dur,Pseq([1/3],inf),
-		\type,Pseq([\note,\rest,\note,\rest,\note,\rest,\rest,\rest,\rest,\note],inf),
+		\type,Pseq([\note,\rest,\note,\rest,\note,\rest,\note,\rest,\rest,\rest,\rest,\rest,\rest,\rest],inf),
 	\dure,60/151.703592/3,
-\eFreq,Pseq([300,340,500,580,629],inf),
+       \eFreq,Pseq([380,1      ,450   ,400  ,360,430,   380,  400,400,430,450,450,45,45],inf),
 \which,2,\whichMod,2,\whichAmp,4,\whichEnv,3,\wCar,1,	\decE, 1,
 
 
 	\bus4,4,\bus5,~bus5,\bus6,~bus11,
 
 \amp,0.135
-)).play(t);
+));
+
+
+
+//Pdef(\pr22).play(t);
 
 
 
 
 
-
-
-
-/*
-
-~snewww= Pseq([Pdef(\fuzzy11122),Pdef(\fuzzyhIGH),Pdef(\fuzzyhIGH2),Pdef(\fuzzy112),
+~snewww= Pseq([Pdef(\fuzzy11122),Pdef(\fuzzyhIGH),Pdef(\fuzzyhIGH2),    Pdef(\fuzzy112),~melo,
 	Pdef(\fuzzyhIGH2),Pdef(\fuzzy112),Pdef(\pr22),Pdef(\pre),Pdef(\fuzzy112),Pdef(\proo),Pdef(\proot)
 ],1);
 
 
-~ee3 = Ppar([       Pseq([~ens15Perc],2),           Pseq([Pdef(\wNoise2) ,~snewww,Pdef(\wNoise2)  ],1)    ],inf).play(t);
-*/
+~ee3 = Ppar([       Pseq([~ens15Perc],2),           Pseq([~noise ,~snewww,~noise  ],1)    ],inf).play(t);
 
 
 
@@ -338,7 +360,7 @@ Pbind(\instrument,\lead,
 
 
 )
-
+s.plotTree
 1+1
 //\dure,60/151.703592/4 ,\amp,0.006,\which,0,\whichMod,2,\whichAmp,4,\whichEnv,0,\phFm,11));
 
