@@ -1,6 +1,9 @@
 s.options.memSize = 1048576;
 ~reverbBus = Bus.audio(s,1);
 
+Server.default.options.outDevice_("Audient iD14");
+
+Server.default.options.outDevice_("Built-in Output");
 
 
 
@@ -152,7 +155,7 @@ SynthDef(\lead, {
 
 
 	sig = Pan2.ar( HPF.ar(SelectX.ar(whichEnv, [sig,b1]),100) , pan)* amp;
-	Out.ar(~reverbBus, sig);//was zero   ~reverbBus
+	Out.ar(out, sig);//was zero   ~reverbBus
 }).add;
 
 
@@ -161,7 +164,7 @@ SynthDef(\lead, {
 	"init lead".postln;
 SynthDef(\reverb, {
 		|out=0, roomsize, revtime, damping, inputbw, spread = 15, drylevel, earlylevel,
-    taillevel, amp=0.05|
+    taillevel, amp=0.3,maxRoomsize,wet=0.4|
 
 
 
@@ -171,12 +174,13 @@ SynthDef(\reverb, {
 	a = Resonz.ar(
 
 		input
-
-
-
+,
+        659.25 * [2,4,8,16],
+ wet
+/*
 		,
         1760 * [1, 2, 4, 8],
-        0.01
+        0.01*/
     ).sum * 10;
 
 
@@ -187,7 +191,7 @@ SynthDef(\reverb, {
 
     Out.ar(out,
         (GVerb.ar(
-            input,
+            a,
             roomsize,
             revtime,
             damping,
@@ -196,7 +200,7 @@ SynthDef(\reverb, {
             drylevel.dbamp,
             earlylevel.dbamp,
             taillevel.dbamp,
-            roomsize, amp,)
+				maxRoomsize, (amp-(amp/10)),)
 		+ input  )*   EnvGen.kr(Env.perc(0,revtime),Trig.kr(2,revtime),doneAction:2) )
 
 

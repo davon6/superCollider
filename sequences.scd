@@ -1,5 +1,5 @@
 
-
+s.scope
 ~bar16
 ~ens15Perc
 ~half16.play(t)
@@ -176,7 +176,7 @@ Pbind(\instrument,\lead, \dur,Pseq([1/16], 32),//Pseq([1/4],8),
 ));
 
 
-*/
+
 
 
 
@@ -288,7 +288,7 @@ Pbind(\instrument,\lead, \dur,Pseq([1/1],1),//Pseq([1/4],8),
 
 
 
-
+*/
 
 
 //sunday
@@ -300,15 +300,22 @@ Pdef(\melo,Pbind(\instrument,\lead,		\dur,Pseq([1/3],6),\dure,60/151.703592/3,
 
 
 
-Pdef(\melo,Pbind(\instrument,\lead,		\dur,Pseq([1/3],12),\dure,60/151.703592/3,//was 12
+Pdef(\melo,Pbind(\instrument,\lead,		\dur,Pseq([1/12],24),\dure,60/151.703592/3,//was 12
 		\type,Pseq([\note,\rest,\note,\rest,\note,\rest,\note,\rest,\rest,\rest,\rest,\rest],inf),
-	\eFreq,        Pseq([  [329.63 ,326.63 ]    ,1,  [369.63,366.63],  360,  [389.63,386.63],  390,[409.63,406.63],400,400,430,450,450,45,45],inf),
-	\which,2,\whichMod,2,\whichAmp,4,\whichEnv,3,\wCar,1,	\decE, 1,\bus,~bus12,\bus2,34,\bus3,24,\amp,0.006,
+	\eFreq,        Pseq([  [329.63 ,326.63 ]    ,1,  [369.63,366.63],  360,  [389.63,386.63],  390,[409.63,406.63],400,400,430,450,450,45,45,
+
+
+		380,1      ,450   ,400  ,360,430,   380,  400,400,430,450,450,45,45
+
+
+
+	],inf),
+	\which,2,\whichMod,2,\whichAmp,4,\whichEnv,3,\wCar,1,	\decE, 1,\bus,~bus12,\bus2,34,\bus3,24,\amp,0.0006,\out,~reverbBus
 ));
 
 
 
-Pdef(\r1,Pbind(\instrument,\reverb,\dur,Pseq([1/3],12),\roomsize, 16, \revtime, 3.24, \damping, 0.30, \inputbw, 0.95, \drylevel, (-3), \earlylevel, (-10), \taillevel, (-10)));
+Pdef(\r1,Pbind(\instrument,\reverb,\dur,Pseq([1/3],12),\roomsize, 16, \revtime, 3.24, \damping, 0.30, \inputbw, 0.95, \drylevel, (-3), \earlylevel, (-10), \taillevel, (-10),\maxRoomsize,16));
 
 
 ~melo = Ppar([Pdef(\melo),Pdef(\r1)],1);
@@ -339,7 +346,7 @@ Pbind(\instrument,\lead,
 
 
 
-
+/*
 
 ~snewww= Pseq([Pdef(\fuzzy11122),Pdef(\fuzzyhIGH),Pdef(\fuzzyhIGH2),    Pdef(\fuzzy112),~melo,
 	Pdef(\fuzzyhIGH2),Pdef(\fuzzy112),Pdef(\pr22),Pdef(\pre),Pdef(\fuzzy112),Pdef(\proo),Pdef(\proot)
@@ -350,11 +357,17 @@ Pbind(\instrument,\lead,
 
 
 
+*/
+
+~snewww= Pseq([~lpFuzz,~hpFuzz2,~hpFuzz,~lpFuzz2,~melo,
+	~hpFuzz,~lpFuzz2,~pr,~pre,~lpFuzz2,~proo,~proot
+],1);
 
 
 
+~ee3 = Ppar([       Pseq([~ens15Perc],2),           Pseq([~noise ,~snewww,~noise  ],1)    ],inf).play(t);
 
-
+//~lpFuzz2.play
 
 
 
