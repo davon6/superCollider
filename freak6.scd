@@ -1,5 +1,6 @@
 s.options.memSize = 1048576;
 ~reverbBus = Bus.audio(s,1);
+s.options.memSize = 1572864;
 
 Server.default.options.outDevice_("Audient iD14");
 
@@ -92,7 +93,7 @@ SynthDef(\lead, {
 
 			Env.new(
 			[1, 1 * 5, 1 * 5],
-			[0.000000000001,        (dure  ),      0.0000000001],	//[atk was  0.01,          450,      10 ],   was 0.01   -1.6   -0.8
+			[0.000000000001,        (decE  ),      0.0000000001],	//[atk was  0.01,          450,      10 ],   was 0.01   -1.6   -0.8 was dure
 			[4, (-4)]
 		),doneAction:2
 );//- 1.604003    here!!!
@@ -175,7 +176,7 @@ SynthDef(\reverb, {
 
 		input
 ,
-        659.25 * [2,4,8,16],
+        659.25 * [8,16,32],
  wet
 /*
 		,
