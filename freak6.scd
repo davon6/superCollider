@@ -83,7 +83,7 @@ b = Buffer.alloc(s, s.sampleRate *0.3872,1);//tight good
 
 
 SynthDef(\lead, {
-		arg freq= 500, mRatio=1, cRatio=1, index =1, iScale=5, amp=0.01, atk= 0.01  , rel=3, cAtk = 4 , cRel = (-4) , pan =0, atkE =0,decE=0.1936, subsE=50, relE=0, sineRate = 0.0000000095262251, sineRangeHigh = 0, sineRangeLow=0, pitch = 0, sRteLPF = 1.3, timeSca= 0.25, dure= 1/1, which = 1, whichMod = 1, whichAmp =0,phRise= 0 , whichEnv = 0,timeSca2 =1,out=0, eFreq =0 , phFm=8,decEC=0,filF=200, bus,bus2=14,bus3=14,bus4=14,bus5=14,bus6=14, bus7=14,   bpFreq = 500,wCar=0,roomsize, revtime, damping, inputbw, spread = 15, drylevel, earlylevel,
+		arg freq= 500, mRatio=1, cRatio=1, index =1, iScale=5, amp=0.01, atk= 0.01  , rel=3, cAtk = 4 , cRel = (-4) , pan =0, atkE =0,decE=0.1936, subsE=50, relE=0, sineRate = 0.0000000095262251, sineRangeHigh = 0, sineRangeLow=0, pitch = 0, sRteLPF = 1.3, timeSca= 0.25, dure= 1/1, which = 1, whichMod = 1, whichAmp =0,phRise= 0 , whichEnv = 0,timeSca2 =1,out=0, eFreq =0 , phFm=8,decEC=0,filF=200, bus,bus2=14,bus3=14,bus4=14,bus5=14,bus6=14, bus7=14, bus8= 15 ,  bpFreq = 500,wCar=0,roomsize, revtime, damping, inputbw, spread = 15, drylevel, earlylevel,
     taillevel,maxRoomsize,wet=0.4;
 
 
@@ -95,7 +95,7 @@ SynthDef(\lead, {
 	//5.15
 
 //dont forget 2nd zero used to be 1
-	env = EnvGen.kr(Env([0,1,0,0],[atkE,decE, subsE,relE],[-2,-3,0,0]),
+		env = EnvGen.kr(Env([0,1,0,0],[atkE,decE, subsE,relE],[-2,(-3+In.kr(bus8, 1)),0,0]),
 		//doneAction:2
 
 	);
@@ -187,15 +187,27 @@ SynthDef(\lead, {
 
 
 SynthDef.new(\ptr, {
-	arg out=0, buf=0;
-	var sig;
+	arg out=0, buf=0,dec=1 ;
+	var sig,env;
+
+		env = EnvGen.kr(Env([0,1,0,0],[0,dec, 0,0],[-2,22,0,0]),
+		doneAction:2
+
+	);
+
+
 	sig = Phasor.ar(0, BufRateScale.kr(buf), 0, BufFrames.kr(buf));
 	Out.ar(out, sig);
 }).add;
 
 SynthDef.new(\rec, {
-	arg ptrIn=0, micIn=0, buf=0;
-	var ptr, sig;
+	arg ptrIn=0, micIn=0, buf=0, dec = 1;
+	var ptr, sig, env;
+
+		env = EnvGen.kr(Env([0,1,0,0],[0,dec, 0,0],[-2,22,0,0]),
+			doneAction:2);
+
+
 	ptr = In.ar(ptrIn, 1);
 	sig = In.ar(micIn, 1);
 	BufWr.ar(sig, buf, ptr);

@@ -48,6 +48,9 @@ s.scope
 	 Out.kr(~bus13, SinOsc.ar(0.0201171875).range(81.41,164.81));//useless
 
 
+
+
+
  }.play;
 
 
@@ -63,7 +66,8 @@ Pdef(\fuzzyhIGH2,
 
 		\bus, ~bus5,
 \bus2,50,//~bus2,
-		\bus3, 40,\bus4,40,\bus7,50,
+		\bus3, 40,\bus4,40,\bus7,50,\bus8, ~bus4,
+
 
 	/*
 \bus, ~bus1,
@@ -81,8 +85,8 @@ Pdef(\fuzzyhIGH2,
 	/*	\atkE,Pseq([0.3,0,0,0,0.2,0.1,0,0],inf),
 	\subsE,Pseq([0,0,0,0],inf),
 	\decE,Pseq([0,0.2,0.2,0.2],inf),*/
-		\decE,Pseq([48/16],1),
-		\amp,0.0090,
+		\decE,Pseq([58/16],1),
+		\amp,0.0030,
 		//\amp,1,
 		\out,~micBus,
 		\group, ~micGrp
@@ -94,8 +98,11 @@ Pdef(\fuzzyhIGH2,
 */
 
 
-~ptr = Pbind(\instrument,\ptr, \buf, c, \out, ~ptrBus,\group,~ptrGrp,\dur,Pseq([1024/1],inf)).play;
-~rec =Pbind(\instrument,\rec, \ptrIn, ~ptrBus, \micIn, ~micBus, \buf, c,\group,~recGrp,\dur,Pseq([1024/1],inf)).play;
+~ptr = Pbind(\instrument,\ptr, \buf, c, \out, ~ptrBus,\group,~ptrGrp,\dur,Pseq([58/16],1)
+	//,\dec,Pseq([58/16],1)
+
+);
+~rec =Pbind(\instrument,\rec, \ptrIn, ~ptrBus, \micIn, ~micBus, \buf, c,\group,~recGrp,\dur,Pseq([58/16],1));
 
 
 
@@ -108,7 +115,7 @@ Pdef(\granHighFuzz,Pbind(\instrument,\gran,
 	\rel, 1,
 	\gate, 1,
 	\ptrBus, ~ptrBus,
-	\ptrSampleDelay, s.sampleRate/3,
+	//\ptrSampleDelay, s.sampleRate/3,
 	\ptrRandSamples, 0,
 	\minPtrDelay, 1000,\group,~granGrp,
 	//\pitchRte,1,\duration,8,\impulse, 1.2875
@@ -129,7 +136,7 @@ Pdef(\revfuzzyhIGH2,Pbind(\instrument,\reverb,  \dur,Pseq([1/16],58),\roomsize, 
 ));
 
 
-v =Ppar([Pdef(\fuzzyhIGH2), Pdef(\granHighFuzz) ,Pdef(\revfuzzyhIGH2)],1).play(t);
+v =Ppar([~ptr,~rec, Pdef(\fuzzyhIGH2),Pdef(\granHighFuzz) ,Pdef(\revfuzzyhIGH2)],1);//.play(t);
 
 //,Pdef(\revfuzzyhIGH2)      Pdef(\granHighFuzz),
 /*
@@ -138,8 +145,10 @@ v =Ppar([Pdef(\fuzzyhIGH2), Pdef(\granHighFuzz) ,Pdef(\revfuzzyhIGH2)],1).play(t
 ],1);*/
 
 
-/*
-~ee3 = Ppar([       Pseq([~ens15Perc],2),           Pseq([~noise ,v  ],2)    ],inf).play(t);*/
+
+~ee3 = Ppar([       Pseq([~ens15Perc],2),           Pseq([v,~noise  ],4)    ],inf).play(t);
+
+//~ee3 = Ppar([       Pseq([~ens15Perc],2),           Pseq([v  ],4)    ],inf).play(t);
 
 
 //~ee3 =  Pseq([~noise ,v  ],inf).play(t)
