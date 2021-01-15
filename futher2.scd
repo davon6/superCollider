@@ -14,13 +14,17 @@
 ~bus10 = Bus.control(s,1);
 ~bus11 = Bus.control(s,1);
 ~bus12 = Bus.control(s,1);
+~bus13 = Bus.control(s,1);
+
+~bus14 = Bus.control(s,1);
 )
 
-(
+(//to on before Pbind !!!!!
 ~micGrp = Group.new;
 ~ptrGrp = Group.after(~micGrp);
 ~recGrp = Group.after(~ptrGrp);
 ~granGrp = Group.after(~recGrp);
+~revGrp = Group.after(~granGrp);
 )
 
 (SynthDef(\uuuu,{ Out.ar(~micBus,SinOsc.ar(432+ SinOsc.ar( 1.28).range(300,1400),mul:0.1/* EnvGen.kr(Env.perc(0.1,1.6),doneAction:2)*/))}).add;)
@@ -28,7 +32,7 @@
 Pdef(\uuuuuuuu,Pbind(\instrument, \uuuu,\dur,Pseq([16/1],inf),\group, ~micGrp)).play;
 
 s.scope
-
+s.plotTree
 (
 
 
@@ -300,7 +304,7 @@ Pbind(\instrument,\lead, \dur,Pseq([1/1], 1),//Pseq([1/4],8),
 	//\filF,Pseq([ 0,125,250,375,500,625,750,875,1000,1125,1250,1375,1500,1625,1750,1875,2000
 		// ,1875,1750,1625,1500,1375,1250,1125,1000,875,750,625,500,375,250,125],inf),
 	//\filF,Pseq([ 0,500,700,1000,1500,1700, 2000,0],inf),
-		\amp,0.0022,\out,~reverbBus
+		\amp,0.0022,\out,~micBus,\group, ~micGrp//~reverbBus
 ));
 
 Pdef(\revfuzzyhIGH,Pbind(\instrument,\reverb, \dur,Pseq([1/1], 1),\roomsize, 16, \revtime, 3.24, \damping, 0.10, \inputbw, 0.95, \drylevel, -3, \earlylevel, -15, \taillevel, -17,\maxRoomsize,16,\out,~micBus,\group, ~micGrp
@@ -328,25 +332,25 @@ Pdef(\fuzzy11122,
 		\atkE,Pseq([0.3,0,0,0,0.2,0.1,0,0],inf),
 	\subsE,Pseq([0,0,0,0],inf),
 	//\decEC,Pseq([0,0.3872,0.3872,0.3872],inf),
-		\amp,0.0025,\out,~reverbBus
-
+		\amp,0.0025,\out,~reverbBus/////~micBus,\group, ~micGrp//
+/*,\roomsize, 46, \revtime, 3.5488, \damping, 0.50, \inputbw, 2, \drylevel, -3, \earlylevel, -7, \taillevel, -0,\maxRoomsize,66,\wet,0.7*/
 ));
 
-Pdef(\refuzzy11122,Pbind(\instrument,\reverb, \dur,Pseq([48/16],1),\roomsize, 16, \revtime, 1.5488, \damping, 0.070, \inputbw, 2, \drylevel, -30, \earlylevel, -7, \taillevel, -12,\maxRoomsize,16,\wet,0.2,\out,~micBus,\group, ~micGrp
+Pdef(\refuzzy11122,Pbind(\instrument,\reverb, \dur,Pseq([1/16],48),\roomsize, 16, \revtime, 3.5488, \damping, 0.070, \inputbw, 2, \drylevel, -30, \earlylevel, -7, \taillevel, -2,\maxRoomsize,16,\wet,0.2,\out,0//~micBus,\group, ~micGrp
 
 ));
 
 ~lpFuzz = Ppar([Pdef(\fuzzy11122),Pdef(\refuzzy11122)],1);
 
 
-
+/*
 Pdef(\fuzzyhIGH2,
 	Pbind(\instrument,\lead, \dur,Pseq([1/16],48),
 	\freq, 657.9895,
 	\dure,60/151.703592/16,
 \bus, ~bus1,
 \bus2, ~bus2,
-		\bus3, ~bus3,\bus4,24,
+		\bus3, 24,\bus4,24,\bus7,~bus13,
 \which,2,\whichMod,2,\whichAmp,4,\whichEnv,4,
 
 		//\filF,Pseq([ 0,250,500,750,1000,1250,1500, 1750,2000,1750,1500,1250,1000,750,500,250],inf),
@@ -356,14 +360,53 @@ Pdef(\fuzzyhIGH2,
 		\atkE,Pseq([0.3,0,0,0,0.2,0.1,0,0],inf),
 	\subsE,Pseq([0,0,0,0],inf),
 	\decEC,Pseq([0,0.2,0.2,0.2],inf),
-		\amp,0.0020,\out,~reverbBus
+		\amp,0.0020,\out,0//~micBus,\group, ~micGrp//~reverbBus
+));*/
+
+
+Pdef(\fuzzyhIGH2,
+	Pbind(\instrument,\lead, \dur,Pseq([1/16],48),//48
+	\freq, 657.9895,
+	//\dure,60/151.703592/16,
+
+		\bus, ~bus5,
+\bus2, ~bus2,
+		\bus3, 40,\bus4,40,\bus7,~bus13,
+
+	/*
+\bus, ~bus1,
+\bus2, ~bus2,
+		\bus3, 24,\bus4,24,\bus7,~bus13,*/
+
+
+
+\which,2,\whichMod,2,\whichEnv,4,
+
+		//\filF,Pseq([ 0,250,500,750,1000,1250,1500, 1750,2000,1750,1500,1250,1000,750,500,250],inf),
+
+	//\filF,Pseq([ 0,500,700,1000,1500,1700, 2000,0],inf),
+	//\atkE,Pseq([0.4,0.2,0,0,0.2,0.1,0,0],inf),
+		\atkE,Pseq([0.3,0,0,0,0.2,0.1,0,0],inf),
+	\subsE,Pseq([0,0,0,0],inf),
+	\decE,Pseq([0,0.2,0.2,0.2],inf),
+		\amp,0.0020,
+		//\amp,1,
+		\out,~micBus,\group, ~micGrp
+//~reverbBus
 ));
 
-
-
-Pdef(\revfuzzyhIGH2,Pbind(\instrument,\reverb, \dur,Pseq([48/16],1),\roomsize, 51, \revtime,0.7744, \damping, 0.122, \inputbw, 0.5, \drylevel, -10, \earlylevel, -22, \taillevel, -0,\amp,0.1,\spread,100,\maxRoomsize,68,\out,~micBus,\group, ~micGrp
+Pdef(\revfuzzyhIGH2,Pbind(\instrument,\reverb,  \dur,Pseq([1/16],48),\roomsize, 61, \revtime,1.5488, \damping, 0.322, \inputbw, 0.5, \drylevel, -10, \earlylevel, -22, \taillevel, -5,\amp,0.1,\spread,100,\maxRoomsize,70,\out,0//~micBus,\group, ~micGrp
 
 ));
+/*
+Pdef(\revfuzzyhIGH2,Pbind(\instrument,\reverb,  \dur,Pseq([48/16],1),\roomsize, 61, \revtime,6, \damping, 0.322, \inputbw, 0.5, \drylevel, -10, \earlylevel, -22, \taillevel, -5,\amp,0.1,\spread,100,\maxRoomsize,70,\out,0//~micBus,\group, ~micGrp
+
+));*/
+
+
+
+
+
 
 ~hpFuzz = Ppar([Pdef(\fuzzyhIGH2),Pdef(\revfuzzyhIGH2)],1);
 
@@ -375,12 +418,12 @@ Pdef(\wNoise2,
 	\dur, Pseq([1/4], 16),
 		//\type, Pseq([\rest,\note,\rest,\rest,\rest,\rest,\rest,\rest], inf),
 		\type, Pseq([\rest,\rest,\rest,\rest,\note,\rest,\note,\note,\note,\note,\rest,\rest,\rest,\rest,\note,\rest,[\note,\note],\note,\rest,\rest,\rest], inf),
-\wet,0,\sub, 0.3872,\valStart,1000,  \valEnd,300,\sub2,0.5,\wFil,0, \out ,~reverbBus,\amp,0.15
+\wet,0,\sub, 0.3872,\valStart,1000,  \valEnd,300,\sub2,0.5,\wFil,0, \out ,~reverbBus,\amp,0.015
 
 
 ));
 
-Pdef(\revWNoise2,Pbind(\instrument, \reverb, \dur, Pseq([4/1], 1),\roomsize, 35, \revtime, 3.0976, \damping, 0.42, \inputbw, 0.48, \drylevel, -6, \earlylevel, -11, \taillevel, -13, \amp,0.3,\maxRoomsize,35,\wet,0.2
+Pdef(\revWNoise2,Pbind(\instrument, \reverb, \dur,  Pseq([1/4], 16),\roomsize, 35, \revtime, 3.0976, \damping, 0.42, \inputbw, 0.48, \drylevel, -6, \earlylevel, -11, \taillevel, -13, \amp,0.03,\maxRoomsize,65,\wet,0.2,\in, ~reverbBus, \group ,~revGrp
 
 
 //	\roomsize, 16, \revtime, 3.0976, \damping, 0.10, \inputbw, 0.95, \drylevel ,-3, \earlylevel, -15, \taillevel, -17
@@ -649,9 +692,9 @@ Synth(\rec, [\ptrIn, ~ptrBus, \micIn, ~micBus, \buf, b], ~recGrp);
 1+1
 (
 
-o = {Out.kr(~bus1, SinOsc.ar(1.2875).range(5274.04,81.41))  ;
-	Out.kr(~bus2, SinOsc.ar(5.15).range(164.81,81.41));
-	Out.kr(~bus3, SinOsc.ar(0.0201171875).range(164.81,2.575));
+o = {Out.kr(~bus1, SinOsc.ar(1.2875).range(2637.02,0.1609375))  ;
+	Out.kr(~bus2, SinOsc.ar(0.0201171875).range(164.81,81.41));
+	//Out.kr(~bus3, SinOsc.ar(0.0201171875).range(164.81,2.575));
 	Out.kr(~bus4, SinOsc.ar( 2.575 +SinOsc.kr(0.64375).range(0.01005859375,2.575)  ).range(20.60,1318.51));
 	Out.kr(~bus5, SinOsc.ar(1.2875).range(5274.04,0.0201171875));//c3
 	Out.kr(~bus6, SinOsc.ar(0.321875).range(0.0201171875,318.51));
@@ -664,8 +707,9 @@ o = {Out.kr(~bus1, SinOsc.ar(1.2875).range(5274.04,81.41))  ;
 
 	 Out.kr(~bus12, SinOsc.ar(0.64375).range(2637.02,0.0201171875));
 
-	//Pbind(\instrument,\ptr, \buf, b, \out, ~ptrBus,\group,~ptrGrp,\dur,Pseq([1024/1],inf));
-	//Pbind(\instrument,\rec, \ptrIn, ~ptrBus, \micIn, ~micBus, \buf, b,\group,~recGrp,\dur,Pseq([1024/1],inf));
+
+	 Out.kr(~bus13, SinOsc.ar(0.0201171875).range(81.41,164.81));
+
 
  }.play;
 ~snewww= Pseq([~lpFuzz,~hpFuzz2,~hpFuzz,~lpFuzz2,~melo,
@@ -680,6 +724,10 @@ o = {Out.kr(~bus1, SinOsc.ar(1.2875).range(5274.04,81.41))  ;
 
 ~ptr = Pbind(\instrument,\ptr, \buf, b, \out, ~ptrBus,\group,~ptrGrp,\dur,Pseq([1024/1],inf)).play;
 ~rec =Pbind(\instrument,\rec, \ptrIn, ~ptrBus, \micIn, ~micBus, \buf, b,\group,~recGrp,\dur,Pseq([1024/1],inf)).play;
+
+
+
+
 //Pdef(\uuuuuuuu,Pbind(\instrument, \uuuu,\dur,Pseq([1024/1],inf),\group, ~micGrp)).play;
 
 
@@ -691,19 +739,58 @@ o = {Out.kr(~bus1, SinOsc.ar(1.2875).range(5274.04,81.41))  ;
 
 
 
+/*
+Pdef(\fuzzyhIGH2,
+	//Pbind(\instrument,\lead, \dur,Pseq([1/16],48),
+	Pbind(\instrument,\lead, \dur,Pseq([1/16],48),
+	//Pbind(\instrument,\lead, \dur,Pseq([48/1],1),
+	\freq, 657.9895,
+	//\dure,60/151.703592*48,
+\bus, ~bus1,
+\bus2, ~bus2,
+		\bus3, 24,\bus4,24,\bus7,~bus13,
+
+	/*	\bus, 40,
+\bus2, 40,
+		\bus3, 40,\bus4,40,\bus7,40,
+\which,2,\whichMod,2,\whichEnv,4,*/
+
+		//\filF,Pseq([ 0,250,500,750,1000,1250,1500, 1750,2000,1750,1500,1250,1000,750,500,250],inf),
+
+	//\filF,Pseq([ 0,500,700,1000,1500,1700, 2000,0],inf),
+	//\atkE,Pseq([0.4,0.2,0,0,0.2,0.1,0,0],inf),
+	\atkE,Pseq([0.3,0,0,0,0.2,0.1,0,0],inf),
+	\subsE,Pseq([0,0,0,0],inf),
+	//\decE,Pseq([0,0.02,0.02,0.2],inf),
+
+//\decEC,Pseq([0,0.2,0.2,0.2],inf),
+
+		//\decE,0.08,
+
+
+		\amp,0.0020,\out,0,//~micBus,\group, ~micGrp//~reverbBus
+));*/
+
+
+
 
 
 Pdef(\hey4,Pbind(\instrument,\gran,
-	\dur, Pseq([24/1],1),
-	\amp, 0.5,
+	//\dur, Pseq([24/1],1),
+	// \dur,Pseq([48/16],1),
+	\dur, Pseq([48/16],1),
+
+	\amp, 1.5,
 	\buf, b,
-	\out, 0,
-	\atk, 1,
+	\out,0,//~reverbBus,
+	\atk, 0,
 	\rel, 1,
 	\gate, 1,
 	\sync, 1,
 	\dens, 40,
 	\baseDur, 0.05,
+
+	//\baseDur, 1,
 	\durRand, 1,
 	\rate, 1,
 	\rateRand, 1,
@@ -715,12 +802,133 @@ Pdef(\hey4,Pbind(\instrument,\gran,
 	\ptrRandSamples, 0,
 	\minPtrDelay, 1000,\group,~granGrp,
 	//\pitchRte,1,\duration,8,\impulse, 1.2875
-	\duration,3,\impulse, 2
+	\duration,1/16,\impulse, 10.3,//\duration,1/1,\impulse, 2.575,//\duration,1/16,\impulse, 10.3,//\duration,1/1,\impulse, 2.575, //5.15  DUR 1/16 imp 10.3
+	//in progress \duration,1/4,\impulse, 5.15,//
+	\pos,0,
+	\roomsize, 46, \revtime, 1.5488, \damping, 0.50, \inputbw, 2, \drylevel, -3, \earlylevel, -7, \taillevel, -22,\maxRoomsize,66,\wet,0.4
+));
+/* GOD
+
+Pdef(\hey4,Pbind(\instrument,\gran,
+	//\dur, Pseq([24/1],1),
+	// \dur,Pseq([48/16],1),
+	\dur, Pseq([48/16],1),
+
+	\amp, 1.5,
+	\buf, b,
+	\out,0,//~reverbBus,
+	\atk, 0,
+	\rel, 1,
+	\gate, 1,
+	\sync, 1,
+	\dens, 40,
+	\baseDur, 0.05,
+
+	//\baseDur, 1,
+	\durRand, 1,
+	\rate, 1,
+	\rateRand, 1,
+	\pan, 0,
+	\panRand, 0,
+	\grainEnv, -1,
+	\ptrBus, ~ptrBus,
+	\ptrSampleDelay, s.sampleRate/3,
+	\ptrRandSamples, 0,
+	\minPtrDelay, 1000,\group,~granGrp,
+	//\pitchRte,1,\duration,8,\impulse, 1.2875
+	\duration,1/16,\impulse, 10.3,//\duration,1/1,\impulse, 2.575,//\duration,1/16,\impulse, 10.3,//\duration,1/1,\impulse, 2.575, //5.15  DUR 1/16 imp 10.3
+	//in progress \duration,1/4,\impulse, 5.15,//
+	\pos,0,
+	\roomsize, 61, \revtime,1.5488, \damping, 0.322, \inputbw, 0.5, \drylevel, -10, \earlylevel, -22, \taillevel, -5,\amp,0.1,\spread,100,\maxRoomsize,70,
 ));
 
 
+*/
 
-v = Pseq([Ppar([~snewww,Pdef(\hey4)],1)],inf).play(t);
+/*
+Pdef(\revfuzzyhIGH2,Pbind(\instrument,\reverb,  \dur,Pseq([1/16],48),\roomsize, 61, \revtime,0.7744, \damping, 0.322, \inputbw, 0.5, \drylevel, -10, \earlylevel, -22, \taillevel, -5,\amp,0.1,\spread,100,\maxRoomsize,70,\out,0,\group,~granGrp//~micBus,\group, ~micGrp
+
+));*/
+//v = Pseq([Pdef(\fuzzyhIGH2)],inf).play(t);
+//v = Pseq([~hpFuzz],inf).play(t)
+//v = Ppar([~hpFuzz,Pdef(\hey4)],1).play(t)
+//v = Pseq([Pdef(\fuzzyhIGH2)],inf).play(t)
+
+//v = Ppar([Pseq([Pdef(\fuzzyhIGH2),Pdef(\fuzzyhIGH)],1),Pdef(\hey4)],inf).play(t)
+               //Pseq([Pdef(\fuzzyhIGH2),Pdef(\fuzzyhIGH)],inf).play(t);
+//v = Pseq([Ppar([~snewww,Pdef(\hey4)],1)],inf).play(t);
+/*
+Pdef(\fuzzyhIGH2,
+	Pbind(\instrument,\lead, \dur,Pseq([1/16],48),//48
+	\freq, 657.9895,
+	//\dure,60/151.703592/16,
+
+		\bus, ~bus5,
+\bus2, ~bus2,
+		\bus3, 40,\bus4,40,\bus7,~bus13,
+
+	/*
+\bus, ~bus1,
+\bus2, ~bus2,
+		\bus3, 24,\bus4,24,\bus7,~bus13,*/
+
+
+
+\which,2,\whichMod,2,\whichEnv,4,
+
+		//\filF,Pseq([ 0,250,500,750,1000,1250,1500, 1750,2000,1750,1500,1250,1000,750,500,250],inf),
+
+	//\filF,Pseq([ 0,500,700,1000,1500,1700, 2000,0],inf),
+	//\atkE,Pseq([0.4,0.2,0,0,0.2,0.1,0,0],inf),
+		\atkE,Pseq([0.3,0,0,0,0.2,0.1,0,0],inf),
+	\subsE,Pseq([0,0,0,0],inf),
+	\decE,Pseq([0,0.2,0.2,0.2],inf),
+		\amp,0.0020,\out,~micBus,\group, ~micGrp//~reverbBus
+));
+*/
+
+
+
+ //v =Pseq([Pdef(\fuzzyhIGH2),Pdef(\fuzzyhIGH)],inf).play(t);
+
+//v =  Pseq([Pdef(\fuzzyhIGH2)],inf).play(t);
+
+
+//v =Ppar([Pdef(\fuzzyhIGH2),Pdef(\hey4),Pdef(\revfuzzyhIGH2)],inf).play(t);
+
+//v =Ppar([Pdef(\fuzzyhIGH2),Pdef(\hey4)],inf).play(t);
+
+Pdef(\reee2,Pbind(\instrument,\reverb, \dur,Pseq([1/16],48),\roomsize, 16, \revtime, 0.7744, \damping, 0.070, \inputbw, 2, \drylevel, -30, \earlylevel, -7, \taillevel, -12,\maxRoomsize,16,\wet,0.7,\out,0,\group, ~revGrp,
+
+));
+
+//v = Pseq([Pdef(\fuzzy11122)],inf).play(t)
+//v =Ppar([Pdef(\fuzzy11122),Pdef(\hey4)],inf).play(t);
+//v =Ppar([Pdef(\fuzzyhIGH2),Pdef(\hey4)],inf).play(t);
+
+//,Pdef(\re2)
+
+//v =Ppar([~lpFuzz,Pdef(\hey4)],inf).play(t);
+
+~lpFuzz.play(t)
+
+//v = Pseq([~lpFuzz],inf).play(t);
+//v = Pseq([~hpFuzz],inf).play(t);
+
+//v = Ppar([Pseq([Pdef(\fuzzyhIGH2),Pdef(\fuzzyhIGH)],1),Pdef(\hey4)],inf).play(t)
+//v = Ppar([~hpFuzz,Pdef(\hey4)],inf).play(t)
+//v = Ppar([~lpFuzz,Pdef(\hey4)],inf).play(t)
+
+//NEED ONE REVERB CONSTANT
+
+
+
+//v =  Ppar([      Pseq([~ens15Perc],2),           Pseq([~noise ,Ppar([~snewww, Pdef(\hey4)],1),~noise  ],1)    ],inf).play(t);
+
+
+/*~lpFuzz,~hpFuzz2,~hpFuzz,~lpFuzz2,~melo,~hpFuzz,~lpFuzz2,~pr,~pre,~lpFuzz2,~proo,~proot*/
+//v = Ppar([~hpFuzz, Pdef(\hey4)],inf).play(t);
+
 
 //~ee3 = Ppar([       Pseq([~ens15Perc],2),           Pseq([~noise ,~snewww,~noise  ],1)    ],inf).play(t);
 

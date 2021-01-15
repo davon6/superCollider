@@ -1,6 +1,16 @@
 s.options.memSize = 1048576;
-~reverbBus = Bus.audio(s,1);
 s.options.memSize = 1572864;
+
+s.options.memSize = 1605632;
+
+(
+~reverbBus = Bus.audio(s,1);
+~micBus = Bus.audio(s,1);
+~ptrBus = Bus.audio(s,1);
+)
+
+
+
 
 Server.default.options.outDevice_("Audient iD14");
 
@@ -63,16 +73,21 @@ s.waitForBoot({
 	~tf = ~tf.normalize;
 
 	~tfBuf.loadCollection(~tf.asWavetableNoWrap);
+s.sync;
+	"init buff2".postln;
+	c = Buffer.alloc(s, s.sampleRate *0.7744,1);//goood long
+b = Buffer.alloc(s, s.sampleRate *0.3872,1);//tight good
 
 
 
 
 
 SynthDef(\lead, {
-		arg freq= 500, mRatio=1, cRatio=1, index =1, iScale=5, amp=0.01, atk= 0.01  , rel=3, cAtk = 4 , cRel = (-4) , pan =0, atkE =0,decE=0.1936, subsE=50, relE=0, sineRate = 0.0000000095262251, sineRangeHigh = 0, sineRangeLow=0, pitch = 0, sRteLPF = 1.3, timeSca= 0.25, dure= 1/1, which = 1, whichMod = 1, whichAmp =0,phRise= 0 , whichEnv = 0,timeSca2 =1,out=0, eFreq =0 , phFm=8,decEC=0,filF=200, bus,bus2=14,bus3=14,bus4=14,bus5=14,bus6=14,   bpFreq = 500,wCar=0;
+		arg freq= 500, mRatio=1, cRatio=1, index =1, iScale=5, amp=0.01, atk= 0.01  , rel=3, cAtk = 4 , cRel = (-4) , pan =0, atkE =0,decE=0.1936, subsE=50, relE=0, sineRate = 0.0000000095262251, sineRangeHigh = 0, sineRangeLow=0, pitch = 0, sRteLPF = 1.3, timeSca= 0.25, dure= 1/1, which = 1, whichMod = 1, whichAmp =0,phRise= 0 , whichEnv = 0,timeSca2 =1,out=0, eFreq =0 , phFm=8,decEC=0,filF=200, bus,bus2=14,bus3=14,bus4=14,bus5=14,bus6=14, bus7=14,   bpFreq = 500,wCar=0,roomsize, revtime, damping, inputbw, spread = 15, drylevel, earlylevel,
+    taillevel,maxRoomsize,wet=0.4;
 
 
-	var car,car2, mod,modE,modE2, env, iEnv, mod2, sig, bufpos, envVoice, filRte,lp,bp,hp,lp2, b1;
+	var car,car2, mod,modE,modE2, env, iEnv, mod2, sig, bufpos, envVoice, filRte,lp,bp,hp,lp2, b1,a;
 //dec=3.5        predel=0.025    mix=0.08
 	//1.5488
 	//2.575
@@ -81,7 +96,7 @@ SynthDef(\lead, {
 
 //dont forget 2nd zero used to be 1
 	env = EnvGen.kr(Env([0,1,0,0],[atkE,decE, subsE,relE],[-2,-3,0,0]),
-		doneAction:2
+		//doneAction:2
 
 	);
 
@@ -147,15 +162,19 @@ SynthDef(\lead, {
 	lp2 = BLowPass4.ar(sig, (SinOsc.ar(LFNoise1.kr(Lag.kr(2.575,0.0968)).range(0,7.72500)).range(82.41,1400)), rq: 0.3);//MouseX.kr(0,7.72500)
 
 	bp = BPF.ar(sig,bpFreq+ In.kr(bus5, 1)+ In.kr(bus6, 1),0.3);//0.05
-	hp = BHiPass4.ar(sig, In.kr(bus, 1)+In.kr(bus2, 1)+ In.kr(bus3, 1)  ,MouseY.kr(1,0.4,0));
+	hp = BHiPass4.ar(sig, In.kr(bus, 1)+In.kr(bus2, 1)+ In.kr(bus3, 1)+ In.kr(bus7, 1) ,MouseY.kr(1,0.4,0));
 //MouseX.kr(100,5000+ filF)
 //slcFil
 	sig =SelectX.ar(which, [lp, bp,hp,sig]);//* env* amp;
 
 	b1 =  sig * env;
 
-
 	sig = Pan2.ar( HPF.ar(SelectX.ar(whichEnv, [sig,b1]),100) , pan)* amp;
+
+
+
+
+
 	Out.ar(out, sig);//was zero   ~reverbBus
 }).add;
 
@@ -163,51 +182,90 @@ SynthDef(\lead, {
 
 
 	"init lead".postln;
-SynthDef(\reverb, {
-		|out=0, roomsize, revtime, damping, inputbw, spread = 15, drylevel, earlylevel,
-    taillevel, amp=0.3,maxRoomsize,wet=0.4|
 
 
 
-	var a ,input;
 
-	input = In.ar(~reverbBus,1);
-	a = Resonz.ar(
+SynthDef.new(\ptr, {
+	arg out=0, buf=0;
+	var sig;
+	sig = Phasor.ar(0, BufRateScale.kr(buf), 0, BufFrames.kr(buf));
+	Out.ar(out, sig);
+}).add;
 
-		input
-,
-        659.25 * [8,16,32],
- wet
+SynthDef.new(\rec, {
+	arg ptrIn=0, micIn=0, buf=0;
+	var ptr, sig;
+	ptr = In.ar(ptrIn, 1);
+	sig = In.ar(micIn, 1);
+	BufWr.ar(sig, buf, ptr);
+}).add;
+
+
+SynthDef.new(\gran, {
+	arg amp=0.5, buf =0, out=0, atk=1, rel=1, gate=1, sync=1, dens=40, baseDur=0.05, durRand=1, rate=1, rateRand=1, pan =0, panRand=0, grainEnv=(-1), ptrBus =0, ptrSampleDelay=20000, ptrRandSamples= 5000, minPtrDelay=1000,pitchRte=1,duration=8,impulse = 1.2875,pos=0,roomsize, revtime, damping, inputbw, spread = 15, drylevel, earlylevel,
+    taillevel,maxRoomsize,wet=0.4;
+
+	var sig, env, densCtrl, durCtrl, rateCtrl, panCtrl, ptr, ptrRand, totalDelay, maxGrainDur,a;
+
+	env = EnvGen.kr(Env.asr(atk,1,rel), gate, doneAction:2);
+	densCtrl = Select.ar(sync, [Dust.ar(dens), Impulse.ar(dens)]);
+	durCtrl= baseDur * LFNoise1.ar(100).exprange(1/durRand, durRand);
+	rateCtrl = rate * LFNoise1.ar(100).exprange(1/rateRand, rateRand);
+	panCtrl = pan + LFNoise1.kr(100).bipolar(panRand);
+
+	ptrRand = LFNoise1.ar(100).bipolar(ptrRandSamples);
+	totalDelay = max(ptrSampleDelay - ptrRand, minPtrDelay) ;
+
+	ptr = In.ar(ptrBus,1);
+	ptr = ptr - totalDelay;
+	ptr = ptr / BufFrames.kr(buf);
+
+
+	maxGrainDur = (totalDelay / rateCtrl) / SampleRate.ir;
+	durCtrl = min(durCtrl, maxGrainDur);
 /*
-		,
-        1760 * [1, 2, 4, 8],
-        0.01*/
-    ).sum * 10;
-
-
-//1760
-
-    //    var a = SoundIn.ar(0);
-    //    var a = PlayBuf.ar(1, 0);
-
-    Out.ar(out,
-        (GVerb.ar(
-            a,
-            roomsize,
-            revtime,
-            damping,
-            inputbw,
-            spread,
-            drylevel.dbamp,
-            earlylevel.dbamp,
-            taillevel.dbamp,
-				maxRoomsize, (amp-(amp/10)),)
-		+ input  )*   EnvGen.kr(Env.perc(0,revtime),Trig.kr(2,revtime),doneAction:2) )
+	sig = GrainBuf.ar(
+		2,
+		densCtrl,
+		durCtrl,
+		buf,
+		rateCtrl,
+		ptr,
+		2,
+		panCtrl,
+		grainEnv
+	);
+*/
 
 
 
-	}).add;
-	"init reverb".postln;
+
+
+	sig = GrainBuf.ar(
+		1,
+		Impulse.ar(impulse),//Impulse.ar(0.0968),//lenth of interval ///20.6 and 10.3 are funny was 1
+		duration,//3.0976,//8,//length of the feedback
+		buf,
+		pitchRte,//pitch
+		MouseX.kr(0,1)//pos
+	);
+
+
+
+	sig = sig * env * amp;
+
+
+
+
+
+	Out.ar(out, sig!2);
+}).add;
+
+
+
+
+
 
 	SynthDef(\bass,{
 		arg freq=41.2, dure=1, amp=0.5,
@@ -425,6 +483,57 @@ sig = Pan2.ar( sig , pan);//0 was pan
     )
 }).add;
 "init side events".postln;
+
+	SynthDef(\reverb, {
+		|out=0, roomsize, revtime, damping, inputbw, spread = 15, drylevel, earlylevel,
+    taillevel, amp=0.3,maxRoomsize,wet=0.4,in =0|
+
+
+
+	var a ,input;
+
+	input = In.ar(in,1);
+	a = Resonz.ar(
+
+		input
+,
+        659.25 * [8,16,32],
+ wet
+/*
+		,
+        1760 * [1, 2, 4, 8],
+        0.01*/
+    ).sum * 10;
+
+
+//1760
+
+    //    var a = SoundIn.ar(0);
+    //    var a = PlayBuf.ar(1, 0);
+
+    Out.ar(out,
+        (GVerb.ar(
+            a,
+            roomsize,
+            revtime,
+            damping,
+            inputbw,
+            spread,
+            drylevel.dbamp,
+            earlylevel.dbamp,
+            taillevel.dbamp,
+				maxRoomsize, amp,)
+		+ input
+	//	+a
+	)*   EnvGen.kr(Env.perc(0,revtime),Trig.kr(2,revtime),doneAction:2) )
+
+
+
+	}).add;
+
+	"init reverb".postln;
+
+
 
 	});
 )
