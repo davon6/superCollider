@@ -1,14 +1,18 @@
-s.options.memSize = 1048576;
-s.options.memSize = 1572864;
 
-s.options.memSize = 1605632;
 s.options.memSize = 1867776;
+
+131072 + 1867776
+s.options.memSize = 1998848;
 (
 ~reverbBus = Bus.audio(s,1);
 ~micBus = Bus.audio(s,1);
 ~ptrBus = Bus.audio(s,1);
 
+
 ~ind = 0;
+
+
+
 )
 
 
@@ -18,7 +22,7 @@ Server.default.options.outDevice_("Audient iD14");
 Server.default.options.outDevice_("Built-in Output");
 
 
-
+Server.default.options.outDevice
 
 
 s.options.numAudioBusChannels;
@@ -81,6 +85,7 @@ s.sync;
 b = Buffer.alloc(s, s.sampleRate *0.3872,1);//tight good
 e = Buffer.alloc(s, s.sampleRate *1/4,1);
 
+	d = Buffer.alloc(s, s.sampleRate *1.5488,1);//goood long
 
 
 
@@ -99,7 +104,7 @@ SynthDef(\lead, {
 //dont forget 2nd zero used to be 1
 		//env = EnvGen.kr(Env([0,1,0,0],[atkE,decE, subsE,relE],[-2,(MouseY.kr(-5,5)),0,0]),
 
-		env = EnvGen.kr(Env([1,1,1,0],[atkE,MouseY.kr(0.02,0.0986), subsE,relE],[-2,(-3),0,0]),
+		env = EnvGen.kr(Env([1,1,1,0],[atkE, decE  /*MouseY.kr(0.02,0.0986) */     , subsE,relE],[-2,(-3),0,0]),
 		//doneAction:2     //+In.kr(bus8, 1)
 
 	);
@@ -148,7 +153,7 @@ SynthDef(\lead, {
 	car =SinOsc.ar(  0.00502929687+eFreq * cRatio +SelectX.ar(SinOsc.kr(0.0020,phFm).range(0,1),[SinOsc.ar(0),SelectX.ar(whichMod,[ mod,modE,modE2])]) + pitch +(In.kr(bus4, 1)/4));
 
 
-	car2 =LFSaw.ar(  0.00502929687+eFreq );
+		car2 =LFSaw.ar(  0.00502929687+eFreq+(In.kr(bus4, 1)) );
 
 
 
