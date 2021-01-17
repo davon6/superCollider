@@ -37,6 +37,9 @@ Pdef(\refuzzy11122,Pbind(\instrument,\reverb, \dur,Pseq([1/16],48),\roomsize,45,
 
 
 
+
+
+
 Pdef(\hey4,Pbind(\instrument,\gran,
 	//\dur, Pseq([24/1],inf),
 	 \dur,Pseq([48/16],1),
@@ -77,3 +80,37 @@ v =Ppar([Pdef(\fuzzy11122),Pdef(\hey4),Pdef(\refuzzy11122)],inf).play(t);
 
 
 )
+
+
+
+
+~ptrK = Pbind(\instrument,\ptr, \buf, e, \out, ~ptrBus,\group,~ptrGrp,\dur,Pseq([4/4],1));
+~recK =Pbind(\instrument,\rec, \ptrIn, ~ptrBus, \micIn, ~micBus, \buf, e,\group,~recGrp,\dur,Pseq([4/4],1));
+
+
+
+Pdef(\granKick,Pbind(\instrument,\gran,
+	 \dur,Pseq([1/4],16),
+	\amp, 1,
+	\buf, e,
+	\out,0,
+	\atk, 0,
+	\rel, 1/4,
+	\gate, 1,
+	\ptrBus, ~ptrBus,
+	\pitchRte,(-1),
+	//\ptrSampleDelay, s.sampleRate/3,
+	\ptrRandSamples, 0,
+	\minPtrDelay, 1000,\group,~granGrp,
+	//\pitchRte,1,\duration,8,\impulse, 1.2875
+	\duration,1/4,\impulse, 0.64375,
+//\duration,8,\impulse, 0.1
+
+
+));
+
+
+~kick4Grain =Ppar([Pseq([~kickGran],16),~ptrK,~recK,Pdef(\granKick)              ],1);
+
+
+k = Ppar([Pseq([~kickPat],1),~kickGrain],inf).play(t);

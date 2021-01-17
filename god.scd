@@ -1,31 +1,5 @@
 
-(
-~bus1 = Bus.control(s,1);
-~bus2 = Bus.control(s,1);
-~bus3 = Bus.control(s,1);
-~bus4 = Bus.control(s,1);
-~bus5 = Bus.control(s,1);
-~bus6 = Bus.control(s,1);
-~bus7 = Bus.control(s,1);
-~bus8 = Bus.control(s,1);
 
-~bus9 = Bus.control(s,1);
-
-~bus10 = Bus.control(s,1);
-~bus11 = Bus.control(s,1);
-~bus12 = Bus.control(s,1);
-~bus13 = Bus.control(s,1);
-
-~bus14 = Bus.control(s,1);
-)
-
-(//to on before Pbind !!!!!
-~micGrp = Group.new;
-~ptrGrp = Group.after(~micGrp);
-~recGrp = Group.after(~ptrGrp);
-~granGrp = Group.after(~recGrp);
-~revGrp = Group.after(~granGrp);
-)
 
 s.scope
 
@@ -56,87 +30,25 @@ s.scope
 
 
 
-
-
-
-Pdef(\fuzzyhIGH2,
-	Pbind(\instrument,\lead, \dur,Pseq([1/16],58),//48
-	\freq, 657.9895,
-	//\dure,60/151.703592/16,
-
-		\bus, ~bus5,
-\bus2,50,//~bus2,
-		\bus3, 40,\bus4,40,\bus7,50,\bus8, ~bus4,
-
-
-	/*
-\bus, ~bus1,
-\bus2, ~bus2,
-		\bus3, 24,\bus4,24,\bus7,~bus13,*/
-
-
-
-\which,2,\whichMod,2,\whichEnv,4,
-
-		//\filF,Pseq([ 0,250,500,750,1000,1250,1500, 1750,2000,1750,1500,1250,1000,750,500,250],inf),
-
-	//\filF,Pseq([ 0,500,700,1000,1500,1700, 2000,0],inf),
-	//\atkE,Pseq([0.4,0.2,0,0,0.2,0.1,0,0],inf),
-	/*	\atkE,Pseq([0.3,0,0,0,0.2,0.1,0,0],inf),
-	\subsE,Pseq([0,0,0,0],inf),
-	\decE,Pseq([0,0.2,0.2,0.2],inf),*/
-		\decE,Pseq([58/16],1),
-		\amp,0.0030,
-		//\amp,1,
-		\out,~micBus,
-		\group, ~micGrp
-//~reverbBus
-));
 /*
 ~ptr = Pbind(\instrument,\ptr, \buf, b, \out, ~ptrBus,\group,~ptrGrp,\dur,Pseq([1024/1],inf)).play;
 ~rec =Pbind(\instrument,\rec, \ptrIn, ~ptrBus, \micIn, ~micBus, \buf, b,\group,~recGrp,\dur,Pseq([1024/1],inf)).play;
 */
 
 
-~ptr = Pbind(\instrument,\ptr, \buf, c, \out, ~ptrBus,\group,~ptrGrp,\dur,Pseq([58/16],1)
-	//,\dec,Pseq([58/16],1)
-
-);
-~rec =Pbind(\instrument,\rec, \ptrIn, ~ptrBus, \micIn, ~micBus, \buf, c,\group,~recGrp,\dur,Pseq([58/16],1));
 
 
+//k = Pseq([~ens15PercR],4).play(t);
 
-Pdef(\granHighFuzz,Pbind(\instrument,\gran,
-	 \dur,Pseq([58/16],1),
-	\amp, 0.5,
-	\buf, c,
-	\out,~reverbBus,
-	\atk, 0,
-	\rel, 1,
-	\gate, 1,
-	\ptrBus, ~ptrBus,
-	//\ptrSampleDelay, s.sampleRate/3,
-	\ptrRandSamples, 0,
-	\minPtrDelay, 1000,\group,~granGrp,
-	//\pitchRte,1,\duration,8,\impulse, 1.2875
-	\duration,1/4,\impulse, 10.3,
-//\duration,8,\impulse, 0.1
+//k = Pseq([~kick4],4).play(t);
+//~kickGran.play(t)
+
+//k = Pseq([~kickPat,~~reversedGrain],1).play(t);
+
+//PlayBuf.ar(1,
 
 
-));
-
-
-
-
-
-
-
-Pdef(\revfuzzyhIGH2,Pbind(\instrument,\reverb,  \dur,Pseq([1/16],58),\roomsize, 41, \revtime,1.5488, \damping, 0.422, \inputbw, 0.5, \drylevel, -10, \earlylevel, -22, \taillevel, -5,\amp,0.1,\spread,100,\maxRoomsize,70,\in,~reverbBus,\out,0,\group, ~revGrp
-
-));
-
-
-v =Ppar([~ptr,~rec, Pdef(\fuzzyhIGH2),Pdef(\granHighFuzz) ,Pdef(\revfuzzyhIGH2)],1);//.play(t);
+//Pseq([~fuzzyH],inf).play(t);
 
 //,Pdef(\revfuzzyhIGH2)      Pdef(\granHighFuzz),
 /*
@@ -146,7 +58,7 @@ v =Ppar([~ptr,~rec, Pdef(\fuzzyhIGH2),Pdef(\granHighFuzz) ,Pdef(\revfuzzyhIGH2)]
 
 
 
-~ee3 = Ppar([       Pseq([~ens15Perc],2),           Pseq([v,~noise  ],4)    ],inf).play(t);
+//~ee3 = Ppar([       Pseq([~ens15Perc],2),           Pseq([v,~noise,v,~noise2  ],2)    ],inf).play(t);
 
 //~ee3 = Ppar([       Pseq([~ens15Perc],2),           Pseq([v  ],4)    ],inf).play(t);
 
@@ -171,15 +83,34 @@ v =Ppar([~ptr,~rec, Pdef(\fuzzyhIGH2),Pdef(\granHighFuzz) ,Pdef(\revfuzzyhIGH2)]
 
 //,Pdef(\refuzzy11122)
 //Pdef(\hey4).play(t)
+
+//Pseq([~arrSpecialKB[8.rand], ~ens,~ens ,~arrSpecialKB[8.rand]],2).play(t)
+
+/*
+k = Pseq([~index.().postln, Pseq([~ens],2) ,~index.().postln,~index.().postln, Pseq([~ens],2) ,~index.().postln,~index.().postln, Pseq([~ens],2) ,~index.().postln,~index.().postln, Pseq([~ens],2) ,~index.().postln,~index.().postln, Pseq([~ens],2) ,~index.().postln,~index.().postln, Pseq([~ens],2) ,~index.().postln,~index.().postln, Pseq([~ens],2) ,~index.().postln,~index.().postln, Pseq([~ens],2) ,~index.().postln],1).play(t);*/
+
+
+
+
+/*
+k = Pseq([/*~index.(), Pseq([~ens],2) ,~index.(),*/~index.(), Pseq([~ens],2) ,~index.(),~index.(), Pseq([~ens],2) ,~index.(),~index.(), Pseq([~ens],2) ,~index.(),~index.(), Pseq([~ens],2) ,~index.(),~index.(), Pseq([~ens],2) ,~index.(),~index.(), Pseq([~ens],2) ,~index.()/*,~index.(), Pseq([~ens],2) ,~index.()*/],1).play(t);*/
+
+
+
+
+
+k = Pseq([/*~index.(), Pseq([~ens],2) ,~index.(),*/~arrSpecialKB[~boo[~ind]], Pseq([~ens],2) ,~arrSpecialKB[~boo[~ind+1]],~arrSpecialKB[~boo[~ind+2]], Pseq([~ens],2) ,~arrSpecialKB[~boo[~ind+3]],~arrSpecialKB[~boo[~ind+4]], Pseq([~ens],2) ,~arrSpecialKB[~boo[~ind+5]],~arrSpecialKB[~boo[~ind+6]], Pseq([~ens],2) ,~arrSpecialKB[~boo[~ind+7]],~arrSpecialKB[~boo[~ind+8]], Pseq([~ens],2) ,~arrSpecialKB[~boo[~ind+9]],~arrSpecialKB[~boo[~ind+10]], Pseq([~ens],2) ,~arrSpecialKB[~boo[~ind+11]]/*,~index.(), Pseq([~ens],2) ,~index.()*/],1).play(t);
+
+
 )
-
-
+// = Pseq([~kickPat
+~infkick.stop;
 {
-	o.stop;~ptr.stop;~rec.stop;v.stop;~ee3.stop;s.defaultGroup.deepFree;
+	o.stop;~kickGrain.stop;k.stop;s.defaultGroup.deepFree;
 }
 ~reverb2Bus
 1+1
-~micBus
+~index.()
 s.scope
 s.plotTree
 {SinOsc.ar(432,mul:0.2)}.play

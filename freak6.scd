@@ -2,13 +2,14 @@ s.options.memSize = 1048576;
 s.options.memSize = 1572864;
 
 s.options.memSize = 1605632;
-
+s.options.memSize = 1867776;
 (
 ~reverbBus = Bus.audio(s,1);
 ~micBus = Bus.audio(s,1);
 ~ptrBus = Bus.audio(s,1);
-)
 
+~ind = 0;
+)
 
 
 
@@ -75,9 +76,10 @@ s.waitForBoot({
 	~tfBuf.loadCollection(~tf.asWavetableNoWrap);
 s.sync;
 	"init buff2".postln;
+
 	c = Buffer.alloc(s, s.sampleRate *0.7744,1);//goood long
 b = Buffer.alloc(s, s.sampleRate *0.3872,1);//tight good
-
+e = Buffer.alloc(s, s.sampleRate *1/4,1);
 
 
 
@@ -95,8 +97,10 @@ SynthDef(\lead, {
 	//5.15
 
 //dont forget 2nd zero used to be 1
-		env = EnvGen.kr(Env([0,1,0,0],[atkE,decE, subsE,relE],[-2,(-3+In.kr(bus8, 1)),0,0]),
-		//doneAction:2
+		//env = EnvGen.kr(Env([0,1,0,0],[atkE,decE, subsE,relE],[-2,(MouseY.kr(-5,5)),0,0]),
+
+		env = EnvGen.kr(Env([1,1,1,0],[atkE,MouseY.kr(0.02,0.0986), subsE,relE],[-2,(-3),0,0]),
+		//doneAction:2     //+In.kr(bus8, 1)
 
 	);
 
@@ -309,16 +313,22 @@ sig = sig * amp!2;
 	}).add;
 
 	SynthDef(\kick, {
-		arg amp=0.2;
-		var sig, env, envF;
+		arg amp=0.2,out=0,wR=0;
+		var sig, sig2, env, envF,env2, envF2;
 		envF = EnvGen.ar(
 			Env(
 				[1700,1319,165,26,0,0],
 				[0.001,0.028,0.1,0,0.4],
 				\exp
-			),doneAction:2
+			)
 		);
-"init KB".postln;
+
+
+envF2 =EnvGen.kr(Env(
+[0,26,165,1319,1700],
+[0.001,0.028,0.1,0,0.001],
+	\exp
+),doneAction:2);
 	/*
 
 		//3322
@@ -331,9 +341,10 @@ sig = sig * amp!2;
 
 
 			env = EnvGen.ar(
-			Env.perc(0.0121, 0.40),doneAction:2
+			Env.perc(0.0121, 0.40),doneAction:2);
 
-		);
+		env2 = EnvGen.kr(
+	Env([0,0,1],[0,0.40,   0.0121 ],3),doneAction:2);
 
 /*
 			[0,1     ,0.16 ,0.95 ,0.93],
@@ -342,53 +353,21 @@ sig = sig * amp!2;
 
 		)//,doneAction:2
 	);*/
+
 		sig = SinOsc.ar(envF, mul: env);
+		sig2 = SinOsc.ar(envF2, mul: env2);
 
 
 		//sig = BLowPass4.ar(sig,MouseX.kr(1,5000, \exponential),5);
 
-		sig = sig * amp!2;
+		sig = SelectX.ar(wR,[ sig,sig2]) * amp!2;
 
-		Out.ar(0, sig);
+		Out.ar(out, sig);
 	}).add;
-
+"init KB".postln;
 	s.sync;
 
-	~bassPat = Pbind(
-		\instrument, \bass,
-		\type, Pseq([\rest, \note, \note, \note], inf),
-		\dur, Pseq([1/4],4),
-		\midinote, 28,
-		\atk, t.beatDur/4 * 0.01,
-		\rel, t.beatDur/4 * 0.99,
-		\atkcrv, -2,
-		\relcrv, -1,
-		\amp, 0.24,
-	);
 
-	~kickPat = Pbind(
-		\instrument, \kick,
-		\dur, Pseq([1],1),
-		\amp, 0.028,
-	);
-
-	~bassAndKick = Ppar([~bassPat, ~kickPat], 1);
-
-
-
-	s.sync;
-
-~bassRest = Pbind(
-		\instrument, \bass,
-		\type, Pseq([\rest, \rest, \rest, \rest], inf),
-		\dur, Pseq([1/4],4),
-		\midinote, 28,
-		\atk, t.beatDur/4 * 0.01,
-		\rel, t.beatDur/4 * 0.99,
-		\atkcrv, -2,
-		\relcrv, -1,
-		\amp, 0.8,
-	);
 
 	SynthDef.new(\cymb, {
 	arg carHz=500, modHz=1899.3343179398, modAmp=0, atk=0.01, rel=1, amp=0.2, pan=0,rel2=1;
