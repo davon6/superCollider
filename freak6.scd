@@ -3,6 +3,13 @@ s.options.memSize = 1867776;
 
 131072 + 1867776
 s.options.memSize = 1998848;
+
+1048576*2
+s.options.memSize = 2097152;
+
+
+s.options.memSize =
+
 (
 ~reverbBus = Bus.audio(s,1);
 ~micBus = Bus.audio(s,1);
@@ -88,6 +95,29 @@ e = Buffer.alloc(s, s.sampleRate *1/4,1);
 	d = Buffer.alloc(s, s.sampleRate *1.5488,1);//goood long
 
 
+	s.sync;
+
+	~bus1 = Bus.control(s,1);
+	~bus2 = Bus.control(s,1);
+	~bus3 = Bus.control(s,1);
+	~bus4 = Bus.control(s,1);
+	~bus5 = Bus.control(s,1);
+	~bus6 = Bus.control(s,1);
+	~bus7 = Bus.control(s,1);
+	~bus8 = Bus.control(s,1);
+
+	~bus9 = Bus.control(s,1);
+
+	~bus10 = Bus.control(s,1);
+	~bus11 = Bus.control(s,1);
+	~bus12 = Bus.control(s,1);
+	~bus13 = Bus.control(s,1);
+
+	~bus14 = Bus.control(s,1);
+
+"Kontrol rate init".postln;
+
+	s.sync;
 
 SynthDef(\lead, {
 		arg freq= 500, mRatio=1, cRatio=1, index =1, iScale=5, amp=0.01, atk= 0.01  , rel=3, cAtk = 4 , cRel = (-4) , pan =0, atkE =0,decE=0.1936, subsE=50, relE=0, sineRate = 0.0000000095262251, sineRangeHigh = 0, sineRangeLow=0, pitch = 0, sRteLPF = 1.3, timeSca= 0.25, dure= 1/1, which = 1, whichMod = 1, whichAmp =0,phRise= 0 , whichEnv = 0,timeSca2 =1,out=0, eFreq =0 , phFm=8,decEC=0,filF=200, bus,bus2=14,bus3=14,bus4=14,bus5=14,bus6=14, bus7=14, bus8= 15 ,  bpFreq = 500,wCar=0,roomsize, revtime, damping, inputbw, spread = 15, drylevel, earlylevel,
@@ -104,8 +134,9 @@ SynthDef(\lead, {
 //dont forget 2nd zero used to be 1
 		//env = EnvGen.kr(Env([0,1,0,0],[atkE,decE, subsE,relE],[-2,(MouseY.kr(-5,5)),0,0]),
 
-		env = EnvGen.kr(Env([1,1,1,0],[atkE, decE  /*MouseY.kr(0.02,0.0986) */     , subsE,relE],[-2,(-3),0,0]),
-		//doneAction:2     //+In.kr(bus8, 1)
+		env = EnvGen.kr(Env([1,1,1,0],[atkE,/*  MouseY.kr(0.0986,0.05)*/decE-(In.kr(bus2, 1))     , subsE,relE],[-2,(-3),0,0]),
+		doneAction:2
+			//+In.kr(bus8, 1)
 
 	);
 
@@ -117,9 +148,9 @@ SynthDef(\lead, {
 
 			Env.new(
 			[1, 1 * 5, 1 * 5],
-			[0.000000000001,        (decE  ),      0.0000000001],	//[atk was  0.01,          450,      10 ],   was 0.01   -1.6   -0.8 was dure
+			[0.000000000001,        (decE    ),      0.0000000001],	//[atk was  0.01,          450,      10 ],   was 0.01   -1.6   -0.8 was dure
 			[4, (-4)]
-		),doneAction:2
+		),//doneAction:2
 );//- 1.604003    here!!!
 
 
@@ -163,15 +194,15 @@ SynthDef(\lead, {
 
 
 
-	lp = BLowPass4.ar(sig , In.kr(bus, 1)+In.kr(bus2, 1)+ In.kr(bus3, 1)   //LFNoise1.kr(2.575).range(0.2,20.3)
+	lp = BLowPass4.ar(sig , In.kr(bus, 1) //LFNoise1.kr(2.575).range(0.2,20.3)
 
-		,0.4);//82.41     //Varlag ?   0.4
+		,0.5);//82.41     //Varlag ?   0.4
 //MouseX.kr(1800+ filF,100)
 
 	lp2 = BLowPass4.ar(sig, (SinOsc.ar(LFNoise1.kr(Lag.kr(2.575,0.0968)).range(0,7.72500)).range(82.41,1400)), rq: 0.3);//MouseX.kr(0,7.72500)
 
 	bp = BPF.ar(sig,bpFreq+ In.kr(bus5, 1)+ In.kr(bus6, 1),0.3);//0.05
-	hp = BHiPass4.ar(sig, In.kr(bus, 1)+In.kr(bus2, 1)+ In.kr(bus3, 1)+ In.kr(bus7, 1) ,MouseY.kr(1,0.4,0));
+	hp = BHiPass4.ar(sig, In.kr(bus, 1),MouseY.kr(1,0.4,0));
 //MouseX.kr(100,5000+ filF)
 //slcFil
 	sig =SelectX.ar(which, [lp, bp,hp,sig]);//* env* amp;
@@ -521,7 +552,7 @@ sig = Pan2.ar( sig , pan);//0 was pan
 				maxRoomsize, amp,)
 		+ input
 	//	+a
-	)*   EnvGen.kr(Env.perc(0,revtime),Trig.kr(2,revtime),doneAction:2) )
+		)*   EnvGen.kr(Env([1,1,1,0],[0,revtime,0,0]),Trig.kr(2,revtime),doneAction:2) )
 
 
 
