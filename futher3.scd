@@ -6,7 +6,7 @@ f = { |n=12, min=0, max=11| (min..max).scramble.keep(n) };
 
 ~boo = f.value(12, 0, 11);
 
-
+/*
 ~dure= [256,256,256,256,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,1];  ~busFilter = [~bus4,~bus5,~bus5,~bus6,~bus7,~bus8];
 ~number = [4,4,4,4,4,4,4,4,16,16,16,16,64,64,64,64,256];
 ~revTail = [4,16];
@@ -17,7 +17,7 @@ f = { |n=12, min=0, max=11| (min..max).scramble.keep(n) };
 
 
 ~number2 = 4/16;
-
+*/
 )
 
 
@@ -33,7 +33,9 @@ s.plotTree
 ~ptrGrp = Group.after(~micGrp);
 ~recGrp = Group.after(~ptrGrp);
 ~granGrp = Group.after(~recGrp);
-~revGrp = Group.after(~granGrp);
+
+~effctGrp = Group.after(~granGrp);
+~revGrp = Group.after(~effctGrp);
 
 
 
@@ -737,6 +739,51 @@ Pdef(\sn,
 ~recK1 =Pbind(\instrument,\rec, \ptrIn, ~ptrBus, \micIn, ~micBus, \buf, e,\group,~recGrp,\dur,Pseq([1/4],1));
 
 Pdef(\granKick1,Pbind(\instrument,\gran,\dur,Pseq([1/4],1),\amp, 1,\buf, e,\out,0,\atk, 0,\rel, 1/4,\gate, 1,\ptrBus, ~ptrBus,\pitchRte,(-1),\ptrRandSamples, 0,\minPtrDelay, 1000,\group,~granGrp,\duration,1/4,\impulse, 0.64375));
+
+
+
+
+
+~spe1 =
+Pseq([
+
+~kbassRest,Pseq([~bassRest],3),
+	Ppar([
+	Ppar([
+			Pbind(\instrument, \kick,\dur, Pseq([1],1),\amp, 0.028,\out,~effctBus),
+			Pbind(\instrument, \bass,\type, Pseq([\rest, \note, \note, \note], inf),\dur, Pseq([1/4],4),\midinote, 28,\atk, t.beatDur/4 * 0.01,\rel, t.beatDur/4 * 0.99,\atkcrv, -2,\relcrv, -1,\amp, 0.24,\out,~effctBus),], 4),
+
+
+		Pbind(\instrument, \effect,\wF,1,\dur, Pseq([4/1],1), \in,~effctBus,\out,0,\group,~effctGrp )
+
+], 1),
+
+
+
+	~kbassRest,Pseq([~bassRest],3)],1);
+
+~spe2 = Pbind(\instrument, \kick,\dur, Pseq([Pseq([1/4],4), Pseq([1/16],16),  Pseq([1/3],3),Pseq([1/1],4) ,Pseq([1/4],2),Pseq([1/16],4)],1),\amp, 0.028);
+
+
+~spe3 =   Ppar([Pbind(\instrument, \cymb,\type, Pseq([\rest,\rest,\note,\note ,\rest,\note ,\note, \rest],inf),\dur,  Pseq([1/4],64 ),\rel, 0.3872,\rel2,0.0968,\carHz, 525.12070612224,\modHz,1899.3343179398,\modAmp, 0.12875 ,\amp,0.02,\out,~effctBus),
+
+Pbind(\instrument,\percu2,\dur, Pseq([1/4], 64),\carHz,164.81,\modHz,164.81,\atk, 0,\rel,0.04840,\rel2,0.02420,\amp, 0.062,\out,~effctBus),
+
+Pbind(\instrument, \snare,\carHz, 41.2 ,\type, Pseq([\rest,\rest ,\note, \rest], 8),\atk, 0.00502929687,\rel, 0.0968,\rel2,0.7744,\dur, Pseq([1/2], inf),\amp,0.04,\out,~effctBus),
+
+Ppar([ Pbind(\instrument, \kick,\dur, Pseq([1],1),\amp, 0.028,\out,~effctBus),Pbind(\instrument, \bass,\type, Pseq([\rest, \note, \note, \note], inf),\dur, Pseq([1/4],4),\midinote, 28,\atk, t.beatDur/4 * 0.01,\rel, t.beatDur/4 * 0.99,\atkcrv, -2,\relcrv, -1,\amp, 0.24,\out,~effctBus),],16),
+
+Pbind(\instrument, \effect,\wF,1,\dur, Pseq([16/1],1), \in,~effctBus,\out,0,\group,~effctGrp,\dec1,6 )], 1);
+
+
+~spe4 = Pbind(\instrument, \kick,\dur, Pseq([Pseq([1/16],16),Pseq([1/4],16),Pseq([1/1],3) ],1)  , \amp, 0.028,\wR,1);
+
+
+~specialHits = [~spe1,~spe2,~spe3,~spe4].scramble;
+
+
+
+
 
 
 

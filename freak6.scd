@@ -14,9 +14,10 @@ s.options.memSize =
 ~reverbBus = Bus.audio(s,1);
 ~micBus = Bus.audio(s,1);
 ~ptrBus = Bus.audio(s,1);
+~effctBus =Bus.audio(s,1);
 
 
-~ind = 0;
+//~ind = 0;
 
 
 
@@ -120,8 +121,7 @@ e = Buffer.alloc(s, s.sampleRate *1/4,1);
 	s.sync;
 
 SynthDef(\lead, {
-		arg freq= 500, mRatio=1, cRatio=1, index =1, iScale=5, amp=0.01, atk= 0.01  , rel=3, cAtk = 4 , cRel = (-4) , pan =0, atkE =0,decE=0.1936, subsE=50, relE=0, sineRate = 0.0000000095262251, sineRangeHigh = 0, sineRangeLow=0, pitch = 0, sRteLPF = 1.3, timeSca= 0.25, dure= 1/1, which = 1, whichMod = 1, whichAmp =0,phRise= 0 , whichEnv = 0,timeSca2 =1,out=0, eFreq =0 , phFm=8,decEC=0,filF=200, bus,bus2=14,bus3=14,bus4=14,bus5=14,bus6=14, bus7=14, bus8= 15 ,  bpFreq = 500,wCar=0,roomsize, revtime, damping, inputbw, spread = 15, drylevel, earlylevel,
-    taillevel,maxRoomsize,wet=0.4;
+		arg freq= 500, mRatio=1, cRatio=1, index =1, iScale=5, amp=0.01, atk= 0.01  , rel=3, cAtk = 4 , cRel = (-4) , pan =0, atkE =0,decE=0.1936, subsE=50, relE=0, sineRate = 0.0000000095262251, sineRangeHigh = 0, sineRangeLow=0, pitch = 0, sRteLPF = 1.3, timeSca= 0.25, dure= 1/1, which = 1, whichMod = 1, whichAmp =0,phRise= 0 , whichEnv = 0,timeSca2 =1,out=0, eFreq =0 , phFm=8,decEC=0,filF=200, bus,bus2=14,bus3=14,bus4=14,bus5=14,bus6=14, bus7=14, bus8= 15 ,  bpFreq = 500,wCar=0,gra=1;
 
 
 	var car,car2, mod,modE,modE2, env, iEnv, mod2, sig, bufpos, envVoice, filRte,lp,bp,hp,lp2, b1,a;
@@ -156,6 +156,9 @@ SynthDef(\lead, {
 
 	mod2 = SinOsc.ar(freq/10, mul:freq/10 * iEnv);
 
+
+
+
 	//GOOD LAST                                                                                HERE
 	mod = SinOsc.ar(MouseX.kr(freq * mRatio + mod2,0.0201171875)*SinOsc.kr(sineRate,phRise).range([sineRangeLow]), mul:freq * mRatio * iEnv)!2;
 
@@ -163,7 +166,16 @@ SynthDef(\lead, {
 
 
 //0.0201171875
-	modE2 = SinOsc.ar(Lag.ar(  freq * mRatio + mod2 ,0.06)*SinOsc.kr(sineRate,phRise).range([sineRangeLow]), mul:freq * mRatio * iEnv)!2;
+	modE2 = SinOsc.ar(Lag.ar(  freq * mRatio + mod2 ,0.06)*SinOsc.kr(sineRate,phRise).range([sineRangeLow]), mul:
+
+
+			(freq * mRatio * iEnv)*gra
+
+
+
+
+
+		)!2;
 
 
 
@@ -181,7 +193,7 @@ SynthDef(\lead, {
 
 	//good good
                                                                                // HERE   filRte
-	car =SinOsc.ar(  0.00502929687+eFreq * cRatio +SelectX.ar(SinOsc.kr(0.0020,phFm).range(0,1),[SinOsc.ar(0),SelectX.ar(whichMod,[ mod,modE,modE2])]) + pitch +(In.kr(bus4, 1)/4));
+	car =SinOsc.ar( 0.00502929687+eFreq  /* freq */    * cRatio +SelectX.ar(SinOsc.kr(0.0020,phFm).range(0,1),[SinOsc.ar(0),SelectX.ar(whichMod,[ mod,modE,modE2])]) + pitch +(In.kr(bus4, 1)/4));
 
 
 		car2 =LFSaw.ar(  0.00502929687+eFreq+(In.kr(bus4, 1)) );
@@ -209,7 +221,7 @@ SynthDef(\lead, {
 
 	b1 =  sig * env;
 
-	sig = Pan2.ar( HPF.ar(SelectX.ar(whichEnv, [sig,b1]),100) , pan)* amp;
+	sig = Pan2.ar(SelectX.ar(whichEnv, [sig,b1]), pan)* amp;
 
 
 
@@ -322,7 +334,7 @@ SynthDef.new(\gran, {
 	SynthDef(\bass,{
 		arg freq=41.2, dure=1, amp=0.5,
 		atkcrv=1, relcrv=5,
-		atk=0, rel=0.1, lpf=100;
+		atk=0, rel=0.1, lpf=100, out = 0;
 		var sig, env;
 
 
@@ -345,7 +357,7 @@ sig = sig * amp!2;
 
 
 
-		Out.ar(0, sig);
+		Out.ar(out, sig);
 	}).add;
 
 	SynthDef(\kick, {
@@ -406,7 +418,7 @@ envF2 =EnvGen.kr(Env(
 
 
 	SynthDef.new(\cymb, {
-	arg carHz=500, modHz=1899.3343179398, modAmp=0, atk=0.01, rel=1, amp=0.2, pan=0,rel2=1;
+	arg carHz=500, modHz=1899.3343179398, modAmp=0, atk=0.01, rel=1, amp=0.2, pan=0,rel2=1,out=0;
 	var car, mod, env, car2, mod2,env2,sig;
 	env = EnvGen.kr(Env.perc(atk, rel,1,-1.4), doneAction:2);
 
@@ -424,7 +436,7 @@ envF2 =EnvGen.kr(Env(
 
 	sig = HPF.ar(car+car2!2,3000)* [amp+0.00555,amp];
 
-	Out.ar(0, sig);
+	Out.ar(out, sig);
 }).add;
 
 
@@ -432,7 +444,7 @@ envF2 =EnvGen.kr(Env(
 
 
 SynthDef.new(\percu2, {
-	arg carHz=500, modHz=100, modAmp=200, atk=0.01, rel=0.3872, amp=0.2, pan=0,rel2= 1.1616;
+	arg carHz=500, modHz=100, modAmp=200, atk=0.01, rel=0.3872, amp=0.2, pan=0,rel2= 1.1616,out = 0;
 	var car, mod, env, car2, mod2, mod3,env2,sig;
 	env = EnvGen.kr(Env.perc(atk, rel), doneAction:2);
 
@@ -448,12 +460,12 @@ car2 = WhiteNoise.ar(0.12875) * env2 ;
 	sig = HPF.ar(car+car2,3000)!2* [amp,amp+0.007];
 
 
-	Out.ar(0, sig );
+	Out.ar(out, sig );
 }).add;
 
 
 SynthDef.new(\snare, {
-	arg carHz=500, modHz=100, modAmp=1, atk=0.01, rel=1, amp=0.2, pan=0,rel2=1;
+	arg carHz=500, modHz=100, modAmp=1, atk=0.01, rel=1, amp=0.2, pan=0,rel2=1,out=0;
 	var car, mod, env, car2, mod2,env2;
 
 	env = EnvGen.kr(Env.perc(0, rel,curve:-3), doneAction:2);
@@ -472,19 +484,19 @@ SynthDef.new(\snare, {
 
 
 
-	Out.ar(0,HPF.ar( car+car2!2* amp ,500));
+	Out.ar(out,HPF.ar( car+car2!2* amp ,500));
 }).add;
 
 "init percu".postln;
 
 SynthDef.new(\hit, {
-	arg carHz=500, modHz=100, modAmp=200, atk=0.01, rel=1, amp=0.2, pan=0;
+	arg carHz=500, modHz=100, modAmp=200, atk=0.01, rel=1, amp=0.2, pan=0,out=0;
 	var car, mod, env;
 	env = EnvGen.kr(Env.perc(atk, rel), doneAction:2);
 	mod = SinOsc.ar(modHz, mul:modAmp);
 	car = SinOsc.ar(carHz + mod) * env * amp;
 	car = HPF.ar(Pan2.ar(car, pan),100);
-	Out.ar(0, car);
+	Out.ar(out, car);
 }).add;
 
 
@@ -511,15 +523,43 @@ sig = Pan2.ar( sig , pan);//0 was pan
 }).add;
 "init side events".postln;
 
+
+	SynthDef(\effect,{ | in = 0, out= 0,wF= 0 ,freq=50 ,bus, dec1 = 0.3872  |
+		var sig,env;
+
+
+		sig = LPF.ar(In.ar(in,1),  EnvGen.kr(Env([1,5000],[dec1,0],4),doneAction:2) );
+
+
+
+		//SelectX.ar(wF,[ HPF.ar(In.ar(in,1),In.kr(freq, 1))!2, LPF.ar(In.ar(in,1), In.kr(freq, 1)  )!2 ];
+
+
+
+
+
+		Out.ar(out,sig!2  )
+
+
+	}).add;
+
+
+
+
+
 	SynthDef(\reverb, {
 		|out=0, roomsize, revtime, damping, inputbw, spread = 15, drylevel, earlylevel,
-    taillevel, amp=0.3,maxRoomsize,wet=0.4,in =0|
+    taillevel, amp=0.3,maxRoomsize,wet=0.4,in =0,wF =0|
 
 
 
 	var a ,input;
 
-	input = In.ar(in,1);
+		input =      SelectX.ar(wF,[HPF.ar( In.ar(in,1),100),  LPF.ar( In.ar(in,1),100)]);
+
+
+
+
 	a = Resonz.ar(
 
 		input
