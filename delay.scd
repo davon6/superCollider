@@ -1,3 +1,12 @@
+
+
+
+//HUUUGE use while
+	Pseq([1/4],1).asCompileString.compare(Pseq([1/4],1).asCompileString)
+
+
+
+
 (
 s = Server.local;
 s.waitForBoot({
