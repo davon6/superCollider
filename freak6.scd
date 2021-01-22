@@ -121,7 +121,7 @@ e = Buffer.alloc(s, s.sampleRate *1/4,1);
 	s.sync;
 
 SynthDef(\lead, {
-		arg freq= 500, mRatio=1, cRatio=1, index =1, iScale=5, amp=0.01, atk= 0.01  , rel=3, cAtk = 4 , cRel = (-4) , pan =0, atkE =0,decE=0.1936, subsE=50, relE=0, sineRate = 0.0000000095262251, sineRangeHigh = 0, sineRangeLow=0, pitch = 0, sRteLPF = 1.3, timeSca= 0.25, dure= 1/1, which = 1, whichMod = 1, whichAmp =0,phRise= 0 , whichEnv = 0,timeSca2 =1,out=0, eFreq =0 , phFm=8,decEC=0,filF=200, bus,bus2=14,bus3=14,bus4=14,bus5=14,bus6=14, bus7=14, bus8= 15 ,  bpFreq = 500,wCar=0,gra=1;
+		arg freq= 500, mRatio=1, cRatio=1, index =1, iScale=5, amp=0.01, atk= 0.01  , rel=3, cAtk = 4 , cRel = (-4) , pan =0, atkE =0,decE=0.1936, subsE=50, relE=0, sineRate = 0.0000000095262251, sineRangeHigh = 0, sineRangeLow=0, pitch = 0, sRteLPF = 1.3, timeSca= 0.25, dure= 1/1, which = 1, whichMod = 1, whichAmp =0,phRise= 0 , whichEnv = 0,timeSca2 =1,out=0, eFreq =0 , phFm=8,decEC=0,filF=200, bus,bus2=14,bus3=14,bus4=14,bus5=14,bus6=14, bus7=14, bus8= 15 ,  bpFreq = 500,wCar=0,gra=1,lvlDec=1,factor=1;
 
 
 	var car,car2, mod,modE,modE2, env, iEnv, mod2, sig, bufpos, envVoice, filRte,lp,bp,hp,lp2, b1,a;
@@ -134,14 +134,14 @@ SynthDef(\lead, {
 //dont forget 2nd zero used to be 1
 		//env = EnvGen.kr(Env([0,1,0,0],[atkE,decE, subsE,relE],[-2,(MouseY.kr(-5,5)),0,0]),
 
-		env = EnvGen.kr(Env([1,1,1,0],[atkE,/*  MouseY.kr(0.0986,0.05)*/decE-(In.kr(bus2, 1))     , subsE,relE],[-2,(-3),0,0]),
+		env = EnvGen.kr(Env([0,1,lvlDec,0],[atkE,/*  MouseY.kr(0.0986,0.05)*/decE-(In.kr(bus2, 1))     , subsE,relE],[2.5,-2,(-3),0,0]),
 		doneAction:2
 			//+In.kr(bus8, 1)
 
 	);
 
 
-
+//freq = MouseX.kr(0,957.9895);
 
 	iEnv = EnvGen.kr(
 
@@ -169,7 +169,7 @@ SynthDef(\lead, {
 	modE2 = SinOsc.ar(Lag.ar(  freq * mRatio + mod2 ,0.06)*SinOsc.kr(sineRate,phRise).range([sineRangeLow]), mul:
 
 
-			(freq * mRatio * iEnv)*gra
+		Lag.kr((freq * mRatio * iEnv)*gra,0.01)
 
 
 
@@ -193,7 +193,7 @@ SynthDef(\lead, {
 
 	//good good
                                                                                // HERE   filRte
-	car =SinOsc.ar( 0.00502929687+eFreq  /* freq */    * cRatio +SelectX.ar(SinOsc.kr(0.0020,phFm).range(0,1),[SinOsc.ar(0),SelectX.ar(whichMod,[ mod,modE,modE2])]) + pitch +(In.kr(bus4, 1)/4));
+	car =SinOsc.ar( 0.00502929687+eFreq  /* freq */    * cRatio +SelectX.ar(SinOsc.kr(0.0020,phFm).range(0,1),[SinOsc.ar(0),SelectX.ar(whichMod,[ mod,modE,modE2])]) + pitch +  (In.kr(bus4, 1)/factor));// +  /4
 
 
 		car2 =LFSaw.ar(  0.00502929687+eFreq+(In.kr(bus4, 1)) );
@@ -213,7 +213,12 @@ SynthDef(\lead, {
 
 	lp2 = BLowPass4.ar(sig, (SinOsc.ar(LFNoise1.kr(Lag.kr(2.575,0.0968)).range(0,7.72500)).range(82.41,1400)), rq: 0.3);//MouseX.kr(0,7.72500)
 
-	bp = BPF.ar(sig,bpFreq+ In.kr(bus5, 1)+ In.kr(bus6, 1),0.3);//0.05
+	//bp = BPF.ar(sig,bpFreq+ In.kr(bus5, 1)+ In.kr(bus6, 1),0.3);//0.05
+
+		bp = BPF.ar(sig,MouseY.kr(4,3000),0.26);//0.05
+
+
+
 	hp = BHiPass4.ar(sig, In.kr(bus, 1),MouseY.kr(1,0.4,0));
 //MouseX.kr(100,5000+ filF)
 //slcFil
@@ -524,12 +529,15 @@ sig = Pan2.ar( sig , pan);//0 was pan
 "init side events".postln;
 
 
-	SynthDef(\effect,{ | in = 0, out= 0,wF= 0 ,freq=50 ,bus, dec1 = 0.3872  |
-		var sig,env;
+	SynthDef(\effect,{ | in = 0, out= 0,wF= 0 ,freq=50 ,bus, dec1 = 0.3872, wS=0  |
+		var sig,sig2,env,src;
 
 
-		sig = LPF.ar(In.ar(in,1),  EnvGen.kr(Env([1,5000],[dec1,0],4),doneAction:2) );
+		src = In.ar(in,1);
 
+		sig = LPF.ar( src  ,  EnvGen.kr(Env([1,5000],[dec1,0],4),doneAction:2) );
+
+		sig2 = AllpassC.ar(src,0.7744,0.3872,1.5488  )* EnvGen.kr(Env([1,1],[dec1,0],4),doneAction:2);
 
 
 		//SelectX.ar(wF,[ HPF.ar(In.ar(in,1),In.kr(freq, 1))!2, LPF.ar(In.ar(in,1), In.kr(freq, 1)  )!2 ];
@@ -538,7 +546,7 @@ sig = Pan2.ar( sig , pan);//0 was pan
 
 
 
-		Out.ar(out,sig!2  )
+		Out.ar(out,SelectX.ar(wS,[sig, sig2])!2  )
 
 
 	}).add;
@@ -592,7 +600,7 @@ sig = Pan2.ar( sig , pan);//0 was pan
 				maxRoomsize, amp,)
 		+ input
 	//	+a
-		)*   EnvGen.kr(Env([1,1,1,0],[0,revtime,0,0]),Trig.kr(2,revtime),doneAction:2) )
+		)*   EnvGen.kr(Env([1,1,0],[0,revtime,0],4),Trig.kr(2,revtime),doneAction:2) )
 
 
 

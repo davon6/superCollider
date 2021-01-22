@@ -43,10 +43,10 @@ s.plotTree
 
 Pdef(\melo,Pbind(\instrument,\lead,		\dur,Pseq([1/6],24),
 	//	\type,Pseq([\note,\rest,\note,\rest,\note,\rest,\note,\rest,\rest,\rest,\rest,\rest],inf),
-	\eFreq,        Pseq([  [329.63 ,326.63 ]    ,1,  [369.63,366.63],  360,  [389.63,386.63],  390,[409.63,406.63],400,400,430,450,450,45,45,380,1      ,450   ,400  ,360,430,   380,  400,400,430,450,450,45,45],inf),\which,2,\whichMod,2,\whichAmp,4,\whichEnv,3,\wCar,1,	\decE, 1/1,\bus,~bus12,\bus2,34,\bus3,24,\bus4,~bus3,\amp,0.0006,\out,~reverbBus));
+	\eFreq,        Pseq([  [329.63 ,326.63 ]    ,1,  [369.63,366.63],  360,  [389.63,386.63],  390,[409.63,406.63],400,400,430,450,450,45,45,380,1      ,450   ,400  ,360,430,   380,  400,400,430,450,450,45,45],inf),\which,2,\whichMod,2,\whichAmp,4,\whichEnv,0,\wCar,1,	\decE, 0.05,\bus,~bus12,\bus2,34,\bus3,24,\bus4,~bus3,\amp,0.0006,\out,~reverbBus));
 
 
-Pdef(\r1,Pbind(\instrument,\reverb,\dur,Pseq([1/6],24),\roomsize, 16, \revtime, 1.24, \damping, 0.30, \inputbw, 0.5, \drylevel, (-3), \earlylevel, (-10), \taillevel, (-10),\maxRoomsize,16,\in,~reverbBus , \out,0,\group, ~revGrp));
+Pdef(\r1,Pbind(\instrument,\reverb,\dur,Pseq([1/6],24),\roomsize, 16, \revtime, Pseq([1/6],24)+ 3.7936, \damping, 0.030, \inputbw, 0.5, \drylevel, (-3), \earlylevel, (-10), \taillevel, (-10),\maxRoomsize,16,\in,~reverbBus , \out,0,\group, ~revGrp));
 
 ~melo = Ppar([Pdef(\melo),Pdef(\r1)],1);
 
