@@ -35,7 +35,9 @@ s.plotTree
 ~granGrp = Group.after(~recGrp);
 
 ~effctGrp = Group.after(~granGrp);
-~revGrp = Group.after(~effctGrp);
+~effctGrp2 = Group.after(~effctGrp);
+~revGrp = Group.after(~effctGrp2);
+~revGrp2 = Group.after(~revGrp);
 
 
 
@@ -750,11 +752,11 @@ Pseq([
 ~kbassRest,Pseq([~bassRest],3),
 	Ppar([
 	Ppar([
-			Pbind(\instrument, \kick,\dur, Pseq([1],1),\amp, 0.028,\out,~effctBus),
-			Pbind(\instrument, \bass,\type, Pseq([\rest, \note, \note, \note], inf),\dur, Pseq([1/4],4),\midinote, 28,\atk, t.beatDur/4 * 0.01,\rel, t.beatDur/4 * 0.99,\atkcrv, -2,\relcrv, -1,\amp, 0.24,\out,~effctBus),], 4),
+			Pbind(\instrument, \kick,\dur, Pseq([1],1),\amp, 0.028,\out,~effctBus2),
+			Pbind(\instrument, \bass,\type, Pseq([\rest, \note, \note, \note], inf),\dur, Pseq([1/4],4),\midinote, 28,\atk, t.beatDur/4 * 0.01,\rel, t.beatDur/4 * 0.99,\atkcrv, -2,\relcrv, -1,\amp, 0.24,\out,~effctBus2),], 4),
 
 
-		Pbind(\instrument, \effect,\wF,1,\dur, Pseq([4/1],1), \in,~effctBus,\out,0,\group,~effctGrp )
+		Pbind(\instrument, \effect,\wF,1,\dur, Pseq([4/1],1), \in,~effctBus2,\out,0,\group,~effctGrp2 )
 
 ], 1),
 
@@ -765,15 +767,15 @@ Pseq([
 ~spe2 = Pbind(\instrument, \kick,\dur, Pseq([Pseq([1/4],4), Pseq([1/16],16),  Pseq([1/3],3),Pseq([1/1],4) ,Pseq([1/4],2),Pseq([1/16],4)],1),\amp, 0.028);
 
 
-~spe3 =   Ppar([Pbind(\instrument, \cymb,\type, Pseq([\rest,\rest,\note,\note ,\rest,\note ,\note, \rest],inf),\dur,  Pseq([1/4],64 ),\rel, 0.3872,\rel2,0.0968,\carHz, 525.12070612224,\modHz,1899.3343179398,\modAmp, 0.12875 ,\amp,0.02,\out,~effctBus),
+~spe3 =   Ppar([Pbind(\instrument, \cymb,\type, Pseq([\rest,\rest,\note,\note ,\rest,\note ,\note, \rest],inf),\dur,  Pseq([1/4],64 ),\rel, 0.3872,\rel2,0.0968,\carHz, 525.12070612224,\modHz,1899.3343179398,\modAmp, 0.12875 ,\amp,0.02,\out,~effctBus2),
 
-Pbind(\instrument,\percu2,\dur, Pseq([1/4], 64),\carHz,164.81,\modHz,164.81,\atk, 0,\rel,0.04840,\rel2,0.02420,\amp, 0.062,\out,~effctBus),
+Pbind(\instrument,\percu2,\dur, Pseq([1/4], 64),\carHz,164.81,\modHz,164.81,\atk, 0,\rel,0.04840,\rel2,0.02420,\amp, 0.062,\out,~effctBus2),
 
-Pbind(\instrument, \snare,\carHz, 41.2 ,\type, Pseq([\rest,\rest ,\note, \rest], 8),\atk, 0.00502929687,\rel, 0.0968,\rel2,0.7744,\dur, Pseq([1/2], inf),\amp,0.04,\out,~effctBus),
+Pbind(\instrument, \snare,\carHz, 41.2 ,\type, Pseq([\rest,\rest ,\note, \rest], 8),\atk, 0.00502929687,\rel, 0.0968,\rel2,0.7744,\dur, Pseq([1/2], inf),\amp,0.04,\out,~effctBus2),
 
-Ppar([ Pbind(\instrument, \kick,\dur, Pseq([1],1),\amp, 0.028,\out,~effctBus),Pbind(\instrument, \bass,\type, Pseq([\rest, \note, \note, \note], inf),\dur, Pseq([1/4],4),\midinote, 28,\atk, t.beatDur/4 * 0.01,\rel, t.beatDur/4 * 0.99,\atkcrv, -2,\relcrv, -1,\amp, 0.24,\out,~effctBus),],16),
+Ppar([ Pbind(\instrument, \kick,\dur, Pseq([1],1),\amp, 0.028,\out,~effctBus2),Pbind(\instrument, \bass,\type, Pseq([\rest, \note, \note, \note], inf),\dur, Pseq([1/4],4),\midinote, 28,\atk, t.beatDur/4 * 0.01,\rel, t.beatDur/4 * 0.99,\atkcrv, -2,\relcrv, -1,\amp, 0.24,\out,~effctBus2),],16),
 
-Pbind(\instrument, \effect,\wF,1,\dur, Pseq([16/1],1), \in,~effctBus,\out,0,\group,~effctGrp,\dec1,6 )], 1);
+	Pbind(\instrument, \effect,\wF,1,\dur, Pseq([16/1],1), \in,~effctBus2,\out,0,\group,~effctGrp2,\dec1,6 )], 1);
 
 
 ~spe4 = Pbind(\instrument, \kick,\dur, Pseq([Pseq([1/16],16),Pseq([1/4],16),Pseq([1/1],3) ],1)  , \amp, 0.028,\wR,1);

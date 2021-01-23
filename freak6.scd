@@ -6,9 +6,11 @@ s.options.memSize =
 
 (
 ~reverbBus = Bus.audio(s,1);
+~reverbBus2 = Bus.audio(s,1);
 ~micBus = Bus.audio(s,1);
 ~ptrBus = Bus.audio(s,1);
 ~effctBus =Bus.audio(s,1);
+~effctBus2 =Bus.audio(s,1);
 ~delayBus = Bus.audio(s,1);
 
 
@@ -551,13 +553,13 @@ sig = Pan2.ar( sig , pan);//0 was pan
 	}).add;
 
 
-	SynthDef(\pingD, { |out = 0, bufnum = 0, feedback = 0.5, delayTime = 0.3, in, stereoL =0.00555, stereoR =0, dec=0.5 |
+	SynthDef(\pingD, { |out = 0, bufnum = 0, feedback = 0.5, delayTime = 0.3, in, stereoL =0.00555, stereoR =0, dec=0.5, amp =1 |
     var left, right, src,sig3;
 
 		left =	In.ar(in,1);
 
     Out.ar(out ,PingPong.ar(bufnum, [left,left], delayTime, feedback, 1)
-			* [1+stereoL,1+stereoR] * EnvGen.kr(Env([1,1,0],[0,dec,0],4),doneAction:2) )
+			* [amp+stereoL,amp+stereoR] * EnvGen.kr(Env([1,1,0],[0,dec,0],4),doneAction:2) )
 	}).add;
 
 
