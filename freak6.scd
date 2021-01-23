@@ -1,10 +1,4 @@
 
-s.options.memSize = 1867776;
-
-131072 + 1867776
-s.options.memSize = 1998848;
-
-1048576*2
 s.options.memSize = 2097152;
 
 
@@ -15,6 +9,7 @@ s.options.memSize =
 ~micBus = Bus.audio(s,1);
 ~ptrBus = Bus.audio(s,1);
 ~effctBus =Bus.audio(s,1);
+~delayBus = Bus.audio(s,1);
 
 
 //~ind = 0;
@@ -89,9 +84,13 @@ s.waitForBoot({
 s.sync;
 	"init buff2".postln;
 
+	~delay = Buffer.alloc(s, 44100 * 3, 2);
+
+
+
 	c = Buffer.alloc(s, s.sampleRate *0.7744,1);//goood long
-b = Buffer.alloc(s, s.sampleRate *0.3872,1);//tight good
-e = Buffer.alloc(s, s.sampleRate *1/4,1);
+	b = Buffer.alloc(s, s.sampleRate *0.3872,1);//tight good
+	e = Buffer.alloc(s, s.sampleRate *1/4,1);
 
 	d = Buffer.alloc(s, s.sampleRate *1.5488,1);//goood long
 
@@ -537,7 +536,7 @@ sig = Pan2.ar( sig , pan);//0 was pan
 
 		sig = LPF.ar( src  ,  EnvGen.kr(Env([1,5000],[dec1,0],4),doneAction:2) );
 
-		sig2 = AllpassC.ar(src,0.7744,0.3872,1.5488  )* EnvGen.kr(Env([1,1],[dec1,0],4),doneAction:2);
+
 
 
 		//SelectX.ar(wF,[ HPF.ar(In.ar(in,1),In.kr(freq, 1))!2, LPF.ar(In.ar(in,1), In.kr(freq, 1)  )!2 ];
@@ -546,9 +545,19 @@ sig = Pan2.ar( sig , pan);//0 was pan
 
 
 
-		Out.ar(out,SelectX.ar(wS,[sig, sig2])!2  )
+		Out.ar(out,SelectX.ar(wS,sig)!2  )
 
 
+	}).add;
+
+
+	SynthDef(\pingD, { |out = 0, bufnum = 0, feedback = 0.5, delayTime = 0.3, in, stereoL =0.00555, stereoR =0, dec=0.5 |
+    var left, right, src,sig3;
+
+		left =	In.ar(in,1);
+
+    Out.ar(out ,PingPong.ar(bufnum, [left,left], delayTime, feedback, 1)
+			* [1+stereoL,1+stereoR] * EnvGen.kr(Env([1,1,0],[0,dec,0],4),doneAction:2) )
 	}).add;
 
 
