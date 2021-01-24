@@ -530,7 +530,7 @@ sig = Pan2.ar( sig , pan);//0 was pan
 "init side events".postln;
 
 
-	SynthDef(\effect,{ | in = 0, out= 0,wF= 0 ,freq=50 ,bus, dec1 = 0.3872, wS=0  |
+	SynthDef(\effect,{ | in = 0, out= 0,wF= 0 ,freq=50 ,bus, dec1 = 0.3872, wE=0  |
 		var sig,sig2,env,src;
 
 
@@ -539,7 +539,7 @@ sig = Pan2.ar( sig , pan);//0 was pan
 		sig = LPF.ar( src  ,  EnvGen.kr(Env([1,5000],[dec1,0],4),doneAction:2) );
 
 
-
+		sig2 = HPF.ar( src, EnvGen.kr(Env([1,5000],[dec1,0],-4),doneAction:2) );
 
 		//SelectX.ar(wF,[ HPF.ar(In.ar(in,1),In.kr(freq, 1))!2, LPF.ar(In.ar(in,1), In.kr(freq, 1)  )!2 ];
 
@@ -547,7 +547,7 @@ sig = Pan2.ar( sig , pan);//0 was pan
 
 
 
-		Out.ar(out,SelectX.ar(wS,sig)!2  )
+		Out.ar(out,SelectX.ar(wE,[sig,sig2])!2  )
 
 
 	}).add;
