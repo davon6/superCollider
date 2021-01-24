@@ -493,14 +493,13 @@ Pdef(\e8,
 	\dur,  Pseq([1/4],32 ),
 	\rel, 0.3872,
 	\rel2,0.0968,
-
-
-	\carHz, 525.12070612224,
+\carHz, 525.12070612224,
 	\modHz,1899.3343179398,
 	\modAmp, 0.12875 ,
 		\amp,0.02
 	);
 );
+
 
 Pdef(\e4,
 	   Pbind(
@@ -653,6 +652,17 @@ Pdef(\e,
 		\amp,0.02
 	);
 );
+
+~cymbal = Pbind(\instrument, \cymb,\type, Pseq([\rest,\rest,\note,\note ,\rest,\note ,\note, \rest],inf),\dur,Pseq([1/4],64 ),\rel, 0.3872,\rel2,0.0968,\carHz, 525.12070612224,\modHz,1899.3343179398,\modAmp, 0.12875 ,\amp,0.02);
+
+
+~hat = Pbind(\instrument,\percu2,\dur,Pseq([1/4], 64),\carHz,164.81,\modHz,164.81,\atk, 0,\rel,0.04840,\rel2,0.02420,\amp, 0.062);
+
+~snare = Pbind(\instrument, \snare,\carHz, 41.2 ,\type, Pseq([\rest,\rest ,\note, \rest], 8),\atk, 0.00502929687,\rel, 0.0968,\rel2,0.7744,\dur, Pseq([1/2], inf),\amp,0.04);
+
+
+
+
 Pdef(\d,
 
 	Pbind(
@@ -695,11 +705,34 @@ Pdef(\sn,
 		\amp, 0.24,
 	);
 
+
+~bass = Pbind(
+		\instrument, \bass,
+		\type, Pseq([\rest, \note, \note, \note], inf),
+		\dur, Pseq([1/4],1024),
+		\midinote, 28,
+		\atk, t.beatDur/4 * 0.01,
+		\rel, t.beatDur/4 * 0.99,
+		\atkcrv, -2,
+		\relcrv, -1,
+		\amp, 0.24,
+	);
+
 	~kickPat = Pbind(
 		\instrument, \kick,
 		\dur, Pseq([1],1),
 		\amp, 0.028,
 	);
+
+
+~kick = Pbind(
+		\instrument, \kick,
+		\dur, Pseq([1],1024),
+		\amp, 0.028,
+	);
+
+
+
 
 	~bassAndKick = Ppar([~bassPat, ~kickPat], 1);
 
@@ -769,7 +802,7 @@ Pseq([
 
 ~spe3 =   Ppar([Pbind(\instrument, \cymb,\type, Pseq([\rest,\rest,\note,\note ,\rest,\note ,\note, \rest],inf),\dur,  Pseq([1/4],64 ),\rel, 0.3872,\rel2,0.0968,\carHz, 525.12070612224,\modHz,1899.3343179398,\modAmp, 0.12875 ,\amp,0.02,\out,~effctBus2),
 
-Pbind(\instrument,\percu2,\dur, Pseq([1/4], 64),\carHz,164.81,\modHz,164.81,\atk, 0,\rel,0.04840,\rel2,0.02420,\amp, 0.062,\out,~effctBus2),
+Pbind(\instrument,\percu2,\dur, Pseq([1/4], 64),\carHz,164.81,\modHz,164.81,\atk, 0,\rel,0.04840,\rel2,0.02420,\amp, 0.062,\out,~effctBus2)    ,
 
 Pbind(\instrument, \snare,\carHz, 41.2 ,\type, Pseq([\rest,\rest ,\note, \rest], 8),\atk, 0.00502929687,\rel, 0.0968,\rel2,0.7744,\dur, Pseq([1/2], inf),\amp,0.04,\out,~effctBus2),
 
@@ -797,11 +830,62 @@ Ppar([ Pbind(\instrument, \kick,\dur, Pseq([1],1),\amp, 0.028,\out,~effctBus2),P
 ~bar4 = Ppar([~bassPat, ~kickPat], 4);
 ~seq = Ppar([Pdef(\c),Pdef(\b),Pdef(\a),~barwithBre],1);
 ~seqRising = Ppar([~barwithBre, Pdef(\w)],1);
+~bar12 = Ppar([~bassPat, ~kickPat], 12);
+~bar14 = Ppar([~bassPat, ~kickPat], 14);
 ~bar16  = Pseq([~bassAndKick],16);
 ~bar15 = Ppar([~bassPat, ~kickPat], 15);
 ~bar8 = Ppar([~bassPat, ~kickPat], 8);
 ~semiBreak = Pseq([~bar8,Pseq([~bassRest],8)],1);
 ~kbassRest = Ppar([~kickPat, ~bassRest], 1);
+
+//~bar = {|bar|};
+
+/*
+
+~twoThird = Pseq([ Ppar([ ~bar12, Pbindf(~cymbal, \dur,Pseq([1/4],48)), Pbindf(~hat, \dur,Pseq([1/4],48)),Pbindf(~snare,\type, Pseq([\rest,\rest ,\note, \rest], 6)) ],1)],1).play(t);
+
+
+~twoThird = Pseq([ Ppar([ ~bar12, Pbindf(~cymbal, \dur,Pseq([1/4],48)), Pbindf(~hat, \dur,Pseq([1/4],48)),Pbindf(~snare,\type, Pseq([\rest,\rest ,\note, \rest], 6)) ],1)],1).play(t);
+
+Pbindf(~kick, \dur,Pseq([  Pseq([1/16],4),        ],1) ).play(t)
+
+Pbindf(~kick, \dur,Pseq([  Pseq([1/16],4), Pseq([1/3],3)  ,Pseq([1/16],4),Pseq([1/3],1)  ,Pseq([1/16],4), Pseq([1/3],1)  ,Pseq([1/16],4),       ],1) ).play(t)
+
+//Pbindf(~bass, \dur, Pseq([1/4],8) ).play(t)
+
+
+
+Pbindf(~kick, \dur, Pseq([        ],1) ).play(t)
+
+*/
+
+~ending = [Pseq([   Pseq([1/16],4), Pseq([1/3],3)  ],1)  ,
+Pseq([ Pseq([1/3],1) ,Pseq([1/12],9)  ],1) ,
+Pseq([~bassRest],2) ,
+
+Pseq([Ppar([Pseq([~kickGran],1),~ptrK1,~recK1,Pdef(\granKick1)],1),  Pbindf(~kick, \dur, Pseq([   1/2     ],2)),Ppar([Pseq([~kickGran],1),~ptrK1,~recK1,Pdef(\granKick1)],1),Pbindf(~kick, \dur, Pseq([   1/2     ],1))],1   ),
+
+Pseq([~bassRest],2) ,
+Pseq([~kickR],4),
+
+
+];
+
+
+
+
+
+
+~oneM  = [ Pseq([  Pseq([ Ppar([ ~bar12, Pbindf(~cymbal, \dur,Pseq([1/4],48)), Pbindf(~hat, \dur,Pseq([1/4],48)),Pbindf(~snare,\type, Pseq([\rest,\rest ,\note, \rest], 6)) ],1)],1), Ppar([~kickPat,  Pseq([~kickR],8) ],1)       ],1) ,
+
+ Pseq([~kickPat, Pseq([~bassRest],14) ,~kickPat ],1),
+
+  Ppar([~kickPat,~spe3],1) ,
+
+
+	Pbindf(~kick, \dur,Pseq([  Pseq([1/16],4), Pseq([1/3],3)  ,Pseq([1/16],4),Pseq([1/3],1)  ,Pseq([1/16],4), Pseq([1/3],1)  ,Pseq([1/16],4),       ],1) )];
+
+
 ~half16  = Pseq([Ppar([Pseq([~bassAndKick],8),Pdef(\d8),Pdef(\e8),Pdef(\sn8)],1),Pseq([~bassRest],8)],1);
 ~barwithBre= Pseq([~bar15, ~kbassRest], 1);//HERE
 ~ens = Ppar([Pdef(\e),Pdef(\d),Pdef(\sn),~bar16],1);//must include percu

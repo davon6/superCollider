@@ -43,8 +43,11 @@ var compared,list,list2,count;
 	/*count.postln;*/list2[count];};
 
 f = { |n=12, min=0, max=11| (min..max).scramble.keep(n) };
+//~f2 = { |n=6, min=0, max=5| (min..max).scramble.keep(n) };
 
 ~boo = f.value(12, 0, 11);
+
+~boo2 = f.value(6, 0,5);
 )
 
 
@@ -138,22 +141,23 @@ Ppar([
 
 
 
-	Pseq([Pseq([~specialHits[1],Ppar([~specialHits[2],     Ppar([
+	Pseq([
+		Pseq([~specialHits[1],Ppar([~specialHits[2],     Ppar([
 	Pdef(\wNoise,Pbind(\instrument, \wNoise,\dur, Pseq([1/1], 1),\amp,0.008,\out, ~reverbBus2,))   ,
 	Pbind(\instrument,\reverb,\dur , Pseq([1/1], 1), \revtime, 3.0976, \in, ~reverbBus2,\group,~revGrp2,
 
 
 		\roomsize, 40,  \damping, 0.09, \inputbw, 0.75, \drylevel, -0, \earlylevel, -22, \taillevel, -4,\maxRoomsize,40,\wet,0.8
-)],1)      ],1),~specialHits[3],~specialHits[0]],1),~arrSpecialKB[~boo[~ind]], Pseq([~ens],2) ,~arrSpecialKB[~boo[~ind+1]],~arrSpecialKB[~boo[~ind+2]], Pseq([~ens],2) ,~arrSpecialKB[~boo[~ind+3]],~arrSpecialKB[~boo[~ind+4]], Pseq([~ens],2) ,~arrSpecialKB[~boo[~ind+5]],~arrSpecialKB[~boo[~ind+6]], Pseq([~ens],2) ,~arrSpecialKB[~boo[~ind+7]],~arrSpecialKB[~boo[~ind+8]], Pseq([~ens],2) ,~arrSpecialKB[~boo[~ind+9]],~arrSpecialKB[~boo[~ind+10]], Pseq([~ens],2) ,~arrSpecialKB[~boo[~ind+11]]
+)],1) ,~specialHits[3]     ],1),~specialHits[0]  ],1),~arrSpecialKB[~boo[~ind]], Pseq([~ens],2) ,~arrSpecialKB[~boo[~ind+1]],~arrSpecialKB[~boo[~ind+2]], Pseq([~ens],2) ,~arrSpecialKB[~boo[~ind+3]],~arrSpecialKB[~boo[~ind+4]], Pseq([~ens],2) ,~arrSpecialKB[~boo[~ind+5]],~arrSpecialKB[~boo[~ind+6]], Pseq([~ens],2) ,~arrSpecialKB[~boo[~ind+7]],~arrSpecialKB[~boo[~ind+8]], Pseq([~ens],2) ,~arrSpecialKB[~boo[~ind+9]],~arrSpecialKB[~boo[~ind+10]], Pseq([~ens],2) ,~arrSpecialKB[~boo[~ind+11]]
 
 
-	,~index.(), Pseq([~ens],4) ,~index.()],4)
+	, Pseq([~ens],3),~half16],1),
 
 
 
 
 
-	,
+
 
 
 
@@ -309,25 +313,31 @@ Pbind(\instrument,\reverb,  \dur,~pp,\roomsize, 50, \revtime,~pp+~revTail.(), \d
 
 
 
-/*
 
 
 (
-Ppar([Pseq([Pseq([~specialHits[1],Ppar([~specialHits[2],     Ppar([
-	Pdef(\wNoise,Pbind(\instrument, \wNoise,\dur, Pseq([1/1], 1),\amp,0.008,\out, ~reverbBus,))   ,
-	Pbind(\instrument,\reverb,\dur , Pseq([1/1], 1), \revtime, 3.0976, \in, ~reverbBus,\group,~revGrp,
+Ppar([
+
+
+
+
+
+	Pseq([
+		Pseq([~specialHits[1],Ppar([~specialHits[2],     Ppar([
+	Pdef(\wNoise,Pbind(\instrument, \wNoise,\dur, Pseq([1/1], 1),\amp,0.008,\out, ~reverbBus2,))   ,
+	Pbind(\instrument,\reverb,\dur , Pseq([1/1], 1), \revtime, 3.0976, \in, ~reverbBus2,\group,~revGrp2,
 
 
 		\roomsize, 40,  \damping, 0.09, \inputbw, 0.75, \drylevel, -0, \earlylevel, -22, \taillevel, -4,\maxRoomsize,40,\wet,0.8
-)],1)      ],1),~specialHits[3],~specialHits[0]],1),~arrSpecialKB[~boo[~ind]], Pseq([~ens],2) ,~arrSpecialKB[~boo[~ind+1]],~arrSpecialKB[~boo[~ind+2]], Pseq([~ens],2) ,~arrSpecialKB[~boo[~ind+3]],~arrSpecialKB[~boo[~ind+4]], Pseq([~ens],2) ,~arrSpecialKB[~boo[~ind+5]],~arrSpecialKB[~boo[~ind+6]], Pseq([~ens],2) ,~arrSpecialKB[~boo[~ind+7]],~arrSpecialKB[~boo[~ind+8]], Pseq([~ens],2) ,~arrSpecialKB[~boo[~ind+9]],~arrSpecialKB[~boo[~ind+10]], Pseq([~ens],2) ,~arrSpecialKB[~boo[~ind+11]]
+)],1) ,~specialHits[3]     ],1),~specialHits[0]  ],1),~arrSpecialKB[~boo[~ind]], Pseq([~ens],2) ,~arrSpecialKB[~boo[~ind+1]],~arrSpecialKB[~boo[~ind+2]], Pseq([~ens],2) ,~arrSpecialKB[~boo[~ind+3]],~arrSpecialKB[~boo[~ind+4]], Pseq([~ens],2) ,~arrSpecialKB[~boo[~ind+5]],~arrSpecialKB[~boo[~ind+6]], Pseq([~ens],2) ,~arrSpecialKB[~boo[~ind+7]],~arrSpecialKB[~boo[~ind+8]], Pseq([~ens],2) ,~arrSpecialKB[~boo[~ind+9]],~arrSpecialKB[~boo[~ind+10]], Pseq([~ens],2) ,~arrSpecialKB[~boo[~ind+11]]
 
 
-,~index.(), Pseq([~ens],4) ,~index.()],1),
+	, Pseq([~ens],3),~half16],1),
 
 
 
 
-*/
+
 
 Pseq([
 
@@ -435,7 +445,7 @@ Pseq([
 
 ],16)
 
-	],inf)
+	//],inf)
 
 
 
