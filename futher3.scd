@@ -814,6 +814,8 @@ Ppar([ Pbind(\instrument, \kick,\dur, Pseq([1],1),\amp, 0.028,\out,~effctBus2),P
 ~spe4 = Pbind(\instrument, \kick,\dur, Pseq([Pseq([1/16],16),Pseq([1/4],16),Pseq([1/1],3) ],1)  , \amp, 0.028,\wR,1);
 
 
+
+
 ~specialHits = [~spe1,~spe2,~spe3,~spe4].scramble;
 
 
@@ -933,7 +935,15 @@ Pbind(\instrument, \effect,\wE,1,\dur, Pseq([16/1],1), \in,~effctBus2,\out,0,\gr
 /*
 ~arrSpecialKB = [[~ens15PercS,True],[~ens15PercR,True],[~ens16Perc,True],[~ens15Perc,True],[~ens,True],[~half16,True],[~bar16,True],[~barwithBre,True],[~ens2,True],[~semiBreak,True],[~dbleRverseStart,True],[~fitDbleick,True]];*/
 
+
+
 ~arrSpecialKB = [~ens15PercS,Pseq([Ppar([Pdef(\d15),Pdef(\e15),Pdef(\sn15),~bar15],1),Ppar([~kickPat,Ppar([Pseq([~kickGran],1),~ptrK1,~recK1,Pdef(\granKick1)],1)],1)],1),~ens16Perc,~ens15Perc,~ens,~half16,~bar16,~barwithBre,~ens2,~semiBreak,Pseq([Pseq([Ppar([Pseq([~kickGran],1),~ptrK1,~recK1,Pdef(\granKick1)],1)],2),~kbassRest,~bassRest,Ppar([Pdef(\d4),Pdef(\e4),Pdef(\sn4),~bar4],1)],1),~fitDbleick];
+
+
+
+
+
+~starters = [~ens15Perc, ~ens16Perc,~ens15PercS,Pseq([ Ppar([ ~bar12, Pbindf(~cymbal, \dur,Pseq([1/4],48)), Pbindf(~hat, \dur,Pseq([1/4],48)),Pbindf(~snare,\type, Pseq([\rest,\rest ,\note, \rest], 6)) ],1), ~kbassRest,Pseq([~bassRest],2),~kbassRest],1)];
 
 )
 (
@@ -943,7 +953,7 @@ Pbind(\instrument, \effect,\wE,1,\dur, Pseq([16/1],1), \in,~effctBus2,\out,0,\gr
 1+1
 
 
-~dbleRverseStart.play(t)
+~half16.play(t)
 
 s.plotTree
 s.scope

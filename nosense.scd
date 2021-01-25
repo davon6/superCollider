@@ -138,30 +138,52 @@ Ppar([
 
 
 
-/*
+
+
+
 
 	Pseq([
-		Pseq([~specialHits[1],Ppar([~specialHits[2],     Ppar([
-	Pdef(\wNoise,Pbind(\instrument, \wNoise,\dur, Pseq([1/1], 1),\amp,0.008,\out, ~reverbBus2,))   ,
+
+
+		~starters[4.rand],        Pseq([~bar14S,  ~ending[~boo[~ind]]],1) ,
+		~starters[4.rand],         Pseq([~bar14S,  ~ending[~boo[~ind+1]]],1) ,
+
+	 ~starters[4.rand],     Pseq([~bar14S,  ~ending[~boo[~ind+2]]],1),
+		~starters[4.rand],      Pseq([~bar14S,  ~ending[~boo[~ind+3]]],1),
+
+	~starters[4.rand],           Pseq([~bar14S,  ~ending[~boo[~ind+4]]],1),
+		~starters[4.rand],              Pseq([~bar14S,  ~ending[~boo[~ind+5]]]),
+
+
+		Pseq([~kbassRest,Pseq([~bassRest],47),  	Ppar([
+Pbindf(~cymbal, \dur,Pseq([ Pseq([1/4],4),Pseq([1/8],8), Pseq([1/16],16), Pseq([1/32],32) ,Pseq([1/4],4),Pseq([1/32],32),Pseq([1/64],64)],1),\out,~effctBus2), Pbindf(~hat, \dur,Pseq([ Pseq([1/4],4),Pseq([1/8],8), Pseq([1/16],16), Pseq([1/32],32) ,Pseq([1/4],4),Pseq([1/32],32),Pseq([1/64],64)],1),\out,~effctBus2),Pbindf(~snare,\type, Pseq([\rest,\rest ,\note, \rest], 2)) ,
+
+			Pdef(\wNoise,Pbind(\instrument, \wNoise,\dur, Pseq([1/1], 1),\amp,0.008,\out, ~reverbBus2,))   ,
 	Pbind(\instrument,\reverb,\dur , Pseq([1/1], 1), \revtime, 3.0976, \in, ~reverbBus2,\group,~revGrp2,
 
 
 		\roomsize, 40,  \damping, 0.09, \inputbw, 0.75, \drylevel, -0, \earlylevel, -22, \taillevel, -4,\maxRoomsize,40,\wet,0.8
-)],1) ,~specialHits[3]     ],1),~specialHits[0]  ],1),~arrSpecialKB[~boo[~ind]], Pseq([~ens],2) ,~arrSpecialKB[~boo[~ind+1]],~arrSpecialKB[~boo[~ind+2]], Pseq([~ens],2) ,~arrSpecialKB[~boo[~ind+3]],~arrSpecialKB[~boo[~ind+4]], Pseq([~ens],2) ,~arrSpecialKB[~boo[~ind+5]],~arrSpecialKB[~boo[~ind+6]], Pseq([~ens],2) ,~arrSpecialKB[~boo[~ind+7]],~arrSpecialKB[~boo[~ind+8]], Pseq([~ens],2) ,~arrSpecialKB[~boo[~ind+9]],~arrSpecialKB[~boo[~ind+10]], Pseq([~ens],2) ,~arrSpecialKB[~boo[~ind+11]]
-
-
-	, Pseq([~ens],3),~half16],1),*/
+)
+],1)],1),
 
 
 
-	Pseq([  Pseq([~bar14S,  ~ending[~boo[~ind]]],1) , Pseq([~bar14S,  ~ending[~boo[~ind+1]]],1) ,
-	 Pseq([~bar14S,  ~ending[~boo[~ind+2]]],1), Pseq([~bar14S,  ~ending[~boo[~ind+3]]],1),
-	Pseq([~bar14S,  ~ending[~boo[~ind+4]]],1), Pseq([~bar14S,  ~ending[~boo[~ind+5]]]),
+	~starters[4.rand],      Pseq([~bar14S,  ~ending[~boo[~ind+6]]],1),
+		~starters[4.rand],        Pseq([~bar14S,  ~ending[~boo[~ind+7]]],1),
+	~starters[4.rand],         Pseq([~bar14S,  ~ending[~boo[~ind+8]]],1),
+		~starters[4.rand],         Pseq([~bar14S,  ~ending[~boo[~ind+9]]]),
+		 ~starters[4.rand],      Pseq([~bar14S,  ~ending[~boo[~ind+10]]],1),
+		  ~starters[4.rand],      Pseq([~bar14S,  ~ending[~boo[~ind+11]]],1),
 
-	 Pseq([~bar14S,  ~ending[~boo[~ind+6]]],1), Pseq([~bar14S,  ~ending[~boo[~ind+7]]],1),
-	Pseq([~bar14S,  ~ending[~boo[~ind+8]]],1), Pseq([~bar14S,  ~ending[~boo[~ind+9]]]),
-		 Pseq([~bar14S,  ~ending[~boo[~ind+10]]],1), Pseq([~bar14S,  ~ending[~boo[~ind+11]]],1)
-],1),
+
+
+		~specialHits[4.rand],~specialHits[4.rand],~specialHits[4.rand],~specialHits[4.rand]
+
+
+
+
+
+],1)   ,   //.play(t);
 
 
 
