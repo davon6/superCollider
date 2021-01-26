@@ -51,9 +51,12 @@ f = { |n=12, min=0, max=11| (min..max).scramble.keep(n) };
 
 
 
-
+s.defaultGroup.stop
 (
 
+
+
+// w = Pbindf(~kick, \dur, Pseq([1],1024), \out,20)
 
 
 
@@ -77,7 +80,7 @@ o = {
 	Out.kr(~bus2, SinOsc.ar(0.0201171875).range(164.81,81.41));// useless
 
 
-
+//Out.kr(~bus2, SinOsc.ar(0.08046875).range(81.41,1318.51));
 
 
 	Out.kr(~bus4, SinOsc.ar( 2.575 +SinOsc.kr(0.64375).range(0.01005859375,2.575)  ).range(20.60,1318.51));
@@ -138,7 +141,7 @@ Ppar([
 
 
 
-
+Pbindf(~kick,\out,~kbus),
 
 
 
@@ -193,6 +196,16 @@ Pbindf(~cymbal, \dur,Pseq([ Pseq([1/4],4),Pseq([1/8],8), Pseq([1/16],16), Pseq([
 
 
 
+Ppar([
+
+	Pbind(\instrument, \lead,\dur, Pseq([64/1],1), \gra, 0, \eFreq, [329.63,331.63,334.63,335.63], \subsE, 0,\amp,0.005,\whichMod,2, \decE, Pseq([64/1],1),\whichEnv,1,\bus4, ~bus2 , \which,1,\out, ~reverbBus3),
+
+
+Pbind(\instrument,\reverb,\dur,Pseq([64/1],1),\roomsize, 16, \revtime, Pseq([64/1],1)+3.0976, \damping, 0.030, \inputbw, 0.5, \drylevel, (-3), \earlylevel, (-10), \taillevel, (-10),\maxRoomsize,16,\in,~reverbBus3 , \out,0,\group, ~revGrp,\spread, 1,   \center, 0),
+
+			Pbind(\instrument,\comp,\dur,Pseq([64/1],1),\dec,Pseq([64/1],1) ,\thr ,0.8 ,\sB , 1, \sA , 2, \atk , 0.001, \rel ,0.04840
+
+		,\in, ~compressBus ,\in2, ~kbus,\group, ~compGrp),
 
 
 
@@ -219,7 +232,7 @@ Ppar([Pbind(\instrument,\lead,		\dur,Pseq([1/1],1),\eFreq,81.41,\which,0,\whichM
 
 Ppar([Pbind(\instrument,\lead,		\dur,Pseq([1/12],24),\eFreq,        Pseq([  [329.63 ,326.63 ]    ,1,  [369.63,366.63],  360,  [389.63,386.63],  390,[409.63,406.63],400,400,430,450,450,45,45,380,1      ,450   ,400  ,360,430,   380,  400,400,430,450,450,45,45],inf),\which,2,\whichMod,2,\whichEnv,1,/*\wCar,1,*/ \gra,0,\bus2,34,	\decE,Pseq([1/12],24),\bus,~bus12,\bus3,24,\bus4,34,\amp,0.0001	,\subsE,0,\out,~reverbBus),
 
-			Pbind(\instrument,\reverb,\dur,Pseq([1/12],24),\roomsize, 16, \revtime, Pseq([1/12],24)+3, \damping, 0.030, \inputbw, 0.5, \drylevel, (-3), \earlylevel, (-10), \taillevel, (-10),\maxRoomsize,16,\in,~reverbBus , \out,0,\group, ~revGrp)],1),
+			Pbind(\instrument,\reverb,\dur,Pseq([1/12],24),\roomsize, 16, \revtime, Pseq([1/12],24)+3.0976, \damping, 0.030, \inputbw, 0.5, \drylevel, (-3), \earlylevel, (-10), \taillevel, (-10),\maxRoomsize,16,\in,~reverbBus , \out,0,\group, ~revGrp)],1),
 
 
 
@@ -251,7 +264,7 @@ Ppar([Pbind(\instrument,\lead,		\dur,Pseq([1/1],1),\eFreq,81.41,\which,0,\whichM
 
 Ppar([Pbind(\instrument,\lead,		\dur,Pseq([1/12],24),\eFreq,        Pseq([  [329.63 ,326.63 ]    ,1,  [369.63,366.63],  360,  [389.63,386.63],  390,[409.63,406.63],400,400,430,450,450,45,45,380,1      ,450   ,400  ,360,430,   380,  400,400,430,450,450,45,45],inf),\which,2,\whichMod,2,\whichEnv,1,/*\wCar,1,*/ \gra,0,\bus2,34,	\decE,Pseq([1/12],24),\bus,~bus12,\bus3,24,\bus4,34,\amp,0.0001	,\subsE,0,\out,~reverbBus),
 
-Pbind(\instrument,\reverb,\dur,Pseq([1/12],24),\roomsize, 16, \revtime, Pseq([1/12],24)+3, \damping, 0.030, \inputbw, 0.5, \drylevel, (-3), \earlylevel, (-10), \taillevel, (-10),\maxRoomsize,16,\in,~reverbBus , \out,0,\group, ~revGrp)],1),
+Pbind(\instrument,\reverb,\dur,Pseq([1/12],24),\roomsize, 16, \revtime, Pseq([1/12],24)+3.0976, \damping, 0.030, \inputbw, 0.5, \drylevel, (-3), \earlylevel, (-10), \taillevel, (-10),\maxRoomsize,16,\in,~reverbBus , \out,0,\group, ~revGrp)],1),
 
 
 		Ppar([Pbind(\instrument,\lead, \dur,~psqRise.(),\decE,0,\atkE,~ps,\freq,661.44.rand.postln,\bus,40 ,\bus2,~bus1,\bus3, 40,\bus4,40,\bus7,50,\bus8, ~bus4,\subsE,0,\which,1,\whichMod,2,\whichEnv,1,\amp,0.03, \gra,5.00.rand.postln,\out,~effctBus,\group, ~micGrp),
@@ -272,7 +285,7 @@ Pbind(\instrument,\reverb,  \dur,~pp,\roomsize, 50, \revtime,~pp+~revTail.(), \d
 
 Ppar([Pbind(\instrument,\lead,		\dur,Pseq([1/12],24),\eFreq,        Pseq([  [329.63 ,326.63 ]    ,1,  [369.63,366.63],  360,  [389.63,386.63],  390,[409.63,406.63],400,400,430,450,450,45,45,380,1      ,450   ,400  ,360,430,   380,  400,400,430,450,450,45,45],inf),\which,2,\whichMod,2,\whichEnv,1,/*\wCar,1,*/ \gra,0,\bus2,34,	\decE,Pseq([1/12],24),\bus,~bus12,\bus3,24,\bus4,34,\amp,0.0001	,\subsE,0,\out,~reverbBus),
 
-Pbind(\instrument,\reverb,\dur,Pseq([1/12],24),\roomsize, 16, \revtime, Pseq([1/12],24)+3, \damping, 0.030, \inputbw, 0.5, \drylevel, (-3), \earlylevel, (-10), \taillevel, (-10),\maxRoomsize,16,\in,~reverbBus , \out,0,\group, ~revGrp)],1),
+Pbind(\instrument,\reverb,\dur,Pseq([1/12],24),\roomsize, 16, \revtime, Pseq([1/12],24)+3.0976, \damping, 0.030, \inputbw, 0.5, \drylevel, (-3), \earlylevel, (-10), \taillevel, (-10),\maxRoomsize,16,\in,~reverbBus , \out,0,\group, ~revGrp)],1),
 
 	Ppar([Pbind(\instrument,\lead, \dur,~psqRise.(),\decE,0,\atkE,~ps,\freq,661.44.rand.postln,\bus,40 ,\bus2,~bus1,\bus3, 40,\bus4,40,\bus7,50,\bus8, ~bus4,\subsE,0,\which,1,\whichMod,2,\whichEnv,1,\amp,0.03, \gra,5.00.rand.postln,\out,~effctBus,\group, ~micGrp),
 
@@ -290,7 +303,7 @@ Pbind(\instrument,\reverb,  \dur,~pp,\roomsize, 50, \revtime,~pp+~revTail.(), \d
 
 Ppar([Pbind(\instrument,\lead,		\dur,Pseq([1/12],24),\eFreq,        Pseq([  [329.63 ,326.63 ]    ,1,  [369.63,366.63],  360,  [389.63,386.63],  390,[409.63,406.63],400,400,430,450,450,45,45,380,1      ,450   ,400  ,360,430,   380,  400,400,430,450,450,45,45],inf),\which,2,\whichMod,2,\whichEnv,1,/*\wCar,1,*/ \gra,0,\bus2,34,	\decE,Pseq([1/12],24),\bus,~bus12,\bus3,24,\bus4,34,\amp,0.0001	,\subsE,0,\out,~reverbBus),
 
-Pbind(\instrument,\reverb,\dur,Pseq([1/12],24),\roomsize, 16, \revtime, Pseq([1/12],24)+3, \damping, 0.030, \inputbw, 0.5, \drylevel, (-3), \earlylevel, (-10), \taillevel, (-10),\maxRoomsize,16,\in,~reverbBus , \out,0,\group, ~revGrp)],1),
+Pbind(\instrument,\reverb,\dur,Pseq([1/12],24),\roomsize, 16, \revtime, Pseq([1/12],24)+3.0976, \damping, 0.030, \inputbw, 0.5, \drylevel, (-3), \earlylevel, (-10), \taillevel, (-10),\maxRoomsize,16,\in,~reverbBus , \out,0,\group, ~revGrp)],1),
 
 
 
@@ -323,9 +336,24 @@ Pbind(\instrument,\reverb,  \dur,~pp,\roomsize, 50, \revtime,~pp+~revTail.(), \d
 //],inf)
 		].scramble,8),
 
+		],1)
+
+
+
+
+
+
+
+
+
+
+
 ],1).play(t);
 
 
+//Compander
+
+//Limiter
 //9.6727405929565        3.73355448246
 // 16.377023048401       2.9488724470139
 //7.4276504516602     4.4187152385712*/

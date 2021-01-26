@@ -1,17 +1,40 @@
 
 s.options.memSize = 2097152;
-
+// Decay2 perfect shape for percusion
 
 s.options.memSize =
 
 (
 ~reverbBus = Bus.audio(s,1);
 ~reverbBus2 = Bus.audio(s,1);
+~reverbBus3 = Bus.audio(s,1);
 ~micBus = Bus.audio(s,1);
 ~ptrBus = Bus.audio(s,1);
 ~effctBus =Bus.audio(s,1);
 ~effctBus2 =Bus.audio(s,1);
 ~delayBus = Bus.audio(s,1);
+
+
+~kbus = Bus.audio(s,2);
+~snBus = Bus.audio(s,2);
+
+~comBusHat = Bus.audio(s,2);
+~comBusSna = Bus.audio(s,2);
+~comBusCymb = Bus.audio(s,2);
+~compressBus = Bus.audio(s,1);
+~compressBus2 = Bus.audio(s,1);
+~limitBus = Bus.audio(s,2);
+~limitBus2 = Bus.audio(s,2);
+~limitBus3 = Bus.audio(s,2);
+~limitBus4 = Bus.audio(s,2);
+~limitBus5 = Bus.audio(s,2);
+~limitCymbBus = Bus.audio(s,2);
+~limitHatBus = Bus.audio(s,2);
+~limitSnaBus = Bus.audio(s,2);
+
+
+
+~distordBus = Bus.audio(s,1);
 
 
 //~ind = 0;
@@ -40,7 +63,7 @@ s.waitForBoot({
 
 		var numSegs;
 
-	"init buff".postln;
+	"buff init".postln;
 
 
 	t = TempoClock.new(151.703592/60).permanent_(true);
@@ -84,7 +107,7 @@ s.waitForBoot({
 
 	~tfBuf.loadCollection(~tf.asWavetableNoWrap);
 s.sync;
-	"init buff2".postln;
+	"buff2 init".postln;
 
 	~delay = Buffer.alloc(s, 44100 * 3, 2);
 
@@ -122,7 +145,7 @@ s.sync;
 	s.sync;
 
 SynthDef(\lead, {
-		arg freq= 500, mRatio=1, cRatio=1, index =1, iScale=5, amp=0.01, atk= 0.01  , rel=3, cAtk = 4 , cRel = (-4) , pan =0, atkE =0,decE=0.1936, subsE=50, relE=0, sineRate = 0.0000000095262251, sineRangeHigh = 0, sineRangeLow=0, pitch = 0, sRteLPF = 1.3, timeSca= 0.25, dure= 1/1, which = 1, whichMod = 1, whichAmp =0,phRise= 0 , whichEnv = 0,timeSca2 =1,out=0, eFreq =0 , phFm=8,decEC=0,filF=200, bus,bus2=14,bus3=14,bus4=14,bus5=14,bus6=14, bus7=14, bus8= 15 ,  bpFreq = 500,wCar=0,gra=1,lvlDec=1,factor=1,  spread=0, level=1, center=0.0;
+		arg freq= 500, mRatio=1, cRatio=1, index =1, iScale=5, amp=0.01, atk= 0.01  , rel=3, cAtk = 4 , cRel = (-4) , pan =0, atkE =0,decE=0.1936, subsE=50, relE=0, sineRate = 0.0000000095262251, sineRangeHigh = 0, sineRangeLow=0, pitch = 0, sRteLPF = 1.3, timeSca= 0.25, dure= 1/1, which = 1, whichMod = 1, whichAmp =0,phRise= 0 , whichEnv = 0,timeSca2 =1,out=0, eFreq =0 , phFm=8,decEC=0,filF=200, bus,bus2=14,bus3=14,bus4=14,bus5=14,bus6=14, bus7=14, bus8= 15 ,  bpFreq = 500,wCar=0,gra=1,lvlDec=1,factor=1;
 
 
 	var car,car2, mod,modE,modE2, env, iEnv, mod2, sig, bufpos, envVoice, filRte,lp,bp,hp,lp2, b1,a;
@@ -194,7 +217,15 @@ SynthDef(\lead, {
 
 	//good good
                                                                                // HERE   filRte
-	car =SinOsc.ar( 0.00502929687+eFreq  /* freq */    * cRatio +SelectX.ar(SinOsc.kr(0.0020,phFm).range(0,1),[SinOsc.ar(0),SelectX.ar(whichMod,[ mod,modE,modE2])]) + pitch +  (In.kr(bus4, 1)/factor));// +  /4
+	car =SinOsc.ar( 0.00502929687+eFreq  /* freq */    * cRatio +
+
+
+			SelectX.ar(SinOsc.kr(0.0020,phFm).range(0,1),[SinOsc.ar(0),SelectX.ar(whichMod,[ mod,modE,modE2])])
+
+
+
+
+			+ pitch +  (In.kr(bus4, 1)/factor));// +  /4
 
 
 		car2 =LFSaw.ar(  0.00502929687+eFreq+(In.kr(bus4, 1)) );
@@ -229,22 +260,22 @@ SynthDef(\lead, {
 
 
 
-	//sig = Pan2.ar(SelectX.ar(whichEnv, [sig,b1]), pan)* amp;
+		sig = Pan2.ar(SelectX.ar(whichEnv, [sig,b1]), pan)* amp;
 
 
 
 
+//Splay.arFill(10,SelectX.ar(whichEnv, [sig,b1]),spread,amp,center)
 
 
 
-
-	Out.ar(out, Splay.ar(sig,spread,amp,center)); //sig);//was zero   ~reverbBus
+	Out.ar(out, sig);     //SelectX.ar(whichEnv, [sig,b1]) ); //sig);//was zero   ~reverbBus
 }).add;
 
 
 
 
-	"init lead".postln;
+	"lead init".postln;
 
 
 
@@ -362,7 +393,7 @@ SynthDef.new(\gran, {
 		sig = LPF.ar(sig, lpf);
 
 		//sig = BLowPass4.ar(sig,MouseX.kr(1,5000, \exponential),5);
-sig = sig * amp!2;
+sig = sig * amp.dbamp!2;
 
 		sig = sig * env;
 
@@ -387,7 +418,7 @@ envF2 =EnvGen.kr(Env(
 [0,26,165,1319,1700],
 [0.001,0.028,0.1,0,0.001],
 	\exp
-),doneAction:2);
+));
 	/*
 
 		//3322
@@ -419,7 +450,7 @@ envF2 =EnvGen.kr(Env(
 
 		//sig = BLowPass4.ar(sig,MouseX.kr(1,5000, \exponential),5);
 
-		sig = SelectX.ar(wR,[ sig,sig2]) * amp!2;
+		sig = SelectX.ar(wR,[ sig,sig2]) * amp.dbamp  !2;
 
 
 
@@ -427,7 +458,7 @@ envF2 =EnvGen.kr(Env(
 
 		Out.ar(out, sig);// Splay.ar(sig,spread,level,center));
 	}).add;
-"init KB".postln;
+"KB init".postln;
 	s.sync;
 
 
@@ -449,7 +480,7 @@ envF2 =EnvGen.kr(Env(
 
 	car2 = WhiteNoise.ar(modAmp) * env2 ;
 
-	sig = HPF.ar(car+car2!2,3000)* [amp+0.00555,amp];
+	sig = HPF.ar(car+car2!2,3000)* [amp.dbamp+0.00555,amp.dbamp];
 
 	Out.ar(out, sig);
 }).add;
@@ -472,7 +503,7 @@ SynthDef.new(\percu2, {
 
 car2 = WhiteNoise.ar(0.12875) * env2 ;
 
-	sig = HPF.ar(car+car2,3000)!2* [amp,amp+0.007];
+	sig = HPF.ar(car+car2,3000)!2* [amp.dbamp,amp.dbamp+0.007];
 
 
 	Out.ar(out, sig );
@@ -499,10 +530,10 @@ SynthDef.new(\snare, {
 
 
 
-	Out.ar(out,HPF.ar( car+car2!2* amp ,500));
+	Out.ar(out,HPF.ar( car+car2!2* amp.dbamp ,500));
 }).add;
 
-"init percu".postln;
+"percu init".postln;
 
 SynthDef.new(\hit, {
 	arg carHz=500, modHz=100, modAmp=200, atk=0.01, rel=1, amp=0.2, pan=0,out=0;
@@ -536,7 +567,7 @@ sig = Pan2.ar( sig , pan);//0 was pan
 
     )
 }).add;
-"init side events".postln;
+"side events init".postln;
 
 
 	SynthDef(\effect,{ | in = 0, out= 0,wF= 0 ,freq=50 ,bus, dec1 = 0.3872, wE=0  |
@@ -577,7 +608,7 @@ sig = Pan2.ar( sig , pan);//0 was pan
 
 	SynthDef(\reverb, {
 		|out=0, roomsize, revtime, damping, inputbw, spread = 15, drylevel, earlylevel,
-    taillevel, amp=0.3,maxRoomsize,wet=0.4,in =0,wF =0|
+    taillevel, amp=0.3,maxRoomsize,wet=0.4,in =0,wF =0, spread2=0, level=1, center=0.0, multi = 2|
 
 
 
@@ -606,8 +637,10 @@ sig = Pan2.ar( sig , pan);//0 was pan
     //    var a = SoundIn.ar(0);
     //    var a = PlayBuf.ar(1, 0);
 
-    Out.ar(out,
-        (GVerb.ar(
+
+
+	/*	 Out.ar(    out,
+            (GVerb.ar(
             a,
             roomsize,
             revtime,
@@ -619,15 +652,71 @@ sig = Pan2.ar( sig , pan);//0 was pan
             taillevel.dbamp,
 				maxRoomsize, amp,)
 		+ input
-	//	+a
-		)*   EnvGen.kr(Env([1,1,0],[0,revtime,0],4),Trig.kr(2,revtime),doneAction:2) )
+
+		)*        EnvGen.kr(Env([1,1,0],[0,revtime,0],4),Trig.kr(2,revtime),doneAction:2)    )*/
+
+
+
+
+
+    Out.ar(    out,    Splay.ar( //multi,  //SelectX.ar(whichEnv, [sig,b1])
+            (GVerb.ar(
+            a,
+            roomsize,
+            revtime,
+            damping,
+            inputbw,
+            spread,
+            drylevel.dbamp,
+            earlylevel.dbamp,
+            taillevel.dbamp,
+				maxRoomsize, amp,)
+		+ input
+
+		)*        EnvGen.kr(Env([1,1,0],[0,revtime,0],4),Trig.kr(2,revtime),doneAction:2)      ,spread2,level,center))
 
 
 
 	}).add;
 
-	"init reverb".postln;
+	"reverb init".postln;
 
+
+
+	SynthDef(\comp, {|in, in2, out= 0, dec  , thr  =0.01 ,sB = 1, sA = (1/4), atk = 0.001, rel = 0.04     |
+
+
+		Out.ar(out, Compander.ar(In.ar(in,1) , In.ar(in2,1)  , thresh: thr, slopeBelow: sB, slopeAbove: sA, clampTime: atk, relaxTime: rel)     *   EnvGen.kr(Env([1,1,0],[0,dec,0],4),doneAction:2) );
+
+
+	}).add;
+
+
+
+
+
+	"compression init".postln;
+
+	/*
+	SynthDef(\disto, {|in, out|
+		Out.ar(out,In.ar(in,1) );
+	}).add;
+
+*/
+	SynthDef(\limiter, {|in, out = 0,gain=1,vol =(-40),dec, du =0.01 |
+
+	var input, effect;
+
+		input=In.ar(in,2); //get two channels of input starting (and ending) on bus 0
+
+		effect= Limiter.ar(gain*input,vol.dbamp, du);
+
+		//ReplaceOut.ar(out,effect) *   EnvGen.kr(Env([1,1,0],[0,dec,0],4),doneAction:2) ; //replaces bus 0 where original signal is already playing
+
+		Out.ar(out, effect*   EnvGen.kr(Env([1,1,0],[0,dec,0],4),doneAction:2) );
+	}).add;
+
+"limiter init".postln;
 
 
 	});

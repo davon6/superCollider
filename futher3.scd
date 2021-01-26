@@ -1,30 +1,4 @@
 
-(
-
-f = { |n=12, min=0, max=11| (min..max).scramble.keep(n) };
-
-
-~boo = f.value(12, 0, 11);
-
-/*
-~dure= [256,256,256,256,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,1];  ~busFilter = [~bus4,~bus5,~bus5,~bus6,~bus7,~bus8];
-~number = [4,4,4,4,4,4,4,4,16,16,16,16,64,64,64,64,256];
-~revTail = [4,16];
-~wFil = [0,2,3];
-
-
-
-
-
-~number2 = 4/16;
-*/
-)
-
-
-(SynthDef(\uuuu,{ Out.ar(~micBus,SinOsc.ar(432+ SinOsc.ar( 1.28).range(300,1400),mul:0.1/* EnvGen.kr(Env.perc(0.1,1.6),doneAction:2)*/))}).add;)
-
-Pdef(\uuuuuuuu,Pbind(\instrument, \uuuu,\dur,Pseq([16/1],inf),\group, ~micGrp)).play;
-
 s.scope
 s.plotTree
 (
@@ -38,6 +12,9 @@ s.plotTree
 ~effctGrp2 = Group.after(~effctGrp);
 ~revGrp = Group.after(~effctGrp2);
 ~revGrp2 = Group.after(~revGrp);
+~compGrp = Group.after(~revGrp2);
+
+~limitGrp = Group.after(~compGrp);
 
 
 
@@ -653,12 +630,41 @@ Pdef(\e,
 	);
 );
 
-~cymbal = Pbind(\instrument, \cymb,\type, Pseq([\rest,\rest,\note,\note ,\rest,\note ,\note, \rest],inf),\dur,Pseq([1/4],64 ),\rel, 0.3872,\rel2,0.0968,\carHz, 525.12070612224,\modHz,1899.3343179398,\modAmp, 0.12875 ,\amp,0.02);
 
 
-~hat = Pbind(\instrument,\percu2,\dur,Pseq([1/4], 64),\carHz,164.81,\modHz,164.81,\atk, 0,\rel,0.04840,\rel2,0.02420,\amp, 0.062);
 
-~snare = Pbind(\instrument, \snare,\carHz, 41.2 ,\type, Pseq([\rest,\rest ,\note, \rest], 8),\atk, 0.00502929687,\rel, 0.0968,\rel2,0.7744,\dur, Pseq([1/2], inf),\amp,0.04);
+~cymbal = Pbind(\instrument, \cymb,\type, Pseq([\rest,\rest,\note,\note ,\rest,\note ,\note, \rest],inf),\dur,Pseq([1/4],64 ),\rel, 0.3872,\rel2,0.0968,\carHz, 525.12070612224,\modHz,1899.3343179398,\modAmp, 0.12875 ,\amp,(-18),\out, ~comBusCymb);
+
+~compCymb = Pbind(\instrument,\comp,\dur,Pseq([8/1],1),\dec,Pseq([8/1],1) ,\thr,0.6 ,\sB, 1,\sA, 2,\atk ,0.001, \rel ,0.04840
+
+	,\in, ~comBusCymb ,\in2, ~kbus, \out,~limitCymbBus,\group, ~compGrp);
+
+~limitCymbal =  Pbind(\instrument, \limiter,\in, ~limitCymbBus, \dur, Pseq([8/1],1),\dec,Pseq([8/1],1),\du,0.06, \vol,(-18),\group,~limitGrp);
+
+/*//HERE DAVON
+
+
+Pseq([Pbindf(~kick,\out,~kbus)],1024).play(t);
+Ppar([~cymbal,~compCymb, ~limitCymbal],1).play(t)
+
+
+ONLY MONO
+
+//s.plotTree      */
+
+
+
+
+~hat = Pbind(\instrument,\percu2,\dur,Pseq([1/4], 64),\carHz,164.81,\modHz,164.81,\atk, 0,\rel,0.04840,\rel2,0.02420,\amp,( -18),\out,~limitHatBus);
+~limitHat = Pbind(\instrument, \limiter,\in, ~limitHatBus, \dur, Pseq([8/1],1),\dec,Pseq([8/1],1),\du,0.06, \vol,(-18),\group,~limitGrp);
+
+
+
+~snare = Pbind(\instrument, \snare,\carHz, 41.2 ,\type, Pseq([\rest,\rest ,\note, \rest], 8),\atk, 0.00502929687,\rel, 0.0968,\rel2,0.7744,\dur, Pseq([1/2], inf),\amp,(-15),\out,~limitSnaBus);
+~limitSna = Pbind(\instrument, \limiter,\in, ~limitSnaBus, \dur, Pseq([8/1],1),\dec,Pseq([8/1],1),\du,0.06, \vol,(-16),\group,~limitGrp);
+
+
+//Ppar([~hat,~limitHat],1).play(t)
 
 
 
@@ -709,29 +715,53 @@ Pdef(\sn,
 ~bass = Pbind(
 		\instrument, \bass,
 		\type, Pseq([\rest, \note, \note, \note], inf),
-		\dur, Pseq([1/4],1024),
+		\dur, Pseq([1/4],4),
 		\midinote, 28,
 		\atk, t.beatDur/4 * 0.01,
 		\rel, t.beatDur/4 * 0.99,
 		\atkcrv, -2,
 		\relcrv, -1,
-		\amp, 0.24,
+		\amp, -12,\out,~limitBus5
 	);
+
+~limitBass = Pbind(\instrument, \limiter,\in, ~limitBus5, \dur, Pseq([1/1],1),\dec,Pseq([1/1],1),\du,0.001, \vol,(-12),\group,~limitGrp);
+
+
 
 	~kickPat = Pbind(
 		\instrument, \kick,
 		\dur, Pseq([1],1),
 		\amp, 0.028,
-	);
+);
 
 
-~kick = Pbind(
-		\instrument, \kick,
-		\dur, Pseq([1],1024),
-		\amp, 0.028,
-	);
 
 
+
+~kick =	Pbind(\instrument, \kick,\dur, Pseq([1],1),\amp, -10.5,\out,~limitBus4);
+~limitKick =  Pbind(\instrument, \limiter,\in, ~limitBus4,\dur, Pseq([1/1],1),\dec,Pseq([1/1],1), \vol,(-10.5),\du,0.001,\group,~limitGrp);
+
+
+//Ppar([~kick,~limitKick],4).play(t);
+//s.plotTree
+
+
+
+/*
+~bar = Ppar([Pbindf( ~kick ,\dur, Pseq([1],1) ),Pbindf( ~limitKick ,\dur,Pseq([1/2],1),\dec,Pseq([1/2],1)  ),
+	Pbindf( ~bass ,\dur, Pseq([1/4],4)),Pbindf( ~limitBass ,\dur,Pseq([1/2],1),\dec,Pseq([1/2],1)  )],1 );
+
+~bar16 = Ppar([~kick16, ~bass16],1);
+~bar8
+~bar12
+~bar14
+~bar15*/
+
+
+	// Ppar([
+//~bar4.play(t)
+//s.meter
+//s.plotTree
 
 
 	~bassAndKick = Ppar([~bassPat, ~kickPat], 1);
@@ -833,12 +863,78 @@ Ppar([ Pbind(\instrument, \kick,\dur, Pseq([1],1),\amp, 0.028,\out,~effctBus2),P
 ~seq = Ppar([Pdef(\c),Pdef(\b),Pdef(\a),~barwithBre],1);
 ~seqRising = Ppar([~barwithBre, Pdef(\w)],1);
 ~bar12 = Ppar([~bassPat, ~kickPat], 12);
-~bar14 = Ppar([~bassPat, ~kickPat], 14);
-~bar16  = Pseq([~bassAndKick],16);
+~bar14 = Ppar([~bassPat, ~kickPat], 14);//.play(t);
+//~bar16  = Pseq([~bassAndKick],16);
 ~bar15 = Ppar([~bassPat, ~kickPat], 15);
 ~bar8 = Ppar([~bassPat, ~kickPat], 8);
 ~semiBreak = Pseq([~bar8,Pseq([~bassRest],8)],1);
 ~kbassRest = Ppar([~kickPat, ~bassRest], 1);
+
+
+//~bar15 =
+
+
+//~bar14 = Ppar([~bassPat, ~kickPat], 14).play(t);
+
+
+~bar = [
+	Ppar([Ppar([~kick,~bass],1), Pbindf( ~limitKick ,\dur,Pseq([1/2],1),\dec,Pseq([1/2],1)),Pbindf( ~limitBass ,\dur,Pseq([1/2],1),\dec,Pseq([1/2],1)  )],1 ),
+
+	Ppar([Ppar([~kick,~bass],12), Pbindf( ~limitKick ,\dur,Pseq([6/1],1),\dec,Pseq([6/1],1)),Pbindf( ~limitBass ,\dur,Pseq([6/1],1),\dec,Pseq([6/1],1)  )],1 ),
+
+	Ppar([Ppar([~kick,~bass],14), Pbindf( ~limitKick ,\dur,Pseq([7/1],1),\dec,Pseq([7/1],1)),Pbindf( ~limitBass ,\dur,Pseq([7/1],1),\dec,Pseq([7/1],1)  )],1 ),
+
+	Ppar([Ppar([~kick,~bass],15), Pbindf( ~limitKick ,\dur,Pseq([15/2],1),\dec,Pseq([15/1],1)),Pbindf( ~limitBass ,\dur,Pseq([15/2],1),\dec,Pseq([15/2],1)  )],1 ),
+
+	Ppar([Ppar([~kick,~bass],16), Pbindf( ~limitKick ,\dur,Pseq([8/1],1),\dec,Pseq([8/1],1)),Pbindf( ~limitBass ,\dur,Pseq([8/1],1),\dec,Pseq([8/1],1)  )],1 )
+
+];
+
+
+~perc = [
+
+	Ppar([~bar[1],Pbindf(~cymbal, \dur,Pseq([1/4],56)), Pbindf(~limitCymbal,\dur,Pseq([6/1],1),\dec,Pseq([6/1],1)),
+		Pbindf(~hat, \dur,Pseq([1/4],56)),Pbindf(~limitHat,\dur,Pseq([6/1],1),\dec,Pseq([6/1],1)),
+		Pbindf(~snare,\type, Pseq([\rest,\rest ,\note, \rest], 7)),Pbindf(~limitSna,\dur,Pseq([6/1],1),\dec,Pseq([6/1],1)),
+	],1),
+
+
+
+
+	Ppar([~bar[2],Pbindf(~cymbal, \dur,Pseq([1/4],56)), Pbindf(~limitCymbal, \dur,Pseq([7/1],1),\dec,Pseq([7/1],1)),
+		Pbindf(~hat, \dur,Pseq([1/4],56)),Pbindf(~limitHat,\dur,Pseq([7/1],1),\dec,Pseq([7/1],1)),
+		Pbindf(~snare,\type, Pseq([\rest,\rest ,\note, \rest], 7)),Pbindf(~limitSna,\dur,Pseq([7/1],1),\dec,Pseq([7/1],1)),
+	],1),
+
+
+	Ppar([~bar[3],Pbindf(~cymbal, \dur,Pseq([1/4],60)), Pbindf(~limitCymbal,\dur,Pseq([15/2],1),\dec,Pseq([15/2],1)),
+		Pbindf(~hat, \dur,Pseq([1/4],60)),Pbindf(~limitHat,\dur,Pseq([15/2],1),\dec,Pseq([15/2],1)),
+		Pbindf(~snare,\type, Pseq([\rest,\rest ,\note, \rest], 7)),Pbindf(~limitSna,\dur,Pseq([15/2],1),\dec,Pseq([15/2],1))
+	],1),
+
+
+
+
+/*
+
+
+	Ppar([
+		//~bar[4],
+
+		Pbindf(~cymbal, \dur,Pseq([1/4],64)), Pbindf(~limitCymbal,\dur,Pseq([16/1],1),\dec,Pseq([16/1],1)),
+		Pbindf(~hat, \dur,Pseq([1/4],64)),Pbindf(~limitHat,\dur,Pseq([15/2],1),\dec,Pseq([16/1],1)),
+		Pbindf(~snare,\type, Pseq([\rest,\rest ,\note, \rest], 8)),
+
+
+
+		Pbindf(~limitSna,\dur,Pseq([16/1],1),\dec,Pseq([16/1],1))
+	],1).play(t)*/
+
+];
+
+
+
+
 
 
 
