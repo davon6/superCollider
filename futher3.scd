@@ -738,7 +738,7 @@ Pdef(\sn,
 
 
 
-~kick =	Pbind(\instrument, \kick,\dur, Pseq([1],1),\amp, -10.5,\out,~limitBus4);
+~kick =	Pbind(\instrument, \kick,\dur, Pseq([1/1],1),\amp, -10.5,\out,~limitBus4);
 ~limitKick =  Pbind(\instrument, \limiter,\in, ~limitBus4,\dur, Pseq([1/1],1),\dec,Pseq([1/1],1), \vol,(-10.5),\du,0.001,\group,~limitGrp);
 
 
@@ -995,8 +995,17 @@ Pbindf(~cymbal, \dur,Pseq([ Pseq([1/4],4),Pseq([1/8],8), Pseq([1/16],16), Pseq([
 
 
 
-Pseq([Pbindf(~kick, \dur, Pseq([ Pseq([1/4],4),Pseq([1/8],8), Pseq([1/16],16), Pseq([1/32],32) ,Pseq([1/4],4),Pseq([1/32],32),Pseq([1/64],64) ],1),\out,~effctBus2) ,Pbindf(~kick, \dur, Pseq([1/1],1),\wR,1)],1),
+		Pseq([Pbindf(~kick, \dur, Pseq([ Pseq([1/4],4),Pseq([1/8],8), Pseq([1/16],16), Pseq([1/32],32) ,Pseq([1/4],4),Pseq([1/32],32),Pseq([1/64],64) ],1),\out,~effctBus2) ,Pbindf(~kick, \dur, Pseq([1/1],1),\wR,1)],1).play(t),
 
+	/*TRY
+		Pseq([Pbindf(~kick, \dur, Pseq([ Pseq([1/4],4),Pseq([1/8],8), Pseq([1/16],16), Pseq([1/32],32) ,Pseq([1/4],4),Pseq([1/32],32),Pseq([1/64],64) ],1),\out,0) ,Pbindf(~kick, \dur, Pseq([1/1],1),\wR,1)],1).play(t),
+
+
+		Pbindf(~kick, \dur,  Pseq([8/4],4),\out,0).play(t)
+
+
+		Pseq([Pbindf(~kick, \dur,  Pseq([1/4],1),\out,0)],4).play(t)
+		Pseq([Pbindf(~kick, \dur,  Pseq([1/16],1),\out,0)],4).play(t)      WORKING*/
 
 Pbind(\instrument, \effect,\wE,1,\dur, Pseq([16/1],1), \in,~effctBus2,\out,0,\group,~effctGrp2,\dec1,6 )],1)
 	,
