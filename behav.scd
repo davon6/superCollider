@@ -224,10 +224,10 @@ Ppar([
 Ppar([Pbindf(~kick,\out,~micBus,\group, ~micGrp) ,~ptrK1,~recK1,Pdef(\granKick1)],1),
 
 
-//NOT QUIET WORKING
-		Pbind(\instrument, \effect,\wE,1,\dur, Pseq([16/1],1), \in,~effctBus2,\out,~compHat,\group,~effctGrp2,\dec1,6 )],1).play(t),
+//NOT QUIET WORKING  manage rversed kick
+		Pbind(\instrument, \effect,\wE,1,\dur, Pseq([16/1],1), \in,~effctBus2,\out,~compHat,\group,~effctGrp2,\dec1,6 )],1),
 
-	,
+
 	Pseq([~bassRest],16)
 
 
