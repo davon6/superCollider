@@ -26,14 +26,35 @@ s.options.memSize =
 ~limitBus = Bus.audio(s,2);
 ~limitBus2 = Bus.audio(s,2);
 ~limitBus3 = Bus.audio(s,2);
-~limitBus4 = Bus.audio(s,2);
-~limitBus5 = Bus.audio(s,2);
-~limitCymbBus = Bus.audio(s,2);
-~limitHatBus = Bus.audio(s,2);
-~limitSnaBus = Bus.audio(s,2);
+~limitKick = Bus.audio(s,2);
+~limitBass = Bus.audio(s,2);
+~limitCymb = Bus.audio(s,2);
+~limitHat = Bus.audio(s,2);
+~limitSna = Bus.audio(s,2);
 
-
-
+~master = Bus.audio(s,2);
+/*
+~master1 = Bus.audio(s,2);
+~master2 = Bus.audio(s,2);
+~master3 = Bus.audio(s,2);
+~master4 = Bus.audio(s,2);
+~master5= Bus.audio(s,2);
+~master6 = Bus.audio(s,2);
+~master7 = Bus.audio(s,2);
+~master8 = Bus.audio(s,2);
+~master9 = Bus.audio(s,2);
+~master10
+~master11
+~master12
+~master13
+~master14
+~master15
+~master16
+~master17
+~master18
+~master19
+~master20
+*/
 ~distordBus = Bus.audio(s,1);
 
 
@@ -686,7 +707,7 @@ sig = Pan2.ar( sig , pan);//0 was pan
 	SynthDef(\comp, {|in, in2, out= 0, dec  , thr  =0.01 ,sB = 1, sA = (1/4), atk = 0.001, rel = 0.04     |
 
 
-		Out.ar(out, Compander.ar(In.ar(in,1) , In.ar(in2,1)  , thresh: thr, slopeBelow: sB, slopeAbove: sA, clampTime: atk, relaxTime: rel)     *   EnvGen.kr(Env([1,1,0],[0,dec,0],4),doneAction:2) );
+		Out.ar(out, Compander.ar(In.ar(in,2) , In.ar(in2,1)  , thresh: thr, slopeBelow: sB, slopeAbove: sA, clampTime: atk, relaxTime: rel)     *   EnvGen.kr(Env([1,1,1],[0,dec,0],560),doneAction:2) );
 
 
 	}).add;
@@ -703,17 +724,33 @@ sig = Pan2.ar( sig , pan);//0 was pan
 	}).add;
 
 */
-	SynthDef(\limiter, {|in, out = 0,gain=1,vol =(-40),dec, du =0.01 |
+	SynthDef(\limiter, {|in, out = 0,gain=1,vol =(-40),dec, du =0.0001 |
 
 	var input, effect;
 
 		input=In.ar(in,2); //get two channels of input starting (and ending) on bus 0
 
-		effect= Limiter.ar(gain*input,vol.dbamp, du);
+		effect= Limiter.ar(gain*input,vol.dbamp, du)*EnvGen.kr(Env([1,1,1],[0,dec,0],4), doneAction:2);
 
-		//ReplaceOut.ar(out,effect) *   EnvGen.kr(Env([1,1,0],[0,dec,0],4),doneAction:2) ; //replaces bus 0 where original signal is already playing
 
-		Out.ar(out, effect*   EnvGen.kr(Env([1,1,0],[0,dec,0],4),doneAction:2) );
+
+
+
+
+		//* Linen.kr(1, doneAction: 2);//Done.freeSelf
+
+
+		//*
+
+
+		//
+
+		//ReplaceOut.ar( In.ar(~master,2),effect) *   EnvGen.kr(Env([1,1,0],[0,dec,0],4),doneAction:2) ; //replaces bus 0 where original signal is already playing
+
+		//Out.ar(out, In.ar(~master,2)    );
+
+
+		Out.ar(out ,effect     );
 	}).add;
 
 "limiter init".postln;
