@@ -23,6 +23,10 @@ s.options.memSize =
 ~comBusCymb = Bus.audio(s,2);
 ~compressBus = Bus.audio(s,1);
 ~compressBus2 = Bus.audio(s,1);
+~combFuzz = Bus.audio(s,2);
+
+
+
 ~limitBus = Bus.audio(s,2);
 ~limitBus2 = Bus.audio(s,2);
 ~limitBus3 = Bus.audio(s,2);
@@ -31,6 +35,8 @@ s.options.memSize =
 ~limitCymb = Bus.audio(s,2);
 ~limitHat = Bus.audio(s,2);
 ~limitSna = Bus.audio(s,2);
+~limitNonRec = Bus.audio(s,2);
+~limitFuzz = Bus.audio(s,2);
 
 ~master = Bus.audio(s,2);
 /*
@@ -133,12 +139,23 @@ s.sync;
 	~delay = Buffer.alloc(s, 44100 * 3, 2);
 
 
-
+/*
 	c = Buffer.alloc(s, s.sampleRate *0.7744,1);//goood long
 	b = Buffer.alloc(s, s.sampleRate *0.3872,1);//tight good
+	//~b16th = Buffer.alloc(s, s.sampleRate *1/16,1);
+	~b16th = Buffer.alloc(s, s.sampleRate *3.0976,1);
+	~b16th2 = Buffer.alloc(s, s.sampleRate *1/1,1);
+	d = Buffer.alloc(s, s.sampleRate *1.5488,1);//goood long
+	*/
+
+
+
 	e = Buffer.alloc(s, s.sampleRate *1/4,1);
 
-	d = Buffer.alloc(s, s.sampleRate *1.5488,1);//goood long
+	e = Buffer.alloc(s, s.sampleRate *0.38,1);
+
+
+
 
 
 	s.sync;
@@ -281,7 +298,7 @@ SynthDef(\lead, {
 
 
 
-		sig = Pan2.ar(SelectX.ar(whichEnv, [sig,b1]), pan)* amp;
+		sig = Pan2.ar(SelectX.ar(whichEnv, [sig,b1]), pan)* amp.dbamp;
 
 
 
@@ -303,12 +320,12 @@ SynthDef(\lead, {
 
 SynthDef.new(\ptr, {
 	arg out=0, buf=0,dec=1 ;
-	var sig,env;
+	var sig;  /*,env;
 
 		env = EnvGen.kr(Env([0,1,0,0],[0,dec, 0,0],[-2,22,0,0]),
 		doneAction:2
 
-	);
+	);*/
 
 
 	sig = Phasor.ar(0, BufRateScale.kr(buf), 0, BufFrames.kr(buf));
@@ -317,12 +334,12 @@ SynthDef.new(\ptr, {
 
 SynthDef.new(\rec, {
 	arg ptrIn=0, micIn=0, buf=0, dec = 1;
-	var ptr, sig, env;
+	var ptr, sig;  /*, env;
 
 		env = EnvGen.kr(Env([0,1,0,0],[0,dec, 0,0],[-2,22,0,0]),
 			doneAction:2);
 
-
+*/
 	ptr = In.ar(ptrIn, 1);
 	sig = In.ar(micIn, 1);
 	BufWr.ar(sig, buf, ptr);
@@ -335,7 +352,10 @@ SynthDef.new(\gran, {
 
 	var sig, env, densCtrl, durCtrl, rateCtrl, panCtrl, ptr, ptrRand, totalDelay, maxGrainDur,a;
 
-	env = EnvGen.kr(Env.asr(atk,1,rel), gate, doneAction:2);
+	//env = EnvGen.kr(Env.asr(atk,1,rel), gate, doneAction:2);
+
+		env = EnvGen.kr(Env([1,1,1],[atk,rel,0]), gate, doneAction:2);
+
 	densCtrl = Select.ar(sync, [Dust.ar(dens), Impulse.ar(dens)]);
 	durCtrl= baseDur * LFNoise1.ar(100).exprange(1/durRand, durRand);
 	rateCtrl = rate * LFNoise1.ar(100).exprange(1/rateRand, rateRand);
@@ -375,7 +395,7 @@ SynthDef.new(\gran, {
 		duration,//3.0976,//8,//length of the feedback
 		buf,
 		pitchRte,//pitch
-		MouseX.kr(0,1)//pos
+		0//MouseX.kr(0,1)//pos
 	);
 
 
@@ -427,6 +447,18 @@ sig = sig * amp.dbamp!2;
 		arg amp=0.2,out=0,wR=0, spread=0, level=1, center=0.0;
 		var sig, sig2, env, envF,env2, envF2;
 		envF = EnvGen.ar(
+
+			/*
+			Env(
+				[1700,1319,165,26,0,0],
+				[0.001,0.014,0.08,0,0.02],
+				\exp
+			)
+
+
+			*/
+
+
 			Env(
 				[1700,1319,165,26,0,0],
 				[0.001,0.028,0.1,0,0.4],
@@ -450,9 +482,16 @@ envF2 =EnvGen.kr(Env(
 
 */
 
-
 			env = EnvGen.ar(
 			Env.perc(0.0121, 0.40),doneAction:2);
+
+
+	/*
+
+
+		env = EnvGen.ar(
+			Env.perc(0.0121, 0.08),doneAction:2);
+		*/
 
 		env2 = EnvGen.kr(
 	Env([0,0,1],[0,0.40,   0.0121 ],3),doneAction:2);
@@ -595,7 +634,7 @@ sig = Pan2.ar( sig , pan);//0 was pan
 		var sig,sig2,env,src;
 
 
-		src = In.ar(in,1);
+		src = In.ar(in,2);
 
 		sig = LPF.ar( src  ,  EnvGen.kr(Env([1,5000],[dec1,0],4),doneAction:2) );
 
@@ -606,9 +645,10 @@ sig = Pan2.ar( sig , pan);//0 was pan
 
 
 
+		//Out.ar(out,SinOsc.ar(864,mul:0.2 ));
 
 
-		Out.ar(out,SelectX.ar(wE,[sig,sig2])!2  )
+		Out.ar(out,SelectX.ar(wE,[sig,sig2])!2  );
 
 
 	}).add;
@@ -680,7 +720,7 @@ sig = Pan2.ar( sig , pan);//0 was pan
 
 
 
-    Out.ar(    out,    Splay.ar( //multi,  //SelectX.ar(whichEnv, [sig,b1])
+    Out.ar(    out,  BHiPass4.ar(  Splay.ar( //multi,  //SelectX.ar(whichEnv, [sig,b1])
             (GVerb.ar(
             a,
             roomsize,
@@ -694,7 +734,7 @@ sig = Pan2.ar( sig , pan);//0 was pan
 				maxRoomsize, amp,)
 		+ input
 
-		)*        EnvGen.kr(Env([1,1,0],[0,revtime,0],4),Trig.kr(2,revtime),doneAction:2)      ,spread2,level,center))
+		)*        EnvGen.kr(Env([1,1,0],[0,revtime,0],4),Trig.kr(2,revtime),doneAction:2)      ,spread2,level,center),100))
 
 
 
@@ -707,7 +747,7 @@ sig = Pan2.ar( sig , pan);//0 was pan
 	SynthDef(\comp, {|in, in2, out= 0, dec  , thr  =0.01 ,sB = 1, sA = (1/4), atk = 0.001, rel = 0.04     |
 
 
-		Out.ar(out, Compander.ar(In.ar(in,2) , In.ar(in2,1)  , thresh: thr, slopeBelow: sB, slopeAbove: sA, clampTime: atk, relaxTime: rel)     *   EnvGen.kr(Env([1,1,1],[0,dec,0],560),doneAction:2) );
+		Out.ar(out, Compander.ar(In.ar(in,2) , In.ar(in2,1)  , thresh: thr, slopeBelow: sB, slopeAbove: sA, clampTime: atk, relaxTime: rel)  );
 
 
 	}).add;
@@ -730,7 +770,7 @@ sig = Pan2.ar( sig , pan);//0 was pan
 
 		input=In.ar(in,2); //get two channels of input starting (and ending) on bus 0
 
-		effect= Limiter.ar(gain*input,vol.dbamp, du)*EnvGen.kr(Env([1,1,1],[0,dec,0],4), doneAction:2);
+		effect= Limiter.ar(gain*input,vol.dbamp, du);
 
 
 
