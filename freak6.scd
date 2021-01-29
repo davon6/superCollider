@@ -5,9 +5,13 @@ s.options.memSize = 2097152;
 s.options.memSize =
 
 (
-~reverbBus = Bus.audio(s,1);
+~reverbBus = Bus.audio(s,2);
 ~reverbBus2 = Bus.audio(s,1);
 ~reverbBus3 = Bus.audio(s,1);
+
+
+
+
 ~micBus = Bus.audio(s,1);
 ~ptrBus = Bus.audio(s,1);
 ~effctBus =Bus.audio(s,1);
@@ -21,22 +25,44 @@ s.options.memSize =
 ~comBusHat = Bus.audio(s,2);
 ~comBusSna = Bus.audio(s,2);
 ~comBusCymb = Bus.audio(s,2);
-~compressBus = Bus.audio(s,1);
-~compressBus2 = Bus.audio(s,1);
-~combFuzz = Bus.audio(s,2);
 
+~comFuzz = Bus.audio(s,2);
+~comLead1= Bus.audio(s,2);
+~comLead2= Bus.audio(s,2);
+~comLead3= Bus.audio(s,2);
+~comLead4= Bus.audio(s,2);
+~comLead5= Bus.audio(s,2);
+~comLead6= Bus.audio(s,2);
+~comLead7= Bus.audio(s,2);
+~comLead8= Bus.audio(s,2);
 
+~limitLead1= Bus.audio(s,2);
+~limitLead2= Bus.audio(s,2);
+~limitLead3= Bus.audio(s,2);
+~limitLead4= Bus.audio(s,2);
+~limitLead5= Bus.audio(s,2);
+~limitLead6= Bus.audio(s,2);
+~limitLead7= Bus.audio(s,2);
+~limitLead8= Bus.audio(s,2);
 
-~limitBus = Bus.audio(s,2);
-~limitBus2 = Bus.audio(s,2);
-~limitBus3 = Bus.audio(s,2);
 ~limitKick = Bus.audio(s,2);
 ~limitBass = Bus.audio(s,2);
 ~limitCymb = Bus.audio(s,2);
 ~limitHat = Bus.audio(s,2);
 ~limitSna = Bus.audio(s,2);
 ~limitNonRec = Bus.audio(s,2);
+
+
 ~limitFuzz = Bus.audio(s,2);
+~limitFuzz2 = Bus.audio(s,2);
+~limitFuzz3 = Bus.audio(s,2);
+~limitFuzz4 = Bus.audio(s,2);
+~limitFuzz5 = Bus.audio(s,2);
+~limitFuzz6 = Bus.audio(s,2);
+~limitFuzz7 = Bus.audio(s,2);
+~limitFuzz8 = Bus.audio(s,2);
+
+~comSnaGrpBus = Bus.audio(s,2);
 
 ~master = Bus.audio(s,2);
 /*
@@ -150,9 +176,9 @@ s.sync;
 
 
 
-	e = Buffer.alloc(s, s.sampleRate *1/4,1);
+	//e = Buffer.alloc(s, s.sampleRate *1/4,1);
 
-	e = Buffer.alloc(s, s.sampleRate *0.38,1);
+	e = Buffer.alloc(s, s.sampleRate *0.3872,1);
 
 
 
@@ -654,6 +680,18 @@ sig = Pan2.ar( sig , pan);//0 was pan
 	}).add;
 
 
+	SynthDef(\comp, {|in, in2, out= 0, dec  , thr  =0.01 ,sB = 1, sA = (1/4), atk = 0.001, rel = 0.04     |
+
+
+		Out.ar(out, Compander.ar(In.ar(in,2) , In.ar(in2,1)  , thresh: thr, slopeBelow: sB, slopeAbove: sA, clampTime: atk, relaxTime: rel)  );
+
+
+	}).add;
+
+	"compression init".postln;
+
+
+
 	SynthDef(\pingD, { |out = 0, bufnum = 0, feedback = 0.5, delayTime = 0.3, in, stereoL =0.00555, stereoR =0, dec=0.5, amp =1 |
     var left, right, src,sig3;
 
@@ -662,6 +700,41 @@ sig = Pan2.ar( sig , pan);//0 was pan
     Out.ar(out ,PingPong.ar(bufnum, [left,left], delayTime, feedback, 1)
 			* [amp+stereoL,amp+stereoR] * EnvGen.kr(Env([1,1,0],[0,dec,0],4),doneAction:2) )
 	}).add;
+
+
+		SynthDef(\limiter, {|in, out = 0,gain=1,vol =(-40),dec, du =0.0001 |
+
+	var input, effect;
+
+		input=In.ar(in,2); //get two channels of input starting (and ending) on bus 0
+
+		effect= Limiter.ar(gain*input,vol.dbamp, du);
+
+
+
+
+
+
+		//* Linen.kr(1, doneAction: 2);//Done.freeSelf
+
+
+		//*
+
+
+		//
+
+		//ReplaceOut.ar( In.ar(~master,2),effect) *   EnvGen.kr(Env([1,1,0],[0,dec,0],4),doneAction:2) ; //replaces bus 0 where original signal is already playing
+
+		//Out.ar(out, In.ar(~master,2)    );
+
+
+		Out.ar(out ,effect     );
+	}).add;
+
+"limiter init".postln;
+
+
+
 
 
 
@@ -675,7 +748,7 @@ sig = Pan2.ar( sig , pan);//0 was pan
 
 	var a ,input;
 
-		input =      SelectX.ar(wF,[HPF.ar( In.ar(in,1),100),  LPF.ar( In.ar(in,1),100)]);
+		input =      SelectX.ar(wF,[HPF.ar( In.ar(in,2),100),  LPF.ar( In.ar(in,2),100)]);
 
 
 
@@ -744,7 +817,7 @@ sig = Pan2.ar( sig , pan);//0 was pan
 
 
 
-	SynthDef(\comp, {|in, in2, out= 0, dec  , thr  =0.01 ,sB = 1, sA = (1/4), atk = 0.001, rel = 0.04     |
+	SynthDef(\grpComp, {|in, in2, out= 0, dec  , thr  =0.01 ,sB = 1, sA = (1/4), atk = 0.001, rel = 0.04     |
 
 
 		Out.ar(out, Compander.ar(In.ar(in,2) , In.ar(in2,1)  , thresh: thr, slopeBelow: sB, slopeAbove: sA, clampTime: atk, relaxTime: rel)  );
@@ -752,11 +825,10 @@ sig = Pan2.ar( sig , pan);//0 was pan
 
 	}).add;
 
+	"Grp compression init".postln;
 
 
 
-
-	"compression init".postln;
 
 	/*
 	SynthDef(\disto, {|in, out|
@@ -764,36 +836,7 @@ sig = Pan2.ar( sig , pan);//0 was pan
 	}).add;
 
 */
-	SynthDef(\limiter, {|in, out = 0,gain=1,vol =(-40),dec, du =0.0001 |
 
-	var input, effect;
-
-		input=In.ar(in,2); //get two channels of input starting (and ending) on bus 0
-
-		effect= Limiter.ar(gain*input,vol.dbamp, du);
-
-
-
-
-
-
-		//* Linen.kr(1, doneAction: 2);//Done.freeSelf
-
-
-		//*
-
-
-		//
-
-		//ReplaceOut.ar( In.ar(~master,2),effect) *   EnvGen.kr(Env([1,1,0],[0,dec,0],4),doneAction:2) ; //replaces bus 0 where original signal is already playing
-
-		//Out.ar(out, In.ar(~master,2)    );
-
-
-		Out.ar(out ,effect     );
-	}).add;
-
-"limiter init".postln;
 
 
 	});
