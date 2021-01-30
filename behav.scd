@@ -1,5 +1,7 @@
 
 // PERCUSSION TOO WEAK
+// WRITE MELO OUT OF RANDOM
+//is PAN2 STILL NEEEDED IN LEAD INSTRU
 s.scope
 s.plotTree
 (
@@ -108,12 +110,13 @@ Pbind(\instrument,\rec, \ptrIn, ~ptrBus, \micIn, ~micBus, \buf, e,\group,~recGrp
 Pbind(\instrument,\comp,\dur,Pseq([64/1],1),\thr,0.6 ,\sB, 1,\sA, 4,\atk ,0.001, \rel ,0.04840,\in, ~comBusCymb ,\in2, ~kbus, \out,~limitCymb,\group, ~compGrp),
 Pbind(\instrument,\comp, \dur,Pseq([64/1],1),\thr,0.6 ,\sB, 1.2,\sA, 2,\atk ,0.0001, \rel ,0.04840
 ,\in, ~comBusHat ,\in2, ~kbus, \out,~limitHat,\group, ~compGrp),
-
-
 Pbind(\instrument,\comp, \dur,Pseq([64/1],1),\thr,0.2 ,\sB, 1.086,\sA, 0.2,\atk ,0.0242, \rel ,0.04840
 ,\in, ~comFuzz ,\in2, ~kbus, \out,~limitFuzz, \group, ~compGrp),
+	Pbind(\instrument,\comp, \dur,Pseq([64/1],1),\thr,0.8 ,\sB, 1.05,\sA, 0.2,\atk ,0.0242, \rel ,0.04840
+,\in, ~comMelo ,\in2, ~kbus, \out,~limitMelo, \group, ~compGrp),
 
-
+Pbind(\instrument,\comp, \dur,Pseq([64/1],1),\thr,0.2 ,\sB, 1.2,\sA, 0.25,\atk ,0.0484, \rel ,0.3872
+,\in, ~comSquelch ,\in2, ~kbus, \out,~limitSquelch, \group, ~compGrp),
 
 
 
@@ -126,7 +129,8 @@ Pbind(\instrument, \limiter,\in, ~limitSna, \dur, Pseq([64/1],1),\du,0.001, \vol
 Pbind(\instrument, \limiter,\in, ~limitNonRec, \dur, Pseq([64/1],1),\du,0.001, \vol,(-25),\group,~limitGrp),
 
 Pbind(\instrument, \limiter,\in, ~limitFuzz, \dur, Pseq([64/1],1),\du,0.001, \vol,(-25),\group,~limitGrp,\out,~reverbBus),
-
+Pbind(\instrument, \limiter,\in, ~limitMelo, \dur, Pseq([64/1],1),\du,0.001, \vol,(-25),\group,~limitGrp,\out,~reverbBus),
+Pbind(\instrument, \limiter,\in, ~limitSquelch, \dur, Pseq([64/1],1),\du,0.001, \vol,(-25),\group,~limitGrp,\out,~reverbBus),
 
 		/*
 Pbind(\instrument, \limiter,\in, ~limitFuzz2, \dur, Pseq([64/1],1),\du,0.001, \vol,(-25),\group,~limitGrp,\out,~comSnaGrpBus),

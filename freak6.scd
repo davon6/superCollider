@@ -18,7 +18,6 @@ s.options.memSize =
 ~effctBus2 =Bus.audio(s,1);
 ~delayBus = Bus.audio(s,1);
 
-
 ~kbus = Bus.audio(s,2);
 ~snBus = Bus.audio(s,2);
 
@@ -27,23 +26,29 @@ s.options.memSize =
 ~comBusCymb = Bus.audio(s,2);
 
 ~comFuzz = Bus.audio(s,2);
-~comLead1= Bus.audio(s,2);
-~comLead2= Bus.audio(s,2);
+
+~comMelo= Bus.audio(s,2);
+
+~comSquelch= Bus.audio(s,2);
 ~comLead3= Bus.audio(s,2);
 ~comLead4= Bus.audio(s,2);
 ~comLead5= Bus.audio(s,2);
 ~comLead6= Bus.audio(s,2);
 ~comLead7= Bus.audio(s,2);
-~comLead8= Bus.audio(s,2);
 
-~limitLead1= Bus.audio(s,2);
-~limitLead2= Bus.audio(s,2);
+
+~comNoisePerc= Bus.audio(s,2);
+
+~limitMelo= Bus.audio(s,2);
+~limitSquelch= Bus.audio(s,2);
 ~limitLead3= Bus.audio(s,2);
 ~limitLead4= Bus.audio(s,2);
 ~limitLead5= Bus.audio(s,2);
 ~limitLead6= Bus.audio(s,2);
 ~limitLead7= Bus.audio(s,2);
-~limitLead8= Bus.audio(s,2);
+
+
+~limitNoisePerc= Bus.audio(s,2);
 
 ~limitKick = Bus.audio(s,2);
 ~limitBass = Bus.audio(s,2);
@@ -54,13 +59,15 @@ s.options.memSize =
 
 
 ~limitFuzz = Bus.audio(s,2);
+
+/*
 ~limitFuzz2 = Bus.audio(s,2);
 ~limitFuzz3 = Bus.audio(s,2);
 ~limitFuzz4 = Bus.audio(s,2);
 ~limitFuzz5 = Bus.audio(s,2);
 ~limitFuzz6 = Bus.audio(s,2);
 ~limitFuzz7 = Bus.audio(s,2);
-~limitFuzz8 = Bus.audio(s,2);
+~limitFuzz8 = Bus.audio(s,2);    */
 
 ~comSnaGrpBus = Bus.audio(s,2);
 
@@ -209,7 +216,7 @@ s.sync;
 	s.sync;
 
 SynthDef(\lead, {
-		arg freq= 500, mRatio=1, cRatio=1, index =1, iScale=5, amp=0.01, atk= 0.01  , rel=3, cAtk = 4 , cRel = (-4) , pan =0, atkE =0,decE=0.1936, subsE=50, relE=0, sineRate = 0.0000000095262251, sineRangeHigh = 0, sineRangeLow=0, pitch = 0, sRteLPF = 1.3, timeSca= 0.25, dure= 1/1, which = 1, whichMod = 1, whichAmp =0,phRise= 0 , whichEnv = 0,timeSca2 =1,out=0, eFreq =0 , phFm=8,decEC=0,filF=200, bus,bus2=14,bus3=14,bus4=14,bus5=14,bus6=14, bus7=14, bus8= 15 ,  bpFreq = 500,wCar=0,gra=1,lvlDec=1,factor=1;
+		arg freq= 500, mRatio=1, cRatio=1, index =1, iScale=5, amp=0.01, atk= 0.01  , rel=3, cAtk = 4 , cRel = (-4) , pan =0, atkE =0,decE=0.1936, subsE=50, relE=0, sineRate = 0.0000000095262251, sineRangeHigh = 0, sineRangeLow=0, pitch = 0, sRteLPF = 1.3, timeSca= 0.25, dure= 1/1, which = 1, whichMod = 1, whichAmp =0,phRise= 0 , whichEnv = 0,timeSca2 =1,out=0, eFreq =0 , phFm=8,decEC=0,filF=200, bus,bus2=14,bus3=14,bus4=14,bus5=14,bus6=14, bus7=14, bus8= 15 ,  bpFreq = 500,wCar=0,gra=1,lvlDec=1,factor=1, factor2 =0, vlPE =27.1366666667,dcPE = 0.129066666667,atckC = 2.5, decC = (-2), crvEP = (-2);
 
 
 	var car,car2, mod,modE,modE2, env, iEnv, mod2, sig, bufpos, envVoice, filRte,lp,bp,hp,lp2, b1,a;
@@ -220,13 +227,12 @@ SynthDef(\lead, {
 	//5.15
 
 //dont forget 2nd zero used to be 1
-		//env = EnvGen.kr(Env([0,1,0,0],[atkE,decE, subsE,relE],[-2,(MouseY.kr(-5,5)),0,0]),
+		//env = EnvGen.kr(Env([0,1,0,0],[atkE,decE, subsE,relE],[-2,(MouseY.kr(-5,5)),0,0]),/*  MouseY.kr(0.0986,0.05)*/
 
-		env = EnvGen.kr(Env([0,1,lvlDec,0],[atkE,/*  MouseY.kr(0.0986,0.05)*/decE-(In.kr(bus2, 1))     , subsE,relE],[2.5,-2,(-3),0,0]),
-		doneAction:2
-			//+In.kr(bus8, 1)
+		env = EnvGen.kr(Env([0,1,lvlDec,0],[atkE, decE-(In.kr(bus2, 1))     , subsE,relE],[atckC,decC- (In.kr(bus3, 1))
 
-	);
+			,(-3),0,0]),
+		doneAction:2);
 
 
 //freq = MouseX.kr(0,957.9895);
@@ -245,27 +251,20 @@ SynthDef(\lead, {
 	mod2 = SinOsc.ar(freq/10, mul:freq/10 * iEnv);
 
 
-
+/*
 
 	//GOOD LAST                                                                                HERE
 	mod = SinOsc.ar(MouseX.kr(freq * mRatio + mod2,0.0201171875)*SinOsc.kr(sineRate,phRise).range([sineRangeLow]), mul:freq * mRatio * iEnv)!2;
 
 	modE = SinOsc.ar(freq * mRatio + mod2*SinOsc.kr(sineRate,phRise).range([sineRangeLow]), mul:freq * mRatio * iEnv)!2;
 
-
+*/
 //0.0201171875
-	modE2 = SinOsc.ar(Lag.ar(  freq * mRatio + mod2 ,0.06)*SinOsc.kr(sineRate,phRise).range([sineRangeLow]), mul:
-
+	mod = SinOsc.ar(Lag.ar(  freq * mRatio + mod2 ,0.06)*SinOsc.kr(sineRate,phRise).range([sineRangeLow]), mul:
 
 		Lag.kr((freq * mRatio * iEnv)*gra,0.01)
 
-
-
-
-
-		)!2;
-
-
+		);
 
 
 	//extraMod    0.01005859375
@@ -284,19 +283,19 @@ SynthDef(\lead, {
 	car =SinOsc.ar( 0.00502929687+eFreq  /* freq */    * cRatio +
 
 
-			SelectX.ar(SinOsc.kr(0.0020,phFm).range(0,1),[SinOsc.ar(0),SelectX.ar(whichMod,[ mod,modE,modE2])])
+//			SelectX.ar(SinOsc.kr(0.0020,phFm).range(0,1),[SinOsc.ar(0),SelectX.ar(whichMod,[ mod,modE,modE2])])
 
-
-
+//mod
+			SelectX.ar(SinOsc.kr(0.0020,phFm).range(0,1),[SinOsc.ar(0),mod]) +  (EnvGen.kr(Env([vlPE,0],[dcPE,0],crvEP))*factor2)
 
 			+ pitch +  (In.kr(bus4, 1)/factor));// +  /4
 
 
-		car2 =LFSaw.ar(  0.00502929687+eFreq+(In.kr(bus4, 1)) );
+	//	car2 =LFSaw.ar(  0.00502929687+eFreq+(In.kr(bus4, 1)) );
 
 
 
-	sig = Shaper.ar(~tfBuf,SelectX.ar(wCar,[car,car2]));
+		sig = Shaper.ar(~tfBuf,   car);//                      SelectX.ar(wCar,[car,car2]));
 
 	sig  = LeakDC.ar(sig);
 
@@ -311,9 +310,11 @@ SynthDef(\lead, {
 
 	//bp = BPF.ar(sig,bpFreq+ In.kr(bus5, 1)+ In.kr(bus6, 1),0.3);//0.05
 
-		bp = BPF.ar(sig,MouseY.kr(4,3000),0.26);//0.05
 
 
+		//bp = BPF.ar(sig,MouseY.kr(4,3000),0.26);//0.05
+
+bp = BPF.ar(sig,In.kr(bus5, 1),0.26);//0.05
 
 	hp = BHiPass4.ar(sig, In.kr(bus, 1),MouseY.kr(1,0.4,0));
 //MouseX.kr(100,5000+ filF)
