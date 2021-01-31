@@ -132,7 +132,7 @@ Pbind(\instrument,\comp, \dur,Pseq([64/1],1),\thr,0.8 ,\sB, 1.05,\sA, 0.0625,\at
 
 
 
-Pbind(\instrument, \limiter,\in, ~limitBass, \dur,Pseq([64/1],1),\du,0.2, \vol,(-8),\group,~limitGrp),
+Pbind(\instrument, \limiter,\in, ~limitBass, \dur,Pseq([64/1],1),\du,0.2, \vol,(-12),\gain,400,\group,~limitGrp),
 Pbind(\instrument, \limiter,\in, ~limitKick,\dur,Pseq([64/1],1), \vol,(-10.5),\du,0.2,\group,~limitGrp),
 Pbind(\instrument, \limiter,\in, ~limitCymb,\dur,Pseq([64/1],1),\du,0.2, \vol,(-18),\group,~limitGrp),
 Pbind(\instrument, \limiter,\in, ~limitHat,\dur,Pseq([64/1],1),\du,0.2, \vol,(-18),\group,~limitGrp),
@@ -141,25 +141,26 @@ Pbind(\instrument, \limiter,\in, ~limitSna, \dur, Pseq([64/1],1),\du,0.2, \vol,(
 Pbind(\instrument, \limiter,\in, ~limitNonRec, \dur, Pseq([64/1],1),\du,0.2, \vol,(-25),\group,~limitGrp),
 
 Pbind(\instrument, \limiter,\in, ~limitFuzz, \dur, Pseq([64/1],1),\du,0.2, \vol,(-25),\group,~limitGrp,\out,~reverbBus),
-Pbind(\instrument, \limiter,\in, ~limitMelo, \dur, Pseq([64/1],1),\du,0.2, \vol,(-25),\group,~limitGrp,\out,~reverbBus),
+Pbind(\instrument, \limiter,\in, ~limitMelo, \dur, Pseq([64/1],1),\du,0.2, \vol,(-25),\group,~limitGrp,\out,~reverbMelo,\gain,-2),
 
 
 
 
 
-Pbind(\instrument, \limiter,\in, ~limitSquelch, \dur, Pseq([64/1],1),\du,0.1, \vol,(-25),\group,~limitGrp,\out,~reverbBus,\gain,100),
+Pbind(\instrument, \limiter,\in, ~limitSquelch, \dur, Pseq([64/1],1),\du,0.2, \vol,(-25),\group,~limitGrp,\out,~reverbSquelch,\gain,5460),
 
 
 
 
 
 
-Pbind(\instrument, \limiter,\in, ~limitMiniRise, \dur, Pseq([64/1],1),\gain,15,\du,0.2, \vol,(-25),\group,~limitGrp,\out,~reverbBus),
-Pbind(\instrument, \limiter,\in, ~limitRnd, \dur, Pseq([64/1],1),\gain,3.5,\du,0.2, \vol,(-25),\group,~limitGrp,\out,~reverbBus),
+Pbind(\instrument, \limiter,\in, ~limitMiniRise, \dur, Pseq([64/1],1),\gain,20,\du,0.2, \vol,(-25),\group,~limitGrp,\out,~reverbMiniRise),
 
-	Pbind(\instrument, \limiter,\in, ~limitDelayed, \dur, Pseq([64/1],1),\du,0.2, \vol,(-25),\gain,80,\group,~limitGrp,\out,~delayToRevBus),
+Pbind(\instrument, \limiter,\in, ~limitRnd, \dur, Pseq([64/1],1),\gain,3540,\du,0.2, \vol,(-25),\group,~limitGrp,\out,~reverbRnd),
 
-	Pbind(\instrument, \limiter,\in, ~limitNonRec, \dur, Pseq([64/1],1),\du,0.2, \vol,(-29),\gain,1,\group,~limitGrp,\out,~reverbBus3),
+	Pbind(\instrument, \limiter,\in, ~limitDelayed, \dur, Pseq([64/1],1),\du,0.2, \vol,(-15),\gain,1,\group,~limitGrp,\out,~delayToRevBus),
+
+	Pbind(\instrument, \limiter,\in, ~limitNonRec, \dur, Pseq([64/1],1),\du,0.2, \vol,(-39),\gain,1,\group,~limitGrp,\out,~reverbNonRec),
 
 Pbind(\instrument,\grpComp, \dur,Pseq([64/1],1),\thr,0.4 ,\sB, 1.086,\sA, 0.2,\atk ,0.0242, \rel ,0.7744
 ,\in, ~comSnaGrpBus ,\in2, ~snBus, \group, ~compGrp2),

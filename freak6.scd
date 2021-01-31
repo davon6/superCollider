@@ -10,6 +10,13 @@ s.options.memSize =
 ~reverbBus3 = Bus.audio(s,2);
 
 
+~reverbDelayed = Bus.audio(s,2);
+~reverbMelo = Bus.audio(s,2);
+~reverbSquelch = Bus.audio(s,2);
+~reverbMiniRise = Bus.audio(s,2);
+~reverbRnd = Bus.audio(s,2);
+~reverbNonRec = Bus.audio(s,2);
+
 
 
 ~micBus = Bus.audio(s,1);
@@ -749,11 +756,6 @@ sig = Pan2.ar( sig , pan);//0 was pan
 	}).add;
 
 "limiter init".postln;
-
-
-
-
-
 
 
 
