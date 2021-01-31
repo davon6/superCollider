@@ -18,11 +18,13 @@
 ~psqRises = [Pseq([1 /1],1),Pseq([4 /1],1),Pseq([1 /4],1),Pseq([1 /16],1)];
 ~damps = [0.022,0.22,0.8,0.4 ];
 ~wetsR = [0.2,0.4];
+~amps = [0.1,0.01,0.001];
 
 ~freqs = [657.9895,657.9895];//, 698.46.rand ];
 
-~pp;~ff;~dd;~bf;~rt;~frq;~fct;~ps;~dps;~we;~tpp;~pm;
+~pp;~ff;~dd;~bf;~rt;~frq;~fct;~ps;~dps;~we;~tpp;~pm;~am;
 
+~amp = {~am  = ~amps[3.rand];~am;};
 ~pseqm= {~pm=~pseqsm[2.rand]; ~pm;};
 ~tpseq = {~tpp = ~thrpseqs[3.rand]; ~tpp;};
 ~damp = {~dps = ~damps[4.rand];~dps;};
@@ -213,13 +215,17 @@ Ppar([Pbind(\instrument,\lead,\dur, ~tpseq.()  ,\type,Pseq([\note,\rest,\rest,\n
 
 
 
+Ppar([Pbind(\instrument,\lead, \dur,Pseq([1/1],1),\decE,0,\atkE,Pseq([1/1],1),\freq,661.44.rand.postln,
 
-//HERENEXT
+	\bus,~bus5 ,\bus2,~bus1,\bus3, 40,\bus4,40,\bus7,50,\bus8, ~bus4,//\bus5,~bus10,
 
-	Ppar([Pbind(\instrument,\lead, \dur,~psqRise.(),\decE,0,\atkE,~ps,\freq,661.44.rand.postln,\bus,40 ,\bus2,~bus1,\bus3, 40,\bus4,40,\bus7,50,\bus8, ~bus4,\subsE,0,\which,1,\whichMod,2,\whichEnv,1,\amp,0.03, \gra,5.00.rand.postln,\out,~effctBus,\group, ~micGrp),
 
-Pbind(\instrument, \effect,\wF,1,\dur, ~ps, \in,~effctBus,\out,~reverbBus,\group,~effctGrp,\dec1,~ps),
-Pbind(\instrument,\reverb,  \dur,~ps,\roomsize, 50, \revtime,~ps+~revTail.(), \damping, 0.42, \inputbw, 0.5, \drylevel, -10, \earlylevel, -22, \taillevel, -5,\amp,0.1,\spread,100,\wet,0.2,\maxRoomsize,80,\in,~reverbBus,\out,0,\group, ~revGrp)],1).play(t,quant:1),
+	\subsE,0,\which,0,\whichMod,2,\whichEnv,1,\amp,(-23), \gra,5.00.rand.postln,\out,~effctBus,\group, ~micGrp),
+
+Pbind(\instrument, \effect,\wF,1,\dur, Pseq([1/1],1), \in,~effctBus,\out,~comMiniRise,\group,~effctGrp,\dec1,Pseq([1/1],1)),
+
+Pbind(\instrument,\reverb,  \dur, Pseq([1/1],1),\roomsize, 40, \revtime,Pseq([1/1],1)+~revTail.(), \damping, 0.42, \inputbw, 0.5, \drylevel, -10, \earlylevel, -22, \taillevel, -8,\amp,~amp.(),\spread,100,\wet,0.2,\maxRoomsize,60,\in,~reverbBus,\out,0,\group, ~revGrp)
+],1),
 
 
 
@@ -399,6 +405,8 @@ Pbind(\instrument,\reverb,  \dur,~pp,\roomsize, 50, \revtime,~pp+~revTail.(), \d
 Ppar([
 
 
+	//Pbind(\instrument, \lead, \dur,Pseq([1024/1],1),\bus5,~bus10,\type,\rest),
+
 
 
 
@@ -428,7 +436,7 @@ Pseq([
 
 				Pbind(\instrument,\lead, \dur,~pseq.(),\decE,~pp,\freq, ~freq.(),\bus, ~busFi.(),\bus2,~bus1,\bus3, 40,\bus4,40,\bus7,50,\bus8, ~bus4,\subsE,0,\which,~fil.(),\whichMod,2,\whichEnv,1,\amp,(-23),\out,~comFuzz,\group, ~micGrp),
 
-				Pbind(\instrument,\reverb,  \dur,~trans.(~pp),\roomsize, 41, \revtime,~trans.(~pp)+~revTail.(), \damping, ~damp.(), \inputbw, 0.5, \drylevel, -10, \earlylevel, -22, \taillevel, -5,\amp,0.1,\spread,100,\wet,~wet.(),\maxRoomsize,70,\in,~reverbBus,\out,~comSnaGrpBus, \group,~revGrp ),
+				Pbind(\instrument,\reverb,  \dur,~trans.(~pp),\roomsize, 41, \revtime,~trans.(~pp)+~revTail.(), \damping, ~damp.(), \inputbw, 0.5, \drylevel, -10, \earlylevel, -22, \taillevel, -5,\amp,~amp.(),\spread,100,\wet,~wet.(),\maxRoomsize,70,\in,~reverbBus,\out,~comSnaGrpBus, \group,~revGrp ),
 
 			],1)
 			,
@@ -437,7 +445,7 @@ Pseq([
 
 				Pbind(\instrument,\lead, \dur,~pseq.(),\decE,~pp,\freq, ~freq.(),\bus, ~busFi.(),\bus2,~bus1,\bus3, 40,\bus4,40,\bus7,50,\bus8, ~bus4,\subsE,0,\which,~fil.(),\whichMod,2,\whichEnv,1,\amp,(-23),\out,~comFuzz,\group, ~micGrp),
 
-				Pbind(\instrument,\reverb,  \dur,~trans.(~pp),\roomsize, 41, \revtime,~trans.(~pp)+~revTail.(), \damping, ~damp.(), \inputbw, 0.5, \drylevel, -10, \earlylevel, -22, \taillevel, -5,\amp,0.1,\spread,100,\wet,~wet.(),\maxRoomsize,70,\in,~reverbBus,\out,~comSnaGrpBus, \group,~revGrp ),
+				Pbind(\instrument,\reverb,  \dur,~trans.(~pp),\roomsize, 41, \revtime,~trans.(~pp)+~revTail.(), \damping, ~damp.(), \inputbw, 0.5, \drylevel, -10, \earlylevel, -22, \taillevel, -5,\amp,~amp.(),\spread,100,\wet,~wet.(),\maxRoomsize,70,\in,~reverbBus,\out,~comSnaGrpBus, \group,~revGrp ),
 
 
 
@@ -454,7 +462,7 @@ Pseq([
 
 				Pbind(\instrument,\lead, \dur,~pseq.(),\decE,~pp,\freq, ~freq.(),\bus, ~busFi.(),\bus2,~bus1,\bus3, 40,\bus4,40,\bus7,50,\bus8, ~bus4,\subsE,0,\which,~fil.(),\whichMod,2,\whichEnv,1,\amp,(-23),\out,~comFuzz,\group, ~micGrp),
 
-				Pbind(\instrument,\reverb,  \dur,~trans.(~pp),\roomsize, 41, \revtime,~trans.(~pp)+~revTail.(), \damping, ~damp.(), \inputbw, 0.5, \drylevel, -10, \earlylevel, -22, \taillevel, -5,\amp,0.1,\spread,100,\wet,~wet.(),\maxRoomsize,70,\in,~reverbBus,\out,~comSnaGrpBus, \group,~revGrp ),
+				Pbind(\instrument,\reverb,  \dur,~trans.(~pp),\roomsize, 41, \revtime,~trans.(~pp)+~revTail.(), \damping, ~damp.(), \inputbw, 0.5, \drylevel, -10, \earlylevel, -22, \taillevel, -5,\amp,~amp.(),\spread,100,\wet,~wet.(),\maxRoomsize,70,\in,~reverbBus,\out,~comSnaGrpBus, \group,~revGrp ),
 			],1)
 
 			,
@@ -463,7 +471,7 @@ Pseq([
 
 				Pbind(\instrument,\lead, \dur,~pseq.(),\decE,~pp,\freq, ~freq.(),\bus, ~busFi.(),\bus2,~bus1,\bus3, 40,\bus4,40,\bus7,50,\bus8, ~bus4,\subsE,0,\which,~fil.(),\whichMod,2,\whichEnv,1,\amp,(-23),\out,~comFuzz,\group, ~micGrp),
 
-				Pbind(\instrument,\reverb,  \dur,~trans.(~pp),\roomsize, 41, \revtime,~trans.(~pp)+~revTail.(), \damping, ~damp.(), \inputbw, 0.5, \drylevel, -10, \earlylevel, -22, \taillevel, -5,\amp,0.1,\spread,100,\wet,~wet.(),\maxRoomsize,70,\in,~reverbBus,\out,~comSnaGrpBus, \group,~revGrp ),
+				Pbind(\instrument,\reverb,  \dur,~trans.(~pp),\roomsize, 41, \revtime,~trans.(~pp)+~revTail.(), \damping, ~damp.(), \inputbw, 0.5, \drylevel, -10, \earlylevel, -22, \taillevel, -5,\amp,~amp.(),\spread,100,\wet,~wet.(),\maxRoomsize,70,\in,~reverbBus,\out,~comSnaGrpBus, \group,~revGrp ),
 
 
 
@@ -480,7 +488,7 @@ Pseq([
 
 				Pbind(\instrument,\lead, \dur,~pseq.(),\decE,~pp,\freq, ~freq.(),\bus, ~busFi.(),\bus2,~bus1,\bus3, 40,\bus4,40,\bus7,50,\bus8, ~bus4,\subsE,0,\which,~fil.(),\whichMod,2,\whichEnv,1,\amp,(-23),\out,~comFuzz,\group, ~micGrp),
 
-				Pbind(\instrument,\reverb,  \dur,~trans.(~pp),\roomsize, 41, \revtime,~trans.(~pp)+~revTail.(), \damping, ~damp.(), \inputbw, 0.5, \drylevel, -10, \earlylevel, -22, \taillevel, -5,\amp,0.1,\spread,100,\wet,~wet.(),\maxRoomsize,70,\in,~reverbBus,\out,~comSnaGrpBus, \group,~revGrp ),
+				Pbind(\instrument,\reverb,  \dur,~trans.(~pp),\roomsize, 41, \revtime,~trans.(~pp)+~revTail.(), \damping, ~damp.(), \inputbw, 0.5, \drylevel, -10, \earlylevel, -22, \taillevel, -5,\amp,~amp.(),\spread,100,\wet,~wet.(),\maxRoomsize,70,\in,~reverbBus,\out,~comSnaGrpBus, \group,~revGrp ),
 			],1)
 
 			,
@@ -489,7 +497,7 @@ Pseq([
 
 			Pbind(\instrument,\lead, \dur,~pseq.(),\decE,~pp,\freq, ~freq.(),\bus, ~busFi.(),\bus2,~bus1,\bus3, 40,\bus4,40,\bus7,50,\bus8, ~bus4,\subsE,0,\which,~fil.(),\whichMod,2,\whichEnv,1,\amp,(-23),\out,~comFuzz,\group, ~micGrp),
 
-				Pbind(\instrument,\reverb,  \dur,~trans.(~pp),\roomsize, 41, \revtime,~trans.(~pp)+~revTail.(), \damping, ~damp.(), \inputbw, 0.5, \drylevel, -10, \earlylevel, -22, \taillevel, -5,\amp,0.1,\spread,100,\wet,~wet.(),\maxRoomsize,70,\in,~reverbBus,\out,~comSnaGrpBus, \group,~revGrp ),
+				Pbind(\instrument,\reverb,  \dur,~trans.(~pp),\roomsize, 41, \revtime,~trans.(~pp)+~revTail.(), \damping, ~damp.(), \inputbw, 0.5, \drylevel, -10, \earlylevel, -22, \taillevel, -5,\amp,~amp.(),\spread,100,\wet,~wet.(),\maxRoomsize,70,\in,~reverbBus,\out,~comSnaGrpBus, \group,~revGrp ),
 
 
 
@@ -505,7 +513,7 @@ Pseq([
 
 				Pbind(\instrument,\lead, \dur,~pseq.(),\decE,~pp,\freq, ~freq.(),\bus, ~busFi.(),\bus2,~bus1,\bus3, 40,\bus4,40,\bus7,50,\bus8, ~bus4,\subsE,0,\which,~fil.(),\whichMod,2,\whichEnv,1,\amp,(-23),\out,~comFuzz,\group, ~micGrp),
 
-				Pbind(\instrument,\reverb,  \dur,~trans.(~pp),\roomsize, 41, \revtime,~trans.(~pp)+~revTail.(), \damping, ~damp.(), \inputbw, 0.5, \drylevel, -10, \earlylevel, -22, \taillevel, -5,\amp,0.1,\spread,100,\wet,~wet.(),\maxRoomsize,70,\in,~reverbBus,\out,~comSnaGrpBus, \group,~revGrp ),
+				Pbind(\instrument,\reverb,  \dur,~trans.(~pp),\roomsize, 41, \revtime,~trans.(~pp)+~revTail.(), \damping, ~damp.(), \inputbw, 0.5, \drylevel, -10, \earlylevel, -22, \taillevel, -5,\amp,~amp.(),\spread,100,\wet,~wet.(),\maxRoomsize,70,\in,~reverbBus,\out,~comSnaGrpBus, \group,~revGrp ),
 			],1)
 
 			,
@@ -514,7 +522,7 @@ Pseq([
 
 				Pbind(\instrument,\lead, \dur,~pseq.(),\decE,~pp,\freq, ~freq.(),\bus, ~busFi.(),\bus2,~bus1,\bus3, 40,\bus4,40,\bus7,50,\bus8, ~bus4,\subsE,0,\which,~fil.(),\whichMod,2,\whichEnv,1,\amp,(-23),\out,~comFuzz,\group, ~micGrp),
 
-				Pbind(\instrument,\reverb,  \dur,~trans.(~pp),\roomsize, 41, \revtime,~trans.(~pp)+~revTail.(), \damping, ~damp.(), \inputbw, 0.5, \drylevel, -10, \earlylevel, -22, \taillevel, -5,\amp,0.1,\spread,100,\wet,~wet.(),\maxRoomsize,70,\in,~reverbBus,\out,~comSnaGrpBus, \group,~revGrp ),
+				Pbind(\instrument,\reverb,  \dur,~trans.(~pp),\roomsize, 41, \revtime,~trans.(~pp)+~revTail.(), \damping, ~damp.(), \inputbw, 0.5, \drylevel, -10, \earlylevel, -22, \taillevel, -5,\amp,~amp.(),\spread,100,\wet,~wet.(),\maxRoomsize,70,\in,~reverbBus,\out,~comSnaGrpBus, \group,~revGrp ),
 
 
 

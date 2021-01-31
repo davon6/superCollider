@@ -26,11 +26,11 @@ s.options.memSize =
 ~comBusCymb = Bus.audio(s,2);
 
 ~comFuzz = Bus.audio(s,2);
-
 ~comMelo= Bus.audio(s,2);
-
 ~comSquelch= Bus.audio(s,2);
-~comLead3= Bus.audio(s,2);
+
+~comMiniRise= Bus.audio(s,2);
+
 ~comLead4= Bus.audio(s,2);
 ~comLead5= Bus.audio(s,2);
 ~comLead6= Bus.audio(s,2);
@@ -41,7 +41,10 @@ s.options.memSize =
 
 ~limitMelo= Bus.audio(s,2);
 ~limitSquelch= Bus.audio(s,2);
-~limitLead3= Bus.audio(s,2);
+
+~limitMiniRise= Bus.audio(s,2);
+
+
 ~limitLead4= Bus.audio(s,2);
 ~limitLead5= Bus.audio(s,2);
 ~limitLead6= Bus.audio(s,2);
@@ -216,7 +219,7 @@ s.sync;
 	s.sync;
 
 SynthDef(\lead, {
-		arg freq= 500, mRatio=1, cRatio=1, index =1, iScale=5, amp=0.01, atk= 0.01  , rel=3, cAtk = 4 , cRel = (-4) , pan =0, atkE =0,decE=0.1936, subsE=50, relE=0, sineRate = 0.0000000095262251, sineRangeHigh = 0, sineRangeLow=0, pitch = 0, sRteLPF = 1.3, timeSca= 0.25, dure= 1/1, which = 1, whichMod = 1, whichAmp =0,phRise= 0 , whichEnv = 0,timeSca2 =1,out=0, eFreq =0 , phFm=8,decEC=0,filF=200, bus,bus2=14,bus3=14,bus4=14,bus5=14,bus6=14, bus7=14, bus8= 15 ,  bpFreq = 500,wCar=0,gra=1,lvlDec=1,factor=1, factor2 =0, vlPE =27.1366666667,dcPE = 0.129066666667,atckC = 2.5, decC = (-2), crvEP = (-2);
+		arg freq= 500, mRatio=1, cRatio=1, index =1, iScale=5, amp=0.01, atk= 0.01  , rel=3, cAtk = 4 , cRel = (-4) , pan =0, atkE =0,decE=0.1936, subsE=50, relE=0, sineRate = 0.0000000095262251, sineRangeHigh = 0, sineRangeLow=0, pitch = 0, sRteLPF = 1.3, timeSca= 0.25, dure= 1/1, which = 1, whichMod = 1, whichAmp =0,phRise= 0 , whichEnv = 0,timeSca2 =1,out=0, eFreq =0 , phFm=8,decEC=0,filF=200, bus,bus2,bus3,bus4,bus5,bus6, bus7, bus8,  bpFreq = 500,wCar=0,gra=1,lvlDec=1,factor=1, factor2 =0, vlPE =27.1366666667,vlPE2=0,dcPE = 0.129066666667,atckC = 2.5, decC = (-2), crvEP = (-2), rqLPF =0.5;
 
 
 	var car,car2, mod,modE,modE2, env, iEnv, mod2, sig, bufpos, envVoice, filRte,lp,bp,hp,lp2, b1,a;
@@ -286,7 +289,7 @@ SynthDef(\lead, {
 //			SelectX.ar(SinOsc.kr(0.0020,phFm).range(0,1),[SinOsc.ar(0),SelectX.ar(whichMod,[ mod,modE,modE2])])
 
 //mod
-			SelectX.ar(SinOsc.kr(0.0020,phFm).range(0,1),[SinOsc.ar(0),mod]) +  (EnvGen.kr(Env([vlPE,0],[dcPE,0],crvEP))*factor2)
+			SelectX.ar(SinOsc.kr(0.0020,phFm).range(0,1),[SinOsc.ar(0),mod]) +  (EnvGen.kr(Env([vlPE,vlPE2],[dcPE,0],crvEP))*factor2)
 
 			+ pitch +  (In.kr(bus4, 1)/factor));// +  /4
 
@@ -303,7 +306,7 @@ SynthDef(\lead, {
 
 	lp = BLowPass4.ar(sig , In.kr(bus, 1) //LFNoise1.kr(2.575).range(0.2,20.3)
 
-		,0.5);//82.41     //Varlag ?   0.4
+		,rqLPF);//82.41     //Varlag ?   0.4
 //MouseX.kr(1800+ filF,100)
 
 	lp2 = BLowPass4.ar(sig, (SinOsc.ar(LFNoise1.kr(Lag.kr(2.575,0.0968)).range(0,7.72500)).range(82.41,1400)), rq: 0.3);//MouseX.kr(0,7.72500)

@@ -30,7 +30,14 @@ o = {
 	Out.kr(~bus7, SinOsc.ar(5.15).range(5274.04,0.0201171875));
 	Out.kr(~bus8, SinOsc.ar(0.321875).range(5274.04,0.0201171875));
 
-	Out.kr(~bus9, SinOsc.ar(1.2875).range(10.3,81.41));
+	Out.kr(~bus9, //SinOsc.ar(1.2875).range(10.3,81.41));
+
+	Lag.kr(LFNoise0.kr(0.321875).range(41.2,1318.51),0.2)
+
+		+SinOsc.kr(SelectX.kr(LFNoise0.kr(1.2875).range(0,2).round(1),[1.2875,0.08046875,0.321875])).range(5274.04,20.6));
+
+
+
 
 	Out.kr(~bus10,  Lag.kr(LFNoise0.kr(1.2875).range(41.2,1318.51),0.2)
 
@@ -46,9 +53,88 @@ o = {
 }.play();
 
 
-//~busFi.()    INSTEAD OF 50
 
 
+
+
+Ppar([Pbind(\instrument,\lead, \dur,~pseq.(),\decE,~pp,\freq,661.44.rand.postln,
+	\bus,40 ,\bus2,~bus1,\bus3, 40,\bus4,40,\bus7,50,\bus8, ~bus4,\bus5,~bus9,
+\vlPE,0,\vlPE2,661.44,\dcPE,~pp+1,\crvEP,8,\factor2,2,
+	\subsE,0,\which,1,\whichMod,2,\whichEnv,1,\amp,(-23), \gra,2.00.rand.postln,\out,0,\group, ~micGrp),
+
+
+	Pbind(\instrument,\reverb,  \dur,~pp,\roomsize, 50, \revtime,~pp+~revTail.(), \damping, 0.42, \inputbw, 0.5, \drylevel, -10, \earlylevel, -22, \taillevel, -5,\amp,0.1,\spread,100,\wet,0.2,\maxRoomsize,80,\in,~reverbBus,\out,0,\group, ~revGrp)],1).play(t)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+)
+
+Ppar([Pbind(\instrument,\lead, \dur,Pseq([1/1],1),\decE,0,\atkE,Pseq([1/1],1),\freq,661.44.rand.postln,
+
+	\bus,~bus5 ,\bus2,~bus1,\bus3, 40,\bus4,40,\bus7,50,\bus8, ~bus4,//\bus5,~bus10,
+
+
+	\subsE,0,\which,0,\whichMod,2,\whichEnv,1,\amp,(-23), \gra,5.00.rand.postln,\out,~effctBus,\group, ~micGrp),
+
+Pbind(\instrument, \effect,\wF,1,\dur, Pseq([1/1],1), \in,~effctBus,\out,~comMiniRise,\group,~effctGrp,\dec1,Pseq([1/1],1)),
+
+Pbind(\instrument,\reverb,  \dur, Pseq([1/1],1),\roomsize, 40, \revtime,Pseq([1/1],1)+~revTail.(), \damping, 0.42, \inputbw, 0.5, \drylevel, -10, \earlylevel, -22, \taillevel, -8,\amp,~amp.(),\spread,100,\wet,0.2,\maxRoomsize,60,\in,~reverbBus,\out,0,\group, ~revGrp)
+],1)
+
+
+
+
+.play(t,quant:1)
+
+)
+
+
+
+
+
+
+
+
+
+
+
+
+Ppar([Pbind(\instrument,\lead, \dur,~pseqsm.(),\decE,0,\atkE,~pm,\freq,661.44.rand.postln,
+
+	\bus,~bus5 ,\bus2,~bus1,\bus3, 40,\bus4,40,\bus7,50,\bus8, ~bus4,//\bus5,~bus10,
+
+
+	\subsE,0,\which,0,\whichMod,2,\whichEnv,1,\amp,(-23), \gra,5.00.rand.postln,\out,~effctBus,\group, ~micGrp),
+
+Pbind(\instrument, \effect,\wF,1,\dur, ~pm, \in,~effctBus,\out,~comMiniRise,\group,~effctGrp,\dec1,Pseq([1/1],1)),
+
+Pbind(\instrument,\reverb,  \dur, ~pm,\roomsize, 40, \revtime,~pm+~revTail.(), \damping, 0.42, \inputbw, 0.5, \drylevel, -10, \earlylevel, -22, \taillevel, -8,\amp,~amp.(),\spread,100,\wet,0.2,\maxRoomsize,60,\in,~reverbBus,\out,0,\group, ~revGrp)
+],1)
+
+
+
+
+.play(t,quant:1)
+
+)
+
+Ppar([Pbind(\instrument,\lead, \dur,~psqRise.(),\decE,0,\atkE,~ps,\freq,661.44.rand.postln,\bus,40 ,\bus2,~bus1,\bus3, 40,\bus4,40,\bus7,50,\bus8, ~bus4,\subsE,0,\which,1,\whichMod,2,\whichEnv,1,\amp,(-23), \gra,5.00.rand.postln,\out,0,\group, ~micGrp),
+
+Pbind(\instrument, \effect,\wF,1,\dur, ~ps, \in,~effctBus,\out,0,\group,~effctGrp,\dec1,~ps),
+Pbind(\instrument,\reverb,  \dur,~ps,\roomsize, 50, \revtime,~ps+~revTail.(), \damping, 0.42, \inputbw, 0.5, \drylevel, -10, \earlylevel, -22, \taillevel, -5,\amp,0.1,\spread,100,\wet,0.2,\maxRoomsize,80,\in,~reverbBus,\out,0,\group, ~revGrp)],1).play(t,quant:1)
 
 
 
@@ -73,7 +159,7 @@ Ppar([Pbind(\instrument,\lead,		\dur,~pseqm.(),\eFreq,81.41,\which,1,\whichMod,2
 
 //s.plotTree
 
-
+//s.scope
 
 )
 
