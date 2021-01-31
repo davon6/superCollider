@@ -140,7 +140,7 @@ Pbind(\instrument, \limiter,\in, ~limitSna, \dur, Pseq([64/1],1),\du,0.2, \vol,(
 
 Pbind(\instrument, \limiter,\in, ~limitNonRec, \dur, Pseq([64/1],1),\du,0.2, \vol,(-25),\group,~limitGrp),
 
-Pbind(\instrument, \limiter,\in, ~limitFuzz, \dur, Pseq([64/1],1),\du,0.2, \vol,(-25),\group,~limitGrp,\out,~reverbBus),
+Pbind(\instrument, \limiter,\in, ~limitFuzz, \dur, Pseq([64/1],1),\du,0.2, \vol,(-25),\gain,10,\group,~limitGrp,\out,~reverbBus),
 Pbind(\instrument, \limiter,\in, ~limitMelo, \dur, Pseq([64/1],1),\du,0.2, \vol,(-25),\group,~limitGrp,\out,~reverbMelo,\gain,-2),
 
 
