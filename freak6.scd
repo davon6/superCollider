@@ -17,6 +17,7 @@ s.options.memSize =
 ~effctBus =Bus.audio(s,1);
 ~effctBus2 =Bus.audio(s,1);
 ~delayBus = Bus.audio(s,1);
+~delayToRevBus = Bus.audio(s,2);
 
 ~kbus = Bus.audio(s,2);
 ~snBus = Bus.audio(s,2);
@@ -27,26 +28,32 @@ s.options.memSize =
 
 ~comFuzz = Bus.audio(s,2);
 ~comMelo= Bus.audio(s,2);
-~comSquelch= Bus.audio(s,2);
+~comSquelch= Bus.audio(s,1);
 
 ~comMiniRise= Bus.audio(s,2);
 
-~comLead4= Bus.audio(s,2);
-~comLead5= Bus.audio(s,2);
+~comRnd= Bus.audio(s,2);
+
+
+~comDelayed= Bus.audio(s,2);
+
+
 ~comLead6= Bus.audio(s,2);
+
+
 ~comLead7= Bus.audio(s,2);
 
 
 ~comNoisePerc= Bus.audio(s,2);
 
 ~limitMelo= Bus.audio(s,2);
-~limitSquelch= Bus.audio(s,2);
-
+~limitSquelch= Bus.audio(s,1);
 ~limitMiniRise= Bus.audio(s,2);
+~limitRnd= Bus.audio(s,2);
 
 
-~limitLead4= Bus.audio(s,2);
-~limitLead5= Bus.audio(s,2);
+~limitDelayed= Bus.audio(s,2);
+
 ~limitLead6= Bus.audio(s,2);
 ~limitLead7= Bus.audio(s,2);
 
@@ -213,6 +220,7 @@ s.sync;
 	~bus13 = Bus.control(s,1);
 
 	~bus14 = Bus.control(s,1);
+	~bus15 = Bus.control(s,1);
 
 "Kontrol rate init".postln;
 
@@ -322,13 +330,13 @@ bp = BPF.ar(sig,In.kr(bus5, 1),0.26);//0.05
 	hp = BHiPass4.ar(sig, In.kr(bus, 1),MouseY.kr(1,0.4,0));
 //MouseX.kr(100,5000+ filF)
 //slcFil
-	sig =SelectX.ar(which, [lp, bp,hp,sig]);//* env* amp;
+	sig =SelectX.ar(which, [lp, bp,hp,sig])* env* amp.dbamp;
 
-	b1 =  sig * env;
+	//b1 =  sig * env;
 
 
 
-		sig = Pan2.ar(SelectX.ar(whichEnv, [sig,b1]), pan)* amp.dbamp;
+		//sig = Pan2.ar(SelectX.ar(whichEnv, [sig,b1]), pan)* amp.dbamp;
 
 
 
@@ -706,11 +714,14 @@ sig = Pan2.ar( sig , pan);//0 was pan
 	}).add;
 
 
+
+	"delay init".postln;
+
 		SynthDef(\limiter, {|in, out = 0,gain=1,vol =(-40),dec, du =0.0001 |
 
 	var input, effect;
 
-		input=In.ar(in,2); //get two channels of input starting (and ending) on bus 0
+		input=In.ar(in,1); //get two channels of input starting (and ending) on bus 0
 
 		effect= Limiter.ar(gain*input,vol.dbamp, du);
 
@@ -733,6 +744,8 @@ sig = Pan2.ar( sig , pan);//0 was pan
 
 
 		Out.ar(out ,effect     );
+
+
 	}).add;
 
 "limiter init".postln;
@@ -752,7 +765,7 @@ sig = Pan2.ar( sig , pan);//0 was pan
 
 	var a ,input;
 
-		input =      SelectX.ar(wF,[HPF.ar( In.ar(in,2),100),  LPF.ar( In.ar(in,2),100)]);
+		input =      SelectX.ar(wF,[HPF.ar( In.ar(in,2).round(2**(-7)),100),  LPF.ar( In.ar(in,2),100).round(2**(-7))]);
 
 
 
