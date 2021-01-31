@@ -65,12 +65,12 @@ f = { |n=12, min=0, max=11| (min..max).scramble.keep(n) };
 
 ~boo = f.value(12, 0, 11);
 
-)
 
 
 
-s.defaultGroup.stop
-(
+
+//s.defaultGroup.stop
+
 
 
 o = {
@@ -181,17 +181,17 @@ Pbindf(~cymbal, \dur,Pseq([ Pseq([1/4],4),Pseq([1/8],8), Pseq([1/16],16), Pseq([
 Ppar([
 //Background
 
-
-		Pbind(\instrument, \lead,\dur, Pseq([64/1],1), \gra, 0, \eFreq, [329.63,331.63,334.63,335.63], \subsE, 0,\amp,(-23),\whichMod,2, \decE, Pseq([64/1],1),\whichEnv,1,\bus4, ~bus2 , \which,0,\out, ~comLead6, \bus,~bus15),
-
-
-		Pbind(\instrument,\comp,\dur,Pseq([64/1],1),\dec,Pseq([64/1],1) ,\thr ,0.8 ,\sB , 1, \sA , 0.25, \atk , 0.001, \rel ,0.04840
-
-		,\in, ~comLead6 ,\in2, ~kbus,\group, ~compGrp,\out,  ~limitNonRec  ),
-
-
-
-Pbind(\instrument,\reverb,\dur,Pseq([64/1],1),\roomsize, 16, \revtime, Pseq([64/1],1)+3.0976, \damping, 0.030, \inputbw, 0.5, \drylevel, (-3), \earlylevel, (-10), \taillevel, (-10),\maxRoomsize,16,\in,~reverbBus3 , \out,0,\group, ~revGrp,\spread, 1,   \center, 0),
+		//
+		// Pbind(\instrument, \lead,\dur, Pseq([64/1],1), \gra, 0, \eFreq, [329.63,331.63,334.63,335.63], \subsE, 0,\amp,(-23),\whichMod,2, \decE, Pseq([64/1],1),\whichEnv,1,\bus4, ~bus2 , \which,0,\out, ~comLead6, \bus,~bus15),
+		//
+		//
+		// Pbind(\instrument,\comp,\dur,Pseq([64/1],1),\dec,Pseq([64/1],1) ,\thr ,0.8 ,\sB , 1, \sA , 0.25, \atk , 0.001, \rel ,0.04840
+		//
+		// ,\in, ~comLead6 ,\in2, ~kbus,\group, ~compGrp,\out,  ~limitNonRec  ),
+		//
+		//
+		//
+		// Pbind(\instrument,\reverb,\dur,Pseq([64/1],1),\roomsize, 16, \revtime, Pseq([64/1],1)+3.0976, \damping, 0.030, \inputbw, 0.5, \drylevel, (-3), \earlylevel, (-10), \taillevel, (-10),\maxRoomsize,16,\in,~reverbBus3 , \out,0,\group, ~revGrp,\spread, 1,   \center, 0),
 
 
 
@@ -204,7 +204,7 @@ Pbind(\instrument,\reverb,\dur,Pseq([64/1],1),\roomsize, 16, \revtime, Pseq([64/
 Pseq([
 //4.do({
 
-Ppar([Pbind(\instrument,\lead,		\dur,~pseqm.(),\eFreq,81.41,\which,1,\whichMod,2,\whichEnv,1,/*\wCar,1,*/ \gra,0,\bus2,34,	\decE,~pm,\bus,~bus12,\bus3,24,\bus4,~busFi.(),\bus5,~bus10,\amp,(-13),\factor,~factor.(),\subsE,0,\factor2,1,\vlPE, 1318.51/~factor.(),\dcPE,~revTails.(),\out,~comSquelch),
+Ppar([Pbind(\instrument,\lead,		\dur,~pseqm.(),\eFreq,81.41,\which,1,\whichMod,2,\whichEnv,1,/*\wCar,1,*/ \gra,0,\bus2,34,	\decE,~pm,\bus,~bus12,\bus3,24,\bus4,~busFi.(),\bus5,~bus10,\amp,(-20),\factor,~factor.(),\subsE,0,\factor2,1,\vlPE, 1318.51/~factor.(),\dcPE,~revTails.(),\out,~comSquelch),
 
 				Pbind(\instrument,\reverb,\dur,~trans.(~pm),\roomsize, 46, \revtime,~trans.(~pm)+~revTail.() , \damping, 0.50, \inputbw, 0.8, \drylevel, (-3), \earlylevel, (-5), \taillevel, (-10),\maxRoomsize,52,\wet,0.1,\in,~reverbBus , \out,~comSnaGrpBus,\group, ~revGrp)],1),
 

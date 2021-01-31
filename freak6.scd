@@ -7,7 +7,7 @@ s.options.memSize =
 (
 ~reverbBus = Bus.audio(s,2);
 ~reverbBus2 = Bus.audio(s,1);
-~reverbBus3 = Bus.audio(s,1);
+~reverbBus3 = Bus.audio(s,2);
 
 
 
@@ -319,7 +319,7 @@ SynthDef(\lead, {
 
 	lp2 = BLowPass4.ar(sig, (SinOsc.ar(LFNoise1.kr(Lag.kr(2.575,0.0968)).range(0,7.72500)).range(82.41,1400)), rq: 0.3);//MouseX.kr(0,7.72500)
 
-	//bp = BPF.ar(sig,bpFreq+ In.kr(bus5, 1)+ In.kr(bus6, 1),0.3);//0.05
+		//bp = BPF.ar(sig,bpFreq+ In.kr(bus5, 1)+ In.kr(bus6, 1),0.3);//0.05
 
 
 
@@ -721,7 +721,7 @@ sig = Pan2.ar( sig , pan);//0 was pan
 
 	var input, effect;
 
-		input=In.ar(in,1); //get two channels of input starting (and ending) on bus 0
+		input=In.ar(in,2); //get two channels of input starting (and ending) on bus 0
 
 		effect= Limiter.ar(gain*input,vol.dbamp, du);
 

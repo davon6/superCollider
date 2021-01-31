@@ -132,7 +132,7 @@ Pbind(\instrument,\comp, \dur,Pseq([64/1],1),\thr,0.8 ,\sB, 1.05,\sA, 0.0625,\at
 
 
 
-Pbind(\instrument, \limiter,\in, ~limitBass, \dur,Pseq([64/1],1),\du,0.2, \vol,(-5),\group,~limitGrp),
+Pbind(\instrument, \limiter,\in, ~limitBass, \dur,Pseq([64/1],1),\du,0.2, \vol,(-8),\group,~limitGrp),
 Pbind(\instrument, \limiter,\in, ~limitKick,\dur,Pseq([64/1],1), \vol,(-10.5),\du,0.2,\group,~limitGrp),
 Pbind(\instrument, \limiter,\in, ~limitCymb,\dur,Pseq([64/1],1),\du,0.2, \vol,(-18),\group,~limitGrp),
 Pbind(\instrument, \limiter,\in, ~limitHat,\dur,Pseq([64/1],1),\du,0.2, \vol,(-18),\group,~limitGrp),
@@ -147,7 +147,7 @@ Pbind(\instrument, \limiter,\in, ~limitMelo, \dur, Pseq([64/1],1),\du,0.2, \vol,
 
 
 
-Pbind(\instrument, \limiter,\in, ~limitSquelch, \dur, Pseq([64/1],1),\du,0.1, \vol,(-25),\group,~limitGrp,\out,0,\gain,100),
+Pbind(\instrument, \limiter,\in, ~limitSquelch, \dur, Pseq([64/1],1),\du,0.1, \vol,(-25),\group,~limitGrp,\out,~reverbBus,\gain,100),
 
 
 
@@ -334,7 +334,7 @@ Ppar([
 
 
 
-
+~bass.play(t)
 
 
 
