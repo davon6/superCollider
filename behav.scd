@@ -9,6 +9,7 @@ s.plotTree
 s.meter
 (
 
+
 ~micGrp = Group.new;
 ~ptrGrp = Group.after(~micGrp);
 ~recGrp = Group.after(~ptrGrp);
@@ -17,16 +18,16 @@ s.meter
 ~effctGrp = Group.after(~granGrp);
 ~effctGrp2 = Group.after(~effctGrp);
 
-~compGrp = Group.after(~effctGrp2);
+~delayGrp =  Group.after(~effctGrp2);
 
-~delayGrp =  Group.after(~compGrp);
+~compGrp = Group.after(~delayGrp);
 
-~limitGrp = Group.after(~delayGrp);
-
-~revGrp = Group.after(~limitGrp);
+~revGrp = Group.after(~compGrp);
 ~revGrp2 = Group.after(~revGrp);
 
-~compGrp2 = Group.after(~revGrp2);
+~limitGrp = Group.after(~revGrp2);
+
+~compGrp2 = Group.after(~limitGrp);
 
 
 ~bass = Pbind(
