@@ -1,5 +1,8 @@
 
 s.options.memSize = 2097152;
+
+
+s.options.memSize = 2597152;
 // Decay2 perfect shape for percusion
 
 s.options.memSize =
@@ -724,38 +727,6 @@ sig = Pan2.ar( sig , pan);//0 was pan
 
 	"delay init".postln;
 
-		SynthDef(\limiter, {|in, out = 0,gain=1,vol =(-40),dec, du =0.0001 |
-
-	var input, effect;
-
-		input=In.ar(in,2); //get two channels of input starting (and ending) on bus 0
-
-		effect= Limiter.ar(gain*input,vol.dbamp, du);
-
-
-
-
-
-
-		//* Linen.kr(1, doneAction: 2);//Done.freeSelf
-
-
-		//*
-
-
-		//
-
-		//ReplaceOut.ar( In.ar(~master,2),effect) *   EnvGen.kr(Env([1,1,0],[0,dec,0],4),doneAction:2) ; //replaces bus 0 where original signal is already playing
-
-		//Out.ar(out, In.ar(~master,2)    );
-
-
-		Out.ar(out ,effect     );
-
-
-	}).add;
-
-"limiter init".postln;
 
 
 
@@ -769,7 +740,7 @@ sig = Pan2.ar( sig , pan);//0 was pan
 
 		input =      SelectX.ar(wF,[HPF.ar( In.ar(in,2).round(2**(-7)),100),  LPF.ar( In.ar(in,2),100).round(2**(-7))]);
 
-
+		//input =      SelectX.ar(wF,[HPF.ar( In.ar(in,2),100),  LPF.ar( In.ar(in,2),100).round(2**(-7))]);
 
 
 	a = Resonz.ar(
@@ -826,13 +797,35 @@ sig = Pan2.ar( sig , pan);//0 was pan
 				maxRoomsize, amp,)
 		+ input
 
-		)*        EnvGen.kr(Env([1,1,0],[0,revtime,0],4),Trig.kr(2,revtime),doneAction:2)      ,spread2,level,center),100))
+		)     //  * EnvGen.kr(Env([1,1,0],[0,revtime,0],4),Trig.kr(2,revtime),doneAction:2)
+			,spread2,level,center),100))
 
 
 
 	}).add;
 
 	"reverb init".postln;
+
+
+	SynthDef(\limiter, {|in, out = 0,gain=1,vol =(-40), du =0.01 |
+
+	//var input, effect;
+
+		//input=In.ar(in,2); //get two channels of input starting (and ending) on bus 0
+
+		//effect= Limiter.ar(gain*input,vol.dbamp, du);
+
+		//ReplaceOut.ar( In.ar(~master,2),effect) *   EnvGen.kr(Env([1,1,0],[0,dec,0],4),doneAction:2) ; //replaces bus 0 where original signal is already playing
+
+		//Out.ar(out, In.ar(~master,2)    );
+
+
+		Out.ar(out , Limiter.ar(gain*In.ar(in,2),vol.dbamp, du));
+
+	}).add;
+
+"limiter init".postln;
+
 
 
 

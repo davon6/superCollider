@@ -115,19 +115,55 @@ Pbind(\instrument,\rec, \ptrIn, ~ptrBus, \micIn, ~micBus, \buf, e,\group,~recGrp
 Pbind(\instrument,\comp,\dur,Pseq([64/1],1),\thr,0.6 ,\sB, 1,\sA, 4,\atk ,0.001, \rel ,0.04840,\in, ~comBusCymb ,\in2, ~kbus, \out,~limitCymb,\group, ~compGrp),
 Pbind(\instrument,\comp, \dur,Pseq([64/1],1),\thr,0.6 ,\sB, 1.2,\sA, 2,\atk ,0.0001, \rel ,0.04840
 ,\in, ~comBusHat ,\in2, ~kbus, \out,~limitHat,\group, ~compGrp),
+
+
+
 Pbind(\instrument,\comp, \dur,Pseq([64/1],1),\thr,0.2 ,\sB, 1.086,\sA, 0.2,\atk ,0.0242, \rel ,0.04840
-,\in, ~comFuzz ,\in2, ~kbus, \out,~limitFuzz, \group, ~compGrp),
+,\in, ~comFuzz ,\in2, ~kbus, \out,~reverbBus, \group, ~compGrp),
+
+
+
+
 	Pbind(\instrument,\comp, \dur,Pseq([64/1],1),\thr,0.8 ,\sB, 1.2,\sA, 0.1,\atk ,0.0968, \rel ,0.04840
-,\in, ~comMelo ,\in2, ~kbus, \out,~limitMelo, \group, ~compGrp),
+,\in, ~comMelo ,\in2, ~kbus, \out,~reverbMelo, \group, ~compGrp),
 Pbind(\instrument,\comp, \dur,Pseq([64/1],1),\thr,0.2 ,\sB, 1.2,\sA, 0.25,\atk ,0.0484, \rel ,0.3872
-,\in, ~comSquelch ,\in2, ~kbus, \out,~limitSquelch, \group, ~compGrp),
+,\in, ~comSquelch ,\in2, ~kbus, \out,~reverbSquelch, \group, ~compGrp),
 Pbind(\instrument,\comp, \dur,Pseq([64/1],1),\thr,0.8 ,\sB, 1.05,\sA, 0.0625,\atk ,0.0242, \rel ,0.04840
 ,\in, ~comMiniRise ,\in2, ~kbus, \out,~limitMiniRise, \group, ~compGrp),
 Pbind(\instrument,\comp, \dur,Pseq([64/1],1),\thr,0.8 ,\sB, 1.05,\sA, 0.0625,\atk ,0.0121, \rel ,0.04840
-,\in, ~comRnd,\in2, ~kbus, \out,~limitRnd, \group, ~compGrp),
+,\in, ~comRnd,\in2, ~kbus, \out,~reverbRnd, \group, ~compGrp),
 
 Pbind(\instrument,\comp, \dur,Pseq([64/1],1),\thr,0.8 ,\sB, 1.05,\sA, 0.0625,\atk ,0.0121, \rel ,0.04840
 ,\in, ~comDelayed,\in2, ~kbus, \out,~delayBus, \group, ~compGrp),
+
+
+	//Ppar([
+
+	//~trans.(~pm)                ~trans.(~pm)+~revTail.()
+
+	Pdef(\revSquelch,Pbind(\instrument,\reverb,\dur,Pseq([16/1],4096),\roomsize, 46, \revtime,Pseq([16/1],4096), \damping, 0.50, \inputbw, 0.8, \drylevel, (-3), \earlylevel, (-5), \taillevel, (-10),\maxRoomsize,52,\wet,0.1,\in,~reverbSquelch , \out,~comSnaGrpBus,\group, ~revGrp)),
+
+
+
+//	~trans.(~tpp)           ~trans.(~tpp)+(~revTails.()/3)
+
+Pdef(\revMelo,Pbind(\instrument,\reverb,\dur,Pseq([16/1],4096),\roomsize, 16, \revtime, Pseq([16/1],4096), \damping, ~damp.(), \inputbw, 0.5, \drylevel, (-3), \earlylevel, (-10), \taillevel, (-10),\maxRoomsize,46,\in,~reverbMelo , \out,~comSnaGrpBus,\group, ~revGrp)),
+
+	// Pbindf(~fuzz,  \dur,Pseq([16/1],1),\decE,Pseq([16/1],1)).play(t)
+
+// ~trans.(~pp)               ~trans.(~pp)+~revTail.()
+
+
+
+	Pdef(\revLFuzz,
+		Pbind(\instrument,\reverb, \dur,Pseq([16/1],4096),\roomsize, 41, \revtime,Pseq([16/1],4096), \damping,0.1, \inputbw, 0.5, \drylevel, -10, \earlylevel, -22, \taillevel, -5,\amp,~amp.(),\spread,~spread.(),\wet,~wet.(),\maxRoomsize,70,\in,~reverbBus,\out,~comSnaGrpBus, \group,~revGrp )),
+
+
+//   ~pp          ~pp+~revTail.()
+
+	Pdef(\revRnd,
+	Pbind(\instrument,\reverb,  \dur,Pseq([16/1],4096),\roomsize, 50, \revtime,Pseq([16/1],4096), \damping, ~damp.(), \inputbw, 0.5, \drylevel, -10, \earlylevel, -22, \taillevel, -5,\amp,0.1,\spread,10,\wet,~wet.(),\maxRoomsize,80,\in,~reverbRnd,\out,~comSnaGrpBus,\group, ~revGrp))
+			,
 
 
 
@@ -160,13 +196,14 @@ Pbind(\instrument, \limiter,\in, ~limitRnd, \dur, Pseq([64/1],1),\gain,3540,\du,
 
 	Pbind(\instrument, \limiter,\in, ~limitDelayed, \dur, Pseq([64/1],1),\du,0.2, \vol,(-15),\gain,1,\group,~limitGrp,\out,~delayToRevBus),
 
-	Pbind(\instrument, \limiter,\in, ~limitNonRec, \dur, Pseq([64/1],1),\du,0.2, \vol,(-39),\gain,1,\group,~limitGrp,\out,~reverbNonRec),
+	Pbind(\instrument, \limiter,\in, ~limitNonRec, \dur, Pseq([64/1],1),\du,0.2, \vol,(-27),\gain,1,\group,~limitGrp,\out,~reverbNonRec),
 
 Pbind(\instrument,\grpComp, \dur,Pseq([64/1],1),\thr,0.4 ,\sB, 1.086,\sA, 0.2,\atk ,0.0242, \rel ,0.7744
 ,\in, ~comSnaGrpBus ,\in2, ~snBus, \group, ~compGrp2),
 
 
 ],1).play(t, quant:1);
+
 
 
 
@@ -198,7 +235,7 @@ Ppar([
 
 ],1);
 
-~bassRest = Pbindf(~bass,\amp,-80);//WHY NOT \REST
+~bassRest = Pbindf(~bass,  \type,\rest);        //\amp,-80);//WHY NOT \REST
 ~spe1 =
 Pseq([
 
@@ -329,17 +366,61 @@ Ppar([
 
 ~starters = [~ens15Perc, ~perc[5],~ens15PercS,Pseq([ ~perc[2], ~kbassRest,Pseq([~bassRest],2),~kbassRest],1)];
 
+
+
+
+
+
+
+
+			~fuzz =	Pbind(\instrument,\lead, \dur,~pseq.(),\decE,~pp,\freq, ~freq.(),\bus, ~busFi.(),\bus2,~bus1,\bus3, 40,\bus4,40,\bus7,50,\bus8, ~bus4,\subsE,0,\which,~fil.(),\whichMod,2,\whichEnv,1,\amp,(-23),\out,~comFuzz,\group, ~micGrp);
+
+
+
+
+
+~squelch = Pbind(\instrument,\lead,		\dur,~pseqm.(),\eFreq,81.41,\which,1,\whichMod,2,\whichEnv,1,/*\wCar,1,*/ \gra,0,\bus2,34,	\decE,~pm,\bus,~bus12,\bus3,24,\bus4,~busFi.(),\bus5,~bus10,\amp,(-25),\factor,~factor.(),\subsE,0,\factor2,1,\vlPE, 1318.51/~factor.(),\dcPE,~revTails.(),\out,~comSquelch);
+
+
+~melo1 = Pbind(\instrument,\lead,\dur, ~tpseq.()  ,\type,Pseq([\note,\rest,\rest,\note],inf),\eFreq,  [329.63 ,326.63 ]
+,\factor2,1,\vlPE, 3.01518518519,\decC,60,\which,2,\whichEnv,1, \gra,0.0012,\bus2,34,	\decE,~tpp
+
+		,\bus,~bus12,\bus3,~bus14,\bus4,~bus13,\amp,(-30)	,\subsE,0,\lvlDec,0  ,\out,~comMelo);
+
+
+~rnd = Pbind(\instrument,\lead, \dur,~pseq.(),\decE,~pp,\freq,661.44.rand.postln,
+	\bus,40 ,\bus2,~bus1,\bus3, 40,\bus4,40,\bus7,50,\bus8, ~bus4,\bus5,~bus9,
+\vlPE,0,\vlPE2,661.44,\dcPE,~pp,\crvEP,2,\factor2,2,
+	\subsE,0,\which,1,\whichMod,2,\whichEnv,1,\amp,(-2), \gra,5.00.rand.postln,\out,~comRnd,\group, ~micGrp);
+
+
+
+
+
+
+
+
+
+
+
+
+~miniRise = Ppar([Pbind(\instrument,\lead, \dur,Pseq([1/1],1),\decE,0,\atkE,Pseq([1/1],1),\freq,661.44.rand.postln,
+
+	\bus,~bus5 ,\bus2,~bus1,\bus3, 40,\bus4,40,\bus7,50,\bus8, ~bus4,//\bus5,~bus10,
+	\subsE,0,\which,0,\whichMod,2,\whichEnv,1,\amp,(-0), \gra,5.00.rand.postln,\out,~effctBus,\group, ~micGrp)
+
+
+],1);
+
+~delayed = Ppar([Pbind(\instrument,\lead,		\dur,Pseq([1/8],32),\type,Pseq([\note, \rest],inf),
+				\eFreq,81.41,\which,0,\whichMod,2,\whichEnv,1,/*\wCar,1,*/ \gra,0,\bus2,34,	\decE,0.0484,\bus,~bus12,\bus3,24,\bus4,~busFi.(),\amp,(-25),\factor,~factor.(),\subsE,0,\out, ~comDelayed),
+
+
+Pbind(\instrument,\pingD,\dur,~trans.(Pseq([1/8],32)),\bufnum, ~delay.bufnum, \feedback, 0.5, \delayTime,0.3,\dec,~trans.(Pseq([1/8],32)),\amp,4,\in, ~delayBus,\out,~limitDelayed,\group,~delayGrp)],1); // can use non rec
+
+
+//~miniRise.play(t)
 )
-
-
-
-
-
-~bass.play(t)
-
-
-
-
 
 
 
