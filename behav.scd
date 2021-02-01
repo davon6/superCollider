@@ -141,13 +141,13 @@ Pbind(\instrument,\comp, \dur,Pseq([64/1],1),\thr,0.8 ,\sB, 1.05,\sA, 0.0625,\at
 
 	//~trans.(~pm)                ~trans.(~pm)+~revTail.()
 
-	Pdef(\revSquelch,Pbind(\instrument,\reverb,\dur,Pseq([16/1],4096),\roomsize, 46, \revtime,Pseq([16/1],4096), \damping, 0.50, \inputbw, 0.8, \drylevel, (-3), \earlylevel, (-5), \taillevel, (-10),\maxRoomsize,52,\wet,0.1,\in,~reverbSquelch , \out,~comSnaGrpBus,\group, ~revGrp)),
+	Pdef(\revSquelch,Pbind(\instrument,\reverb,\dur,Pseq([1024/1],1),\roomsize, 46, \revtime,Pseq([16/1],4096), \damping, 0.50, \inputbw, 0.8, \drylevel, (-3), \earlylevel, (-5), \taillevel, (-10),\maxRoomsize,52,\wet,0.1,\in,~reverbSquelch , \out,~comSnaGrpBus,\group, ~revGrp)),
 
 
 
 //	~trans.(~tpp)           ~trans.(~tpp)+(~revTails.()/3)
 
-Pdef(\revMelo,Pbind(\instrument,\reverb,\dur,Pseq([16/1],4096),\roomsize, 16, \revtime, Pseq([16/1],4096), \damping, ~damp.(), \inputbw, 0.5, \drylevel, (-3), \earlylevel, (-10), \taillevel, (-10),\maxRoomsize,46,\in,~reverbMelo , \out,~comSnaGrpBus,\group, ~revGrp)),
+Pdef(\revMelo,Pbind(\instrument,\reverb,\dur,Pseq([1024/1],1),\roomsize, 16, \revtime, Pseq([16/1],4096), \damping, ~damp.(), \inputbw, 0.5, \drylevel, (-3), \earlylevel, (-10), \taillevel, (-10),\maxRoomsize,46,\in,~reverbMelo , \out,~comSnaGrpBus,\group, ~revGrp)),
 
 	// Pbindf(~fuzz,  \dur,Pseq([16/1],1),\decE,Pseq([16/1],1)).play(t)
 
@@ -156,13 +156,13 @@ Pdef(\revMelo,Pbind(\instrument,\reverb,\dur,Pseq([16/1],4096),\roomsize, 16, \r
 
 
 	Pdef(\revLFuzz,
-		Pbind(\instrument,\reverb, \dur,Pseq([16/1],4096),\roomsize, 41, \revtime,Pseq([16/1],4096), \damping,0.1, \inputbw, 0.5, \drylevel, -10, \earlylevel, -22, \taillevel, -5,\amp,~amp.(),\spread,~spread.(),\wet,~wet.(),\maxRoomsize,70,\in,~reverbBus,\out,~comSnaGrpBus, \group,~revGrp )),
+		Pbind(\instrument,\reverb, \dur,Pseq([1024/1],1),\roomsize, 41, \revtime,Pseq([16/1],4096), \damping,0.1, \inputbw, 0.5, \drylevel, -10, \earlylevel, -22, \taillevel, -5,\amp,~amp.(),\spread,~spread.(),\wet,~wet.(),\maxRoomsize,70,\in,~reverbBus,\out,~comSnaGrpBus, \group,~revGrp )),
 
 
 //   ~pp          ~pp+~revTail.()
 
 	Pdef(\revRnd,
-	Pbind(\instrument,\reverb,  \dur,Pseq([16/1],4096),\roomsize, 50, \revtime,Pseq([16/1],4096), \damping, ~damp.(), \inputbw, 0.5, \drylevel, -10, \earlylevel, -22, \taillevel, -5,\amp,0.1,\spread,10,\wet,~wet.(),\maxRoomsize,80,\in,~reverbRnd,\out,~comSnaGrpBus,\group, ~revGrp))
+	Pbind(\instrument,\reverb,  \dur,Pseq([1024/1],1),\roomsize, 50, \revtime,Pseq([16/1],4096), \damping, ~damp.(), \inputbw, 0.5, \drylevel, -10, \earlylevel, -22, \taillevel, -5,\amp,0.1,\spread,10,\wet,~wet.(),\maxRoomsize,80,\in,~reverbRnd,\out,~comSnaGrpBus,\group, ~revGrp))
 			,
 
 
