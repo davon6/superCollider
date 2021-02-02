@@ -25,7 +25,7 @@ s.options.memSize =
 ~micBus = Bus.audio(s,1);
 ~ptrBus = Bus.audio(s,1);
 ~effctBus =Bus.audio(s,1);
-~effctBus2 =Bus.audio(s,1);
+~effctBus2 =Bus.audio(s,2);
 ~delayBus = Bus.audio(s,1);
 ~delayToRevBus = Bus.audio(s,2);
 
@@ -572,8 +572,11 @@ envF2 =EnvGen.kr(Env(
 
 
 	SynthDef.new(\cymb, {
-	arg carHz=500, modHz=1899.3343179398, modAmp=0, atk=0.01, rel=1, amp=0.2, pan=0,rel2=1,out=0;
+	arg carHz=500, modHz=1899.3343179398, modAmp=0, atk=0.01, rel=1, amp=0.2, pan=0,rel2=1,out=0, latch = 6000;
 	var car, mod, env, car2, mod2,env2,sig;
+
+
+
 	env = EnvGen.kr(Env.perc(atk, rel,1,-1.4), doneAction:2);
 
 	env2 = EnvGen.kr(Env.perc(0.001, rel2, 1, -2), doneAction:2);
@@ -588,9 +591,10 @@ envF2 =EnvGen.kr(Env(
 
 	car2 = WhiteNoise.ar(modAmp) * env2 ;
 
-	sig = HPF.ar(car+car2!2,3000)* [amp.dbamp+0.00555,amp.dbamp];
+	sig =  HPF.ar(car+car2,3000);
 
-	Out.ar(out, sig);
+	Out.ar(out, Latch.ar(sig,Impulse.ar(latch))
+		* [amp.dbamp+0.00555,amp.dbamp]);
 }).add;
 
 
@@ -598,7 +602,7 @@ envF2 =EnvGen.kr(Env(
 
 
 SynthDef.new(\percu2, {
-	arg carHz=500, modHz=100, modAmp=200, atk=0.01, rel=0.3872, amp=0.2, pan=0,rel2= 1.1616,out = 0;
+	arg carHz=500, modHz=100, modAmp=200, atk=0.01, rel=0.3872, amp=0.2, pan=0,rel2= 1.1616,out = 0, latch = 18500;
 	var car, mod, env, car2, mod2, mod3,env2,sig;
 	env = EnvGen.kr(Env.perc(atk, rel), doneAction:2);
 
@@ -611,20 +615,24 @@ SynthDef.new(\percu2, {
 
 car2 = WhiteNoise.ar(0.12875) * env2 ;
 
-	sig = HPF.ar(car+car2,3000)!2* [amp.dbamp,amp.dbamp+0.007];
+	sig = HPF.ar(car+car2,3000);
 
 
-	Out.ar(out, sig );
+			Out.ar(out, Latch.ar(sig,Impulse.ar(latch))
+			* [amp.dbamp,amp.dbamp+0.007]);
+
+
+//	Out.ar(out, sig );
 }).add;
 
 
 SynthDef.new(\snare, {
-	arg carHz=500, modHz=100, modAmp=1, atk=0.01, rel=1, amp=0.2, pan=0,rel2=1,out=0;
-	var car, mod, env, car2, mod2,env2;
+		arg carHz=500, modHz=100, modAmp=1, atk=0.01, rel=1, amp=0.2, pan=0,rel2=2,out=0,latch=12000, da1=2, da2=2, crv1=(-3),crv2 = (-2);
+	var car, mod, env, car2, mod2,env2, sig;
 
-	env = EnvGen.kr(Env.perc(0, rel,curve:-3), doneAction:2);
+	env = EnvGen.kr(Env.perc(0, rel,curve:crv1), doneAction:da1);
 
-	env2 = EnvGen.kr(Env.perc(0, 2, 1, -0 ), doneAction:2);
+	env2 = EnvGen.kr(Env.perc(0, rel2, 1, crv2), doneAction:da2);
 
 
 
@@ -636,19 +644,22 @@ SynthDef.new(\snare, {
 
 	car2 = BrownNoise.ar(0.321875) * env2 ;
 
+sig = HPF.ar( car+car2,500);
 
+		Out.ar(out, Latch.ar(sig,Impulse.ar(latch))!2
+			* amp.dbamp);
 
-	Out.ar(out,HPF.ar( car+car2!2* amp.dbamp ,500));
+	//Out.ar(out,HPF.ar( car+car2!2* amp.dbamp ,500));
 }).add;
 
 "percu init".postln;
 
 SynthDef.new(\hit, {
-	arg carHz=500, modHz=100, modAmp=200, atk=0.01, rel=1, amp=0.2, pan=0,out=0;
+		arg carHz=500, modHz=100, modAmp=200, atk=0.01, rel=1, amp=(-13), pan=0,out=0;
 	var car, mod, env;
 	env = EnvGen.kr(Env.perc(atk, rel), doneAction:2);
 	mod = SinOsc.ar(modHz, mul:modAmp);
-	car = SinOsc.ar(carHz + mod) * env * amp;
+	car = SinOsc.ar(carHz + mod) * env * amp.dbamp;
 	car = HPF.ar(Pan2.ar(car, pan),100);
 	Out.ar(out, car);
 }).add;
@@ -677,17 +688,17 @@ sig = Pan2.ar( sig , pan);//0 was pan
 }).add;
 "side events init".postln;
 
-
-	SynthDef(\effect,{ | in = 0, out= 0,wF= 0 ,freq=50 ,bus, dec1 = 0.3872, wE=0  |
+//Watch out its befor compression
+	SynthDef(\effect,{ | in = 0, out= 0,wF= 0 ,freq=50 ,bus, dec1 = 0.3872, wE=0,lvl1=1,lvl2 =5000, crv1=4, crv2=(-4) |
 		var sig,sig2,env,src;
 
 
 		src = In.ar(in,2);
 
-		sig = LPF.ar( src  ,  EnvGen.kr(Env([1,5000],[dec1,0],4),doneAction:2) );
+		sig = LPF.ar( src  ,  EnvGen.kr(Env([lvl1,lvl2],[dec1,0],crv1),doneAction:2) );
 
 
-		sig2 = HPF.ar( src, EnvGen.kr(Env([1,5000],[dec1,0],-4),doneAction:2) );
+		sig2 = HPF.ar( src, EnvGen.kr(Env([lvl1,lvl2],[dec1,0],crv2),doneAction:2) );
 
 		//SelectX.ar(wF,[ HPF.ar(In.ar(in,1),In.kr(freq, 1))!2, LPF.ar(In.ar(in,1), In.kr(freq, 1)  )!2 ];
 

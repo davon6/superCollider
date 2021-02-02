@@ -1,9 +1,11 @@
 //PSEQ On vlvEnv for adsr
-// PERCUSSION TOO WEAK
 // WRITE MELO OUT OF RANDOM
 //is PAN2 STILL NEEEDED IN LEAD INSTRU
-
+//make sure 1/3 pseq end on round
 //COMPR ONLY NEED 1 CHANNEL
+//try put ALL kb seqs in same array
+//dont forget double Rkick start seq
+//why 2 grps effect
 s.scope
 s.plotTree
 s.meter
@@ -46,11 +48,11 @@ s.meter
 ~kick =	Pbind(\instrument, \kick,\dur, Pseq([1/1],1),\amp,( -10.5),\out,~limitKick);
 
 
-~cymbal = Pbind(\instrument, \cymb,\type, Pseq([\rest,\rest,\note,\note ,\rest,\note ,\note, \rest],inf),\dur,Pseq([1/4],64 ),\rel, 0.3872,\rel2,0.0968,\carHz, 525.12070612224,\modHz,1899.3343179398,\modAmp, 0.12875 ,\amp,(-18),\out, ~comBusCymb);
+~cymbal = Pbind(\instrument, \cymb,\type, Pseq([\rest,\rest,\note,\note ,\rest,\note ,\note, \rest],inf),\dur,Pseq([1/4],64 ),\rel, 0.3872,\rel2,0.0968,\carHz, 525.12070612224,\modHz,1899.3343179398,\modAmp, 0.12875 ,\amp,(-18.5),\rel,0.0968,\rel2,0.0968,\out, ~comBusCymb);
 
-~hat = Pbind(\instrument,\percu2,\dur,Pseq([1/4], 64),\carHz,164.81,\modHz,164.81,\atk, 0,\rel,0.04840,\rel2,0.02420,\amp,( -18),\out,~comBusHat);
+~hat = Pbind(\instrument,\percu2,\dur,Pseq([1/4], 64),\carHz,164.81,\modHz,164.81,\atk, 0,\rel,0.04840,\rel2,0.02420,\amp,( -17),\out,~comBusHat);
 
-~snare = Pbind(\instrument, \snare,\carHz, 41.2 ,\type, Pseq([\rest,\rest ,\note, \rest], 8),\atk, 0.00502929687,\rel, 0.0968,\rel2,0.7744,\dur, Pseq([1/2], inf),\amp,(-15.5),\out,~limitSna);
+~snare = Pbind(\instrument, \snare,\carHz, 41.2 ,\type, Pseq([\rest ,\note], 8),\atk, 0.00502929687,\rel, 0.0968,\rel2, 0.3872,\dur, Pseq([1/1], inf),\amp,(-15.5),\out,~limitSna);
 
 
 
@@ -88,7 +90,18 @@ s.meter
 	Ppar([~bar[6],Pbindf(~cymbal, \dur,Pseq([1/4],64)),
 		Pbindf(~hat, \dur,Pseq([1/4],64)),
 		Pbindf(~snare,\type, Pseq([\rest,\rest ,\note, \rest], 8))
-	],1);
+	],1),
+
+	Ppar([~kick,~bass],16),
+
+	Ppar([~bar[6],~hat,Pbindf(~cymbal,\type,Pseq([\rest,\rest,\note,\rest ,\rest,\rest ,\note, \rest],inf)),~snare],2),
+
+Ppar([~bar[6],~hat,~cymbal,~snare],2),
+
+Ppar([~bar[6],~hat,~cymbal],2),
+Ppar([~bar[6],~hat],2),
+Ppar([~bar[6],~snare],2),
+	Ppar([~bar[6],Pbindf(~snare,\da1,0)],1)
 
 ];
 
@@ -292,7 +305,7 @@ Ppar([
 //~spe1.play(t, quant:1)
 ~specialHits = [~spe1,~spe2,~spe3,~spe4].scramble;
 
-~ending = [ Pseq([~perc[4], Pseq([Pbindf(~kick, \dur,Pseq([1/16],1))],4) ,Pseq([Pbindf(~kick, \dur,Pseq([1/3],1))],3)                               ],1) ,
+~ending = [ Pseq([~perc[4], Pseq([Pbindf(~kick, \dur,Pseq([1/16],1))],4) ,Pseq([Pbindf(~kick, \dur,Pseq([1/3],1))],3)],1) ,
 
 
  Pseq([~perc[4],Pseq([Pseq([Pbindf(~kick, \dur,Pseq([1/3],1))],1) ,Pseq([Pbindf(~kick, \dur,Pseq([1/12],1))],8)],1),~kick],1),
@@ -350,7 +363,7 @@ Ppar([
 	Pseq([~bassRest],16)
 ];
 
-~dbleRverseStart = Pseq([Pseq([~rev],2),~kbassRest,~bassRest,Ppar([Pdef(\d4),Pdef(\e4),Pdef(\sn4),~bar4],1)],1);
+~dbleRverseStart = Pseq([Pseq([~rev],2),~kbassRest,~bassRest,~perc[0],~perc[1]],1);//NOT USED YET !!!!!
 
 ~barwithBre= Pseq([~bar[5], ~kbassRest], 1);
 ~semiBreak =   Pseq([~bar[1],Pseq([~bassRest],8)],1);
@@ -384,11 +397,11 @@ Ppar([
 
 
 ~melo1 = Pbind(\instrument,\lead,\dur, ~tpseq.()  ,\type,Pseq([\note,\rest,\rest,\note],inf),\eFreq,  [329.63 ,326.63 ]
-,\factor2,1,\vlPE, 3.01518518519,\decC,60,\which,2,\whichEnv,1, \gra,0.0012,\bus2,34,	\decE,~tpp
+,\factor2,1,\vlPE, 2.575,\decC,60,\which,2,\whichEnv,1, \gra,0.0012,\bus2,34,	\decE,~tpp
 
 		,\bus,~bus12,\bus3,~bus14,\bus4,~bus13,\amp,(-30)	,\subsE,0,\lvlDec,0  ,\out,~comMelo);
 
-
+// \vlPE, 3.01518518519
 ~rnd = Pbind(\instrument,\lead, \dur,~pseq.(),\decE,~pp,\freq,661.44.rand.postln,
 	\bus,40 ,\bus2,~bus1,\bus3, 40,\bus4,40,\bus7,50,\bus8, ~bus4,\bus5,~bus9,
 \vlPE,0,\vlPE2,661.44,\dcPE,~pp,\crvEP,2,\factor2,2,
@@ -420,7 +433,29 @@ Ppar([
 Pbind(\instrument,\pingD,\dur,~trans.(Pseq([1/8],32)),\bufnum, ~delay.bufnum, \feedback, 0.5, \delayTime,0.3,\dec,~trans.(Pseq([1/8],32)),\amp,4,\in, ~delayBus,\out,~limitDelayed,\group,~delayGrp)],1); // can use non rec
 
 
-//~miniRise.play(t)
+~hit =   Pbind(
+	\instrument, \hit,
+	\type, Pseq([\note,\rest ,\rest, \rest,\rest,\rest ,\rest, \rest], 4),
+		\dur, Pseq([2/1], inf),
+		\carHz, exprand(20,10000).postln,
+	\modHz, exprand(20,10000).postln,
+	\modAmp, rrand(0, 10000).postln,
+		\amp, (-22),//exprand(0.1, 0.5),
+	\atk, exprand(0.001, 0.05),
+	\rel,exprand(0.05, 1.2),
+	\pan,rand(-1.0, 1.0),
+);
+
+
+~h1 = Pbindf(~hit,\type,Pseq([\note,\rest ,\rest, \rest,\rest,\rest ,\rest, \rest], 64),\dur, Pseq([1/1], inf),\carHz, exprand(20,10000).postln,\modHz, exprand(20,10000).postln,\modAmp, rrand(0, 10000).postln,\amp, (-22),\atk, exprand(0.001, 0.05),\rel,exprand(0.05, 1.2),\pan,rand(-1.0, 1.0),\out,~limitNonRec);
+~h2 = Pbindf(~hit,\type, Pseq([\rest,\note ,\rest, \rest,\rest,\rest ,\rest, \rest], 64),\dur, Pseq([1/1], inf),\carHz, exprand(20,10000).postln,\modHz, exprand(20,10000).postln,\modAmp, rrand(0, 10000).postln,\amp, (-22),\atk, exprand(0.001, 0.05),\rel,exprand(0.05, 1.2),\pan,rand(-1.0, 1.0),\out,~limitNonRec);
+~h3 = Pbindf(~hit,\type, Pseq([\rest,\rest ,\note, \rest,\rest,\rest ,\rest, \rest], 64),\dur, Pseq([1/1], inf),\carHz, exprand(20,10000).postln,\modHz, exprand(20,10000).postln,\modAmp, rrand(0, 10000).postln,\amp, (-22),\atk, exprand(0.001, 0.05),\rel,exprand(0.05, 1.2),\pan,rand(-1.0, 1.0),\out,~limitNonRec);
+~h4 = Pbindf(~hit,\type, Pseq([\rest,\rest ,\rest, \note,\rest,\rest ,\rest, \rest], 64),\dur, Pseq([1/1], inf),\carHz, exprand(20,10000).postln,\modHz, exprand(20,10000).postln,\modAmp, rrand(0, 10000).postln,\amp, (-22),\atk, exprand(0.001, 0.05),\rel,exprand(0.05, 1.2),\pan,rand(-1.0, 1.0),\out,~limitNonRec);
+~h5 = Pbindf(~hit,\type, Pseq([\rest,\rest ,\rest, \rest,\note,\rest ,\rest, \rest], 64),\dur, Pseq([1/1], inf),\carHz, exprand(20,10000).postln,\modHz, exprand(20,10000).postln,\modAmp, rrand(0, 10000).postln,\amp, (-22),\atk, exprand(0.001, 0.05),\rel,exprand(0.05, 1.2),\pan,rand(-1.0, 1.0),\out,~limitNonRec);
+~h6 = Pbindf(~hit,\type, Pseq([\rest,\rest ,\rest, \rest,\rest,\note ,\rest, \rest], 64),\dur, Pseq([1/1], inf),\carHz, exprand(20,10000).postln,\modHz, exprand(20,10000).postln,\modAmp, rrand(0, 10000).postln,\amp, (-22),\atk, exprand(0.001, 0.05),\rel,exprand(0.05, 1.2),\pan,rand(-1.0, 1.0),\out,~limitNonRec);
+~h7 = Pbindf(~hit,\type, Pseq([\rest,\rest ,\rest, \rest,\rest,\rest ,\note, \rest], 64),\dur, Pseq([1/1], inf),\carHz, exprand(20,10000).postln,\modHz, exprand(20,10000).postln,\modAmp, rrand(0, 10000).postln,\amp, (-22),\atk, exprand(0.001, 0.05),\rel,exprand(0.05, 1.2),\pan,rand(-1.0, 1.0),\out,~limitNonRec);
+~h8 = Pbindf(~hit,\type, Pseq([\rest,\rest ,\rest, \rest,\rest,\rest ,\rest, \note], 64),\dur, Pseq([1/1], inf),\carHz, exprand(20,10000).postln,\modHz, exprand(20,10000).postln,\modAmp, rrand(0, 10000).postln,\amp, (-22),\atk, exprand(0.001, 0.05),\rel,exprand(0.05, 1.2),\pan,rand(-1.0, 1.0),\out,~limitNonRec);
+
 )
 
 
@@ -502,20 +537,28 @@ Pdef(\wNoise,
 
 
 
-Pdef(\hit,
-  Pbind(
-	\instrument, \hit,
-	\type, Pseq([\note,\rest ,\rest, \rest,\rest,\rest ,\rest, \rest], 2),
-		\dur, Pseq([2/1], inf),
-		\carHz, exprand(20,10000).postln,
-	\modHz, exprand(20,10000).postln,
-	\modAmp, rrand(0, 10000).postln,
-	\amp, 0.006,//exprand(0.1, 0.5),
-	\atk, exprand(0.001, 0.05),
-	\rel,exprand(0.05, 1.2),
-	\pan,rand(-1.0, 1.0),
-	)
-);
+
+
+
+
+
+(
+Ppar([
+	Pseq([~bar[6] ,Ppar([~bar[6] ,Pbindf(~cymbal, \dur,Pseq([1/4],64),\out, ~effctBus2),
+		Pbindf(~hat, \dur,Pseq([1/4],64),\out, ~effctBus2),
+		Pbindf(~snare,\type, Pseq([\rest,\rest ,\note, \rest], 8),\out, ~effctBus2),
+
+		Pbind(\instrument, \effect,\dur,Pseq([16/1],1),\wE,1,\dec1,Pseq([16/1],1),\lvl1,7000,\lvl2,10,\crv2,(-8),\in,~effctBus2,\out,~limitNonRec,\group,~effctGrp)],1 )         ],1),~h1,~h2,~h3,~h4,~h5,~h6,~h7,~h8,
+
+
+
+
+
+],1).play(t))
+
+
+
+
 Pdef(\hit2,
   Pbind(
 	\instrument, \hit,

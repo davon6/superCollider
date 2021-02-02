@@ -49,8 +49,8 @@
 ~fil =  {~ff =~wFils[2.rand];~ff;};
 ~pseq = {~pp =~pseqs[14.rand];~pp;};//9
 ~wet = { ~we =~wetsR[2.rand]; ~we;};
-~inst = {~ins =~insts[4.rand];~ins;};
-
+//~inst = {~ins =~insts[4.rand];~ins;};
+~inst ={~ins =~insts[1.exprand(4,0).round(1) -1];~ins;};
 
 ~transRev = {|input|
 	var compared,list,list2,count;
@@ -60,7 +60,7 @@
 
 	list2 = [\revLFuzz,\revMelo,\revSquelch,\revRnd];
 	compared = list[count];
-
+≥
 	while({input.asCompileString.compare(compared.asCompileString)!=0},{count=count+1;compared = list[count];});
 
 	list2[count];   };
@@ -127,7 +127,7 @@ o = {
 
 	Out.kr(~bus11, LFNoise0.kr(5.15).range(2.575,2637.02));
 	Out.kr(~bus12, SinOsc.ar(0.64375).range(2637.02,0.0201171875));
-	Out.kr(~bus13, SinOsc.ar(0.42916666666).range(20.6,41.20));
+	Out.kr(~bus13, SinOsc.ar(0.64375).range(20.6,41.20));   //   0.42916666666
 
 	Out.kr(~bus14, MouseY.kr(0,70));
 
@@ -135,6 +135,16 @@ o = {
 
 }.play();
 
+Pseq([~starters[4.rand],        Pseq([~perc[3],  Pseq([~ending[~boo[~ind]]],4).play(t,quant:1)
+
+
+],1).play(t,quant:1)
+
+],1).play(t,quant:1)
+
+
+
+)
 
 //  Ppar([      Pseq([Pbindf(~inst.(), \dur,Pseq([1/4],16),\decE,Pseq([1/4],16))],1),     ],inf).play(t)
 
@@ -142,6 +152,62 @@ o = {
 //s.scope
 //s.plotTree
 Ppar([
+
+
+/*
+
+	Pseq([
+
+
+		~starters[4.rand],        Pseq([~perc[3],  ~ending[~boo[~ind]]],1) ,
+		~starters[4.rand],         Pseq([~perc[3],  ~ending[~boo[~ind+1]]],1) ,
+
+	 ~starters[4.rand],     Pseq([~perc[3],  ~ending[~boo[~ind+2]]],1),
+		~starters[4.rand],      Pseq([~perc[3],  ~ending[~boo[~ind+3]]],1),
+
+	~starters[4.rand],           Pseq([~perc[3],  ~ending[~boo[~ind+4]]],1),
+		~starters[4.rand],              Pseq([~perc[3],  ~ending[~boo[~ind+5]]]),
+
+
+		Pseq([~kbassRest,Pseq([~bassRest],47),  	Ppar([
+
+		Pdef(\wNoise,Pbind(\instrument, \wNoise,\dur, Pseq([1/1], 1),\amp,0.1,\out, ~reverbBus2,))   ,
+	Pbind(\instrument,\reverb,\dur , Pseq([1/1], 1), \revtime, 3.0976, \in, ~reverbBus2,\group,~revGrp2,\out,~limitNonRec,
+
+
+		\roomsize, 40,  \damping, 0.09, \inputbw, 0.75, \drylevel, -0, \earlylevel, -22, \taillevel, -4,\maxRoomsize,40,\wet,0.8
+)
+],1)],1),
+
+
+
+	~starters[4.rand],      Pseq([~perc[3],  ~ending[~boo[~ind+6]]],1),
+		~starters[4.rand],        Pseq([~perc[3],  ~ending[~boo[~ind+7]]],1),
+	~starters[4.rand],         Pseq([~perc[3],  ~ending[~boo[~ind+8]]],1),
+		~starters[4.rand],         Pseq([~perc[3],  ~ending[~boo[~ind+9]]]),
+		 ~starters[4.rand],      Pseq([~perc[3],  ~ending[~boo[~ind+10]]],1),
+		  ~starters[4.rand],      Pseq([~perc[3],  ~ending[~boo[~ind+11]]],1),
+
+
+
+		~specialHits[4.rand],~specialHits[4.rand],~specialHits[4.rand],~specialHits[4.rand]
+
+
+
+
+
+],1)   ,   //.play(t);
+
+
+
+
+
+*/
+
+
+
+
+
 
 Pbindef(\revLFuzz, \revtime,Pseq([1/4],inf)+~revTail.()),
 	Pbindef(\revMelo, \revtime,Pseq([1/4],inf)+~revTail.()),
@@ -787,7 +853,7 @@ Ppar([
 
 
 		\roomsize, 40,  \damping, 0.09, \inputbw, 0.75, \drylevel, -0, \earlylevel, -22, \taillevel, -4,\maxRoomsize,40,\wet,0.8
-		)],1) ,~specialHits[3]     ],1),~specialHits[0]  ],1),~arrSpecialKB[~boo[~ind]], Pseq([~perc[5]],2) ,~arrSpecialKB[~boo[~ind+1]],~arrSpecialKB[~boo[~ind+2]], Pseq([~perc[5]],2) ,~arrSpecialKB[~boo[~ind+3]],~arrSpecialKB[~boo[~ind+4]], Pseq([~perc[5]],2) ,~arrSpecialKB[~boo[~ind+5]],~arrSpecialKB[~boo[~ind+6]], Pseq([~perc[5]],2) ,~arrSpecialKB[~boo[~ind+7]],~arrSpecialKB[~boo[~ind+8]], Pseq([~perc[5]],2) ,~arrSpecialKB[~boo[~ind+9]],~arrSpecialKB[~boo[~ind+10]], Pseq([~perc[5]],2) ,~arrSpecialKB[~boo[~ind+11]]
+		)],1) ,~specialHits[3]     ],1),~specialHits[0]  ],1),~arrSpecialKB[~boo[~ind]], Pseq([~perc[5.rrand(12,1)]],2) ,~arrSpecialKB[~boo[~ind+1]],~arrSpecialKB[~boo[~ind+2]], Pseq([~perc[5.rrand(12,1)]],2) ,~arrSpecialKB[~boo[~ind+3]],~arrSpecialKB[~boo[~ind+4]], Pseq([~perc[5]],2) ,~arrSpecialKB[~boo[~ind+5]],~arrSpecialKB[~boo[~ind+6]], Pseq([~perc[5.rrand(12,1)]],2) ,~arrSpecialKB[~boo[~ind+7]],~arrSpecialKB[~boo[~ind+8]], Pseq([~perc[5.rrand(12,1)],~perc[5.rrand(12,1)]],1) ,~arrSpecialKB[~boo[~ind+9]],~arrSpecialKB[~boo[~ind+10]], Pseq([~perc[5]],2) ,~arrSpecialKB[~boo[~ind+11]]
 
 
 	, Pseq([~perc[5]],3),~half16],1),
