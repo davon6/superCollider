@@ -19,11 +19,13 @@ s.options.memSize =
 ~reverbMiniRise = Bus.audio(s,2);
 ~reverbRnd = Bus.audio(s,2);
 ~reverbNonRec = Bus.audio(s,2);
-
+~reverbNonRec2 = Bus.audio(s,2);
 
 
 ~micBus = Bus.audio(s,1);
 ~ptrBus = Bus.audio(s,1);
+~micBus2 = Bus.audio(s,1);
+~ptrBus2 = Bus.audio(s,1);
 ~effctBus =Bus.audio(s,1);
 ~effctBus2 =Bus.audio(s,2);
 ~delayBus = Bus.audio(s,1);
@@ -76,7 +78,7 @@ s.options.memSize =
 ~limitHat = Bus.audio(s,2);
 ~limitSna = Bus.audio(s,2);
 ~limitNonRec = Bus.audio(s,2);
-
+~limitNonRec2 = Bus.audio(s,2);
 
 ~limitFuzz = Bus.audio(s,2);
 
@@ -207,6 +209,7 @@ s.sync;
 
 	e = Buffer.alloc(s, s.sampleRate *0.3872,1);
 
+	d = Buffer.alloc(s, s.sampleRate *1.5488,1);
 
 
 
@@ -395,10 +398,10 @@ SynthDef.new(\rec, {
 
 
 SynthDef.new(\gran, {
-	arg amp=0.5, buf =0, out=0, atk=1, rel=1, gate=1, sync=1, dens=40, baseDur=0.05, durRand=1, rate=1, rateRand=1, pan =0, panRand=0, grainEnv=(-1), ptrBus =0, ptrSampleDelay=20000, ptrRandSamples= 5000, minPtrDelay=1000,pitchRte=1,duration=8,impulse = 1.2875,pos=0,roomsize, revtime, damping, inputbw, spread = 15, drylevel, earlylevel,
+	arg amp=1, buf =0, out=0, atk=1, rel=1, gate=1, sync=1, dens=40, baseDur=0.05, durRand=1, rate=1, rateRand=1, pan =0, panRand=0, grainEnv=(-1), ptrBus =0, ptrSampleDelay=20000, ptrRandSamples= 5000, minPtrDelay=1000,pitchRte=1,duration=8,impulse = 1.2875,pos=0,roomsize, revtime, damping, inputbw, spread = 15, drylevel, earlylevel,
     taillevel,maxRoomsize,wet=0.4;
 
-	var sig, env, densCtrl, durCtrl, rateCtrl, panCtrl, ptr, ptrRand, totalDelay, maxGrainDur,a;
+	var sig, env, densCtrl, durCtrl, rateCtrl, panCtrl, ptr, ptrRand, totalDelay, maxGrainDur;
 
 	//env = EnvGen.kr(Env.asr(atk,1,rel), gate, doneAction:2);
 

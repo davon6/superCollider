@@ -6,6 +6,7 @@
 //try put ALL kb seqs in same array
 //dont forget double Rkick start seq
 //why 2 grps effect
+
 s.scope
 s.plotTree
 s.meter
@@ -103,6 +104,7 @@ Ppar([~bar[6],~hat],2),
 Ppar([~bar[6],~snare],2),
 	Ppar([~bar[6],Pbindf(~snare,\da1,0)],1)
 
+
 ];
 
 
@@ -122,6 +124,10 @@ Ppar([
 
 	Pbind(\instrument,\ptr, \buf, e, \out, ~ptrBus,\group,~ptrGrp,\dur,Pseq([64/1],1)),
 Pbind(\instrument,\rec, \ptrIn, ~ptrBus, \micIn, ~micBus, \buf, e,\group,~recGrp,\dur,Pseq([64/1],1)),
+
+
+	Pbind(\instrument,\ptr, \buf, d, \out, ~ptrBus2,\group,~ptrGrp,\dur,Pseq([64/1],1)),
+Pbind(\instrument,\rec, \ptrIn, ~ptrBus2, \micIn, ~micBus2, \buf, d,\group,~recGrp,\dur,Pseq([64/1],1)),
 
 
 
@@ -188,7 +194,7 @@ Pbind(\instrument, \limiter,\in, ~limitCymb,\dur,Pseq([64/1],1),\du,0.2, \vol,(-
 Pbind(\instrument, \limiter,\in, ~limitHat,\dur,Pseq([64/1],1),\du,0.2, \vol,(-18),\group,~limitGrp),
 Pbind(\instrument, \limiter,\in, ~limitSna, \dur, Pseq([64/1],1),\du,0.2, \vol,(-16.5),\group,~limitGrp),
 
-Pbind(\instrument, \limiter,\in, ~limitNonRec, \dur, Pseq([64/1],1),\du,0.2, \vol,(-25),\group,~limitGrp),
+Pbind(\instrument, \limiter,\in, ~limitNonRec2, \dur, Pseq([64/1],1),\du,0.2, \vol,(-25),\group,~limitGrp),
 
 Pbind(\instrument, \limiter,\in, ~limitFuzz, \dur, Pseq([64/1],1),\du,0.2, \vol,(-25),\gain,10,\group,~limitGrp,\out,~reverbBus),
 Pbind(\instrument, \limiter,\in, ~limitMelo, \dur, Pseq([64/1],1),\du,0.2, \vol,(-25),\group,~limitGrp,\out,~reverbMelo,\gain,-2),
@@ -210,7 +216,7 @@ Pbind(\instrument, \limiter,\in, ~limitRnd, \dur, Pseq([64/1],1),\gain,3540,\du,
 
 	Pbind(\instrument, \limiter,\in, ~limitDelayed, \dur, Pseq([64/1],1),\du,0.2, \vol,(-15),\gain,1,\group,~limitGrp,\out,~delayToRevBus),
 
-	Pbind(\instrument, \limiter,\in, ~limitNonRec, \dur, Pseq([64/1],1),\du,0.2, \vol,(-27),\gain,1,\group,~limitGrp,\out,~reverbNonRec),
+	Pbind(\instrument, \limiter,\in, ~limitNonRec, \dur, Pseq([64/1],1),\du,0.2, \vol,(-27),\gain,1,\group,~limitGrp,\out,0),//~reverbNonRec
 
 Pbind(\instrument,\grpComp, \dur,Pseq([64/1],1),\thr,0.4 ,\sB, 1.086,\sA, 0.2,\atk ,0.0242, \rel ,0.7744
 ,\in, ~comSnaGrpBus ,\in2, ~snBus, \group, ~compGrp2),
@@ -268,7 +274,7 @@ Pseq([
 
 ~spe2 =
 
-Ppar([Pseq([  Pseq([ Pbindf(~kick,\dur, Pseq([1/4],1),\out,~effctBus2)],4),Pseq([Pbindf(~kick,\dur, Pseq([1/16],1),\out,~effctBus2)],16), Pseq([Pbindf(~kick,\dur, Pseq([1/3],1),\out,~effctBus2)],3),Pseq([Pbindf(~kick,\dur, Pseq([1/1],1),\out,~effctBus2)],4), Pseq([Pbindf(~kick,\dur, Pseq([1/4],1),\out,~effctBus2)],2) ,Pseq([Pbindf(~kick,\dur, Pseq([1/16],1),\out,~effctBus2)],4)                ],1) ,Pbind(\instrument, \effect,\wE,1,\dur, Pseq([16/1],1), \in,~effctBus2,\out,~limitKick,\group,~effctGrp2,\dec1,6 ),
+Ppar([Pseq([  Pseq([ Pbindf(~kick,\dur, Pseq([1/4],1),\out,~effctBus2)],4),Pseq([Pbindf(~kick,\dur, Pseq([1/16],1),\out,~effctBus2)],16), Pseq([Pbindf(~kick,\dur, Pseq([1/3],1),\out,~effctBus2)],3),Pseq([Pbindf(~kick,\dur, Pseq([1/1],1),\out,~effctBus2)],4), Pseq([Pbindf(~kick,\dur, Pseq([1/4],1),\out,~effctBus2)],2) ,Pseq([Pbindf(~kick,\dur, Pseq([1/16],1),\out,~effctBus2)],4)],1) ,Pbind(\instrument, \effect,\wE,1,\dur, Pseq([16/1],1), \in,~effctBus2,\out,~limitKick,\group,~effctGrp2,\dec1,6 ),
 ],1);
 
 ~spe3 =   Ppar([
@@ -405,7 +411,7 @@ Ppar([
 ~rnd = Pbind(\instrument,\lead, \dur,~pseq.(),\decE,~pp,\freq,661.44.rand.postln,
 	\bus,40 ,\bus2,~bus1,\bus3, 40,\bus4,40,\bus7,50,\bus8, ~bus4,\bus5,~bus9,
 \vlPE,0,\vlPE2,661.44,\dcPE,~pp,\crvEP,2,\factor2,2,
-	\subsE,0,\which,1,\whichMod,2,\whichEnv,1,\amp,(-2), \gra,5.00.rand.postln,\out,~comRnd,\group, ~micGrp);
+	\subsE,0,\which,1,\whichMod,2,\whichEnv,1,\amp,(-2), \gra,5.00.rand.postln,\out,~comRnd);
 
 
 
@@ -536,14 +542,46 @@ Pdef(\wNoise,
 
 
 
+(
+Ppar([
+//HERE
+	Pbind(\instrument, \wNoise,\dur, Pseq([1/1], 1),\amp,0.1,\out, ~micBus2,\group, ~micGrp),
 
+	Pbind(\instrument,\gran,\dur,Pseq([1/1],1),\amp, 1,\buf, d,\out,~limitKick,\atk, 0,\rel, Pseq([1/1],1),\ptrBus, ~ptrBus2,\pitchRte,(-1),\ptrRandSamples, 0,\minPtrDelay, 1000,\group,~granGrp,\duration,Pseq([1/1],1),\impulse,Pseq([1/1],1))//0.321875)
 
+],1).play(t, quant:1))
 
 
 
 
 (
 Ppar([
+
+Pseq([
+
+		Ppar([
+			Pdef(\wNoise,Pbind(\instrument, \wNoise,\dur, Pseq([1/1], 1),\amp,(-23),\out, ~reverbBus2,))
+	,
+	Pbind(\instrument,\reverb,\dur , Pseq([4/1], 1), \revtime, Pseq([4/1],1), \in, ~reverbBus2,\group,~revGrp2,\out,~limitNonRec2,
+
+
+		\roomsize, 40,  \damping, 0.09, \inputbw, 0.75, \drylevel, -0, \earlylevel, -22, \taillevel, -4,\maxRoomsize,60,\wet,0.8,\amp,0.8
+)],1),
+		Pseq([~bassRest],26),
+		Ppar([
+//HERE
+	Pbind(\instrument, \wNoise,\dur, Pseq([1/1], 1),\amp,0.1,\out, ~micBus2,\group, ~micGrp),
+
+	Pbind(\instrument,\gran,\dur,Pseq([1/1],1),\amp, 1,\buf, d,\out,~limitKick,\atk, 0,\rel, Pseq([1/1],1),\ptrBus, ~ptrBus2,\pitchRte,(-1),\ptrRandSamples, 0,\minPtrDelay, 1000,\group,~granGrp,\duration,Pseq([1/1],1),\impulse,Pseq([1/1],1))//0.321875)
+
+],1)
+
+
+
+	],1),
+
+
+
 	Pseq([~bar[6] ,Ppar([~bar[6] ,Pbindf(~cymbal, \dur,Pseq([1/4],64),\out, ~effctBus2),
 		Pbindf(~hat, \dur,Pseq([1/4],64),\out, ~effctBus2),
 		Pbindf(~snare,\type, Pseq([\rest,\rest ,\note, \rest], 8),\out, ~effctBus2),
@@ -554,10 +592,13 @@ Ppar([
 
 
 
-],1).play(t))
+],1).play(t,quant:1))
 
 
+Pdef(\revMelo,Pbind(\instrument,\reverb,\dur,Pseq([1024/1],1),\roomsize, 16, \revtime, Pseq([16/1],4096), \damping, ~damp.(), \inputbw, 0.5, \drylevel, (-3), \earlylevel, (-10), \taillevel, (-10),\maxRoomsize,46,\in,~reverbMelo , \out,~comSnaGrpBus,\group, ~revGrp)),
 
+
+//s.plotTree
 
 Pdef(\hit2,
   Pbind(
