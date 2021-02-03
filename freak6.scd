@@ -147,7 +147,7 @@ s.options.numAudioBusChannels;
 s.options.numOutputBusChannels;
 s.options.numInputBusChannels;
 s.meter
-(
+(`
 s.waitForBoot({
 
 

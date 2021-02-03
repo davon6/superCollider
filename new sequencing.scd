@@ -7,13 +7,13 @@
 		\roomsize, 40,  \damping, 0.09, \inputbw, 0.75, \drylevel, -0, \earlylevel, -22, \taillevel, -4,\maxRoomsize,40,\wet,0.8
 	)],1),~specialHits[3]     ,~specialHits[0] ,
 
-~perc[13.rrand(34,1)],~perc[13.rrand(34,1)],
-	~perc[13.rrand(34,1)],~perc[13.rrand(34,1)],
+~perc[7.rrand(28,1)],~perc[7.rrand(28,1)],
+	~perc[7.rrand(28,1)],~perc[7.rrand(28,1)],
 
-	~perc[13.rrand(34,1)],~perc[13.rrand(34,1)],
-	~perc[13.rrand(34,1)],~perc[13.rrand(34,1)],
-	~perc[13.rrand(34,1)],~perc[13.rrand(34,1)],
-	~perc[13.rrand(34,1)],~perc[13.rrand(34,1)],
+	~perc[7.rrand(28,1)],~perc[7.rrand(28,1)],
+	~perc[7.rrand(28,1)],~perc[7.rrand(28,1)],
+	~perc[7.rrand(28,1)],~perc[7.rrand(28,1)],
+	~perc[7.rrand(28,1)],~perc[7.rrand(28,1)],
 
 
 

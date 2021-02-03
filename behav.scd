@@ -156,7 +156,12 @@ Ppar([
 	Ppar([~bar[6],Pbindf(~cymbal, \dur,Pseq([1/4],64)),
 		Pbindf(~hat, \dur,Pseq([1/4],64)),
 		Pbindf(~snare,\type, Pseq([\rest,\rest ,\note, \rest], 8))
-	],1),
+],1)];
+
+~toUse = [
+
+
+	~perc[5],
 
 	Ppar([~kick,~bass],16),
 
@@ -252,17 +257,17 @@ Ppar([
 	Pseq([~bar[1],Pseq([~bassRest],8)],1),
 
 //~ens2 =
-	Pseq([~perc[5],~bassRest],1),
+	Pseq([~perc[4],~bassRest],1),
 
 //~ens15Perc =
-	Pseq([~perc[5],~kbassRest],1),
+	Pseq([~perc[4],~kbassRest],1),
 
 //	~ens15PercR =
-	Pseq([ Pseq([~perc[5]],1),~rev],1),
+	Pseq([ Pseq([~perc[4]],1),~rev],1),
 
 //~ens15PercS =
 
-	Pseq([~kbassRest,~perc[5]],1),
+	Pseq([~kbassRest,~perc[4]],1),
 
 //~fitDbleick =
 
@@ -364,11 +369,11 @@ Pdef(\revMelo,Pbind(\instrument,\reverb,\dur,Pseq([1024/1],1),\roomsize, 16, \re
 
 
 	Pdef(\revLFuzz,
-		Pbind(\instrument,\reverb, \dur,Pseq([1024/1],1),\roomsize, 41, \revtime,Pseq([16/1],4096), \damping,0.1, \inputbw, 0.5, \drylevel, -10, \earlylevel, -22, \taillevel, -5,\amp,~amp.().postln,\spread,~spread.(),\wet,~wet.().postln,\maxRoomsize,70,\in,~reverbBus,\out,~limitFuzz, \group,~revGrp )),
+		Pbind(\instrument,\reverb, \dur,Pseq([1024/1],1),\roomsize, 41, \revtime,~revTail.(), \damping,0.1, \inputbw, 0.5, \drylevel, -10, \earlylevel, -22, \taillevel, -5,\amp,1,\spread,~spread.(),\wet,~wet.().postln,\maxRoomsize,70,\in,~reverbBus,\out,~limitFuzz, \group,~revGrp )),
 
 
 	Pdef(\revHFuzz,
-		Pbind(\instrument,\reverb, \dur,Pseq([1024/1],1),\roomsize, 41, \revtime,Pseq([16/1],4096), \damping,0.1, \inputbw, 0.5, \drylevel, -10, \earlylevel, -22, \taillevel, -5,\amp,~amp.(),\spread,~spread.(),\wet,~wet.(),\maxRoomsize,70,\in,~reverbBus2,\out,~limitFuzz2, \group,~revGrp )),
+		Pbind(\instrument,\reverb, \dur,Pseq([1024/1],1),\roomsize, 41, \revtime,~revTail.(), \damping,0.1, \inputbw, 0.5, \drylevel, -10, \earlylevel, -22, \taillevel, -5,\amp,1,\spread,~spread.(),\wet,~wet.(),\maxRoomsize,70,\in,~reverbBus2,\out,~limitFuzz2, \group,~revGrp )),
 
 
 //   ~pp          ~pp+~revTail.()
@@ -452,7 +457,7 @@ Ppar([
 
 
 //  \dur ~pseq.()    \decE,~pp, \bus 8 useless      [~bus4,~bus4,~bus4,~bus4,~bus5,~bus5,~bus5,~bus5,~bus7,~bus8];     ~busFi.()    ~fil.()
-~fuzz =	Pbind(\instrument,\lead, \dur,Pseq([4/1],1),\decE,Pseq([4/1],1),\freq, ~freq.(),\bus, ~busFi.(),\bus2,~bus1,\bus3, 40,\bus4,40,\bus7,50,\bus8, ~bus4,\subsE,0,\which,~fil.().postln ,\whichMod,2,\whichEnv,1,\amp,(-20),\out,~rteFil.(~ff),\group, ~micGrp);
+~fuzz =	Pbind(\instrument,\lead, \dur,Pseq([4/1],1),\decE,Pseq([4/1],1),\freq, ~freq.(),\bus, ~busFi.(),\bus2,~bus1,\bus3, 40,\bus4,40,\bus7,50,\bus8, ~bus4,\subsE,0,\which,~fil.() ,\whichMod,2,\whichEnv,1,\amp,(-20),\out,~rteFil.(~ff),\group, ~micGrp);
  //~fuzz.play(t)
 
 //s.meter

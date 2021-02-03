@@ -16,17 +16,20 @@
 ~pseqs=  [Pseq([1/3],3),  Pseq([1/12],36) ,  Pseq([1/12],12),Pseq([1/12],72), Pseq([1 /4],1),Pseq([1 /4],4),Pseq([1 /4],16),Pseq([1 /4],16),Pseq([1 /4],16),Pseq([1 /4],16),Pseq([1 /1],1),Pseq([1 /1],4),Pseq([4 /1],1)];
 
 
+~pseqs=  [Pseq([3/3],3),  Pseq([1 /4],1),Pseq([1 /4],4),Pseq([1 /4],16),Pseq([1 /4],16),Pseq([1 /4],16),Pseq([1 /4],16),Pseq([1 /1],1),Pseq([1 /1],4),Pseq([4 /1],1)];
+
+
 //~pseqs =    [Pseq([1 /4],4),Pseq([1 /4],16),Pseq([1 /1],1),Pseq([1 /1],4),Pseq([1 /1],16)];
 ~dure = [1,1,1,1,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,16];
 ~busFis = [~bus4,~bus4,~bus4,~bus4,~bus5,~bus5,~bus5,~bus5,~bus7,~bus8];
 ~wFils = [0,2];
-~revTails = [0.1936,0.3872, 0.7744,0, 0];//Pseq([1/1],1),Pseq([1/4],1)
+~revTails =[Pseq([1/4],4096),  Pseq([1/1],4096)];// [0.1936,0.3872, 0.7744,0, 0];//Pseq([1/1],1),Pseq([1/4],1)
 ~factors = [500,5000,5,1,1,1,1,10];
 ~psqRises = [Pseq([1 /1],1),Pseq([4 /1],1),Pseq([1 /4],1),Pseq([1 /16],1)];
 ~damps = [0.22,0.8,0.4 ];//0.022
-~wetsR = [0.2,0.1];
+~wetsR = [0.05,0.1];
 ~amps = [0.1,0.01,0.2,0.001];
-~spreads = [10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,40];
+~spreads = [1,1,1,1,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,40];
 
 ~freqs = [657.9895,657.9895];//, 698.46.rand ];
 
@@ -35,20 +38,20 @@
 ~pp;~ff;~dd;~bf;~rt;~frq;~fct;~ps;~dps;~we;~tpp;~pm;~am;~ins;~sp;~bsFu;
 
 
-~spread = {~sp = ~spreads[2.rand];~sp;};
-~amp = {~am  = ~amps[4.rand];~am;};
-~pseqm= {~pm=~pseqsm[2.rand]; ~pm;};
-~tpseq = {~tpp = ~thrpseqs[3.rand]; ~tpp;};
-~damp = {~dps = ~damps[3.rand];~dps;};
-~psqRise = {~ps = ~psqRises[4.rand];~ps;};
-~factor = {~fct = ~factors[6.rand];  ~fct;};
-~freq = {~frq= ~freqs[2.rand];~frq;};
-~revTail = {~rt = ~revTails[4.rand]; ~rt;};
-~busFi = {~bf = ~busFis[10.rand];~bf;};
-~dur =  {~dd =~dure[6.rand];~dd;};
-~fil =  {~ff =~wFils[2.rand];~ff;};
-~pseq = {~pp =~pseqs[14.rand];~pp;};//9
-~wet = { ~we =~wetsR[2.rand]; ~we;};
+~spread = {~sp = ~spreads[~spreads.size.rand];~sp;};
+~amp = {~am  = ~amps[~amps.size.rand];~am;};
+~pseqm= {~pm=~pseqsm[~pseqsm.size.rand]; ~pm;};
+~tpseq = {~tpp = ~thrpseqs[~thrpseqs.size.rand]; ~tpp;};
+~damp = {~dps = ~damps[~damps.size.rand];~dps;};
+~psqRise = {~ps = ~psqRises[~psqRises.size.rand];~ps;};
+~factor = {~fct = ~factors[~factors.size.rand];  ~fct;};
+~freq = {~frq= ~freqs[~freqs.size.rand];~frq;};
+~revTail = {~rt = ~revTails[~revTails.size.rand]; ~rt;};
+~busFi = {~bf = ~busFis[~busFis.size.rand];~bf;};
+~dur =  {~dd =~dure[~dure.size.rand];~dd;};
+~fil =  {~ff =~wFils[~wFils.size.rand];~ff;};
+~pseq = {~pp =~pseqs[~pseqs.size.rand];~pp;};//9
+~wet = { ~we =~wetsR[~wetsR.size.rand]; ~we;};
 //~inst = {~ins =~insts[4.rand];~ins;};
 ~inst ={~ins =~insts[1.exprand(4,0).round(1) -1];~ins;};
 
@@ -857,10 +860,10 @@ Ppar([
 
 
 		\roomsize, 40,  \damping, 0.09, \inputbw, 0.75, \drylevel, -0, \earlylevel, -22, \taillevel, -4,\maxRoomsize,40,\wet,0.8
-		)],1) ,~specialHits[3]     ],1),~specialHits[0]  ],1),~arrSpecialKB[~boo[~ind]], Pseq([~perc[5.rrand(12,1)]],2) ,~arrSpecialKB[~boo[~ind+1]],~arrSpecialKB[~boo[~ind+2]], Pseq([~perc[5.rrand(12,1)]],2) ,~arrSpecialKB[~boo[~ind+3]],~arrSpecialKB[~boo[~ind+4]], Pseq([~perc[5]],2) ,~arrSpecialKB[~boo[~ind+5]],~arrSpecialKB[~boo[~ind+6]], Pseq([~perc[5.rrand(12,1)]],2) ,~arrSpecialKB[~boo[~ind+7]],~arrSpecialKB[~boo[~ind+8]], Pseq([~perc[5.rrand(12,1)],~perc[5.rrand(12,1)]],1) ,~arrSpecialKB[~boo[~ind+9]],~arrSpecialKB[~boo[~ind+10]], Pseq([~perc[5]],2) ,~arrSpecialKB[~boo[~ind+11]]
+		)],1) ,~specialHits[3]     ],1),~specialHits[0]  ],1),~arrSpecialKB[~boo[~ind]], Pseq([~perc[0.rrand(6,1)]],2) ,~arrSpecialKB[~boo[~ind+1]],~arrSpecialKB[~boo[~ind+2]], Pseq([~perc[0.rrand(6,1)]],2) ,~arrSpecialKB[~boo[~ind+3]],~arrSpecialKB[~boo[~ind+4]], Pseq([~perc[5]],2) ,~arrSpecialKB[~boo[~ind+5]],~arrSpecialKB[~boo[~ind+6]], Pseq([~perc[0.rrand(6,1)]],2) ,~arrSpecialKB[~boo[~ind+7]],~arrSpecialKB[~boo[~ind+8]], Pseq([~perc[0.rrand(6,1)],~perc[0.rrand(6,1)]],1) ,~arrSpecialKB[~boo[~ind+9]],~arrSpecialKB[~boo[~ind+10]], Pseq([~perc[5]],2) ,~arrSpecialKB[~boo[~ind+11]]
 
 
-	, Pseq([~perc[5]],3),~half16],1),
+	, Pseq([~perc[5]],3),~perc[0.rrand(6,1)]],1),
 
 
 
