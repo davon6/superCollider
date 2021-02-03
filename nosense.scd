@@ -25,18 +25,18 @@
 ~psqRises = [Pseq([1 /1],1),Pseq([4 /1],1),Pseq([1 /4],1),Pseq([1 /16],1)];
 ~damps = [0.22,0.8,0.4 ];//0.022
 ~wetsR = [0.2,0.1];
-~amps = [0.1,0.01,0.001];
+~amps = [0.1,0.01,0.2,0.001];
 ~spreads = [10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,40];
 
 ~freqs = [657.9895,657.9895];//, 698.46.rand ];
 
 ~insts = [~fuzz, ~melo1, ~squelch, ~rnd];
 
-~pp;~ff;~dd;~bf;~rt;~frq;~fct;~ps;~dps;~we;~tpp;~pm;~am;~ins;~sp;
+~pp;~ff;~dd;~bf;~rt;~frq;~fct;~ps;~dps;~we;~tpp;~pm;~am;~ins;~sp;~bsFu;
 
 
 ~spread = {~sp = ~spreads[2.rand];~sp;};
-~amp = {~am  = ~amps[3.rand];~am;};
+~amp = {~am  = ~amps[4.rand];~am;};
 ~pseqm= {~pm=~pseqsm[2.rand]; ~pm;};
 ~tpseq = {~tpp = ~thrpseqs[3.rand]; ~tpp;};
 ~damp = {~dps = ~damps[3.rand];~dps;};
@@ -52,6 +52,10 @@
 //~inst = {~ins =~insts[4.rand];~ins;};
 ~inst ={~ins =~insts[1.exprand(4,0).round(1) -1];~ins;};
 
+~rteFil = {|input|      if(input==0,{~bsFu =~comFuzz;},{~bsFu = ~comFuzz2;}); ~bsFu;};
+
+
+
 ~transRev = {|input|
 	var compared,list,list2,count;
 	count = 0;
@@ -60,7 +64,7 @@
 
 	list2 = [\revLFuzz,\revMelo,\revSquelch,\revRnd];
 	compared = list[count];
-≥
+
 	while({input.asCompileString.compare(compared.asCompileString)!=0},{count=count+1;compared = list[count];});
 
 	list2[count];   };

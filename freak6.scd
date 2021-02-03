@@ -9,7 +9,7 @@ s.options.memSize =
 
 (
 ~reverbBus = Bus.audio(s,2);
-~reverbBus2 = Bus.audio(s,1);
+~reverbBus2 = Bus.audio(s,2);
 ~reverbBus3 = Bus.audio(s,2);
 
 
@@ -26,6 +26,10 @@ s.options.memSize =
 ~ptrBus = Bus.audio(s,1);
 ~micBus2 = Bus.audio(s,1);
 ~ptrBus2 = Bus.audio(s,1);
+
+~micBus3 = Bus.audio(s,1);
+~ptrBus3 = Bus.audio(s,1);
+
 ~effctBus =Bus.audio(s,1);
 ~effctBus2 =Bus.audio(s,2);
 ~delayBus = Bus.audio(s,1);
@@ -39,6 +43,9 @@ s.options.memSize =
 ~comBusCymb = Bus.audio(s,2);
 
 ~comFuzz = Bus.audio(s,2);
+~comFuzz2 = Bus.audio(s,2);
+
+
 ~comMelo= Bus.audio(s,2);
 ~comSquelch= Bus.audio(s,1);
 
@@ -81,6 +88,7 @@ s.options.memSize =
 ~limitNonRec2 = Bus.audio(s,2);
 
 ~limitFuzz = Bus.audio(s,2);
+~limitFuzz2 = Bus.audio(s,2);
 
 /*
 ~limitFuzz2 = Bus.audio(s,2);
@@ -206,6 +214,8 @@ s.sync;
 
 
 	//e = Buffer.alloc(s, s.sampleRate *1/4,1);
+
+	f = Buffer.alloc(s, s.sampleRate *6.1952,1);
 
 	e = Buffer.alloc(s, s.sampleRate *0.3872,1);
 
@@ -668,16 +678,46 @@ SynthDef.new(\hit, {
 }).add;
 
 
-SynthDef(\wNoise, {
+	// SynthDef(\wNoise, {
+	//
+	// 	arg in=0, dec=1.5, mix=0.2, amp = (-20), sub =1,sub2 =3, valStart= 10000,valEnd =100, wFil=1, pan =0, durF =3,out =0,atk=0;
+	// 	var env,dry, wet, sig,env2, ori;
+	//
+	// 	env = EnvGen.kr(Env([0,amp.dbamp,0],[atk,sub,0]),doneAction:2);
+	//
+	// 	//env2 = EnvGen.kr(Env([amp.dbamp,amp.dbamp,0],[0,sub2,0]),doneAction:2);
+	//
+	// 	sig =  SelectX.ar(wFil,[
+	// 		LPF.ar(WhiteNoise.ar(env),XLine.kr(valStart,valEnd,durF)),
+	//
+	// 	HPF.ar(WhiteNoise.ar(env),XLine.kr(valStart,valEnd,durF))]);
+	//
+	//
+	//
+	// 	sig = Pan2.ar( sig , pan);//0 was pan
+	//
+	//
+	//
+	// 	Out.ar(out,HPF.ar(sig,100);//* env2 //*amp
+	//
+	// 	)
+	// }).add;
+	// "side events init".postln;
 
-	arg in=0, dec=1.5, mix=0.2, lpf1=2000, lpf2= 6000, predel=0.000003,out=0, maxdelaytime=0.000001, amp = 0.0042, sub =1,sub2 =3, valStart= 10000,valEnd =100, wFil=1, pan =0;
+
+	SynthDef(\wNoise, {
+
+		arg in=0, mix=0.2, amp = (-20), dec =0,sub2 =3, valStart= 10000,valEnd =100, wFil=1, pan =0, durF =3,out =0,atk=0;
 	var env,dry, wet, sig,env2, ori;
 
-	env = EnvGen.kr(Env([1,1,0],[0,sub,0]));
+		env = EnvGen.kr(Env([0,amp.dbamp,0],[atk,dec,0],[3,-2]),doneAction:2);
 
-	env2 = EnvGen.kr(Env([amp,amp,0],[0,sub2,0]),doneAction:2);
+	//env2 = EnvGen.kr(Env([amp.dbamp,amp.dbamp,0],[0,sub2,0]),doneAction:2);
 
-	sig =  SelectX.ar(wFil,[LPF.ar(WhiteNoise.ar(env),XLine.kr(valStart,valEnd,3)),HPF.ar(WhiteNoise.ar(env),XLine.kr(valStart,valEnd,3))]);
+	sig =  SelectX.ar(wFil,[
+			LPF.ar(WhiteNoise.ar(env),XLine.kr(valStart,valEnd,durF)),
+
+			HPF.ar(WhiteNoise.ar(env),XLine.kr(valStart,valEnd,durF))]);
 
 
 
@@ -685,11 +725,13 @@ sig = Pan2.ar( sig , pan);//0 was pan
 
 
 
-	Out.ar(out,HPF.ar(sig,100)* env2 //*amp
+	Out.ar(out,HPF.ar(sig,100);//* env2 //*amp
 
     )
 }).add;
 "side events init".postln;
+
+
 
 //Watch out its befor compression
 	SynthDef(\effect,{ | in = 0, out= 0,wF= 0 ,freq=50 ,bus, dec1 = 0.3872, wE=0,lvl1=1,lvl2 =5000, crv1=4, crv2=(-4) |
@@ -834,7 +876,7 @@ sig = Pan2.ar( sig , pan);//0 was pan
 		//Out.ar(out, In.ar(~master,2)    );
 
 
-		Out.ar(out , Limiter.ar(gain*In.ar(in,2),vol.dbamp, du));
+		Out.ar(out , Limiter.ar(gain.dbamp*In.ar(in,2),vol.dbamp, du));
 
 	}).add;
 
