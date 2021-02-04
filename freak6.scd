@@ -47,7 +47,7 @@ s.options.memSize =
 
 
 ~comMelo= Bus.audio(s,2);
-~comSquelch= Bus.audio(s,1);
+~comSquelch= Bus.audio(s,2);
 
 ~comMiniRise= Bus.audio(s,2);
 

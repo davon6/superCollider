@@ -7,7 +7,7 @@
 
 //TO RECONSID ~thrpseqs = [ Pseq([1/3],3),  Pseq([1/12],36) ,  Pseq([1/12],12),Pseq([1/12],72), Pseq([1/12],36) ,  Pseq([1/12],12),Pseq([1/12],72) ];
 
-~thrpseqs = [  Pseq([ (Pseq([1/24],24)/1.5) ,Pseq([1/24],24),  (Pseq([1/24],24)*1.5)  ],1) ,Pseq([ (Pseq([1/24],12)/1.5) ,Pseq([1/24],12),  (Pseq([1/24],12)*1.5)  ],1) ,Pseq([ (Pseq([1/24],6)/1.5) ,Pseq([1/24],6),  (Pseq([1/24],6)*1.5)  ],1) ];
+~thrpseqs = [  Pseq([ (Pseq([1/24],24)/1.5) ,Pseq([1/24],24),  (Pseq([1/24],24)*1.5)  ],1) ,Pseq([ (Pseq([1/24],12)/1.5) ,Pseq([1/24],12),  (Pseq([1/24],12)*1.5)  ],1) ,Pseq([ (Pseq([1/24],6)/1.5) ,Pseq([1/24],6),  (Pseq([1/24],6)*1.5)  ],1),Pseq([1/3],3) ];
 
 
 ~pseqs=  [Pseq([1/3],3),  Pseq([1/12],36) ,  Pseq([1/12],12),Pseq([1/12],72),  Pseq([1/12],12),Pseq([1 /4],1),Pseq([1 /4],4),Pseq([1 /4],16),Pseq([1 /4],16),Pseq([1 /4],16),Pseq([1 /4],16),Pseq([1 /1],1),Pseq([1 /1],4),Pseq([4 /1],1)];
@@ -142,12 +142,25 @@ o = {
 
 }.play();
 
-Pseq([~starters[4.rand],        Pseq([~perc[3],  Pseq([~ending[~boo[~ind]]],4).play(t,quant:1)
 
 
-],1).play(t,quant:1)
 
-],1).play(t,quant:1)
+Pseq([
+		Pbindf(~inst.(), \dur,Pseq([1/4],16),\decE,Pseq([1/4],16)),
+	Pbindf(~inst.(), \dur,Pseq([1/4],16),\decE,Pseq([1/4],16)),
+	Pbindf(~inst.(), \dur,Pseq([1/4],16),\decE,Pseq([1/4],16)),
+		Pbindf(~inst.(), \dur,Pseq([1/4],16),\decE,Pseq([1/4],16)),
+
+
+
+		Pbindf(~bassRest, \dur,Pseq([1/4],1)),
+	Pbindf(~bassRest, \dur,Pseq([1/16],1)),
+	Pbindf(~bassRest, \dur,Pseq([1/1],1)),
+
+
+
+//	,Pbindef(~transRev.(~ins),\revtime,~trans.(Pseq([1/4],16)))
+].scramble,16).play(t,quant:0)
 
 
 

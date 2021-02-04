@@ -61,7 +61,53 @@ o = {
 
 }.play();
 
+Ppar([
 
+
+
+		Pseq([Pbindf(~kick,\out,~kbus)],4096),
+	Pseq([Pbindf(~snare,\out,~snBus)],1024),
+
+
+	Pseq([
+
+	Pbind(\instrument,\lead, \dur,Pseq([1/4],16),\decE,Pseq([1/4],16),\freq,661.44.rand.postln,
+	\bus,40 ,\bus2,~bus1,\bus3, 40,\bus4,40,\bus7,50,\bus8, ~bus4,\bus5,~bus9,
+\vlPE,0,\vlPE2,661.44,\dcPE,~pp,\crvEP,2,\factor2,2,
+			\subsE,0,\which,1,\whichMod,2,\whichEnv,1,\amp,(-20), \gra,5.00.rand.postln,\out,~reverbRnd)    ],1),
+
+// ~revTail.()    ~pseq.()    ~pp
+
+	Pbind(\instrument,\reverb,  \dur,Pseq([1024/1],1),\roomsize, 50, \revtime,Pseq([1/4],32), \damping, ~damp.(), \inputbw, 0.5, \drylevel, -10, \earlylevel, -22, \taillevel, -50,\amp,1,\spread,10,\wet,~wet.(),\maxRoomsize,80,\in,~reverbRnd,\out,~comRnd,\group, ~revGrp)
+			,
+
+
+
+
+
+
+Pbind(\instrument,\comp, \dur,Pseq([64/1],1),\thr,0.8 ,\sB, 1.05,\sA, 1/4,\atk ,0.0121, \rel ,0.04840
+,\in, ~comRnd,\in2, ~kbus, \out,~limitRnd, \group, ~compGrp),
+
+
+
+
+
+
+
+
+
+
+
+
+Pbind(\instrument, \limiter,\in, ~limitRnd, \dur, Pseq([64/1],1),\gain,40,\du,2.5, \vol,(-4),\group,~limitGrp,\out,0),
+
+	/*Pbind(\instrument,\grpComp, \dur,Pseq([64/1],1),\thr,0.4 ,\sB, 1.086,\sA, 0.2,\atk ,0.0242, \rel ,0.7744
+,\in, ~comSnaGrpBus ,\in2, ~snBus, \group, ~compGrp2),*/
+
+
+],1).play(t,quant:0)
+)
 
 
 Ppar([
@@ -72,18 +118,18 @@ Ppar([
 	Pseq([Pbind(\instrument,\lead,\dur, ~tpseq.()  ,\type,Pseq([\note,\rest,\rest,\note],inf),\eFreq,  [329.63 ,326.63 ]
 ,\factor2,1,\vlPE, 2.575,\decC,60,\which,2,\whichEnv,1, \gra,0.0012,\bus2,34,	\decE,~tpp
 
-		,\bus,~bus12,\bus3,~bus14,\bus4,~bus13,\amp,(-30)	,\subsE,0,\lvlDec,0  ,\out,~reverbMelo)],40),
+		,\bus,~bus12,\bus3,~bus14,\bus4,~bus13,\amp,(-20)	,\subsE,0,\lvlDec,0  ,\out,~reverbMelo)],40),
 
 
 
-Pdef(\revMelo,Pbind(\instrument,\reverb,\dur,Pseq([1024/1],1),\roomsize, 16, \revtime, ~revTail.(), \damping, 0.01, \inputbw, 1, \drylevel, (-3), \earlylevel, (-10), \taillevel, (-1),\maxRoomsize,86,\in,~reverbMelo , \out,~comMelo,\group, ~revGrp)),
+	Pdef(\revMelo,Pbind(\instrument,\reverb,\dur,Pseq([1024/1],1),\roomsize, 46, \revtime, ~revTail.()/3, \damping,~damp.(), \inputbw, 1, \drylevel, (-3), \earlylevel, (-10), \taillevel, (-1),\maxRoomsize,86,\in,~reverbMelo , \out,~comMelo,\group, ~revGrp)),
 
 
 
 Pbind(\instrument,\comp, \dur,Pseq([64/1],1),\thr,0.8 ,\sB, 1.2,\sA, 1/3,\atk ,0.0968, \rel ,0.04840
 ,\in, ~comMelo ,\in2, ~kbus, \out,~limitMelo, \group, ~compGrp),
 
-	Pbind(\instrument, \limiter,\in, ~limitMelo, \dur, Pseq([64/1],1),\du,0.03, \vol,(-10),\group,~limitGrp,\out,0,\gain,1),
+	Pbind(\instrument, \limiter,\in, ~limitMelo, \dur, Pseq([64/1],1),\du,0.03, \vol,(-10),\group,~limitGrp,\out,0,\gain,10),
 
 ],1).play(t,quant:0)
 
