@@ -5,6 +5,7 @@ s.meter
 (
 
 
+
 ~micGrp = Group.new;
 ~ptrGrp = Group.after(~micGrp);
 ~recGrp = Group.after(~ptrGrp);
@@ -15,12 +16,14 @@ s.meter
 
 ~delayGrp =  Group.after(~effctGrp2);
 
-~compGrp = Group.after(~delayGrp);
 
-~revGrp = Group.after(~compGrp);
+
+~revGrp = Group.after(~delayGrp);
 ~revGrp2 = Group.after(~revGrp);
 
-~limitGrp = Group.after(~revGrp2);
+~compGrp = Group.after(~revGrp2);
+
+~limitGrp = Group.after(~compGrp);
 
 ~compGrp2 = Group.after(~limitGrp);
 
@@ -64,29 +67,36 @@ Ppar([
 		Pseq([Pbindf(~kick,\out,~kbus)],4096),
 	Pseq([Pbindf(~snare,\out,~snBus)],1024),
 
-	Pseq([Pbind(\instrument,\lead, \dur,~pseq.(),\decE,~pp,\freq, ~freq.(),\bus, ~busFi.(),\bus2,~bus1,\bus3, 40,\bus4,40,\bus7,50,\bus8, ~bus4,\subsE,0,\which,~fil.() ,\whichMod,0,\whichEnv,1,\amp,(-20),\out,~rteFil.(~ff),\group, ~micGrp)],400),
-	//~fil.()
-
-Pbind(\instrument,\comp, \dur,Pseq([64/1],1),\thr,0.2 ,\sB, 1.086,\sA, 0.2,\atk ,0.0242, \rel ,0.04840
-,\in, ~comFuzz ,\in2, ~kbus, \out,~reverbBus, \group, ~compGrp),
-
-
-	Pbind(\instrument,\comp, \dur,Pseq([64/1],1),\thr,0.2 ,\sB, 1.086,\sA, 0.2,\atk ,0.0242, \rel ,0.04840
-,\in, ~comFuzz2 ,\in2, ~kbus, \out,~reverbBus2, \group, ~compGrp),
-
+	Pseq([Pbind(\instrument,\lead, \dur,~pseq.(),\decE,~pp,\freq, ~freq.(),\bus, ~busFi.(),\bus2,~bus1,\bus3, 40,\bus4,40,\bus7,50,\bus8, ~bus4,\subsE,0,\which, ~fil.(),\whichMod,0,\whichEnv,1,\amp,(-20),\out, ~rteFil.(~ff),\group, ~micGrp)],400),
+	//          Pseq([1/4],4096),  Pseq([1/1],4096)]       .postln
+   // .postln   .postln
 
 	Pdef(\revLFuzz,
-		Pbind(\instrument,\reverb, \dur,Pseq([1024/1],1),\roomsize, 41, \revtime,~revTail.(), \damping,0.1, \inputbw, 0.5, \drylevel, -10, \earlylevel, -22, \taillevel, -5,\amp,1,\spread,~spread.(),\wet,~wet.(),\maxRoomsize,70,\in,~reverbBus,\out,~limitFuzz, \group,~revGrp )),
+		Pbind(\instrument,\reverb, \dur,Pseq([1024/1],1),\roomsize, 41, \revtime, ~revTail.(), \damping,~damp.(), \inputbw, 0.1, \drylevel, -2, \earlylevel, -2, \taillevel, -5,\amp,1,\spread,~spread.(),\wet,~wet.(),\maxRoomsize,70,\in,~reverbBus,\out,~comFuzz, \group,~revGrp )),
 
 
 	Pdef(\revHFuzz,
-		Pbind(\instrument,\reverb, \dur,Pseq([1024/1],1),\roomsize, 41, \revtime,~revTail.(), \damping,0.1, \inputbw, 0.5, \drylevel, -10, \earlylevel, -22, \taillevel, -5,\amp,1,\spread,~spread.().postln,\wet,~wet.().postln,\maxRoomsize,70,\in,~reverbBus2,\out,~limitFuzz2, \group,~revGrp )),
+		Pbind(\instrument,\reverb, \dur,Pseq([1024/1],1),\roomsize, 41, \revtime,~revTail.(), \damping,0.1, \inputbw, 0.5, \drylevel, -10, \earlylevel, -22, \taillevel, -5,\amp,1,\spread,~spread.(),\wet,~wet.(),\maxRoomsize,70,\in,~reverbBus2,\out,~comFuzz2, \group,~revGrp )),
 
 
 
-	Pbind(\instrument, \limiter,\in, ~limitFuzz, \dur, Pseq([64/1],1),\du,0.3, \vol,(-0.3),\gain,3.2,\group,~limitGrp,\out,0),
 
-	Pbind(\instrument, \limiter,\in, ~limitFuzz2, \dur, Pseq([64/1],1),\du,0.3, \vol,(-0.3),\gain,3.7,\group,~limitGrp,\out,0),
+
+
+
+	Pbind(\instrument,\comp, \dur,Pseq([64/1],1),\thr,0.6 ,\sB, 1.086,\sA, 1/2,\atk ,0.0242, \rel ,0.04840
+,\in, ~comFuzz ,\in2, ~kbus, \out,~limitFuzz, \group, ~compGrp),
+
+
+	Pbind(\instrument,\comp, \dur,Pseq([64/1],1),\thr,0.6 ,\sB, 1.086,\sA, 1/2,\atk ,0.0242, \rel ,0.04840
+,\in, ~comFuzz2 ,\in2, ~kbus, \out,~limitFuzz2, \group, ~compGrp),
+
+
+
+
+	Pbind(\instrument, \limiter,\in, ~limitFuzz, \dur, Pseq([64/1],1),\du,0.03, \vol,(-10),\gain,10,\group,~limitGrp,\out,0),
+
+	Pbind(\instrument, \limiter,\in, ~limitFuzz2, \dur, Pseq([64/1],1),\du,0.03, \vol,(-10),\gain,20,\group,~limitGrp,\out,0),
 ],1).play(t,quant:0)
 
 

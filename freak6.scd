@@ -147,7 +147,7 @@ s.options.numAudioBusChannels;
 s.options.numOutputBusChannels;
 s.options.numInputBusChannels;
 s.meter
-(`
+(
 s.waitForBoot({
 
 
@@ -758,15 +758,6 @@ sig = Pan2.ar( sig , pan);//0 was pan
 	}).add;
 
 
-	SynthDef(\comp, {|in, in2, out= 0, dec  , thr  =0.01 ,sB = 1, sA = (1/4), atk = 0.001, rel = 0.04     |
-
-
-		Out.ar(out, Compander.ar(In.ar(in,2) , In.ar(in2,1)  , thresh: thr, slopeBelow: sB, slopeAbove: sA, clampTime: atk, relaxTime: rel)  );
-
-
-	}).add;
-
-	"compression init".postln;
 
 
 
@@ -786,6 +777,7 @@ sig = Pan2.ar( sig , pan);//0 was pan
 
 
 
+
 	SynthDef(\reverb, {
 		|out=0, roomsize, revtime, damping, inputbw, spread = 15, drylevel, earlylevel,
     taillevel, amp=0.3,maxRoomsize,wet=0.4,in =0,wF =0, spread2=0, level=1, center=0.0, multi = 2|
@@ -794,7 +786,10 @@ sig = Pan2.ar( sig , pan);//0 was pan
 
 	var a ,input;
 
-		input =      SelectX.ar(wF,[HPF.ar( In.ar(in,2).round(2**(-7)),100),  LPF.ar( In.ar(in,2),100).round(2**(-7))]);
+
+		input = HPF.ar( In.ar(in,2).round(2**(-8)),100);
+
+		//input =      SelectX.ar(wF,[HPF.ar( In.ar(in,2).round(2**(-7)),100),  LPF.ar( In.ar(in,2),100).round(2**(-7))]);
 
 		//input =      SelectX.ar(wF,[HPF.ar( In.ar(in,2),100),  LPF.ar( In.ar(in,2),100).round(2**(-7))]);
 
@@ -863,7 +858,22 @@ sig = Pan2.ar( sig , pan);//0 was pan
 	"reverb init".postln;
 
 
-	SynthDef(\limiter, {|in, out = 0,gain=1,vol =(-40), du =0.01 |
+
+		SynthDef(\comp, {|in, in2, out= 0, dec  , thr  =0.01 ,sB = 1, sA = (1/4), atk = 0.001, rel = 0.04     |
+
+
+		Out.ar(out, Compander.ar(In.ar(in,2) , In.ar(in2,1)  , thresh: thr, slopeBelow: sB, slopeAbove: sA, clampTime: atk, relaxTime: rel)  );
+
+
+	}).add;
+
+	"compression init".postln;
+
+
+
+
+
+	SynthDef(\limiter, {|in, out = 0,gain=1,vol =1 du =0.01 |
 
 	//var input, effect;
 
@@ -876,7 +886,7 @@ sig = Pan2.ar( sig , pan);//0 was pan
 		//Out.ar(out, In.ar(~master,2)    );
 
 
-		Out.ar(out , Limiter.ar(gain.dbamp*In.ar(in,2),vol.dbamp, du));
+		Out.ar(out , Normalizer.ar(gain.dbamp*In.ar(in,2),vol.dbamp, du));
 
 	}).add;
 

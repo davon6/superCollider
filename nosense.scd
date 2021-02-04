@@ -55,7 +55,7 @@
 //~inst = {~ins =~insts[4.rand];~ins;};
 ~inst ={~ins =~insts[1.exprand(4,0).round(1) -1];~ins;};
 
-~rteFil = {|input|      if(input==0,{~bsFu =~comFuzz;},{~bsFu = ~comFuzz2;}); ~bsFu;};
+~rteFil = {|input|      if(input==0,{~bsFu =~reverbBus;},{~bsFu = ~reverbBus2;}); ~bsFu;};
 
 
 
