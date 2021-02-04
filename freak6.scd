@@ -787,7 +787,7 @@ sig = Pan2.ar( sig , pan);//0 was pan
 	var a ,input;
 
 
-		input = HPF.ar( In.ar(in,2).round(2**(-8)),100);
+		input = HPF.ar( In.ar(in,2),100).round(2**(-8));
 
 		//input =      SelectX.ar(wF,[HPF.ar( In.ar(in,2).round(2**(-7)),100),  LPF.ar( In.ar(in,2),100).round(2**(-7))]);
 
@@ -798,7 +798,8 @@ sig = Pan2.ar( sig , pan);//0 was pan
 
 		input
 ,
-        659.25 * [8,16,32],
+      659.25 *  /* [1, 2, 4, 8], */      [8,16,32], // 659.25 * [8,16,32],
+			//1760 * [1, 2, 4, 8],
  wet
 /*
 		,
