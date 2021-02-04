@@ -20,6 +20,8 @@
 
 
 
+
+
 /*	,~specialHits[3]     ],1),~specialHits[0]  ],1),~arrSpecialKB[~boo[~ind]], Pseq([~perc[5.rrand(12,1)]],2) ,~arrSpecialKB[~boo[~ind+1]],~arrSpecialKB[~boo[~ind+2]], Pseq([~perc[5.rrand(12,1)]],2) ,~arrSpecialKB[~boo[~ind+3]],~arrSpecialKB[~boo[~ind+4]], Pseq([~perc[5]],2) ,~arrSpecialKB[~boo[~ind+5]],~arrSpecialKB[~boo[~ind+6]], Pseq([~perc[5.rrand(12,1)]],2) ,~arrSpecialKB[~boo[~ind+7]],~arrSpecialKB[~boo[~ind+8]], Pseq([~perc[5.rrand(12,1)],~perc[5.rrand(12,1)]],1) ,~arrSpecialKB[~boo[~ind+9]],~arrSpecialKB[~boo[~ind+10]], Pseq([~perc[5]],2) ,~arrSpecialKB[~boo[~ind+11]]
 
 

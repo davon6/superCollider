@@ -66,7 +66,7 @@ s.options.memSize =
 ~comNoisePerc= Bus.audio(s,2);
 
 ~limitMelo= Bus.audio(s,2);
-~limitSquelch= Bus.audio(s,1);
+~limitSquelch= Bus.audio(s,2);
 ~limitMiniRise= Bus.audio(s,2);
 ~limitRnd= Bus.audio(s,2);
 
@@ -787,7 +787,7 @@ sig = Pan2.ar( sig , pan);//0 was pan
 	var a ,input;
 
 
-		input = HPF.ar( In.ar(in,2),100).round(2**(-8));
+		input = HPF.ar( In.ar(in,2),100).round(2**(-16));
 
 		//input =      SelectX.ar(wF,[HPF.ar( In.ar(in,2).round(2**(-7)),100),  LPF.ar( In.ar(in,2),100).round(2**(-7))]);
 

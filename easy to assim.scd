@@ -62,6 +62,60 @@ o = {
 }.play();
 
 
+
+
+Ppar([
+
+		Pseq([Pbindf(~kick,\out,~kbus)],4096),
+	Pseq([Pbindf(~snare,\out,~snBus)],1024),
+
+	Pseq([Pbind(\instrument,\lead,\dur, ~tpseq.()  ,\type,Pseq([\note,\rest,\rest,\note],inf),\eFreq,  [329.63 ,326.63 ]
+,\factor2,1,\vlPE, 2.575,\decC,60,\which,2,\whichEnv,1, \gra,0.0012,\bus2,34,	\decE,~tpp
+
+		,\bus,~bus12,\bus3,~bus14,\bus4,~bus13,\amp,(-30)	,\subsE,0,\lvlDec,0  ,\out,~reverbMelo)],40),
+
+
+
+Pdef(\revMelo,Pbind(\instrument,\reverb,\dur,Pseq([1024/1],1),\roomsize, 16, \revtime, ~revTail.(), \damping, 0.01, \inputbw, 1, \drylevel, (-3), \earlylevel, (-10), \taillevel, (-1),\maxRoomsize,86,\in,~reverbMelo , \out,~comMelo,\group, ~revGrp)),
+
+
+
+Pbind(\instrument,\comp, \dur,Pseq([64/1],1),\thr,0.8 ,\sB, 1.2,\sA, 1/3,\atk ,0.0968, \rel ,0.04840
+,\in, ~comMelo ,\in2, ~kbus, \out,~limitMelo, \group, ~compGrp),
+
+	Pbind(\instrument, \limiter,\in, ~limitMelo, \dur, Pseq([64/1],1),\du,0.03, \vol,(-10),\group,~limitGrp,\out,0,\gain,1),
+
+],1).play(t,quant:0)
+
+)
+
+
+Ppar([
+
+		Pseq([Pbindf(~kick,\out,~kbus)],4096),
+	Pseq([Pbindf(~snare,\out,~snBus)],1024),
+
+
+	 Pbind(\instrument,\lead,		\dur,~pseqm.(),\eFreq,81.41,\which,1,\whichMod,2,\whichEnv,1,/*\wCar,1,*/ \gra,0,\bus2,34,	\decE,~pm,\bus,~bus12,\bus3,24,\bus4,~busFi.(),\bus5,~bus10,\amp,(-25),\factor,~factor.(),\subsE,0,\factor2,1,\vlPE, 1318.51/~factor.(),\dcPE,~revTails.(),\out,~reverbSquelch),
+
+
+	Pdef(\revSquelch,Pbind(\instrument,\reverb,\dur,Pseq([1024/1],1),\roomsize, 46, \revtime,~revTail.(), \damping, ~damp.(), \inputbw, 1, \drylevel, (-30), \earlylevel, (-1), \taillevel, (-42),\maxRoomsize,62,\spread,~spread.(),\wet,~wet.(),\in,~reverbSquelch , \out,~comSquelch,\group, ~revGrp)),
+
+
+	Pbind(\instrument,\comp, \dur,Pseq([64/1],1),\thr,0.2 ,\sB, 1.2,\sA, 1/2,\atk ,0.0484, \rel ,0.3872
+,\in, ~comSquelch ,\in2, ~kbus, \out,~limitSquelch, \group, ~compGrp),
+
+
+
+	Pbind(\instrument, \limiter,\in, ~limitSquelch, \dur, Pseq([64/1],1),\du,0.03, \vol,(-10),\group,~limitGrp,\out,0,\gain,1),
+
+
+
+
+],1).play(t,quant:0)
+)
+
+
 Ppar([
 
 		Pseq([Pbindf(~kick,\out,~kbus)],4096),
@@ -73,10 +127,6 @@ Ppar([
 
 	Pdef(\revLFuzz,
 		Pbind(\instrument,\reverb, \dur,Pseq([1024/1],1),\roomsize, 41, \revtime, ~revTail.(), \damping,~damp.(), \inputbw, 1, \drylevel, -2, \earlylevel, -12, \taillevel, -5,\amp,1,\spread,~spread.(),\wet,~wet.(),\maxRoomsize,70,\in,~reverbBus,\out,~comFuzz, \group,~revGrp )),
-
-
-	/*Pdef(\revLFuzz,
-		Pbind(\instrument,\reverb, \dur,Pseq([1024/1],1),\roomsize, 41, \revtime,Pseq([1/4],4096), \damping,0.4, \inputbw, 0.1, \drylevel, -2, \earlylevel, -12, \taillevel, -5,\amp,1,\spread,1,\wet,0.05,\maxRoomsize,70,\in,~reverbBus,\out,~comFuzz, \group,~revGrp )),*/
 
 
 	Pdef(\revHFuzz,
