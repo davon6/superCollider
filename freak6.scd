@@ -101,6 +101,8 @@ s.options.memSize =
 
 ~comSnaGrpBus = Bus.audio(s,2);
 
+~limitLeadgrp = Bus.audio(s,2);
+
 ~master = Bus.audio(s,2);
 /*
 ~master1 = Bus.audio(s,2);
@@ -375,6 +377,16 @@ bp = BPF.ar(sig,In.kr(bus5, 1),0.26);//0.05
 
 
 	"lead init".postln;
+
+
+	SynthDef(\normaliza, {|in, out = 0,gain=1,vol =1 du =0.01 |
+
+	Out.ar(out , Normalizer.ar(gain.dbamp*In.ar(in,2),vol.dbamp, du));
+
+	}).add;
+
+"normalization init".postln;
+
 
 
 
@@ -905,6 +917,30 @@ sig = Pan2.ar( sig , pan);//0 was pan
 	}).add;
 
 	"Grp compression init".postln;
+
+
+
+
+	SynthDef(\limiter2, {|in, out = 0,gain=1,vol =(-23) du =0.01 |
+
+	//var input, effect;
+
+		//input=In.ar(in,2); //get two channels of input starting (and ending) on bus 0
+
+		//effect= Limiter.ar(gain*input,vol.dbamp, du);
+
+		//ReplaceOut.ar( In.ar(~master,2),effect) *   EnvGen.kr(Env([1,1,0],[0,dec,0],4),doneAction:2) ; //replaces bus 0 where original signal is already playing
+
+		//Out.ar(out, In.ar(~master,2)    );
+
+
+		Out.ar(out , Limiter.ar(gain.dbamp*In.ar(in,2),vol.dbamp, du));
+
+	}).add;
+
+"limiter2 init".postln;
+
+
 
 
 

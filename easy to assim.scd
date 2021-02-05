@@ -6,8 +6,13 @@ s.meter
 
 
 
+
 ~micGrp = Group.new;
-~ptrGrp = Group.after(~micGrp);
+
+
+~normGrp = Group.after(~micGrp);
+
+~ptrGrp = Group.after(~normGrp);
 ~recGrp = Group.after(~ptrGrp);
 ~granGrp = Group.after(~recGrp);
 
@@ -23,9 +28,11 @@ s.meter
 
 ~compGrp = Group.after(~revGrp2);
 
-~limitGrp = Group.after(~compGrp);
+~normaGrp = Group.after(~compGrp);
 
-~compGrp2 = Group.after(~limitGrp);
+~compGrp2 = Group.after(~normaGrp);
+~limitGrp = Group.after(~compGrp2);
+
 
 o = {
 	Out.kr(~bus1, MouseY.kr(0.2,0.00)/*LFNoise1.ar(1.2875).range(0.0986,0.05)*/);
@@ -61,6 +68,67 @@ o = {
 
 }.play();
 
+
+
+
+Ppar([
+
+		Pseq([Pbindf(~kick,\out,~kbus)],4096),
+	Pseq([Pbindf(~snare,\out,~snBus)],1024),
+
+	Pseq([
+
+	Pseq([Pbind(\instrument,\lead, \dur,~pseq.(),\decE,~pp,\freq, ~freq.(),\bus, ~busFi.(),\bus2,~bus1,\bus3, 40,\bus4,40,\bus7,50,\bus8, ~bus4,\subsE,0,\which,0 ,\whichMod,0,\whichEnv,1,\amp,(-20),\out,~limitFuzz ,\group, ~micGrp)],1),
+
+	Pseq([Pbind(\instrument,\lead, \dur,~pseq.(),\decE,~pp,\freq, ~freq.(),\bus, ~busFi.(),\bus2,~bus1,\bus3, 40,\bus4,40,\bus7,50,\bus8, ~bus4,\subsE,0,\which,2 ,\whichMod,0,\whichEnv,1,\amp,(-20),\out,~limitFuzz2 ,\group, ~micGrp)],1),
+
+
+	],40),
+	//          Pseq([1/4],4096),  Pseq([1/1],4096)]       .postln
+   // .postln   .postln
+
+	//      ~fil.()     ~rteFil.(~ff)
+
+
+		Pbind(\instrument, \normaliza,\in, ~limitFuzz, \dur, Pseq([64/1],1),\du,2.5, \vol,(-10),\gain,1,\group,~normGrp,\out,~reverbBus),
+
+
+
+	Pbind(\instrument, \normaliza,\in, ~limitFuzz2, \dur, Pseq([64/1],1),\du,2.5, \vol,(-10),\gain,20,\group,~normGrp,\out,~reverbBus2),
+
+
+	Pdef(\revLFuzz,
+		Pbind(\instrument,\reverb, \dur,Pseq([1024/1],1),\roomsize, 41, \revtime, ~revTail.(), \damping,~damp.(), \inputbw, 1, \drylevel, -2, \earlylevel, -12, \taillevel, -5,\amp,1,\spread,~spread.(),\wet,~wet.(),\maxRoomsize,70,\in,~reverbBus,\out,~comFuzz, \group,~revGrp )),
+
+
+	Pdef(\revHFuzz,
+		Pbind(\instrument,\reverb, \dur,Pseq([1024/1],1),\roomsize, 41, \revtime,~revTail.(), \damping,~damp.(), \inputbw, 1, \drylevel, -10, \earlylevel, -22, \taillevel, -15,\amp,1,\spread,~spread.(),\wet,~wet.(),\maxRoomsize,70,\in,~reverbBus2,\out,~comFuzz2, \group,~revGrp )),
+
+
+
+
+
+
+
+	Pbind(\instrument,\comp, \dur,Pseq([64/1],1),\thr,0.6 ,\sB, 1.086,\sA, 1/2,\atk ,0.0242, \rel ,0.04840
+,\in, ~comFuzz ,\in2, ~kbus, \out,~limitLeadgrp, \group, ~compGrp),
+
+
+	Pbind(\instrument,\comp, \dur,Pseq([64/1],1),\thr,0.6 ,\sB, 1.086,\sA, 1/2,\atk ,0.0242, \rel ,0.04840
+,\in, ~comFuzz2 ,\in2, ~kbus, \out,~limitDelayed, \group, ~compGrp),
+
+
+
+
+Pbind(\instrument, \limiter2,\in, ~limitLeadgrp, \dur, Pseq([64/1],1),\du,0.03, \vol,(-10),\gain,10,\group,~normaGrp,\out,0),
+Pbind(\instrument, \limiter2,\in, ~limitDelayed, \dur, Pseq([64/1],1),\du,0.03, \vol,(-10),\gain,13,\group,~normaGrp,\out,0),
+
+
+],1).play(t,quant:0)
+
+
+)
+
 Ppar([
 
 
@@ -74,9 +142,12 @@ Ppar([
 	Pbind(\instrument,\lead, \dur,Pseq([1/4],16),\decE,Pseq([1/4],16),\freq,661.44.rand.postln,
 	\bus,40 ,\bus2,~bus1,\bus3, 40,\bus4,40,\bus7,50,\bus8, ~bus4,\bus5,~bus9,
 \vlPE,0,\vlPE2,661.44,\dcPE,~pp,\crvEP,2,\factor2,2,
-			\subsE,0,\which,1,\whichMod,2,\whichEnv,1,\amp,(-20), \gra,5.00.rand.postln,\out,~reverbRnd)    ],1),
+			\subsE,0,\which,1,\whichMod,2,\whichEnv,1,\amp,(-20), \gra,5.00.rand.postln,\out,~reverbRnd)    ],40),
 
 // ~revTail.()    ~pseq.()    ~pp
+
+
+
 
 	Pbind(\instrument,\reverb,  \dur,Pseq([1024/1],1),\roomsize, 50, \revtime,Pseq([1/4],32), \damping, ~damp.(), \inputbw, 0.5, \drylevel, -10, \earlylevel, -22, \taillevel, -50,\amp,1,\spread,10,\wet,~wet.(),\maxRoomsize,80,\in,~reverbRnd,\out,~comRnd,\group, ~revGrp)
 			,
@@ -100,7 +171,7 @@ Pbind(\instrument,\comp, \dur,Pseq([64/1],1),\thr,0.8 ,\sB, 1.05,\sA, 1/4,\atk ,
 
 
 
-Pbind(\instrument, \limiter,\in, ~limitRnd, \dur, Pseq([64/1],1),\gain,40,\du,2.5, \vol,(-4),\group,~limitGrp,\out,0),
+Pbind(\instrument, \limiter,\in, ~limitRnd, \dur, Pseq([64/1],1),\gain,1,\du,2.5, \vol,(-8),\group,~normaGrp,\out,0),
 
 	/*Pbind(\instrument,\grpComp, \dur,Pseq([64/1],1),\thr,0.4 ,\sB, 1.086,\sA, 0.2,\atk ,0.0242, \rel ,0.7744
 ,\in, ~comSnaGrpBus ,\in2, ~snBus, \group, ~compGrp2),*/
@@ -129,7 +200,7 @@ Ppar([
 Pbind(\instrument,\comp, \dur,Pseq([64/1],1),\thr,0.8 ,\sB, 1.2,\sA, 1/3,\atk ,0.0968, \rel ,0.04840
 ,\in, ~comMelo ,\in2, ~kbus, \out,~limitMelo, \group, ~compGrp),
 
-	Pbind(\instrument, \limiter,\in, ~limitMelo, \dur, Pseq([64/1],1),\du,0.03, \vol,(-10),\group,~limitGrp,\out,0,\gain,10),
+	Pbind(\instrument, \limiter,\in, ~limitMelo, \dur, Pseq([64/1],1),\du,0.03, \vol,(-10),\group,~normaGrp,\out,0,\gain,10),
 
 ],1).play(t,quant:0)
 
@@ -153,7 +224,7 @@ Ppar([
 
 
 
-	Pbind(\instrument, \limiter,\in, ~limitSquelch, \dur, Pseq([64/1],1),\du,0.03, \vol,(-10),\group,~limitGrp,\out,0,\gain,1),
+	Pbind(\instrument, \limiter,\in, ~limitSquelch, \dur, Pseq([64/1],1),\du,0.03, \vol,(-10),\group,~normaGrp,\out,0,\gain,1),
 
 
 
@@ -194,9 +265,9 @@ Ppar([
 
 
 
-	Pbind(\instrument, \limiter,\in, ~limitFuzz, \dur, Pseq([64/1],1),\du,0.03, \vol,(-10),\gain,15,\group,~limitGrp,\out,0),
+	Pbind(\instrument, \limiter,\in, ~limitFuzz, \dur, Pseq([64/1],1),\du,0.03, \vol,(-10),\gain,15,\group,~normaGrp,\out,0),
 
-	Pbind(\instrument, \limiter,\in, ~limitFuzz2, \dur, Pseq([64/1],1),\du,0.03, \vol,(-10),\gain,20,\group,~limitGrp,\out,0),
+	Pbind(\instrument, \limiter,\in, ~limitFuzz2, \dur, Pseq([64/1],1),\du,0.03, \vol,(-10),\gain,20,\group,~normaGrp,\out,0),
 ],1).play(t,quant:0)
 
 
