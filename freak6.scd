@@ -22,6 +22,15 @@ s.options.memSize =
 ~reverbNonRec2 = Bus.audio(s,2);
 
 
+~normFuzz  = Bus.audio(s,1);
+~normFuzz2  = Bus.audio(s,1);
+~normMelo  = Bus.audio(s,1);
+~normRnd  = Bus.audio(s,1);
+~normSquelch  = Bus.audio(s,1);
+~normCymbal  = Bus.audio(s,2);
+~normHat  = Bus.audio(s,2);
+
+
 ~micBus = Bus.audio(s,1);
 ~ptrBus = Bus.audio(s,1);
 ~micBus2 = Bus.audio(s,1);
@@ -252,7 +261,7 @@ s.sync;
 	s.sync;
 
 SynthDef(\lead, {
-		arg freq= 500, mRatio=1, cRatio=1, index =1, iScale=5, amp=0.01, atk= 0.01  , rel=3, cAtk = 4 , cRel = (-4) , pan =0, atkE =0,decE=0.1936, subsE=50, relE=0, sineRate = 0.0000000095262251, sineRangeHigh = 0, sineRangeLow=0, pitch = 0, sRteLPF = 1.3, timeSca= 0.25, dure= 1/1, which = 1, whichMod = 1, whichAmp =0,phRise= 0 , whichEnv = 0,timeSca2 =1,out=0, eFreq =0 , phFm=8,decEC=0,filF=200, bus,bus2,bus3,bus4,bus5,bus6, bus7, bus8,  bpFreq = 500,wCar=0,gra=1,lvlDec=1,factor=1, factor2 =0, vlPE =27.1366666667,vlPE2=0,dcPE = 0.129066666667,atckC = 2.5, decC = (-2), crvEP = (-2), rqLPF =0.5;
+		arg freq= 500, mRatio=1, cRatio=1, index =1, iScale=5, amp=0.01, atk= 0.01  , rel=3, cAtk = 4 , cRel = (-4) , pan =0, atkE =0,decE=0.1936, subsE=50, relE=0, sineRate = 0.0000000095262251, sineRangeHigh = 0, sineRangeLow=0, pitch = 0, sRteLPF = 1.3, timeSca= 0.25, dure= 1/1, which = 1, whichMod = 1, whichAmp =0,phRise= 0 , whichEnv = 0,timeSca2 =1,out=0, eFreq =0 , phFm=8,decEC=0,filF=200, bus,bus2,bus3,bus4,bus5,bus6, bus7, bus8,  bpFreq = 500,wCar=0,gra=1,lvlDec=1,factor=1, factor2 =0, vlPE =27.1366666667,vlPE2=0,dcPE = 0.129066666667,atckC = 2.5, decC = (-2), crvEP = (-2), rqLPF =0.5, factor3 =1;
 
 
 	var car,car2, mod,modE,modE2, env, iEnv, mod2, sig, bufpos, envVoice, filRte,lp,bp,hp,lp2, b1,a;
@@ -350,7 +359,7 @@ SynthDef(\lead, {
 
 		//bp = BPF.ar(sig,MouseY.kr(4,3000),0.26);//0.05
 
-bp = BPF.ar(sig,In.kr(bus5, 1),0.26);//0.05
+bp = BPF.ar(sig,In.kr(bus5, 1) *factor3  ,0.26);//0.05
 
 	hp = BHiPass4.ar(sig, In.kr(bus, 1),MouseY.kr(1,0.4,0));
 //MouseX.kr(100,5000+ filF)
@@ -379,9 +388,12 @@ bp = BPF.ar(sig,In.kr(bus5, 1),0.26);//0.05
 	"lead init".postln;
 
 
-	SynthDef(\normaliza, {|in, out = 0,gain=1,vol =1 du =0.01 |
+	SynthDef(\normaliza, {|in, out = 0,gain=1,vol =1 du =0.01 , rel=0.8, atk=0.08|
 
-	Out.ar(out , Normalizer.ar(gain.dbamp*In.ar(in,2),vol.dbamp, du));
+	//Out.ar(out , Normalizer.ar(In.ar(in,1),vol.dbamp, du));
+
+
+		Out.ar(out , Compander.ar(In.ar(in,1), In.ar(in,1), 0.001, 1, 0.05, atk, rel)*1);//(-23).dbamp
 
 	}).add;
 
@@ -886,7 +898,7 @@ sig = Pan2.ar( sig , pan);//0 was pan
 
 
 
-	SynthDef(\limiter, {|in, out = 0,gain=1,vol =1 du =0.01 |
+	SynthDef(\limiter, {|in, out = 0,gain=1,vol =(-10) du =0.01 |
 
 	//var input, effect;
 
@@ -899,7 +911,9 @@ sig = Pan2.ar( sig , pan);//0 was pan
 		//Out.ar(out, In.ar(~master,2)    );
 
 
-		Out.ar(out , Normalizer.ar(gain.dbamp*In.ar(in,2),vol.dbamp, du));
+		//Out.ar(out , Normalizer.ar(gain.dbamp*In.ar(in,2),vol.dbamp, du));
+
+		Out.ar(out , Limiter.ar(gain.dbamp*In.ar(in,2),vol.dbamp, du));
 
 	}).add;
 
@@ -921,7 +935,7 @@ sig = Pan2.ar( sig , pan);//0 was pan
 
 
 
-	SynthDef(\limiter2, {|in, out = 0,gain=1,vol =(-23) du =0.01 |
+	SynthDef(\limiter2, {|in, out = 0,gain=1,vol =(-23) du =0.01, rel=0.8 |
 
 	//var input, effect;
 
@@ -933,8 +947,10 @@ sig = Pan2.ar( sig , pan);//0 was pan
 
 		//Out.ar(out, In.ar(~master,2)    );
 
+		Out.ar(out , Compander.ar(In.ar(in,2), In.ar(in,2), 0.001, 1, 0.05, 0.01, rel)*gain);//(-23).dbamp
 
-		Out.ar(out , Limiter.ar(gain.dbamp*In.ar(in,2),vol.dbamp, du));
+
+		//Out.ar(out , Limiter.ar(gain.dbamp*In.ar(in,2),vol.dbamp, du));
 
 	}).add;
 

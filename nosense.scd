@@ -1,4 +1,4 @@
-
+s.meter
 
 (
 ~ind = 0;
@@ -30,14 +30,16 @@
 ~wetsR = [0.05,0.1];
 ~amps = [0.1,0.01,0.2,0.001];
 ~spreads = [1,1,1,1,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,40];
+~fac3s = [0.25,1,4];
+
 
 ~freqs = [657.9895,657.9895];//, 698.46.rand ];
 
 ~insts = [~melo1,~fuzz, ~squelch, ~rnd,Pbindf(~bassRest, \dur,Pseq([1/4],1))].scramble;
 
-~pp;~ff;~dd;~bf;~rt;~frq;~fct;~ps;~dps;~we;~tpp;~pm;~am;~ins;~sp;~bsFu;
+~pp;~ff;~dd;~bf;~rt;~frq;~fct;~ps;~dps;~we;~tpp;~pm;~am;~ins;~sp;~bsFu;~fc3;
 
-
+~fac3 = {~fc3 =  ~fac3s[~fac3s.size.rand];~fc3;};
 ~spread = {~sp = ~spreads[~spreads.size.rand];~sp;};
 ~amp = {~am  = ~amps[~amps.size.rand];~am;};
 ~pseqm= {~pm=~pseqsm[~pseqsm.size.rand]; ~pm;};
@@ -50,12 +52,23 @@
 ~busFi = {~bf = ~busFis[~busFis.size.rand];~bf;};
 ~dur =  {~dd =~dure[~dure.size.rand];~dd;};
 ~fil =  {~ff =~wFils[~wFils.size.rand];~ff;};
-~pseq = {~pp =~pseqs[~pseqs.size.rand];~pp;};//9
+~pseq = {|input|
+
+	if(input==~melo1,{~pp = ~tpseq.(); ~pp;},{
+
+
+
+
+	~pp =~pseqs[~pseqs.size.rand];~pp;
+
+	});
+
+};//9
 ~wet = { ~we =~wetsR[~wetsR.size.rand]; ~we;};
 //~inst = {~ins =~insts[4.rand];~ins;};
 ~inst ={~ins =~insts[~insts.size.rand];~ins;};
 
-~rteFil = {|input|      if(input==0,{~bsFu =~limitFuzz;},{~bsFu = ~limitFuzz2;}); ~bsFu;};
+~rteFil = {|input|      if(input==0,{~bsFu =~normFuzz;},{~bsFu = ~normFuzz2;}); ~bsFu;};
 
 
 
@@ -171,16 +184,18 @@ o = {
 
 //s.scope
 //s.plotTree
+
+
 Ppar([
 
-	/*Pseq([
-		~specialHits[1],Ppar([~specialHits[2],
+	Pseq([
+/*		~specialHits[1],Ppar([~specialHits[2],
 		Pbind(\instrument, \wNoise,\dur, Pseq([1/1], 1),\dec, Pseq([1/1], 1),\amp,(-20),\out, ~reverbBus2,)   ,
 	Pbind(\instrument,\reverb,\dur , Pseq([1/1], 1), \revtime, 3.0976, \in, ~reverbBus2,\group,~revGrp2,\out,~limitNonRec,
 
 
 		\roomsize, 40,  \damping, 0.09, \inputbw, 0.75, \drylevel, -0, \earlylevel, -22, \taillevel, -4,\maxRoomsize,40,\wet,0.8
-	)],1),~specialHits[3]     ,~specialHits[0] ,
+	)],1),~specialHits[3]     ,~specialHits[0] ,     */
 
 ~toUse[7.rrand(28,1)],~toUse[7.rrand(28,1)],
 	~toUse[7.rrand(28,1)],~toUse[7.rrand(28,1)],
@@ -190,7 +205,94 @@ Ppar([
 	~toUse[7.rrand(28,1)],~toUse[7.rrand(28,1)],
 	~toUse[7.rrand(28,1)],~toUse[7.rrand(28,1)],
 
-	],1),*/
+
+		~toUse[7.rrand(28,1)],~toUse[7.rrand(28,1)],
+	~toUse[7.rrand(28,1)],~toUse[7.rrand(28,1)],
+
+	],1),
+
+
+
+Pseq([
+
+
+Pseq([
+	Pbindf(~inst.(), \dur,~pseq.(~ins),\decE,~pp),
+	Pbindf(~inst.(), \dur,~pseq.(~ins),\decE,~pp),
+	Pbindf(~inst.(), \dur,~pseq.(~ins),\decE,~pp),
+		Pbindf(~inst.(), \dur,~pseq.(~ins),\decE,~pp),
+
+
+
+
+
+
+
+//	,Pbindef(~transRev.(~ins),\revtime,~trans.(Pseq([1/4],16)))
+].scramble,4)
+,
+
+Pseq([
+	Pbindf(~inst.(), \dur,~pseq.(~ins),\decE,~pp),
+	Pbindf(~inst.(), \dur,~pseq.(~ins),\decE,~pp),
+	Pbindf(~inst.(), \dur,~pseq.(~ins),\decE,~pp),
+		Pbindf(~inst.(), \dur,~pseq.(~ins),\decE,~pp),
+
+
+
+
+
+
+
+//	,Pbindef(~transRev.(~ins),\revtime,~trans.(Pseq([1/4],16)))
+].scramble,4),
+
+Pseq([
+	Pbindf(~inst.(), \dur,~pseq.(~ins),\decE,~pp),
+	Pbindf(~inst.(), \dur,~pseq.(~ins),\decE,~pp),
+	Pbindf(~inst.(), \dur,~pseq.(~ins),\decE,~pp),
+		Pbindf(~inst.(), \dur,~pseq.(~ins),\decE,~pp),
+
+
+
+
+
+
+
+//	,Pbindef(~transRev.(~ins),\revtime,~trans.(Pseq([1/4],16)))
+].scramble,4)
+
+	],inf)
+
+
+],inf).play(t,quant:0)
+
+
+)
+Ppar([
+
+	Pseq([
+/*		~specialHits[1],Ppar([~specialHits[2],
+		Pbind(\instrument, \wNoise,\dur, Pseq([1/1], 1),\dec, Pseq([1/1], 1),\amp,(-20),\out, ~reverbBus2,)   ,
+	Pbind(\instrument,\reverb,\dur , Pseq([1/1], 1), \revtime, 3.0976, \in, ~reverbBus2,\group,~revGrp2,\out,~limitNonRec,
+
+
+		\roomsize, 40,  \damping, 0.09, \inputbw, 0.75, \drylevel, -0, \earlylevel, -22, \taillevel, -4,\maxRoomsize,40,\wet,0.8
+	)],1),~specialHits[3]     ,~specialHits[0] ,     */
+
+~toUse[7.rrand(28,1)],~toUse[7.rrand(28,1)],
+	~toUse[7.rrand(28,1)],~toUse[7.rrand(28,1)],
+
+	~toUse[7.rrand(28,1)],~toUse[7.rrand(28,1)],
+	~toUse[7.rrand(28,1)],~toUse[7.rrand(28,1)],
+	~toUse[7.rrand(28,1)],~toUse[7.rrand(28,1)],
+	~toUse[7.rrand(28,1)],~toUse[7.rrand(28,1)],
+
+
+		~toUse[7.rrand(28,1)],~toUse[7.rrand(28,1)],
+	~toUse[7.rrand(28,1)],~toUse[7.rrand(28,1)],
+
+	],1),
 
 /*
 
