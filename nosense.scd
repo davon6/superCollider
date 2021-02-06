@@ -151,7 +151,7 @@ o = {
 
 	Out.kr(~bus5, SinOsc.ar(1.2875).range(5274.04,0.0201171875));//c3
 
-	Out.kr(~bus6, SinOsc.ar(2.575).range(5274.04,0.0201171875));//c3
+
 	Out.kr(~bus7, SinOsc.ar(5.15).range(5274.04,0.0201171875));
 	Out.kr(~bus8, SinOsc.ar(0.321875).range(2637.02,0.0201171875));
 
@@ -172,7 +172,18 @@ o = {
 
 	Out.kr(~bus15, SinOsc.ar(1.2875).range(41.2,1318.51));
 
-}.play();
+
+
+	//Out.kr(~bus6, SinOsc.ar(2.575).range(5274.04,0.0201171875));//c3
+
+	Out.kr(~bus6,
+
+		EnvGen.kr(
+	Env([0,0,0,0,1,1,1,0],[0,0,0,TempoClock.beatDur/2,0, TempoClock.beatDur/2,0,0],6,6,0),Trig.kr(1,490));
+
+	);//c3
+//TempoClock.beatInBar
+}.play();//DONT FORGET quant:
 
 
 

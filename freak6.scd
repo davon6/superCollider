@@ -90,6 +90,10 @@ s.options.memSize =
 
 ~limitKick = Bus.audio(s,2);
 ~limitBass = Bus.audio(s,2);
+
+~limitDumK = Bus.audio(s,2);
+~limitDumB = Bus.audio(s,2);
+
 ~limitCymb = Bus.audio(s,2);
 ~limitHat = Bus.audio(s,2);
 ~limitSna = Bus.audio(s,2);
@@ -493,13 +497,24 @@ SynthDef.new(\gran, {
 	SynthDef(\bass,{
 		arg freq=41.2, dure=1, amp=0.5,
 		atkcrv=1, relcrv=5,
-		atk=0, rel=0.1, lpf=100, out = 0;
-		var sig, env;
+		atk=0, rel=0.1, lpf=100, out = 0, modLvl = True,bus;
+
+
+
+		var sig, env, lvlBa;
+
+
+		if(modLvl== True,{
+			lvlBa  = In.kr(bus, 1);
+		},{
+			lvlBa =1;
+		});
+
 
 
 		env = EnvGen.ar(
 			Env(
-				[0,1,0],
+				[0,lvlBa,0],
 				[atk,rel],
 				[atkcrv,relcrv]
 			),
@@ -586,7 +601,11 @@ envF2 =EnvGen.kr(Env(
 
 		//sig = BLowPass4.ar(sig,MouseX.kr(1,5000, \exponential),5);
 
-		sig = SelectX.ar(wR,[ sig,sig2]) * amp.dbamp  !2;
+		//sig = SelectX.ar(wR,[ sig,sig2]) * amp.dbamp  !2;
+
+
+		sig = sig * amp.dbamp  !2;
+
 
 
 

@@ -41,7 +41,7 @@ s.meter
 		\atk, t.beatDur/4 * 0.01,
 		\rel, t.beatDur/4 * 0.99,
 		\atkcrv, -2,
-		\relcrv, -1,
+		\relcrv, -1, \bus, ~bus6,
 	\amp, (-0),\out,~limitBass
 );
 
@@ -301,8 +301,10 @@ Pbind(\instrument,\comp, \dur,Pseq([64/1],1),\thr,0.6 ,\sB, 1.2,\sA, 2,\atk ,0.0
 
 Ppar([
 
-	Pseq([Pbindf(~kick,\out,~kbus)],4096),
-	Pseq([Pbindf(~snare,\out,~snBus)],1024),
+	Pseq([Pbindf(~kick,\out,~limitDumK)],4096),
+	Pseq([Pbindf(~snare,\out,~limitDumB)],1024),
+	Pbind(\instrument, \limiter,\in, ~limitDumB, \dur,Pseq([1024/1],1),\du,2.5, \vol,(-2),\gain,70,\out,~snBus),
+Pbind(\instrument, \limiter,\in, ~limitDumK,\dur,Pseq([1024/1],1), \vol,(-0.5),\gain,20,\du,2.5,\out,~kbus),
 
 	Pbind(\instrument,\comp,\dur,Pseq([1024/1],1),\thr,0.6 ,\sB, 1,\sA, 4,\atk ,0.001, \rel ,0.04840,\in, ~comBusCymb ,\in2, ~kbus, \out,~limitCymb,\group, ~compGrp),
 Pbind(\instrument,\comp, \dur,Pseq([1024/1],1),\thr,0.6 ,\sB, 1.2,\sA, 2,\atk ,0.0001, \rel ,0.04840
@@ -313,10 +315,9 @@ Pbind(\instrument,\comp, \dur,Pseq([1024/1],1),\thr,0.6 ,\sB, 1.2,\sA, 2,\atk ,0
 
 	Pbind(\instrument, \limiter,\in, ~limitBass, \dur,Pseq([1024/1],1),\du,2.5, \vol,(-2),\gain,70,\group,~limitGrp),
 Pbind(\instrument, \limiter,\in, ~limitKick,\dur,Pseq([1024/1],1), \vol,(-0.5),\gain,20,\du,2.5,\group,~limitGrp),
-Pbind(\instrument, \limiter,\in, ~limitCymb,\dur,Pseq([1024/1],1),\du,2.5, \gain,60,\vol,(-18),\group,~limitGrp),
-Pbind(\instrument, \limiter,\in, ~limitHat,\dur,Pseq([1024/1],1),\du,2.5, \gain,60, \vol,(-18),\group,~limitGrp),
+Pbind(\instrument, \limiter,\in, ~limitCymb,\dur,Pseq([1024/1],1),\du,2.5, \gain,50,\vol,(-18),\group,~limitGrp),
+Pbind(\instrument, \limiter,\in, ~limitHat,\dur,Pseq([1024/1],1),\du,2.5, \gain,50, \vol,(-18),\group,~limitGrp),
 Pbind(\instrument, \limiter,\in, ~limitSna, \dur, Pseq([1024/1],1),\du,2.5,  \gain,18,\vol,(-12.5),\group,~limitGrp),
-
 
 
 	// Ppar([    Ppar([~kick , ~bass,],40)  ,~snare      ],40).play(t)
