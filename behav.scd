@@ -7,6 +7,7 @@
 //dont forget double Rkick start seq
 //why 2 grps effect
 //percu cutting the 1/2 for progression
+//more variation in kickbass
 s.scope
 s.plotTree
 s.meter
@@ -49,7 +50,7 @@ s.meter
 ~kick =	Pbind(\instrument, \kick,\dur, Pseq([1/1],1),\amp,( -10.5),\out,~limitKick);
 
 
-~cymbal = Pbind(\instrument, \cymb,\type, Pseq([\rest,\rest,\note,\note ,\rest,\note ,\note, \rest],inf),\dur,Pseq([1/4],64 ),\rel, 0.3872,\rel2,0.0968,\carHz, 525.12070612224,\modHz,1899.3343179398,\modAmp, 0.12875 ,\amp,(-18.5),\rel,0.0968,\rel2,0.0968,\out, ~comBusCymb);
+~cymbal = Pbind(\instrument, \cymb,\type, Pseq([\rest,\rest,\note,\note ,\rest,\note ,\note, \rest],inf),\dur,Pseq([1/4],64 ),\rel, 0.3872,\rel2,0.0968,\carHz, 525.12070612224,\modHz,1899.3343179398,\modAmp, 0.12875 ,\amp,(-18.5),\rel,0.0968,\rel2,0.0968,\latch,8000,\out, ~comBusCymb);
 
 ~hat = Pbind(\instrument,\percu2,\dur,Pseq([1/4], 64),\carHz,164.81,\modHz,164.81,\atk, 0,\rel,0.04840,\rel2,0.02420,\amp,( -17),\out,~comBusHat);
 
@@ -315,7 +316,7 @@ Pbind(\instrument,\comp, \dur,Pseq([1024/1],1),\thr,0.6 ,\sB, 1.2,\sA, 2,\atk ,0
 
 	Pbind(\instrument, \limiter,\in, ~limitBass, \dur,Pseq([1024/1],1),\du,2.5, \vol,(-2),\gain,70,\group,~limitGrp),
 Pbind(\instrument, \limiter,\in, ~limitKick,\dur,Pseq([1024/1],1), \vol,(-0.5),\gain,20,\du,2.5,\group,~limitGrp),
-Pbind(\instrument, \limiter,\in, ~limitCymb,\dur,Pseq([1024/1],1),\du,2.5, \gain,50,\vol,(-18),\group,~limitGrp),
+Pbind(\instrument, \limiter,\in, ~limitCymb,\dur,Pseq([1024/1],1),\du,2.5, \gain,35,\vol,(-18),\group,~limitGrp),
 Pbind(\instrument, \limiter,\in, ~limitHat,\dur,Pseq([1024/1],1),\du,2.5, \gain,50, \vol,(-18),\group,~limitGrp),
 Pbind(\instrument, \limiter,\in, ~limitSna, \dur, Pseq([1024/1],1),\du,2.5,  \gain,18,\vol,(-12.5),\group,~limitGrp),
 
