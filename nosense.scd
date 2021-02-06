@@ -21,7 +21,7 @@ s.meter
 
 //~pseqs =    [Pseq([1 /4],4),Pseq([1 /4],16),Pseq([1 /1],1),Pseq([1 /1],4),Pseq([1 /1],16)];
 ~dure = [1,1,1,1,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,16];
-~busFis = [~bus4,~bus4,~bus4,~bus4,~bus5,~bus5,~bus5,~bus5,~bus7,~bus8];
+
 ~wFils = [0,2];
 ~revTails =[Pseq([1/4],4096),  Pseq([1/1],4096)];// [0.1936,0.3872, 0.7744,0, 0];//Pseq([1/1],1),Pseq([1/4],1)
 ~factors = [500,5000,5,1,1,1,1,10];
@@ -35,7 +35,7 @@ s.meter
 
 ~freqs = [657.9895,657.9895];//, 698.46.rand ];
 
-~insts = [~melo1,~fuzz, ~squelch, ~rnd,Pbindf(~bassRest, \dur,Pseq([1/4],1))].scramble;
+~insts = [~melo1,~fuzz, ~squelch, ~rnd  /*Pbindf(~bassRest, \dur,Pseq([1/4],1))*/].scramble;
 
 ~pp;~ff;~dd;~bf;~rt;~frq;~fct;~ps;~dps;~we;~tpp;~pm;~am;~ins;~sp;~bsFu;~fc3;
 
@@ -48,8 +48,27 @@ s.meter
 ~psqRise = {~ps = ~psqRises[~psqRises.size.rand];~ps;};
 ~factor = {~fct = ~factors[~factors.size.rand];  ~fct;};
 ~freq = {~frq= ~freqs[~freqs.size.rand];~frq;};
-~revTail = {~rt = ~revTails[~revTails.size.rand]; ~rt;};
-~busFi = {~bf = ~busFis[~busFis.size.rand];~bf;};
+~revTail = {|input|
+	if(input==~melo1,{
+
+		~rt = Pseq([1/3],1);~rt;
+
+	},
+
+{
+	~rt = ~revTails[~revTails.size.rand]; ~rt;
+	});
+
+
+	};
+~busFi = {|input|
+	var busAr;
+	~busLFis = [~bus4,~bus4,~bus4,~bus4,~bus7,~bus8];
+	~busHFis = [~bus5,~bus5,~bus5,~bus5,~bus7,~bus8];
+
+
+	if(input ==0,{ busAr = ~busLFis   },{  busAr = ~busHFis  });
+	~bf = busAr[busAr.size.rand];~bf;};
 ~dur =  {~dd =~dure[~dure.size.rand];~dd;};
 ~fil =  {~ff =~wFils[~wFils.size.rand];~ff;};
 ~pseq = {|input|
@@ -68,7 +87,7 @@ s.meter
 //~inst = {~ins =~insts[4.rand];~ins;};
 ~inst ={~ins =~insts[~insts.size.rand];~ins;};
 
-~rteFil = {|input|      if(input==0,{~bsFu =~normFuzz;},{~bsFu = ~normFuzz2;}); ~bsFu;};
+~rteFil = {|input|      if(input==0,{~bsFu =~reverbBus;},{~bsFu = ~reverbBus2;}); ~bsFu;};
 
 
 
@@ -134,7 +153,7 @@ o = {
 
 	Out.kr(~bus6, SinOsc.ar(2.575).range(5274.04,0.0201171875));//c3
 	Out.kr(~bus7, SinOsc.ar(5.15).range(5274.04,0.0201171875));
-	Out.kr(~bus8, SinOsc.ar(0.321875).range(5274.04,0.0201171875));
+	Out.kr(~bus8, SinOsc.ar(0.321875).range(2637.02,0.0201171875));
 
 	Out.kr(~bus9, //SinOsc.ar(1.2875).range(10.3,81.41));
 
@@ -197,6 +216,19 @@ Ppar([
 		\roomsize, 40,  \damping, 0.09, \inputbw, 0.75, \drylevel, -0, \earlylevel, -22, \taillevel, -4,\maxRoomsize,40,\wet,0.8
 	)],1),~specialHits[3]     ,~specialHits[0] ,     */
 
+
+		~toUse[0.rrand(6,1)],~toUse[0.rrand(6,1)],
+		~toUse[0.rrand(6,1)],~toUse[0.rrand(6,1)],
+		~toUse[0.rrand(6,1)],~toUse[0.rrand(6,1)],
+		~toUse[0.rrand(6,1)],~toUse[0.rrand(6,1)],
+		~toUse[0.rrand(6,1)],~toUse[0.rrand(6,1)],
+		~toUse[0.rrand(6,1)],~toUse[0.rrand(6,1)],
+		~toUse[0.rrand(6,1)],~toUse[0.rrand(6,1)],
+		~toUse[0.rrand(6,1)],~toUse[0.rrand(6,1)],
+
+
+
+
 ~toUse[7.rrand(28,1)],~toUse[7.rrand(28,1)],
 	~toUse[7.rrand(28,1)],~toUse[7.rrand(28,1)],
 
@@ -216,27 +248,18 @@ Ppar([
 Pseq([
 
 
-Pseq([
-	Pbindf(~inst.(), \dur,~pseq.(~ins),\decE,~pp),
+		Pbindf(~inst.(), \dur,~pseq.(~ins),\decE,~pp),
 	Pbindf(~inst.(), \dur,~pseq.(~ins),\decE,~pp),
 	Pbindf(~inst.(), \dur,~pseq.(~ins),\decE,~pp),
 		Pbindf(~inst.(), \dur,~pseq.(~ins),\decE,~pp),
 
 
 
-
-
-
-
-//	,Pbindef(~transRev.(~ins),\revtime,~trans.(Pseq([1/4],16)))
-].scramble,4)
-,
-
 Pseq([
 	Pbindf(~inst.(), \dur,~pseq.(~ins),\decE,~pp),
 	Pbindf(~inst.(), \dur,~pseq.(~ins),\decE,~pp),
 	Pbindf(~inst.(), \dur,~pseq.(~ins),\decE,~pp),
-		Pbindf(~inst.(), \dur,~pseq.(~ins),\decE,~pp),
+		Pbindf(~bassRest, \dur,~pseq.(~ins),\decE,~pp),
 
 
 
@@ -246,6 +269,29 @@ Pseq([
 
 //	,Pbindef(~transRev.(~ins),\revtime,~trans.(Pseq([1/4],16)))
 ].scramble,4),
+
+
+
+
+
+
+Pseq([
+	Pbindf(~inst.(), \dur,~pseq.(~ins),\decE,~pp),
+	Pbindf(~inst.(), \dur,~pseq.(~ins),\decE,~pp),
+	Pbindf(~inst.(), \dur,~pseq.(~ins),\decE,~pp),
+		Pbindf(~inst.(), \dur,~pseq.(~ins),\decE,~pp),
+
+
+
+
+
+
+
+//	,Pbindef(~transRev.(~ins),\revtime,~trans.(Pseq([1/4],16)))
+].scramble,4),Pbindf(~inst.(), \dur,~pseq.(~ins),\decE,~pp),
+	Pbindf(~inst.(), \dur,~pseq.(~ins),\decE,~pp),
+	Pbindf(~inst.(), \dur,~pseq.(~ins),\decE,~pp),
+		Pbindf(~inst.(), \dur,~pseq.(~ins),\decE,~pp),
 
 Pseq([
 	Pbindf(~inst.(), \dur,~pseq.(~ins),\decE,~pp),

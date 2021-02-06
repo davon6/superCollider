@@ -22,11 +22,11 @@ s.options.memSize =
 ~reverbNonRec2 = Bus.audio(s,2);
 
 
-~normFuzz  = Bus.audio(s,1);
-~normFuzz2  = Bus.audio(s,1);
-~normMelo  = Bus.audio(s,1);
-~normRnd  = Bus.audio(s,1);
-~normSquelch  = Bus.audio(s,1);
+~normFuzz  = Bus.audio(s,2);
+~normFuzz2  = Bus.audio(s,2);
+~normMelo  = Bus.audio(s,2);
+~normRnd  = Bus.audio(s,2);
+~normSquelch  = Bus.audio(s,2);
 ~normCymbal  = Bus.audio(s,2);
 ~normHat  = Bus.audio(s,2);
 
@@ -388,16 +388,7 @@ bp = BPF.ar(sig,In.kr(bus5, 1) *factor3  ,0.26);//0.05
 	"lead init".postln;
 
 
-	SynthDef(\normaliza, {|in, out = 0,gain=1,vol =1 du =0.01 , rel=0.8, atk=0.08|
 
-	//Out.ar(out , Normalizer.ar(In.ar(in,1),vol.dbamp, du));
-
-
-		Out.ar(out , Compander.ar(In.ar(in,1), In.ar(in,1), 0.001, 1, 0.05, atk, rel)*1);//(-23).dbamp
-
-	}).add;
-
-"normalization init".postln;
 
 
 
@@ -896,9 +887,21 @@ sig = Pan2.ar( sig , pan);//0 was pan
 
 
 
+	SynthDef(\normaliza, {|in, out = 0,gain=1,vol =1 du =0.01 , rel=0.8, atk=0.08|
+
+	//Out.ar(out , Normalizer.ar(In.ar(in,1),vol.dbamp, du));
 
 
-	SynthDef(\limiter, {|in, out = 0,gain=1,vol =(-10) du =0.01 |
+		Out.ar(out , CompanderD.ar(In.ar(in,2), 0.001, 1, 0.05, atk, rel)*gain);//(-23).dbamp
+
+	}).add;
+
+"normalization init".postln;
+
+
+
+
+	SynthDef(\limiter, {|in, out = 0,gain=1,vol =1, du =0.01,rel=0.8, atk =0.01 |
 
 	//var input, effect;
 
@@ -914,6 +917,9 @@ sig = Pan2.ar( sig , pan);//0 was pan
 		//Out.ar(out , Normalizer.ar(gain.dbamp*In.ar(in,2),vol.dbamp, du));
 
 		Out.ar(out , Limiter.ar(gain.dbamp*In.ar(in,2),vol.dbamp, du));
+
+
+	//	Out.ar(out , Compander.ar(In.ar(in,2), In.ar(in,2), 0.001, 1, 0.05, atk, rel)*gain);//(-23).dbamp
 
 	}).add;
 
@@ -935,7 +941,7 @@ sig = Pan2.ar( sig , pan);//0 was pan
 
 
 
-	SynthDef(\limiter2, {|in, out = 0,gain=1,vol =(-23) du =0.01, rel=0.8 |
+	SynthDef(\limiter2, {|in, out = 0,gain=1,vol =(-23), du =0.01, rel=0.8, atk =0.01 |
 
 	//var input, effect;
 
@@ -947,10 +953,10 @@ sig = Pan2.ar( sig , pan);//0 was pan
 
 		//Out.ar(out, In.ar(~master,2)    );
 
-		Out.ar(out , Compander.ar(In.ar(in,2), In.ar(in,2), 0.001, 1, 0.05, 0.01, rel)*gain);//(-23).dbamp
+		//Out.ar(out , Compander.ar(In.ar(in,2), In.ar(in,2), 0.001, 1, 0.05, atk, rel)*gain);//(-23).dbamp
 
 
-		//Out.ar(out , Limiter.ar(gain.dbamp*In.ar(in,2),vol.dbamp, du));
+		Out.ar(out , Limiter.ar(gain.dbamp*In.ar(in,2),vol.dbamp, du));
 
 	}).add;
 
