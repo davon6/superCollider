@@ -1,5 +1,7 @@
 s.meter
+Server.freeAll
 
+Server.killAll
 (
 ~ind = 0;
 ~pseqs =    [Pseq([1 /4],1),Pseq([1 /4],4),Pseq([1 /4],16),Pseq([1 /4],16),Pseq([1 /4],16),Pseq([1 /4],16),Pseq([1 /1],1),Pseq([1 /1],4),Pseq([4 /1],1)];
@@ -31,14 +33,16 @@ s.meter
 ~amps = [0.1,0.01,0.2,0.001];
 ~spreads = [1,1,1,1,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,40];
 ~fac3s = [0.25,1,4];
-
-
 ~freqs = [657.9895,657.9895];//, 698.46.rand ];
 
 ~insts = [~melo1,~fuzz, ~squelch, ~rnd  /*Pbindf(~bassRest, \dur,Pseq([1/4],1))*/].scramble;
 
-~pp;~ff;~dd;~bf;~rt;~frq;~fct;~ps;~dps;~we;~tpp;~pm;~am;~ins;~sp;~bsFu;~fc3;
+~lvlDecs = [0.2,0.4,0.8];
 
+~pp;~ff;~dd;~bf;~rt;~frq;~fct;~ps;~dps;~we;~tpp;~pm;~am;~ins;~sp;~bsFu;~fc3;~lvDc;
+
+
+~lvlDec = {~lvDc =  ~lvlDecs[~lvlDecs.size.rand];~lvDc;};
 ~fac3 = {~fc3 =  ~fac3s[~fac3s.size.rand];~fc3;};
 ~spread = {~sp = ~spreads[~spreads.size.rand];~sp;};
 ~amp = {~am  = ~amps[~amps.size.rand];~am;};
@@ -172,11 +176,16 @@ o = {
 
 	Out.kr(~bus15, SinOsc.ar(1.2875).range(41.2,1318.51));
 
+	Out.kr(~bus16, EnvGen.kr(Env(
+		[0,0,0,0.8,0 ,0,0],
+		[0,1   ,1,1  ,1 ,1   ,1],
+		[0, 8  ,-8, 8,-8,0   ,0],5,0),Trig.kr(1,490))
+	);
 
 
 	//Out.kr(~bus6, SinOsc.ar(2.575).range(5274.04,0.0201171875));//c3
 
-	Out.kr(~bus6,
+	Out.kr(~bus6,//FOR BASS
 
 		EnvGen.kr(
 	Env([0,0,0,0,1,1,1,0],[0,0,0,TempoClock.beatDur/2,0, TempoClock.beatDur/2,0,0],6,6,0),Trig.kr(1,490));
@@ -238,7 +247,7 @@ Ppar([
 		~toUse[0.rrand(6,1)],~toUse[0.rrand(6,1)],
 
 
-
+		// ~toUse.size()
 
 ~toUse[7.rrand(28,1)],~toUse[7.rrand(28,1)],
 	~toUse[7.rrand(28,1)],~toUse[7.rrand(28,1)],
@@ -322,7 +331,7 @@ Pseq([
 	],inf)
 
 
-],inf).play(t,quant:0)
+],inf).play(t,quant:1)
 
 
 )

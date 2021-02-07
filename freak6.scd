@@ -259,16 +259,17 @@ s.sync;
 
 	~bus14 = Bus.control(s,1);
 	~bus15 = Bus.control(s,1);
+	~bus16 = Bus.control(s,1);
 
 "Kontrol rate init".postln;
 
 	s.sync;
 
 SynthDef(\lead, {
-		arg freq= 500, mRatio=1, cRatio=1, index =1, iScale=5, amp=0.01, atk= 0.01  , rel=3, cAtk = 4 , cRel = (-4) , pan =0, atkE =0,decE=0.1936, subsE=50, relE=0, sineRate = 0.0000000095262251, sineRangeHigh = 0, sineRangeLow=0, pitch = 0, sRteLPF = 1.3, timeSca= 0.25, dure= 1/1, which = 1, whichMod = 1, whichAmp =0,phRise= 0 , whichEnv = 0,timeSca2 =1,out=0, eFreq =0 , phFm=8,decEC=0,filF=200, bus,bus2,bus3,bus4,bus5,bus6, bus7, bus8,  bpFreq = 500,wCar=0,gra=1,lvlDec=1,factor=1, factor2 =0, vlPE =27.1366666667,vlPE2=0,dcPE = 0.129066666667,atckC = 2.5, decC = (-2), crvEP = (-2), rqLPF =0.5, factor3 =1;
+		arg freq= 500, mRatio=1, cRatio=1, index =1, iScale=5, amp=0.01, atk= 0.01  , rel=3, cAtk = 4 , cRel = (-4) , pan =0, atkE =0,decE=0.1936, subsE=50, relE=0, sineRate = 0.0000000095262251, sineRangeHigh = 0, sineRangeLow=0, pitch = 0, sRteLPF = 1.3, timeSca= 0.25, dure= 1/1, which = 1, whichMod = 1, whichAmp =0,phRise= 0 , whichEnv = 0,timeSca2 =1,out=0, eFreq =0 , phFm=8,decEC=0,filF=200, bus,bus2,bus3,bus4,bus5,bus6, bus7, bus8,  bpFreq = 500,wCar=0,gra=1,lvlDec=1,factor=1, factor2 =0, vlPE =27.1366666667,vlPE2=0,dcPE = 0.129066666667,atckC = 2.5, decC = (-2), crvEP = (-2), rqLPF =0.5, factor3 =1, modLvl=False;
 
 
-	var car,car2, mod,modE,modE2, env, iEnv, mod2, sig, bufpos, envVoice, filRte,lp,bp,hp,lp2, b1,a;
+	var car,car2, mod,modE,modE2, env, iEnv, mod2, sig, bufpos, envVoice, filRte,lp,bp,hp,lp2, b1,lvlAtk;
 //dec=3.5        predel=0.025    mix=0.08
 	//1.5488
 	//2.575
@@ -278,7 +279,17 @@ SynthDef(\lead, {
 //dont forget 2nd zero used to be 1
 		//env = EnvGen.kr(Env([0,1,0,0],[atkE,decE, subsE,relE],[-2,(MouseY.kr(-5,5)),0,0]),/*  MouseY.kr(0.0986,0.05)*/
 
-		env = EnvGen.kr(Env([0,1,lvlDec,0],[atkE, decE-(In.kr(bus2, 1))     , subsE,relE],[atckC,decC- (In.kr(bus3, 1))
+
+		/*if(modLvl== True,{
+			lvlAtk  = In.kr(bus6, 1);
+		},{
+			lvlAtk =1;
+		});*/
+
+
+
+// weird extra zero at start
+		env = EnvGen.kr(Env([0,1 - In.kr(bus6, 1),lvlDec,0],[atkE, decE-(In.kr(bus2, 1))     , subsE,relE],[atckC,decC- (In.kr(bus3, 1))
 
 			,(-3),0,0]),
 		doneAction:2);
@@ -357,7 +368,7 @@ SynthDef(\lead, {
 
 	lp2 = BLowPass4.ar(sig, (SinOsc.ar(LFNoise1.kr(Lag.kr(2.575,0.0968)).range(0,7.72500)).range(82.41,1400)), rq: 0.3);//MouseX.kr(0,7.72500)
 
-		//bp = BPF.ar(sig,bpFreq+ In.kr(bus5, 1)+ In.kr(bus6, 1),0.3);//0.05
+		//bp = BPF.ar(sig,bpFreq+ In.kr(bus5, 1)+ In.kr(bus6, 1),0.3);//0.05 never use again coz bus6
 
 
 
@@ -368,7 +379,7 @@ bp = BPF.ar(sig,In.kr(bus5, 1) *factor3  ,0.26);//0.05
 	hp = BHiPass4.ar(sig, In.kr(bus, 1),MouseY.kr(1,0.4,0));
 //MouseX.kr(100,5000+ filF)
 //slcFil
-	sig =SelectX.ar(which, [lp, bp,hp,sig])* env* amp.dbamp;
+	sig =SelectX.ar(which, [lp, bp,hp,sig])* amp.dbamp* env;
 
 	//b1 =  sig * env;
 
@@ -514,7 +525,7 @@ SynthDef.new(\gran, {
 
 		env = EnvGen.ar(
 			Env(
-				[0,lvlBa,0],
+				[0,1- In.kr(bus, 1),0],///to try
 				[atk,rel],
 				[atkcrv,relcrv]
 			),
@@ -624,9 +635,9 @@ envF2 =EnvGen.kr(Env(
 
 
 
-	env = EnvGen.kr(Env.perc(atk, rel,1,-1.4), doneAction:2);
+	env = EnvGen.kr(Env.perc(atk, rel,1,-2.4), doneAction:2);
 
-	env2 = EnvGen.kr(Env.perc(0.001, rel2, 1, -2), doneAction:2);
+	env2 = EnvGen.kr(Env.perc(0.001, rel2, 1, -3), doneAction:2);
 
 
 
@@ -638,9 +649,9 @@ envF2 =EnvGen.kr(Env(
 
 	car2 = WhiteNoise.ar(modAmp) * env2 ;
 
-	sig =  HPF.ar(car+car2,3000);
+		sig =  HPF.ar(Latch.ar(tanh(car+car2),Impulse.ar(latch)),3000);
 
-	Out.ar(out, Latch.ar(sig,Impulse.ar(latch))
+	Out.ar(out, sig
 		* [amp.dbamp+0.00555,amp.dbamp]);
 }).add;
 
@@ -653,7 +664,7 @@ SynthDef.new(\percu2, {
 	var car, mod, env, car2, mod2, mod3,env2,sig;
 	env = EnvGen.kr(Env.perc(atk, rel), doneAction:2);
 
-	env2 = EnvGen.kr(Env.perc(0.001, 0.0484, 1, -1), doneAction:2);
+	env2 = EnvGen.kr(Env.perc(0.001, 0.0484, 1, -3), doneAction:2);
 
 	mod = SinOsc.ar(exprand(20,10000), mul:rrand(0, 10000).postln);
 	car = SinOsc.ar(exprand(20,10000) + mod) * env * 0.05;
@@ -662,10 +673,10 @@ SynthDef.new(\percu2, {
 
 car2 = WhiteNoise.ar(0.12875) * env2 ;
 
-	sig = HPF.ar(car+car2,3000);
+	sig = HPF.ar(tanh(Latch.ar(car+car2,Impulse.ar(latch))),3000);
 
 
-			Out.ar(out, Latch.ar(sig,Impulse.ar(latch))
+		Out.ar(out, sig
 			* [amp.dbamp,amp.dbamp+0.007]);
 
 
@@ -898,6 +909,21 @@ sig = Pan2.ar( sig , pan);//0 was pan
 
 
 		Out.ar(out, Compander.ar(In.ar(in,2) , In.ar(in2,1)  , thresh: thr, slopeBelow: sB, slopeAbove: sA, clampTime: atk, relaxTime: rel)  );
+
+
+
+		/*|out,in, sideBus, thresh = 0.05,
+		atk = 0.05, clampLevel = 0.2, rel = 0.08|
+
+
+
+
+		var sig = In.ar(in, 2);
+		var side = In.ar(sideBus, 2).sum;
+		var level = Amplitude.ar(side, 0.01, 0.1);
+		var gate = level > thresh;
+		var eg = EnvGen.ar(Env([1, clampLevel, 1], [atk, rel], releaseNode: 1), gate);
+		Out.ar(out, sig * eg);*/
 
 
 	}).add;

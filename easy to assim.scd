@@ -27,7 +27,7 @@ s.meter
 
 ~limitGrp2 = Group.after(~compGrp2);
 
-
+~bd = TempoClock.beatDur;
 o = {
 	Out.kr(~bus1, MouseY.kr(0.2,0.00)/*LFNoise1.ar(1.2875).range(0.0986,0.05)*/);
 
@@ -39,7 +39,14 @@ o = {
 
 	Out.kr(~bus5, SinOsc.ar(1.2875).range(5274.04,0.0201171875));//c3
 
-	Out.kr(~bus6, SinOsc.ar(2.575).range(5274.04,0.0201171875));//c3
+/*	Out.kr(~bus6, SinOsc.ar(2.575).range(5274.04,0.0201171875));//c3*/
+
+	Out.kr(~bus6,
+
+		EnvGen.kr(
+	Env([0,0,0,0,1,1,1,0],[0,0,0,TempoClock.beatDur/2,0, TempoClock.beatDur/2,0,0],6,6,0),Trig.kr(1,490));
+
+	);
 	Out.kr(~bus7, SinOsc.ar(5.15).range(5274.04,0.0201171875));
 	Out.kr(~bus8, SinOsc.ar(0.321875).range(2637.02,0.0201171875));
 
@@ -60,21 +67,31 @@ o = {
 
 	Out.kr(~bus15, SinOsc.ar(1.2875).range(41.2,1318.51));
 
+
+	Out.kr(~bus16, EnvGen.kr(Env(
+		[0,0,0,0.8,0 ,0,0],
+		[0,~bd   ,~bd,~bd  ,~bd ,~bd   ,~bd],           //    [0,1   ,1,1  ,1 ,1   ,1],
+		[0, 8  ,-8, 8,-8,0   ,0],5,0),Trig.kr(1,490))
+	);
+
 }.play();
 
-
+// modLvl
 
 Ppar([
 
 		Pseq([Pbindf(~kick,\out,~kbus)],4096),
 	Pseq([Pbindf(~snare,\out,~snBus)],1024),
-
+//  ,~pseq.()             ~pp
 	Pseq([
 
-Pbind(\instrument,\lead, \dur,~pseq.(),\decE,~pp,\freq, ~freq.(),\bus, ~busFi.(0),\bus2,~bus1,\bus3, 40,\bus4,40,\bus7,50,\bus8, ~bus4,\subsE,0,\which,0 ,\whichMod,0,\whichEnv,1,\amp,(-20),\out,~reverbBus ,\group, ~micGrp),
+		/*Pbind(\instrument,\lead, \dur,~pseq.(),\decE, ~pp,\freq, ~freq.(),\bus, ~busFi.(0),\lvlDec,~lvlDec.(),\bus2,~bus1,\bus3, 40,\bus4,40,\bus7,50,\bus8, ~bus4,\subsE,0,\which,0 ,\whichMod,0,\whichEnv,1,\amp,(-20),\out,~reverbBus ,\group, ~micGrp),*/
 
-	Pbind(\instrument,\lead, \dur,~pseq.(),\decE,~pp,\freq, ~freq.(),\bus, ~busFi.(2),\bus2,~bus1,\bus3, 40,\bus4,40,\bus7,50,\bus8, ~bus4,\subsE,0,\which,2 ,\whichMod,0,\whichEnv,1,\amp,(-20),\out,~reverbBus2 ,\group, ~micGrp),
+	/*Pbind(\instrument,\lead, \dur,~pseq.(),\decE,~pp,\freq, ~freq.(),\bus, ~busFi.(2),\bus2,~bus1,\bus3, 40,\bus4,40,\bus7,50,\bus8, ~bus4,\subsE,0,\which,2 ,\whichMod,0,\whichEnv,1,\amp,(-20),\out,~reverbBus2 ,\group, ~micGrp),*/
 
+		Pbind(\instrument,\lead, \dur,~pseq.(),\decE,~pp,\freq, ~freq.(),\bus, ~busFi.(~ff),\bus2,~bus1,\bus3, 40,\bus4,40,\bus7,50,\bus8, ~bus4,\lvlDec,~lvlDec.(),\subsE,0,\which, ~fil.(),\whichMod,0,
+		\modLvl,True, \bus6,~bus16,
+			\whichEnv,1,\amp,(-20),\out, ~rteFil.(~ff),\group, ~micGrp)
 
 	],40),
 	//          Pseq([1/4],4096),  Pseq([1/1],4096)]       .postln
@@ -99,21 +116,21 @@ Pbind(\instrument,\lead, \dur,~pseq.(),\decE,~pp,\freq, ~freq.(),\bus, ~busFi.(0
 ,\in, ~comFuzz2 ,\in2, ~kbus, \out,~normFuzz2, \group, ~compGrp),
 
 
-	Pbind(\instrument, \normaliza,\in, ~normFuzz, \dur, Pseq([1024/1],1),\du,2.5, \vol,(-10),\gain,65,\group,~normGrp,\out,~limitFuzz),
+	Pbind(\instrument, \normaliza,\in, ~normFuzz, \dur, Pseq([1024/1],1),\du,~du, \vol,(-10),\gain,65,\group,~normGrp,\out,~limitFuzz),
 
-	Pbind(\instrument, \normaliza,\in, ~normFuzz2, \dur, Pseq([1024/1],1),\du,2.5, /*\atk,1,\rel,0.4,*/\vol,(-10),\gain,52,\group,~normGrp,\out,~limitFuzz),
-
-
-
-
-
-	Pbind(\instrument, \limiter,\in, ~limitFuzz, \dur, Pseq([1024/1],1),\du,2.5, \vol,(-10.3),\gain,50,\group,~limitGrp,\out,0),
+	Pbind(\instrument, \normaliza,\in, ~normFuzz2, \dur, Pseq([1024/1],1),\du,~du, /*\atk,1,\rel,0.4,*/\vol,(-10),\gain,52,\group,~normGrp,\out,~limitFuzz),
 
 
 
 
 
-	Pbind(\instrument, \limiter,\in, ~limitFuzz2, \dur, Pseq([1024/1],1),\du,2.5, \vol,1,\gain,50,\group,~limitGrp2,\out,0),
+	Pbind(\instrument, \limiter,\in, ~limitFuzz, \dur, Pseq([1024/1],1),\du,~du, \vol,(-10.3),\gain,50,\group,~limitGrp,\out,0),
+
+
+
+
+
+	Pbind(\instrument, \limiter,\in, ~limitFuzz2, \dur, Pseq([1024/1],1),\du,~du, \vol,1,\gain,50,\group,~limitGrp2,\out,0),
 
 
 ],1).play(t,quant:0)
