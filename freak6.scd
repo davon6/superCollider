@@ -27,8 +27,18 @@ s.options.memSize =
 ~normMelo  = Bus.audio(s,2);
 ~normRnd  = Bus.audio(s,2);
 ~normSquelch  = Bus.audio(s,2);
-~normCymbal  = Bus.audio(s,2);
-~normHat  = Bus.audio(s,2);
+
+
+
+
+~norm1  = Bus.audio(s,2);
+~norm2  = Bus.audio(s,2);
+~norm3  = Bus.audio(s,2);
+~norm4  = Bus.audio(s,2);
+~norm5  = Bus.audio(s,2);
+
+~norm6  = Bus.audio(s,2);
+~norm7  = Bus.audio(s,2);
 
 
 ~micBus = Bus.audio(s,1);
@@ -379,7 +389,7 @@ bp = BPF.ar(sig,In.kr(bus5, 1) *factor3  ,0.26);//0.05
 	hp = BHiPass4.ar(sig, In.kr(bus, 1),MouseY.kr(1,0.4,0));
 //MouseX.kr(100,5000+ filF)
 //slcFil
-	sig =SelectX.ar(which, [lp, bp,hp,sig])* amp.dbamp* env;
+	sig =SelectX.ar(which, [lp, bp,hp,sig])* env* amp.dbamp;
 
 	//b1 =  sig * env;
 
@@ -905,10 +915,10 @@ sig = Pan2.ar( sig , pan);//0 was pan
 
 
 
-		SynthDef(\comp, {|in, in2, out= 0, dec  , thr  =0.01 ,sB = 1, sA = (1/4), atk = 0.001, rel = 0.04     |
+		SynthDef(\comp, {|in, in2, out= 0, dec  , thr  =0.01 ,sB = 1, sA = (1/4), atk = 0.001, rel = 0.04     , gain=1|
 
 
-		Out.ar(out, Compander.ar(In.ar(in,2) , In.ar(in2,1)  , thresh: thr, slopeBelow: sB, slopeAbove: sA, clampTime: atk, relaxTime: rel)  );
+		Out.ar(out, Compander.ar(In.ar(in,2) , In.ar(in2,1)  , thresh: thr, slopeBelow: sB, slopeAbove: sA, clampTime: atk, relaxTime: rel)* gain.dbamp  );
 
 
 
@@ -932,14 +942,14 @@ sig = Pan2.ar( sig , pan);//0 was pan
 
 
 
-	SynthDef(\normaliza, {|in, out = 0,gain=1,vol =1 du =0.01 , rel=0.8, atk=0.08|
+/*	SynthDef(\normaliza, {|in, out = 0,gain=1,vol =1 du =0.01 , rel=0.8, atk=0.08|
 
 	//Out.ar(out , Normalizer.ar(In.ar(in,1),vol.dbamp, du));
 
 
 		Out.ar(out , CompanderD.ar(In.ar(in,2), 0.001, 1, 0.05, atk, rel)*gain);//(-23).dbamp
 
-	}).add;
+	}).add;*/
 
 "normalization init".postln;
 
@@ -972,6 +982,20 @@ sig = Pan2.ar( sig , pan);//0 was pan
 
 
 
+	SynthDef(\limiter2, {|in, out = 0,gain=1,vol =1 du =0.01 , rel=0.8, atk=0.08|
+
+	//Out.ar(out , Normalizer.ar(In.ar(in,1),vol.dbamp, du));
+
+
+		/*Out.ar(out , CompanderD.ar(In.ar(in,2), 0.001, 1, 0.05, atk, rel)*gain);//(-23).dbamp*/
+
+
+
+		Out.ar(out , Limiter.ar(gain.dbamp*In.ar(in,2),vol.dbamp, du));
+	}).add;
+
+
+
 
 	SynthDef(\grpComp, {|in, in2, out= 0, dec  , thr  =0.01 ,sB = 1, sA = (1/4), atk = 0.001, rel = 0.04     |
 
@@ -986,7 +1010,10 @@ sig = Pan2.ar( sig , pan);//0 was pan
 
 
 
-	SynthDef(\limiter2, {|in, out = 0,gain=1,vol =(-23), du =0.01, rel=0.8, atk =0.01 |
+
+
+
+	/*SynthDef(\limiter2, {|in, out = 0,gain=1,vol =(-23), du =0.01, rel=0.8, atk =0.01 |
 
 	//var input, effect;
 
@@ -1003,7 +1030,7 @@ sig = Pan2.ar( sig , pan);//0 was pan
 
 		Out.ar(out , Limiter.ar(gain.dbamp*In.ar(in,2),vol.dbamp, du));
 
-	}).add;
+	}).add;*/
 
 "limiter2 init".postln;
 

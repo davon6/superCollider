@@ -226,8 +226,36 @@ o = {
 
 
 Ppar([
+	/*Pseq([~bar[6]],100),*/
+	/*Pseq([~toUse[0]
 
-	Pseq([
+		/*Ppar([Ppar([~kick,~bass],16),~cymbal,
+		~hat,~snare
+	/*	Pbindf(~snare,\type, Pseq([\rest,\rest ,\note, \rest], 8))*/
+	*/
+
+	],100),*/
+
+Ppar([
+		Ppar([~kick,~bass],16),~cymbal, ~snare
+	],100)
+
+
+	,
+	/*Pseq([~cymbal],1600),*/
+
+
+	/*Pseq([~snare],1600),*/
+
+
+
+	// Ppar([Pbindf(~cymbal, \dur,Pseq([1/4],64))],1600)
+
+
+
+//	],100),
+
+	/*Pseq([
 /*		~specialHits[1],Ppar([~specialHits[2],
 		Pbind(\instrument, \wNoise,\dur, Pseq([1/1], 1),\dec, Pseq([1/1], 1),\amp,(-20),\out, ~reverbBus2,)   ,
 	Pbind(\instrument,\reverb,\dur , Pseq([1/1], 1), \revtime, 3.0976, \in, ~reverbBus2,\group,~revGrp2,\out,~limitNonRec,
@@ -261,7 +289,7 @@ Ppar([
 		~toUse[7.rrand(28,1)],~toUse[7.rrand(28,1)],
 	~toUse[7.rrand(28,1)],~toUse[7.rrand(28,1)],
 
-	],1),
+	],1),*/
 
 
 
