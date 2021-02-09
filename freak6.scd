@@ -680,7 +680,6 @@ SynthDef.new(\percu2, {
 	car = SinOsc.ar(exprand(20,10000) + mod) * env * 0.05;
 
 
-
 car2 = WhiteNoise.ar(0.12875) * env2 ;
 
 	sig = HPF.ar(tanh(Latch.ar(car+car2,Impulse.ar(latch))),3000);
@@ -688,6 +687,7 @@ car2 = WhiteNoise.ar(0.12875) * env2 ;
 
 		Out.ar(out, sig
 			* [amp.dbamp,amp.dbamp+0.007]);
+
 
 
 //	Out.ar(out, sig );
