@@ -2,7 +2,9 @@
 Pdef.all.do(_.clear);
 Pbindef.all.do(_.clear);
 
+Server.default.options.outDevice_("Audient iD14");
 
+Server.default.options.outDevice_("Built-in Output");
 
 
 (
@@ -76,6 +78,9 @@ s.waitForBoot({
 ~comBusHat = Bus.audio(s,2);
 ~comBusCymb = Bus.audio(s,2);
 
+~comSnaGrpBus = Bus.audio(s,2);
+
+
 ~limitFuzz = Bus.audio(s,2);
 
 
@@ -83,7 +88,7 @@ s.waitForBoot({
 ~kbus = Bus.audio(s,2);
 ~limitDumK = Bus.audio(s,2);
 
-
+~snBus = Bus.audio(s,2);
 
 
 
@@ -369,20 +374,23 @@ SynthDef(\lead, {
 
 	SynthDef(\limiter, {|in, out = 0,gain=1,vol =1, du =0.01,rel=0.8, atk =0.01 |
 
+
+		/*does not limit volumes*/
 		//Out.ar(out , Limiter.ar(gain.dbamp*In.ar(in,2),vol.dbamp, du));
+
+
+		/*this one has volume peaks when gain is pushed to reach  flat -23db*/
 		//Out.ar(out , Compander.ar(In.ar(in,2),In.ar(in,2), 0.001, 1, 0.05, atk, rel))* gain;
 
 
+		/*the best but crashes*/
 		Out.ar(out , CompanderD.ar(In.ar(in,2), 0.001, 1, 0.05, atk, rel)* gain;)
 	}).add;
 
 "limiter init".postln;
 
-});)
 
-
-(
-//	s.sync;
+	s.sync;
 
 
 	//this section initiates arrays that store values and functions that distribute them on call
@@ -461,7 +469,7 @@ SynthDef(\lead, {
 ~rteFil = {|input|      if(input==0,{~bsFu =~reverbBus;},{~bsFu = ~reverbBus2;}); ~bsFu;};
 
 
-//	s.sync;
+	s.sync;
 
 	//set sounds objects
 
@@ -486,25 +494,28 @@ SynthDef(\lead, {
 
 ~snare = Pbind(\instrument, \snare,\carHz, 41.2 ,\type, Pseq([\rest ,\rest,\note,\rest], 8),\atk, 0.00502929687,\rel, 0.0968,\rel2, 0.3872,\dur, Pseq([1/2], inf),\amp,(-15.5),\out,0);
 
+s.sync;
 
-)
 	//set the groups
-(
+
 ~micGrp = Group.new;
 
 ~revGrp = Group.after(~micGrp);
 
 ~compGrp = Group.after(~revGrp);
 
-~limitGrp = Group.after(~compGrp);
+
+~compGrp2 = Group.after(~compGrp);
+
+~limitGrp = Group.after(~compGrp2);
 
 
 	//global vairable to set limiter delay "du" (this is the least noise artefact generator value I found)
 
-
+//not used for this example coz limiter is replaced by CompanderD
 ~du = 60/151.703592/4;
 
-// s.sync;
+ s.sync;
 
 
 	//Control rates
@@ -551,9 +562,8 @@ Ppar([
 
 		/*	the first  2 lines set the ghost kick for the compressor to get compression even when real kick isnt playing
 			it is sent to a limiter to get the same delay than the other sounds to bring more synchronicity    */
-		Pseq([Pbindf(~kick,\out,~limitDumK)],4096),
-	Pbind(\instrument, \limiter,\in, ~limitDumK,\dur,Pseq([1024/1],1), \vol,(-0.5),\gain,20,\du,~du,\out,~kbus),
-
+		Pseq([Pbindf(~kick,\out,~kbus)],4096),
+		Pseq([Pbindf(~snare,\out,~snBus)],1024),
 
 
 
@@ -606,7 +616,7 @@ Pbind(\instrument,\comp, \dur,Pseq([1024/1],1),\thr,0.6 ,\sB, 1.2,\sA, 2,\atk ,0
 
 
 				//THIS to repeat
-		],40),
+		],80),
 
 
 
@@ -627,16 +637,23 @@ Pbind(\instrument,\comp, \dur,Pseq([1024/1],1),\thr,0.6 ,\sB, 1.2,\sA, 2,\atk ,0
 
 			//Low pass compression
 
-	Pbind(\instrument,\comp, \dur,Pseq([1024/1],1),\thr,0.6 ,\sB, 1.086,\sA, 1/2,\atk ,0.0242, \rel ,0.04840, \gain,(11.8)
-,\in, ~comFuzz ,\in2, ~kbus, \out,~limitFuzz, \group, ~compGrp),
+	Pbind(\instrument,\comp, \dur,Pseq([1024/1],1),\thr,0.6 ,\sB, 1.086,\sA, 1/2,\atk ,0.0242, \rel ,0.04840, \gain,(12.8)
+,\in, ~comFuzz ,\in2, ~kbus, \out,~comSnaGrpBus, \group, ~compGrp),
 
 
 			//High pass compression
 
 	Pbind(\instrument,\comp, \dur,Pseq([1024/1],1),\thr,0.6 ,\sB, 1.086,\sA, 1/2,\atk ,0.0242, \rel ,0.04840,\gain,(6.3)
-,\in, ~comFuzz2 ,\in2, ~kbus, \out,~limitFuzz, \group, ~compGrp),
+,\in, ~comFuzz2 ,\in2, ~kbus, \out,~comSnaGrpBus, \group, ~compGrp),
 
 
+
+
+
+
+Pbind(\instrument,\comp, \dur,Pseq([1024/1],1),\thr,0.4 ,\sB, 1.086,\sA, 0.2,\atk ,0.5, \rel ,0.7744
+,\in, ~comSnaGrpBus ,\in2, ~snBus, \group, ~compGrp2,\out,~limitFuzz
+),
 
 
 		//both routed to same limiter but not sure what is best to get most flat volume possible
@@ -649,7 +666,7 @@ Pbind(\instrument,\comp, \dur,Pseq([1024/1],1),\thr,0.6 ,\sB, 1.2,\sA, 2,\atk ,0
 ],1).play(t,quant:0);
 
 
-)
+});)
 
 s.meter;
 s.plotTree;
