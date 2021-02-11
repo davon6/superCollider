@@ -1,4 +1,4 @@
-~pseq = {~pp = Pseq([1/4],16);~pp};
+/*~pseq = {~pp = Pseq([1/4],16);~pp};*/
 
 
 
@@ -30,7 +30,79 @@ Ppar([
 Pseq([
 
 		Pbindf(~inst.(), \dur,Pseq([4/1],1),\decE,Pseq([4/1],1)),
+		Pbindf(~inst.(), \dur,~pseq.(~ins,False),\decE,~pp),
+	Pbindf(~inst.(), \dur,~pseq.(~ins),\decE,~pp),
+	Pbindf(~inst.(), \dur,~pseq.(~ins),\decE,~pp),
 		Pbindf(~inst.(), \dur,~pseq.(~ins),\decE,~pp),
+
+
+		Pseq([
+	Pbindf(~inst.(), \dur,~pseq.(~ins),\decE,~pp),
+	Pbindf(~inst.(), \dur,~pseq.(~ins),\decE,~pp),
+	Pbindf(~inst.(), \dur,~pseq.(~ins),\decE,~pp),
+		Pbindf(~bassRest, \dur,~pseq.(~ins),\decE,~pp),
+
+
+
+
+
+
+
+//	,Pbindef(~transRev.(~ins),\revtime,~trans.(Pseq([1/4],16)))
+		].scramble,~dur.()),
+
+
+
+Pseq([
+	Pbindf(~inst.(), \dur,~pseq.(~ins),\decE,~pp),
+	Pbindf(~inst.(), \dur,~pseq.(~ins),\decE,~pp),
+	Pbindf(~inst.(), \dur,~pseq.(~ins),\decE,~pp),
+		Pbindf(~bassRest, \dur,~pseq.(~ins),\decE,~pp),
+
+
+
+
+
+
+
+//	,Pbindef(~transRev.(~ins),\revtime,~trans.(Pseq([1/4],16)))
+		].scramble,~dur.()),
+
+
+
+
+
+
+Pseq([
+	Pbindf(~inst.(), \dur,~pseq.(~ins),\decE,~pp),
+	Pbindf(~inst.(), \dur,~pseq.(~ins),\decE,~pp),
+	Pbindf(~inst.(), \dur,~pseq.(~ins),\decE,~pp),
+		Pbindf(~inst.(), \dur,~pseq.(~ins),\decE,~pp),
+
+
+
+
+
+
+
+//	,Pbindef(~transRev.(~ins),\revtime,~trans.(Pseq([1/4],16)))
+].scramble,~dur.()),Pbindf(~inst.(), \dur,~pseq.(~ins),\decE,~pp),
+	Pbindf(~inst.(), \dur,~pseq.(~ins),\decE,~pp),
+	Pbindf(~inst.(), \dur,~pseq.(~ins),\decE,~pp),
+		Pbindf(~inst.(), \dur,~pseq.(~ins),\decE,~pp),
+
+Pseq([
+	Pbindf(~inst.(), \dur,~pseq.(~ins),\decE,~pp),
+	Pbindf(~inst.(), \dur,~pseq.(~ins),\decE,~pp),
+	Pbindf(~inst.(), \dur,~pseq.(~ins),\decE,~pp),
+		Pbindf(~inst.(), \dur,~pseq.(~ins),\decE,~pp),
+
+
+].scramble,~dur.()),
+
+
+				Pbindf(~inst.(), \dur,Pseq([4/1],1),\decE,Pseq([4/1],1)),
+		Pbindf(~inst.(), \dur,~pseq.(~ins,True),\decE,~pp),
 	Pbindf(~inst.(), \dur,~pseq.(~ins),\decE,~pp),
 	Pbindf(~inst.(), \dur,~pseq.(~ins),\decE,~pp),
 		Pbindf(~inst.(), \dur,~pseq.(~ins),\decE,~pp),
@@ -99,6 +171,9 @@ Pseq([
 
 
 ].scramble,~dur.())
+
+
+
 
 	],inf),
 

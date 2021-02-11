@@ -10,7 +10,6 @@
 
 
 
-
 ~rev =Ppar([Pbindf(~kick,\out,~micBus,\group, ~micGrp), ~granK],1);
 
 ~perc = [

@@ -1,5 +1,7 @@
 //Pan2 lead
 //percu cutting the 1/2 for progression
+//slider aka minirise
+//delay
 (
 Server.killAll;
 Pdef.all.do(_.clear);
@@ -577,8 +579,15 @@ SynthDef.new(\gran, {
 
 ~fil =  {~ff =~wFils[~wFils.size.rand];~ff;};
 
+~order = True;
+~pseq = {|input, order|
 
-~pseq = {|input|
+		order.postln;
+
+		if(order.isNil ==False,{~order = order},{});
+
+
+		if(~order ==False,{
 
 		if(input.asCompileString.compare(~melo1.asCompileString)==0,{~pp = ~tpseq.(); ~pp;},{
 
@@ -587,8 +596,8 @@ SynthDef.new(\gran, {
 
 				~pp =~pseqs[~pseqs.size.rand];~pp;});
 
-	});
-
+		});},{
+			 if(order==2,{~order =0;},{}); ~pp=Pseq([1/4],16);~pp   })
 };
 ~wet = { ~we =~wetsR[~wetsR.size.rand]; ~we;};
 
@@ -681,7 +690,7 @@ o = {
 
 	Out.kr(~bus2, SinOsc.ar(0.0201171875).range(164.81,81.41));
 
-	Out.kr(~bus4, SinOsc.ar( 2.575 +SinOsc.kr(0.64375).range(0.01005859375,2.575)  ).range(20.60,1318.51));
+	Out.kr(~bus4, SinOsc.ar( 5.15 + SinOsc.kr(0.64375).range(0.01005859375,1.2875)  ).range(659.255,81.41));
 
 	Out.kr(~bus5, SinOsc.ar(1.2875).range(5274.04,0.0201171875));//c3
 
