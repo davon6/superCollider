@@ -778,8 +778,6 @@ SynthDef.new(\hit, {
 
 sig = Pan2.ar( sig , pan);//0 was pan
 
-
-
 	Out.ar(out,HPF.ar(sig,100);//* env2 //*amp
 
     )

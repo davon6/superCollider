@@ -13,6 +13,10 @@ Server.default.options.outDevice_("Audient iD14");
 Server.default.options.outDevice_("Built-in Output");
 
 
+
+Server.default.options.sampleRate =  48000
+
+
 (
 s.waitForBoot({
 
@@ -67,6 +71,10 @@ s.waitForBoot({
 	~tfBuf.loadCollection(~tf.asWavetableNoWrap);
 
 
+
+	e = Buffer.alloc(s, s.sampleRate *0.3872,1);
+
+
 "Shaper init".postln;
 
 
@@ -75,6 +83,13 @@ s.waitForBoot({
 
 	//set the audio bus fro passing signal from synth to reverb to compression to limiter
 // most of the busses a doubled as signal gets split in between low and high pass filtering
+
+	~bus17 = Bus.audio(s,1);
+
+~micBus = Bus.audio(s,1);
+~ptrBus = Bus.audio(s,1);
+
+
 ~reverbBus = Bus.audio(s,1);
 ~reverbBus2 = Bus.audio(s,1);
 ~reverbRnd = Bus.audio(s,1);
@@ -127,7 +142,7 @@ s.waitForBoot({
 	~bus15 = Bus.control(s,1);
 	~bus16 = Bus.control(s,1);
 
-	~bus17 = Bus.control(s,1);
+	// ~bus17 = Bus.control(s,1);
 	~bus18 = Bus.control(s,1);
 
 
@@ -173,15 +188,16 @@ s.waitForBoot({
 		var sig, env, lvlBa;
 
 
-		if(modLvl== True,{
+		/*if(modLvl== True,{
 			lvlBa  = In.kr(bus, 1);
 		},{
 			lvlBa =1;
-		});
+		});*/
+
 
 		env = EnvGen.ar(
 			Env(
-				[0,1,0],  //- In.kr(bus, 1)
+				[0,1,0],
 				[atk,rel],
 				[atkcrv,relcrv]
 			),
@@ -190,7 +206,7 @@ s.waitForBoot({
 
 		sig = Saw.ar(freq,-1,-0.4);
 		sig = sig.lincurve(-1,1,-1,1,-7);
-		sig = LPF.ar(sig, lpf);
+		sig = BLowPass.ar(sig, lpf- In.ar(bus, 1));
 
 		sig = sig * amp.dbamp!2;
 
@@ -241,6 +257,32 @@ s.sync;
 			* amp.dbamp);
 
 }).add;
+
+
+
+
+	SynthDef(\wNoise, {
+
+		arg in=0, mix=0.2, amp = (-20), dec =0,sub2 =3, valStart= 10000,valEnd =100, wFil=1, pan =0, durF =3,out =0,atk=0;
+	var env,dry, wet, sig,env2, ori;
+
+		env = EnvGen.kr(Env([0,amp.dbamp,0],[atk,dec,0],[3,-2]),doneAction:2);
+
+
+	sig =  SelectX.ar(wFil,[
+			LPF.ar(WhiteNoise.ar(env),XLine.kr(valStart,valEnd,durF)),
+
+			HPF.ar(WhiteNoise.ar(env),XLine.kr(valStart,valEnd,durF))]);
+
+
+
+sig = Pan2.ar( sig , pan);//0 was pan
+
+	Out.ar(out,HPF.ar(sig,100);//* env2 //*amp
+
+    )
+}).add;
+"side events init".postln;
 
 
 
@@ -335,7 +377,7 @@ SynthDef(\lead, {
 
 
 		//trim freq below 100hz before to 16 bits the sound
-		input = HPF.ar( In.ar(in,1),100).round(2**(-16));
+		input = HPF.ar( In.ar(in,1),81.41).round(2**(-16));
 
 		a = Resonz.ar(
 
@@ -362,11 +404,70 @@ SynthDef(\lead, {
 				maxRoomsize, amp,)
 		+ input
 
-		),100),spread2,level,center))
+		),81.41),spread2,level,center))
 
 	}).add;
 
 	"reverb init".postln;
+
+
+
+	SynthDef.new(\ptr, {
+	arg out=0, buf=0,dec=1 ;
+	var sig;
+	sig = Phasor.ar(0, BufRateScale.kr(buf), 0, BufFrames.kr(buf));
+	Out.ar(out, sig);
+}).add;
+
+SynthDef.new(\rec, {
+	arg ptrIn=0, micIn=0, buf=0, dec = 1;
+	var ptr, sig;
+	ptr = In.ar(ptrIn, 1);
+	sig = In.ar(micIn, 1);
+	BufWr.ar(sig, buf, ptr);
+}).add;
+
+
+SynthDef.new(\gran, {
+	arg amp=1, buf =0, out=0, atk=1, rel=1, gate=1, sync=1, dens=40, baseDur=0.05, durRand=1, rate=1, rateRand=1, pan =0, panRand=0, grainEnv=(-1), ptrBus =0, ptrSampleDelay=20000, ptrRandSamples= 5000, minPtrDelay=1000,pitchRte=1,duration=8,impulse = 1.2875,pos=0,roomsize, revtime, damping, inputbw, spread = 15, drylevel, earlylevel,
+    taillevel,maxRoomsize,wet=0.4;
+
+	var sig, env, densCtrl, durCtrl, rateCtrl, panCtrl, ptr, ptrRand, totalDelay, maxGrainDur;
+
+
+		env = EnvGen.kr(Env([1,1,1],[atk,rel,0]), gate, doneAction:2);
+
+	densCtrl = Select.ar(sync, [Dust.ar(dens), Impulse.ar(dens)]);
+	durCtrl= baseDur * LFNoise1.ar(100).exprange(1/durRand, durRand);
+	rateCtrl = rate * LFNoise1.ar(100).exprange(1/rateRand, rateRand);
+	panCtrl = pan + LFNoise1.kr(100).bipolar(panRand);
+
+	ptrRand = LFNoise1.ar(100).bipolar(ptrRandSamples);
+	totalDelay = max(ptrSampleDelay - ptrRand, minPtrDelay) ;
+
+	ptr = In.ar(ptrBus,1);
+	ptr = ptr - totalDelay;
+	ptr = ptr / BufFrames.kr(buf);
+
+
+	maxGrainDur = (totalDelay / rateCtrl) / SampleRate.ir;
+	durCtrl = min(durCtrl, maxGrainDur);
+
+	sig = GrainBuf.ar(
+		1,
+		Impulse.ar(impulse),//Impulse.ar(0.0968),//lenth of interval ///20.6 and 10.3 are funny was 1
+		duration,//3.0976,//8,//length of the feedback
+		buf,
+		pitchRte,//pitch
+		0//MouseX.kr(0,1)//pos
+	);
+	sig = sig * env * amp;
+
+	Out.ar(out, sig!2);
+}).add;
+
+
+
 
 
 	//the compressor received for control a signal going on channel that never goes to zero (renamed ghost)
@@ -431,10 +532,12 @@ SynthDef(\lead, {
 ~freqs = [657.9895,657.9895];
 ~pseqsm =    [Pseq([1 /4],1),Pseq([1 /1],1)];
 ~lvlDecs = [0.2,0.4,0.8];
-
+~insts = [~melo1,~fuzz, ~squelch, ~rnd].scramble;
+~dure = [1,1,1,1,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,16];
 ~pp;~ff;~dd;~bf;~rt;~frq;~fct;~ps;~dps;~we;~tpp;~pm;~am;~ins;~sp;~bsFu;~fc3;~lvDc;~rq;
 
 
+~dur =  {~dd =~dure[~dure.size.rand];~dd;};
 ~lvlDec = {~lvDc =  ~lvlDecs[~lvlDecs.size.rand];~lvDc;};
 ~fac3 = {~fc3 =  ~fac3s[~fac3s.size.rand];~fc3;};
 ~spread = {~sp = ~spreads[~spreads.size.rand];~sp;};
@@ -446,9 +549,9 @@ SynthDef(\lead, {
 ~factor = {~fct = ~factors[~factors.size.rand];  ~fct;};
 ~freq = {~frq= ~freqs[~freqs.size.rand];~frq;};
 
-
+~inst ={~ins =~insts[~insts.size.rand];~ins;};
 ~revTail = {|input|
-	if(input==~melo1,{
+		if(input.asCompileString.compare(~melo1.asCompileString)==0,{
 
 		~rt = Pseq([1/3],1);~rt;
 
@@ -477,12 +580,12 @@ SynthDef(\lead, {
 
 ~pseq = {|input|
 
-	if(input==~melo1,{~pp = ~tpseq.(); ~pp;},{
+		if(input.asCompileString.compare(~melo1.asCompileString)==0,{~pp = ~tpseq.(); ~pp;},{
+
+			if(input.asCompileString.compare(~squelch.asCompileString)==0,{~pp =~pseqm.();~pp },{
 
 
-
-
-	~pp =~pseqs[~pseqs.size.rand];~pp;
+				~pp =~pseqs[~pseqs.size.rand];~pp;});
 
 	});
 
@@ -508,13 +611,13 @@ SynthDef(\lead, {
 ~bass = Pbind(
 		\instrument, \bass,
 		\type, Pseq([\rest, \note, \note, \note], inf),
-		\dur, Pseq([1/4],4),
+		\dur, Pseq([1/4],4),\lpf,81.41,
 		\midinote, 28,
-		\atk, t.beatDur/4 * 0.01,
+		/*\atk, t.beatDur/4 * 0.01,*/
 		\rel, t.beatDur/4 * 0.99,
 		\atkcrv, -2,
-		\relcrv, -1, /*\bus, ~bus6,*/
-	\amp, (4),\out,0
+		\relcrv, -1, \bus, ~bus17,
+	\amp, (6),\out,0
 );
 
 	~cymbal = Pbind(\instrument, \percussion,\type, Pseq([\rest,\rest,\note,\note ,\rest,\note ,\note, \rest],inf),\dur,Pseq([1/4],64 ),\carHz, 525.12070612224,\modHz,1899.3343179398,\modAmp, 0.12875 ,\amp,(-2.3),\rel,Pseq([1/16],inf),\rel2,Pseq([1/16],inf),\latch,8000,\stereoL, 0.00555, \crv1,  (-2.4), \crv1b,(-3), \mulMod, 1691,\out, ~comBusCymb);
@@ -547,7 +650,11 @@ SynthDef(\lead, {
 
 ~micGrp = Group.new;
 
-~revGrp = Group.after(~micGrp);
+~ptrGrp = Group.after(~micGrp);
+~recGrp = Group.after(~ptrGrp);
+~granGrp = Group.after(~recGrp);
+
+~revGrp = Group.after(~granGrp);
 
 ~compGrp = Group.after(~revGrp);
 
@@ -568,7 +675,7 @@ SynthDef(\lead, {
 o = {
 		Out.kr(~bus1,  Lag.kr(LFNoise0.kr(1.2875).range(0.15,0.0),0.05)
 
-		+SinOsc.kr(SelectX.kr(LFNoise0.kr(5.15).range(0,2).round(1),[1.2875,5.15,20.6])).range(0.07,0.00));     //                MouseY.kr(0.2,0.00));
+		+SinOsc.kr(SelectX.kr(LFNoise0.kr(5.15).range(0,2).round(1),[1.2875,5.15,20.6])).range(0.08,0.00));     //                MouseY.kr(0.2,0.00));
 
 	Out.kr(~bus3, SinOsc.ar(1.2875).range(81.41,164.81));
 
@@ -605,37 +712,31 @@ o = {
 	Out.kr(~bus16, SinOsc.ar(0.08046875).range(1,0.4));
 
 
+	Out.ar(~bus17,
+
+		/*EnvGen.kr(Env([0,0,0,0,1,1,1,0],[0,0,0,t.beatDur/2,0, t.beatDur/2,0,0],5,6,0),Trig.kr(1,490))*/
+	EnvGen.ar(Env([0,80,80,80,0,0,0,0],[0,0,0,t.beatDur/2,0, t.beatDur/2,0,0],9,6,0),Trig.kr(1,490))
+
+
+
+	);
+
+
 }.play();
 
-
+// FreqScope.new
 
 
 Ppar([
+
+		Pbind(\instrument,\ptr, \buf, e, \out, ~ptrBus,\group,~ptrGrp,\dur,Pseq([1024/1],1)),
+Pbind(\instrument,\rec, \ptrIn, ~ptrBus, \micIn, ~micBus, \buf, e,\group,~recGrp,\dur,Pseq([1024/1],1)),
 
 		Pseq([Pbindf(~kick,\out,~kbus)],4096),
 		Pseq([Pbindf(~snare,\out,~snBus)],4096),
 
 
 
-
-	/*Pseq([
-
-
-	],inf),*/
-			Pseq([~squelch,~fuzz,~rnd,~melo1
-
-
-		],inf),
-/*Pseq([
-	~squelch
-
-],inf),*/
-
-/*Ppar([
-		Ppar([~kick,~bass],16),~cymbal, ~snare,~hat
-	],inf),*/
-
-Ppar([Ppar([~kick,~bass],16),~cymbal,~hat,~snare],inf),
 
 
 
@@ -705,11 +806,11 @@ Pbind(\instrument,\comp, \dur,Pseq([1024/1],1),\thr,0.4 ,\sB, 1.04,\sA, 0.2,\atk
 	Pbind(\instrument, \limiter,\in, ~limitFuzz, \dur, Pseq([1024/1],1)
 	/*,\thr,  0.1*/
 
-		,\gain,84,\group,~limitGrp,\out,0),
+		,\gain,74,\group,~limitGrp,\out,0),
 /*thr, sB ,sA, atk, rel
 gain=1,vol =1, du =0.01,rel=0.8, atk =0.01 ,thr= 0.001,sB =1,sA= 0.05*/
 
-],1).play(t,quant:0);
+],1).play(t,quant:1);
 
 )
 

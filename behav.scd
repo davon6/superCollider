@@ -67,10 +67,10 @@ s.meter
 
 ~kbassRest =Ppar([~kick, ~bassRest], 1);
 
-~rev =Ppar([Pbindf(~kick,\out,~micBus,\group, ~micGrp,\dur,Pseq([1/4],1)),
+~rev =Ppar([Pbindf(~kick,\out,~micBus,\dur,Pseq([1/4],1)),
 
-		Pbind(\instrument,\gran,\dur,Pseq([1/4],1),\amp, 1,\buf, e,\out,~norm1,\atk, 0,\rel, Pseq([1/4],1),\gate, 1,\ptrBus, ~ptrBus,\pitchRte,(-1),\ptrRandSamples, 0,\minPtrDelay, 1000,\group,~granGrp,\duration,Pseq([1/4],1),\impulse,Pseq([1/4],1))
-	],1);
+		Pbind(\instrument,\gran,\dur,Pseq([1/4],1),\amp, 1,\buf, e,\out,0,\atk, 0,\rel, Pseq([1/4],1),\gate, 1,\ptrBus, ~ptrBus,\pitchRte,(-1),\ptrRandSamples, 0,\minPtrDelay, 1000,\group,~granGrp,\duration,Pseq([1/4],1),\impulse,Pseq([1/4],1))
+],1)
 
 ~spe1 =
 Pseq([
