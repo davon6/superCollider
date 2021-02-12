@@ -8,7 +8,8 @@ Pdef.all.do(_.clear);
 Pbindef.all.do(_.clear);
 Pbind.free;
 Pbindf.free;
-~melo1.free
+~melo1.free;
+~bass.free;
 )
 Server.default.options.outDevice_("Audient iD14");
 
@@ -86,11 +87,14 @@ s.waitForBoot({
 	//set the audio bus fro passing signal from synth to reverb to compression to limiter
 // most of the busses a doubled as signal gets split in between low and high pass filtering
 
-	~bus17 = Bus.audio(s,1);
+
+
+
 
 ~micBus = Bus.audio(s,1);
 ~ptrBus = Bus.audio(s,1);
 
+~bassShapB = Bus.audio(s,1);
 
 ~reverbBus = Bus.audio(s,1);
 ~reverbBus2 = Bus.audio(s,1);
@@ -144,7 +148,9 @@ s.waitForBoot({
 	~bus15 = Bus.control(s,1);
 	~bus16 = Bus.control(s,1);
 
-	// ~bus17 = Bus.control(s,1);
+	//~bassShapB = Bus.control(s,1);
+
+	~bus17 = Bus.control(s,1);
 	~bus18 = Bus.control(s,1);
 
 
@@ -152,7 +158,20 @@ s.waitForBoot({
 
 		s.sync;
 
-	/*this section initialize the kick that will be used silently for the compression*/
+
+
+	SynthDef(\shap,{|in, out=0, vl1=80, vl2=0,vl3=0|
+	var halfBeat, shap;
+
+	halfBeat = t.beatDur * 0.5;
+
+		shap = EnvGen.ar(Env([vl1,vl2],[halfBeat,halfBeat],9),doneAction:2);
+
+
+
+	Out.ar(out, shap);
+}).add;
+
 
 
 	SynthDef(\kick, {
@@ -208,7 +227,7 @@ s.waitForBoot({
 
 		sig = Saw.ar(freq,-1,-0.4);
 		sig = sig.lincurve(-1,1,-1,1,-7);
-		sig = BLowPass.ar(sig, lpf- In.ar(bus, 1));
+		sig = BLowPass.ar(sig, lpf - In.ar(bus, 1));
 
 		sig = sig * amp.dbamp!2;
 
@@ -221,6 +240,8 @@ s.waitForBoot({
 s.sync;
 
 
+
+s.sync;
 		SynthDef.new(\percussion, {
 	arg carHz=500, modHz=1899.3343179398, modAmp=0, atk=0.01, rel=1, amp=0.2, pan=0,rel2=1,out=0, latch = 6000, crv1, crv1b, mulMod, stereoL=0, stereoR=0;
 	var car, mod, env, car2, mod2,env2,sig;
@@ -508,8 +529,11 @@ SynthDef.new(\gran, {
 "limiter init".postln;
 
 
-	s.sync;
 
+});)
+
+
+(
 
 	//this section initiates arrays that store values and functions that distribute them on call
 
@@ -608,26 +632,40 @@ SynthDef.new(\gran, {
 	//s.sync;
 
 
-});)
 
-(
+
+
 
 	//set sounds objects
 
     ~kick =	Pbind(\instrument, \kick,\dur, Pseq([1/1],1),\amp,( -4.5),\out,0);
 
 
+~bassShap = Pbind(\instrument, \shap, \dur,Pseq([1/1],inf),\vl1,50,\vl2,50,\vl3,0,\out,~bassShapB);
+
 ~bass = Pbind(
 		\instrument, \bass,
 		\type, Pseq([\rest, \note, \note, \note], inf),
 		\dur, Pseq([1/4],4),\lpf,81.41,
-		\midinote, 28,
+		\midinote, 28, \bus, ~bassShapB,
 		/*\atk, t.beatDur/4 * 0.01,*/
-		\rel, t.beatDur/4 * 0.99,
+		/*\rel, t.beatDur/4 * 0.99,*/
 		\atkcrv, -2,
-		\relcrv, -1, \bus, ~bus17,
+		\relcrv, -1,
 	\amp, (6),\out,0
 );
+
+// ~bass.play(t)
+
+/*~bassShap.play(t);
+
+Ppar([~kick,~bass],inf).play(t)
+
+Ppar([, Pseq([~bass],inf)]).play(t)*/
+
+// ~bassPr = Ppar([ Pbindf(~bass, \out, ~bassShapB), Pbindf(~bassShap, \in, ~bassShapB)],7).play(t);
+
+
 
 	~cymbal = Pbind(\instrument, \percussion,\type, Pseq([\rest,\rest,\note,\note ,\rest,\note ,\note, \rest],inf),\dur,Pseq([1/4],64 ),\carHz, 525.12070612224,\modHz,1899.3343179398,\modAmp, 0.12875 ,\amp,(-2.3),\rel,Pseq([1/16],inf),\rel2,Pseq([1/16],inf),\latch,8000,\stereoL, 0.00555, \crv1,  (-2.4), \crv1b,(-3), \mulMod, 1691,\out, ~comBusCymb);
 
@@ -721,14 +759,14 @@ o = {
 	Out.kr(~bus16, SinOsc.ar(0.08046875).range(1,0.4));
 
 
-	Out.ar(~bus17,
+	/*Out.ar(~bus17,  //CANCELLED
 
 		/*EnvGen.kr(Env([0,0,0,0,1,1,1,0],[0,0,0,t.beatDur/2,0, t.beatDur/2,0,0],5,6,0),Trig.kr(1,490))*/
 	EnvGen.ar(Env([0,80,80,80,0,0,0,0],[0,0,0,t.beatDur/2,0, t.beatDur/2,0,0],9,6,0),Trig.kr(1,490))
 
 
 
-	);
+	);*/
 
 
 }.play();
@@ -738,8 +776,10 @@ o = {
 
 Ppar([
 
-		Pbind(\instrument,\ptr, \buf, e, \out, ~ptrBus,\group,~ptrGrp,\dur,Pseq([1024/1],1)),
+	Pbind(\instrument,\ptr, \buf, e, \out, ~ptrBus,\group,~ptrGrp,\dur,Pseq([1024/1],1)),
 Pbind(\instrument,\rec, \ptrIn, ~ptrBus, \micIn, ~micBus, \buf, e,\group,~recGrp,\dur,Pseq([1024/1],1)),
+
+	~bassShap,
 
 		Pseq([Pbindf(~kick,\out,~kbus)],4096),
 		Pseq([Pbindf(~snare,\out,~snBus)],4096),
@@ -774,8 +814,6 @@ Pbind(\instrument,\comp, \dur,Pseq([1024/1],1),\thr,0.6 ,\sB, 1.2,\sA, 2,\atk ,0
 
 	Pbind(\instrument,\comp, \dur,Pseq([1024/1],1),\thr,0.8 ,\sB, 1.020,\sA, 1/2,\atk ,0.0121, \rel ,0.0484,\gain,(1.3)
 ,\in, ~comFuzz2 ,\in2, ~kbus, \out,~comSnaGrpBus, \group, ~compGrp),
-
-
 
 
 
@@ -822,6 +860,9 @@ gain=1,vol =1, du =0.01,rel=0.8, atk =0.01 ,thr= 0.001,sB =1,sA= 0.05*/
 ],1).play(t,quant:1);
 
 )
+
+
+// Pbindf(~inst.(), \dur,Pseq([1/4],16),\decE,Pseq([1/4],16)).play(t,quant:1)
 
 //});)
 s.meter;
