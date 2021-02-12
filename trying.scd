@@ -89,7 +89,7 @@ s.waitForBoot({
 
 
 
-
+~gateBus = Bus.audio(s,1);
 
 ~micBus = Bus.audio(s,1);
 ~ptrBus = Bus.audio(s,1);
@@ -168,6 +168,14 @@ s.waitForBoot({
 		shap = EnvGen.ar(Env([vl1,vl2],[halfBeat,halfBeat],9),doneAction:2);
 
 
+		/*env = EnvGen.kr(Env([0,1,lvlDec,0],[atkE, decE-(In.kr(bus2, 1))     , subsE,relE],[atckC,decC- (In.kr(bus3, 1))
+
+			,(-3),0,0]),
+
+
+		doneAction:2);*/
+
+
 
 	Out.ar(out, shap);
 }).add;
@@ -204,17 +212,9 @@ s.waitForBoot({
 	SynthDef(\bass,{
 		arg freq=41.2, dure=1, amp=0.5,
 		atkcrv=1, relcrv=5,
-		atk=0, rel=0.1, lpf=100, out = 0, modLvl = True,bus;
+		atk=0, rel=0.1, lpf=100, out = 0, bus;
 
 		var sig, env, lvlBa;
-
-
-		/*if(modLvl== True,{
-			lvlBa  = In.kr(bus, 1);
-		},{
-			lvlBa =1;
-		});*/
-
 
 		env = EnvGen.ar(
 			Env(
@@ -232,8 +232,6 @@ s.waitForBoot({
 		sig = sig * amp.dbamp!2;
 
 		sig = sig * env;
-
-
 
 		Out.ar(out, sig);
 	}).add;
@@ -291,13 +289,10 @@ s.sync;
 
 		env = EnvGen.kr(Env([0,amp.dbamp,0],[atk,dec,0],[3,-2]),doneAction:2);
 
-
 	sig =  SelectX.ar(wFil,[
 			LPF.ar(WhiteNoise.ar(env),XLine.kr(valStart,valEnd,durF)),
 
 			HPF.ar(WhiteNoise.ar(env),XLine.kr(valStart,valEnd,durF))]);
-
-
 
 sig = Pan2.ar( sig , pan);//0 was pan
 
@@ -339,19 +334,22 @@ SynthDef(\lead, {
 
 	//first level of modulation
 
-	mod = SinOsc.ar(Lag.ar(  freq * mRatio + mod2 ,0.06)*
+		// mod = SinOsc.ar(MouseX.kr(0,freq * mRatio + mod2), mul:freq * mRatio * iEnv);
+
+		mod = SinOsc.ar( MouseX.kr( freq * mRatio + mod2 )*
 
 
 			SinOsc.kr(sineRate,phRise).range([sineRangeLow]), mul:
 
-		Lag.kr((freq * mRatio * iEnv),0.01)*gra
+			(freq * mRatio * iEnv) *gra
 
 		);
 
 
+
 	//my carrier is a mess but bring interesting outputs
 
-	car =SinOsc.ar( 0.00502929687+eFreq  /* freq */    * cRatio +
+		car =SinOsc.ar( 0.00502929687+eFreq  /* freq */    * cRatio +
 
 			//remove this line as shwon to decrease sound quality so I left it
 			SelectX.ar(SinOsc.kr(0.0020,phFm).range(0,1),[SinOsc.ar(0),mod])
@@ -386,6 +384,31 @@ SynthDef(\lead, {
 
 
 	"synth lead init".postln;
+
+
+
+
+	SynthDef(\gate,{|in, out=0, vlAtk=0, vlDec=1,vlSub=0, vlRel=0, atkT=0, decT=0, subsT=0, relT=0, atckC=0, decC=0, relC=0, bus1, bus2|
+	var env;
+
+		/*env =   In.ar(in, 1) *    EnvGen.kr(Env(
+			[vlAtk,vlDec                  ,vlSub ,vlRel],
+			[atkT , decT-(In.kr(bus1, 1)) , subsT,relT],
+			[atckC,decC- (In.kr(bus2, 1)) ,0     ,relC]),
+
+		doneAction:2);*/
+
+
+
+		env =   In.ar(in, 1) *    EnvGen.kr(Env(
+			[vlAtk,vlDec                  ,vlSub ,vlRel],
+			[atkT , decT-In.kr(bus1, 1), subsT,relT],
+			[atckC,decC ,0     ,relC]),
+
+		doneAction:2);
+
+	Out.ar(out, env);
+}).add;
 
 
 	//GVerb + Splay in one synth
@@ -641,7 +664,7 @@ SynthDef.new(\gran, {
     ~kick =	Pbind(\instrument, \kick,\dur, Pseq([1/1],1),\amp,( -4.5),\out,0);
 
 
-~bassShap = Pbind(\instrument, \shap, \dur,Pseq([1/1],inf),\vl1,50,\vl2,50,\vl3,0,\out,~bassShapB);
+~bassShap = Pbind(\instrument, \shap, \dur,Pseq([1/1],inf),\out,~bassShapB);
 
 ~bass = Pbind(
 		\instrument, \bass,
@@ -652,14 +675,16 @@ SynthDef.new(\gran, {
 		/*\rel, t.beatDur/4 * 0.99,*/
 		\atkcrv, -2,
 		\relcrv, -1,
-	\amp, (6),\out,0
+	\amp, (12),\out,0
 );
+
+// Ppar([~bass],inf).play(t)
 
 // ~bass.play(t)
 
 /*~bassShap.play(t);
 
-Ppar([~kick,~bass],inf).play(t)
+
 
 Ppar([, Pseq([~bass],inf)]).play(t)*/
 
@@ -671,7 +696,7 @@ Ppar([, Pseq([~bass],inf)]).play(t)*/
 
 ~hat = Pbind(\instrument,\percussion,\dur,Pseq([1/4], 64),\atk, 0,\rel,0.04840,\rel2,0.02420,\amp,( -5), \crv2, (-3), \modHz, exprand(20,10000), \mulMod, rrand(0, 10000), \carHz, exprand(20,10000), \modAmp, 0.12875, \latch, 18500, \stereoR, 0.007,\out,~comBusHat);
 
-~snare = Pbind(\instrument, \snare,\carHz, 41.2 ,\type, Pseq([\rest ,\rest,\note,\rest], 8),\atk, 0.00502929687,\rel, 0.0968,\rel2, 0.3872,\dur, Pseq([1/2], inf),\amp,(-3.5),\out,0);
+~snare = Pbind(\instrument, \snare,\carHz, 41.2 ,\type, Pseq([\rest ,\rest,\note,\rest], 8),\atk, 0.00502929687,\rel, 0.0968,\rel2, 0.3872,\dur, Pseq([1/2], inf),\amp,(-5.5),\out,0);
 
 
 	~fuzz = Pbind(\instrument,\lead, \dur,~pseq.(),\decE,~pp,\freq, ~freq.(),\which, ~fil.(),\bus, ~busFi.(~ff),\bus2,~bus1,\bus3, 40,\bus4,40,\bus7,~rqs.(~ff),\bus8, ~bus4,\lvlDec,~lvlDec.(),\subsE,0,\whichMod,0,
@@ -695,7 +720,15 @@ Ppar([, Pseq([~bass],inf)]).play(t)*/
 
 	//set the groups
 
-~micGrp = Group.new;
+
+
+
+
+~leadGrp = Group.new;
+
+~gateGrp =  Group.after(~leadGrp);
+
+/*~micGrp = Group.new;
 
 ~ptrGrp = Group.after(~micGrp);
 ~recGrp = Group.after(~ptrGrp);
@@ -708,7 +741,7 @@ Ppar([, Pseq([~bass],inf)]).play(t)*/
 
 ~compGrp2 = Group.after(~compGrp);
 
-~limitGrp = Group.after(~compGrp2);
+~limitGrp = Group.after(~compGrp2);*/
 
 
 	//global vairable to set limiter delay "du" (this is the least noise artefact generator value I found)
@@ -757,6 +790,9 @@ o = {
 	Out.kr(~bus15, SinOsc.ar(1.2875).range(41.2,1318.51));
 
 	Out.kr(~bus16, SinOsc.ar(0.08046875).range(1,0.4));
+
+
+	Out.kr(~bus17, MouseY.kr(0,659.26));
 
 
 	/*Out.ar(~bus17,  //CANCELLED
@@ -853,7 +889,7 @@ Pbind(\instrument,\comp, \dur,Pseq([1024/1],1),\thr,0.4 ,\sB, 1.04,\sA, 0.2,\atk
 	Pbind(\instrument, \limiter,\in, ~limitFuzz, \dur, Pseq([1024/1],1)
 	/*,\thr,  0.1*/
 
-		,\gain,74,\group,~limitGrp,\out,0),
+		,\gain,44,\group,~limitGrp,\out,0),
 /*thr, sB ,sA, atk, rel
 gain=1,vol =1, du =0.01,rel=0.8, atk =0.01 ,thr= 0.001,sB =1,sA= 0.05*/
 
