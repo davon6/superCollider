@@ -124,6 +124,9 @@ s.waitForBoot({
 
 ~filterCtrl = Bus.audio(s,1);
 
+~sineRCtrl = Bus.audio(s,1);
+~sineSCtrl = Bus.audio(s,1);
+~sinePCtrl = Bus.audio(s,1);
 	s.sync;
 
 	//the control rates
@@ -177,34 +180,46 @@ s.sync;
 
 
 
-	SynthDef(\shap,{|in, out=300,out2=300, vl1=80, vl2=0,vl3=0, dA1 =0,dA2=0,dA3=0,dA4=0 |
+
+	SynthDef(\shap,{|in, out,out2, vl1=80, vl2=0,vl3=0, dA1 =0,dA2=0,dA3=0,dA4=0 |
 	var halfBeat, shap, shap2;
 
 	halfBeat = t.beatDur * 0.5;
 
 		shap = EnvGen.ar(Env([vl1,vl2],[halfBeat,halfBeat],9),doneAction:dA1);
 
-		shap2 = EnvGen.ar(Env([~vl1,~vl1,~vl2,~vl2,~vl3,~vl3,~vl4,~vl4,~vl5,~vl5,~vl6,~vl6,~vl7,~vl7,~vl8,~vl8],
+	Out.ar(out, shap);
 
-	[~tim,0,~tim,0,~tim,0,~tim,0,~tim,0,~tim,0,~tim,0,~tim ]),doneAction:dA2);
-
-
-		/*env = EnvGen.kr(Env([0,1,lvlDec,0],[atkE, decE-(In.kr(bus2, 1))     , subsE,relE],[atckC,decC- (In.kr(bus3, 1))
-
-			,(-3),0,0]),
-
-
-		doneAction:2);*/
-
-
-
-	/*Out.ar(out, shap);*/
-	Out.ar(out2, shap2);
 }).add;
 
 
 
+	SynthDef(\lfo,{|out|Out.ar(out, EnvGen.ar(Env([~vl1,~vl1,~vl2,~vl2,~vl3,~vl3,~vl4,~vl4,~vl5,~vl5,~vl6,~vl6,~vl7,~vl7,~vl8,~vl8],
+		[~tim,0,~tim,0,~tim,0,~tim,0,~tim,0,~tim,0,~tim,0,~tim ]),doneAction:2))}).add;
 
+
+	~flat =  0.0000000095262251; ~acti = 0.01005859375; ~scaRi = (-10.4); ~phR = 15;
+
+	s.sync;
+
+	SynthDef(\lfo2,{|out, out2, out3|Out.ar(out, EnvGen.ar(Env(
+	[~flat, ~flat,~acti,~acti],
+		[ 0,18585.6,0,6195.2]),doneAction:2));
+
+	Out.ar(out2, EnvGen.ar(Env(
+	[0, 0,~scaRi,~scaRi],
+		[ 0,18585.6,0,6195.2]),doneAction:2));
+
+	Out.ar(out3, EnvGen.ar(Env(
+	[0, 0,~phR,~phR],
+		[ 0,18585.6,0,6195.2]),doneAction:2));
+
+
+	}).add;
+
+
+// sineRate = 0.0000000095262251,  ,phRise= 0 sineRangeLow=0
+/*	\sineRangeLow,(-10.4),\sineRate,0.01005859375,\phRise,(15),*/
 
 	SynthDef(\kick, {
 		arg amp=0.2,out=0;
@@ -330,7 +345,7 @@ sig = Pan2.ar( sig , pan);//0 was pan
 
 
 SynthDef(\lead, {
-		arg freq= 500, mRatio=1, cRatio=1,  amp=0.01, atk= 0.01  , rel=3, atkE =0,decE=0.1936, subsE=50, relE=0, sineRate = 0.0000000095262251,  sineRangeLow=0, pitch = 0, which,phRise= 0 ,out=0, eFreq =0 , phFm=8, busLP,busHP,bus2,bus3,bus4,busBP,bus6, bus7, bus8, gra=1,lvlDec=1,factor=1, factor2 =0, vlPE =27.1366666667,vlPE2=0.2,dcPE = 0.129066666667,atckC = 2.5, decC = (-2), crvEP = (-2), rqLPF =0.5, factor3 =1;
+		arg freq= 500, mRatio=1, cRatio=1,  amp=0.01, atk= 0.01  , rel=3, atkE =0,decE=0.1936, subsE=50, relE=0, sineRate = 0.0000000095262251,  sineRangeLow=0, pitch = 0, which,phRise= 0 ,out=0, eFreq =0 , phFm=8, busLP,busHP,bus2,bus3,bus4,busBP,bus6, bus7, bus8, busSR, busSS, busSP, gra=1,lvlDec=1,factor=1, factor2 =0, vlPE =27.1366666667,vlPE2=0.2,dcPE = 0.129066666667,atckC = 2.5, decC = (-2), crvEP = (-2), rqLPF =0.5, factor3 =1;
 
 
 	var car, mod, mod2, env, iEnv, sig, filRte, lp, bp, hp, b1,lvlAtk;
@@ -362,8 +377,8 @@ SynthDef(\lead, {
 
 		mod = SinOsc.ar( MouseX.kr( freq * mRatio + mod2 )*
 
-
-			SinOsc.kr(sineRate,phRise).range([sineRangeLow]), mul:
+/*sineRate phRise sineRangeLow*/
+			SinOsc.kr(In.kr(busSR, 1),In.kr(busSP, 1)).range([In.kr(busSS, 1)]), mul:
 
 			(freq * mRatio * iEnv) *gra
 
@@ -931,7 +946,7 @@ gain=1,vol =1, du =0.01,rel=0.8, atk =0.01 ,thr= 0.001,sB =1,sA= 0.05*/
 
 )
 
-
+~bass.play(t)
 // Pbindf(~inst.(), \dur,Pseq([1/4],16),\decE,Pseq([1/4],16)).play(t,quant:1)
 
 //});)

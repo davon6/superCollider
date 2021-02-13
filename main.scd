@@ -5,7 +5,13 @@
 ~gate = Pbind(\instrument,\gate, \dur,Pseq([1/4],1),\in, ~gateBus, \atkT,0, \decT,Pseq([1/4],4),\bus1,~bus1,\out,~limitFuzz,\group, ~gateGrp);
 
 
-~counter = Pbind(\instrument, \shap, \dur, Pseq([16/1],inf),\dA2,2, \out2, ~filterCtrl,)
+/*~counter = Pbind(\instrument, \lfo, \dur, Pseq([16/1],inf),\dA2,2, \out, ~filterCtrl,)*/
+
+
+~lfoSeqFi = Pbind(\instrument, \lfo, \dur, Pseq([16/1],inf)/*,\dA2,2,*/ ,\out, ~filterCtrl,);
+
+
+~lfoRise = Pbind(\instrument, \lfo2, \dur, Pseq([16/1],inf),\out, ~sineRCtrl,\out2, ~sineSCtrl,\out3, ~sinePCtrl)
 )
 
 
@@ -13,7 +19,7 @@
 Ppar([
 
 
-		~counter,
+		/*~counter,*/	~lfoSeqFi, ~lfoRise,
 
 Pseq([
 	 Pseq([~gate],64),
