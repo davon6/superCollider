@@ -80,10 +80,10 @@ Ppar([~bar[6],~snare],2),
 
 	Pseq([~kbassRest,~perc[4]],1),
 
-	 Pseq([~perc[4],        Pseq([ ~rev  ,
+	 Pseq([~perc[4],        Pseq([ Ppar([Pbindf(~kick,\out,~micBus,\group, ~micGrp), Pbind(\instrument,\gran,\dur,Pseq([1/4],1),\amp, 1,\buf, e,\out,0,\atk, 0,\rel, Pseq([1/4],1),\gate, 1,\ptrBus, ~ptrBus,\pitchRte,(-1),\ptrRandSamples, 0,\minPtrDelay, 1000,\group,~granGrp,\duration,Pseq([1/4],1),\impulse,Pseq([1/4],1));],1)  ,
 
 
-		Pseq([Pbindf(~kick, \dur, Pseq([1/2],1))],2),~rev, Pseq([Pbindf(~kick, \dur, Pseq([1/2],1))],1)
+		Pseq([Pbindf(~kick, \dur, Pseq([1/2],1))],2),Ppar([Pbindf(~kick,\out,~micBus,\group, ~micGrp), Pbind(\instrument,\gran,\dur,Pseq([1/4],1),\amp, 1,\buf, e,\out,0,\atk, 0,\rel, Pseq([1/4],1),\gate, 1,\ptrBus, ~ptrBus,\pitchRte,(-1),\ptrRandSamples, 0,\minPtrDelay, 1000,\group,~granGrp,\duration,Pseq([1/4],1),\impulse,Pseq([1/4],1));],1), Pseq([Pbindf(~kick, \dur, Pseq([1/2],1))],1)
 	],1   )],1) ,
 
 	 Pseq([~perc[3],

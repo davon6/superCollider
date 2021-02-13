@@ -916,10 +916,14 @@ Pbind(\instrument,\comp, \dur,Pseq([1024/1],1),\thr,0.4 ,\sB, 1.04,\sA, 0.2,\atk
 
 		//both routed to same limiter but not sure what is best to get most flat volume possible
 
-	Pbind(\instrument, \limiter,\in, ~limitFuzz, \dur, Pseq([1024/1],1)
-	/*,\thr,  0.1*/
+	/*Pbind(\instrument, \limiter,\in, ~limitFuzz, \dur, Pseq([1024/1],1)
 
-		,\gain,44,\group,~limitGrp,\out,0),
+
+		,\gain,44,\group,~limitGrp,\out,0),*/
+
+
+
+	/*,\thr,  0.1*/
 /*thr, sB ,sA, atk, rel
 gain=1,vol =1, du =0.01,rel=0.8, atk =0.01 ,thr= 0.001,sB =1,sA= 0.05*/
 

@@ -1,13 +1,48 @@
 /*~pseq = {~pp = Pseq([1/4],16);~pp};*/
 
+(
+~gate.free;
+~gate = Pbind(\instrument,\gate, \dur,Pseq([1/4],1),\in, ~gateBus, \atkT,0, \decT,Pseq([1/4],4),\bus1,~bus1,\out,~limitFuzz,\group, ~gateGrp);
 
+
+~counter = Pbind(\instrument, \shap, \dur, Pseq([16/1],inf),\dA2,2, \out2, ~filterCtrl,)
+)
 
 
 (
 Ppar([
 
 
+		~counter,
 
+Pseq([
+	 Pseq([~gate],64),
+Pseq([	Pbindf(~gate,  \dur,Pseq([1/1],1), \decT,Pseq([1/1],1))],1),
+ Pseq([~gate],64),
+	Pseq([	Pbindf(~gate,  \dur,Pseq([1/3],1), \decT,Pseq([1/3],1))],12),
+		 Pseq([~gate],64),
+		Pseq([	Pbindf(~gate,  \dur,Pseq([16/1],1), \decT,Pseq([16/1],1))],1),
+
+
+	],inf),
+
+	Pbind(\instrument,\lead,\dur,Pseq([4096/1],1),\decE, Pseq([4096/1],1),\freq,659.26 ,\which,~filterCtrl,\busHP,~bus5,\bus7,~bus6,\factor3,~fac3.(),
+
+	/*	\sineRangeLow,(-10.4),\sineRate,0.01005859375,\phRise,(15),*/
+
+		\busLP, ~bus4, \busBP, ~bus9 ,
+
+		\out,~gateBus,\group,~leadGrp), //~gateBus
+
+
+
+	Pbind(\instrument, \limiter,\in, ~limitFuzz, \dur, Pseq([1024/1],1)
+	/*,\thr,  0.1*/
+
+		,\gain,124,\group,~limitGrp,\out,0),
+
+
+/*
 	Pseq([
 	Pseq([
 
@@ -175,7 +210,7 @@ Pseq([
 
 
 
-	],inf),
+	],inf),*/
 
 	Pseq([~toUse[0.rrand(~toUse.size,1)],~toUse[0.rrand(~toUse.size,1)],~toUse[0.rrand(~toUse.size,1)],~toUse[0.rrand(~toUse.size,1)],
 
