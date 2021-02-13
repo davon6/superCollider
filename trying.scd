@@ -148,11 +148,13 @@ s.waitForBoot({
 	~bus15 = Bus.control(s,1);
 	~bus16 = Bus.control(s,1);
 
-	//~bassShapB = Bus.control(s,1);
+
 
 	~bus17 = Bus.control(s,1);
 	~bus18 = Bus.control(s,1);
 
+
+	~filterCtrl = Bus.control(s,1);
 
 "Kontrol rate init".postln;
 
@@ -160,12 +162,31 @@ s.waitForBoot({
 
 
 
-	SynthDef(\shap,{|in, out=0, vl1=80, vl2=0,vl3=0|
-	var halfBeat, shap;
+	~tim = 3.0976;
+~vl1  = 3.rand;
+~vl2  = 3.rand;
+~vl3  = 3.rand;
+~vl4  = 3.rand;
+~vl5  = 3.rand;
+~vl6  = 3.rand;
+~vl7  = 3.rand;
+~vl8  = 3.rand;
+
+s.sync;
+
+
+
+
+	SynthDef(\shap,{|in, out=0,out2, vl1=80, vl2=0,vl3=0|
+	var halfBeat, shap, shap2;
 
 	halfBeat = t.beatDur * 0.5;
 
 		shap = EnvGen.ar(Env([vl1,vl2],[halfBeat,halfBeat],9),doneAction:2);
+
+		shap2 = EnvGen.kr(Env([~vl1,~vl1,~vl2,~vl2,~vl3,~vl3,~vl4,~vl4,~vl5,~vl5,~vl6,~vl6,~vl7,~vl7,~vl8,~vl8],
+
+	[~tim,0,~tim,0,~tim,0,~tim,0,~tim,0,~tim,0,~tim,0,~tim ]),doneAction:2);
 
 
 		/*env = EnvGen.kr(Env([0,1,lvlDec,0],[atkE, decE-(In.kr(bus2, 1))     , subsE,relE],[atckC,decC- (In.kr(bus3, 1))
@@ -178,7 +199,10 @@ s.waitForBoot({
 
 
 	Out.ar(out, shap);
+	Out.kr(out2, shap2);
 }).add;
+
+
 
 
 
@@ -306,7 +330,7 @@ sig = Pan2.ar( sig , pan);//0 was pan
 
 
 SynthDef(\lead, {
-		arg freq= 500, mRatio=1, cRatio=1,  amp=0.01, atk= 0.01  , rel=3, atkE =0,decE=0.1936, subsE=50, relE=0, sineRate = 0.0000000095262251,  sineRangeLow=0, pitch = 0, which = 1,phRise= 0 ,out=0, eFreq =0 , phFm=8, bus,bus2,bus3,bus4,bus5,bus6, bus7, bus8, gra=1,lvlDec=1,factor=1, factor2 =0, vlPE =27.1366666667,vlPE2=0.2,dcPE = 0.129066666667,atckC = 2.5, decC = (-2), crvEP = (-2), rqLPF =0.5, factor3 =1;
+		arg freq= 500, mRatio=1, cRatio=1,  amp=0.01, atk= 0.01  , rel=3, atkE =0,decE=0.1936, subsE=50, relE=0, sineRate = 0.0000000095262251,  sineRangeLow=0, pitch = 0, which = 1,phRise= 0 ,out=0, eFreq =0 , phFm=8, busLP,busHP,bus2,bus3,bus4,busBP,bus6, bus7, bus8, gra=1,lvlDec=1,factor=1, factor2 =0, vlPE =27.1366666667,vlPE2=0.2,dcPE = 0.129066666667,atckC = 2.5, decC = (-2), crvEP = (-2), rqLPF =0.5, factor3 =1;
 
 
 	var car, mod, mod2, env, iEnv, sig, filRte, lp, bp, hp, b1,lvlAtk;
@@ -324,7 +348,7 @@ SynthDef(\lead, {
 
 	iEnv = EnvGen.kr(
 			Env.new(
-			[1, 1 * 5, 1 * 5],
+			[1, 1 * 5, 1 * 5,5],
 			[0.000000000001,        (decE    ),      0.0000000001],
 			[4, (-4)]
 		));
@@ -369,15 +393,15 @@ SynthDef(\lead, {
 	//the different filer in use for this example only hp (high pass) and lp (low ass) are used
 
 
-	lp = BLowPass4.ar(sig , In.kr(bus, 1) ,rqLPF);
+	lp = BLowPass4.ar(sig , In.kr(busLP, 1) ,rqLPF);
 
-	bp = BPF.ar(sig,In.kr(bus5, 1) *factor3  ,0.26);//0.05
+	bp = BPF.ar(sig,In.kr(busBP, 1) *factor3  ,0.26);//0.05             bus5
 
-	hp = BHiPass4.ar(sig, In.kr(bus, 1),In.kr(bus7, 1)); //0.6);//      MouseY.kr(1,0.4,0));
+	hp = BHiPass4.ar(sig, In.kr(busHP, 1),In.kr(bus7, 1)); //0.6);//      MouseY.kr(1,0.4,0));
 
 	//select which filter to use	+ add envelope and final volume, all go mono
 
-	sig =SelectX.ar(which, [lp, bp,hp,sig])* amp;
+	sig =SelectX.ar(which/*In.kr(which, 1)*/, [lp, bp,hp,sig])* amp;
 
 	Out.ar(out, sig);
 }).add;
@@ -728,7 +752,10 @@ Ppar([, Pseq([~bass],inf)]).play(t)*/
 
 ~gateGrp =  Group.after(~leadGrp);
 
-/*~micGrp = Group.new;
+/*~micGrp = Group.new;*/
+
+~micGrp =  Group.after(~gateGrp);
+
 
 ~ptrGrp = Group.after(~micGrp);
 ~recGrp = Group.after(~ptrGrp);
@@ -741,7 +768,7 @@ Ppar([, Pseq([~bass],inf)]).play(t)*/
 
 ~compGrp2 = Group.after(~compGrp);
 
-~limitGrp = Group.after(~compGrp2);*/
+~limitGrp = Group.after(~compGrp2);
 
 
 	//global vairable to set limiter delay "du" (this is the least noise artefact generator value I found)
