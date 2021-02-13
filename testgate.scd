@@ -25,7 +25,11 @@ Pseq([	Pbindf(~gate,  \dur,Pseq([1/1],1), \decT,Pseq([1/1],1))],1),
 
 	],inf),
 
-	Pbind(\instrument,\lead,\dur,Pseq([1024/1],1),\decE, Pseq([1024/1],1),\freq,659.26 ,\which,2 ,\busHP,~bus5,\bus7,~bus6,\out,~gateBus,\group,~leadGrp),
+	Pbind(\instrument,\lead,\dur,Pseq([1024/1],1),\decE, Pseq([1024/1],1),\freq,659.26 ,\which,2,\busHP,~bus5,\bus7,~bus6,\factor3,~fac3.(),
+
+		\busLP, ~bus5, \busBP, ~bus9 ,
+
+		\out,~gateBus,\group,~leadGrp),
 /*Pseq([~gate],inf)*/
 
 
