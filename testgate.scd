@@ -1,26 +1,24 @@
 (
 ~gate.free;
-~gate = Pbind(\instrument,\gate, \dur,Pseq([1/4],1),\in, ~gateBus, \atkT,0, \decT,Pseq([1/4],4),\bus1,~bus1,\out,~limitFuzz,\group, ~gateGrp);
+~gate = Pbind(\instrument,\gate, \dur,Pseq([1/4],1),\in, ~gateBus, \atkT,0, \decT,Pseq([1/4],4),\bus1,~bus1,\out,~busRting,\group, ~gateGrp);
 
 
 ~lfoSeqFi = Pbind(\instrument, \lfo, \dur, Pseq([16/1],inf)/*,\dA2,2,*/ ,\out, ~filterCtrl,);
 
 
-~lfoRise = Pbind(\instrument, \lfo2, \dur, Pseq([16/1],inf),\out, ~sineRCtrl,\out2, ~sineSCtrl,\out3, ~sinePCtrl)
+~lfoRise = Pbind(\instrument, \lfo2, \dur, Pseq([16/1],inf),\out, ~sineRCtrl,\out2, ~sineSCtrl,\out3, ~sinePCtrl);
+
+~lfoFx = Pbind(\instrument, \lfo3, \dur, Pseq([639/128],inf),\out, ~busRting,);
 
 )
+//   ~busRting
+
 (
-/*~leadGrp = Group.new;
-
-~gateGrp =  Group.after(~leadGrp);*/
-
-
-// ~counter.play(t)
 
 
 Ppar([
 
-	~lfoSeqFi, ~lfoRise,
+	~lfoSeqFi, ~lfoRise,~lfoFx,
 
 Pseq([
 	 Pseq([~gate],64),
@@ -33,9 +31,9 @@ Pseq([	Pbindf(~gate,  \dur,Pseq([1/1],1), \decT,Pseq([1/1],1))],1),
 
 	],inf),
 
-	Pbind(\instrument,\lead,\dur,Pseq([4096/1],1),\decE, Pseq([4096/1],1),\freq,659.26 ,\which,~filterCtrl,\busHP,~bus5,\bus7,~bus6,\factor3,~fac3.(),
+	Pbind(\instrument,\lead,\dur,Pseq([4096/1],1),\decE, Pseq([4096/1],1),\freq,659.26 ,\which,1,\busHP,~bus5,\bus7,~bus6,\factor3,~fac3.(),
 
-	/*	\sineRangeLow,(-10.4),\sineRate,0.01005859375,\phRise,(15),*/
+	/*	\sineRangeLow,(-10.4),\sineRate,0.01005859375,\phRise,(15),*/  //   ~filterCtrl
 
 		\busLP, ~bus4, \busBP, ~bus9 ,
 
@@ -43,11 +41,11 @@ Pseq([	Pbindf(~gate,  \dur,Pseq([1/1],1), \decT,Pseq([1/1],1))],1),
 
 
 
-	Pbind(\instrument, \limiter,\in, ~limitFuzz, \dur, Pseq([1024/1],1)
+	/*Pbind(\instrument, \limiter,\in, ~limitFuzz, \dur, Pseq([1024/1],1)
 	/*,\thr,  0.1*/
 
 		,\gain,74,\group,~limitGrp,\out,0),
-
+*/
 
 
 

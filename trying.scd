@@ -114,7 +114,10 @@ s.waitForBoot({
 
 
 ~limitFuzz = Bus.audio(s,2);
-
+~limitFuzz2 = Bus.audio(s,2);
+~limitRnd = Bus.audio(s,2);
+~limitSquelch = Bus.audio(s,2);
+~limitMelo = Bus.audio(s,2);
 
 //use for ghost signal for compression
 ~kbus = Bus.audio(s,2);
@@ -127,6 +130,9 @@ s.waitForBoot({
 ~sineRCtrl = Bus.audio(s,1);
 ~sineSCtrl = Bus.audio(s,1);
 ~sinePCtrl = Bus.audio(s,1);
+
+~busRting = Bus.audio(s,1);
+
 	s.sync;
 
 	//the control rates
@@ -175,6 +181,13 @@ s.waitForBoot({
 ~vl7  = 3.rand;
 ~vl8  = 3.rand;
 
+
+
+	~flat =  0.0000000095262251; ~acti = 0.01005859375; ~scaRi = (-10.4); ~phR = 15;
+
+	~b1 = ~reverbBus.index; ~b2 = ~reverbBus2.index; ~b3 = ~reverbRnd.index; ~b4 = ~reverbSquelch.index; ~b5 = ~reverbMelo.index;
+
+
 s.sync;
 
 
@@ -198,9 +211,8 @@ s.sync;
 		[~tim,0,~tim,0,~tim,0,~tim,0,~tim,0,~tim,0,~tim,0,~tim ]),doneAction:2))}).add;
 
 
-	~flat =  0.0000000095262251; ~acti = 0.01005859375; ~scaRi = (-10.4); ~phR = 15;
 
-	s.sync;
+
 
 	SynthDef(\lfo2,{|out, out2, out3|Out.ar(out, EnvGen.ar(Env(
 	[~flat, ~flat,~acti,~acti],
@@ -214,8 +226,16 @@ s.sync;
 	[0, 0,~phR,~phR],
 		[ 0,18585.6,0,6195.2]),doneAction:2));
 
-
 	}).add;
+
+
+
+
+	SynthDef(\lfo3,{|out|Out.ar( out, EnvGen.ar(Env([~b1,~b1,~b2,~b2, ~b3,~b3, ~b4,~b4, ~b5,~b5],
+		[~tim,0,~tim,0,~tim,0,~tim,0,~tim,0,~tim,0,~tim,0,~tim ]),doneAction:2));}).add;
+
+
+
 
 
 // sineRate = 0.0000000095262251,  ,phRise= 0 sineRangeLow=0
@@ -416,7 +436,7 @@ SynthDef(\lead, {
 
 	//select which filter to use	+ add envelope and final volume, all go mono
 
-	sig =SelectX.ar(In.ar(which, 1).poll, [lp, bp,hp,sig])* amp;
+	sig =SelectX.ar(which, [lp, bp,hp,sig])* amp;  //In.ar(which, 1)
 
 	Out.ar(out, sig);
 }).add;
@@ -446,7 +466,7 @@ SynthDef(\lead, {
 
 		doneAction:2);
 
-	Out.ar(out, env);
+		Out.ar(~reverbRnd, env); //remember normally ar.
 }).add;
 
 
@@ -780,10 +800,10 @@ Ppar([, Pseq([~bass],inf)]).play(t)*/
 
 ~compGrp = Group.after(~revGrp);
 
+~limitGrp = Group.after(~compGrp);
+~compGrp2 = Group.after(~limitGrp);
 
-~compGrp2 = Group.after(~compGrp);
 
-~limitGrp = Group.after(~compGrp2);
 
 
 	//global vairable to set limiter delay "du" (this is the least noise artefact generator value I found)
@@ -887,31 +907,36 @@ Pbind(\instrument,\comp, \dur,Pseq([1024/1],1),\thr,0.6 ,\sB, 1.2,\sA, 2,\atk ,0
 
 			//Low pass compression
 
-	Pbind(\instrument,\comp, \dur,Pseq([1024/1],1),\thr,0.2 ,\sB, 1.086,\sA, 1/2,\atk ,0.0121, \rel ,0.04840, \gain,(5)
-,\in, ~comFuzz ,\in2, ~kbus, \out,~comSnaGrpBus, \group, ~compGrp),
+	Pbind(\instrument,\comp, \dur,Pseq([1024/1],1),\thr,0.2 ,\sB, 1.086,\sA, 1/2,\atk ,0.0121, \rel ,0.04840, \gain,(50)
+,\in, ~comFuzz ,\in2, ~kbus, \out,~limitFuzz, \group, ~compGrp),
 
 
 			//High pass compression
 
-	Pbind(\instrument,\comp, \dur,Pseq([1024/1],1),\thr,0.8 ,\sB, 1.020,\sA, 1/2,\atk ,0.0121, \rel ,0.0484,\gain,(1.3)
-,\in, ~comFuzz2 ,\in2, ~kbus, \out,~comSnaGrpBus, \group, ~compGrp),
+	Pbind(\instrument,\comp, \dur,Pseq([1024/1],1),\thr,0.8 ,\sB, 1.020,\sA, 1/2,\atk ,0.0121, \rel ,0.0484,\gain,(70.3)
+,\in, ~comFuzz2 ,\in2, ~kbus, \out,~limitFuzz2, \group, ~compGrp),
+
+
+	Pbind(\instrument, \limiter,\in, ~limitFuzz, \dur, Pseq([1024/1],1),\gain,124,\group,~limitGrp,\out,0),
+	Pbind(\instrument, \limiter,\in, ~limitFuzz2, \dur, Pseq([1024/1],1),\gain,84,\group,~limitGrp,\out,0),
 
 
 
 		Pbind(\instrument,\reverb,\dur,Pseq([1024/1],1),\roomsize, 46, \revtime,~revTail.(), \damping, ~damp.(), \inputbw, 0.2, \drylevel, (-30), \earlylevel, (-1), \taillevel, (-42),\maxRoomsize,62,\spread,~spread.(),\wet,~wet.(),\in,~reverbSquelch , \out,~comSquelch,\group, ~revGrp),
 
 	Pbind(\instrument,\comp, \dur,Pseq([1024/1],1),\thr,0.2 ,\sB, 1.2,\sA, 1/4,\atk ,0.0484, \rel ,0.3872
-,\gain, 4,\in, ~comSquelch ,\in2, ~kbus, \out,~comSnaGrpBus, \group, ~compGrp),
+,\gain, 24,\in, ~comSquelch ,\in2, ~kbus, \out,~limitSquelch, \group, ~compGrp),
+
+Pbind(\instrument, \limiter,\in, ~limitSquelch, \dur, Pseq([1024/1],1),\gain,95,\group,~limitGrp,\out,0),
 
 
+		Pbind(\instrument,\reverb,  \dur,Pseq([1024/1],1),\roomsize, 50, \revtime,Pseq([1/4],32), \damping, ~damp.(), \inputbw, 1, \drylevel, -10, \earlylevel, -22, \taillevel, -50,\amp,1,\spread,10,\wet,~wet.(),\maxRoomsize,80,\in,~reverbRnd,\out,~comRnd,\group, ~revGrp),
 
-
-		Pbind(\instrument,\reverb,  \dur,Pseq([1024/1],1),\roomsize, 50, \revtime,Pseq([1/4],32), \damping, ~damp.(), \inputbw, 1, \drylevel, -10, \earlylevel, -22, \taillevel, -50,\amp,1,\spread,10,\wet,~wet.(),\maxRoomsize,80,\in,~reverbRnd,\out,~comRnd,\group, ~revGrp)
-			,
 
 Pbind(\instrument,\comp, \dur,Pseq([1024/1],1),\thr,0.8 ,\sB, 1.05,\sA, 1/2,\atk ,0.0121, \rel ,0.04840
-,\gain,4,\in, ~comRnd,\in2, ~kbus, \out,~comSnaGrpBus, \group, ~compGrp),
+,\gain,4,\in, ~comRnd,\in2, ~kbus, \out,~limitRnd, \group, ~compGrp),
 
+Pbind(\instrument, \limiter,\in, ~limitRnd, \dur, Pseq([1024/1],1),\gain,65,\group,~limitGrp,\out,0),
 
 
 	Pbind(\instrument,\reverb,\dur,Pseq([1024/1],1),\roomsize, 46, \revtime, Pseq([1/1],1), \damping,~damp.(), \inputbw, 1, \drylevel, (-3), \earlylevel, (-10), \taillevel, (-1),\maxRoomsize,86,\in,~reverbMelo , \out,~comMelo,\group, ~revGrp),
@@ -919,7 +944,7 @@ Pbind(\instrument,\comp, \dur,Pseq([1024/1],1),\thr,0.8 ,\sB, 1.05,\sA, 1/2,\atk
 
 
 Pbind(\instrument,\comp, \dur,Pseq([1024/1],1),\thr,0.8 ,\sB, 1.2,\sA, 1/3,\atk ,0.0968, \rel ,0.04840
-,\in, ~comMelo ,\in2, ~kbus,\gain,6, \out,~comSnaGrpBus, \group, ~compGrp),
+,\in, ~comMelo ,\in2, ~kbus,\gain,6, \out,0, \group, ~compGrp),
 
 
 
