@@ -934,9 +934,9 @@ Pbind(\instrument, \limiter,\in, ~limitSquelch, \dur, Pseq([1024/1],1),\gain,95,
 
 
 Pbind(\instrument,\comp, \dur,Pseq([1024/1],1),\thr,0.8 ,\sB, 1.05,\sA, 1/2,\atk ,0.0121, \rel ,0.04840
-,\gain,4,\in, ~comRnd,\in2, ~kbus, \out,~limitRnd, \group, ~compGrp),
+,\gain,20,\in, ~comRnd,\in2, ~kbus, \out,~limitRnd, \group, ~compGrp),
 
-Pbind(\instrument, \limiter,\in, ~limitRnd, \dur, Pseq([1024/1],1),\gain,65,\group,~limitGrp,\out,0),
+Pbind(\instrument, \limiter,\in, ~limitRnd, \dur, Pseq([1024/1],1),\gain,110,\group,~limitGrp,\out,0),
 
 
 	Pbind(\instrument,\reverb,\dur,Pseq([1024/1],1),\roomsize, 46, \revtime, Pseq([1/1],1), \damping,~damp.(), \inputbw, 1, \drylevel, (-3), \earlylevel, (-10), \taillevel, (-1),\maxRoomsize,86,\in,~reverbMelo , \out,~comMelo,\group, ~revGrp),
