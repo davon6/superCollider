@@ -3,7 +3,7 @@
 ~gate = Pbind(\instrument,\gate, \dur,Pseq([1/4],1),\in, ~gateBus, \atkT,0, \decT,Pseq([1/4],4),\bus1,~bus1,\group, ~gateGrp);
 
 
-~counter = Pbind(\instrument, \shap, \dur, Pseq([1024/1],1), \out2, ~filterCtrl,)
+~counter = Pbind(\instrument, \shap, \dur, Pseq([16/1],inf),\dA2,2, \out2, ~filterCtrl,)
 )
 (
 /*~leadGrp = Group.new;
@@ -11,25 +11,31 @@
 ~gateGrp =  Group.after(~leadGrp);*/
 
 
-
+// ~counter.play(t)
 
 
 Ppar([
 
+	~counter,
+
 Pseq([
 	 Pseq([~gate],64),
 Pseq([	Pbindf(~gate,  \dur,Pseq([1/1],1), \decT,Pseq([1/1],1))],1),
-
+ Pseq([~gate],64),
 	Pseq([	Pbindf(~gate,  \dur,Pseq([1/3],1), \decT,Pseq([1/3],1))],12),
+		 Pseq([~gate],64),
+		Pseq([	Pbindf(~gate,  \dur,Pseq([16/1],1), \decT,Pseq([16/1],1))],1),
 
 
 	],inf),
 
-	Pbind(\instrument,\lead,\dur,Pseq([1024/1],1),\decE, Pseq([1024/1],1),\freq,659.26 ,\which,2,\busHP,~bus5,\bus7,~bus6,\factor3,~fac3.(),
+	Pbind(\instrument,\lead,\dur,Pseq([1024/1],1),\decE, Pseq([1024/1],1),\freq,659.26 ,\which,~filterCtrl,\busHP,~bus5,\bus7,~bus6,\factor3,~fac3.(),
 
-		\busLP, ~bus5, \busBP, ~bus9 ,
+	/*	\sineRangeLow,(-10.4),\sineRate,0.01005859375,\phRise,(15),*/
 
-		\out,~gateBus,\group,~leadGrp),
+		\busLP, ~bus4, \busBP, ~bus9 ,
+
+		\out,~gateBus,\group,~leadGrp), //~gateBus
 /*Pseq([~gate],inf)*/
 
 
@@ -38,6 +44,12 @@ Pseq([	Pbindf(~gate,  \dur,Pseq([1/1],1), \decT,Pseq([1/1],1))],1),
 ],1).play(t);
 
 )
+
+Pbindef(\blast, \sineRangeLow,(-10.4),\sineRate,0.01005859375,\phRise,(15))
+
+Pbindef(\blast, \sineRate , 0.0000000095262251, \sineRangeLow,0,\phRise,0)
+
+
 
 
 

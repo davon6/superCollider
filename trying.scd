@@ -122,7 +122,7 @@ s.waitForBoot({
 
 ~snBus = Bus.audio(s,2);
 
-
+~filterCtrl = Bus.audio(s,1);
 
 	s.sync;
 
@@ -154,7 +154,7 @@ s.waitForBoot({
 	~bus18 = Bus.control(s,1);
 
 
-	~filterCtrl = Bus.control(s,1);
+	// ~filterCtrl = Bus.control(s,1);
 
 "Kontrol rate init".postln;
 
@@ -162,7 +162,7 @@ s.waitForBoot({
 
 
 
-	~tim = 3.0976;
+	~tim = t.beatDur;//3.0976;
 ~vl1  = 3.rand;
 ~vl2  = 3.rand;
 ~vl3  = 3.rand;
@@ -177,16 +177,16 @@ s.sync;
 
 
 
-	SynthDef(\shap,{|in, out=0,out2, vl1=80, vl2=0,vl3=0|
+	SynthDef(\shap,{|in, out=300,out2=300, vl1=80, vl2=0,vl3=0, dA1 =0,dA2=0,dA3=0,dA4=0 |
 	var halfBeat, shap, shap2;
 
 	halfBeat = t.beatDur * 0.5;
 
-		shap = EnvGen.ar(Env([vl1,vl2],[halfBeat,halfBeat],9),doneAction:2);
+		shap = EnvGen.ar(Env([vl1,vl2],[halfBeat,halfBeat],9),doneAction:dA1);
 
-		shap2 = EnvGen.kr(Env([~vl1,~vl1,~vl2,~vl2,~vl3,~vl3,~vl4,~vl4,~vl5,~vl5,~vl6,~vl6,~vl7,~vl7,~vl8,~vl8],
+		shap2 = EnvGen.ar(Env([~vl1,~vl1,~vl2,~vl2,~vl3,~vl3,~vl4,~vl4,~vl5,~vl5,~vl6,~vl6,~vl7,~vl7,~vl8,~vl8],
 
-	[~tim,0,~tim,0,~tim,0,~tim,0,~tim,0,~tim,0,~tim,0,~tim ]),doneAction:2);
+	[~tim,0,~tim,0,~tim,0,~tim,0,~tim,0,~tim,0,~tim,0,~tim ]),doneAction:dA2);
 
 
 		/*env = EnvGen.kr(Env([0,1,lvlDec,0],[atkE, decE-(In.kr(bus2, 1))     , subsE,relE],[atckC,decC- (In.kr(bus3, 1))
@@ -198,8 +198,8 @@ s.sync;
 
 
 
-	Out.ar(out, shap);
-	Out.kr(out2, shap2);
+	/*Out.ar(out, shap);*/
+	Out.ar(out2, shap2);
 }).add;
 
 
@@ -330,7 +330,7 @@ sig = Pan2.ar( sig , pan);//0 was pan
 
 
 SynthDef(\lead, {
-		arg freq= 500, mRatio=1, cRatio=1,  amp=0.01, atk= 0.01  , rel=3, atkE =0,decE=0.1936, subsE=50, relE=0, sineRate = 0.0000000095262251,  sineRangeLow=0, pitch = 0, which = 1,phRise= 0 ,out=0, eFreq =0 , phFm=8, busLP,busHP,bus2,bus3,bus4,busBP,bus6, bus7, bus8, gra=1,lvlDec=1,factor=1, factor2 =0, vlPE =27.1366666667,vlPE2=0.2,dcPE = 0.129066666667,atckC = 2.5, decC = (-2), crvEP = (-2), rqLPF =0.5, factor3 =1;
+		arg freq= 500, mRatio=1, cRatio=1,  amp=0.01, atk= 0.01  , rel=3, atkE =0,decE=0.1936, subsE=50, relE=0, sineRate = 0.0000000095262251,  sineRangeLow=0, pitch = 0, which,phRise= 0 ,out=0, eFreq =0 , phFm=8, busLP,busHP,bus2,bus3,bus4,busBP,bus6, bus7, bus8, gra=1,lvlDec=1,factor=1, factor2 =0, vlPE =27.1366666667,vlPE2=0.2,dcPE = 0.129066666667,atckC = 2.5, decC = (-2), crvEP = (-2), rqLPF =0.5, factor3 =1;
 
 
 	var car, mod, mod2, env, iEnv, sig, filRte, lp, bp, hp, b1,lvlAtk;
@@ -401,7 +401,7 @@ SynthDef(\lead, {
 
 	//select which filter to use	+ add envelope and final volume, all go mono
 
-	sig =SelectX.ar(which/*In.kr(which, 1)*/, [lp, bp,hp,sig])* amp;
+	sig =SelectX.ar(In.ar(which, 1).poll, [lp, bp,hp,sig])* amp;
 
 	Out.ar(out, sig);
 }).add;
@@ -688,7 +688,7 @@ SynthDef.new(\gran, {
     ~kick =	Pbind(\instrument, \kick,\dur, Pseq([1/1],1),\amp,( -4.5),\out,0);
 
 
-~bassShap = Pbind(\instrument, \shap, \dur,Pseq([1/1],inf),\out,~bassShapB);
+~bassShap = Pbind(\instrument, \shap, \dur,Pseq([1/1],inf),\dA1,2,\out,~bassShapB);
 
 ~bass = Pbind(
 		\instrument, \bass,
@@ -820,6 +820,9 @@ o = {
 
 
 	Out.kr(~bus17, MouseY.kr(0,659.26));
+
+
+	// Out.kr(~filterCtrl, MouseX.kr(0,2));
 
 
 	/*Out.ar(~bus17,  //CANCELLED
