@@ -2,6 +2,7 @@
 //percu cutting the 1/2 for progression
 //slider aka minirise
 //delay
+//use prand and probability
 (
 Server.killAll;
 Pdef.all.do(_.clear);
@@ -10,6 +11,8 @@ Pbind.free;
 Pbindf.free;
 ~melo1.free;
 ~bass.free;
+Bus.free;
+
 )
 Server.default.options.outDevice_("Audient iD14");
 
@@ -91,16 +94,28 @@ s.waitForBoot({
 
 ~gateBus = Bus.audio(s,1);
 
-~micBus = Bus.audio(s,1);
-~ptrBus = Bus.audio(s,1);
+
 
 ~bassShapB = Bus.audio(s,1);
+
+
+~filterBus = Bus.audio(s,1);
+~filterBus2 = Bus.audio(s,1);
+~filterRnd = Bus.audio(s,1);
+~filterSquelch = Bus.audio(s,1);
+~filterMelo = Bus.audio(s,1);
+
+
+	~micBus = Bus.audio(s,1);
+~ptrBus = Bus.audio(s,1);
+
 
 ~reverbBus = Bus.audio(s,1);
 ~reverbBus2 = Bus.audio(s,1);
 ~reverbRnd = Bus.audio(s,1);
 ~reverbSquelch = Bus.audio(s,1);
 ~reverbMelo = Bus.audio(s,1);
+
 
 ~comRnd = Bus.audio(s,2);
 ~comMelo = Bus.audio(s,2);
@@ -133,6 +148,12 @@ s.waitForBoot({
 
 ~busRting = Bus.audio(s,1);
 
+~busFilLMod = Bus.audio(s,1);
+~busFilHMod = Bus.audio(s,1);
+~busFilBMod = Bus.audio(s,1);
+~choose = Bus.audio(s,1);
+
+
 	s.sync;
 
 	//the control rates
@@ -140,17 +161,17 @@ s.waitForBoot({
 	~bus1 = Bus.control(s,1);
 	~bus2 = Bus.control(s,1);
 	~bus3 = Bus.control(s,1);
-	~bus4 = Bus.control(s,1);
-	~bus5 = Bus.control(s,1);
+	~bus4 = Bus.audio(s,1);
+	~bus5 = Bus.audio(s,1);
 	~bus6 = Bus.control(s,1);
-	~bus7 = Bus.control(s,1);
-	~bus8 = Bus.control(s,1);
+	~bus7 = Bus.audio(s,1);
+	~bus8 = Bus.audio(s,1);
 
-	~bus9 = Bus.control(s,1);
+	~bus9 = Bus.audio(s,1);
 
 	~bus10 = Bus.control(s,1);
 	~bus11 = Bus.control(s,1);
-	~bus12 = Bus.control(s,1);
+	~bus12 = Bus.audio(s,1);
 	~bus13 = Bus.control(s,1);
 
 	~bus14 = Bus.control(s,1);
@@ -163,6 +184,8 @@ s.waitForBoot({
 	~bus18 = Bus.control(s,1);
 
 
+
+
 	// ~filterCtrl = Bus.control(s,1);
 
 "Kontrol rate init".postln;
@@ -171,7 +194,7 @@ s.waitForBoot({
 
 
 
-	~tim = t.beatDur;//3.0976;
+	/*~tim = t.beatDur;//3.0976;
 ~vl1  = 3.rand;
 ~vl2  = 3.rand;
 ~vl3  = 3.rand;
@@ -179,13 +202,21 @@ s.waitForBoot({
 ~vl5  = 3.rand;
 ~vl6  = 3.rand;
 ~vl7  = 3.rand;
-~vl8  = 3.rand;
+~vl8  = 3.rand;*/
+
+
+	/*~ctBusses = [ ~reverbBus, ~reverbBus2, ~reverbRnd, ~reverbSquelch, ~reverbMelo];
+	~filters = [0,2,1,1,2];*/
 
 
 
 	~flat =  0.0000000095262251; ~acti = 0.01005859375; ~scaRi = (-10.4); ~phR = 15;
 
-	~b1 = ~reverbBus.index; ~b2 = ~reverbBus2.index; ~b3 = ~reverbRnd.index; ~b4 = ~reverbSquelch.index; ~b5 = ~reverbMelo.index;
+	~busLFis = [~bus4,~bus4,~bus4,~bus4,~bus7,~bus8];
+	~busHFis = [~bus5,~bus5,~bus5,~bus5,~bus7,~bus8];
+
+
+	/*~b1 = ~reverbBus.index; ~b2 = ~reverbBus2.index; ~b3 = ~reverbRnd.index; ~b4 = ~reverbSquelch.index; ~b5 = ~reverbMelo.index;*/
 
 
 s.sync;
@@ -207,8 +238,70 @@ s.sync;
 
 
 
-	SynthDef(\lfo,{|out|Out.ar(out, EnvGen.ar(Env([~vl1,~vl1,~vl2,~vl2,~vl3,~vl3,~vl4,~vl4,~vl5,~vl5,~vl6,~vl6,~vl7,~vl7,~vl8,~vl8],
-		[~tim,0,~tim,0,~tim,0,~tim,0,~tim,0,~tim,0,~tim,0,~tim ]),doneAction:2))}).add;
+	/*SynthDef(\choo,{|out,val, dec|Out.ar(out,val* EnvGen.kr(Env([1,1],[dec]), doneAction:2));}).add;*/
+
+~val =0;
+
+	SynthDef(\lfo,{|out, out2, out3, out4, out5, dec=1, val=3, bus, bLP, bHP, bBP |
+
+		/*var busFil=0, filter=0, filMod=0, busses, filters;*/
+
+
+	/*	~val = val;*/
+
+	/*	busses = [ ~reverbBus, ~reverbBus2, ~reverbRnd, ~reverbSquelch, ~reverbMelo];
+	filters = [0,2,1,1,2];*/
+
+
+/*
+		if(val==1,{filter=0;
+			busFil = ~reverbBus.index;
+			filMod = ~busLFis[~busLFis.size.rand].index;
+		},{};);
+
+		if(val==2,{ filter=2;
+		busFil = ~reverbBus2.index	;
+			filMod = ~busHFis[~busHFis.size.rand].index;
+
+		},{};);
+
+
+		if(val==3,{filter=1;
+			busFil =~reverbRnd.index;
+			filMod = ~bus9.index;
+		},{};);
+
+
+		if(val==4,{filter=1;
+			busFil =  ~reverbSquelch.index;
+			filMod = ~bus12.index;
+		},{};);
+
+
+		if(val==5,{filter=2;
+			busFil =  ~reverbMelo.index;
+			filMod = ~bus12.index;
+		},{};);*/
+
+		//which filter
+		/*Out.ar(out, EnvGen.ar(Env([val-22,val-22],[dec,0]),doneAction:2));*/
+
+
+		//which Bus
+		Out.ar( out, EnvGen.ar(Env([bus, bus],[dec,0]),doneAction:2));
+
+
+		//which filter mod
+
+		Out.ar( out2, EnvGen.ar(Env([bLP],[dec,0]), doneAction:2));
+
+		Out.ar( out3, EnvGen.ar(Env([bHP],[dec,0]), doneAction:2));
+
+		Out.ar( out4, EnvGen.ar(Env([bBP],[dec,0]), doneAction:2));
+
+
+	}).add;
+
 
 
 
@@ -231,8 +324,20 @@ s.sync;
 
 
 
-	SynthDef(\lfo3,{|out|Out.ar( out, EnvGen.ar(Env([~b1,~b1,~b2,~b2, ~b3,~b3, ~b4,~b4, ~b5,~b5],
-		[~tim,0,~tim,0,~tim,0,~tim,0,~tim,0,~tim,0,~tim,0,~tim ]),doneAction:2));}).add;
+	/*SynthDef(\lfo3,{|out|Out.ar( out, EnvGen.ar(Env([~b1,~b1,~b2,~b2, ~b3,~b3, ~b4,~b4, ~b5,~b5],
+		[~tim,0,~tim,0,~tim,0,~tim,0,~tim,0,~tim,0,~tim,0,~tim ]),doneAction:2));}).add;*/
+
+
+	/*SynthDef(\lfo4,{|out, out2, out3, filL, filH, filB, dec|
+
+		Out.ar( out, EnvGen.ar(Env([filL],[dec,0]), doneAction:2));
+
+		Out.ar( out2, EnvGen.ar(Env([filH],[dec,0]), doneAction:2));
+
+		Out.ar( out3, EnvGen.ar(Env([filB],[dec,0]), doneAction:2));
+
+
+	}).add;*/
 
 
 
@@ -371,12 +476,12 @@ SynthDef(\lead, {
 	var car, mod, mod2, env, iEnv, sig, filRte, lp, bp, hp, b1,lvlAtk;
 
 		// envelope volume
-		env = EnvGen.kr(Env([0,1,lvlDec,0],[atkE, decE-(In.kr(bus2, 1))     , subsE,relE],[atckC,decC- (In.kr(bus3, 1))
+		/*env = EnvGen.kr(Env([0,1,lvlDec,0],[atkE, decE-(In.kr(bus2, 1))     , subsE,relE],[atckC,decC- (In.kr(bus3, 1))
 
 			,(-3),0,0]),
 
 
-		doneAction:2);
+		doneAction:2);*/
 
 
 		//inspired from Eli Fieldsteel FM tutorial this must be used to bring the best sound
@@ -398,7 +503,9 @@ SynthDef(\lead, {
 		mod = SinOsc.ar( MouseX.kr( freq * mRatio + mod2 )*
 
 /*sineRate phRise sineRangeLow*/
-			SinOsc.kr(In.kr(busSR, 1),In.kr(busSP, 1)).range([In.kr(busSS, 1)]), mul:
+			/*SinOsc.kr(In.kr(busSR, 1),In.kr(busSP, 1)).range([In.kr(busSS, 1)]), mul:*/
+
+			SinOsc.kr(sineRate,phRise).range([sineRangeLow]), mul:
 
 			(freq * mRatio * iEnv) *gra
 
@@ -422,27 +529,13 @@ SynthDef(\lead, {
 
 	sig = Shaper.ar(~tfBuf,   car);
 
-	sig  = LeakDC.ar(sig)* env;
+	sig  = LeakDC.ar(sig);//* env;
 
 
-	//the different filer in use for this example only hp (high pass) and lp (low ass) are used
 
-
-	lp = BLowPass4.ar(sig , In.kr(busLP, 1) ,rqLPF);
-
-	bp = BPF.ar(sig,In.kr(busBP, 1) *factor3  ,0.26);//0.05             bus5
-
-	hp = BHiPass4.ar(sig, In.kr(busHP, 1),In.kr(bus7, 1)); //0.6);//      MouseY.kr(1,0.4,0));
-
-	//select which filter to use	+ add envelope and final volume, all go mono
-
-	sig =SelectX.ar(which, [lp, bp,hp,sig])* amp;  //In.ar(which, 1)
-
-	Out.ar(out, sig);
+			Out.ar(out, sig);
 }).add;
 
-
-	"synth lead init".postln;
 
 
 
@@ -466,8 +559,34 @@ SynthDef(\lead, {
 
 		doneAction:2);
 
-		Out.ar(~reverbRnd, env); //remember normally ar.
+		Out.ar(~reverbMelo, env); //remember normally ar.
 }).add;
+
+
+
+		//the different filer in use for this example only hp (high pass) and lp (low ass) are used
+
+	SynthDef(\filters,{|out=0, in, busLP, busBP, busHP, bus7, which, factor3=1, rqLPF=0.5 |
+
+		var lp, bp, hp, sig;
+
+		sig = In.ar(in,1);
+
+	lp = BLowPass4.ar(sig , In.ar(busLP, 1) ,rqLPF);
+
+	bp = BPF.ar(sig,In.ar(busBP, 1) *factor3  ,0.26);//0.05             bus5
+
+	hp = BHiPass4.ar(sig, In.ar(busHP, 1),In.kr(bus7, 1)); //0.6);//      MouseY.kr(1,0.4,0));
+
+	//select which filter to use	+ add envelope and final volume, all go mono
+
+	sig =SelectX.ar(which, [lp, bp,hp,sig]);//* amp;  //In.ar(which, 1)
+
+		Out.ar(out, sig);
+	}).add;
+
+	"synth lead init".postln;
+
 
 
 	//GVerb + Splay in one synth
@@ -675,8 +794,8 @@ SynthDef.new(\gran, {
 	//different filter modulation in case low or high pass
 ~busFi = {|input|
 	var busAr;
-	~busLFis = [~bus4,~bus4,~bus4,~bus4,~bus7,~bus8];
-	~busHFis = [~bus5,~bus5,~bus5,~bus5,~bus7,~bus8];
+	/*~busLFis = [~bus4,~bus4,~bus4,~bus4,~bus7,~bus8];
+	~busHFis = [~bus5,~bus5,~bus5,~bus5,~bus7,~bus8];*/
 
 
 	if(input ==0,{ busAr = ~busLFis   },{  busAr = ~busHFis  });
@@ -785,11 +904,17 @@ Ppar([, Pseq([~bass],inf)]).play(t)*/
 
 ~leadGrp = Group.new;
 
+
 ~gateGrp =  Group.after(~leadGrp);
+
+~filterGrp =  Group.after(~gateGrp);
+
+
+
 
 /*~micGrp = Group.new;*/
 
-~micGrp =  Group.after(~gateGrp);
+~micGrp =  Group.after(~filterGrp);
 
 
 ~ptrGrp = Group.after(~micGrp);
@@ -823,18 +948,18 @@ o = {
 
 	Out.kr(~bus2, SinOsc.ar(0.0201171875).range(164.81,81.41));
 
-	Out.kr(~bus4, SinOsc.ar( 5.15 + SinOsc.kr(0.64375).range(0.01005859375,1.2875)  ).range(659.255,81.41));
+	Out.ar(~bus4, SinOsc.ar( 5.15 + SinOsc.kr(0.64375).range(0.01005859375,1.2875)  ).range(659.255,81.41));
 
-	Out.kr(~bus5, SinOsc.ar(1.2875).range(5274.04,0.0201171875));//c3
+	Out.ar(~bus5, SinOsc.ar(1.2875).range(5274.04,0.0201171875));//c3
 
 	Out.kr(~bus6, SinOsc.ar(0.321875).range(1,0.4));
 
-	Out.kr(~bus7, SinOsc.ar(5.15).range(2637.02,0.0201171875));
-	Out.kr(~bus8, SinOsc.ar(0.321875).range(2637.02,0.0201171875));
+	Out.ar(~bus7, SinOsc.ar(5.15).range(2637.02,0.0201171875));
+	Out.ar(~bus8, SinOsc.ar(0.321875).range(2637.02,0.0201171875));
 
-	Out.kr(~bus9,
+	Out.ar(~bus9,
 
-		SinOsc.kr(     LFTri.kr( 0.321875).range(0.321875,10.3)).range(82.4,2637.02));
+		SinOsc.ar(     LFTri.kr( 0.321875).range(0.321875,10.3)).range(82.4,2637.02));
 
 
 	Out.kr(~bus10,  Lag.kr(LFNoise0.kr(1.2875).range(41.2,1318.51),0.2)
@@ -842,7 +967,8 @@ o = {
 		+SinOsc.kr(SelectX.kr(LFNoise0.kr(5.15).range(0,2).round(1),[1.2875,5.15,0.321875])).range(5274.04,20.6));
 
 	Out.kr(~bus11, LFNoise0.kr(5.15).range(2.575,2637.02));
-	Out.kr(~bus12, SinOsc.ar(0.64375).range(2637.02,41.20));
+
+	Out.ar(~bus12, SinOsc.ar(0.64375).range(2637.02,41.20));
 	Out.kr(~bus13, SinOsc.ar(0.64375).range(20.6,41.20));
 
 	Out.kr(~bus14,
@@ -874,25 +1000,37 @@ o = {
 
 // FreqScope.new
 
-
+// ~kick.play
 Ppar([
 
 	Pbind(\instrument,\ptr, \buf, e, \out, ~ptrBus,\group,~ptrGrp,\dur,Pseq([1024/1],1)),
 Pbind(\instrument,\rec, \ptrIn, ~ptrBus, \micIn, ~micBus, \buf, e,\group,~recGrp,\dur,Pseq([1024/1],1)),
 
+
+
+/*	],1).play(t,quant:1);*/
 	~bassShap,
 
 		Pseq([Pbindf(~kick,\out,~kbus)],4096),
 		Pseq([Pbindf(~snare,\out,~snBus)],4096),
+/*
 
+Pbind(\instrument, \filters ,\dur,Pseq([1024/1],1),\in, ~filterBus, \which ,0 ,\busLP,~busFilLMod,\out,~reverbBus ,\group,~filterGrp ),
 
+Pbind(\instrument, \filters ,\dur,Pseq([1024/1],1),\in, ~filterBus2, \which,2  ,\busHP, ~busFilHMod,\out,~reverbBus2,\group,~filterGrp  ),
+Pbind(\instrument, \filters ,\dur,Pseq([1024/1],1),\in, ~filterRnd, \which ,1 ,\busBP,~busFilBMod,\factor3,~fac3.(),\out,~reverbRnd,\group,~filterGrp  ),
+	Pbind(\instrument, \filters ,\dur,Pseq([1024/1],1),\in, ~filterSquelch, \which,1  ,\busBP,~busFilBMod,\out, ~reverbSquelch,\group,~filterGrp ),
+	Pbind(\instrument, \filters ,\dur,Pseq([1024/1],1),\in, ~filterMelo, \which ,2 ,\busHP, ~busFilHMod,\out, ~reverbMelo,\group,~filterGrp ),*/
 
-
-
+/*busLP, busBP, busHP,*/
+/*~busFilLMod,\out3, ~busFilHMod,\out4, ~busFilBMod);*/
 
 Pbind(\instrument,\comp, \dur,Pseq([1024/1],1),\thr,0.6 ,\sB, 1.2,\sA, 2,\atk ,0.0001, \rel ,0.04840
 ,\gain,1,\in, ~comBusHat ,\in2, ~kbus, \out,0,\group, ~compGrp),
 		Pbind(\instrument,\comp,\dur,Pseq([1024/1],1),\thr,0.6 ,\sB, 1,\sA, 4,\atk ,0.001, \rel ,0.04840,\gain,1,\in, ~comBusCymb ,\in2, ~kbus, \out,0,\group, ~compGrp),
+
+
+
 
 
 
@@ -917,8 +1055,8 @@ Pbind(\instrument,\comp, \dur,Pseq([1024/1],1),\thr,0.6 ,\sB, 1.2,\sA, 2,\atk ,0
 ,\in, ~comFuzz2 ,\in2, ~kbus, \out,~limitFuzz2, \group, ~compGrp),
 
 
-	Pbind(\instrument, \limiter,\in, ~limitFuzz, \dur, Pseq([1024/1],1),\gain,124,\group,~limitGrp,\out,0),
-	Pbind(\instrument, \limiter,\in, ~limitFuzz2, \dur, Pseq([1024/1],1),\gain,84,\group,~limitGrp,\out,0),
+	/*Pbind(\instrument, \limiter,\in, ~limitFuzz, \dur, Pseq([1024/1],1),\gain,124,\group,~limitGrp,\out,0),
+	Pbind(\instrument, \limiter,\in, ~limitFuzz2, \dur, Pseq([1024/1],1),\gain,84,\group,~limitGrp,\out,0),*/
 
 
 
@@ -944,14 +1082,14 @@ Pbind(\instrument, \limiter,\in, ~limitRnd, \dur, Pseq([1024/1],1),\gain,110,\gr
 
 
 Pbind(\instrument,\comp, \dur,Pseq([1024/1],1),\thr,0.8 ,\sB, 1.2,\sA, 1/3,\atk ,0.0968, \rel ,0.04840
-,\in, ~comMelo ,\in2, ~kbus,\gain,6, \out,0, \group, ~compGrp),
+,\in, ~comMelo ,\in2, ~kbus,\gain,60, \out,~limitMelo, \group, ~compGrp),
 
 
+Pbind(\instrument, \limiter,\in, ~limitMelo, \dur, Pseq([1024/1],1),\gain,10,\group,~limitGrp,\out,0),
 
-
-Pbind(\instrument,\comp, \dur,Pseq([1024/1],1),\thr,0.4 ,\sB, 1.04,\sA, 0.2,\atk ,0.0968, \rel ,0.3872
+/*Pbind(\instrument,\comp, \dur,Pseq([1024/1],1),\thr,0.4 ,\sB, 1.04,\sA, 0.2,\atk ,0.0968, \rel ,0.3872
 ,\in, ~comSnaGrpBus ,\in2, ~snBus, \group, ~compGrp2,\out,~limitFuzz
-),
+),*/
 
 
 		//both routed to same limiter but not sure what is best to get most flat volume possible
