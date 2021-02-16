@@ -42,6 +42,56 @@ Pseq([1/4],1)
 
 
 
+
+
 //MONSTER ENV FOR PERCUSSIONS
 
 ({LFPulse.ar(216, mul: EnvGen.kr(Env([0,1,0.4,0.8,0],[0.02,0.02,0.05,1.4],[6,-4,-8,-9]),doneAction:2))!2}.play)
+
+
+
+
+
+
+//drafts
+
+
+({LFPulse.ar(216, mul: EnvGen.kr(Env.adsr(0.001, 0.2, 0.25, 1, 1, -4),doneAction:2))}.play)
+
+
+
+
+
+({LFPulse.ar(216, mul: EnvGen.kr(Env([0,1,0.1,0],[0.02,0.3,4],[6,-4,-8]),doneAction:2))!2}.play)
+
+
+({EnvGen.kr(Env([0,1,0.4,0],[0.02,0.3,0.1,0.005],[6,-4,-8,-8]))}.plot(duration:2))
+
+
+
+
+
+({LFPulse.ar(216, mul: EnvGen.kr(Env([0,1,0.8,0.8,0],[0.02,0.02,0.05,1.4],[6,-4,-8,-9]),doneAction:2))!2}.play)
+
+
+
+
+({LFPulse.ar(216, mul: EnvGen.kr(Env([0,1,0.8,0.8,0],[0.01,0.04,0.02,4.4],[6,-4,-8,-29]),doneAction:2))!2}.play)
+
+
+
+
+({EnvGen.kr(Env([0,1,0.4,0.8,0],[0.02,0.02,0.05,1.4],[6,-4,-8,-9]),doneAction:2)}.plot(duration:2))
+
+
+
+
+({ EnvGen.kr(Env([0,1,0.8,0.8,0],[0.02,0.02,0.05,1.4],[6,-4,-8,-9]),doneAction:2)}.plot(duration:2))
+
+
+
+
+({EnvGen.kr(Env([0,1,0.1,0.1,0],[0.02,0.1,0.2,0.05],[6,-4,-8,-9]),doneAction:2)}.plot(duration:2))
+
+
+s.plotTree

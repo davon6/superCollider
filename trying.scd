@@ -403,7 +403,6 @@ s.sync;
 
 
 
-s.sync;
 		SynthDef.new(\percussion, {
 	arg carHz=500, modHz=1899.3343179398, modAmp=0, atk=0.01, rel=1, amp=0.2, pan=0,rel2=1,out=0, latch = 6000, crv1, crv1b, mulMod, stereoL=0, stereoR=0;
 	var car, mod, env, car2, mod2,env2,sig;

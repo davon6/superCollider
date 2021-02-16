@@ -11,6 +11,12 @@ Bus.free;
 )
 
 
+Server.default.options.sampleRate =  48000
+Server.default.options.outDevice_("Audient iD14");
+
+Server.default.options.outDevice_("Built-in Output");
+
+
 (
 s.waitForBoot({
 
@@ -73,7 +79,11 @@ s.waitForBoot({
 	s.sync;
 
 
+
 	~dispatchBus = Bus.audio(s,1);
+
+	~micBus = Bus.audio(s,1);
+	~ptrBus = Bus.audio(s,1);
 
 	~gateBus = Bus.audio(s,1);
 	~gateBus2 = Bus.audio(s,1);
@@ -116,6 +126,13 @@ s.waitForBoot({
 
 
 	~kbus = Bus.audio(s,1);
+	~snBus = Bus.audio(s,1);
+
+	~bassShapB = Bus.audio(s,1);
+
+	~comBusHat = Bus.audio(s,2);
+	~comBusCymb = Bus.audio(s,2);
+
 
 
 	s.sync;
@@ -131,6 +148,17 @@ s.waitForBoot({
 	~bus8 = Bus.control(s,1);
 
 	s.sync;
+
+	SynthDef(\shap,{|in, out,out2, vl1=80, vl2=0,vl3=0, dA1 =0,dA2=0,dA3=0,dA4=0 |
+	var halfBeat, shap, shap2;
+
+	halfBeat = t.beatDur * 0.5;
+
+		shap = EnvGen.ar(Env([vl1,vl2],[halfBeat,halfBeat],9),doneAction:dA1);
+
+	Out.ar(out, shap);
+
+	}).add;
 
 
 	SynthDef(\kick, {
@@ -155,6 +183,76 @@ s.waitForBoot({
 
 		Out.ar(out, sig);
 	}).add;
+
+
+
+	SynthDef(\bass,{
+		arg freq=41.2, dure=1, amp=0.5,
+		atkcrv=1, relcrv=5,
+		atk=0, rel=0.1, lpf=100, out = 0, bus;
+
+		var sig, env, lvlBa;
+
+		env = EnvGen.ar(
+			Env(
+				[0,1,0],
+				[atk,rel],
+				[atkcrv,relcrv]
+			),
+			doneAction:2
+		);
+
+		sig = Saw.ar(freq,-1,-0.4);
+		sig = sig.lincurve(-1,1,-1,1,-7);
+		sig = BLowPass.ar(sig, lpf - In.ar(bus, 1));
+
+		sig = sig * amp.dbamp!2;
+
+		sig = sig * env;
+
+		Out.ar(out, sig);
+	}).add;
+
+	s.sync;
+
+		SynthDef.new(\percussion, {
+	arg carHz=500, modHz=1899.3343179398, modAmp=0, atk=0.01, rel=1, amp=0.2, pan=0,rel2=1,out=0, latch = 6000, crv1, crv1b, mulMod, stereoL=0, stereoR=0;
+	var car, mod, env, car2, mod2,env2,sig;
+
+	env = EnvGen.kr(Env.perc(atk, rel,1,crv1), doneAction:2);
+
+	env2 = EnvGen.kr(Env.perc(0.001, rel2, 1, crv1b), doneAction:2);
+
+	mod = SinOsc.ar(modHz, mul:mulMod);
+	car = SinOsc.ar(carHz + mod) * env * 0.05;
+
+	car2 = WhiteNoise.ar(modAmp) * env2 ;
+
+	sig =  HPF.ar(Latch.ar(tanh(car+car2),Impulse.ar(latch)),3000);
+
+	Out.ar(out, sig
+		* [amp.dbamp+stereoL,amp.dbamp+stereoR]);
+}).add;
+
+	SynthDef.new(\snare, {
+		arg carHz=500, modHz=100, modAmp=1, atk=0.01, rel=1, amp=0.2, pan=0,rel2=2,out=0,latch=12000, da1=2, da2=2, crv1=(-3),crv2 = (-2);
+	var car, mod, env, car2, mod2,env2, sig;
+
+	env = EnvGen.kr(Env.perc(0, rel,curve:crv1), doneAction:da1);
+
+	env2 = EnvGen.kr(Env.perc(0, rel2, 1, crv2), doneAction:da2);
+
+	mod = SinOsc.ar(modHz, mul:1691);
+	car = SinOsc.ar(carHz + mod) * env * 0.321875;
+
+	car2 = BrownNoise.ar(0.321875) * env2 ;
+
+	sig = HPF.ar( car+car2,500);
+
+		Out.ar(out, Latch.ar(sig,Impulse.ar(latch))!2
+			* amp.dbamp);
+
+}).add;
 
 	SynthDef(\lead, {
 		arg freq= 659.26, mRatio=1, cRatio=1,  amp=0.01, sineRate = 0.0000000095262251,  sineRangeLow=0, pitch = 0, phRise= 0 ,out=0, eFreq =0 , phFm=8, bus2,bus3,bus4,busBP,bus6, bus7, bus8, busSR, busSS, busSP, gra=1,lvlDec=1,factor=1, factor2 =0, vlPE =27.1366666667,vlPE2=0.2,dcPE = 0.129066666667, rqLPF =0.5, factor3 =1, decE= 0.1936, dur, crvEP = (-2);
@@ -297,6 +395,59 @@ s.waitForBoot({
 
 	"reverb init".postln;
 
+	SynthDef.new(\ptr, {
+		arg out=0, buf=0,dec=1 ;
+		var sig;
+		sig = Phasor.ar(0, BufRateScale.kr(buf), 0, BufFrames.kr(buf));
+		Out.ar(out, sig);
+	}).add;
+
+	SynthDef.new(\rec, {
+		arg ptrIn=0, micIn=0, buf=0, dec = 1;
+		var ptr, sig;
+		ptr = In.ar(ptrIn, 1);
+		sig = In.ar(micIn, 1);
+		BufWr.ar(sig, buf, ptr);
+	}).add;
+
+	SynthDef.new(\gran, {
+		arg amp=1, buf =0, out=0, atk=1, rel=1, gate=1, sync=1, dens=40, baseDur=0.05, durRand=1, rate=1, rateRand=1, pan =0, panRand=0, grainEnv=(-1), ptrBus =0, ptrSampleDelay=20000, ptrRandSamples= 5000, minPtrDelay=1000,pitchRte=1,duration=8,impulse = 1.2875,pos=0,roomsize, revtime, damping, inputbw, spread = 15, drylevel, earlylevel,
+		taillevel,maxRoomsize,wet=0.4;
+
+		var sig, env, densCtrl, durCtrl, rateCtrl, panCtrl, ptr, ptrRand, totalDelay, maxGrainDur;
+
+
+		env = EnvGen.kr(Env([1,1,1],[atk,rel,0]), gate, doneAction:2);
+
+		densCtrl = Select.ar(sync, [Dust.ar(dens), Impulse.ar(dens)]);
+		durCtrl= baseDur * LFNoise1.ar(100).exprange(1/durRand, durRand);
+		rateCtrl = rate * LFNoise1.ar(100).exprange(1/rateRand, rateRand);
+		panCtrl = pan + LFNoise1.kr(100).bipolar(panRand);
+
+		ptrRand = LFNoise1.ar(100).bipolar(ptrRandSamples);
+		totalDelay = max(ptrSampleDelay - ptrRand, minPtrDelay) ;
+
+		ptr = In.ar(ptrBus,1);
+		ptr = ptr - totalDelay;
+		ptr = ptr / BufFrames.kr(buf);
+
+
+		maxGrainDur = (totalDelay / rateCtrl) / SampleRate.ir;
+		durCtrl = min(durCtrl, maxGrainDur);
+
+		sig = GrainBuf.ar(
+			1,
+			Impulse.ar(impulse),//Impulse.ar(0.0968),//lenth of interval ///20.6 and 10.3 are funny was 1
+			duration,//3.0976,//8,//length of the feedback
+			buf,
+			pitchRte,//pitch
+			0//MouseX.kr(0,1)//pos
+		);
+		sig = sig * env * amp;
+
+		Out.ar(out, sig!2);
+	}).add;
+
 
 	//the compressor received for control a signal going on channel that never goes to zero (renamed ghost)
 	SynthDef(\comp, {|in, ctrl, out= 0, dec  , thr  =0.01 ,sB = 1, sA = (1/4), atk = 0.001, rel = 0.04 , gain=1|
@@ -316,11 +467,33 @@ s.waitForBoot({
 		Out.ar(out , CompanderD.ar(In.ar(in,2),thr, sB ,sA, atk, rel)* gain;)
 	}).add;
 
-"limiter init".postln;
+	"limiter init".postln;
 
 	s.sync;
 
 	~kick =	Pbind(\instrument, \kick,\dur, Pseq([1/1],1),\amp,( -4.5),\out,0);
+
+	~bassShap = Pbind(\instrument, \shap, \dur,Pseq([1/1],inf),\dA1,2,\out,~bassShapB);
+
+	~bass = Pbind(
+		\instrument, \bass,
+		\type, Pseq([\rest, \note, \note, \note], inf),
+		\dur, Pseq([1/4],4),\lpf,81.41,
+		\midinote, 28, \bus, ~bassShapB,
+		/*\atk, t.beatDur/4 * 0.01,*/
+		/*\rel, t.beatDur/4 * 0.99,*/
+		\atkcrv, -2,
+		\relcrv, -1,
+		\amp, (16),\out,0
+	);
+
+	~cymbal = Pbind(\instrument, \percussion,\type, Pseq([\rest,\rest,\note,\note ,\rest,\note ,\note, \rest],inf),\dur,Pseq([1/4],64 ),\carHz, 525.12070612224,\modHz,1899.3343179398,\modAmp, 0.12875 ,\amp,(-2.3),\rel,Pseq([1/16],inf),\rel2,Pseq([1/16],inf),\latch,8000,\stereoL, 0.00555, \crv1,  (-2.4), \crv1b,(-3), \mulMod, 1691,\out, ~comBusCymb);
+
+	~hat = Pbind(\instrument,\percussion,\dur,Pseq([1/4], 64),\atk, 0,\rel,0.04840,\rel2,0.02420,\amp,( -5), \crv2, (-3), \modHz, exprand(20,10000), \mulMod, rrand(0, 10000), \carHz, exprand(20,10000), \modAmp, 0.12875, \latch, 18500, \stereoR, 0.007,\out,~comBusHat);
+
+	~snare = Pbind(\instrument, \snare,\carHz, 41.2 ,\type, Pseq([\rest ,\rest,\note,\rest], 8),\atk, 0.00502929687,\rel, 0.0968,\rel2, 0.3872,\dur, Pseq([1/2], inf),\amp,(-5.5),\out,0);
+
+
 
 
 });)
