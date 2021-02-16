@@ -73,39 +73,46 @@ s.waitForBoot({
 	s.sync;
 
 
+	~dispatchBus = Bus.audio(s,1);
 
 	~gateBus = Bus.audio(s,1);
-	~filterBus = Bus.audio(s,1);
+	~gateBus2 = Bus.audio(s,1);
+	~gateRnd = Bus.audio(s,1);
+	~gateSquelch = Bus.audio(s,1);
+	~gateMelo = Bus.audio(s,1);
 
+
+
+	~filterBus = Bus.audio(s,1);
 	~filterBus2 = Bus.audio(s,1);
-~filterRnd = Bus.audio(s,1);
-~filterSquelch = Bus.audio(s,1);
-~filterMelo = Bus.audio(s,1);
+	~filterRnd = Bus.audio(s,1);
+	~filterSquelch = Bus.audio(s,1);
+	~filterMelo = Bus.audio(s,1);
 
 
 	~reverbBus = Bus.audio(s,1);
-~reverbBus2 = Bus.audio(s,1);
-~reverbRnd = Bus.audio(s,1);
-~reverbSquelch = Bus.audio(s,1);
-~reverbMelo = Bus.audio(s,1);
+	~reverbBus2 = Bus.audio(s,1);
+	~reverbRnd = Bus.audio(s,1);
+	~reverbSquelch = Bus.audio(s,1);
+	~reverbMelo = Bus.audio(s,1);
 
 
-~comRnd = Bus.audio(s,2);
-~comMelo = Bus.audio(s,2);
-~comSquelch = Bus.audio(s,2);
-~comFuzz = Bus.audio(s,2);
-~comFuzz2 = Bus.audio(s,2);
-~comBusHat = Bus.audio(s,2);
-~comBusCymb = Bus.audio(s,2);
+	~comRnd = Bus.audio(s,2);
+	~comMelo = Bus.audio(s,2);
+	~comSquelch = Bus.audio(s,2);
+	~comFuzz = Bus.audio(s,2);
+	~comFuzz2 = Bus.audio(s,2);
+	~comBusHat = Bus.audio(s,2);
+	~comBusCymb = Bus.audio(s,2);
 
-~comSnaGrpBus = Bus.audio(s,2);
+	~comSnaGrpBus = Bus.audio(s,2);
 
 
-~limitFuzz = Bus.audio(s,2);
-~limitFuzz2 = Bus.audio(s,2);
-~limitRnd = Bus.audio(s,2);
-~limitSquelch = Bus.audio(s,2);
-~limitMelo = Bus.audio(s,2);
+	~limitFuzz = Bus.audio(s,2);
+	~limitFuzz2 = Bus.audio(s,2);
+	~limitRnd = Bus.audio(s,2);
+	~limitSquelch = Bus.audio(s,2);
+	~limitMelo = Bus.audio(s,2);
 
 
 	~kbus = Bus.audio(s,1);
@@ -151,19 +158,15 @@ s.waitForBoot({
 	SynthDef(\lead, {
 		arg freq= 659.26, mRatio=1, cRatio=1,  amp=0.01, sineRate = 0.0000000095262251,  sineRangeLow=0, pitch = 0, phRise= 0 ,out=0, eFreq =0 , phFm=8, bus2,bus3,bus4,busBP,bus6, bus7, bus8, busSR, busSS, busSP, gra=1,lvlDec=1,factor=1, factor2 =0, vlPE =27.1366666667,vlPE2=0.2,dcPE = 0.129066666667, rqLPF =0.5, factor3 =1, decE= 0.1936, dur, crvEP = (-2);
 
-
-			/*arg freq= 500, mRatio=1, cRatio=1,  amp=0.01, atk= 0.01  , rel=3, atkE =0,decE=0.1936, subsE=50, relE=0, sineRate = 0.0000000095262251,  sineRangeLow=0, pitch = 0, which,phRise= 0 ,out=0, eFreq =0 , phFm=8, busLP,busHP,bus2,bus3,bus4,busBP,bus6, bus7, bus8, busSR, busSS, busSP, gra=1,lvlDec=1,factor=1, factor2 =0, vlPE =27.1366666667,vlPE2=0.2,dcPE = 0.129066666667,atckC = 2.5, decC = (-2), crvEP = (-2), rqLPF =0.5, factor3 =1;*/
-
-
 	var car, mod, mod2, iEnv, sig, filRte;
 
 
 
 	iEnv = EnvGen.kr(
 			Env.new(
-			[1, 1 * 5, 1 * 5,5],
-			[0.000000000001,        (/*decE*/ dur   ),      0.0000000001],
-			[4, (-4)]
+			[1, 1 * 5, 1 * 5,4.8],
+			[0,0.000000000001,        (/*decE*/ dur   ),      0.0000000001],
+			[4, 4,(-4)]
 		));
 
 	//second level of modulation
@@ -206,22 +209,9 @@ s.waitForBoot({
 }).add;
 
 
-	SynthDef(\gate,{|in, out=0, vlAtk=0, vlDec=1,vlSub=0, vlRel=0, atkT=0, decT=0, subsT=0, relT=0, atckC=0, decC=0, relC=0, bus1, bus2, dur|
-	var env;
+	SynthDef(\dispatch,{|in, out, dur|Out.ar(out, In.ar(in,1)* EnvGen.kr(Env([1,0],[dur,0],60),doneAction:2))}).add;
 
-
-		env =   In.ar(in, 1) *    EnvGen.kr(Env(
-			[vlAtk,vlDec                  ,vlSub ,vlRel],
-			[atkT ,dur /*decT*/-In.kr(bus1, 1), subsT,relT],
-			[atckC,decC ,0     ,relC]),    //decC- (In.kr(bus2, 1)
-
-		doneAction:2);
-
-		Out.ar(out, env); //remember normally ar.
-}).add;
-
-
-SynthDef(\filter,{|out=0, in, busLP, busBP, busHP, bus7, which, factor3=1, rqLPF=0.5 |
+	SynthDef(\filter,{|out=0, in, busLP, busBP, busHP, bus7, which, factor3=1, rqLPF=0.5 |
 
 		var lp, bp, hp, sig;
 
@@ -237,6 +227,21 @@ SynthDef(\filter,{|out=0, in, busLP, busBP, busHP, bus7, which, factor3=1, rqLPF
 
 		Out.ar(out, sig);
 	}).add;
+
+
+	SynthDef(\gate,{|in, out=0, vlAtk=0, vlDec=1,vlSub=0, vlRel=0, atkT=0, decT=0, subsT=0, relT=0, atckC=0, decC=0, relC=0, bus1, bus2, dur|
+	var env;
+
+
+		env =   In.ar(in, 1) *    EnvGen.kr(Env(
+			[vlAtk,vlDec                  ,vlSub ,vlRel],
+			[atkT ,dur /*decT*/-In.kr(bus1, 1), subsT,relT],
+			[atckC,decC ,0     ,relC]),    //decC- (In.kr(bus2, 1)
+
+		doneAction:2);
+
+		Out.ar(out, env);
+}).add;
 
 
 	//GVerb + Splay in one synth
