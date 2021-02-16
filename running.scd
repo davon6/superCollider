@@ -122,6 +122,7 @@ s.waitForBoot({
 
 	~bus1 = Bus.control(s,1);
 
+	/*~bus2 = Bus.control(s,1);*/
 
 	~bus4 = Bus.control(s,1);
 	~bus5 = Bus.control(s,1);
@@ -229,14 +230,24 @@ s.waitForBoot({
 	}).add;
 
 
-	SynthDef(\gate,{|in, out=0, vlAtk=0, vlDec=1,vlSub=0, vlRel=0, atkT=0, decT=0, subsT=0, relT=0, atckC=0, decC=0, relC=0, bus1, bus2, dur|
+	SynthDef(\gate,{|in, out=0, vlAtk=0, vlDec=1,vlSub=0, vlRel=0, atkT=0, decT=0, subsT=0, relT=0, atckC=0, decC=0, relC=0, bus1, bus2, dur,relSu=0|
 	var env;
 
 
-		env =   In.ar(in, 1) *    EnvGen.kr(Env(
+		/*env =   In.ar(in, 1) *    EnvGen.kr(Env(
 			[vlAtk,vlDec                  ,vlSub ,vlRel],
 			[atkT ,dur /*decT*/-In.kr(bus1, 1), subsT,relT],
+			[atckC,decC ,0     ,relC]),    //decC- (In.kr(bus2, 1)*/
+
+
+		/*({LFPulse.ar(216, mul: EnvGen.kr(Env([0,1,0.8,0.8,0],[0.02,0.02,0.05,1.4],[6,-4,-8,-9]),doneAction:2))!2}.play)*/
+
+		env =   In.ar(in, 1) *    EnvGen.kr(Env(
+			[vlAtk,vlDec                  ,vlSub ,vlRel,0],
+			[atkT ,dur /*decT*/-In.kr(bus1, 1)  -relSu, subsT,relT],
 			[atckC,decC ,0     ,relC]),    //decC- (In.kr(bus2, 1)
+
+
 
 		doneAction:2);
 

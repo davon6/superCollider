@@ -20,6 +20,9 @@ o = {
 
 
 
+
+
+
 	Out.kr(~bus4, SinOsc.kr(Select.kr(LFNoise2.ar(1.2875).range(0,2).round(1),
 		[    1.2875, 5.15,0.321875	]
 	)    *  SinOsc.kr(0.64375).range(0.01005859375,1.2875)).range(2637.02,10.3),);
@@ -31,6 +34,9 @@ o = {
 
 	Out.kr(~bus6, SinOsc.ar(1.2875).range(0.8,0.4));
 	Out.kr(~bus7, SinOsc.ar(0.321875).range(1,0.4));
+
+	Out.kr(~bus8,  Lag.kr(LFNoise0.kr(1.2875).range(0.10,0.0),0.05)
+		+SinOsc.kr(SelectX.kr(LFNoise0.kr(5.15).range(0,2).round(1),[1.2875,5.15,20.6])).range(0.06,0.00));
 
 
 
@@ -57,6 +63,10 @@ Pbind(\instrument,\lead,\dur,Pseq([4096/1],1), \freq,659.255,\out,~dispatchBus),
 
 
 
+	/*Pbind(\instrument, \gate, \dur, Pseq([1/1],1) ,\in ,~dispatchBus),*/
+
+
+
 	Pseq([
 	Pbind(\instrument,\dispatch,\dur,
 
@@ -65,7 +75,7 @@ Pbind(\instrument,\lead,\dur,Pseq([4096/1],1), \freq,659.255,\out,~dispatchBus),
 		Pwrand([ Pseq([1/4],Pxrand([1,4,16],1)), Pseq([4/4],Pxrand([1,4],1)), Pseq([16/4],1), Pseq([64/4],1)],[64,16,4,1],1)
 
 
-	,\in, ~dispatchBus, \out,Prand([~filterBus2, ~filterBus],1),\group,~dispatchGrp),
+	,\in,~dispatchBus, \out,Prand([~filterBus2, ~filterBus],1),\group,~dispatchGrp),
 
 	],/*Pwrand([ 1,4,16],[*/Prand([1,4,16,64],inf)),
 
@@ -84,11 +94,11 @@ Pbind(\instrument, \limiter,\in, ~limitFuzz2, \dur, Pseq([1024/1],1),\gain,84,\g
 
 	Pbind(\instrument, \filter, \dur,Pseq([4096/1],1),\which,0, \in,~filterBus,\busLP, ~bus4,\rqLPF,~bus6, \out, ~gateBus, \group,~filterGrp ),
 
-	Pseq([Pbindf(~gate ,\in, ~gateBus,\out,~reverbBus)],inf),
+	Pseq([Pbindf(~gate ,\vlSub,0.8,\vlDec,0.8, \relSu, 0.048, \relT, 0.048,\bus1,~bus8, \in, ~gateBus,\out,~reverbBus)],inf),
 	Pbind(\instrument,\reverb, \dur,Pseq([1024/1],1),\roomsize, 41, \revtime,Pxrand([Pseq([1/4],4096),  Pseq([1/1],4096)],1), \damping,Pxrand([0.22,0.8,0.4 ],1), \inputbw, 1, \drylevel, -20, \earlylevel, -12, \taillevel, -5,\amp,1,\spread,Pwrand([1,10,40],[4,16,1],1),\wet,Pxrand([0.05,0.1],1),\maxRoomsize,70,\in,~reverbBus,\out,~comFuzz, \group,~revGrp ),
 	Pbind(\instrument,\comp, \dur,Pseq([1024/1],1),\thr,0.2 ,\sB, 1.086,\sA, 1/2,\atk ,0.0121, \rel ,0.04840, \gain,1/*(50)*/
 ,\in, ~comFuzz ,\ctrl, ~kbus, \out,~limitFuzz, \group, ~compGrp),
-	Pbind(\instrument, \limiter,\in, ~limitFuzz, \dur, Pseq([1024/1],1),\gain,124,\group,~limitGrp,\out,0),
+	Pbind(\instrument, \limiter,\in, ~limitFuzz, \dur, Pseq([1024/1],1),\gain,122,\group,~limitGrp,\out,0),
 
 
 ],1).play(t)
