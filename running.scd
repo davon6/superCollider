@@ -91,6 +91,7 @@ s.waitForBoot({
 	~gateSquelch = Bus.audio(s,1);
 	~gateMelo = Bus.audio(s,1);
 
+	~shiftMelo = Bus.audio(s,1);
 
 
 	~filterBus = Bus.audio(s,1);
@@ -273,7 +274,7 @@ s.waitForBoot({
 }).add;
 
 	SynthDef(\lead, {
-		arg freq= 659.26, mRatio=1, cRatio=1,  amp=0.01, sineRate = 0.0000000095262251,  sineRangeLow=0, pitch = 0, phRise= 0 ,out=0, eFreq =0 , phFm=8, bus2,bus3,bus4,busBP,bus6, bus7, bus8, busSR, busSS, busSP, gra=1,lvlDec=1,factor=1, factor2 =0, vlPE =27.1366666667,vlPE2=0.2,dcPE = 0.129066666667, rqLPF =0.5, factor3 =1, decE= 0.1936, dur, crvEP = (-2);
+		arg freq= 659.26, mRatio=1, cRatio=1,  amp=0.01, sineRate = 0.0000000095262251,  sineRangeLow=0, pitch = 0, phRise= 0 ,out=0, eFreq =0 , phFm=8, bus2,bus3,bus4,busBP,bus6, bus7, bus8, busSR, busSS, busSP, gra=1,lvlDec=1,factor=1, factor2 =0 /*,vlPE =27.1366666667,vlPE2=0.2,dcPE = 0.129066666667*/, rqLPF =0.5, factor3 =1, decE= 0.1936, dur/*, crvEP = (-2)*/;
 
 	var car, mod, mod2, iEnv, sig, filRte;
 
@@ -312,9 +313,9 @@ s.waitForBoot({
 			SelectX.ar(SinOsc.kr((0.00502929687/2/2),phFm).range(0,1),[SinOsc.ar(0),mod])
 
 			//pitch envelope
-			+  (EnvGen.kr(Env([vlPE,vlPE2],[dcPE,0],crvEP))*factor2)
+			/*+  (EnvGen.kr(Env([vlPE,vlPE2],[dcPE,0],crvEP))*factor2)*/
 			//extra pitch modulation
-			+ pitch +  (In.kr(bus4, 1)/factor));
+			/*+ pitch +  (In.kr(bus4, 1)/factor)  */              );
 
 	//transform signal through the shaper
 
@@ -327,6 +328,17 @@ s.waitForBoot({
 
 
 	SynthDef(\dispatch,{|in, out, dur|Out.ar(out, In.ar(in,1)* EnvGen.kr(Env([1,0],[dur,0],60),doneAction:2))}).add;
+
+//below dur can be factored to change mod
+	SynthDef(\shift, {|in, out, freq, freq2, factor =1, factor2, factor3, vlPE =27.1366666667,vlPE2=0.2, crvEP = (-2), dcPE = 0.129066666667, dur,
+		vlPE3,vlPE33,crvEP2, dA=0, dA2=0, dA3=0|
+		Out.ar(out, FreqShift.ar(In.ar(in, 1), 0
+
+			/*freq: (EnvGen.kr(Env([vlPE,vlPE2],[dur/*dcPE*/,0],crvEP),doneAction: dA)*factor2)+
+			(EnvGen.kr(Env.step([vlPE3,vlPE33],[dur/*dcPE2*/,0],crvEP2),doneAction: dA2)*factor3)+
+
+			(In.kr(freq,1)* EnvGen.kr(Env.step([factor,0],[dur,0]),doneAction: dA3))+ freq2*/            ));
+	}).add;
 
 	SynthDef(\filter,{|out=0, in, busLP, busBP, busHP, bus7, which, factor3=1, rqLPF=0.5 |
 
@@ -489,11 +501,11 @@ s.waitForBoot({
 		\type, Pseq([\rest, \note, \note, \note], inf),
 		\dur, Pseq([1/4],4),\lpf,81.41,
 		\midinote, 28, \bus, ~bassShapB,
-		/*\atk, t.beatDur/4 * 0.01,*/
-		/*\rel, t.beatDur/4 * 0.99,*/
+		\atk, t.beatDur/4 * 0.01,
+		\rel, t.beatDur/4 * 0.99,
 		\atkcrv, -2,
 		\relcrv, -1,
-		\amp, (16),\out,0
+		\amp, (6),\out,0
 	);
 
 	~cymbal = Pbind(\instrument, \percussion,\type, Pseq([\rest,\rest,\note,\note ,\rest,\note ,\note, \rest],inf),\dur,Pseq([1/4],64 ),\carHz, 525.12070612224,\modHz,1899.3343179398,\modAmp, 0.12875 ,\amp,(-2.3),\rel,Pseq([1/16],inf),\rel2,Pseq([1/16],inf),\latch,8000,\stereoL, 0.00555, \crv1,  (-2.4), \crv1b,(-3), \mulMod, 1691,\out, ~comBusCymb);
