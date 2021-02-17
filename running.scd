@@ -139,13 +139,16 @@ s.waitForBoot({
 
 	~bus1 = Bus.control(s,1);
 
-	/*~bus2 = Bus.control(s,1);*/
+	~bus2 = Bus.control(s,1);
+	~bus3 = Bus.control(s,1);
 
 	~bus4 = Bus.control(s,1);
 	~bus5 = Bus.control(s,1);
 	~bus6 = Bus.control(s,1);
 	~bus7 = Bus.control(s,1);
 	~bus8 = Bus.control(s,1);
+
+	~bus11 = Bus.control(s,1);
 
 	s.sync;
 
@@ -159,6 +162,21 @@ s.waitForBoot({
 	Out.ar(out, shap);
 
 	}).add;
+
+	SynthDef(\lfo2,{|out, out2, out3, riseT, flatT, dur, vl=0.0000000095262251, vl2=0, vl3=0|
+
+		var flat =  0.0000000095262251,acti = 0.01005859375, scaRi = (-10.4), phR = 15;
+
+		riseT = t.beatDur* 16*4;
+		flatT = t.beatDur* 48* 4;
+
+		Out.kr(out,Line.kr(vl,vl,dur,doneAction: 2));
+		Out.kr(out2,Line.kr(vl2,vl2,dur,doneAction: 2));
+		Out.kr(out3,Line.kr(vl3,vl3,dur,doneAction: 2));
+
+
+	}).add;
+
 
 
 	SynthDef(\kick, {
@@ -277,8 +295,7 @@ s.waitForBoot({
 
 		mod = SinOsc.ar( MouseX.kr( freq * mRatio + mod2 )*
 
-/*sineRate phRise sineRangeLow*/
-			/*SinOsc.kr(In.kr(busSR, 1),In.kr(busSP, 1)).range([In.kr(busSS, 1)]), mul:*/
+		/*	SinOsc.kr(In.kr(~bus2, 1),In.kr(~bus3, 1)).range([In.kr(~bus11, 1)]), mul:*/
 
 			SinOsc.kr(sineRate,phRise).range([sineRangeLow]), mul:
 
@@ -290,8 +307,9 @@ s.waitForBoot({
 
 		car =SinOsc.ar( 0.00502929687+eFreq * cRatio +
 
-			//remove this line as shwon to decrease sound quality so I left it
-			SelectX.ar(SinOsc.kr(0.0020,phFm).range(0,1),[SinOsc.ar(0),mod])
+			//remove this line as shwon to decrease sound quality so I left it / HERE CHNAGE THE SOUND
+			/*SelectX.ar(SinOsc.kr(0.0020,phFm).range(0,1),[SinOsc.ar(0),mod])*/
+			SelectX.ar(SinOsc.kr((0.00502929687/2/2),phFm).range(0,1),[SinOsc.ar(0),mod])
 
 			//pitch envelope
 			+  (EnvGen.kr(Env([vlPE,vlPE2],[dcPE,0],crvEP))*factor2)
@@ -330,15 +348,6 @@ s.waitForBoot({
 
 	SynthDef(\gate,{|in, out=0, vlAtk=0, vlDec=1,vlSub=0, vlRel=0, atkT=0, decT=0, subsT=0, relT=0, atckC=0, decC=0, relC=0, bus1, bus2, dur,relSu=0|
 	var env;
-
-
-		/*env =   In.ar(in, 1) *    EnvGen.kr(Env(
-			[vlAtk,vlDec                  ,vlSub ,vlRel],
-			[atkT ,dur /*decT*/-In.kr(bus1, 1), subsT,relT],
-			[atckC,decC ,0     ,relC]),    //decC- (In.kr(bus2, 1)*/
-
-
-		/*({LFPulse.ar(216, mul: EnvGen.kr(Env([0,1,0.8,0.8,0],[0.02,0.02,0.05,1.4],[6,-4,-8,-9]),doneAction:2))!2}.play)*/
 
 		env =   In.ar(in, 1) *    EnvGen.kr(Env(
 			[vlAtk,vlDec                  ,vlSub ,vlRel,0],

@@ -9,7 +9,7 @@
 
 
 ~rev =Ppar([Pbindf(~kick,\out,~micBus,/*\group, ~micGrp*/), Pbind(\instrument,\gran,\dur,Pseq([1/4],1),\amp, 1,\buf, e,\out,0,\atk, 0,\rel, Pseq([1/4],1),\gate, 1,\ptrBus, ~ptrBus,\pitchRte,(-1),\ptrRandSamples, 0,\minPtrDelay, 1000,\group,~granGrp,\duration,Pseq([1/4],1),\impulse,Pseq([1/4],1));],1);
-
+/*.play(t,quant:1)*/
 ~perc = [
 
 
@@ -49,18 +49,18 @@
 
 	~bar[6],
 
-	Ppar([~bar[6],~hat,Pbindf(~cymbal,\type,Pseq([\rest,\rest,\note,\rest ,\rest,\rest ,\note, \rest],inf)),~snare],2),
+	Ppar([~bar[6],~hat,Pbindf(~cymbal,\type,Pseq([\rest,\rest,\note,\rest ,\rest,\rest ,\note, \rest],inf)),~snare],1),
 
-Ppar([~bar[6],~hat,~cymbal,~snare],2),
+Ppar([~bar[6],~hat,~cymbal,~snare],1),
 
-Ppar([~bar[6],~hat,~cymbal],2),
-Ppar([~bar[6],~hat],2),
-Ppar([~bar[6],~snare],2),
+Ppar([~bar[6],~hat,~cymbal],1),
+Ppar([~bar[6],~hat],1),
+Ppar([~bar[6],~snare],1),
 	Ppar([~bar[6],Pbindf(~snare,\da1,0)],1),
 
-	Pseq([~perc[4], Pseq([Pbindf(~kick, \dur,Pseq([1/16],1))],4) ,Pseq([Pbindf(~kick, \dur,Pseq([1/3],1))],3)],1),
+		Pseq([~perc[4] ,Pseq([Pbindf(~kick, \dur,Pseq([1/3],1))],3)],1) ,
 
- Pseq([~perc[4],Pseq([Pseq([Pbindf(~kick, \dur,Pseq([1/3],1))],1) ,Pseq([Pbindf(~kick, \dur,Pseq([1/12],1))],8)],1),~kick],1),
+	Pseq([~perc[4],Pseq([Pseq([Pbindf(~kick, \dur,Pseq([1/3],1))],1) ,Pseq([Pbindf(~kick, \dur,Pseq([1/12],1))],8)],1),~kick],1),
 
 	Pseq([~perc[4],Pseq([~bassRest],2)],1)  ,
 
@@ -68,7 +68,7 @@ Ppar([~bar[6],~snare],2),
 
 	Pseq([~bassRest],16),
 
-	Pseq([~kick,Pseq([~bassRest],16)],1),
+	Ppar([~kick,Pseq([~bassRest],16)],1),
 
 	Pseq([~bar[5],~kbassRest],1),
 

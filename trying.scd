@@ -898,7 +898,7 @@ Ppar([, Pseq([~bass],inf)]).play(t)*/
 	//set the groups
 
 
-
+/*12 10 16 14 4 9*/
 
 
 ~leadGrp = Group.new;
