@@ -348,9 +348,9 @@ s.waitForBoot({
 		vlPE3,vlPE33,crvEP2, dA=0, dA2=0, dA3=0|
 		Out.ar(out, FreqShift.ar(In.ar(in, 1)/*.sign*/,
 
-			freq:  [329.63 ,326.63 ]+    In.kr( boo, 1) /*+ SinOsc.kr(0.64375).range(20.6,41.20) */     /*freq2  + (EnvGen.kr(Env([vlPE,vlPE2],[dur/*dcPE*/,0],crvEP),doneAction: dA)*factor2)*/
+			freq:  freq2+    In.kr( boo, 1)  +   (EnvGen.kr(Env([vlPE,vlPE2],[dur/*dcPE*/,0],crvEP),doneAction: dA)*factor2)
 
-			/* +  (  +  *//* In.kr(freq,1)  */     /** EnvGen.kr(Env.step([factor,0],[dur,0]),doneAction: dA3)*//*)*/
+		   /** EnvGen.kr(Env.step([factor,0],[dur,0]),doneAction: dA3)*//*)*/
 			/*+
 			(EnvGen.kr(Env.step([vlPE3,vlPE33],[dur/*dcPE2*/,0],crvEP2),doneAction: dA2)*factor3)+
 
