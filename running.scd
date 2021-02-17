@@ -153,6 +153,8 @@ s.waitForBoot({
 	~bus10 = Bus.control(s,1);
 	~bus11 = Bus.control(s,1);
 
+	~bus13 = Bus.control(s,1);
+
 	s.sync;
 
 	SynthDef(\shap,{|in, out,out2, vl1=80, vl2=0,vl3=0, dA1 =0,dA2=0,dA3=0,dA4=0 |
@@ -342,14 +344,17 @@ s.waitForBoot({
 	SynthDef(\dispatch,{|in, out, dur|Out.ar(out, In.ar(in,1)* EnvGen.kr(Env([1,0],[dur,0],60),doneAction:2))}).add;
 
 //below dur can be factored to change mod
-	SynthDef(\shift, {|in, out, freq, freq2, factor =1, factor2, factor3, vlPE =27.1366666667,vlPE2=0.2, crvEP = (-2), dcPE = 0.129066666667, dur,
+	SynthDef(\shift, {|in, out, freq,boo, freq2, factor =1, factor2, factor3, vlPE =27.1366666667,vlPE2=0.2, crvEP = (-2), dcPE = 0.129066666667, dur,
 		vlPE3,vlPE33,crvEP2, dA=0, dA2=0, dA3=0|
 		Out.ar(out, FreqShift.ar(In.ar(in, 1)/*.sign*/,
 
-			freq: freq2+ (EnvGen.kr(Env([vlPE,vlPE2],[dur/*dcPE*/,0],crvEP),doneAction: dA)*factor2)/*+
+			freq:  [329.63 ,326.63 ]+    In.kr( boo, 1) /*+ SinOsc.kr(0.64375).range(20.6,41.20) */     /*freq2  + (EnvGen.kr(Env([vlPE,vlPE2],[dur/*dcPE*/,0],crvEP),doneAction: dA)*factor2)*/
+
+			/* +  (  +  *//* In.kr(freq,1)  */     /** EnvGen.kr(Env.step([factor,0],[dur,0]),doneAction: dA3)*//*)*/
+			/*+
 			(EnvGen.kr(Env.step([vlPE3,vlPE33],[dur/*dcPE2*/,0],crvEP2),doneAction: dA2)*factor3)+
 
-			(In.kr(freq,1)* EnvGen.kr(Env.step([factor,0],[dur,0]),doneAction: dA3))*/            ));
+			*/            ));
 	}).add;
 
 	SynthDef(\filter,{|out=0, in, busLP, busBP, busHP, bus7, which, factor3=1, rqLPF=0.5 |
