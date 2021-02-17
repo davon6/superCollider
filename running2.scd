@@ -3,7 +3,8 @@
 //stereo percu weird
 //percu cutting the 1/2 for progression
 //slider aka minirise
-//delay
+//delayfo random melor
+// multi valu  freq shifter or single pxrand
 (
 
 ~dispatchGrp = Group.new;
@@ -31,9 +32,6 @@ o = {
 
 
 
-
-
-
 	Out.kr(~bus4, SinOsc.kr(Select.kr(LFNoise2.ar(1.2875).range(0,3).round(1),
 		[  1.2875,  1.2875, 5.15,0.321875	]
 	)    *  SinOsc.kr(0.64375).range(0.01005859375,1.2875)).range(10.3,2637.02),);
@@ -51,7 +49,10 @@ o = {
 
 
 
+
+
 }.play
+
 
 
 )
@@ -63,7 +64,7 @@ o = {
 )
 
 (Ppar([Pbind(\instrument,\ptr, \buf, e, \out, ~ptrBus,\group,~ptrGrp,\dur,Pseq([1024/1],1)),
-	Pbind(\instrument,\rec, \ptrIn, ~ptrBus, \micIn, ~micBus, \buf, e,\group,~recGrp,\dur,Pseq([1024/1],1)),],1).play(t, quant:1))
+	Pbind(\instrument,\rec, \ptrIn, ~ptrBus, \micIn, ~micBus, \buf, e,\group,~recGrp,\dur,Pseq([1024/1],1))],1).play(t, quant:1))
 
 (
 
@@ -77,6 +78,8 @@ Ppar([
 		\vl3, Pseq([0,0,0, (-10.4)],inf), \vl2, Pseq([0,0,0, 15],inf),
 		\out, ~bus2,  \out2, ~bus11,  \out3, ~bus3),*/
 
+	Pbind(\instrument, \lfo, \dur, Pseq([1/ Prand([4,16,1],inf) ], Prand([1,4,16,64],inf)  ), \vl1, Prand([5,0.20],inf)   ,\vl2, Prand([5,0.20],inf)   ,  \out, ~bus10),
+
 	Pseq([Pbindf(~kick,\out,~kbus)],4096),
 	Pseq([Pbindf(~snare,\out,~snBus)],4096),
 
@@ -84,21 +87,28 @@ Ppar([
 ,\gain,1,\in, ~comBusHat ,\ctrl, ~kbus, \out,0,\group, ~compGrp),
 	Pbind(\instrument,\comp,\dur,Pseq([1024/1],1),\thr,0.6 ,\sB, 1,\sA, 4,\atk ,0.001, \rel ,0.04840,\gain,1,\in, ~comBusCymb ,\ctrl, ~kbus, \out,0,\group, ~compGrp),
 
-	Pbind(\instrument,\lead,\dur,Pseq([16384/1],1), \sineRate, (0.0000000095262251/2/2/2/2), \freq,659.255,\out,~shiftMelo/*~dispatchBus*/),
+	Pbind(\instrument,\lead,\dur,Pseq([16384/1],1), \gra,~bus10 , \sineRate, (0.0000000095262251/2/2/2/2), \freq,659.255,\out,/*0~shiftMelo */~dispatchBus),
 
 	Pseq([
 	Pbind(\instrument,\dispatch,\dur,
 
 	Pwrand([ Pseq([1/4],Pxrand([1,4,16],1)), Pseq([4/4],Pxrand([1,4],1)), Pseq([16/4],1), Pseq([64/4],1)],[64,16,4,1],1)
 
-			// ,\type, Pseq([\rest,\note,\note,\rest,\rest,\rest,\rest,\rest],inf)
+
 	,\in,~dispatchBus, \out,Prand([~filterBus2, ~filterBus],1),\group,~dispatchGrp),
 
 	],Prand([1,4,16,64],inf)),
 
 
+	Pbind(\instrument, \shift, \dur, Pseq([1/1],inf),
+		\freq2,Pseq([  [329.63 ,326.63 ],[529.63 ,526.63 ]],inf), \vlPE, 2.575, \dA, 2, \factor2,1,
+
+
+		\in,~shiftMelo, \out,0, \group, ~shiftGrp),
+
+
 	Pbind(\instrument, \shift, \dur, Pseq([1/4],inf),
-		\freq2, [329.63 ,326.63 ], \vlPE, 2.575,
+		\freq2, (-200), \vlPE, 2.575, \dA, 2, \factor2,0,
 
 
 		\in,~shiftMelo, \out,0, \group, ~shiftGrp),

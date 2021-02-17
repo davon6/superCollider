@@ -30,8 +30,8 @@ s.waitForBoot({
 	t = TempoClock.new(151.703592/60).permanent_(true);
 
 
-	s.meter;
-	s.plotTree;
+	/*s.meter;
+	s.plotTree;*/
 
 	//necessary for the buffer of the shaper to work
 	~tf = Env([-0.8,0,0.8],[1,1],[8,-8]).asSignal(1025);
@@ -149,6 +149,8 @@ s.waitForBoot({
 	~bus7 = Bus.control(s,1);
 	~bus8 = Bus.control(s,1);
 
+
+	~bus10 = Bus.control(s,1);
 	~bus11 = Bus.control(s,1);
 
 	s.sync;
@@ -163,6 +165,9 @@ s.waitForBoot({
 	Out.ar(out, shap);
 
 	}).add;
+
+
+	SynthDef(\lfo,{|out, vl1, vl2, dur| Out.kr(out,VarLag.kr( Line.kr(vl1, vl2, dur, doneAction: 2),0.0484,-12));}).add;
 
 	SynthDef(\lfo2,{|out, out2, out3, riseT, flatT, dur, vl=0.0000000095262251, vl2=0, vl3=0|
 
@@ -274,7 +279,7 @@ s.waitForBoot({
 }).add;
 
 	SynthDef(\lead, {
-		arg freq= 659.26, mRatio=1, cRatio=1,  amp=0.01, sineRate = 0.0000000095262251,  sineRangeLow=0, pitch = 0, phRise= 0 ,out=0, eFreq =0 , phFm=8, bus2,bus3,bus4,busBP,bus6, bus7, bus8, busSR, busSS, busSP, gra=1,lvlDec=1,factor=1, factor2 =0 /*,vlPE =27.1366666667,vlPE2=0.2,dcPE = 0.129066666667*/, rqLPF =0.5, factor3 =1, decE= 0.1936, dur/*, crvEP = (-2)*/;
+		arg freq= 659.26, mRatio=1, cRatio=1,  amp=0.01, sineRate = 0.0000000095262251,  sineRangeLow=0, pitch = 0, phRise= 0 ,out=0, eFreq =0 , phFm=8, bus2,bus3,bus4,busBP,bus6, bus7, bus8, busSR, busSS, busSP, gra=0.5,lvlDec=1,factor=1, factor2 =0 /*,vlPE =27.1366666667,vlPE2=0.2,dcPE = 0.129066666667*/, rqLPF =0.5, factor3 =1, decE= 0.1936, dur, gain =50/*, crvEP = (-2)*/;
 
 	var car, mod, mod2, iEnv, sig, filRte;
 
@@ -288,7 +293,7 @@ s.waitForBoot({
 		));
 
 	//second level of modulation
-	mod2 = SinOsc.ar(freq/10, mul:freq/10 * iEnv);
+	mod2 = SinOsc.ar(freq/10, mul:freq/10 * In.kr( gra, 1));
 
 	//first level of modulation
 
@@ -300,7 +305,7 @@ s.waitForBoot({
 
 			SinOsc.kr(sineRate,phRise).range([sineRangeLow]), mul:
 
-			(freq * mRatio * iEnv) *gra
+			/*(*/freq * mRatio * In.kr( gra, 1)   /*) *   In.kr( gra, 1)*/
 
 		);
 
@@ -323,7 +328,14 @@ s.waitForBoot({
 
 	sig  = LeakDC.ar(sig);
 
-	Out.ar(out, sig);
+
+		Out.ar(out, //CompanderD.ar(
+
+			sig
+			//, 0.001,1,0.05,0.01,0.8)*gain
+
+
+		);
 }).add;
 
 
@@ -332,12 +344,12 @@ s.waitForBoot({
 //below dur can be factored to change mod
 	SynthDef(\shift, {|in, out, freq, freq2, factor =1, factor2, factor3, vlPE =27.1366666667,vlPE2=0.2, crvEP = (-2), dcPE = 0.129066666667, dur,
 		vlPE3,vlPE33,crvEP2, dA=0, dA2=0, dA3=0|
-		Out.ar(out, FreqShift.ar(In.ar(in, 1), 0
+		Out.ar(out, FreqShift.ar(In.ar(in, 1)/*.sign*/,
 
-			/*freq: (EnvGen.kr(Env([vlPE,vlPE2],[dur/*dcPE*/,0],crvEP),doneAction: dA)*factor2)+
+			freq: freq2+ (EnvGen.kr(Env([vlPE,vlPE2],[dur/*dcPE*/,0],crvEP),doneAction: dA)*factor2)/*+
 			(EnvGen.kr(Env.step([vlPE3,vlPE33],[dur/*dcPE2*/,0],crvEP2),doneAction: dA2)*factor3)+
 
-			(In.kr(freq,1)* EnvGen.kr(Env.step([factor,0],[dur,0]),doneAction: dA3))+ freq2*/            ));
+			(In.kr(freq,1)* EnvGen.kr(Env.step([factor,0],[dur,0]),doneAction: dA3))*/            ));
 	}).add;
 
 	SynthDef(\filter,{|out=0, in, busLP, busBP, busHP, bus7, which, factor3=1, rqLPF=0.5 |
