@@ -357,17 +357,17 @@ s.waitForBoot({
 			*/            ));
 	}).add;
 
-	SynthDef(\filter,{|out=0, in, busLP, busBP, busHP, bus7, which, factor3=1, rqLPF=0.5 |
+	SynthDef(\filter,{|out=0, in, busMod, bus7, which, factor3=1, rqLPF=0.5 |
 
 		var lp, bp, hp, sig;
 
 		sig = In.ar(in,1);
 
-		lp = BLowPass4.ar(sig , In.kr(busLP, 1) ,In.kr(rqLPF));
+		lp = BLowPass4.ar(sig , In.kr(busMod, 1) ,In.kr(rqLPF));
 
-		bp = BPF.ar(sig,In.kr(busBP, 1) *factor3  ,0.26);
+		bp = BPF.ar(sig,In.kr(busMod, 1) *factor3  ,0.26);
 
-		hp = BHiPass4.ar(sig, In.kr(busHP, 1),In.kr(bus7, 1));
+		hp = BHiPass4.ar(sig, In.kr(busMod, 1),In.kr(bus7, 1));
 
 		sig = SelectX.ar(which, [lp, bp,hp,sig]);
 
