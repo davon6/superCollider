@@ -256,8 +256,8 @@ s.waitForBoot({
 
 	sig =  HPF.ar(Latch.ar(tanh(car+car2),Impulse.ar(latch)),3000);
 
-	Out.ar(out, sig
-		* [amp.dbamp+stereoL,amp.dbamp+stereoR]);
+	Out.ar(out, sig.dup
+		/** [amp.dbamp+stereoL,amp.dbamp+stereoR]*/);
 }).add;
 
 	SynthDef.new(\snare, {
@@ -373,6 +373,9 @@ s.waitForBoot({
 
 		Out.ar(out, sig);
 	}).add;
+
+	SynthDef(\phaser,{|in, out| Out.ar(out, AllpassN.ar(In.ar(in,1)
+		,0.2,SinOsc.kr(Lag.kr(MouseY.kr(0.08046875,5.15)),0,0.01,0.01)));}).add;
 
 
 	SynthDef(\gate,{|in, out=0, vlAtk=0, vlDec=1,vlSub=0, vlRel=0, atkT=0, decT=0, subsT=0, relT=0, atckC=0, decC=0, relC=0, bus1, bus2, dur,relSu=0|
@@ -503,7 +506,6 @@ s.waitForBoot({
 
 	SynthDef(\limiter, {|in, out = 0,gain=1,vol =1, du =0.01,rel=0.8, atk =0.01 ,thr= 0.001,sB =1,sA= 0.05|
 
-		/*the best but crashes*/
 		Out.ar(out , CompanderD.ar(In.ar(in,2),thr, sB ,sA, atk, rel)* gain;)
 	}).add;
 
