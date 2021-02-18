@@ -40,8 +40,8 @@ o = {
 	Out.kr(~bus2, SinOsc.kr(LFPulse.kr(Select.kr(0.321875,[1.2875, 0.321875,0.08046875 ])).range(0.321875,0.08046875) ).range(659.255, 2637.02));
 
 
-	Out.kr(~bus4, SinOsc.kr(Select.kr(LFNoise2.ar(1.2875).range(0,3).round(1),
-		[  1.2875,  1.2875, 5.15,0.321875	]
+	Out.kr(~bus4, SinOsc.kr(Select.kr(LFNoise2.ar(1.2875).range(0,2).round(1),
+		[  1.2875,  1.2875/*, 5.15*/,0.321875	]
 	)    *  SinOsc.kr(0.64375).range(0.01005859375,1.2875)).range(10.3,2637.02),);
 
 	Out.kr(~bus5, SinOsc.kr(Select.kr(LFNoise2.ar(1.2875).range(0,2).round(1),
@@ -72,7 +72,7 @@ o = {
 
 (
 ~gate.free;
-~gate = Pbind(\instrument,\gate, \dur,Pwrand([Pseq([1/4],Pwrand([1,4,16,64],[1,4,16,16],1)),Pseq([1/1],Prand([1,4],1)),Pseq([1/3],Prand([1,3,12],1)) ],[4,1,1],Prand([1,4,16],1))
+~gate = Pbind(\instrument,\gate, \dur,Pwrand([/*Pseq([4/1],1),*/Pseq([1/4],Pwrand([1,4,16,64],[1,4,16,16],1)),Pseq([1/1],Prand([1,4],1)),Pseq([1/3],Prand([1,3,12],1)) ],[4,1,1],Prand([1,4,16],1))
 	,\in, 0, \atkT,0,\bus1,~bus1,\out,0,\group, ~gateGrp);
 )
 
@@ -149,7 +149,7 @@ Pbind(\instrument, \limiter,\in, ~limitSquelch, \dur, Pseq([1024/1],1),\gain,95,
 
 	Pbind(\instrument, \filter, \dur,Pseq([4096/1],1), \in,~filterBus2,\which,2,\busMod, ~bus5,\bus7,~bus7, \out, ~gateBus2, \group,~filterGrp),
 
-	Pbind(\instrument, \gate , \dur, Pseq([ Pseq([Pwrand([1,4,16,64],[64,16,4,1],1)/4],Prand([1,4,16,64],1))],inf),
+	Pbind(\instrument, \gate , \dur, Pseq([Pwrand([1,4,16,64],[64,16,4,1],1)/4],Prand([1,4,16,64],inf)),
 		\type, Pwrand([ Pseq([\note],64) , Pseq([\note,\note,\note,\rest,\rest,\note,\rest,\note],64)],[16,1],inf), \group, ~gateGrp,
 		\vlSub,0.2,\subsT,inf ,\in, ~gateBus2,\out,~reverbBus2) ,
 
@@ -174,7 +174,7 @@ Pbind(\instrument, \limiter,\in, ~limitSquelch, \dur, Pseq([1024/1],1),\gain,95,
 	Pbind(\instrument,\comp, \dur,Pseq([1024/1],1),\thr,0.4 ,\sB, 1.04,\sA, 0.2,\atk ,0.0968, \rel ,0.3872
 		,\in, ~comSnaGrpBus ,\ctrl, ~snBus, \group, ~compGrp2,\out,0),
 
-	~toUse,
+	/*~toUse,*/
 
 
 
