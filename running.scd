@@ -148,7 +148,7 @@ s.waitForBoot({
 	~bus6 = Bus.control(s,1);
 	~bus7 = Bus.control(s,1);
 	~bus8 = Bus.control(s,1);
-
+	~bus9 = Bus.control(s,1);
 
 	~bus10 = Bus.control(s,1);
 	~bus11 = Bus.control(s,1);
@@ -369,7 +369,7 @@ s.waitForBoot({
 
 		hp = BHiPass4.ar(sig, In.kr(busHP, 1),In.kr(bus7, 1));
 
-		sig =SelectX.ar(which, [lp, bp,hp,sig]);
+		sig = SelectX.ar(which, [lp, bp,hp,sig]);
 
 		Out.ar(out, sig);
 	}).add;
@@ -391,47 +391,6 @@ s.waitForBoot({
 }).add;
 
 
-	//GVerb + Splay in one synth
-
-	SynthDef(\reverb, {
-		|out=0, roomsize, revtime, damping, inputbw, spread = 15, drylevel, earlylevel,
-    taillevel, amp=0.3,maxRoomsize,wet=0.4,in =0,wF =0, spread2=0, level=1, center=0.0, multi = 2|
-
-	var a ,input;
-
-		//trim freq below 100hz before to 16 bits the sound
-		input = HPF.ar( In.ar(in,1),81.41).round(2**(-16));
-
-		a = Resonz.ar(
-
-		input
-			,
-      659.25 *   [8,16,32],
-
-			wet
-		).sum * 10;
-
-
-		//apply reverb , splay stereo and another 100hz trim
-    Out.ar(    out,  Splay.ar(BHiPass4.ar(
-            (GVerb.ar(
-            a,
-            roomsize,
-            revtime,
-            damping,
-            inputbw,
-            spread,
-            drylevel.dbamp,
-            earlylevel.dbamp,
-            taillevel.dbamp,
-				maxRoomsize, amp,)
-		+ input
-
-		),81.41),spread2,level,center))
-
-	}).add;
-
-	"reverb init".postln;
 
 	SynthDef.new(\ptr, {
 		arg out=0, buf=0,dec=1 ;
@@ -485,6 +444,49 @@ s.waitForBoot({
 
 		Out.ar(out, sig!2);
 	}).add;
+
+
+	//GVerb + Splay in one synth
+
+	SynthDef(\reverb, {
+		|out=0, roomsize, revtime, damping, inputbw, spread = 15, drylevel, earlylevel,
+    taillevel, amp=0.3,maxRoomsize,wet=0.4,in =0,wF =0, spread2=0, level=1, center=0.0, multi = 2|
+
+	var a ,input;
+
+		//trim freq below 100hz before to 16 bits the sound
+		input = HPF.ar( In.ar(in,1),81.41).round(2**(-16));
+
+		a = Resonz.ar(
+
+		input
+			,
+      659.25 *   [8,16,32],
+
+			wet
+		).sum * 10;
+
+
+		//apply reverb , splay stereo and another 100hz trim
+    Out.ar(    out,  Splay.ar(BHiPass4.ar(
+            (GVerb.ar(
+            a,
+            roomsize,
+            revtime,
+            damping,
+            inputbw,
+            spread,
+            drylevel.dbamp,
+            earlylevel.dbamp,
+            taillevel.dbamp,
+				maxRoomsize, amp,)
+		+ input
+
+		),81.41),spread2,level,center))
+
+	}).add;
+
+	"reverb init".postln;
 
 
 	//the compressor received for control a signal going on channel that never goes to zero (renamed ghost)

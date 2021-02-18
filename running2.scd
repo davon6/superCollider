@@ -6,6 +6,7 @@
 //delayfo random melor
 // multi valu  freq shifter or single pxrand
 //STEREO IS BROKEN FOR PERCUSSIONS
+//ALSO LONG SNARE GLTICH WITH BASS
 
 (
 
@@ -48,6 +49,10 @@ o = {
 
 	Out.kr(~bus8,  Lag.kr(LFNoise0.kr(1.2875).range(0.10,0.0),0.05)
 		+SinOsc.kr(SelectX.kr(LFNoise0.kr(5.15).range(0,2).round(1),[1.2875,5.15,20.6])).range(0.06,0.00));
+
+
+	Out.kr(~bus9, SinOsc.kr( LFTri.kr( 0.321875).range(0.321875,10.3)).range(82.4,2637.02));
+
 
 	Out.kr(~bus13, SinOsc.kr(0.64375).range(20.6,41.20));
 
@@ -98,7 +103,7 @@ Ppar([
 	Pwrand([ Pseq([1/4],Pxrand([1,4,16],1)), Pseq([4/4],Pxrand([1,4],1)), Pseq([16/4],1), Pseq([64/4],1)],[64,16,4,1],1)
 
 
-	,\in,~dispatchBus, \out,~shiftMelo/*Prand([~filterBus2, ~filterBus,~shiftMelo],1)*/,\group,~dispatchGrp),
+	,\in,~dispatchBus, \out,Prand([~filterBus2, ~filterBus,~shiftMelo,~filterSquelch],1),\group,~dispatchGrp),
 
 	],Prand([1,4,16,64],inf)),
 
@@ -107,7 +112,19 @@ Ppar([
 		\freq2, [329.63 ,326.63 ], \vlPE, 2.575, \dA, 2, \factor2,1, \type,Pseq([\note,\rest,\rest,\note],inf),
 		\boo, ~bus13, \dA3, 2,
 
-		\in,~shiftMelo, \out,~filterBus, \group, ~shiftGrp),
+		\in,~shiftMelo, \out,Prand([~filterBus2, ~filterBus,~filterSquelch],1), \group, ~shiftGrp),
+
+
+	Pbind(\instrument, \filter, \dur,Pseq([4096/1],1), \in,~filterSquelch,\which,1,\busBP, ~bus9, \out, ~reverbSquelch, \group,~filterGrp),
+
+
+	Pbind(\instrument,\reverb,\dur,Pseq([1024/1],1),\roomsize, 46, \revtime,Pxrand([Pseq([1/4],4096),  Pseq([1/1],4096)],1), \damping,Pxrand([0.22,0.8,0.4 ],1), \inputbw, 0.2, \drylevel, (-30), \earlylevel, (-1), \taillevel, (-42),\maxRoomsize,62,\spread,Pwrand([1,10,40],[4,16,1],1),\wet,Pxrand([0.05,0.1],1),\in,~reverbSquelch , \out,~comSquelch,\group, ~revGrp),
+
+	Pbind(\instrument,\comp, \dur,Pseq([1024/1],1),\thr,0.2 ,\sB, 1.2,\sA, 1/4,\atk ,0.0484, \rel ,0.3872
+,\gain, 24,\in, ~comSquelch ,\ctrl, ~kbus, \out,~limitSquelch, \group, ~compGrp),
+
+Pbind(\instrument, \limiter,\in, ~limitSquelch, \dur, Pseq([1024/1],1),\gain,95,\group,~limitGrp,\out,~comSnaGrpBus),
+
 
 
 
@@ -138,7 +155,7 @@ Ppar([
 	Pbind(\instrument,\comp, \dur,Pseq([1024/1],1),\thr,0.4 ,\sB, 1.04,\sA, 0.2,\atk ,0.0968, \rel ,0.3872
 		,\in, ~comSnaGrpBus ,\ctrl, ~snBus, \group, ~compGrp2,\out,0),
 
-/*	~toUse,*/
+	~toUse,
 
 
 

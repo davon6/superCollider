@@ -40,7 +40,7 @@
 	Ppar([~bar[6],~hat,~cymbal,~snare],1)
 ];
 
-Ppar([Pseq([~bass],inf),Pbindf(~snare,\da1,0)],1).play(t,quant:1)//JEEEZ
+Ppar([Pseq([~bass],inf),Pbindf(~snare,\da1,0)],1);//JEEEZ
 
 ~toUse = Prand([
 
