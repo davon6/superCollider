@@ -93,6 +93,8 @@ s.waitForBoot({
 
 	~shiftMelo = Bus.audio(s,1);
 
+	~phaseBus = Bus.audio(s,1);
+
 
 	~filterBus = Bus.audio(s,1);
 	~filterBus2 = Bus.audio(s,1);
@@ -374,8 +376,8 @@ s.waitForBoot({
 		Out.ar(out, sig);
 	}).add;
 
-	SynthDef(\phaser,{|in, out| Out.ar(out, AllpassN.ar(In.ar(in,1)
-		,0.2,SinOsc.kr(Lag.kr(MouseY.kr(0.08046875,5.15)),0,0.01,0.01)));}).add;
+	SynthDef(\phaser,{|in, out, rate, maxDlT =0.0968| Out.ar(out, In.ar(in,1)+ AllpassN.ar(In.ar(in,1)
+		,maxDlT,SinOsc.kr(Lag.kr(MouseX.kr(1.2875,0.00000005)),0,0.01,0.01),0.1)*0.4);}).add;
 
 
 	SynthDef(\gate,{|in, out=0, vlAtk=0, vlDec=1,vlSub=0, vlRel=0, atkT=0, decT=0, subsT=0, relT=0, atckC=0, decC=0, relC=0, bus1, bus2, dur,relSu=0|
