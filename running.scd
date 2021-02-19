@@ -74,6 +74,9 @@ s.waitForBoot({
 	e = Buffer.alloc(s, s.sampleRate *0.3872,1);
 	~delay = Buffer.alloc(s, 48000 * 3, 2);
 
+	~remyAudio = Buffer.read(s, "/Users/MisterGadou/Collider/remy.wav");
+
+
 
 "Shaper init".postln;
 
@@ -161,6 +164,9 @@ s.waitForBoot({
 	~bus13 = Bus.control(s,1);
 
 	s.sync;
+
+	SynthDef(\playBuf ,{|out = 0,start, trig, dur|Out.ar(out,PlayBuf.ar(2,~remyAudio,trigger: Dust.kr(4.0),startPos: start,doneAction: 2));}).add;
+
 
 	SynthDef(\shap,{|in, out,out2, vl1=80, vl2=0,vl3=0, dA1 =0,dA2=0,dA3=0,dA4=0 |
 	var halfBeat, shap, shap2;
