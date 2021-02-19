@@ -72,11 +72,13 @@ s.waitForBoot({
 
 
 	e = Buffer.alloc(s, s.sampleRate *0.3872,1);
+	~delay = Buffer.alloc(s, 48000 * 3, 2);
 
 
 "Shaper init".postln;
 
 	s.sync;
+
 
 
 
@@ -102,6 +104,7 @@ s.waitForBoot({
 	~filterSquelch = Bus.audio(s,1);
 	~filterMelo = Bus.audio(s,1);
 
+	~delayBus = Bus.audio(s,2);
 
 	~reverbBus = Bus.audio(s,1);
 	~reverbBus2 = Bus.audio(s,1);
@@ -451,6 +454,9 @@ s.waitForBoot({
 	}).add;
 
 
+
+
+
 	//GVerb + Splay in one synth
 
 	SynthDef(\reverb, {
@@ -492,6 +498,15 @@ s.waitForBoot({
 	}).add;
 
 	"reverb init".postln;
+
+	SynthDef(\pingD, { |out = 0, bufnum = 0, dur, feedback = 0.5, delayTime = 0.3, in, stereoL =0.00555, stereoR =0, dec=0.5, amp =1 |
+    var left, right, src,sig3;
+
+		left =	In.ar(in,2);
+
+    Out.ar(out ,PingPong.ar(bufnum, [left,left], delayTime, feedback, 1)
+			* [amp+stereoL,amp+stereoR] * EnvGen.kr(Env([1,1,0],[0,dur,0],4),doneAction:2) )
+	}).add;
 
 
 	//the compressor received for control a signal going on channel that never goes to zero (renamed ghost)
