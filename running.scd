@@ -96,6 +96,8 @@ s.waitForBoot({
 	~gateSquelch = Bus.audio(s,1);
 	~gateMelo = Bus.audio(s,1);
 
+	~gate2Bus = Bus.audio(s,1);
+
 	~shiftMelo = Bus.audio(s,1);
 
 	~phaseBus = Bus.audio(s,1);
@@ -180,7 +182,11 @@ s.waitForBoot({
 	}).add;
 
 
-	SynthDef(\lfo,{|out, vl1, vl2, dur| Out.kr(out,VarLag.kr( Line.kr(vl1, vl2, dur, doneAction: 2),0.0484,-12));}).add;
+	SynthDef(\lfo,{|out, vl1, vl2, dur, tim = 0.0484, crv =(-12)|
+		Out.kr(out,VarLag.kr( Line.kr(vl1, vl2, dur, doneAction: 2),tim,crv));}).add;
+
+
+
 
 	SynthDef(\lfo2,{|out, out2, out3, riseT, flatT, dur, vl=0.0000000095262251, vl2=0, vl3=0|
 
