@@ -535,7 +535,7 @@ s.waitForBoot({
 
 	SynthDef(\limiter, {|in, out = 0,gain=1,vol =1, du =0.01,rel=0.8, atk =0.01 ,thr= 0.001,sB =1,sA= 0.05|
 
-		Out.ar(out , CompanderD.ar(In.ar(in,2),thr, sB ,sA, atk, rel)* gain;)
+		Out.ar(out , CompanderD.ar(BHiPass4.ar( In.ar(in,2),100),thr, sB ,sA, atk, rel)* gain;)
 	}).add;
 
 	"limiter init".postln;
@@ -555,7 +555,7 @@ s.waitForBoot({
 		\rel, t.beatDur/4 * 0.99,
 		\atkcrv, -2,
 		\relcrv, -1,
-		\amp, (6),\out,0
+		\amp, (8),\out,0
 	);
 
 	~cymbal = Pbind(\instrument, \percussion,\type, Pseq([\rest,\rest,\note,\note ,\rest,\note ,\note, \rest],inf),\dur,Pseq([1/4],64 ),\carHz, 525.12070612224,\modHz,1899.3343179398,\modAmp, 0.12875 ,\amp,(-2.3),\rel,Pseq([1/16],inf),\rel2,Pseq([1/16],inf),\latch,8000,\stereoL, 0.00555, \crv1,  (-2.4), \crv1b,(-3), \mulMod, 1691,\out, ~comBusCymb);
