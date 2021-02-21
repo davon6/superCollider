@@ -316,7 +316,7 @@ s.waitForBoot({
 		));
 
 	//second level of modulation
-	mod2 = SinOsc.ar(freq/10, mul:freq/10 * In.kr( gra, 1));
+	mod2 = SinOsc.ar(freq/10, mul:freq/10 *iEnv /*In.kr( gra, 1)*/ );
 
 	//first level of modulation
 
@@ -328,7 +328,7 @@ s.waitForBoot({
 
 			SinOsc.kr(sineRate,phRise).range([sineRangeLow]), mul:
 
-			/*(*/freq * mRatio * In.kr( gra, 1)   /*) *   In.kr( gra, 1)*/
+			/*(*/freq * mRatio *iEnv /*In.kr( gra, 1) */  /*) *   In.kr( gra, 1)*/
 
 		);
 

@@ -177,7 +177,7 @@ Pbind(\instrument, \limiter,\in, ~limitRnd, \dur, Pseq([1024/1],1),\gain,60,\gro
 
 
 
-
+//BROKEN MUST CHANGE AS NOT GOING TO HAPPEN
 
 	Pbind(\instrument, \pingD, \in, ~delayBus ,\bufnum, ~delay, \dur, Pseq([1024/1],1),\out,~comSquelch/* ,\delayTime,3  ,\feedback, 1.5*/,\group, ~delayGrp),
 
@@ -222,7 +222,7 @@ Pbind(\instrument, \limiter,\in, ~limitSquelch, \dur, Pseq([1024/1],1),\gain,90,
 
 
 
-	 Pbind(\instrument,\gran,\dur,Pseq([1/1],inf),\amp, 1,\buf, d,\out,~reverbBus,\atk, 0,\rel, Pseq([1/1],inf),\gate, 1,\ptrBus, ~ptrBus2,\pitchRte,(-1),\ptrRandSamples, 0,\minPtrDelay, 1000,\group,~granGrp,\duration,Pseq([1/1],inf),\impulse,Pseq([1/1],inf)),
+	 Pbind(\instrument,\gran,\dur,Pseq([1/16],inf),\amp, 1,\buf, d,\out,~reverbBus,\atk, 0,\rel, Pseq([1/16],inf),\gate, 1,\ptrBus, ~ptrBus2,\pitchRte,(-1),\ptrRandSamples, 0,\minPtrDelay, 1000,\group,~granGrp,\duration,Pseq([1/16],inf),\impulse,Pseq([1/16],inf)),
 
 
 
