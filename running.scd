@@ -70,7 +70,7 @@ s.waitForBoot({
 	~tfBuf.loadCollection(~tf.asWavetableNoWrap);
 
 
-
+	d = Buffer.alloc(s, s.sampleRate *0.3872,1);
 	e = Buffer.alloc(s, s.sampleRate *0.3872,1);
 	~delay = Buffer.alloc(s, 48000 * 3, 2);
 
@@ -89,6 +89,10 @@ s.waitForBoot({
 
 	~micBus = Bus.audio(s,1);
 	~ptrBus = Bus.audio(s,1);
+	~micBus2 = Bus.audio(s,1);
+	~ptrBus2 = Bus.audio(s,1);
+
+
 
 	~gateBus = Bus.audio(s,1);
 	~gateBus2 = Bus.audio(s,1);
@@ -428,13 +432,13 @@ s.waitForBoot({
 	}).add;
 
 	SynthDef.new(\gran, {
-		arg amp=1, buf =0, out=0, atk=1, rel=1, gate=1, sync=1, dens=40, baseDur=0.05, durRand=1, rate=1, rateRand=1, pan =0, panRand=0, grainEnv=(-1), ptrBus =0, ptrSampleDelay=20000, ptrRandSamples= 5000, minPtrDelay=1000,pitchRte=1,duration=8,impulse = 1.2875,pos=0,roomsize, revtime, damping, inputbw, spread = 15, drylevel, earlylevel,
-		taillevel,maxRoomsize,wet=0.4;
+		arg amp=1, buf =0, out=0, atk=1, rel=1, gate=1, sync=1, dens=40, baseDur=0.05, durRand=1, rate=1, rateRand=1, pan =0, panRand=0, grainEnv=(-1), ptrBus =0, ptrSampleDelay=20000, ptrRandSamples= 5000, minPtrDelay=1000,pitchRte=1,duration=8,impulse = 1.2875,pos=0,roomsize, revtime, damping, inputbw, spread = 15, drylevel, earlylevel, dur,
+		taillevel,maxRoomsize,wet=0.4, crv= 12;
 
 		var sig, env, densCtrl, durCtrl, rateCtrl, panCtrl, ptr, ptrRand, totalDelay, maxGrainDur;
 
 
-		env = EnvGen.kr(Env([1,1,1],[atk,rel,0]), gate, doneAction:2);
+		env = EnvGen.kr(Env([1,1,0],[atk,dur,0],crv), gate, doneAction:2);
 
 		densCtrl = Select.ar(sync, [Dust.ar(dens), Impulse.ar(dens)]);
 		durCtrl= baseDur * LFNoise1.ar(100).exprange(1/durRand, durRand);

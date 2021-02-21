@@ -82,7 +82,14 @@ o = {
 )
 
 (Ppar([Pbind(\instrument,\ptr, \buf, e, \out, ~ptrBus,\group,~ptrGrp,\dur,Pseq([1024/1],1)),
-	Pbind(\instrument,\rec, \ptrIn, ~ptrBus, \micIn, ~micBus, \buf, e,\group,~recGrp,\dur,Pseq([1024/1],1))],1).play(t, quant:1))
+	Pbind(\instrument,\rec, \ptrIn, ~ptrBus, \micIn, ~micBus, \buf, e,\group,~recGrp,\dur,Pseq([1024/1],1))
+,
+
+	Pbind(\instrument,\ptr, \buf, d, \out, ~ptrBus2,\group,~ptrGrp,\dur,Pseq([1024/1],1)),
+	Pbind(\instrument,\rec, \ptrIn, ~ptrBus2, \micIn, ~micBus2, \buf, d,\group,~recGrp,\dur,Pseq([1024/1],1))
+
+
+],1).play(t, quant:1))
 
 (
 
@@ -106,7 +113,7 @@ Ppar([
 ,\gain,1,\in, ~comBusHat ,\ctrl, ~kbus, \out,0,\group, ~compGrp),
 	Pbind(\instrument,\comp,\dur,Pseq([1024/1],1),\thr,0.6 ,\sB, 1,\sA, 4,\atk ,0.001, \rel ,0.04840,\gain,1,\in, ~comBusCymb ,\ctrl, ~kbus, \out,0,\group, ~compGrp),
 
-	Pbind(\instrument,\lead,\dur,Pseq([16384/1],1), \gra,~bus10 , \sineRate, (0.0000000095262251/2/2/2/2), \freq,659.255,\out,~dispatchBus/*~filterSquelch*/),
+	Pbind(\instrument,\lead,\dur,Pseq([16384/1],1), \gra,~bus10 , \sineRate, (0.0000000095262251/2/2/2/2), \freq,659.255,\out,~dispatchBus/*~filterSquelch*//*~filterBus2*/),
 /*Pbind(\instrument,\lead,\dur,Pseq([16384/1],1), \gra,~bus11 , \sineRate, (0.0000000095262251/2/2/2/2), \freq,659.255,\out,0),*/
 
 
@@ -116,11 +123,29 @@ Ppar([
 	Pbind(\instrument,\dispatch,\dur,
 
 	Pwrand([ Pseq([1/4],Pxrand([1,4,16],1)), Pseq([4/4],Pxrand([1,4],1)), Pseq([16/4],1), Pseq([64/4],1)],[64,16,4,1],1)
-			// Pseq([Pwrand([ Pseq([1/4],Pxrand([1,4,16],1)), Pseq([4/4],Pxrand([1,4],1)), Pseq([16/4],1), Pseq([64/4],1)],[64,16,4,1],1)],inf)
+
 
 	,\in,~dispatchBus, \out,Prand([99,~filterBus2, ~filterBus,/*~shiftMelo,*/~filterSquelch,~phaseBus],1),\group,~dispatchGrp),
 
 	],Prand([1,4,16,64],inf)),
+
+
+	/*Pseq([
+	Pbind(\instrument,\dispatch,\dur,
+
+	Pwrand([ Pseq([1/1],1), Pseq([4/1],1), Pseq([16/1],1), Pseq([64/1],1)],[16,16,4,1],1)
+
+
+	,\in,~dispatchBus, \out,Prand([99,~filterBus2, ~filterBus,~filterSquelch,~phaseBus],1),\group,~dispatchGrp),
+
+	],Prand([1,4,16,64],inf)),*/
+
+
+
+	/*~shiftMelo,*/
+
+
+
 
 
 	Pbind(\instrument, \shift, \dur, Pseq([1/3],inf),
@@ -174,7 +199,10 @@ Pbind(\instrument, \limiter,\in, ~limitSquelch, \dur, Pseq([1024/1],1),\gain,90,
 		\vlSub,0.2,\subsT,inf ,\in, ~gateBus2,\out,Prand([~gate2Bus,~reverbBus2],inf), \group, ~gateGrp ) ,
 
 	Pbind(\instrument, \gate , \dur,Prand([ Pseq([1/1],1), Pseq([4/1],1)],inf), \group, ~gateGrp,
-		\vlSub,0.2,\subsT,inf ,\in, ~gateBus2,\out,~reverbBus2),
+		\vlSub,0.2,\subsT,inf ,\in, ~gateBus2,\out,Prand([~micBus2,~reverbBus2],inf)),
+
+
+	 Pbind(\instrument,\gran,\dur,Pseq([1/4],inf),\amp, 1,\buf, d,\out,~reverbBus2,\atk, 0,\rel, Pseq([1/4],inf),\gate, 1,\ptrBus, ~ptrBus2,\pitchRte,(-1),\ptrRandSamples, 0,\minPtrDelay, 1000,\group,~granGrp,\duration,Pseq([1/4],inf),\impulse,Pseq([1/4],inf)),
 
 
 
@@ -190,7 +218,15 @@ Pbind(\instrument, \limiter,\in, ~limitSquelch, \dur, Pseq([1024/1],1),\gain,90,
 	Pbind(\instrument, \filter, \dur,Pseq([4096/1],1),\which,0, \in,~filterBus,\busMod, ~bus4,\rqLPF,~bus6, \out, ~gateBus, \group,~filterGrp ),
 
 	Pseq([Pbindf(~gate ,\vlSub,0.8,\vlDec,0.8, \relSu, 0.048, \relT, 0.048,
-		\bus1,~bus8, \in, ~gateBus,\out,~reverbBus)],inf),
+		\bus1,~bus8, \in, ~gateBus,\out,Prand([~micBus2,~reverbBus],inf))],inf),
+
+
+
+	 Pbind(\instrument,\gran,\dur,Pseq([1/1],inf),\amp, 1,\buf, d,\out,~reverbBus,\atk, 0,\rel, Pseq([1/1],inf),\gate, 1,\ptrBus, ~ptrBus2,\pitchRte,(-1),\ptrRandSamples, 0,\minPtrDelay, 1000,\group,~granGrp,\duration,Pseq([1/1],inf),\impulse,Pseq([1/1],inf)),
+
+
+
+
 	Pbind(\instrument,\reverb, \dur,Pseq([1024/1],1),\roomsize, 41, \revtime,Pxrand([Pseq([1/4],4096),  Pseq([1/1],4096)],1), \damping,Pxrand([0.22,0.8,0.4 ],1), \inputbw, 1, \drylevel, -20, \earlylevel, -12, \taillevel, -5,\amp,1,\spread,Pwrand([1,10,40],[4,16,1],1),\wet,Pxrand([0.05,0.1],1),\maxRoomsize,70,\in,~reverbBus,\out,~comFuzz, \group,~revGrp ),
 	Pbind(\instrument,\comp, \dur,Pseq([1024/1],1),\thr,0.2 ,\sB, 1.086,\sA, 1/2,\atk ,0.0121, \rel ,0.04840, \gain,1/*(50)*/
 ,\in, ~comFuzz ,\ctrl, ~kbus, \out,~limitFuzz, \group, ~compGrp),
