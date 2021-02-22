@@ -9,7 +9,7 @@
 //STEREO IS BROKEN FOR PERCUSSIONS
 //ALSO LONG SNARE GLTICH WITH BASS
 //bus rq for all filter bg
-
+//warning delay is now mono
 
 s.plotTree
 (
@@ -134,12 +134,12 @@ Ppar([
 
 	Pbind(\instrument, \men, \dur, Pseq([16384/1],inf),\out, ~filterSquelch),
 
-	/*Pbind(\instrument,\lead,\dur,Pseq([16384/1],1), \sineRate, (0.0000000095262251/2/2/2/2), \freq,659.255,\out,~filterBus2),
+	Pbind(\instrument,\lead,\dur,Pseq([16384/1],1), \sineRate, (0.0000000095262251/2/2/2/2), \freq,659.255,\out,~filterBus2),
 
 	Pbind(\instrument,\lead,\dur,Pseq([16384/1],1), \sineRate, (0.0000000095262251/2/2/2/2), \freq,164.81375,\out,~filterBus),
 
 	Pbind(\instrument,\multi,\dur,Pseq([16384/1],1), \out,~bgBus),
-*/
+
 	Pbind(\instrument,\reverb, \dur,Pseq([1024/1],1),\roomsize, 30, \revtime,Pxrand([Pseq([1/4],4096),  Pseq([1/1],4096)],1), \damping,Pxrand([0.22,0.8,0.4 ],1), \inputbw, 0.8, \drylevel, -20, \earlylevel, -22, \taillevel, -22,\amp,1,\spread,Pwrand([1,10,40],[4,16,1],1),\wet,Pxrand([0.05,0.1],1),\maxRoomsize,40,\in,~bgBus,\spread2,1,\out,~bgCom, \group,~revGrp ),
 
 Pbind(\instrument,\comp, \dur,Pseq([1024/1],1),\thr,0.4 ,\sB, 1.04,\sA, 0.2,\atk ,0.0968, \rel ,0.3872
@@ -204,15 +204,20 @@ Pbind(\instrument,\reverb,\dur,Pseq([1024/1],1),\roomsize, 50, \revtime,Pxrand([
 Pbind(\instrument, \limiter,\in, ~limitRnd, \dur, Pseq([1024/1],1),\gain,60,\group,~limitGrp,\out,~comSnaGrpBus),
 */
 
-	Pbind(\instrument, \filter, \dur,Pseq([4096/1],1), \in,~filterSquelch,\which,1,\busMod, ~bus9, \out, ~reverbSquelch, \group,~filterGrp),
-
-	Pbind(\instrument,\reverb,\dur,Pseq([1024/1],1),\roomsize, 46, \revtime,Pxrand([Pseq([1/4],4096),  Pseq([1/1],4096)],1), \damping,Pxrand([0.22,0.8,0.4 ],1), \inputbw, 0.2, \drylevel, (-30), \earlylevel, (-1), \taillevel, (-42),\maxRoomsize,62,\spread,Pwrand([1,10,40],[4,16,1],1),\wet,Pxrand([0.05,0.1],1),\in,~reverbSquelch , \out,0/*Pwrand([~comSquelch,~delayBus,99],[20,1,5],inf)*/,\group, ~revGrp),
+	Pbind(\instrument, \filter, \dur,Pseq([4096/1],1), \in,~filterSquelch,\which,1,\busMod, ~bus9, \out, ~gateSquelch, \group,~filterGrp),
 
 
-/*
+	Pbind(\instrument, \pingD, \in, ~delayBus ,\bufnum, ~delay, \dur, Pseq([1024/1],1),\out,~reverbSquelch/*~comSquelch*//* ,\delayTime,3  ,\feedback, 1.5*/,\group, ~revGrp),
+
+
+	Pbind(\instrument,\reverb,\dur,Pseq([1024/1],1),\roomsize, 46, \revtime,Pxrand([Pseq([1/4],4096),  Pseq([1/1],4096)],1), \damping,Pxrand([0.22,0.8,0.4 ],1), \inputbw, 0.2, \drylevel, (-30), \earlylevel, (-1), \taillevel, (-42),\maxRoomsize,62,\spread,Pwrand([1,10,40],[4,16,1],1),\wet,Pxrand([0.05,0.1],1),\in,~reverbSquelch , \center, Pxrand([0.1 , 0.4, (-0.3), 0],inf), \spread2,Prand([1, 0],inf),
+		\out, ~comSquelch,\group, ~delayGrp),
+
+
+
 //BROKEN MUST CHANGE AS NOT GOING TO HAPPEN
 
-	Pbind(\instrument, \pingD, \in, ~delayBus ,\bufnum, ~delay, \dur, Pseq([1024/1],1),\out,~comSquelch/* ,\delayTime,3  ,\feedback, 1.5*/,\group, ~delayGrp),
+
 
 
 
@@ -223,7 +228,7 @@ Pbind(\instrument, \limiter,\in, ~limitRnd, \dur, Pseq([1024/1],1),\gain,60,\gro
 Pbind(\instrument, \limiter,\in, ~limitSquelch, \dur, Pseq([1024/1],1),\gain,90,\group,~limitGrp,\out,~comSnaGrpBus),
 
 
-*/
+
 
 
 
@@ -258,9 +263,18 @@ Pbind(\instrument, \filter, \dur,Pseq([4096/1],1),\which,0, \in,~filterBus,\busM
 
 
 
-	//GATES
+	//GATES  Make good adsr %
 
-	Prand([	Pbind(\instrument, \gate, \dur, ~short,
+	Prand([
+
+
+		Pbind(\instrument, \gate, \dur, Prand([     Pseq([1/4],1)  ,Pseq([1/1],1)],1)  /* , \vlDec, 0.6,*/
+		,\group, ~gateGrp,
+	\subsT,inf , \in,~gateSquelch ,\out,  Prand([~delayBus ,~reverbSquelch],inf)),
+
+
+
+		Pbind(\instrument, \gate, \dur, ~short,
 		\group, ~gateGrp,
 	\vlSub,0.2,\subsT,inf ,\bus1,~bus8,\in, ~gateBus,\out, ~reverbBus),
 
@@ -294,7 +308,7 @@ Pbind(\instrument, \filter, \dur,Pseq([4096/1],1),\which,0, \in,~filterBus,\busM
 	Pbind(\instrument,\comp, \dur,Pseq([1024/1],1),\thr,0.4 ,\sB, 1.04,\sA, 0.2,\atk ,0.0968, \rel ,0.3872
 		,\in, ~comSnaGrpBus ,\ctrl, ~snBus, \group, ~compGrp2,\out,0),
 
-	/*~toUse,*/
+	~toUse,
 
 
 

@@ -453,7 +453,7 @@ SynthDef(\men,{|out = 0, dur|Out.ar(out,
 
 		env =   In.ar(in, 1) *    EnvGen.kr(Env(
 			[vlAtk,vlDec                  ,vlSub ,vlRel,0],
-			[atkT ,dur /*decT*/-In.kr(bus1, 1)  -relSu, subsT,relT],
+			[atkT ,dur /*decT*/-In.kr(bus1, 1)  -relSu, subsT,relT],//turn to %
 			[atckC,decC ,0     ,relC]),    //decC- (In.kr(bus2, 1)
 
 
@@ -567,7 +567,7 @@ SynthDef(\men,{|out = 0, dur|Out.ar(out,
 	SynthDef(\pingD, { |out = 0, bufnum = 0, dur, feedback = 0.5, delayTime = 0.3, in, stereoL =0.00555, stereoR =0, dec=0.5, amp =1 |
     var left, right, src,sig3;
 
-		left =	In.ar(in,2);
+		left =	In.ar(in,1);
 
     Out.ar(out ,PingPong.ar(bufnum, [left,left], delayTime, feedback, 1)
 			* [amp+stereoL,amp+stereoR] * EnvGen.kr(Env([1,1,0],[0,dur,0],4),doneAction:2) )
