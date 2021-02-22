@@ -116,6 +116,10 @@ s.waitForBoot({
 
 	~phaseBus = Bus.audio(s,1);
 
+	~bgBus = Bus.audio(s,1);
+	~bgCom = Bus.audio(s,1);
+	~bgLimit = Bus.audio(s,1);
+
 
 	~filterBus = Bus.audio(s,1);
 	~filterBus2 = Bus.audio(s,1);
@@ -324,11 +328,18 @@ SynthDef(\multi, {|out=0| Out.ar(out,
 +	SinOsc.kr(0.02).range(-6.58, 6.48)
 	+ LFNoise0.kr(10.3).range(-300, 300)
 
-	, mul:[1, MouseX.kr(0,0.6), MouseX.kr(0,0.6)])
+	, mul:[1,
+			/*MouseX.kr(0,0.6)*/ SinOsc.kr(Select.kr(LFNoise2.ar(1.2875).range(0,2).round(1),
+		[    1.2875, 0.08046875,0.321875	]
+	)    *  SinOsc.kr(0.1609375).range((-1.2875),1.2875)).range(0,0.6)   ,
+			/*MouseX.kr(0,0.6)*/SinOsc.kr(Select.kr(LFNoise2.ar(1.2875).range(0,2).round(1),
+		[    1.2875, 0.08046875,0.321875	]
+	)    *  SinOsc.kr(0.1609375).range((-1.2875),1.2875)).range(0,0.6)
+		])
 
 		//,  Saw.kr(10.3).range(400, 2100)  , 0.2)
 
-		!2*0.08
+		*0.08
 
 );}).add;
 
