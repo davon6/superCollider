@@ -29,7 +29,7 @@
 
 	Ppar([~bar[4],Pbindf(~cymbal, \dur,Pseq([1/4],56)),
 		Pbindf(~hat, \dur,Pseq([1/4],56)),
-		Pbindf(~snare,\type, Pseq([\rest,\rest ,\note, \rest], 7)),],1).play(t),
+		Pbindf(~snare,\type, Pseq([\rest,\rest ,\note, \rest], 7)),],1),
 
 
 	Ppar([~bar[5],Pbindf(~cymbal, \dur,Pseq([1/4],60)),
@@ -37,7 +37,7 @@
 		Pbindf(~snare,\type, Pseq([\rest,\rest ,\note, \rest], 7))],1),
 
 
-	Ppar([~bar[6],~hat,~cymbal,~snare],1).play(t)
+	Ppar([~bar[6],~hat,~cymbal,~snare],1)
 ];
 
 Ppar([Pseq([~bass],inf),Pbindf(~snare,\da1,0)],1);//JEEEZ
