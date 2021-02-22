@@ -29,6 +29,13 @@
 
 
 
+~gate1 =Pbind(\instrument, \gate, \dur, ~short,
+		\group, ~gateGrp,
+	\vlSub,0.2,\subsT,inf ,\bus1,~bus8,\in, ~gateBus,\out, ~micBus3);
+
+~gate2 = Pbind(\instrument, \gate, \dur, /*Pseq([4/1],inf)*/ Prand([~short,~long],1) ,
+		\type, Pwrand([ Pseq([\note],64) , Pseq([\note,\note,\note,\rest,\rest,\note,\rest,\note],64)],[16,1],inf), \group, ~gateGrp,
+		\vlSub,0.2,\subsT,inf ,\bus1,~bus8,\in, ~gateBus2,\out,~micBus2/*Prand([/*~gate2Bus*/,~reverbBus2],inf) */);
 
 
 

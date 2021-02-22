@@ -75,6 +75,7 @@ s.waitForBoot({
 
 	d = Buffer.alloc(s, s.sampleRate *0.3872,1);
 	e = Buffer.alloc(s, s.sampleRate *0.3872,1);
+	f = Buffer.alloc(s, s.sampleRate *1.5488,1);
 	~delay = Buffer.alloc(s, 48000 * 3, 2);
 
 	~remyAudio = Buffer.read(s, "/Users/MisterGadou/Collider/remy.wav");
@@ -94,6 +95,10 @@ s.waitForBoot({
 	~ptrBus = Bus.audio(s,1);
 	~micBus2 = Bus.audio(s,1);
 	~ptrBus2 = Bus.audio(s,1);
+	~micBus3 = Bus.audio(s,1);
+	~ptrBus3 = Bus.audio(s,1);
+	~micBus4 = Bus.audio(s,1);
+	~ptrBus4 = Bus.audio(s,1);
 
 
 
