@@ -29,7 +29,7 @@
 
 	Ppar([~bar[4],Pbindf(~cymbal, \dur,Pseq([1/4],56)),
 		Pbindf(~hat, \dur,Pseq([1/4],56)),
-		Pbindf(~snare,\type, Pseq([\rest,\rest ,\note, \rest], 7)),],1),
+		Pbindf(~snare,\type, Pseq([\rest,\rest ,\note, \rest], 7)),],1).play(t),
 
 
 	Ppar([~bar[5],Pbindf(~cymbal, \dur,Pseq([1/4],60)),
@@ -37,7 +37,7 @@
 		Pbindf(~snare,\type, Pseq([\rest,\rest ,\note, \rest], 7))],1),
 
 
-	Ppar([~bar[6],~hat,~cymbal,~snare],1)
+	Ppar([~bar[6],~hat,~cymbal,~snare],1).play(t)
 ];
 
 Ppar([Pseq([~bass],inf),Pbindf(~snare,\da1,0)],1);//JEEEZ
@@ -78,7 +78,25 @@ Ppar([~bar[6],~snare],1),
 
 	Pseq([~perc[4],~kbassRest],1),
 
-	Pseq([~kbassRest,~perc[4]],1)/*,
+	Pseq([~kbassRest,~perc[4]],1),
+
+
+
+	Pseq([~perc[4],        Pseq([ Pbindf(~kick,\out,~micBus/*,\group, ~micGrp*/) ,
+
+
+		Pseq([Pbindf(~kick, \dur, Pseq([1/2],1))],2),Pbindf(~kick,\out,~micBus), Pseq([Pbindf(~kick, \dur, Pseq([1/2],1))],1)
+	],1   )],1) ,
+
+	 Pseq([~perc[3],
+ 	Pbindf(~kick,\out,~micBus,\dur,Pseq([1/1],1))],1),
+
+
+
+
+	Pseq([ ~perc[2], Ppar([~kick,      Pseq([	Pbindf(~kick,\out,~micBus,/*\group, ~micGrp,*/\dur,Pseq([1/1],1))],2),                     ],1)   ],1)
+
+	/*,
 
 	 Pseq([~perc[4],        Pseq([ Ppar([Pbindf(~kick,\out,~micBus/*,\group, ~micGrp*/), Pbind(\instrument,\gran,\dur,Pseq([1/4],1),\amp, 1,\buf, e,\out,0,\atk, 0,\rel, Pseq([1/4],1),\gate, 1,\ptrBus, ~ptrBus,\pitchRte,(-1),\ptrRandSamples, 0,\minPtrDelay, 1000,\group,~granGrp,\duration,Pseq([1/4],1),\impulse,Pseq([1/4],1));],1)  ,
 

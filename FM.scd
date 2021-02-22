@@ -84,7 +84,7 @@ SynthDef(\multi, {Out.ar(0,
 
 	, mul:[1, MouseX.kr(0,0.6), MouseX.kr(0,0.6)])
 
-		//,Saw.kr(10.3).range(400, 2100), 0.2)
+		//,  Saw.kr(10.3).range(400, 2100)  , 0.2)
 
 		!2*0.08
 

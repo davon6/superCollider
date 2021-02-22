@@ -86,6 +86,8 @@ s.waitForBoot({
 
 	s.sync;
 
+	~short = Prand([  Pseq([1/4], 1), Pseq([1/4], 4) ,Pseq([1/4], 16) ,Pseq([1/4], 64), Pseq([1/1], 1),     ],1 );
+	~long = Prand([ Pseq([1/1],1), Pseq([4/1],1), Pseq([16/1],1) ],1);
 
 
 
@@ -308,6 +310,31 @@ s.waitForBoot({
 			* amp.dbamp);
 
 }).add;
+
+
+
+
+//filter broken
+SynthDef(\multi, {|out=0| Out.ar(out,
+	 //BLowPass4.ar(
+	Saw.ar([432+SinOsc.kr(0.1).range(-430,430),
+		435+ SinOsc.kr(0.1).range(-428,450),
+		430+ SinOsc.kr(0.1).range(-422,444)]
+
++	SinOsc.kr(0.02).range(-6.58, 6.48)
+	+ LFNoise0.kr(10.3).range(-300, 300)
+
+	, mul:[1, MouseX.kr(0,0.6), MouseX.kr(0,0.6)])
+
+		//,  Saw.kr(10.3).range(400, 2100)  , 0.2)
+
+		!2*0.08
+
+);}).add;
+
+
+
+
 
 	SynthDef(\lead, {
 		arg freq= 659.26, mRatio=1, cRatio=1,  amp=0.01, sineRate = 0.0000000095262251,  sineRangeLow=0, pitch = 0, phRise= 0 ,out=0, eFreq =0 , phFm=8, bus2,bus3,bus4,busBP,bus6, bus7, bus8, busSR, busSS, busSP, gra=0.5,lvlDec=1,factor=1, factor2 =0 /*,vlPE =27.1366666667,vlPE2=0.2,dcPE = 0.129066666667*/, rqLPF =0.5, factor3 =1, decE= 0.1936, dur, gain =50/*, crvEP = (-2)*/;
