@@ -66,7 +66,7 @@ o = {
 		+SinOsc.kr(SelectX.kr(LFNoise0.kr(5.15).range(0,2).round(1),[1.2875,5.15,20.6])).range(0.06,0.00));
 
 
-	Out.kr(~bus9, SinOsc.kr( LFTri.kr( 0.321875).range(0.321875,10.3)).range(82.4,2637.02));
+	Out.kr(~bus9, SinOsc.kr( LFTri.kr( 0.321875).range(0.321875,1.2875)).range(82.4,2637.02));
 
 
 	Out.kr(~bus13, SinOsc.kr(0.64375).range(20.6,41.20));
@@ -132,13 +132,14 @@ Ppar([
 
 	Pbind(\instrument,\lead,\dur,Pseq([16384/1],1), \sineRate, (0.0000000095262251/2/2/2/2), \freq,659.255,\out,~phaseBus),*/
 
+	Pbind(\instrument, \men, \dur, Pseq([16384/1],inf),\out, ~filterSquelch),
 
-	Pbind(\instrument,\lead,\dur,Pseq([16384/1],1), \sineRate, (0.0000000095262251/2/2/2/2), \freq,659.255,\out,~filterBus2),
+	/*Pbind(\instrument,\lead,\dur,Pseq([16384/1],1), \sineRate, (0.0000000095262251/2/2/2/2), \freq,659.255,\out,~filterBus2),
 
 	Pbind(\instrument,\lead,\dur,Pseq([16384/1],1), \sineRate, (0.0000000095262251/2/2/2/2), \freq,164.81375,\out,~filterBus),
 
 	Pbind(\instrument,\multi,\dur,Pseq([16384/1],1), \out,~bgBus),
-
+*/
 	Pbind(\instrument,\reverb, \dur,Pseq([1024/1],1),\roomsize, 30, \revtime,Pxrand([Pseq([1/4],4096),  Pseq([1/1],4096)],1), \damping,Pxrand([0.22,0.8,0.4 ],1), \inputbw, 0.8, \drylevel, -20, \earlylevel, -22, \taillevel, -22,\amp,1,\spread,Pwrand([1,10,40],[4,16,1],1),\wet,Pxrand([0.05,0.1],1),\maxRoomsize,40,\in,~bgBus,\spread2,1,\out,~bgCom, \group,~revGrp ),
 
 Pbind(\instrument,\comp, \dur,Pseq([1024/1],1),\thr,0.4 ,\sB, 1.04,\sA, 0.2,\atk ,0.0968, \rel ,0.3872
@@ -201,14 +202,14 @@ Pbind(\instrument,\reverb,\dur,Pseq([1024/1],1),\roomsize, 50, \revtime,Pxrand([
 ,\gain,20,\in, ~comRnd,\ctrl, ~kbus, \out,~limitRnd, \group, ~compGrp),
 
 Pbind(\instrument, \limiter,\in, ~limitRnd, \dur, Pseq([1024/1],1),\gain,60,\group,~limitGrp,\out,~comSnaGrpBus),
-
+*/
 
 	Pbind(\instrument, \filter, \dur,Pseq([4096/1],1), \in,~filterSquelch,\which,1,\busMod, ~bus9, \out, ~reverbSquelch, \group,~filterGrp),
 
-	Pbind(\instrument,\reverb,\dur,Pseq([1024/1],1),\roomsize, 46, \revtime,Pxrand([Pseq([1/4],4096),  Pseq([1/1],4096)],1), \damping,Pxrand([0.22,0.8,0.4 ],1), \inputbw, 0.2, \drylevel, (-30), \earlylevel, (-1), \taillevel, (-42),\maxRoomsize,62,\spread,Pwrand([1,10,40],[4,16,1],1),\wet,Pxrand([0.05,0.1],1),\in,~reverbSquelch , \out,Pwrand([~comSquelch,~delayBus,99],[20,1,5],inf),\group, ~revGrp),
+	Pbind(\instrument,\reverb,\dur,Pseq([1024/1],1),\roomsize, 46, \revtime,Pxrand([Pseq([1/4],4096),  Pseq([1/1],4096)],1), \damping,Pxrand([0.22,0.8,0.4 ],1), \inputbw, 0.2, \drylevel, (-30), \earlylevel, (-1), \taillevel, (-42),\maxRoomsize,62,\spread,Pwrand([1,10,40],[4,16,1],1),\wet,Pxrand([0.05,0.1],1),\in,~reverbSquelch , \out,0/*Pwrand([~comSquelch,~delayBus,99],[20,1,5],inf)*/,\group, ~revGrp),
 
 
-
+/*
 //BROKEN MUST CHANGE AS NOT GOING TO HAPPEN
 
 	Pbind(\instrument, \pingD, \in, ~delayBus ,\bufnum, ~delay, \dur, Pseq([1024/1],1),\out,~comSquelch/* ,\delayTime,3  ,\feedback, 1.5*/,\group, ~delayGrp),
@@ -293,7 +294,7 @@ Pbind(\instrument, \filter, \dur,Pseq([4096/1],1),\which,0, \in,~filterBus,\busM
 	Pbind(\instrument,\comp, \dur,Pseq([1024/1],1),\thr,0.4 ,\sB, 1.04,\sA, 0.2,\atk ,0.0968, \rel ,0.3872
 		,\in, ~comSnaGrpBus ,\ctrl, ~snBus, \group, ~compGrp2,\out,0),
 
-	~toUse,
+	/*~toUse,*/
 
 
 

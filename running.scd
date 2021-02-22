@@ -344,7 +344,10 @@ SynthDef(\multi, {|out=0| Out.ar(out,
 );}).add;
 
 
+SynthDef(\men,{|out = 0, dur|Out.ar(out,
 
+		LFSaw.ar(164.82 + Saw.kr(1.2875).range(-329.64,0)
+		+ EnvGen.kr(Env([41.2,0],[/*4*/dur,0],-3),doneAction: 2) ));}).add;
 
 
 	SynthDef(\lead, {
