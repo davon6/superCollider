@@ -94,9 +94,26 @@ SynthDef(\multi, {Out.ar(0,
 
 );}).play)
 
+Pbind(\instrument, \phaser, \dur,Pseq([4096/1],1),\maxDlT,0.0242, \rate, 0.00502929687 , \in,~phaseBus, \out, ~filterRnd, \group,~phaserGrp),
+x = (SynthDef(\men,{Out.ar(0,BPF.ar( Saw.ar(164.82 * SinOsc.ar(1.2875) + EnvGen.kr(Env([50,0],[4/*must be dur*/,0],-3)) ) ,MouseY.kr(80, 1400),0.4) ); }).play;)
 
-(SynthDef(\men,{Out.ar(0,BPF.ar( Saw.ar(216 * SinOsc.ar(0.02) + EnvGen.kr(Env([50,0],[4/*must be dur*/,0],-3)) ) ,MouseY.kr(80, 2400),0.4) ); }).play;)
+
+SynthDef(\phaser,{|in, out, rate, maxDlT =0.0968| Out.ar(out, In.ar(in,1)+ AllpassN.ar(In.ar(in,1)
+		,maxDlT,SinOsc.kr(Lag.kr(MouseX.kr(1.2875,0.00000005)),0,0.01,0.01),0.1)*0.4);}).add;
+
+(
+x = (SynthDef(\men,{|rate, maxDlT =0.0968|Out.ar(0,
+
+	BPF.ar( Saw.ar(164.82 * SinOsc.ar(1.2875) + EnvGen.kr(Env([50,0],[4/*must be dur*/,0],-3)) ) ,MouseY.kr(80, 1400),0.4)
+
+	+  AllpassN.ar(
+
+		BPF.ar( Saw.ar(164.82 * SinOsc.ar(1.2875) + EnvGen.kr(Env([50,0],[4/*must be dur*/,0],-3)) ) ,MouseY.kr(80, 1400),0.4)
+		,maxDlT,SinOsc.kr(Lag.kr(MouseX.kr(1.2875,0.00000005)),0,0.01,0.01),0.1)*0.4
+
+);}).play;)
+)
 
 
-
+x.free
 mod.wrap(0, 4pi)
