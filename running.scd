@@ -10,7 +10,7 @@ Bus.free;
 
 )
 
-
+~remyAudio.play
 s.options.memSize = 2097152;
 
 
@@ -78,7 +78,7 @@ s.waitForBoot({
 	f = Buffer.alloc(s, s.sampleRate *1.5488,1);
 	~delay = Buffer.alloc(s, 48000 * 3, 2);
 
-	~remyAudio = Buffer.read(s, "/Users/MisterGadou/Collider/remy.wav");
+	~remyAudio = Buffer.read(s, "/home/davon/desktop/remy.wav");
 
 
 
