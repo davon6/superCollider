@@ -37,6 +37,7 @@ s.plotTree
 ~limitGrp = Group.after(~compGrp);
 
 ~compGrp2 = Group.after(~limitGrp);
+~gateGrp2 =  Group.after(~compGrp2);
 
 o = {
 	Out.kr(~bus1,  Lag.kr(LFNoise0.kr(1.2875).range(0.15,0.0),0.05)
@@ -47,7 +48,8 @@ o = {
 
 	Out.kr(~bus4, SinOsc.kr(Select.kr(LFNoise2.ar(1.2875).range(0,2).round(1),
 		[  1.2875,  1.2875/*, 5.15*/,0.321875	]
-	)    *  SinOsc.kr(0.64375).range(0.01005859375,1.2875)).range(10.3,2637.02),);
+	)    *  SinOsc.kr(0.64375).range(0.321875
+/*0.01005859375*/,1.2875)).range(10.3,2637.02),);
 
 	/*Out.kr(~bus5, SinOsc.kr(Select.kr(LFNoise2.ar(1.2875).range(0,2).round(1),
 		[    1.2875, 0.08046875,0.321875	]
@@ -141,9 +143,9 @@ Ppar([
 	/*Pbind(\instrument,\multi,\dur,Pseq([16384/1],1), \out,~bgBus),*/
 
 	Pbind(\instrument,\reverb, \dur,Pseq([1024/1],1),\roomsize, 30, \revtime,Pxrand([Pseq([1/4],4096),  Pseq([1/1],4096)],1), \damping,Pxrand([0.22,0.8,0.4 ],1), \inputbw, 0.8, \drylevel, -20, \earlylevel, -22, \taillevel, -22,\amp,1,\spread,Pwrand([1,10,40],[4,16,1],1),\wet,Pxrand([0.05,0.1],1),\maxRoomsize,40,\in,~bgBus,\spread2,1,\out,~bgCom, \group,~revGrp ),
-
+	//
 Pbind(\instrument,\comp, \dur,Pseq([1024/1],1),\thr,0.4 ,\sB, 1.04,\sA, 0.2,\atk ,0.0968, \rel ,0.3872
-		,\in, ~bgCom ,\ctrl, ~kbus, \group, ~compGrp2,\out,0),
+		,\in, ~bgCom ,\ctrl, ~kbus, \group, ~compGrp,\out,0),
 
 
 
@@ -215,10 +217,6 @@ Pbind(\instrument, \limiter,\in, ~limitRnd, \dur, Pseq([1024/1],1),\gain,60,\gro
 
 
 
-//BROKEN MUST CHANGE AS NOT GOING TO HAPPEN
-
-
-
 
 
 
@@ -274,11 +272,11 @@ Pbind(\instrument, \filter, \dur,Pseq([4096/1],1),\which,0, \in,~filterBus,\busM
 
 
 
-		Pbind(\instrument, \gate, \dur, ~short,
+	Pbind(\instrument, \gate, \dur, ~short,
 		\group, ~gateGrp,
 	\vlSub,0.2,\subsT,inf ,\bus1,~bus8,\in, ~gateBus,\out, ~reverbBus),
 
-		Pbind(\instrument, \gate, \dur, /*Pseq([4/1],inf)*/ Prand([~short,~long],1) ,
+			Pbind(\instrument, \gate, \dur, /*Pseq([4/1],inf)*/ Prand([~short,~long],1) ,
 		\type, Pwrand([ Pseq([\note],64) , Pseq([\note,\note,\note,\rest,\rest,\note,\rest,\note],64)],[16,1],inf), \group, ~gateGrp,
 		\vlSub,0.2,\subsT,inf ,\bus1,~bus8,\in, ~gateBus2,\out,Prand([~micBus2,~reverbBus2],inf) )
 
@@ -305,16 +303,20 @@ Pbind(\instrument, \filter, \dur,Pseq([4096/1],1),\which,0, \in,~filterBus,\busM
 	Pbind(\instrument, \limiter,\in, ~limitFuzz, \dur, Pseq([1024/1],1),\gain,82,\group,~limitGrp,\out,~comSnaGrpBus),
 
 
-	/*Pbind(\instrument,\comp, \dur,Pseq([1024/1],1),\thr,0.4 ,\sB, 1.04,\sA, 0.2,\atk ,0.0968, \rel ,0.3872
-		,\in, ~comSnaGrpBus ,\ctrl, ~snBus, \group, ~compGrp2,\out,0),*/
+	Pbind(\instrument,\comp, \dur,Pseq([1024/1],1),\thr,0.4 ,\sB, 1.04,\sA, 0.2,\atk ,0.0968, \rel ,0.3872
+		,\in, ~comSnaGrpBus ,\ctrl, ~snBus, \group, ~compGrp2,\out,~gateShap),
 
-	~toUse,
-
-
+	/*~toUse,*/
 
 
+	Pbind(\instrument,\gateS, \vlDec, 1,\vlSub, 1, \dur,Pseq([1/1],inf), \in, ~gateShap , \group, ~gateGrp2,
+
+		\out, Pseq([0,99],inf)
+
+	)
 
 
+// vlAtk=0, vlDec=1,vlSub=1, vlRel=0, atkT=0, decT=0, subsT=0, relT=0, atckC=0, decC=0, relC=0,
 
 
 

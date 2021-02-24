@@ -12,7 +12,7 @@ Bus.free;
 
 ~remyAudio.play
 s.options.memSize = 2097152;
-
+Pseq([~remyAudio],inf).play
 
 Server.default.options.sampleRate =  48000
 Server.default.options.outDevice_("Audient iD14");
@@ -152,6 +152,8 @@ s.waitForBoot({
 	~limitRnd = Bus.audio(s,2);
 	~limitSquelch = Bus.audio(s,2);
 	~limitMelo = Bus.audio(s,2);
+
+	~gateShap = Bus.audio(s, 2);
 
 
 	~kbus = Bus.audio(s,1);
@@ -577,8 +579,6 @@ SynthDef(\men,{|out = 0, dur|Out.ar(out,
 	//the compressor received for control a signal going on channel that never goes to zero (renamed ghost)
 	SynthDef(\comp, {|in, ctrl, out= 0, dec  , thr  =0.01 ,sB = 1, sA = (1/4), atk = 0.001, rel = 0.04 , gain=1|
 
-		// I just started using gain at the end to boost signal following jamshark70 example
-
 		Out.ar(out, Compander.ar(In.ar(in,2) , In.ar(ctrl,1)  , thresh: thr, slopeBelow: sB, slopeAbove: sA, clampTime: atk, relaxTime: rel)* gain );
 
 	}).add;
@@ -592,6 +592,22 @@ SynthDef(\men,{|out = 0, dur|Out.ar(out,
 	}).add;
 
 	"limiter init".postln;
+
+
+	SynthDef(\gateS,{|in, out=0, vlAtk=0, vlDec=1,vlSub=0, vlRel=0, atkT=0, decT=0, subsT=0, relT=0, atckC=0, decC=0, relC=0, bus1, bus2, dur,relSu=0|
+	var env;
+
+		env =   In.ar(in, 2) *    EnvGen.kr(Env(
+			[vlAtk,vlDec                  ,vlSub ,vlRel,0],
+			[atkT ,dur, subsT,relT],//turn to %
+			[atckC,decC ,0     ,relC]),
+
+
+
+		doneAction:2);
+
+		Out.ar(out, env);
+}).add;
 
 	s.sync;
 
@@ -618,6 +634,6 @@ SynthDef(\men,{|out = 0, dur|Out.ar(out,
 	~snare = Pbind(\instrument, \snare,\carHz, 41.2 ,\type, Pseq([\rest ,\rest,\note,\rest], 8),\atk, 0.00502929687,\rel, 0.0968,\rel2, 0.3872,\dur, Pseq([1/2], inf),\amp,(-5.5),\out,0);
 
 
-
-
+//130.882809922
+//8100
 });)
