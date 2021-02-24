@@ -130,17 +130,22 @@ s.waitForBoot({
 	~delayBus = Bus.audio(s,2);
 
 	~reverbBus = Bus.audio(s,1);
-	~reverbBus2 = Bus.audio(s,1);
+	/*~reverbBus2 = Bus.audio(s,1);
 	~reverbRnd = Bus.audio(s,1);
 	~reverbSquelch = Bus.audio(s,1);
-	~reverbMelo = Bus.audio(s,1);
+	~reverbMelo = Bus.audio(s,1);*/
+
+	~stereoBus1 = Bus.audio(s,1);
+	~stereoBus2 = Bus.audio(s,1);
+	~stereoBus3 = Bus.audio(s,1);
+	~stereoBus4 = Bus.audio(s,1);
 
 
-	~comRnd = Bus.audio(s,2);
-	~comMelo = Bus.audio(s,2);
-	~comSquelch = Bus.audio(s,2);
-	~comFuzz = Bus.audio(s,2);
-	~comFuzz2 = Bus.audio(s,2);
+	~comRnd = Bus.audio(s,1);
+	~comMelo = Bus.audio(s,1);
+	~comSquelch = Bus.audio(s,1);
+	~comFuzz = Bus.audio(s,1);
+	~comFuzz2 = Bus.audio(s,1);
 	~comBusHat = Bus.audio(s,2);
 	~comBusCymb = Bus.audio(s,2);
 
@@ -163,8 +168,6 @@ s.waitForBoot({
 
 	~bassShapB = Bus.audio(s,1);
 
-	~comBusHat = Bus.audio(s,2);
-	~comBusCymb = Bus.audio(s,2);
 
 
 
@@ -559,7 +562,7 @@ SynthDef(\men,{|out = 0, dur|Out.ar(out,
             earlylevel.dbamp,
             taillevel.dbamp,
 				maxRoomsize, amp,)
-		+ input
+/*		+ input*/
 
 		),81.41),spread2,level,center))
 
@@ -580,8 +583,13 @@ SynthDef(\men,{|out = 0, dur|Out.ar(out,
 	//the compressor received for control a signal going on channel that never goes to zero (renamed ghost)
 	SynthDef(\comp, {|in, ctrl, out= 0, dec  , thr  =0.01 ,sB = 1, sA = (1/4), atk = 0.001, rel = 0.04 , gain=1|
 
-		Out.ar(out, Compander.ar(In.ar(in,2) , In.ar(ctrl,1)  , thresh: thr, slopeBelow: sB, slopeAbove: sA, clampTime: atk, relaxTime: rel)* gain );
+		Out.ar(out, Compander.ar(In.ar(in,1) , In.ar(ctrl,1)  , thresh: thr, slopeBelow: sB, slopeAbove: sA, clampTime: atk, relaxTime: rel)* gain );
 
+	}).add;
+
+	SynthDef(\stereo,{|out=0, in, spread=0, level=1, center=0.0|
+
+		Out.ar(out,Splay.ar(In.ar(in, 1),spread,level,center));
 	}).add;
 
 
@@ -619,7 +627,7 @@ SynthDef(\men,{|out = 0, dur|Out.ar(out,
 
 	s.sync;
 
-	~kick =	Pbind(\instrument, \kick,\dur, Pseq([1/1],1),\amp,( -4.5),\out,0).play;
+	~kick =	Pbind(\instrument, \kick,\dur, Pseq([1/1],1),\amp,( -4.5),\out,0);
 
 	~bassShap = Pbind(\instrument, \shap, \dur,Pseq([1/1],inf),\dA1,2,\out,~bassShapB);
 
