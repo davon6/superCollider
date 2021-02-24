@@ -78,7 +78,7 @@ s.waitForBoot({
 	f = Buffer.alloc(s, s.sampleRate *1.5488,1);
 	~delay = Buffer.alloc(s, 48000 * 3, 2);
 
-	~remyAudio = Buffer.read(s, "/home/davon/desktop/remy.wav");
+	~remyAudio = Buffer.read(s, "/Users/davidmignot/superCollider-master/remy.wav");
 
 
 
@@ -153,6 +153,8 @@ s.waitForBoot({
 	~limitSquelch = Bus.audio(s,2);
 	~limitMelo = Bus.audio(s,2);
 
+
+	~limit = Bus.audio(s,2);
 	~gateShap = Bus.audio(s, 2);
 
 
@@ -434,7 +436,7 @@ SynthDef(\men,{|out = 0, dur|Out.ar(out,
 
 		sig = In.ar(in,1);
 
-		lp = BLowPass4.ar(sig , In.kr(busMod, 1) ,In.kr(rqLPF));
+		lp = BLowPass4.ar(sig ,  In.kr(busMod, 1) ,In.kr(rqLPF));
 
 		bp = BPF.ar(sig,In.kr(busMod, 1) *factor3  ,0.26);
 
@@ -592,6 +594,13 @@ SynthDef(\men,{|out = 0, dur|Out.ar(out,
 
 	"limiter init".postln;
 
+	/*SynthDef(\limiter2, {|in, out = 0,gain=1,vol =1, du =0.01,rel=0.8, atk =0.01 ,thr= 0.001,sB =1,sA= 0.05|
+
+		Out.ar(out , CompanderD.ar(In.ar(in,2),thr, sB ,sA, atk, rel)* gain;)
+	}).add;
+
+	"limiter init".postln;*/
+
 
 	SynthDef(\gateS,{|in, out=0, vlAtk=0, vlDec=1,vlSub=0, vlRel=0, atkT=0, decT=0, subsT=0, relT=0, atckC=0, decC=0, relC=0, bus1, bus2, dur,relSu=0|
 	var env;
@@ -610,7 +619,7 @@ SynthDef(\men,{|out = 0, dur|Out.ar(out,
 
 	s.sync;
 
-	~kick =	Pbind(\instrument, \kick,\dur, Pseq([1/1],1),\amp,( -4.5),\out,0);
+	~kick =	Pbind(\instrument, \kick,\dur, Pseq([1/1],1),\amp,( -4.5),\out,0).play;
 
 	~bassShap = Pbind(\instrument, \shap, \dur,Pseq([1/1],inf),\dA1,2,\out,~bassShapB);
 

@@ -1,5 +1,5 @@
 (
-~bassRest = Pbindf(~bass,  \type,\rest);
+~bassRest = Pbindf(~bass,  \type,Pseq([\rest],inf));
 
 ~kbassRest =Ppar([~kick, ~bassRest], 1);
 
@@ -42,7 +42,7 @@
 
 Ppar([Pseq([~bass],inf),Pbindf(~snare,\da1,0)],1);//JEEEZ
 
-~toUse = Prand([
+~toUse = /* Prand(*/[
 
 
 	~perc[5],
@@ -60,9 +60,9 @@ Ppar([~bar[6],~snare],1),
 
 		Pseq([~perc[4] ,Pseq([Pbindf(~kick, \dur,Pseq([1/3],1))],3)],1) ,
 
-	Pseq([~perc[4],Pseq([Pseq([Pbindf(~kick, \dur,Pseq([1/3],1))],1) ,Pseq([Pbindf(~kick, \dur,Pseq([1/12],1))],8)],1),~kick],1),
+	Pseq([~perc[4],Pseq([Pseq([Pbindf(~kick, \dur,Pseq([1/3],1))],1) ,Pseq([Pbindf(~kick, \dur,Pseq([1/12],1))],8)],1)],1),
 
-	Pseq([~perc[4],Pseq([~bassRest],2)],1)  ,
+	Pseq([Pseq([~bassRest],1),~perc[3],Pseq([~bassRest],1)],1)  ,
 
 	Pseq([~perc[3],Pseq([~bassRest],2)],1) ,
 
@@ -72,9 +72,9 @@ Ppar([~bar[6],~snare],1),
 
 	Pseq([~bar[5],~kbassRest],1),
 
-	Pseq([~bar[1],Pseq([~bassRest],8)],1),
+	Pseq([~bar[2],Pseq([~bassRest],8)],1),
 
-	Pseq([~perc[4],~bassRest],1),
+	Pseq([~perc[4],~bassRest],1),//
 
 	Pseq([~perc[4],~kbassRest],1),
 
@@ -116,6 +116,6 @@ Ppar([~bar[6],~snare],1),
 	Pbind(\instrument,\gran,\dur,Pseq([1/4],8),\amp, 1,\buf, e,\out,0,\atk, 0,\rel, Pseq([1/4],inf),\gate, 1,\ptrBus, ~ptrBus,\pitchRte,(-1),\ptrRandSamples, 0,\minPtrDelay, 1000,\group,~granGrp,\duration,0.3,\impulse,Pseq([1/16],inf))
 ],1)                       ],1)   ],1)
 */
-],inf);
+/*],inf)*/];
 )
 

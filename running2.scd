@@ -46,10 +46,15 @@ o = {
 	Out.kr(~bus2, SinOsc.kr(LFPulse.kr(Select.kr(0.321875,[1.2875, 0.321875,0.08046875 ])).range(0.321875,0.08046875) ).range(659.255, 2637.02));
 
 
-	Out.kr(~bus4, SinOsc.kr(Select.kr(LFNoise2.ar(1.2875).range(0,2).round(1),
-		[  1.2875,  1.2875/*, 5.15*/,0.321875	]
-	)    *  SinOsc.kr(0.64375).range(0.321875
-/*0.01005859375*/,1.2875)).range(10.3,2637.02),);
+	Out.kr(~bus4, SinOsc.kr(Select.kr(LFNoise2.ar(10.3).range(0,1).round(1),
+		[  5.15 ,0.321875	]
+	)    /* * SinOsc.kr(0.64375).range(
+0.01005859375,1.2875)*/
+
+
+
+
+	).range(10.3,2637.02),);
 
 	/*Out.kr(~bus5, SinOsc.kr(Select.kr(LFNoise2.ar(1.2875).range(0,2).round(1),
 		[    1.2875, 0.08046875,0.321875	]
@@ -61,7 +66,7 @@ o = {
 		[    1.2875, 0.08046875,0.321875	]
 	)    *  SinOsc.kr(0.1609375).range((-5.15),2.575)).range(5274.04,82.41),);
 
-	Out.kr(~bus6, SinOsc.ar(1.2875).range(0.8,0.4));
+	Out.kr(~bus6, SinOsc.ar(1.2875).range(0.8,0.2));
 	Out.kr(~bus7, SinOsc.ar(0.321875).range(1,0.4));
 
 	Out.kr(~bus8,  Lag.kr(LFNoise0.kr(1.2875).range(0.10,0.0),0.05)
@@ -138,12 +143,12 @@ Ppar([
 
 	Pbind(\instrument,\lead,\dur,Pseq([16384/1],1), \sineRate, (0.0000000095262251/2/2/2/2), \freq,659.255,\out,~filterBus2),
 
-	Pbind(\instrument,\lead,\dur,Pseq([16384/1],1), \sineRate, (0.0000000095262251/2/2/2/2), \freq,164.81375,\out,~filterBus),
+	Pbind(\instrument,\lead,\dur,Pseq([16384/1],1), \sineRate, (0.0000000095262251/2/2/2/2), \freq,659.255,\out,~filterBus),
 
 	/*Pbind(\instrument,\multi,\dur,Pseq([16384/1],1), \out,~bgBus),*/
 
 	Pbind(\instrument,\reverb, \dur,Pseq([1024/1],1),\roomsize, 30, \revtime,Pxrand([Pseq([1/4],4096),  Pseq([1/1],4096)],1), \damping,Pxrand([0.22,0.8,0.4 ],1), \inputbw, 0.8, \drylevel, -20, \earlylevel, -22, \taillevel, -22,\amp,1,\spread,Pwrand([1,10,40],[4,16,1],1),\wet,Pxrand([0.05,0.1],1),\maxRoomsize,40,\in,~bgBus,\spread2,1,\out,~bgCom, \group,~revGrp ),
-	//
+
 Pbind(\instrument,\comp, \dur,Pseq([1024/1],1),\thr,0.4 ,\sB, 1.04,\sA, 0.2,\atk ,0.0968, \rel ,0.3872
 		,\in, ~bgCom ,\ctrl, ~kbus, \group, ~compGrp,\out,0),
 
@@ -306,23 +311,53 @@ Pbind(\instrument, \filter, \dur,Pseq([4096/1],1),\which,0, \in,~filterBus,\busM
 	Pbind(\instrument,\comp, \dur,Pseq([1024/1],1),\thr,0.4 ,\sB, 1.04,\sA, 0.2,\atk ,0.0968, \rel ,0.3872
 		,\in, ~comSnaGrpBus ,\ctrl, ~snBus, \group, ~compGrp2,\out,~gateShap),
 
-	~toUse,
+	Pseq([~toUse[16]],inf),
 
 	/*Pseq([~kick],inf),*/
 
 
-	Pbind(\instrument,\gateS, \vlDec, 1,\vlSub, 0, \decC,50,\dur,Pseq([1/4],inf), \in, ~gateShap , \group, ~gateGrp2,
-\type,  Pseq([ \rest,\rest,\rest,\rest, \note,\note,\note,\note, \rest,\rest, \rest,\rest,\rest,\rest, \rest,\rest,
-			 \rest,\rest,\rest,\rest, \note,\note,\rest,\rest,\rest,\rest, \rest,\rest,\rest,\rest, \rest,\rest,
 
-			/*\rest, \note, \note, \rest*/],inf),
-		\out,0
+	Pbind(\instrument,\gateS, \vlDec, 1,\vlSub, 1,/* \decC,50,*/\dur,Pseq([1/1],inf), \in, ~gateShap , \group, ~gateGrp2,
+		\type,  Pseq([
+			\rest, \note, \note, \rest, \note, \rest, \rest, \rest,
+			\rest, \note, \note, \rest, \note, \rest, \rest, \rest,
+			\rest, \note, \note, \rest, \rest, \rest, \rest, \rest,
+			\rest, \note, \note, \rest, \note, \rest, \rest, \rest   ],inf),
+		\out,0)
 
-	)
+
+/*	Pbind(\instrument,\gateS, \vlDec, 1,\vlSub, 1,/* \decC,50,*/\dur,Pseq([1/16],inf), \in, ~gateShap , \group, ~gateGrp2,
+
+
+\type,  Pseq([
+
+
+
+			\rest,\rest,\rest,\rest,   \note,\note,\note,\note,  \note,\note,\note,\note,   \rest,\rest, \rest,\rest,
+			   \note,\note,\note,\note,\rest,\rest, \rest,\rest, \rest,\rest,\rest,\rest,   \rest,\rest, \rest,\rest,
+
+
+			\rest,\rest,\rest,\rest,   \note,\note,\note,\note,  \note,\note,\note,\note,   \rest,\rest, \rest,\rest,
+			 \note,\note,\note,\note, \rest,\rest, \rest,\rest, \rest,\rest,\rest,\rest,   \rest,\rest, \rest,\rest,
+
+
+			\rest,\rest,\rest,\rest,   \note,\note,\note,\note,  \rest,\rest, \rest,\rest,   \rest,\rest, \rest,\rest,
+			\rest,\rest, \rest,\rest, \rest,\rest, \rest,\rest, \rest,\rest,\rest,\rest,   \rest,\rest, \rest,\rest,
+
+
+			\rest,\rest,\rest,\rest,   \note,\note,\note,\note,  \note,\note,\note,\note,   \rest,\rest, \rest,\rest,
+			  \note,\note,\note,\note,  \rest,\rest, \rest,\rest, \rest,\rest,\rest,\rest,   \rest,\rest, \rest,\rest
+
+
+			],inf),
+		\out,0)*/
 
 
 // vlAtk=0, vlDec=1,vlSub=1, vlRel=0, atkT=0, decT=0, subsT=0, relT=0, atckC=0, decC=0, relC=0,
 
+
+	/*Pbind(\instrument, \limiter2,\in, ~limit, \dur, Pseq([4096/1],1),\gain,400,\group,~limitGrp,\out,0)
+*/
 
 
 ],1).play(t, quant:1)
@@ -332,9 +367,9 @@ Pbind(\instrument, \filter, \dur,Pseq([4096/1],1),\which,0, \in,~filterBus,\busM
 
 
 )
-
+~kick.play|
 Ppar([~hat, ~snare,~cymbal,Ppar([~kick,~bass],1)],1).play(t)
-
+{SinOsc.ar(432)}.play
 s.plotTree
 
 // Pseq([~toUse],inf.play(t,quant:1)
