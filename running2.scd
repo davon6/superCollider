@@ -27,6 +27,7 @@ s.plotTree
 ~gateGrp =  Group.after(~distoGrp);
 
 ~ptrGrp = Group.after(~gateGrp);
+
 ~recGrp = Group.after(~ptrGrp);
 ~granGrp = Group.after(~recGrp);
 
@@ -307,7 +308,20 @@ Pbind(\instrument, \filter, \dur,Pseq([4096/1],1),\which,0, \in,~filterBus,\busM
 
 
 
-	Pbind(\instrument,\reverb, \dur,Pseq([1024/1],1),\roomsize, 41, \revtime,Pxrand([Pseq([1/4],4096),  Pseq([1/1],4096)],1), \damping,Pxrand([0.22,0.8,0.4 ],1), \inputbw, 1, \drylevel, -20, \earlylevel, -12, \taillevel, -5,\amp,1,\spread,Pwrand([1,10,40],[4,16,1],1),\wet,Pxrand([0.05,0.1],1),\maxRoomsize,70,\in,~comFuzz,\out,0, \spread2,1,\group,~revGrp ),
+	/*Pbind(\instrument,\reverb, \dur,Pseq([1024/1],1),\roomsize, 51, \revtime,Pxrand([Pseq([1/4],4096),  Pseq([1/1],4096)],1), \damping,Pxrand([0.22,0.8,0.4 ],1), \inputbw, 1, \drylevel, -20, \earlylevel, -12, \taillevel, -5,\amp,1,\spread,Pwrand([1,10],[4,16],1),\wet,Pxrand([0.05,0.1],1),\maxRoomsize,70,\in,~comFuzz,\out,0, \spread2,1,\group,~revGrp ),*/
+
+	/*Pbind(\instrument,\reverb, \dur,inf,\roomsize, 51, \revtime,Pxrand([Pseq([1/1],inf),  Pseq([1/1],4096)],1), \damping,Pxrand([0.22,0.8,0.4],1), \inputbw, 1, \drylevel, -20, \earlylevel, -12, \taillevel, -5,\amp,1,\spread,Prand([1,0],1),\wet,Pxrand([/*0.05,*/0.1],1),\maxRoomsize,Prand([60, 70, 80, 90, 100],1).postln,\in,~comFuzz,\out,0, \spread2,1,\group,~revGrp ),
+	*/
+	/*Pbind(\instrument,\reverb, \dur,inf,
+	\roomsize, 80, \revtime, 1.85, \damping, 0.41, \inputbw, 0.19, \drylevel, -3, \earlylevel, -9, \taillevel, -11
+	,\in,~comFuzz,\out,0, \group,~revGrp ),*/
+
+
+	Pbindf( Prand([~quickFix, ~rShort, ~rLong]),\dur,inf, \in,~comFuzz  , \out,~limitReverbBus ,\group,~revGrp),
+
+	Pbind( \instrument, \limiter,\in,~limitReverbBus, \dur,inf, \gain,82,\group,~limitGrp,\out ,~stereoReverbBus),
+	Pbind( \instrument, \stereo, \in, ~stereoReverbBus, \spread,1,\group, ~stereoGrp),
+
 	Pbind(\instrument,\comp, \dur,Pseq([1024/1],1),\thr,0.2 ,\sB, 1.086,\sA, 1/2,\atk ,0.0121, \rel ,0.04840, \gain,1/*(50)*/	,\in, ~comFuzz ,\ctrl, ~kbus, \out,~limitFuzz, \group, ~compGrp),
 
 
@@ -318,7 +332,7 @@ Pbind(\instrument, \filter, \dur,Pseq([4096/1],1),\which,0, \in,~filterBus,\busM
 	Pbind(\instrument,\comp, \dur,Pseq([1024/1],1),\thr,0.4 ,\sB, 1.04,\sA, 0.2,\atk ,0.0968, \rel ,0.3872
 		,\in, ~comSnaGrpBus ,\ctrl, ~snBus, \group, ~compGrp2,\out,~stereoBus1),
 
-	/*Pseq([~toUse[16]],inf),*/
+	Pseq([~toUse[16]],inf),
 
 	/*Pseq([~kick],inf),*/
 

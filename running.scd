@@ -91,6 +91,14 @@ s.waitForBoot({
 
 
 
+	~quickFix =Pbind(\instrument,\reverb, \dur,inf,\roomsize, 40, \revtime, 4, \damping, 0.9, \inputbw, 0.75, \drylevel, -0, \earlylevel, -22, \taillevel, -28);
+	~rShort = Pbind(\instrument,\reverb, \dur,inf,\roomsize, 41, \revtime, Pseq([1/4],inf), \damping, 0.81, \inputbw, 0.7, \drylevel, -0, \earlylevel, -15, \taillevel, -12);
+	~rLong =	Pbind(\instrument,\reverb, \dur,inf,\roomsize, 41, \revtime, Pseq([1/1],inf), \damping, 0.31, \inputbw, 0.7, \drylevel, -0, \earlylevel, -15, \taillevel, -9);
+	~church =	Pbind(\instrument,\reverb, \dur,inf,\roomsize, 80, \revtime, 4.85, \damping, 0.41, \inputbw, 0.19, \drylevel, -3, \earlylevel, -9, \taillevel, -11 );
+
+
+
+
 	~dispatchBus = Bus.audio(s,1);
 
 	~micBus = Bus.audio(s,1);
@@ -137,10 +145,24 @@ s.waitForBoot({
 	~delayBus = Bus.audio(s,2);
 
 	~reverbBus = Bus.audio(s,1);
-	/*~reverbBus2 = Bus.audio(s,1);
+	~reverbBus2 = Bus.audio(s,1);
 	~reverbRnd = Bus.audio(s,1);
 	~reverbSquelch = Bus.audio(s,1);
-	~reverbMelo = Bus.audio(s,1);*/
+	~reverbMelo = Bus.audio(s,1);
+
+	~limitReverbBus = Bus.audio(s,1);
+	~limitReverbBus2 = Bus.audio(s,1);
+	~limitReverbRnd = Bus.audio(s,1);
+	~limitReverbSquelch = Bus.audio(s,1);
+	~limitReverbMelo = Bus.audio(s,1);
+
+	~stereoReverbBus = Bus.audio(s,1);
+	~stereoReverbBus2 = Bus.audio(s,1);
+	~stereoReverbRnd = Bus.audio(s,1);
+	~stereoReverbSquelch = Bus.audio(s,1);
+	~stereoReverbMelo = Bus.audio(s,1);
+
+
 
 	~stereoBus1 = Bus.audio(s,1);
 	~stereoBus2 = Bus.audio(s,1);
@@ -560,8 +582,10 @@ SynthDef(\men,{|out = 0, dur|Out.ar(out,
 
 
 		//apply reverb , splay stereo and another 100hz trim
-    Out.ar(    out,  Splay.ar(BHiPass4.ar(
-            (GVerb.ar(
+    Out.ar(    out,
+			//Splay.ar(
+				//BHiPass4.ar(
+            GVerb.ar(
             a,
             roomsize,
             revtime,
@@ -571,10 +595,12 @@ SynthDef(\men,{|out = 0, dur|Out.ar(out,
             drylevel.dbamp,
             earlylevel.dbamp,
             taillevel.dbamp,
-				maxRoomsize, amp,)
+				roomsize+1,0.6)
 /*		+ input*/
+			//,81.41)
 
-		),81.41),spread2,level,center))
+			//,spread2,level,center)
+		)
 
 	}).add;
 
