@@ -74,8 +74,8 @@ s.waitForBoot({
 
 
 	d = Buffer.alloc(s, s.sampleRate *0.3872,1);
-	e = Buffer.alloc(s, s.sampleRate *0.3872,1);
-	f = Buffer.alloc(s, s.sampleRate *1.5488,1);
+	e = Buffer.alloc(s, s.sampleRate *t.beatDur/*0.3872*/,1);
+	f = Buffer.alloc(s, s.sampleRate *(t.beatDur*4)/*1.5488,1*/);
 	~delay = Buffer.alloc(s, 48000 * 3, 2);
 
 	~remyAudio = Buffer.read(s, "/Users/davidmignot/superCollider-master/remy.wav");
@@ -127,6 +127,7 @@ s.waitForBoot({
 	~bgBus = Bus.audio(s,1);
 	~bgCom = Bus.audio(s,1);
 	~bgLimit = Bus.audio(s,1);
+	~bgStereo = Bus.audio(s,1);
 
 
 	~filterBus = Bus.audio(s,1);
@@ -486,12 +487,12 @@ SynthDef(\men,{|out = 0, dur|Out.ar(out,
 	SynthDef(\disto, {|out=0,in|Out.ar(out, HPF.ar( In.ar(in,1),81.41).round(2**(-16)));}).add;
 
 
-	SynthDef(\gate,{|in, out=0, vlAtk=0, vlDec=1,vlSub=0, vlRel=0, atkT=0, decT=0, subsT=0, relT=0, atckC=0, decC=0, relC=0, bus1, bus2, dur,relSu=0|
+	SynthDef(\gate,{|in, out=0, vlAtk=0, vlDec=1,vlSub=0, vlRel=0, atkT=0, decT=1, subsT=0, relT=0, atckC=0, decC=0, relC=0, bus1, bus2, dur,relSu=0|
 	var env;
 
 		env =   In.ar(in, 1) *    EnvGen.kr(Env(
 			[vlAtk,vlDec                  ,vlSub ,vlRel,0],
-			[atkT ,dur /*decT*/-In.kr(bus1, 1)  -relSu, subsT,relT],//turn to %
+			[dur * atkT ,dur *decT  -In.kr(bus1, 1)  -relSu, dur * subsT,dur* relT],//turn to %
 			[atckC,decC ,0     ,relC]),    //decC- (In.kr(bus2, 1)
 
 
@@ -553,7 +554,7 @@ SynthDef(\men,{|out = 0, dur|Out.ar(out,
 		);
 		sig = sig * env * amp;
 
-		Out.ar(out, sig!2);
+		Out.ar(out, sig);
 	}).add;
 
 
@@ -677,7 +678,7 @@ SynthDef(\men,{|out = 0, dur|Out.ar(out,
 		\rel, t.beatDur/4 * 0.99,
 		\atkcrv, -2,
 		\relcrv, -1,
-		\amp, (8),\out,0
+		\amp, (-6),\out,0
 	);
 
 	~cymbal = Pbind(\instrument, \percussion,\type, Pseq([\rest,\rest,\note,\note ,\rest,\note ,\note, \rest],inf),\dur,Pseq([1/4],64 ),\carHz, 525.12070612224,\modHz,1899.3343179398,\modAmp, 0.12875 ,\amp,(-2.3),\rel,Pseq([1/16],inf),\rel2,Pseq([1/16],inf),\latch,8000,\stereoL, 0.00555, \crv1,  (-2.4), \crv1b,(-3), \mulMod, 1691,\out, ~comBusCymb);
