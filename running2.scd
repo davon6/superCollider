@@ -99,7 +99,7 @@ o = {
 
 /* Pbind(\instrument,\gran,\dur,Pseq([1/1],inf),\amp, 1,\buf, e,\out,0,\atk, 0,\rel, Pseq([1/4],inf),\gate, 1,\ptrBus, ~ptrBus,\pitchRte,(-1),\ptrRandSamples, 0,\minPtrDelay, 1000,\group,~granGrp,\duration,Pseq([1/2],inf),\impulse,Pseq([2/1],inf),\crv,50)*/
 
-	Pbind(\instrument,\gran,\dur,Pseq([1/1],inf),\amp, 1,\buf, e,\out,0,\atk, 0,\rel, Pseq([1/4],inf),\gate, 1,\ptrBus, ~ptrBus,\pitchRte,(-1),\ptrRandSamples, 0,\minPtrDelay, 1000,\group,~granGrp,\duration,Pseq([1/4],inf),\impulse,Pseq([1/2],inf),\crv,50),
+	Pbind(\instrument,\gran,\dur,Pseq([1/1],inf),\amp, 1,\buf, e,\out,~limitRkick,\atk, 0,\rel, Pseq([1/4],inf),\gate, 1,\ptrBus, ~ptrBus,\pitchRte,(-1),\ptrRandSamples, 0,\minPtrDelay, 1000,\group,~granGrp,\duration,Pseq([1/4],inf),\impulse,Pseq([1/2],inf),\crv,50),
 
 
 	Pbind(\instrument,\ptr, \buf, d, \out, ~ptrBus2,\group,~ptrGrp,\dur,Pseq([1024/1],1)),
@@ -143,8 +143,12 @@ Ppar([
 	Pbind(\instrument,\comp,\dur,inf,\thr,0.6 ,\sB, 1,\sA, 4,\atk ,0.001, \rel ,0.04840,\gain,1,\in, ~comBusCymb ,\ctrl, ~kbus, \out,~stereoCymb,\group, ~compGrp),
 
 	/*Pbind(\instrument, \stereo , \in, ~stereoCymb, \spread, 1 ,\center,0.5 , \group, ~stereoGrp),*/
-	Pbind(\instrument, \stereo , \in, ~stereoCymb, \dur, inf, \spread, 1 ,\center,(-1) , \group, ~stereoGrp),
+	Pbind(\instrument, \stereo , \in, ~stereoCymb, \dur, inf, \spread, 1 ,\center,(-0.1) , \group, ~stereoGrp),
 	Pbind(\instrument, \stereo , \in, ~stereoHat, \spread, 1 ,\dur, inf,\center,(-1), \group, ~stereoGrp),
+
+	Pbind(\instrument, \limiter, \in , ~limitRkick,  \out, ~stereoRkick, \gain , 1, \group, ~limitGrp),
+	Pbind(\instrument, \stereo, \in, ~stereoRkick,  \group, ~stereoGrp),
+
 
 
 	/*Pbind(\instrument,\lead,\dur,Pseq([16384/1],1), \gra,~bus10 , \sineRate, (0.0000000095262251/2/2/2/2), \freq,659.255,\out,/*~dispatchBus*/~filterSquelch/*~filterBus2*/),
@@ -339,7 +343,7 @@ Pbind(\instrument, \filter, \dur,Pseq([4096/1],1),\which,0, \in,~filterBus,\busM
 	Pbind(\instrument,\comp, \dur,Pseq([1024/1],1),\thr,0.4 ,\sB, 1.04,\sA, 0.2,\atk ,0.0968, \rel ,0.3872
 		,\in, ~comSnaGrpBus ,\ctrl, ~snBus, \group, ~compGrp2,\out,~stereoBus1),
 
-Pseq([~toUse[16]],inf),
+	Pseq([~toUse[21]],inf),
 
 	/*Ppar([Pseq([~kick],16),~hat, ~snare,~cymbal],inf),*/
 

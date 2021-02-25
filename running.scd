@@ -173,6 +173,7 @@ s.waitForBoot({
 
 	~stereoCymb = Bus.audio(s,1);
 	~stereoHat = Bus.audio(s,1);
+	~stereoRkick = Bus.audio(s,1);
 
 
 	~comRnd = Bus.audio(s,1);
@@ -193,7 +194,7 @@ s.waitForBoot({
 	~limitMelo = Bus.audio(s,1);
 
 
-	~limit = Bus.audio(s,2);
+	~limitRkick = Bus.audio(s,1);
 	~gateShap = Bus.audio(s, 2);
 
 
@@ -282,7 +283,7 @@ s.waitForBoot({
 		sig =
 		BPeakEQ.ar(
 			SinOsc.ar(envF, mul: env)
-			,659.255,3, (-14));
+			,659.255,3, (-12));
 
 		sig = sig * amp.dbamp  !2;
 
