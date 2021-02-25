@@ -224,8 +224,8 @@ s.waitForBoot({
 	SynthDef(\playBuf ,{|out = 0,start, trig, dur|Out.ar(out,PlayBuf.ar(2,~remyAudio,trigger: Dust.kr(4.0),startPos: start,doneAction: 2));}).add;
 
 
-	SynthDef(\shap,{|in, out,out2, vl1=80, vl2=0,vl3=0, dA1 =0,dA2=0,dA3=0,dA4=0 |
-	var halfBeat, shap, shap2;
+	SynthDef(\shap,{|in, out, vl1=80, vl2=0,vl3=0, dA1 =0|
+	var halfBeat, shap;
 
 	halfBeat = t.beatDur * 0.5;
 
