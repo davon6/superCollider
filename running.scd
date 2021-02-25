@@ -142,7 +142,9 @@ s.waitForBoot({
 	~distoBus3 = Bus.audio(s,1);
 	~distoBus4 = Bus.audio(s,1);
 
+	~distoBg = Bus.audio(s,1);
 
+	~eqBg = Bus.audio(s,1);
 
 	~delayBus = Bus.audio(s,2);
 
@@ -492,7 +494,7 @@ SynthDef(\men,{|out = 0, dur|Out.ar(out,
 		,maxDlT,SinOsc.kr(Lag.kr(MouseX.kr(1.2875,0.00000005)),0,0.01,0.01),0.1)*0.4);}).add;
 
 
-	SynthDef(\disto, {|out=0,in|Out.ar(out, HPF.ar( In.ar(in,1),81.41).round(2**(-16)));}).add;
+	SynthDef(\disto, {|out=0,in, hpf= 81.41|Out.ar(out, HPF.ar( In.ar(in,1),hpf).round(2**(-16)));}).add;
 
 
 	SynthDef(\gate,{|in, out=0, vlAtk=0, vlDec=1,vlSub=0, vlRel=0, atkT=0, decT=1, subsT=0, relT=0, atckC=0, decC=0, relC=0, bus1, bus2, dur,relSu=0|
@@ -500,7 +502,7 @@ SynthDef(\men,{|out = 0, dur|Out.ar(out,
 
 		env =   In.ar(in, 1) *    EnvGen.kr(Env(
 			[vlAtk,vlDec                  ,vlSub ,vlRel,0],
-			[dur * atkT ,dur *decT  -In.kr(bus1, 1)  -relSu, dur * subsT,dur* relT],//turn to %
+			[dur * atkT ,dur *decT  -In.kr(bus1, 1)  -relSu, dur * subsT,dur* relT],
 			[atckC,decC ,0     ,relC]),    //decC- (In.kr(bus2, 1)
 
 
@@ -509,6 +511,22 @@ SynthDef(\men,{|out = 0, dur|Out.ar(out,
 
 		Out.ar(out, env);
 }).add;
+
+	SynthDef(\gateS,{|in, out=0, vlAtk=0, vlDec=1,vlSub=0, vlRel=0, atkT=0, decT=1, subsT=0, relT=0, atckC=0, decC=0, relC=0, bus1, bus2, dur,relSu=0|
+	var env;
+
+		env =   In.ar(in, 2) *    EnvGen.kr(Env(
+			[vlAtk,vlDec                  ,vlSub ,vlRel,0],
+			[dur * atkT ,dur *decT  -In.kr(bus1, 1)  -relSu, dur * subsT,dur* relT],
+			[atckC,decC ,0     ,relC]),    //decC- (In.kr(bus2, 1)
+
+
+
+		doneAction:2);
+
+		Out.ar(out, env);
+}).add;
+
 
 
 
@@ -564,6 +582,7 @@ SynthDef(\men,{|out = 0, dur|Out.ar(out,
 
 		Out.ar(out, sig);
 	}).add;
+
 
 
 
@@ -633,6 +652,10 @@ SynthDef(\men,{|out = 0, dur|Out.ar(out,
 	}).add;
 
 
+		SynthDef(\EQ, {|out=0, in, val, quant, gain| Out.ar(out, BPeakEQ.ar(
+		In.ar(in, 1),val,quant, gain))};).add;
+
+
 
 
 	"compression init".postln;
@@ -646,22 +669,6 @@ SynthDef(\men,{|out = 0, dur|Out.ar(out,
 
 
 
-
-
-	SynthDef(\gateS,{|in, out=0, vlAtk=0, vlDec=1,vlSub=0, vlRel=0, atkT=0, decT=0, subsT=0, relT=0, atckC=0, decC=0, relC=0, bus1, bus2, dur,relSu=0|
-	var env;
-
-		env =   In.ar(in, 2) *    EnvGen.kr(Env(
-			[vlAtk,vlDec                  ,vlSub ,vlRel,0],
-			[atkT ,dur, subsT,relT],//turn to %
-			[atckC,decC ,0     ,relC]),
-
-
-
-		doneAction:2);
-
-		Out.ar(out, env);
-}).add;
 
 	SynthDef(\stereo,{|out=0, in, spread=0, level=1, center=0.0|
 
