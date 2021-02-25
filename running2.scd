@@ -14,15 +14,17 @@
 s.plotTree
 (
 
-~dispatchGrp = Group.new;
+/*~dispatchGrp = Group.new;
 
-~shiftGrp =  Group.after(~dispatchGrp);
+~shiftGrp =  Group.after(~dispatchGrp);*/
 
-~filterGrp =  Group.after(~shiftGrp);
+~filterGrp =  Group.new;
 
 ~phaserGrp =  Group.after(~filterGrp);
 
-~gateGrp =  Group.after(~phaserGrp);
+~distoGrp =  Group.after(~phaserGrp);
+
+~gateGrp =  Group.after(~distoGrp);
 
 ~ptrGrp = Group.after(~gateGrp);
 ~recGrp = Group.after(~ptrGrp);
@@ -38,6 +40,8 @@ s.plotTree
 
 ~compGrp2 = Group.after(~limitGrp);
 ~gateGrp2 =  Group.after(~compGrp2);
+
+~stereoGrp = Group.after(~gateGrp2);
 
 o = {
 	Out.kr(~bus1,  Lag.kr(LFNoise0.kr(1.2875).range(0.15,0.0),0.05)
@@ -261,7 +265,9 @@ Pbind(\instrument, \limiter,\in, ~limitSquelch, \dur, Pseq([1024/1],1),\gain,90,
 
 
 
-Pbind(\instrument, \filter, \dur,Pseq([4096/1],1),\which,0, \in,~filterBus,\busMod, ~bus4,\rqLPF,~bus6, \out,~gateBus, \group,~filterGrp ),
+Pbind(\instrument, \filter, \dur,Pseq([4096/1],1),\which,0, \in,~filterBus,\busMod, ~bus4,\rqLPF,~bus6, \out,~distoBus1, \group,~filterGrp ),
+
+	Pbind(\instrument, \disto, \dur, inf, \in, ~distoBus1 , \out,~gateBus ,\group, ~distoGrp),
 
 
 
@@ -297,26 +303,24 @@ Pbind(\instrument, \filter, \dur,Pseq([4096/1],1),\which,0, \in,~filterBus,\busM
 
 
 
-	/* Pbind(\instrument,\gran,\dur,Pseq([1/16],inf),\amp, 1,\buf, d,\out,~reverbBus,\atk, 0,\rel, Pseq([1/16],inf),\gate, 1,\ptrBus, ~ptrBus2,\pitchRte,(-1),\ptrRandSamples, 0,\minPtrDelay, 1000,\group,~granGrp,\duration,Pseq([1/16],inf),\impulse,Pseq([1/16],inf)),*/
 
 
 
 
-/*	Pbind(\instrument,\reverb, \dur,Pseq([1024/1],1),\roomsize, 41, \revtime,Pxrand([Pseq([1/4],4096),  Pseq([1/1],4096)],1), \damping,Pxrand([0.22,0.8,0.4 ],1), \inputbw, 1, \drylevel, -20, \earlylevel, -12, \taillevel, -5,\amp,1,\spread,Pwrand([1,10,40],[4,16,1],1),\wet,Pxrand([0.05,0.1],1),\maxRoomsize,70,\in,~comFuzz2,\out,0, \group,~revGrp ),*/
+	Pbind(\instrument,\reverb, \dur,Pseq([1024/1],1),\roomsize, 41, \revtime,Pxrand([Pseq([1/4],4096),  Pseq([1/1],4096)],1), \damping,Pxrand([0.22,0.8,0.4 ],1), \inputbw, 1, \drylevel, -20, \earlylevel, -12, \taillevel, -5,\amp,1,\spread,Pwrand([1,10,40],[4,16,1],1),\wet,Pxrand([0.05,0.1],1),\maxRoomsize,70,\in,~comFuzz,\out,0, \spread2,1,\group,~revGrp ),
 	Pbind(\instrument,\comp, \dur,Pseq([1024/1],1),\thr,0.2 ,\sB, 1.086,\sA, 1/2,\atk ,0.0121, \rel ,0.04840, \gain,1/*(50)*/	,\in, ~comFuzz ,\ctrl, ~kbus, \out,~limitFuzz, \group, ~compGrp),
 
-	Pbind(\instrument,\stereo, \dur, inf, \in, ~stereoBus1   ,\out, ~limitFuzz),
 
 	Pbind(\instrument, \limiter,\in, ~limitFuzz, \dur, Pseq([1024/1],1),\gain,82,\group,~limitGrp,\out,~comSnaGrpBus),
 
 
+
 	Pbind(\instrument,\comp, \dur,Pseq([1024/1],1),\thr,0.4 ,\sB, 1.04,\sA, 0.2,\atk ,0.0968, \rel ,0.3872
-		,\in, ~comSnaGrpBus ,\ctrl, ~snBus, \group, ~compGrp2,\out,~gateShap),
+		,\in, ~comSnaGrpBus ,\ctrl, ~snBus, \group, ~compGrp2,\out,~stereoBus1),
 
 	/*Pseq([~toUse[16]],inf),*/
 
 	/*Pseq([~kick],inf),*/
-
 
 
 	Pbind(\instrument,\gateS, \vlDec, 1,\vlSub, 1,/* \decC,50,*/\dur,Pseq([1/1],inf), \in, ~gateShap , \group, ~gateGrp2,
@@ -325,7 +329,9 @@ Pbind(\instrument, \filter, \dur,Pseq([4096/1],1),\which,0, \in,~filterBus,\busM
 			\rest, \note, \note, \rest, \note, \rest, \rest, \rest,
 			\rest, \note, \note, \rest, \rest, \rest, \rest, \rest,
 			\rest, \note, \note, \rest, \note, \rest, \rest, \rest   ],inf),
-		\out,0)
+		\out,0),
+
+	Pbind(\instrument,\stereo, \dur, inf, \in, ~stereoBus1   ,\out,0/*~comSnaGrpBus*/, \group, ~stereoGrp),
 
 
 /*	Pbind(\instrument,\gateS, \vlDec, 1,\vlSub, 1,/* \decC,50,*/\dur,Pseq([1/16],inf), \in, ~gateShap , \group, ~gateGrp2,

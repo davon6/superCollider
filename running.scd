@@ -127,6 +127,13 @@ s.waitForBoot({
 	~filterSquelch = Bus.audio(s,1);
 	~filterMelo = Bus.audio(s,1);
 
+	~distoBus1 = Bus.audio(s,1);
+	~distoBus2 = Bus.audio(s,1);
+	~distoBus3 = Bus.audio(s,1);
+	~distoBus4 = Bus.audio(s,1);
+
+
+
 	~delayBus = Bus.audio(s,2);
 
 	~reverbBus = Bus.audio(s,1);
@@ -152,11 +159,11 @@ s.waitForBoot({
 	~comSnaGrpBus = Bus.audio(s,2);
 
 
-	~limitFuzz = Bus.audio(s,2);
-	~limitFuzz2 = Bus.audio(s,2);
-	~limitRnd = Bus.audio(s,2);
-	~limitSquelch = Bus.audio(s,2);
-	~limitMelo = Bus.audio(s,2);
+	~limitFuzz = Bus.audio(s,1);
+	~limitFuzz2 = Bus.audio(s,1);
+	~limitRnd = Bus.audio(s,1);
+	~limitSquelch = Bus.audio(s,1);
+	~limitMelo = Bus.audio(s,1);
 
 
 	~limit = Bus.audio(s,2);
@@ -454,6 +461,9 @@ SynthDef(\men,{|out = 0, dur|Out.ar(out,
 		,maxDlT,SinOsc.kr(Lag.kr(MouseX.kr(1.2875,0.00000005)),0,0.01,0.01),0.1)*0.4);}).add;
 
 
+	SynthDef(\disto, {|out=0,in|Out.ar(out, HPF.ar( In.ar(in,1),81.41).round(2**(-16)));}).add;
+
+
 	SynthDef(\gate,{|in, out=0, vlAtk=0, vlDec=1,vlSub=0, vlRel=0, atkT=0, decT=0, subsT=0, relT=0, atckC=0, decC=0, relC=0, bus1, bus2, dur,relSu=0|
 	var env;
 
@@ -537,7 +547,7 @@ SynthDef(\men,{|out = 0, dur|Out.ar(out,
 	var a ,input;
 
 		//trim freq below 100hz before to 16 bits the sound
-		input = HPF.ar( In.ar(in,1),81.41).round(2**(-16));
+		input =In.ar(in,1);
 
 		a = Resonz.ar(
 
@@ -587,27 +597,19 @@ SynthDef(\men,{|out = 0, dur|Out.ar(out,
 
 	}).add;
 
-	SynthDef(\stereo,{|out=0, in, spread=0, level=1, center=0.0|
-
-		Out.ar(out,Splay.ar(In.ar(in, 1),spread,level,center));
-	}).add;
 
 
 	"compression init".postln;
 
 	SynthDef(\limiter, {|in, out = 0,gain=1,vol =1, du =0.01,rel=0.8, atk =0.01 ,thr= 0.001,sB =1,sA= 0.05|
 
-		Out.ar(out , CompanderD.ar(BHiPass4.ar( In.ar(in,2),100),thr, sB ,sA, atk, rel)* gain;)
+		Out.ar(out , CompanderD.ar(BHiPass4.ar( In.ar(in,1),100),thr, sB ,sA, atk, rel)* gain;)
 	}).add;
 
 	"limiter init".postln;
 
-	/*SynthDef(\limiter2, {|in, out = 0,gain=1,vol =1, du =0.01,rel=0.8, atk =0.01 ,thr= 0.001,sB =1,sA= 0.05|
 
-		Out.ar(out , CompanderD.ar(In.ar(in,2),thr, sB ,sA, atk, rel)* gain;)
-	}).add;
 
-	"limiter init".postln;*/
 
 
 	SynthDef(\gateS,{|in, out=0, vlAtk=0, vlDec=1,vlSub=0, vlRel=0, atkT=0, decT=0, subsT=0, relT=0, atckC=0, decC=0, relC=0, bus1, bus2, dur,relSu=0|
@@ -624,6 +626,15 @@ SynthDef(\men,{|out = 0, dur|Out.ar(out,
 
 		Out.ar(out, env);
 }).add;
+
+	SynthDef(\stereo,{|out=0, in, spread=0, level=1, center=0.0|
+
+		Out.ar(out,
+			Splay.ar(
+				In.ar(in, 1)
+				,spread,level,center)
+		);
+	}).add;
 
 	s.sync;
 
