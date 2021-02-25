@@ -19,6 +19,7 @@ Server.default.options.outDevice_("Audient iD14");
 
 Server.default.options.outDevice_("Built-in Output");
 
+~kick.play
 
 (
 s.waitForBoot({
@@ -170,14 +171,17 @@ s.waitForBoot({
 	~stereoBus3 = Bus.audio(s,1);
 	~stereoBus4 = Bus.audio(s,1);
 
+	~stereoCymb = Bus.audio(s,1);
+	~stereoHat = Bus.audio(s,1);
+
 
 	~comRnd = Bus.audio(s,1);
 	~comMelo = Bus.audio(s,1);
 	~comSquelch = Bus.audio(s,1);
 	~comFuzz = Bus.audio(s,1);
 	~comFuzz2 = Bus.audio(s,1);
-	~comBusHat = Bus.audio(s,2);
-	~comBusCymb = Bus.audio(s,2);
+	~comBusHat = Bus.audio(s,1);
+	~comBusCymb = Bus.audio(s,1);
 
 	~comSnaGrpBus = Bus.audio(s,2);
 
@@ -275,7 +279,10 @@ s.waitForBoot({
 		Env.perc(0.0121, 0.40),doneAction:2);
 
 
-		sig = SinOsc.ar(envF, mul: env);
+		sig =
+		BPeakEQ.ar(
+			SinOsc.ar(envF, mul: env)
+			,659.255,3, (-14));
 
 		sig = sig * amp.dbamp  !2;
 
@@ -327,7 +334,7 @@ s.waitForBoot({
 
 	sig =  HPF.ar(Latch.ar(tanh(car+car2),Impulse.ar(latch)),3000);
 
-	Out.ar(out, sig.dup
+		Out.ar(out, sig
 		/** [amp.dbamp+stereoL,amp.dbamp+stereoR]*/);
 }).add;
 
@@ -626,6 +633,7 @@ SynthDef(\men,{|out = 0, dur|Out.ar(out,
 
 
 
+
 	"compression init".postln;
 
 	SynthDef(\limiter, {|in, out = 0,gain=1,vol =1, du =0.01,rel=0.8, atk =0.01 ,thr= 0.001,sB =1,sA= 0.05|
@@ -681,7 +689,7 @@ SynthDef(\men,{|out = 0, dur|Out.ar(out,
 		\amp, (-6),\out,0
 	);
 
-	~cymbal = Pbind(\instrument, \percussion,\type, Pseq([\rest,\rest,\note,\note ,\rest,\note ,\note, \rest],inf),\dur,Pseq([1/4],64 ),\carHz, 525.12070612224,\modHz,1899.3343179398,\modAmp, 0.12875 ,\amp,(-2.3),\rel,Pseq([1/16],inf),\rel2,Pseq([1/16],inf),\latch,8000,\stereoL, 0.00555, \crv1,  (-2.4), \crv1b,(-3), \mulMod, 1691,\out, ~comBusCymb);
+	~cymbal = Pbind(\instrument, \percussion,\type, Pseq([\rest,\rest,\note,\note ,\rest,\note ,\note, \rest],inf),\dur,Pseq([1/4],64 ),\carHz, 525.12070612224,\modHz,1899.3343179398,\modAmp, 0.12875 ,\amp,(-6.3),\rel,Pseq([1/16],inf),\rel2,Pseq([1/16],inf),\latch,8000,\stereoL, 0.00555, \crv1,  (-2.4), \crv1b,(-3), \mulMod, 1691,\out, ~comBusCymb);
 
 	~hat = Pbind(\instrument,\percussion,\dur,Pseq([1/4], 64),\atk, 0,\rel,0.04840,\rel2,0.02420,\amp,Pseq([( -7), ( -8),( -7),( -10),( -7),( -7),( -9),( -7)],inf), \crv2, (-3), \modHz, exprand(20,10000).postln, \mulMod, rrand(0, 10000).postln, \carHz, exprand(20,10000), \modAmp, 0.12875, \latch, 18500, \stereoR, 0.007,\out,~comBusHat);
 
