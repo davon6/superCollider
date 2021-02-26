@@ -92,6 +92,7 @@ s.waitForBoot({
 
 
 
+
 	~quickFix =Pbind(\instrument,\reverb, \dur,inf,\roomsize, 40, \revtime, 4, \damping, 0.9, \inputbw, 0.75, \drylevel, -0, \earlylevel, -22, \taillevel, -28);
 	~rShort = Pbind(\instrument,\reverb, \dur,inf,\roomsize, 41, \revtime, Pseq([1/4],inf), \damping, 0.81, \inputbw, 0.7, \drylevel, -0, \earlylevel, -15, \taillevel, -12);
 	~rLong =	Pbind(\instrument,\reverb, \dur,inf,\roomsize, 41, \revtime, Pseq([1/1],inf), \damping, 0.31, \inputbw, 0.7, \drylevel, -0, \earlylevel, -15, \taillevel, -9);
@@ -457,7 +458,7 @@ SynthDef(\men,{|out = 0, dur|Out.ar(out,
 
 
 SynthDef(\algo, {
-		arg freq= 659.26, mRatio=1, cRatio=1,  amp=0.01, sineRate = 0.0000000095262251,  sineRangeLow=0, pitch = 0, phRise= 0 ,out=0, eFreq =0 , phFm=8, bus2,bus3,bus4,busBP,bus6, bus7, bus8, busSR, busSS, busSP, gra=0.5,lvlDec=1,factor=1, factor2 =0 /*,vlPE =27.1366666667,vlPE2=0.2,dcPE = 0.129066666667*/, rqLPF =0.5, factor3 =1, decE= 0.1936, dur, gain =50/*, crvEP = (-2)*/;
+		arg freq= 457/*659.26*/, mRatio=1, cRatio=1,  amp=0.01, sineRate = 0.0000000095262251,  sineRangeLow=0, pitch = 0, phRise= 0 ,out=0, eFreq =0 , phFm=8, bus2,bus3,bus4,busBP,bus6, bus7, bus8, busSR, busSS, busSP, gra=0.5,lvlDec=1,factor=1, factor2 =0 /*,vlPE =27.1366666667,vlPE2=0.2,dcPE = 0.129066666667*/, rqLPF =0.5, factor3 =1, decE= 0.1936, dur, gain =50/*, crvEP = (-2)*/;
 
 	var car, mod, mod2, iEnv, sig, filRte;
 
@@ -468,14 +469,14 @@ SynthDef(\algo, {
 			[4, 4,(-4)]
 		));
 
-	mod2 = SinOsc.ar(freq/10, mul:freq/10 *iEnv );
+/*	mod2 = SinOsc.ar(freq/10, mul:freq/10 *iEnv );*/
 
-		mod = SinOsc.ar( freq * mRatio + mod2 *
+		mod = SinOsc.ar( freq/10 * mRatio /*+ mod2 *
 
-			SinOsc.kr(sineRate,phRise).range([sineRangeLow]), mul:freq * mRatio *iEnv);
+			SinOsc.kr(sineRate,phRise).range([sineRangeLow])*/, mul:SinOsc.kr(1.2875).range(0.0012,  freq /** mRatio *iEnv*/));
 
-		car =SinOsc.ar( 0.00502929687+eFreq * cRatio +
-			SelectX.ar(SinOsc.kr((0.00502929687/2/2),phFm).range(0,1),[SinOsc.ar(0),mod]));
+		car =SinOsc.ar( freq/*0.00502929687+eFreq */* cRatio    + mod/* +
+			SelectX.ar(SinOsc.kr((0.00502929687/2/2),phFm).range(0,1),[SinOsc.ar(0),mod])*/);
 
 	sig = Shaper.ar(~tfBuf,   car);
 
@@ -483,6 +484,10 @@ SynthDef(\algo, {
 
 		Out.ar(out, sig);
 }).add;
+
+
+
+
 
 
 	SynthDef(\dispatch,{|in, out, dur|Out.ar(out, In.ar(in,1)* EnvGen.kr(Env([1,0],[dur,0],60),doneAction:2))}).add;
