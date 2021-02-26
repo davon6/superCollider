@@ -69,12 +69,12 @@ o = {
 
 	Out.kr(~bus5, SinOsc.kr(Select.kr(LFNoise2.ar(1.2875).range(0,1).round(1),
 		[    1.2875, 0.08046875/*,0.321875*/	]
-	)    *  SinOsc.kr(0.1609375).range((-5.15),2.575)).range(5274.04,82.41),);
+	)    *  SinOsc.kr(0.1609375).range((-1.2875),1.2875)).range(2637.02,82.41),);
 
 	Out.kr(~bus6, SinOsc.ar(1.2875).range(0.8,0.2));
 	Out.kr(~bus7, SinOsc.ar(0.321875).range(1,0.4));
 
-	Out.kr(~bus8,  Lag.kr(LFNoise0.kr(1.2875).range(0.10,0.0),0.05)
+	Out.kr(~bus8,  Lag.kr(LFNoise0.kr(1.2875).range(0.10,0.0),0.02)
 		+SinOsc.kr(SelectX.kr(LFNoise0.kr(5.15).range(0,2).round(1),[1.2875,5.15,20.6])).range(0.06,0.00));
 
 
@@ -108,7 +108,7 @@ o = {
 	Pbind(\instrument,\ptr, \buf, f, \out, ~ptrBus3,\group,~ptrGrp,\dur,Pseq([1024/1],1)),
 	Pbind(\instrument,\rec, \ptrIn, ~ptrBus3, \micIn, ~micBus3, \buf, f,\group,~recGrp,\dur,Pseq([1024/1],1)),
 
-	Pbind(\instrument,\gran,\dur,Pseq([1/2],inf),\amp, 1,\buf, d,\out,~comFuzz2,\atk, 0,\rel, Pseq([1/4],inf),\gate, 1,\ptrBus, ~ptrBus2,\ptrRandSamples, 0,\atk,0,\minPtrDelay, 1000,\group,~granGrp,\duration,Pseq([1/1],inf),\impulse,Pseq([1/1],inf)),
+	Pbind(\instrument,\gran,\dur,Pseq([1/1],inf),\amp, 1,\buf, d,\out,~comFuzz2,\atk, 0,\rel, Pseq([1/4],inf),\gate, 1,\ptrBus, ~ptrBus2,\ptrRandSamples, 0,\atk,0,\minPtrDelay, 1000,\group,~granGrp,\duration,Pseq([1/1],inf),\impulse,Pseq([1/4],inf)),
 
 
 	Pbind(\instrument,\gran,\dur,Pseq([2/1],inf),\amp, 1,\buf, f,\out,~comFuzz2,\atk, 0,\rel, Pseq([1/4],inf),\gate, 1,\ptrBus, ~ptrBus3,\ptrRandSamples, 0,\minPtrDelay, 1000,\atk,0,\group,~granGrp,\duration,Pseq([1/1],inf),\impulse,Pseq([1/1],inf)),
@@ -147,7 +147,6 @@ Ppar([
 
 	Pbind(\instrument, \limiter, \dur,inf, \in , ~limitRkick,  \out, ~stereoRkick, \gain , 40, \group, ~limitGrp),
 	Pbind(\instrument, \stereo, \dur,inf , \in, ~stereoRkick,  \group, ~stereoGrp),
-
 
 
 	/*Pbind(\instrument,\lead,\dur,Pseq([16384/1],1), \gra,~bus10 , \sineRate, (0.0000000095262251/2/2/2/2), \freq,659.255,\out,/*~dispatchBus*/~filterSquelch/*~filterBus2*/),
@@ -243,14 +242,14 @@ Pbindf( Prand([~quickFix, ~rShort, ~rLong]),\instrument, \reverbS, \dur,inf, \in
 
 Pbindf( Prand([~quickFix, ~rShort, ~rLong]),\dur,inf, \in,~comFuzz  , \out,~limitReverbBus ,\group,~revGrp),
 
-Pbind( \instrument, \limiter,\in,~limitReverbSquelch, \dur,inf, \gain,45,\group,~limitGrp,\out ,~stereoReverbSquelch),
+Pbind( \instrument, \limiter,\in,~limitReverbSquelch, \dur,inf, \gain,41,\group,~limitGrp,\out ,~stereoReverbSquelch),
 	Pbind( \instrument, \stereo, \dur, inf,\in, ~stereoReverbSquelch, \spread,0,\group, ~stereoGrp),
 
 
 	Pbind(\instrument,\comp, \dur,inf,\thr,0.2 ,\sB, 1.2,\sA, 1/4,\atk ,0.0484, \rel ,0.3872
 ,\gain, 22,\in, ~comSquelch ,\ctrl, ~kbus, \out,~limitSquelch, \group, ~compGrp),
 
-Pbind(\instrument, \limiter,\in, ~limitSquelch, \dur, inf,\gain,45,\group,~limitGrp,\out,~comSnaGrpBus),
+Pbind(\instrument, \limiter,\in, ~limitSquelch, \dur, inf,\gain,41,\group,~limitGrp,\out,~comSnaGrpBus),
 
 
 
@@ -270,7 +269,7 @@ Pbind(\instrument, \limiter,\in, ~limitSquelch, \dur, inf,\gain,45,\group,~limit
 	Pbind( \instrument, \limiter,\in,~limitReverbBus2, \dur,inf, \gain,42,\group,~limitGrp,\out ,~stereoReverbBus2),
 	Pbind( \instrument, \stereo, \dur, inf,\in, ~stereoReverbBus2, \spread,1,\group, ~stereoGrp),
 
-	Pbind(\instrument,\comp, \dur,Pseq([1024/1],1),\thr,0.8 ,\sB, 1.015,\sA, 1/2,\atk ,0.0121, \rel ,0.0484,\gain,/*(70.3)*/1,\in, ~comFuzz2 ,\ctrl, ~kbus, \out,~limitFuzz2, \group, ~compGrp),
+	Pbind(\instrument,\comp, \dur,Pseq([1024/1],1),\thr,0.8 ,\sB, 1.015,\sA, 1/2,\atk ,0.0242, \rel ,0.0968,\gain,/*(70.3)*/1,\in, ~comFuzz2 ,\ctrl, ~kbus, \out,~limitFuzz2, \group, ~compGrp),
 	Pbind(\instrument, \limiter,\in, ~limitFuzz2, \dur, Pseq([1024/1],1),\gain,42,\group,~limitGrp,\out,~comSnaGrpBus),
 
 
@@ -283,7 +282,7 @@ Pbind(\instrument, \filter, \dur,Pseq([4096/1],1),\which,0, \in,~filterBus,\busM
 
 
 
-	//GATES  Make good adsr %
+	//GATES
 
 	Prand([
 
@@ -299,8 +298,8 @@ Pbind(\instrument, \gate, \dur, ~short,
 	\vlSub,0.2,\subsT,inf ,\bus1,~bus8,\in, ~gateBus,\out, ~comFuzz),
 
 			Pbind(\instrument, \gate, \dur, /*Pseq([4/1],inf)*/ Prand([~short,~long],1) ,
-		\type, Pwrand([ Pseq([\note],64) , Pseq([\note,\note,\note,\rest,\rest,\note,\rest,\note],64)],[16,1],inf), \group, ~gateGrp, \atkT, 0.02, \decT, 0.55, \subsT, 0.1, \relT, 0.33,
-		\vlSub,0.2,\subsT,inf ,\bus1,~bus8,\in, ~gateBus2,\out,Prand([~micBus2,~micBus3,~comFuzz2],inf) )
+		\type, Pwrand([ Pseq([\note],64) , Pseq([\note,\note,\note,\rest,\rest,\note,\rest,\note],64)],[16,1],inf), \group, ~gateGrp, \atkT, 0.02, \decT, 0.55, \subsT, 0.1, \relT, 0.33,\vlDec,0.8,
+			\vlSub,0.2,\subsT,inf ,\bus1,~bus8,\in, ~gateBus2,\out,/*~micBus2*/Pwrand([~micBus2,~micBus3,~comFuzz2],[1,1,4],inf) )
 
 
 
@@ -322,13 +321,13 @@ Pbind(\instrument, \gate, \dur, ~short,
 
 	Pbindf( Prand([~quickFix, ~rShort, ~rLong]),\dur,inf, \in,~comFuzz  , \out,~limitReverbBus ,\group,~revGrp),
 
-	Pbind( \instrument, \limiter,\in,~limitReverbBus, \dur,inf, \gain,48,\group,~limitGrp,\out ,~stereoReverbBus),
+	Pbind( \instrument, \limiter,\in,~limitReverbBus, \dur,inf, \gain,44,\group,~limitGrp,\out ,~stereoReverbBus),
 	Pbind( \instrument, \stereo, \dur, inf,\in, ~stereoReverbBus, \spread,1,\group, ~stereoGrp),
 
 	Pbind(\instrument,\comp, \dur,Pseq([1024/1],1),\thr,0.2 ,\sB, 1.086,\sA, 1/2,\atk ,0.0121, \rel ,0.04840, \gain,1/*(50)*/	,\in, ~comFuzz ,\ctrl, ~kbus, \out,~limitFuzz, \group, ~compGrp),
 
 
-	Pbind(\instrument, \limiter,\in, ~limitFuzz, \dur, Pseq([1024/1],1),\gain,48,\group,~limitGrp,\out,~comSnaGrpBus),
+	Pbind(\instrument, \limiter,\in, ~limitFuzz, \dur, Pseq([1024/1],1),\gain,44,\group,~limitGrp,\out,~comSnaGrpBus),
 
 
 

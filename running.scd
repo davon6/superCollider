@@ -75,8 +75,8 @@ s.waitForBoot({
 
 
 	d = Buffer.alloc(s, s.sampleRate *0.3872,1);
-	e = Buffer.alloc(s, s.sampleRate *t.beatDur/*0.3872*/,1);
-	f = Buffer.alloc(s, s.sampleRate *(t.beatDur*4)/*1.5488,1*/);
+	e = Buffer.alloc(s, s.sampleRate *   t.beatDur/*0.3872*/,1);
+	f = Buffer.alloc(s, s.sampleRate *    (t.beatDur*4)/*1.5488*/,1);
 	~delay = Buffer.alloc(s, 48000 * 3, 2);
 
 	~remyAudio = Buffer.read(s, "/Users/davidmignot/superCollider-master/remy.wav");
@@ -553,9 +553,9 @@ SynthDef(\men,{|out = 0, dur|Out.ar(out,
 		var sig, env, densCtrl, durCtrl, rateCtrl, panCtrl, ptr, ptrRand, totalDelay, maxGrainDur;
 
 
-		env = EnvGen.kr(Env([1,1,0],[atk,dur,0],crv), gate, doneAction:2);
+		env = EnvGen.kr(Env([1,1,0],[dur,0,0],crv), gate, doneAction:2);
 
-		densCtrl = Select.ar(sync, [Dust.ar(dens), Impulse.ar(dens)]);
+		/*densCtrl = Select.ar(sync, [Dust.ar(dens), Impulse.ar(dens)]);
 		durCtrl= baseDur * LFNoise1.ar(100).exprange(1/durRand, durRand);
 		rateCtrl = rate * LFNoise1.ar(100).exprange(1/rateRand, rateRand);
 		panCtrl = pan + LFNoise1.kr(100).bipolar(panRand);
@@ -569,7 +569,7 @@ SynthDef(\men,{|out = 0, dur|Out.ar(out,
 
 
 		maxGrainDur = (totalDelay / rateCtrl) / SampleRate.ir;
-		durCtrl = min(durCtrl, maxGrainDur);
+		durCtrl = min(durCtrl, maxGrainDur);*/
 
 		sig = GrainBuf.ar(
 			1,
