@@ -75,7 +75,7 @@ o = {
 	Out.kr(~bus6, SinOsc.ar(1.2875).range(1,0.4));
 	Out.kr(~bus7, SinOsc.ar(0.321875).range(1,0.4));
 
-	Out.kr(~bus8,  Lag.kr(LFNoise0.kr(1.2875).range(0.10,0.0),0.02)
+	Out.kr(~bus8,  /*Lag.kr(*/LFNoise1.kr(1.2875).range(0.10,0.0)/*,0.02)*/
 		+SinOsc.kr(SelectX.kr(LFNoise0.kr(5.15).range(0,2).round(1),[1.2875,5.15,20.6])).range(0.06,0.00));
 
 
@@ -271,7 +271,7 @@ Pbind(\instrument, \limiter,\in, ~limitSquelch, \dur, inf,\gain,34,\group,~limit
 
 
 	Pbind(\instrument,\comp, \dur,Pseq([1024/1],1),\thr,0.8 ,\sB, 1.015,\sA, 1/2,\atk ,0.0242, \rel ,0.0968,\gain,/*(70.3)*/1,\in, ~comFuzz2 ,\ctrl, ~kbus, \out,~limitFuzz2, \group, ~compGrp),
-	Pbind(\instrument, \limiter,\in, ~limitFuzz2, \dur, Pseq([1024/1],1),\gain,42,\group,~limitGrp,\out,~comSnaGrpBus),
+	Pbind(\instrument, \limiter,\in, ~limitFuzz2, \dur, Pseq([1024/1],1),\gain,47,\group,~limitGrp,\out,~comSnaGrpBus),
 
 
 
