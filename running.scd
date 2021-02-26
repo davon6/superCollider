@@ -119,6 +119,12 @@ s.waitForBoot({
 	~gateSquelch = Bus.audio(s,1);
 	~gateMelo = Bus.audio(s,1);
 
+	~gateSeqBus = Bus.audio(s,1);
+	~gateSeqBus2 = Bus.audio(s,1);
+	~gateSeqRnd = Bus.audio(s,1);
+	~gateSeqSquelch = Bus.audio(s,1);
+	~gateSeqMelo = Bus.audio(s,1);
+
 	~gate2Bus = Bus.audio(s,1);
 
 	~shiftMelo = Bus.audio(s,1);
