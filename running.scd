@@ -146,7 +146,7 @@ s.waitForBoot({
 
 	~eqBg = Bus.audio(s,1);
 
-	~delayBus = Bus.audio(s,2);
+	~delayBus = Bus.audio(s,1);
 
 	~reverbBus = Bus.audio(s,1);
 	~reverbBus2 = Bus.audio(s,1);
@@ -166,7 +166,8 @@ s.waitForBoot({
 	~stereoReverbSquelch = Bus.audio(s,1);
 	~stereoReverbMelo = Bus.audio(s,1);
 
-
+	~stereoDelay = Bus.audio(s,1);
+	~revDelay= Bus.audio(s,2);
 
 	~stereoBus1 = Bus.audio(s,1);
 	~stereoBus2 = Bus.audio(s,1);
@@ -285,7 +286,7 @@ s.waitForBoot({
 		sig =
 		BPeakEQ.ar(
 			SinOsc.ar(envF, mul: env)
-			,659.255,3, (-12));
+			,659.255,16, (-12));
 
 		sig = sig * amp.dbamp  !2;
 
@@ -634,15 +635,29 @@ SynthDef(\men,{|out = 0, dur|Out.ar(out,
 
 	"reverb init".postln;
 
-	SynthDef(\pingD, { |out = 0, bufnum = 0, dur, feedback = 0.5, delayTime = 0.3, in, stereoL =0.00555, stereoR =0, dec=0.5, amp =1 |
-    var left, right, src,sig3;
+	SynthDef(\pingD, { |out = 0, bufnum = 0, dur, feedback = 0.5, delayTime = 0.3, in /*stereoL =0.00555, stereoR =0, dec=0.5, amp =1*/ |
+    var left;
 
 		left =	In.ar(in,1);
 
     Out.ar(out ,PingPong.ar(bufnum, [left,left], delayTime, feedback, 1)
-			* [amp+stereoL,amp+stereoR] * EnvGen.kr(Env([1,1,0],[0,dur,0],4),doneAction:2) )
+		/*	* [amp+stereoL,amp+stereoR] * EnvGen.kr(Env([1,1,0],[0,dur,0],4),doneAction:2) */)
 	}).add;
 
+
+
+	SynthDef(\reverbS, {
+		|out=0, roomsize, revtime, damping, inputbw, spread = 15, drylevel, earlylevel,
+    taillevel,maxRoomsize,wet=0.4,in =0,wF =0, spread2=0, level=1, center=0.0, multi = 2|
+
+	var a ,input;
+		input =In.ar(in,2);
+
+		a = Resonz.ar(	input, 659.25 *   [8,16,32],wet).sum * 10;
+    Out.ar(    out, GVerb.ar( a,roomsize,revtime,damping,inputbw, spread,drylevel.dbamp,earlylevel.dbamp,taillevel.dbamp,roomsize+1,0.6))
+}).add;
+
+	"reverb init".postln;
 
 	//the compressor received for control a signal going on channel that never goes to zero (renamed ghost)
 	SynthDef(\comp, {|in, ctrl, out= 0, dec  , thr  =0.01 ,sB = 1, sA = (1/4), atk = 0.001, rel = 0.04 , gain=1|
@@ -673,35 +688,13 @@ SynthDef(\men,{|out = 0, dur|Out.ar(out,
 	SynthDef(\stereo,{|out=0, in, spread=0, level=1, center=0.0|
 
 		Out.ar(out,
-			Splay.ar(
+			Splay.arFill(10,
 				In.ar(in, 1)
 				,spread,level,center)
 		);
 	}).add;
 
-	s.sync;
 
-	~kick =	Pbind(\instrument, \kick,\dur, Pseq([1/1],1),\amp,( -4.5),\out,0);
-
-	~bassShap = Pbind(\instrument, \shap, \dur,Pseq([1/1],inf),\dA1,2,\out,~bassShapB);
-
-	~bass = Pbind(
-		\instrument, \bass,
-		\type, Pseq([\rest, \note, \note, \note], inf),
-		\dur, Pseq([1/4],4),\lpf,81.41,
-		\midinote, 28, \bus, ~bassShapB,
-		\atk, t.beatDur/4 * 0.01,
-		\rel, t.beatDur/4 * 0.99,
-		\atkcrv, -2,
-		\relcrv, -1,
-		\amp, (-6),\out,0
-	);
-
-	~cymbal = Pbind(\instrument, \percussion,\type, Pseq([\rest,\rest,\note,\note ,\rest,\note ,\note, \rest],inf),\dur,Pseq([1/4],64 ),\carHz, 525.12070612224,\modHz,1899.3343179398,\modAmp, 0.12875 ,\amp,(-6.3),\rel,Pseq([1/16],inf),\rel2,Pseq([1/16],inf),\latch,8000,\stereoL, 0.00555, \crv1,  (-2.4), \crv1b,(-3), \mulMod, 1691,\out, ~comBusCymb);
-
-	~hat = Pbind(\instrument,\percussion,\dur,Pseq([1/4], 64),\atk, 0,\rel,0.04840,\rel2,0.02420,\amp,Pseq([( -7), ( -8),( -7),( -10),( -7),( -7),( -9),( -7)],inf), \crv2, (-3), \modHz, exprand(20,10000).postln, \mulMod, rrand(0, 10000).postln, \carHz, exprand(20,10000), \modAmp, 0.12875, \latch, 18500, \stereoR, 0.007,\out,~comBusHat);
-
-	~snare = Pbind(\instrument, \snare,\carHz, 41.2 ,\type, Pseq([\rest ,\rest,\note,\rest], 8),\atk, 0.00502929687,\rel, 0.0968,\rel2, 0.3872,\dur, Pseq([1/2], inf),\amp,(-5.5),\out,0);
 
 
 //130.882809922
