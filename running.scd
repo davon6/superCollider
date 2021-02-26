@@ -154,20 +154,12 @@ s.waitForBoot({
 	~reverbSquelch = Bus.audio(s,1);
 	~reverbMelo = Bus.audio(s,1);
 
-	~limitReverbBus = Bus.audio(s,1);
-	~limitReverbBus2 = Bus.audio(s,1);
-	~limitReverbRnd = Bus.audio(s,1);
-	~limitReverbSquelch = Bus.audio(s,1);
-	~limitReverbMelo = Bus.audio(s,1);
 
-	~stereoReverbBus = Bus.audio(s,1);
-	~stereoReverbBus2 = Bus.audio(s,1);
-	~stereoReverbRnd = Bus.audio(s,1);
-	~stereoReverbSquelch = Bus.audio(s,1);
-	~stereoReverbMelo = Bus.audio(s,1);
 
-	~stereoDelay = Bus.audio(s,1);
+
 	~revDelay= Bus.audio(s,2);
+	~comDelay = Bus.audio(s,2);
+	~limitDelay= Bus.audio(s,2);
 
 	~stereoBus1 = Bus.audio(s,1);
 	~stereoBus2 = Bus.audio(s,1);
@@ -179,22 +171,22 @@ s.waitForBoot({
 	~stereoRkick = Bus.audio(s,1);
 
 
-	~comRnd = Bus.audio(s,1);
-	~comMelo = Bus.audio(s,1);
-	~comSquelch = Bus.audio(s,1);
-	~comFuzz = Bus.audio(s,1);
-	~comFuzz2 = Bus.audio(s,1);
-	~comBusHat = Bus.audio(s,1);
-	~comBusCymb = Bus.audio(s,1);
+	~comRnd = Bus.audio(s,2);
+	~comMelo = Bus.audio(s,2);
+	~comSquelch = Bus.audio(s,2);
+	~comFuzz = Bus.audio(s,2);
+	~comFuzz2 = Bus.audio(s,2);
+	~comBusHat = Bus.audio(s,2);
+	~comBusCymb = Bus.audio(s,2);
 
 	~comSnaGrpBus = Bus.audio(s,2);
+	~comSnaGrpBus2 = Bus.audio(s,2);
 
-
-	~limitFuzz = Bus.audio(s,1);
-	~limitFuzz2 = Bus.audio(s,1);
-	~limitRnd = Bus.audio(s,1);
-	~limitSquelch = Bus.audio(s,1);
-	~limitMelo = Bus.audio(s,1);
+	~limitFuzz = Bus.audio(s,2);
+	~limitFuzz2 = Bus.audio(s,2);
+	~limitRnd = Bus.audio(s,2);
+	~limitSquelch = Bus.audio(s,2);
+	~limitMelo = Bus.audio(s,2);
 
 
 	~limitRkick = Bus.audio(s,1);
@@ -458,15 +450,47 @@ SynthDef(\men,{|out = 0, dur|Out.ar(out,
 }).add;
 
 
+SynthDef(\algo, {
+		arg freq= 659.26, mRatio=1, cRatio=1,  amp=0.01, sineRate = 0.0000000095262251,  sineRangeLow=0, pitch = 0, phRise= 0 ,out=0, eFreq =0 , phFm=8, bus2,bus3,bus4,busBP,bus6, bus7, bus8, busSR, busSS, busSP, gra=0.5,lvlDec=1,factor=1, factor2 =0 /*,vlPE =27.1366666667,vlPE2=0.2,dcPE = 0.129066666667*/, rqLPF =0.5, factor3 =1, decE= 0.1936, dur, gain =50/*, crvEP = (-2)*/;
+
+	var car, mod, mod2, iEnv, sig, filRte;
+
+	iEnv = EnvGen.kr(
+			Env.new(
+			[1, 1 * 5, 1 * 5,4.8],
+			[0,0.000000000001,        ( dur   ),      0.0000000001],
+			[4, 4,(-4)]
+		));
+
+	mod2 = SinOsc.ar(freq/10, mul:freq/10 *iEnv );
+
+		mod = SinOsc.ar( freq * mRatio + mod2 *
+
+			SinOsc.kr(sineRate,phRise).range([sineRangeLow]), mul:freq * mRatio *iEnv);
+
+		car =SinOsc.ar( 0.00502929687+eFreq * cRatio +
+			SelectX.ar(SinOsc.kr((0.00502929687/2/2),phFm).range(0,1),[SinOsc.ar(0),mod]));
+
+	sig = Shaper.ar(~tfBuf,   car);
+
+	sig  = LeakDC.ar(sig);
+
+		Out.ar(out, sig);
+}).add;
+
+
 	SynthDef(\dispatch,{|in, out, dur|Out.ar(out, In.ar(in,1)* EnvGen.kr(Env([1,0],[dur,0],60),doneAction:2))}).add;
 
 //below dur can be factored to change mod
 	SynthDef(\shift, {|in, out, freq,boo, freq2, factor =1, factor2, factor3, vlPE =27.1366666667,vlPE2=0.2, crvEP = (-2), dcPE = 0.129066666667, dur,
 		vlPE3,vlPE33,crvEP2, dA=0, dA2=0, dA3=0|
+
+
 		Out.ar(out, FreqShift.ar(In.ar(in, 1)/*.sign*/,
 
-			freq:  freq2+    In.kr( boo, 1)  +   (EnvGen.kr(Env([vlPE,vlPE2],[dur/*dcPE*/,0],crvEP),doneAction: dA)*factor2)
-
+			/*freq:  freq2+    In.kr( boo, 1)  +   (EnvGen.kr(Env([vlPE,vlPE2],[dur/*dcPE*/,0],crvEP),doneAction: dA)*factor2)
+*/
+			freq:/*SinOsc.kr(0.3).range(10,-10)*/ 55
 		   /** EnvGen.kr(Env.step([factor,0],[dur,0]),doneAction: dA3)*//*)*/
 			/*+
 			(EnvGen.kr(Env.step([vlPE3,vlPE33],[dur/*dcPE2*/,0],crvEP2),doneAction: dA2)*factor3)+
@@ -625,7 +649,7 @@ SynthDef(\men,{|out = 0, dur|Out.ar(out,
             earlylevel.dbamp,
             taillevel.dbamp,
 				roomsize+1,0.6)
-/*		+ input*/
+		+ input
 			//,81.41)
 
 			//,spread2,level,center)
@@ -663,7 +687,11 @@ SynthDef(\men,{|out = 0, dur|Out.ar(out,
 	SynthDef(\comp, {|in, ctrl, out= 0, dec  , thr  =0.01 ,sB = 1, sA = (1/4), atk = 0.001, rel = 0.04 , gain=1|
 
 		Out.ar(out, Compander.ar(In.ar(in,1) , In.ar(ctrl,1)  , thresh: thr, slopeBelow: sB, slopeAbove: sA, clampTime: atk, relaxTime: rel)* gain );
+	}).add;
 
+	SynthDef(\compS, {|in, ctrl, out= 0, dec  , thr  =0.01 ,sB = 1, sA = (1/4), atk = 0.001, rel = 0.04 , gain=1|
+
+		Out.ar(out, Compander.ar(In.ar(in,2) , In.ar(ctrl,1)  , thresh: thr, slopeBelow: sB, slopeAbove: sA, clampTime: atk, relaxTime: rel)* gain );
 	}).add;
 
 
@@ -682,6 +710,12 @@ SynthDef(\men,{|out = 0, dur|Out.ar(out,
 
 	"limiter init".postln;
 
+	SynthDef(\limiterS, {|in, out = 0,gain=1,vol =1, du =0.01,rel=0.8, atk =0.01 ,thr= 0.001,sB =1,sA= 0.05|
+
+		Out.ar(out , CompanderD.ar(BHiPass4.ar( In.ar(in,2),100),thr, sB ,sA, atk, rel)* gain;)
+	}).add;
+
+	"limiter init".postln;
 
 
 
