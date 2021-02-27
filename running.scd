@@ -293,7 +293,7 @@ s.sync;
 	SynthDef(\lfo,{|out, vl1, vl2, dur, tim = 0.0484, crv =(-12)|
 		Out.kr(out,VarLag.kr( Line.kr(vl1, vl2, dur, doneAction: 2),tim,crv));}).add;
 
-
+	SynthDef(\lfo3,{|out| Out.kr(out ,EnvGen.kr(Env([43,0],[0.4,0],-30),doneAction: 2))}).add;
 
 
 	SynthDef(\lfo2,{|out, out2, out3, riseT, flatT, dur, vl=0.0000000095262251, vl2=0, vl3=0|
@@ -509,7 +509,7 @@ SynthDef(\men,{|out = 0, dur|Out.ar(out,
 
 
 SynthDef(\algo, {
-		arg freq= 457/*659.26*/, mRatio=1, cRatio=1,  amp=0.01, sineRate = 0.0000000095262251,  sineRangeLow=0, pitch = 0, phRise= 0 ,out=0, eFreq =0 , phFm=8, bus2,bus3,bus4,busBP,bus6, bus7, bus8, busSR, busSS, busSP, gra=0.5,lvlDec=1,factor=1, factor2 =0 /*,vlPE =27.1366666667,vlPE2=0.2,dcPE = 0.129066666667*/, rqLPF =0.5, factor3 =1, decE= 0.1936, dur, gain =50/*, crvEP = (-2)*/;
+		arg freq= 457/*659.26*/, mRatio=1, cRatio=1,  amp=0.01, sineRate = 0.0000000095262251,  sineRangeLow=0, pitch = 0, phRise= 0 ,out=0, eFreq =0 , phFm=8, bus2,bus3,bus4,busBP,bus6, bus7, bus8, busSR, busSS, busSP, gra=0.5,lvlDec=1,factor=1, factor2 =0 /*,vlPE =27.1366666667,vlPE2=0.2,dcPE = 0.129066666667*/, rqLPF =0.5, factor3 =1, decE= 0.1936, dur, gain =50/*, crvEP = (-2)*/,modu;
 
 	var car, mod, mod2, iEnv, sig, filRte;
 
@@ -526,7 +526,10 @@ SynthDef(\algo, {
 
 			SinOsc.kr(~hz1beat/64,0).range([(-10.4)]), mul:SinOsc.kr(~hz1beat/16).range(0.12,  freq /** mRatio *iEnv*/));
 
-		car =SinOsc.ar( freq/*0.00502929687+eFreq */* cRatio    + mod/* +
+		car =SinOsc.ar(In.kr(~bus2,1)+
+
+
+			freq/*0.00502929687+eFreq */* cRatio    + mod/* +
 			SelectX.ar(SinOsc.kr((0.00502929687/2/2),phFm).range(0,1),[SinOsc.ar(0),mod])*/);
 
 	sig = Shaper.ar(~tfBuf,   car);

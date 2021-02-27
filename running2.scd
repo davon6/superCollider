@@ -57,7 +57,7 @@ o = {
 	Out.kr(~bus1,  Lag.kr(LFNoise0.kr(1.2875).range(0.15,0.0),0.05)
 	+SinOsc.kr(SelectX.kr(LFNoise0.kr(5.15).range(0,2).round(1),[1.2875,5.15,20.6])).range(0.08,0.00));
 
-	Out.kr(~bus2, SinOsc.kr(LFPulse.kr(Select.kr(0.321875,[1.2875, 0.321875,0.08046875 ])).range(0.321875,0.08046875) ).range(659.255, 2637.02));
+	/*Out.kr(~bus2, SinOsc.kr(LFPulse.kr(Select.kr(0.321875,[1.2875, 0.321875,0.08046875 ])).range(0.321875,0.08046875) ).range(659.255, 2637.02));*/
 
 	Out.kr(~bus3, Line.kr(0.2,0.2,inf));
 
@@ -70,7 +70,7 @@ o = {
 
 
 
-	).range(10.3,2637.02),);
+	).range(82.4,2637.02),);
 
 	/*Out.kr(~bus5, SinOsc.kr(Select.kr(LFNoise2.ar(1.2875).range(0,2).round(1),
 		[    1.2875, 0.08046875,0.321875	]
@@ -148,6 +148,8 @@ Ppar([
 	/*Pbind(\instrument, \lfo, \dur,Pseq([1/ Prand([4,16,1],inf) ], Prand([1,4,16,64],inf)  ), \vl1,Prand([5, (-0.25)],inf)   ,\vl2,Prand([5, (-0.25)],inf) ,  \out, ~bus10),*/
 	/*Pbind(\instrument, \lfo, \dur,Pseq([Prand([4,16,1,64],inf)/ 1 ], Prand([1,4],inf)  ), \vl1,Prand([5, (-0.25)],inf)   ,\vl2,Prand([5, (-0.25)],inf) , \tim,  6.1952, \crv,(-3),  \out, ~bus11),*/
 
+	Pbind(\instrument, \lfo3, \dur, Prand([ Pseq([ 1/4 ],16), Pseq([ 1/1 ],4)],inf), \out,~bus2, \group, ~lfoGrp),
+
 	Pbind(\instrument, \lfoSaw, \dur ,Pseq([~long1],inf),\val,Prand([~hz1beat*8,~hz1beat],inf), \out, ~bus10, \group, ~lfoGrp),
 
 	Pseq([Pbindf(~kick,\out,~kbus)],inf),
@@ -184,7 +186,7 @@ Ppar([
 
 	Pbind(\instrument, \EQ, \dur, inf, \val, 2605.12,\quant,4, \gain,(-16) ,\in, ~eqBg, \out, ~dispatchBg, \group, ~eqGrp),
 
-	Pbind(\instrument,\dispatch,\dur,Pseq([ ~long2],inf), \in, ~dispatchBg , \out, Prand([~bgFil,~bgCom],inf), \group, ~dispatchGrp1),
+	Pbind(\instrument,\dispatch,\dur,Pseq([ ~long2],inf), \in, ~dispatchBg , \out, Prand([~bgFil,~bgCom,99],inf), \group, ~dispatchGrp1),
 
 	Pbind(\instrument, \filter, \dur, inf, \in,~bgFil  ,\which,0, \busMod, ~bus10, \rqLPF, ~bus3,\out, ~bgCom, \group, ~filterGrp2),
 
@@ -263,7 +265,7 @@ Pbindf( Prand([~quickFix, ~rShort]),\instrument, \reverbS, \dur,inf, \in,~revDel
 	Pbind(\instrument,\compS, \dur,inf,\thr,0.2 ,\sB, 1.2,\sA, 1/4,\atk ,0.0484, \rel ,0.3872
 ,\gain, 22,\in, ~comDelay ,\ctrl, ~kbus, \out,~limitDelay, \group, ~compGrp),
 
-Pbind( \instrument, \limiterS,\in,~limitDelay, \dur,inf, \gain,36,\group,~limitGrp,\out ,~comSnaGrpBus2),
+Pbind( \instrument, \limiterS,\in,~limitDelay, \dur,inf, \gain,29,\group,~limitGrp,\out ,~comSnaGrpBus2),
 
 	Pbind(\instrument,\compS, \dur,Pseq([1024/1],1),\thr,0.6 ,\sB, 1.04,\sA, 0.2,\atk ,0.0968, \rel ,0.3872
 		,\in, ~comSnaGrpBus2 ,\ctrl, ~snBus, \group, ~compGrp2,\out,0),
