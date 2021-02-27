@@ -100,7 +100,10 @@ s.sync;
 
 	~short = Prand([  Pseq([1/4], 1), Pseq([1/4], 4) ,Pseq([1/4], 16) ,Pseq([1/4], 64), Pseq([1/1], 1),     ],1 );
 	~long = Prand([ Pseq([1/1],1), Pseq([4/1],1), Pseq([16/1],1) ],1);
+	~short1 = Prand([ Pseq([1/4],1),Pseq([1/1],1),Pseq([4/1],1)],1);
 
+	~long1 = Prand([ Pseq([16/1],1),Pseq([1/1],1),Pseq([4/1],1)],1);
+	~long2 = Prand([ Pseq([16/1],1),Pseq([64/1],1),Pseq([4/1],1)],1);
 
 
 
@@ -144,9 +147,11 @@ s.sync;
 	~phaseBus = Bus.audio(s,1);
 
 	~bgBus = Bus.audio(s,1);
+	~bgFil = Bus.audio(s,1);
 	~bgCom = Bus.audio(s,1);
 	~bgLimit = Bus.audio(s,1);
 	~bgStereo = Bus.audio(s,1);
+	~dispatchBg = Bus.audio(s,1);
 
 
 	~filterBus = Bus.audio(s,1);
@@ -216,6 +221,9 @@ s.sync;
 
 	~bassShapB = Bus.audio(s,1);
 
+	~noiseStereo1 =  Bus.audio(s,1);
+
+	~noiseStereo2 =  Bus.audio(s,1);
 
 
 
@@ -266,6 +274,9 @@ s.sync;
 	)    *  SinOsc.kr(~hzHbeat*2).range((~hz1beat.neg),~hz1beat)).range(~hz8Oct,~hz1Oct),);*/
 
 
+	SynthDef(\lfoSaw, {|out, val, dur|Out.kr(out,
+		Saw.kr(val).range(~hz1beat*256, ~hz1beat*2048)* EnvGen.kr(Env.step([1],[dur]),doneAction: 2)
+	)}).add;
 
 	SynthDef(\lfo2, {|out, val=1, dur|Out.kr(out,
 
@@ -402,12 +413,17 @@ s.sync;
 //filter broken
 SynthDef(\multi, {|out=0| Out.ar(out,
 	 //BLowPass4.ar(
-	Saw.ar([432+SinOsc.kr(0.1).range(-430,430),
-		435+ SinOsc.kr(0.1).range(-428,450),
-		430+ SinOsc.kr(0.1).range(-422,444)]
+	Saw.ar([432+SinOsc.kr(0.1).range(-125,430),
+		435+ SinOsc.kr(0.1).range(-128,450),
+		430+ SinOsc.kr(0.1).range(-122,444)]
 
 +	SinOsc.kr(0.02).range(-6.58, 6.48)
-	+ LFNoise0.kr(10.3).range(-300, 300)
+	+ LFNoise0.kr(//10.3
+			Select.kr( LFNoise0.kr(0.321875).range(0,2),
+
+				[10.3, 1.2875, 0.321875])
+
+		).range(-300, 300)
 
 	, mul:[1,
 			/*MouseX.kr(0,0.6)*/ SinOsc.kr(Select.kr(LFNoise2.ar(1.2875).range(0,2).round(1),
