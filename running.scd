@@ -383,7 +383,7 @@ s.sync;
 
 	sig =  HPF.ar(Latch.ar(tanh(car+car2),Impulse.ar(latch)),3000);
 
-		Out.ar(out, sig
+		Out.ar(out, sig * amp.dbamp
 		/** [amp.dbamp+stereoL,amp.dbamp+stereoR]*/);
 }).add;
 
