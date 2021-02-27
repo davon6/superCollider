@@ -177,8 +177,8 @@ Ppar([
 
 	Pbind(\instrument, \wNoise,\dur, ~short1,\dec ,Pkey(\dur),\amp,(-18),\out,0/*~noiseStereo1*/),
 
-	Pbind(\instrument, \wNoise,\dur,Pseq([4/1],inf),\dec ,Pkey(\dur),\amp,(-12),\out,99/*~noiseStereo1*/)
-	],inf),
+	Pbind(\instrument, \wNoise,\dur,Pseq([16/1],1),\dec ,Pkey(\dur),\amp,(-12),\out,99/*~noiseStereo1*/)
+	],1),
 
 	Pbind(\instrument,\lead,\dur,Pseq([16384/1],1), \sineRate, (0.0000000095262251/2/2/2/2), \freq,659.255,\out,~phaseBus),
 

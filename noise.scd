@@ -35,3 +35,18 @@ Pbind(\instrument, \wNoise,\dur, ~short1,\dec ,Pkey(\dur),\amp,(-20),\out,~noise
 	Pbind(\instrument, \stereo, \dur, inf, \in , ~noiseStereo1,\group, ~stereoGrp)],1).play(t)
 )
 Pbind(\instrument, \wNoise,\dur,~short1,\atk ,Pkey(\dur),\amp,(-20),\out,0).play
+
+
+
+
+(
+
+Ppar([
+
+	Pbind(\instrument, \wNoise,\dur, ~short1,\dec ,Pkey(\dur),\amp,(-18),\out,0/*~noiseStereo1*/),
+
+	Pbind(\instrument, \wNoise,\dur,Pseq([4/1],1),\dec ,Pkey(\dur),\amp,(-12),\out,99/*~noiseStereo1*/)
+	],inf).play(t)
+
+
+)
