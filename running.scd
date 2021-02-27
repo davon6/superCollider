@@ -142,7 +142,9 @@ s.sync;
 
 	~gate2Bus = Bus.audio(s,1);
 
-	~shiftMelo = Bus.audio(s,1);
+	~stereoPhase = Bus.audio(s,1);
+	~stetoSnaCom1 = Bus.audio(s,10);
+
 
 	~phaseBus = Bus.audio(s,1);
 
@@ -244,6 +246,8 @@ s.sync;
 	~bus10 = Bus.control(s,1);
 	~bus11 = Bus.control(s,1);
 
+	~bus12 = Bus.control(s,1);
+
 	~bus13 = Bus.control(s,1);
 
 	s.sync;
@@ -293,7 +297,7 @@ s.sync;
 	SynthDef(\lfo,{|out, vl1, vl2, dur, tim = 0.0484, crv =(-12)|
 		Out.kr(out,VarLag.kr( Line.kr(vl1, vl2, dur, doneAction: 2),tim,crv));}).add;
 
-	SynthDef(\lfo3,{|out| Out.kr(out ,EnvGen.kr(Env([43,0],[0.4,0],-30),doneAction: 2))}).add;
+	SynthDef(\lfo3,{|out| Out.kr(out ,EnvGen.kr(Env([143,0],[0.4,0],-30),doneAction: 2))}).add;
 
 
 	SynthDef(\lfo2,{|out, out2, out3, riseT, flatT, dur, vl=0.0000000095262251, vl2=0, vl3=0|
@@ -784,14 +788,21 @@ SynthDef(\algo, {
 
 
 
-	SynthDef(\stereo,{|out=0, in, spread=0, level=1, center=0.0|
+	SynthDef(\stereo,{|out=0, in, spread=0, level=1, center=0.0,dur|
 
 		Out.ar(out,
 			Splay.arFill(10,
 				In.ar(in, 1)
-				,spread,level,center)
+				,spread,level,center)* EnvGen.kr(Env.step([1],[dur]),doneAction: 2)
 		);
 	}).add;
+
+
+	SynthDef(\comp10, {|in, ctrl, out= 0, dec  , thr  =0.01 ,sB = 1, sA = (1/4), atk = 0.001, rel = 0.04 , gain=1|
+
+		Out.ar(out, Compander.ar(In.ar(in,10) , In.ar(ctrl,1)  , thresh: thr, slopeBelow: sB, slopeAbove: sA, clampTime: atk, relaxTime: rel)* gain );
+	}).add;
+
 
 
 
