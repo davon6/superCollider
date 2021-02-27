@@ -38,8 +38,8 @@ Pdef(\lfoSync, Pmono(
 
 
 
-desync = 0.4 * Trig.ar(Dust.ar(0.1), 10).lag(4);
-lfo = SinOsc.ar(0, (time + desync).mod(2pi))
+~desync = 0.4 * Trig.ar(Dust.ar(0.1), 10).lag(4);
+~lfo = SinOsc.ar(0, (~time + ~desync).mod(2pi))
 
 
 

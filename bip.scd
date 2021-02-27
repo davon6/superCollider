@@ -1,0 +1,1 @@
+({SinOsc.ar(108 * Select.kr(LFNoise0.kr(20).range(0,3).round(1),[16,4,64]))}.play)

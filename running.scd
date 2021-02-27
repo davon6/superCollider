@@ -27,11 +27,22 @@ s.waitForBoot({
 
 	var numSegs;
 
+	~bpm = 151.703592;
+
+	~hz1beat = ~bpm * 16/60/32;
+
+	~hz1Oct = ~bpm * 16/30;
+	~hzQbeat = ~hz1beat/4;
+	~hzHbeat = ~hzQbeat/4;
+	~hz8Oct = ~hz1beat * 2048;
+
+
+s.sync;
 	"buff init".postln;
 
 // tempo wanted
 
-	t = TempoClock.new(151.703592/60).permanent_(true);
+	t = TempoClock.new(~bpm/60).permanent_(true);
 
 
 	/*s.meter;
@@ -242,6 +253,30 @@ s.waitForBoot({
 	Out.ar(out, shap);
 
 	}).add;
+
+	SynthDef(\lfo1, {|out, val=1, dur|Out.kr(out,
+	SinOsc.kr(Select.kr(val,
+			[    ~hz1beat, ~hzHbeat/*,0.321875*/	])
+
+			* SinOsc.kr(~hzHbeat*2).range(~hz1beat.neg, ~hz1beat)).range(~hz8Oct, ~hz1Oct)
+		*EnvGen.kr(Env.step([1,0],[dur,0]),doneAction: 2))}).add;
+
+	/*Out.kr(~bus5, SinOsc.kr(Select.kr(LFNoise2.ar(~hz1beat).range(0,1).round(1),
+		[    ~hz1beat, ~hzHbeat/*,0.321875*/	]
+	)    *  SinOsc.kr(~hzHbeat*2).range((~hz1beat.neg),~hz1beat)).range(~hz8Oct,~hz1Oct),);*/
+
+
+
+	SynthDef(\lfo2, {|out, val=1, dur|Out.kr(out,
+
+		LFNoise1.kr(~hz1beat).range(0.10,0.0)/*,0.02)*/
+		+SinOsc.kr(SelectX.kr(LFNoise0.kr(~hz1beat*4).range(0,1).round(1),[~hz1beat,~hz1beat*4,~hz1beat*16])).range(0.06,0.00)
+
+		*EnvGen.kr(Env.step([1,0],[dur,0]),doneAction: 2))}).add;
+
+
+	/*Out.kr(~bus8,  /*Lag.kr(*/LFNoise1.kr(~hz1beat).range(0.10,0.0)/*,0.02)*/
+		+SinOsc.kr(SelectX.kr(LFNoise0.kr(~hz1beat*4).range(0,1).round(1),[~hz1beat,~hz1beat*4,~hz1beat*16])).range(0.06,0.00));*/
 
 
 	SynthDef(\lfo,{|out, vl1, vl2, dur, tim = 0.0484, crv =(-12)|
@@ -471,9 +506,9 @@ SynthDef(\algo, {
 
 /*	mod2 = SinOsc.ar(freq/10, mul:freq/10 *iEnv );*/
 
-		mod = SinOsc.ar( freq/10 * mRatio /*+ mod2 *
+		mod = SinOsc.ar( freq/10 * mRatio /*+mod2 */*
 
-			SinOsc.kr(sineRate,phRise).range([sineRangeLow])*/, mul:SinOsc.kr(1.2875).range(0.0012,  freq /** mRatio *iEnv*/));
+			SinOsc.kr(~hz1beat/64,0).range([(-10.4)]), mul:SinOsc.kr(~hz1beat/16).range(0.12,  freq /** mRatio *iEnv*/));
 
 		car =SinOsc.ar( freq/*0.00502929687+eFreq */* cRatio    + mod/* +
 			SelectX.ar(SinOsc.kr((0.00502929687/2/2),phFm).range(0,1),[SinOsc.ar(0),mod])*/);
