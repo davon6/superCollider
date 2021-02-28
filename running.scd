@@ -86,13 +86,11 @@ s.sync;
 
 
 	d = Buffer.alloc(s, s.sampleRate *0.3872,1);
-	e = Buffer.alloc(s, s.sampleRate *   t.beatDur/*0.3872*/,1);
-	f = Buffer.alloc(s, s.sampleRate *    (t.beatDur*4)/*1.5488*/,1);
+	e = Buffer.alloc(s, s.sampleRate *   t.beatDur*4 /*0.3872*/,1);
+	f = Buffer.alloc(s, s.sampleRate *  t.beatDur*4);//  (t.beatDur*4)/*1.5488*/,1);
 	~delay = Buffer.alloc(s, 48000 * 3, 2);
 
 	~remyAudio = Buffer.read(s, "/Users/davidmignot/superCollider-master/remy.wav");
-
-
 
 "Shaper init".postln;
 
@@ -266,12 +264,37 @@ s.sync;
 
 	}).add;
 
-	SynthDef(\lfo1, {|out, val=1, dur|Out.kr(out,
-	SinOsc.kr(Select.kr(val,
+
+
+	SynthDef(\lfo1, {|out,ph, val=1, dur|Out.kr(out,
+/*	SinOsc.kr(Select.kr(val,
 			[    ~hz1beat, ~hzHbeat/*,0.321875*/	])
 
-			* SinOsc.kr(~hzHbeat*2).range(~hz1beat.neg, ~hz1beat)).range(~hz8Oct, ~hz1Oct)
+			* SinOsc.kr(~hzHbeat*2).range(~hz1beat.neg, ~hz1beat)).range(~hz8Oct, ~hz1Oct)*/
+
+
+	SinOsc.kr(Select.kr(LFNoise2.ar(~hz1beat).range(0,3).round(1),
+		[    ~hz1beat/4, ~hzHbeat,~hz1beat,~hz1beat *4 /*,~hzHbeat*4   */  /*,0.321875*/	]
+	)    *  SinOsc.kr(~hzHbeat*2).range((~hz1beat.neg),~hz1beat),ph).range(~hz8Oct,~hz1Oct)
+
+
 		*EnvGen.kr(Env.step([1,0],[dur,0]),doneAction: 2))}).add;
+
+
+	SynthDef(\lfo12, {|out, val=1,ph, dur|Out.kr(out,
+LFNoise0.kr(~hz1beat).range(0.6,0.0)/*,0.02)*/
+		+SinOsc.kr(SelectX.kr(LFNoise0.kr(~hz1beat*4).range(0,1).round(1),[~hz1beat,~hz1beat*4,~hz1beat*16]),ph).range(0.03,0.00)
+*EnvGen.kr(Env.step([0.06,0],[dur,0]),doneAction: 2))}).add;
+
+
+
+
+		SynthDef(\lfo13, {|out, dur,ph| Out.kr(out,SinOsc.ar(~hzQbeat,ph).range(1,0.4)
+*EnvGen.kr(Env.step([1,0],[dur,0]),doneAction: 2))}).add;
+
+
+
+
 
 	/*Out.kr(~bus5, SinOsc.kr(Select.kr(LFNoise2.ar(~hz1beat).range(0,1).round(1),
 		[    ~hz1beat, ~hzHbeat/*,0.321875*/	]
@@ -425,7 +448,7 @@ s.sync;
 
 /*sig = Pan2.ar( sig , pan);*///0 was pan
 
-	Out.ar(out,HPF.ar(sig.dup,100);//* env2 //*amp
+	Out.ar(out,HPF.ar(sig.dup,100)*amp.dbamp;//* env2 //
 
     )
 }).add;
@@ -597,7 +620,7 @@ SynthDef(\algo, {
 
 		bp = BPF.ar(sig,In.kr(busMod, 1) *factor3  ,0.26);
 
-		hp = BHiPass4.ar(sig, In.kr(busMod, 1),In.kr(bus7, 1));
+		hp = BHiPass4.ar(sig, In.kr(busMod, 1),/*0.6 */ In.kr(bus7, 1));
 
 		sig = SelectX.ar(which, [lp, bp,hp,sig]);
 
@@ -616,7 +639,7 @@ SynthDef(\algo, {
 
 		env =   In.ar(in, 1) *    EnvGen.kr(Env(
 			[vlAtk,vlDec                  ,vlSub ,vlRel,0],
-			[dur * atkT ,dur *decT  -In.kr(bus1, 1)  -relSu, dur * subsT,dur* relT],
+			[dur * atkT ,dur *decT -  In.kr(bus1, 1) /*- -relSu*/, dur * subsT,dur* relT],
 			[atckC,decC ,0     ,relC]),    //decC- (In.kr(bus2, 1)
 
 
@@ -697,7 +720,36 @@ SynthDef(\algo, {
 		Out.ar(out, sig);
 	}).add;
 
+SynthDef("TriggerBufferGranular", {arg out=0, bufnum=0, in=0, thresh = 0.004, ampScaler = 1, duration =
+1.5544, pan=0,centerPosition=0.1, interp=1, incrementBy = 200, dur;
 
+	var trig, amp, gatedAmp, triggerBool, outamp, bufferFrames, bufRateScale;
+	var bufPointer, trigs, env, envGens, outArray, grNum;
+
+	grNum = 4; // the number of granulators in the synthdef   4
+	bufferFrames = BufFrames.kr(bufnum);
+	bufRateScale = BufRateScale.kr(bufnum);
+	amp = Amplitude.kr (SoundIn.ar(in));
+	triggerBool = (SoundIn.ar(in) >= thresh);
+	gatedAmp = Latch.kr(amp, triggerBool);
+	outamp = (gatedAmp * ampScaler);
+
+	trig = Trig.kr(triggerBool, duration/4);  //makes a trigger if triggerBool goes over the threshold
+	env = Env([0,1,0],[duration/2,duration/2],'sine');
+
+	bufPointer = PulseCount.kr(trig);  //a counter that counts the number of triggers triggered
+
+	//each trigger below triggers once for every four times trig (above) triggers (if a trig trig could trig trig)
+
+	trigs = Array.fill(grNum, {|i| PulseDivider.kr(trig, 4, i )});//4
+	envGens = Array.fill(grNum, {|i| EnvGen.kr(env, trigs[i] ) });
+
+	//trigs correspond to and trigger a PlayBuf below - the pointer slowly moves through the file
+	outArray = Array.fill(grNum, {|i| PlayBuf.ar(1, bufnum, bufRateScale, trigs[i], (bufPointer*incrementBy)%bufferFrames)*envGens[i]});
+
+	Out.ar(out, Pan2.ar(Mix(outArray))*EnvGen.kr(Env.step([1],[dur]),doneAction: 2)    );
+
+}).add;
 
 
 

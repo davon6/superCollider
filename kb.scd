@@ -65,7 +65,7 @@
 
 Ppar([Pseq([~bass],inf),Pbindf(~snare,\da1,0)],1);//JEEEZ
 
-~toUse =  Prand([
+~toUse =  Pseq([
 
 
 	~perc[5],
@@ -121,6 +121,6 @@ Ppar([~bar[6],~snare],1),
 
 	],1)   ],1)
 
-],inf);
+].scramble,inf);
 )
 
