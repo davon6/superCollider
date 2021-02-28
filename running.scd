@@ -96,8 +96,8 @@ s.sync;
 
 	s.sync;
 
-	~short = Prand([  /*Pseq([1/4], 1),*/ Pseq([1/4], 4) ,Pseq([1/4], 16) ,Pseq([1/4], 64), Pseq([1/1], 1),     ],1 );
-	~long = Prand([ Pseq([1/1],1), Pseq([4/1],1), Pseq([16/1],1) ],1);
+	~short = Prand([ Pseq([1/4], 4) ,Pseq([1/4], 16) ,Pseq([1/4], 64), Pseq([1/1], 1),     ],1 );
+	~long = Prand([ Pseq([1/1],1), Pseq([4/1],1), Pseq([1/4],1) ],64);
 	~short1 = Prand([ Pseq([1/4],1),Pseq([1/1],1),Pseq([4/1],1)],1);
 
 	~long1 = Prand([ Pseq([16/1],1),Pseq([1/1],1),Pseq([4/1],1)],1);
@@ -549,13 +549,8 @@ SynthDef(\men,{|out = 0, dur|Out.ar(out,
 	sig  = LeakDC.ar(sig);
 
 
-		Out.ar(out, //CompanderD.ar(
-
-			sig
-			//, 0.001,1,0.05,0.01,0.8)*gain
-
-
-		);
+		Out.ar(out,
+sig);
 }).add;
 
 
