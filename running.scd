@@ -16,17 +16,17 @@ Pseq([~remyAudio],inf).play
 
 Server.default.options.sampleRate =  48000
 Server.default.options.outDevice_("Audient iD14");
-
+Server.default.options.outDevice_("External Headphones");
 Server.default.options.outDevice_("Built-in Output");
 
 ~kick.play
-
+ServerOptions.outDevices
 (
 s.waitForBoot({
 
 
 	var numSegs;
-
+	// ~bpm = 171.703592;
 	~bpm = 151.703592;
 
 	~hz1beat = ~bpm * 16/60/32;
@@ -275,16 +275,16 @@ s.sync;
 
 	SinOsc.kr(Select.kr(LFNoise2.ar(~hz1beat).range(0,3).round(1),
 		[    ~hz1beat/4, ~hzHbeat,~hz1beat,~hz1beat *4 /*,~hzHbeat*4   */  /*,0.321875*/	]
-	)    *  SinOsc.kr(~hzHbeat*2).range((~hz1beat.neg),~hz1beat),ph).range(~hz8Oct,~hz1Oct)
+	)    *  SinOsc.kr(~hzHbeat*4).range((~hz1beat.neg),~hz1beat),ph).range(~hz8Oct,~hz1Oct)
 
 
 		*EnvGen.kr(Env.step([1,0],[dur,0]),doneAction: 2))}).add;
 
 
 	SynthDef(\lfo12, {|out, val=1,ph, dur|Out.kr(out,
-LFNoise0.kr(~hz1beat).range(0.6,0.0)/*,0.02)*/
-		+SinOsc.kr(SelectX.kr(LFNoise0.kr(~hz1beat*4).range(0,1).round(1),[~hz1beat,~hz1beat*4,~hz1beat*16]),ph).range(0.03,0.00)
-*EnvGen.kr(Env.step([0.06,0],[dur,0]),doneAction: 2))}).add;
+LFNoise0.kr(~hz1beat).range(0.1,0.0)/*,0.02)*/
+		+SinOsc.kr(SelectX.kr(LFNoise0.kr(~hz1beat*4).range(0,1).round(1),[~hz1beat,~hz1beat*4,~hz1beat*16]),ph).range(0.2,0.00)
+*EnvGen.kr(Env.step([0.08,0],[dur,0]),doneAction: 2))}).add;
 
 
 
@@ -358,7 +358,7 @@ LFNoise0.kr(~hz1beat).range(0.6,0.0)/*,0.02)*/
 		sig =
 		BPeakEQ.ar(
 			SinOsc.ar(envF, mul: env)
-			,659.255,16, (-12));
+			,659.255,12, (-12));
 
 		sig = sig * amp.dbamp  !2;
 
