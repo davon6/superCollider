@@ -421,10 +421,10 @@ Pbind(\instrument, \filter, \dur,Pseq([4096/1],1),\which,0, \in,~filterBus,\busM
 
 	Pbind(\instrument,\gateS, \vlDec, 1,\vlSub, 1,/* \decC,50,*/\dur,Prand([Pseq([1/4],64)/*,Pseq([1/1 ],64  ) */],inf), \in, ~gateSeqBus , \group, ~gateGrp2,
 		\type,  Pxrand([Pseq([
-			\rest, \note, \note, \rest, \note, \rest, \rest, \rest,
-			\rest, \note, \note, \rest, \note, \rest, \rest, \rest,
+			\rest, \note, \note, \rest, \note, \rest, \note, \rest,
+			\rest, \note, \note, \rest, \note, \rest, \note, \rest,
 			\rest, \note, \note, \rest, \rest, \rest, \rest, \rest,
-			\rest, \note, \note, \rest, \note, \rest, \rest, \rest  ],4), Pseq([\note], 64) ], inf),
+			\rest, \note, \note, \rest, \note, \rest, \note, \rest  ],4), Pseq([\note], 64) ], inf),
 		\atkT, Pseq([ 0,0.4,0,0 ,0,0,0,0 ],inf),
 		\decT,Pseq([ 1,0.59,1,1,  1,1,1,1],inf),
 		\atckC, Pseq([0,5,0,0 ,  0,0,0,0],inf),

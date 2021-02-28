@@ -384,7 +384,11 @@ LFNoise0.kr(~hz1beat).range(0.1,0.0)/*,0.02)*/
 
 		sig = Saw.ar(freq,-1,-0.4);
 		sig = sig.lincurve(-1,1,-1,1,-7);
-		sig = BLowPass.ar(sig, lpf - In.ar(bus, 1));
+		sig = BPeakEQ.ar(
+
+			BLowPass.ar(sig, lpf - In.ar(bus, 1))
+
+			,659.255,12, (4));
 
 		sig = sig * amp.dbamp;
 
