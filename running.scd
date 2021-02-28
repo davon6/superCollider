@@ -470,9 +470,9 @@ SynthDef(\multi, {|out=0| Out.ar(out,
 
 +	SinOsc.kr(0.02).range(-6.58, 6.48)
 	+ LFNoise0.kr(//10.3
-			Select.kr( LFNoise0.kr(0.321875).range(0,2),
+			Select.kr( LFNoise0.kr(0.321875).range(0,3),
 
-				[10.3, 1.2875, 0.321875])
+				[10.3, 1.2875, 0.321875,0.08046875])
 
 		).range(-300, 300)
 
