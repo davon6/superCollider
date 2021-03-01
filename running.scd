@@ -228,6 +228,14 @@ s.sync;
 
 	~noiseStereo2 =  Bus.audio(s,1);
 
+	~lpSide=  Bus.audio(s,1);
+	~gateSide=  Bus.audio(s,1);
+	~comSide =  Bus.audio(s,2);
+	~limitSide =  Bus.audio(s,2);
+	~stereoSide =  Bus.audio(s,2);
+	~revSide=  Bus.audio(s,1);
+
+
 
 
 	s.sync;
@@ -251,6 +259,9 @@ s.sync;
 
 	~bus13 = Bus.control(s,1);
 
+	~bus14 = Bus.control(s,1);
+
+	~bus15 = Bus.control(s,1);
 	s.sync;
 
 	SynthDef(\playBuf ,{|out = 0,start, trig, dur|Out.ar(out,PlayBuf.ar(2,~remyAudio,trigger: Dust.kr(4.0),startPos: start,doneAction: 2));}).add;
@@ -298,7 +309,8 @@ LFNoise0.kr(~hz1beat).range(0.1,0.0)/*,0.02)*/
 
 	SynthDef(\lfo14, {|out, val, dur| Out.kr(out, EnvGen.kr(Env.step([val,0],[dur,0]),doneAction: 2))}).add;
 
-
+	SynthDef(\lfo15, {|out, val, dur|Out.kr(out,  SinOsc.kr( ~hz1beat/4).range(~hz1beat*64, ~hz1beat*1024)
+		*EnvGen.kr(Env.step([1,0],[dur,0]),doneAction: 2))}).add;
 
 	/*Out.kr(~bus5, SinOsc.kr(Select.kr(LFNoise2.ar(~hz1beat).range(0,1).round(1),
 		[    ~hz1beat, ~hzHbeat/*,0.321875*/	]
@@ -883,6 +895,16 @@ SynthDef("TriggerBufferGranular", {arg out=0, bufnum=0, in=0, thresh = 0.004, am
 			Splay.arFill(10,
 				In.ar(in, 1)
 				,spread,level,center)* EnvGen.kr(Env.step([1],[dur]),doneAction: 2)
+		);
+	}).add;
+
+
+	SynthDef(\stereoS,{|out=0, in, spread=0, level=1, center=0.0,dur,modPan|
+
+		Out.ar(out,
+			Splay.arFill(10,
+				In.ar(in, 1)
+				,spread,level,center+ In.kr(modPan))* EnvGen.kr(Env.step([1],[dur]),doneAction: 2)
 		);
 	}).add;
 
