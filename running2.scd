@@ -211,7 +211,7 @@ Ppar([
 
 	Pbind(\instrument,\dispatchS,\dur,Pseq([ ~long2],inf), \type,Pseq([\note, \rest],inf),\in, ~dispatchBg , \out, Prand([~bgFil,~bgCom],inf), \group, ~dispatchGrp1),
 
-
+//JEEz keep disapearing
 
 	Pbind(\instrument, \filterS, \dur, inf, \in,~bgFil  ,\which,0, \busMod, ~bus10, \rqLPF, ~bus3,\out, ~bgCom, \group, ~filterGrp2),
 
@@ -219,7 +219,7 @@ Ppar([
 Pbind(\instrument,\comp, \dur,Pseq([1024/1],1),\thr,0.4 ,\sB, 1.04,\sA, 0.2,\atk ,0.0968, \rel ,0.3872
 		,\in, ~bgCom ,\ctrl, ~kbus, \group, ~compGrp,\out,~bgLimit),
 Pbind(\instrument, \limiter,\in, ~bgLimit, \dur, inf,\gain,0.05,\group,~limitGrp,\out,~bgStereo),
-Pbind(\instrument,\stereo, \dur, inf, \in, ~bgStereo   ,\out,0, \spread, 10, \group, ~stereoGrp),
+Pbind(\instrument,\stereo, \dur, Pseq([1024/1],1), \in, ~bgStereo   ,\out,0, \spread, 10, \group, ~stereoGrp),
 
 
 
