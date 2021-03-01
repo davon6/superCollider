@@ -188,7 +188,7 @@ Ppar([
 
 	Ppar([
 
-		Pbind(\instrument, \wNoise,\dur, ~short1,\dec ,Pkey(\dur),\amp,(-14),\out,~noiseRev),
+		Pbind(\instrument, \wNoise,\dur, ~short1,\dec ,Pkey(\dur),\amp,(-16),\out,~noiseRev),
 		Pbindf( Prand([~quickFix, ~rLong,~rShort]),\instrument, \reverbS, \dur,inf, \in,~noiseRev  , \out,0 ,\group,~revGrp),
 
 	Pbind(\instrument, \wNoise,\dur,Pseq([16/1],1),\dec ,Pkey(\dur),\amp,(-12),\type,\rest/*~noiseStereo1*/)
@@ -209,7 +209,7 @@ Ppar([
 
 	Pbind(\instrument, \EQ2, \dur, inf, \val, 2605.12,\quant,8, \gain,(-20) ,\in, ~eqBg, \out, ~dispatchBg, \group, ~eqGrp),
 
-	Pbind(\instrument,\dispatchS,\dur,Pseq([ ~long2],inf), \type,Prand([\note, \rest],inf),\in, ~dispatchBg , \out, Prand([~bgFil,~bgCom],inf), \group, ~dispatchGrp1),
+	Pbind(\instrument,\dispatchS,\dur,Pseq([ ~long2],inf), \type,Pwrand([\note, \rest],[1,4].normalizeSum, inf),\in, ~dispatchBg , \out, Prand([~bgFil,~bgCom],inf), \group, ~dispatchGrp1),
 
 //JEEz keep disapearing
 
@@ -341,8 +341,11 @@ Pxrand([
 
 
 
-	Pbind(\instrument, \gate, \dur, Pseq([1/4],16),
-			\type, Pxrand([ Pseq([\note],256) , Pseq([\note,\rest,\note,\rest, \rest,\note,\rest,\note],8)],inf), \group, ~gateGrp,
+			Pbind(\instrument, \gate, \dur,Pxrand([ Pseq([1/4],16),Pseq([1/4],64)],1),
+			\type, Pxrand([ Pseq([\note],256) , Pseq([\note,\rest,\note,\rest, \rest,\note,\rest,\note],8),
+
+
+				Pseq([\rest,\rest,\note,\rest, \rest,\note,\rest,\rest],8)],inf), \group, ~gateGrp,
 		\atkT, 0.01, \decT, 0.89, /*\subsT, 0.1,*/ \relT, 0.1,
 
 			\vlDec,0.8,\relC, (-4),
