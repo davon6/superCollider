@@ -44,7 +44,7 @@ s.sync;
 // tempo wanted
 
 	t = TempoClock.new(~bpm/60).permanent_(true);
-t = TempoClock.new(147/60).permanent_(true);
+
 
 	/*s.meter;
 	s.plotTree;*/
@@ -148,11 +148,11 @@ t = TempoClock.new(147/60).permanent_(true);
 	~phaseBus = Bus.audio(s,1);
 
 	~bgBus = Bus.audio(s,1);
-	~bgFil = Bus.audio(s,1);
+	~bgFil = Bus.audio(s,2);
 	~bgCom = Bus.audio(s,1);
 	~bgLimit = Bus.audio(s,1);
 	~bgStereo = Bus.audio(s,1);
-	~dispatchBg = Bus.audio(s,1);
+	~dispatchBg = Bus.audio(s,2);
 
 
 	~filterBus = Bus.audio(s,1);
@@ -170,7 +170,7 @@ t = TempoClock.new(147/60).permanent_(true);
 
 	~distoBg = Bus.audio(s,1);
 
-	~eqBg = Bus.audio(s,1);
+	~eqBg = Bus.audio(s,2);
 
 	~delayBus = Bus.audio(s,1);
 
@@ -224,7 +224,7 @@ t = TempoClock.new(147/60).permanent_(true);
 
 	~bassShapB = Bus.audio(s,1);
 
-	~noiseStereo1 =  Bus.audio(s,1);
+	~noiseRev =  Bus.audio(s,2);
 
 	~noiseStereo2 =  Bus.audio(s,1);
 
@@ -306,6 +306,9 @@ LFNoise0.kr(~hz1beat).range(0.1,0.0)/*,0.02)*/
 
 
 	SynthDef(\lfoSaw, {|out, val, dur|Out.kr(out,
+		//Saw.kr(val).range(~hz1beat*256, ~hz1beat*2048)* EnvGen.kr(Env.step([1],[dur]),doneAction: 2)
+
+
 		Saw.kr(val).range(~hz1beat*256, ~hz1beat*2048)* EnvGen.kr(Env.step([1],[dur]),doneAction: 2)
 	)}).add;
 
@@ -595,7 +598,7 @@ SynthDef(\algo, {
 
 
 	SynthDef(\dispatch,{|in, out, dur|Out.ar(out, In.ar(in,1)* EnvGen.kr(Env([1,0],[dur,0],60),doneAction:2))}).add;
-
+	SynthDef(\dispatchS,{|in, out, dur|Out.ar(out, In.ar(in,2)* EnvGen.kr(Env([1,0],[dur,0],60),doneAction:2))}).add;
 //below dur can be factored to change mod
 	SynthDef(\shift, {|in, out, freq,boo, freq2, factor =1, factor2, factor3, vlPE =27.1366666667,vlPE2=0.2, crvEP = (-2), dcPE = 0.129066666667, dur,
 		vlPE3,vlPE33,crvEP2, dA=0, dA2=0, dA3=0|
@@ -618,6 +621,23 @@ SynthDef(\algo, {
 		var lp, bp, hp, sig;
 
 		sig = In.ar(in,1);
+
+		lp = BLowPass4.ar(sig ,  In.kr(busMod, 1) ,In.kr(rqLPF));
+
+		bp = BPF.ar(sig,In.kr(busMod, 1) *factor3  ,0.26);
+
+		hp = BHiPass4.ar(sig, In.kr(busMod, 1),/*0.6 */ In.kr(bus7, 1));
+
+		sig = SelectX.ar(which, [lp, bp,hp,sig]);
+
+		Out.ar(out, sig);
+	}).add;
+
+	SynthDef(\filterS,{|out=0, in, busMod, bus7, which, factor3=1, rqLPF=0.5 |
+
+		var lp, bp, hp, sig;
+
+		sig = In.ar(in,2);
 
 		lp = BLowPass4.ar(sig ,  In.kr(busMod, 1) ,In.kr(rqLPF));
 
