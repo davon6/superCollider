@@ -31,6 +31,7 @@ s.waitForBoot({
 
 	~hz1beat = ~bpm * 16/60/32;
 
+
 	~hz1Oct = ~bpm * 16/30;
 	~hzQbeat = ~hz1beat/4;
 	~hzHbeat = ~hzQbeat/4;
@@ -43,7 +44,7 @@ s.sync;
 // tempo wanted
 
 	t = TempoClock.new(~bpm/60).permanent_(true);
-
+t = TempoClock.new(147/60).permanent_(true);
 
 	/*s.meter;
 	s.plotTree;*/
@@ -164,6 +165,8 @@ s.sync;
 	~distoBus2 = Bus.audio(s,1);
 	~distoBus3 = Bus.audio(s,1);
 	~distoBus4 = Bus.audio(s,1);
+	~distoBass = Bus.audio(s,2);
+	~eqBass = Bus.audio(s,2);
 
 	~distoBg = Bus.audio(s,1);
 
@@ -258,7 +261,7 @@ s.sync;
 
 	halfBeat = t.beatDur * 0.5;
 
-		shap = EnvGen.ar(Env([vl1,vl2],[halfBeat,halfBeat],9),doneAction:dA1);
+		shap = EnvGen.ar(Env([vl1,vl2],[halfBeat,halfBeat],6),doneAction:dA1);
 
 	Out.ar(out, shap);
 
@@ -275,7 +278,7 @@ s.sync;
 
 	SinOsc.kr(Select.kr(LFNoise2.ar(~hz1beat).range(0,3).round(1),
 		[    ~hz1beat/4, ~hzHbeat,~hz1beat,~hz1beat *4 /*,~hzHbeat*4   */  /*,0.321875*/	]
-	)    *  SinOsc.kr(~hzHbeat*4).range((~hz1beat.neg),~hz1beat),ph).range(~hz8Oct,~hz1Oct)
+	)    *  SinOsc.kr(~hzHbeat*4).range((~hz1beat.neg),~hz1beat),ph).range(~hz8Oct/8,~hz1Oct/4)
 
 
 		*EnvGen.kr(Env.step([1,0],[dur,0]),doneAction: 2))}).add;
@@ -293,6 +296,7 @@ LFNoise0.kr(~hz1beat).range(0.1,0.0)/*,0.02)*/
 *EnvGen.kr(Env.step([1,0],[dur,0]),doneAction: 2))}).add;
 
 
+	SynthDef(\lfo14, {|out, val, dur| Out.kr(out, EnvGen.kr(Env.step([val,0],[dur,0]),doneAction: 2))}).add;
 
 
 
@@ -358,7 +362,7 @@ LFNoise0.kr(~hz1beat).range(0.1,0.0)/*,0.02)*/
 		sig =
 		BPeakEQ.ar(
 			SinOsc.ar(envF, mul: env)
-			,659.255,12, (-12));
+			,659.255,16, (-22));
 
 		sig = sig * amp.dbamp  !2;
 
@@ -386,7 +390,7 @@ LFNoise0.kr(~hz1beat).range(0.1,0.0)/*,0.02)*/
 		sig = sig.lincurve(-1,1,-1,1,-7);
 		sig = BPeakEQ.ar(
 
-			BLowPass.ar(sig, lpf - In.ar(bus, 1))
+		BLowPass.ar(sig, lpf - In.ar(bus, 1)).round(2**(-16));
 
 			,659.255,12, (4));
 
@@ -394,7 +398,7 @@ LFNoise0.kr(~hz1beat).range(0.1,0.0)/*,0.02)*/
 
 		sig = sig * env;
 
-		Out.ar(out, sig!2);
+		Out.ar(out, Pan2.ar(sig));
 	}).add;
 
 	s.sync;
@@ -433,7 +437,7 @@ LFNoise0.kr(~hz1beat).range(0.1,0.0)/*,0.02)*/
 
 	sig = HPF.ar( car+car2,500);
 
-		Out.ar(out, Latch.ar(sig,Impulse.ar(latch))!2
+		Out.ar(out,Pan2.ar( Latch.ar(sig,Impulse.ar(latch)))
 			* amp.dbamp);
 
 }).add;
@@ -631,7 +635,7 @@ SynthDef(\algo, {
 
 
 	SynthDef(\disto, {|out=0,in, hpf= 81.41|Out.ar(out, HPF.ar( In.ar(in,1),hpf).round(2**(-16)));}).add;
-
+	// SynthDef(\disto2, {|out=0,in, lpf= 81.41|Out.ar(out, BLowPass.ar( In.ar(in,2),lpf).round(2**(-16)));}).add;
 
 	SynthDef(\gate,{|in, out=0, vlAtk=0, vlDec=1,vlSub=0, vlRel=0, atkT=0, decT=1, subsT=0, relT=0, atckC=0, decC=0, relC=0, bus1, bus2, dur,relSu=0|
 	var env;
@@ -757,11 +761,10 @@ SynthDef("TriggerBufferGranular", {arg out=0, bufnum=0, in=0, thresh = 0.004, am
 
 	SynthDef(\reverb, {
 		|out=0, roomsize, revtime, damping, inputbw, spread = 15, drylevel, earlylevel,
-    taillevel, amp=0.3,maxRoomsize,wet=0.4,in =0,wF =0, spread2=0, level=1, center=0.0, multi = 2|
+    taillevel, amp=0.3,maxRoomsize,wet=0.4,in =0,wF =0, spread2=0, level=1, center=0.0, multi = 2, mod|
 
 	var a ,input;
 
-		//trim freq below 100hz before to 16 bits the sound
 		input =In.ar(in,1);
 
 		a = Resonz.ar(
@@ -774,14 +777,11 @@ SynthDef("TriggerBufferGranular", {arg out=0, bufnum=0, in=0, thresh = 0.004, am
 		).sum * 10;
 
 
-		//apply reverb , splay stereo and another 100hz trim
     Out.ar(    out,
-			//Splay.ar(
-				//BHiPass4.ar(
             GVerb.ar(
             a,
             roomsize,
-            revtime,
+				revtime + In.kr(mod),
             damping,
             inputbw,
             spread,
@@ -789,11 +789,7 @@ SynthDef("TriggerBufferGranular", {arg out=0, bufnum=0, in=0, thresh = 0.004, am
             earlylevel.dbamp,
             taillevel.dbamp,
 				roomsize+1,0.6)
-		+ input
-			//,81.41)
-
-			//,spread2,level,center)
-		)
+		+ input	)
 
 	}).add;
 
@@ -838,6 +834,8 @@ SynthDef("TriggerBufferGranular", {arg out=0, bufnum=0, in=0, thresh = 0.004, am
 		SynthDef(\EQ, {|out=0, in, val, quant, gain| Out.ar(out, BPeakEQ.ar(
 		In.ar(in, 1),val,quant, gain))};).add;
 
+	SynthDef(\EQ2, {|out=0, in, val, quant, gain| Out.ar(out, BPeakEQ.ar(
+		In.ar(in, 2),val,quant, gain))};).add;
 
 
 
