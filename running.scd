@@ -62,13 +62,14 @@ s.sync;
 
 
 	//this section initialize the shaper
-	numSegs= rrand(1,4);
+	"no of seg".postln;
+	numSegs= rrand(1,4).postln;
 
 
 	~tf = Env(
-		(({rrand(0.0,1.0)}!(numSegs+1)) * [1,-1]).scramble,
-		{exprand(1,20)}!numSegs,
-		{rrand(-20,20)}!numSegs
+		(({rrand(0.0,1.0).postln}!(numSegs+1)) * [1,-1]).scramble,
+		{exprand(1,20).postln}!numSegs,
+		{rrand(-20,20).postln}!numSegs
 	).asSignal(1025);
 
 
