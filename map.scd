@@ -3,10 +3,10 @@
 
 (
 
-d = (Synth( \fm2, [\dur, inf,\stretch, 3.5,\mRatio, 1,\cRatio, 1,\index, 1,\atkE, 0.1,\out, 0,\amp,0],~synthGrp));
-w = (Synth( \fm3, [\dur, inf,\stretch, 3.5,\mRatio, 1,\cRatio, 1,\index, 1,\atkE, 0.1,\out, 0,\amp,0],~synthGrp));
-q = (Synth( \fm4, [\dur, inf,\stretch, 3.5,\mRatio, 1,\cRatio, 1,\index, 1,\atkE, 0.1,\out, 0,\amp,0],~synthGrp));
-t = (Synth( \fm, [\dur, inf,\stretch, 3.5,\mRatio, 1,\cRatio, 1,\index, 1,\atkE, 0.1,\out, 0,\amp,0/*~outFil*/],~synthGrp));
+d = (Synth( \fm2, [\dur, inf,\stretch, 3.5,\mRatio, 1,\cRatio, 1,\index, 1,\atkE, 0.1,\out, 0,\amp,0.01],~synthGrp));
+w = (Synth( \fm3, [\dur, inf,\stretch, 3.5,\mRatio, 1,\cRatio, 1,\index, 1,\atkE, 0.1,\out, 0],~synthGrp));
+q = (Synth( \fm4, [\dur, inf,\stretch, 3.5,\mRatio, 1,\cRatio, 1,\index, 1,\atkE, 0.1,\out, 0],~synthGrp));
+t = (Synth( \fm, [\dur, inf,\stretch, 3.5,\mRatio, 1,\cRatio, 1,\index, 1,\atkE, 0.1,\out, 0,/*~outFil*/],~synthGrp));
 )
 
 (
@@ -14,48 +14,53 @@ t = (Synth( \fm, [\dur, inf,\stretch, 3.5,\mRatio, 1,\cRatio, 1,\index, 1,\atkE,
 
 MIDIdef.noteOn(\sec, {|vel, nn, chan, src|
 	[nn].postln;
-	t .set(\amp,0);
-d.set(\amp,0.01);
-w.set(\amp,0);
-q.set(\amp,0);
+	t .set(\gate,0);
+d.set(\gate,1);
+w.set(\gate,0);
+q.set(\gate,0);
 },noteNum: 63);
+
+
+MIDIdef.noteOn(\first, {|vel, nn, chan, src|
+	[nn].postln;
+t.set(\gate,1);
+d.set(\gate,0);
+w.set(\gate,0);
+q.set(\gate,0);
+
+},noteNum: 62);
 
 MIDIdef.noteOn(\thi, {|vel, nn, chan, src|
 	[nn].postln;
-	t.set(\amp,0);
-d.set(\amp,0);
-w.set(\amp,0.2);
-q.set(\amp,0);
+	t.set(\gate,0);
+d.set(\gate,0);
+w.set(\gate,1);
+q.set(\gate,0);
 
 },noteNum: 64);
 
 MIDIdef.noteOn(\fou, {|vel, nn, chan, src|
 	[nn].postln;
-	t.set(\amp,0);
-d.set(\amp,0);
-w.set(\amp,0);
-q.set(\amp,0.2);
+	t.set(\gate,0);
+d.set(\gate,0);
+w.set(\gate,0);
+q.set(\gate,1);
 
 },noteNum: 65);
 
 
-MIDIdef.noteOn(\first, {|vel, nn, chan, src|
+
+
+/*MIDIdef.noteOn(\first, {|vel, nn, chan, src|
 	[nn].postln;
-t.set(\amp,0);
-d.set(\amp,0);
-w.set(\amp,0);
-q.set(\amp,0);
+t.set(\gate,0);
+d.set(\gate,0);
+w.set(\gate,0);
+q.set(\gate,0);
 
-},noteNum: 61);
+},noteNum: 61);*/
 
-MIDIdef.noteOn(\first, {|vel, nn, chan, src|
-	[nn].postln;
-t.set(\amp,0.2);
-d.set(\amp,0);
-w.set(\amp,0);
-q.set(\amp,0);
 
-},noteNum: 62);
 
 )
 

@@ -5,7 +5,7 @@
 
 (
 SynthDef(\fm, {
-	arg freq = 500,freq2 = 50, mRatio = 1, cRatio = 1, index = 1, iScale = 5, amp = 0.2, atk = 0.01, rel = 30000, cAtk = 4, cRel = 80, pan = 0, freq3=50, index2=1, index3=1, multi, out=0;
+	arg freq = 500,freq2 = 50, mRatio = 1, cRatio = 1, index = 1, iScale = 5, amp = 0.2, atk = 0.01, rel = 30000, cAtk = 4, cRel = 80, pan = 0, freq3=50, index2=1, index3=1, multi, out=0, gate;
 	var car, mod2, env, iEnv, mod, sig;
 	iEnv = EnvGen.kr(
 		Env.new(
@@ -34,7 +34,7 @@ SynthDef(\fm, {
 
 
 	sig = Pan2.ar(sig, pan);
-	Out.ar(out, sig);
+	Out.ar(out, sig * EnvGen.kr(Env.adsr(0.1), gate));
 }).add;
 
 
@@ -43,7 +43,7 @@ SynthDef(\fm, {
 
 
 SynthDef(\fm2, {
-	arg freq = 500,freq2 = 50, mRatio = 1, cRatio = 1, index = 1, iScale = 5, amp = 0.2, atk = 0.01, rel = 30000, cAtk = 4, cRel = 80, pan = 0, freq3=50, index2=1, index3=1,multi, out=0;
+	arg freq = 500,freq2 = 50, mRatio = 1, cRatio = 1, index = 1, iScale = 5, amp = 0.2, atk = 0.01, rel = 30000, cAtk = 4, cRel = 80, pan = 0, freq3=50, index2=1, index3=1,multi, out=0, gate;
 	var car, mod2, env, iEnv, mod, sig;
 	iEnv = EnvGen.kr(
 		Env.new(
@@ -67,13 +67,13 @@ SynthDef(\fm2, {
 
 
 	sig = Pan2.ar(sig, pan);
-	Out.ar(out, sig);
+	Out.ar(out, sig * EnvGen.kr(Env.adsr(0.1), gate));
 }).add;
 
 
 
 SynthDef(\fm3, {
-	arg freq = 500,freq2 = 50, mRatio = 1, cRatio = 1, index = 1, iScale = 5, amp = 0.2, atk = 0.01, rel = 30000, cAtk = 4, cRel = 80, pan = 0, freq3=50, index2=1, index3=1,multi, out=0;
+	arg freq = 500,freq2 = 50, mRatio = 1, cRatio = 1, index = 1, iScale = 5, amp = 0.2, atk = 0.01, rel = 30000, cAtk = 4, cRel = 80, pan = 0, freq3=50, index2=1, index3=1,multi, out=0, gate;
 	var car, mod2, env, iEnv, mod, sig;
 	iEnv = EnvGen.kr(
 		Env.new(
@@ -97,14 +97,14 @@ SynthDef(\fm3, {
 
 
 	sig = Pan2.ar(sig, pan);
-	Out.ar(out, sig);
+	Out.ar(out, sig * EnvGen.kr(Env.adsr(0.1), gate));
 }).add;
 
 
 
 
 SynthDef(\fm4, {
-	arg freq = 500,freq2 = 50, mRatio = 1, cRatio = 1, index = 1, iScale = 5, amp = 0.2, atk = 0.01, rel = 30000, cAtk = 4, cRel = 80, pan = 0, freq3=50, index2=1, index3=1,multi, out=0;
+	arg freq = 500,freq2 = 50, mRatio = 1, cRatio = 1, index = 1, iScale = 5, amp = 0.2, atk = 0.01, rel = 30000, cAtk = 4, cRel = 80, pan = 0, freq3=50, index2=1, index3=1,multi, out=0, gate;
 	var car, mod2, env, iEnv, mod, sig;
 	iEnv = EnvGen.kr(
 		Env.new(
@@ -128,7 +128,7 @@ SynthDef(\fm4, {
 
 
 	sig = Pan2.ar(sig, pan);
-	Out.ar(out, sig);
+	Out.ar(out, sig * EnvGen.kr(Env.adsr(0.1), gate));
 }).add;
 
 SynthDef(\sequencer,{|value, dur, in, out=0, vlAtk=0, vlDec=1,vlSub=0, vlRel=0, atkT=0, decT=1, subsT=0, relT=0, atckC=0, decC=0, relC=0, bus1, bus2|
