@@ -5,7 +5,7 @@
 
 (
 SynthDef(\fm, {
-	arg freq = 500,freq2 = 50, mRatio = 1, cRatio = 1, index = 1, iScale = 5, amp = 0.2, atk = 0.01, rel = 30000, cAtk = 4, cRel = 80, pan = 0, freq3=50, index2=1, index3=1, multi, out=0, atkE,gate;
+	arg freq = 500,freq2 = 50, mRatio = 1, cRatio = 1, index = 1, iScale = 5, amp = 0.2, atk = 0.01, rel = 30000, cAtk = 4, cRel = 80, pan = 0, freq3=50, index2=1, index3=1, multi, out=0;
 	var car, mod2, env, iEnv, mod, sig;
 	iEnv = EnvGen.kr(
 		Env.new(
@@ -34,7 +34,7 @@ SynthDef(\fm, {
 
 
 	sig = Pan2.ar(sig, pan);
-	Out.ar(out, sig*EnvGen.kr(Env.adsr(atkE),gate,doneAction: 2));
+	Out.ar(out, sig);
 }).add;
 
 

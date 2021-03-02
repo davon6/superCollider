@@ -3,56 +3,69 @@
 
 (
 
+d = (Synth( \fm2, [\dur, inf,\stretch, 3.5,\mRatio, 1,\cRatio, 1,\index, 1,\atkE, 0.1,\out, 0,\amp,0],~synthGrp));
+w = (Synth( \fm3, [\dur, inf,\stretch, 3.5,\mRatio, 1,\cRatio, 1,\index, 1,\atkE, 0.1,\out, 0,\amp,0],~synthGrp));
+q = (Synth( \fm4, [\dur, inf,\stretch, 3.5,\mRatio, 1,\cRatio, 1,\index, 1,\atkE, 0.1,\out, 0,\amp,0],~synthGrp));
+t = (Synth( \fm, [\dur, inf,\stretch, 3.5,\mRatio, 1,\cRatio, 1,\index, 1,\atkE, 0.1,\out, 0,\amp,0/*~outFil*/],~synthGrp));
+)
+
+(
+
 
 MIDIdef.noteOn(\sec, {|vel, nn, chan, src|
 	[nn].postln;
-	t .free;
-d = (Synth( \fm2, [\dur, inf,\stretch, 3.5,\mRatio, 1,\cRatio, 1,\index, 1,\out, 0,\amp,0.01],~synthGrp));
-w.free;
-q.free;
+	t .set(\amp,0);
+d.set(\amp,0.01);
+w.set(\amp,0);
+q.set(\amp,0);
 },noteNum: 63);
 
 MIDIdef.noteOn(\thi, {|vel, nn, chan, src|
 	[nn].postln;
-	t.free;
-d.free;
-w = (Synth( \fm3, [\dur, inf,\stretch, 3.5,\mRatio, 1,\cRatio, 1,\index, 1,\out, 0],~synthGrp));
-q.free;
+	t.set(\amp,0);
+d.set(\amp,0);
+w.set(\amp,0.2);
+q.set(\amp,0);
 
 },noteNum: 64);
 
 MIDIdef.noteOn(\fou, {|vel, nn, chan, src|
 	[nn].postln;
-	t.free;
-d.free;
-w.free;
-q = (Synth( \fm4, [\dur, inf,\stretch, 3.5,\mRatio, 1,\cRatio, 1,\index, 1,\out, 0],~synthGrp));
+	t.set(\amp,0);
+d.set(\amp,0);
+w.set(\amp,0);
+q.set(\amp,0.2);
 
 },noteNum: 65);
 
 
 MIDIdef.noteOn(\first, {|vel, nn, chan, src|
 	[nn].postln;
-t.free;
-d.free;
-w.free;
-q.free;
+t.set(\amp,0);
+d.set(\amp,0);
+w.set(\amp,0);
+q.set(\amp,0);
 
 },noteNum: 61);
 
 MIDIdef.noteOn(\first, {|vel, nn, chan, src|
 	[nn].postln;
-t = (Synth( \fm, [\dur, inf,\stretch, 3.5,\mRatio, 1,\cRatio, 1,\index, 1,\out, 0/*~outFil*/],~synthGrp));
-d.free;
-w.free;
-q.free;
+t.set(\amp,0.2);
+d.set(\amp,0);
+w.set(\amp,0);
+q.set(\amp,0);
 
 },noteNum: 62);
 
 )
 
+t.set(\gate,0);
+
+
+
 s.freeAll
 
+t.set(\amp,0)
 
 
 (
@@ -61,8 +74,8 @@ s.freeAll
 MIDIdef.cc(\myModFreq, { |value, controlNumber|
 
 	var modFreq = value.linlin(0, 127, 00.002, 3200);
-	["CC", controlNumber, "VALUE", value, "modFreq", modFreq.round(0.001)].postln;
-	~modFreqBus.set(modFreq);
+	/*["CC", controlNumber, "VALUE", value, "modFreq", modFreq.round(0.001)].postln;
+	~modFreqBus.set(modFreq);*/
 
 	t.set(\freq2,modFreq.round(0.001));
 	d.set(\freq2,modFreq.round(0.001));
