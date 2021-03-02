@@ -4,9 +4,13 @@
 (
 
 d = (Synth( \fm2, [\dur, inf,\stretch, 3.5,\mRatio, 1,\cRatio, 1,\index, 1,\atkE, 0.1,\out, 0,\amp,0.01],~synthGrp));
-w = (Synth( \fm3, [\dur, inf,\stretch, 3.5,\mRatio, 1,\cRatio, 1,\index, 1,\atkE, 0.1,\out, 0],~synthGrp));
-q = (Synth( \fm4, [\dur, inf,\stretch, 3.5,\mRatio, 1,\cRatio, 1,\index, 1,\atkE, 0.1,\out, 0],~synthGrp));
+
 t = (Synth( \fm, [\dur, inf,\stretch, 3.5,\mRatio, 1,\cRatio, 1,\index, 1,\atkE, 0.1,\out, 0,/*~outFil*/],~synthGrp));
+
+z=(Synth(\sinModul,[\modu,4]));
+x= (Synth(\sawModul,[\modu,4]));
+c =(Synth(\pulModul,[\modu,4]));
+m =(Synth(\ranModul,[\modu,4]));
 )
 
 (
@@ -15,50 +19,59 @@ t = (Synth( \fm, [\dur, inf,\stretch, 3.5,\mRatio, 1,\cRatio, 1,\index, 1,\atkE,
 MIDIdef.noteOn(\sec, {|vel, nn, chan, src|
 	[nn].postln;
 	t .set(\gate,0);
-d.set(\gate,1);
-w.set(\gate,0);
-q.set(\gate,0);
+
+d.set(\gate,1,\factor,0,);
+/*w.set(\gate,0);
+q.set(\gate,0);*/
 },noteNum: 63);
 
 
 MIDIdef.noteOn(\first, {|vel, nn, chan, src|
 	[nn].postln;
-t.set(\gate,1);
+t.set(\gate,1,\factor,0,);
 d.set(\gate,0);
-w.set(\gate,0);
-q.set(\gate,0);
+/*w.set(\gate,0);
+q.set(\gate,0);*/
 
 },noteNum: 62);
+//,\factor,0
 
-MIDIdef.noteOn(\thi, {|vel, nn, chan, src|
-	[nn].postln;
-	t.set(\gate,0);
-d.set(\gate,0);
-w.set(\gate,1);
-q.set(\gate,0);
+MIDIdef.noteOn(\modLfo, {|vel, nn, chan, src|[nn].postln;
+	t.set(\factor,1,\modu, ~mod1);
+	d.set(\factor,1,\modu, ~mod1 );
 
-},noteNum: 64);
+},noteNum: 58);
 
-MIDIdef.noteOn(\fou, {|vel, nn, chan, src|
-	[nn].postln;
-	t.set(\gate,0);
-d.set(\gate,0);
-w.set(\gate,0);
-q.set(\gate,1);
+MIDIdef.noteOn(\modLfo2, {|vel, nn, chan, src|[nn].postln;
+	t.set(\factor,1,\modu, ~mod2);
+	d.set(\factor,1,\modu, ~mod2 );
 
-},noteNum: 65);
+},noteNum: 59);
+
+MIDIdef.noteOn(\modLfo3, {|vel, nn, chan, src|[nn].postln;
+	t.set(\factor,1,\modu, ~mod3);
+	d.set(\factor,1,\modu, ~mod3 );
+
+},noteNum: 60);
+
+MIDIdef.noteOn(\modLfo4, {|vel, nn, chan, src|[nn].postln;
+	t.set(\factor,1,\modu, ~mod4);
+	d.set(\factor,1,\modu, ~mod4 );
+
+},noteNum: 61);
 
 
 
 
-/*MIDIdef.noteOn(\first, {|vel, nn, chan, src|
+
+
+
+MIDIdef.noteOn(\oFF, {|vel, nn, chan, src|
 	[nn].postln;
 t.set(\gate,0);
 d.set(\gate,0);
-w.set(\gate,0);
-q.set(\gate,0);
 
-},noteNum: 61);*/
+},noteNum: 65);
 
 
 
@@ -84,8 +97,8 @@ MIDIdef.cc(\myModFreq, { |value, controlNumber|
 
 	t.set(\freq2,modFreq.round(0.001));
 	d.set(\freq2,modFreq.round(0.001));
-	w.set(\freq2,modFreq.round(0.001));
-	q.set(\freq2,modFreq.round(0.001));
+/*	w.set(\freq2,modFreq.round(0.001));
+	q.set(\freq2,modFreq.round(0.001));*/
 	//~bus.set(modFreq);
 
 /*	Pbindef( \a,
@@ -103,8 +116,8 @@ MIDIdef.cc(\freqx, { |value|var modFreq = value.linlin(0, 127, 00.002, 3200);
 
 	t.set(\freq,modFreq.round(0.001));
 	d.set(\freq,modFreq.round(0.001));
-	w.set(\freq,modFreq.round(0.001));
-	q.set(\freq,modFreq.round(0.001));
+	/*w.set(\freq,modFreq.round(0.001));
+	q.set(\freq,modFreq.round(0.001));*/
 },ccNum: 23 );
 
 
@@ -114,22 +127,22 @@ MIDIdef.cc(\freqx3, { |value|var modFreq = value.linlin(0, 127, 00.002, 3200);
 
 	t.set(\freq3,modFreq.round(0.001));
 d.set(\freq3,modFreq.round(0.001));
-w.set(\freq3,modFreq.round(0.001));
-q.set(\freq3,modFreq.round(0.001));},ccNum: 18 );
+/*w.set(\freq3,modFreq.round(0.001));
+q.set(\freq3,modFreq.round(0.001));*/},ccNum: 18 );
 
 MIDIdef.cc(\cv, { |value|var modFreq = value.linlin(0, 127, 00.002, 160);
 
 	t.set(\index2,modFreq.round(0.001));
 d.set(\index2,modFreq.round(0.001));
-w.set(\index2,modFreq.round(0.001));
-q.set(\index2,modFreq.round(0.001));},ccNum: 20 );
+/*w.set(\index2,modFreq.round(0.001));
+q.set(\index2,modFreq.round(0.001));*/},ccNum: 20 );
 MIDIdef.cc(\cv2, { |value|var modFreq = value.linlin(0, 127, 00.002, 160);
 
 	t.set(\index3,modFreq.round(0.001));
 d.set(\index3,modFreq.round(0.001));
-w.set(\index3,modFreq.round(0.001));
-q.set(\index3,modFreq.round(0.001));},ccNum: 21 );
-
+/*w.set(\index3,modFreq.round(0.001));
+q.set(\index3,modFreq.round(0.001));*/
+},ccNum: 21 );
 
 )
 
