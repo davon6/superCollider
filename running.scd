@@ -177,6 +177,7 @@ s.sync;
 
 	~reverbBus = Bus.audio(s,1);
 	~reverbBus2 = Bus.audio(s,1);
+	~reverbBus3 = Bus.audio(s,1);
 	~reverbRnd = Bus.audio(s,1);
 	~reverbSquelch = Bus.audio(s,1);
 	~reverbMelo = Bus.audio(s,1);
@@ -203,6 +204,7 @@ s.sync;
 	~comSquelch = Bus.audio(s,2);
 	~comFuzz = Bus.audio(s,2);
 	~comFuzz2 = Bus.audio(s,2);
+	~comFuzz3 = Bus.audio(s,2);
 	~comBusHat = Bus.audio(s,2);
 	~comBusCymb = Bus.audio(s,2);
 
@@ -211,6 +213,7 @@ s.sync;
 
 	~limitFuzz = Bus.audio(s,2);
 	~limitFuzz2 = Bus.audio(s,2);
+	~limitFuzz3 = Bus.audio(s,2);
 	~limitRnd = Bus.audio(s,2);
 	~limitSquelch = Bus.audio(s,2);
 	~limitMelo = Bus.audio(s,2);

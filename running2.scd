@@ -319,6 +319,15 @@ Pbind(\instrument,\stereo, \dur, 9999, \in, ~stereoBus3   ,\out,~stetoSnaCom1, \
 
 	Pbindf( Prand([~quickFix, ~rShort, ~rLong]),\dur,inf, \in,~reverbBus2  , \out,~comFuzz2,\group,~revGrp),
 
+	Pbindf( ~rLong,\dur,inf, \in,~reverbBus3  , \out,~comFuzz3,\group,~revGrp),
+
+	Pbind(\instrument,\comp, \dur,Pseq([1/1],1),\thr,0.8 ,\sB, 1.015,\sA, 1/2,\atk ,0.0242, \rel ,0.0968,\gain,/*(70.3)*/1,\in, ~comFuzz3 ,\ctrl, ~kbus, \out,~limitFuzz3, \group, ~compGrp),
+	Pbind(\instrument, \limiter,\in, ~limitFuzz3, \dur, Pseq([1024/1],1),\gain,9,\group,~limitGrp,\out,~stereoBus4),
+
+Pbind(\instrument,\stereo, \dur, 9999, \in, ~stereoBus4   ,\out,~stetoSnaCom1, \group, ~stereoGrp),
+
+
+
 
 
 	Pbind(\instrument,\comp, \dur,Pseq([1/1],1),\thr,0.8 ,\sB, 1.015,\sA, 1/2,\atk ,0.0242, \rel ,0.0968,\gain,/*(70.3)*/1,\in, ~comFuzz2 ,\ctrl, ~kbus, \out,~limitFuzz2, \group, ~compGrp),
@@ -333,6 +342,33 @@ Pxrand([
 
 
 	//GATES
+
+		Pxrand([
+
+		Pbind(\instrument, \gate, \dur, Pseq([1/1],1),
+		\group, ~gateGrp,
+	\vlSub,0.2,\subsT,inf ,\bus1,~bus8,\in, ~gateBus,\out, ~reverbBus/*~gateSeqBus*/),
+
+
+
+			Pbind(\instrument, \gate, \dur,Pseq([4/1],1),
+			\type, Pxrand([ Pseq([\note],256) , Pseq([\note,\rest,\note,\rest, \rest,\note,\rest,\note],8),
+
+
+				Pseq([\rest,\rest,\note,\rest, \rest,\note,\rest,\rest],8)],inf), \group, ~gateGrp,
+		\atkT, 0.01, \decT, 0.89, /*\subsT, 0.1,*/ \relT, 0.1,
+
+			\vlDec,0.8,\relC, (-4),
+
+			\atckC, Pseq([22,0,0,0],inf),
+			 \vlSub,0.2,\bus1,~bus8,\in, ~gateBus2,\out,
+			/*Prand([/*~micBus3,*/~micBus2/*,~reverbBus2*//*,~micBus3,*/],inf)*/
+			Pwrand([~reverbBus3],[1,1,16].normalizeSum,inf)),
+
+
+
+		],1),
+
 
 	Pxrand([
 	Pbind(\instrument, \gate, \dur, Pseq([1/4],3),
