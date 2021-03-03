@@ -59,7 +59,7 @@ SynthDef(\fm, {
 
 	//my carrier is a mess but bring interesting outputs
 
-		car =SinOsc.ar( freq+eFreq * cRatio + (In.kr(modu,1)* factor)+(In.kr(modu2,1)* factor2)+
+		car =SinOsc.ar( freq+eFreq * cRatio + (In.kr(modu,1)* EnvGen.kr(Env.adsr(sustainLevel: 1,releaseTime: 0.1),factor ))+(In.kr(modu2,1)* factor2)+
 
 			//remove this line as shwon to decrease sound quality so I left it / HERE CHNAGE THE SOUND
 			/*SelectX.ar(SinOsc.kr(0.0020,phFm).range(0,1),[SinOsc.ar(0),mod])*/
@@ -76,8 +76,8 @@ SynthDef(\fm, {
 
 	sig  = LeakDC.ar(sig);
 
-	sig = Splay.ar(sig);
-		Out.ar(out, sig* EnvGen.kr(Env.adsr(0.1), gate));
+	// sig = Splay.arFill(2,sig,spread: 0);
+		Out.ar(out, sig!2* EnvGen.kr(Env.adsr(0.1), gate));
 }).add;
 
 
@@ -120,7 +120,7 @@ SynthDef(\fm, {
 
 
 SynthDef(\fm2, {
-	arg freq = 500,freq2 = 50, mRatio = 1, cRatio = 1, index = 1, iScale = 5, amp = 0.2, atk = 0.01, rel = 30000, cAtk = 4, cRel = 80, pan = 0, freq3=50, index2=1, index3=1,multi, out=0, gate, factor =0,modu,modu2, factor2=0,melo;
+	arg freq = 500,freq2 = 50, mRatio = 1, cRatio = 1, index = 1, iScale = 5, amp = 0.2, atk = 0.01, rel = 30000, cAtk = 4, cRel = 80, pan = 0, freq3=50, index2=1, index3=1,multi=0, out=0, gate, factor =0,modu,modu2, factor2=0,melo;
 	var car, mod2, env, iEnv, mod, sig;
 	iEnv = EnvGen.kr(
 		Env.new(
@@ -137,15 +137,22 @@ SynthDef(\fm2, {
 
 	mod = SinOsc.ar(freq2  /*In.kr(~bus.postln,1) */   * mRatio,/*mod2.wrap(0, 16pi),*/ mul:/* freq2 **/ iEnv* index3/*MouseX.kr(0,iEnv)*/);
 
-	car = Saw.ar([freq, freq+10, freq -5] + (In.kr(modu,1)* factor)+(In.kr(~seqBus,1)* factor2)
-		/*+ LFNoise0.kr(10.3).range(-40,1200) */ * cRatio, mod.wrap(0, 16pi),[1,multi,multi]) * env * amp;
+	car = Saw.ar([freq, freq+20, freq -40] + (In.kr(modu,1)*EnvGen.kr(Env.adsr(sustainLevel: 1,releaseTime: 0.1),factor ))+(In.kr(~seqBus,1)* factor2)
+		/*+ LFNoise0.kr(10.3).range(-40,1200) */ * cRatio,
+		mod.wrap(0, 16pi)*[1,multi
+			,multi
+
+
+		]
+
+		) * env * amp;
 	sig = Shaper.ar(~tfBuf,   car);
 
 	sig  = LeakDC.ar(sig);
 
-
+/*sig = Splay.arFill(2,sig,spread: 0);*/
 	sig = Pan2.ar(sig, pan);
-	Out.ar(out, sig * EnvGen.kr(Env.adsr(0.1), gate));
+	Out.ar(out, sig!2 * EnvGen.kr(Env.adsr(0.1), gate));
 }).add;
 
 
@@ -156,12 +163,12 @@ SynthDef(\filterModu,{|out=0, in, filMod,qf, which |
 		sig = In.ar(in,2);
 
 		lp = BLowPass4.ar(sig ,  filMod ,qf);
-
+/*
 		hp = BHiPass4.ar(sig, filMod,qf);
 
-		sig = SelectX.ar(which, [lp, hp]);
+		sig = SelectX.ar(which, [lp, hp]);*/
 
-		Out.ar(out, sig);
+		Out.ar(out, lp);
 	}).add;
 
 SynthDef(\sequ,{|value, dur, in, out=0, vlAtk=0, vlDec=1,vlSub=0, vlRel=0, atkT=0, decT=1, subsT=0, relT=0, atckC=0, decC=0, relC=0, bus1, bus2|

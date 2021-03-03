@@ -3,16 +3,16 @@
 
 (
 
-d = (Synth( \fm2, [\dur, inf,\stretch, 3.5,\mRatio, 1,\cRatio, 1,\index, 1,\atkE, 0.1,\out, 0],~synthGrp));
+d = (Synth( \fm2, [\dur, inf,\stretch, 3.5,\mRatio, 1,\amp, 0.12,\cRatio, 1,\index, 1,\atkE, 0.1,\out,0 /*~outFil*/],~synthGrp));
 
-v = (Synth( \fm, [\dur, inf,\stretch, 3.5,\mRatio, 1,\cRatio, 1,\index, 1,\atkE, 0.1,\out, 0,/*~outFil*/],~synthGrp));
+v = (Synth( \fm, [\dur, inf,\stretch, 3.5,\mRatio, 1,\cRatio, 1,\index, 1,\atkE, 0.1,\out, 0],~synthGrp));
 
 z=(Synth(\sinModul,[\modu,4]));
 x= (Synth(\sawModul,[\modu,4]));
 c =(Synth(\pulModul,[\modu,4]));
 m =(Synth(\ranModul,[\modu,4]));
 
-k = (Synth( \filterModu, [\dur, inf,\in,~outFil],~filterGrp));
+k = (Synth( \filterModu, [\dur, inf,\in,~outFil, \filMod],~filterGrp));
 
 //Pdef(\aaa, Pbind(\instrument, \sequ, \value,Pseq([104,500,200],inf),\dur,1)).play(t);
 
@@ -34,7 +34,7 @@ MIDIdef.noteOn(\sec, {|vel, nn, chan, src|
 	[nn].postln;
 	v.set(\gate,0);
 
-d.set(\gate,1,\factor,0,\factor2,0);
+d.set(\gate,1,\factor,0,\factor2,0,\multi,0);
 },noteNum: 63);
 
 
@@ -98,6 +98,31 @@ v.set(\amp,0)
 
 
 (
+
+MIDIdef.cc(\mVo, { |value|var modFreq = value.linlin(0, 127, 0, 1);
+
+
+
+
+	d.set(\multi, modFreq.round(0.01).postln);
+
+},ccNum: 51 );
+
+MIDIdef.cc(\fil, { |value|var modFreq = value.linlin(0, 127, 30, 3400);
+
+
+	if(modFreq.round(1).postln ==1500,{k.set(\which,0);},{});
+	if(modFreq.round(1).postln ==1510,{k.set(\which,1);},{});
+
+	k.set(\filMod, modFreq.round(1));
+
+},ccNum: 52 );
+
+MIDIdef.cc(\filRez, { |value|var modFreq = value.linlin(0, 127, 0.08, 1);
+
+	k.set(\qf, modFreq.round(0.01));
+
+},ccNum: 53 );
 
 MIDIdef.cc(\c, { |value|var modFreq = value.linlin(0, 127, 1, 10);
 
