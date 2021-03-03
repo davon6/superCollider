@@ -3,23 +3,21 @@
 
 (
 
-d = (Synth( \fm2, [\dur, inf,\stretch, 3.5,\mRatio, 1,\amp, 0.12,\cRatio, 1,\index, 1,\atkE, 0.1,\out,0 /*~outFil*/],~synthGrp));
+d = (Synth( \fm2, [\dur, inf,\stretch, 3.5,\mRatio, 1,\amp, 0.12,\cRatio, 1,\index, 1,\atkE, 0.1,\out,~outFil],~synthGrp));
 
-v = (Synth( \fm, [\dur, inf,\stretch, 3.5,\mRatio, 1,\cRatio, 1,\index, 1,\atkE, 0.1,\out, 0],~synthGrp));
+v = (Synth( \fm, [\dur, inf,\stretch, 3.5,\mRatio, 1,\cRatio, 1,\index, 1,\atkE, 0.1,\amp, 2,\out, ~outFil],~synthGrp));
 
-z=(Synth(\sinModul,[\modu,4]));
-x= (Synth(\sawModul,[\modu,4]));
-c =(Synth(\pulModul,[\modu,4]));
-m =(Synth(\ranModul,[\modu,4]));
+z=(Synth(\sinModul,[\modu,0.3]));
+x= (Synth(\sawModul,[\modu,0.3]));
+c =(Synth(\pulModul,[\modu,0.3]));
+m =(Synth(\ranModul,[\modu,0.3]));
 
 k = (Synth( \filterModu, [\dur, inf,\in,~outFil, \filMod],~filterGrp));
 
 //Pdef(\aaa, Pbind(\instrument, \sequ, \value,Pseq([104,500,200],inf),\dur,1)).play(t);
 
 Pbindef(\aaa, \instrument, \sequ, \value,Pseq([104,500,200],inf),\dur,1).play(t);
-)
 
-(
 
 
 MIDIdef.noteOn(\shoc, {|vel, nn, chan, src|[nn].postln;
@@ -86,18 +84,7 @@ d.set(\gate,0);
 
 
 
-)
 
-v.set(\gate,0);
-
-
-
-s.freeAll
-
-v.set(\amp,0)
-
-
-(
 
 MIDIdef.cc(\mVo, { |value|var modFreq = value.linlin(0, 127, 0, 1);
 
@@ -108,19 +95,43 @@ MIDIdef.cc(\mVo, { |value|var modFreq = value.linlin(0, 127, 0, 1);
 
 },ccNum: 51 );
 
-MIDIdef.cc(\fil, { |value|var modFreq = value.linlin(0, 127, 30, 3400);
+
+MIDIdef.cc(\wfil, { |value|var modFreq = value.linlin(0, 127, 0, 1);
+
+	k.set(\which, modFreq.round(0.01).postln);
+
+},ccNum: 15 );
+
+MIDIdef.cc(\fil, { |value|var modFreq = value.linlin(0, 127, 60, 2200);
 
 
-	if(modFreq.round(1).postln ==1500,{k.set(\which,0);},{});
-	if(modFreq.round(1).postln ==1510,{k.set(\which,1);},{});
+	// if(modFreq.round(1).postln >1500,{k.set(\which,0);"yo".postln},{k.set(\which,1)});
+		// if(modFreq.round(1).postln 1510,{);"yo2".postln},{});
 
 	k.set(\filMod, modFreq.round(1));
 
 },ccNum: 52 );
 
-MIDIdef.cc(\filRez, { |value|var modFreq = value.linlin(0, 127, 0.08, 1);
+
+MIDIdef.cc(\fil2, { |value|var modFreq = value.linlin(0, 127, 60, 4200);
+
+
+	// if(modFreq.round(1).postln >1500,{k.set(\which,0);"yo".postln},{k.set(\which,1)});
+		// if(modFreq.round(1).postln 1510,{);"yo2".postln},{});
+
+	k.set(\filMod2, modFreq.round(1));
+
+},ccNum: 52 );
+
+MIDIdef.cc(\filRez, { |value|var modFreq = value.linlin(0, 127, 0.08, 8);
 
 	k.set(\qf, modFreq.round(0.01));
+
+},ccNum: 53 );
+
+MIDIdef.cc(\filRez, { |value|var modFreq = value.linlin(0, 127, 1, 0.3);
+
+	k.set(\qf2, modFreq.round(0.01));
 
 },ccNum: 53 );
 

@@ -26,7 +26,7 @@ SynthDef(\pulModul,{|modu|Out.kr(~mod3, LFTri.kr(modu).range(-40,2200))}).add;
 SynthDef(\ranModul,{|modu|Out.kr(~mod4,LFDNoise0.kr(modu).range(0,2200) )}).add;
 
 SynthDef(\fm, {
-		arg freq= 659.26, freq2=200,freq3=200, mRatio=1, cRatio=1,  amp=0.008, sineRate = 0.0000000095262251,  sineRangeLow=0, pitch = 0, phRise= 0 ,out=0, eFreq =0 , phFm=8, bus2,bus3,bus4,busBP,bus6, bus7, bus8, busSR, busSS, busSP, gra=0.5,lvlDec=1,factor=0, factor2 =0 /*,vlPE =27.1366666667,vlPE2=0.2,dcPE = 0.129066666667*/, rqLPF =0.5, factor3 =1, decE= 0.1936, dur, gain =50/*, crvEP = (-2)*/,gate,pan=0, modu,modu2;
+		arg freq= 659.26, freq2=200,freq3=200, mRatio=1, cRatio=1,  amp=1.5, sineRate = 0.0000000095262251,  sineRangeLow=0, pitch = 0, phRise= 0 ,out=0, eFreq =0 , phFm=8, bus2,bus3,bus4,busBP,bus6, bus7, bus8, busSR, busSS, busSP, gra=0.5,lvlDec=1,factor=0, factor2 =0 /*,vlPE =27.1366666667,vlPE2=0.2,dcPE = 0.129066666667*/, rqLPF =0.5, factor3 =1, decE= 0.1936, dur, gain =50/*, crvEP = (-2)*/,gate,pan=0, modu,modu2;
 
 	var car, mod, mod2, iEnv, sig, filRte;
 
@@ -77,7 +77,7 @@ SynthDef(\fm, {
 	sig  = LeakDC.ar(sig);
 
 	// sig = Splay.arFill(2,sig,spread: 0);
-		Out.ar(out, sig!2* EnvGen.kr(Env.adsr(0.1), gate));
+		Out.ar(out, sig!2* amp* EnvGen.kr(Env.adsr(0.1), gate));
 }).add;
 
 
@@ -156,19 +156,20 @@ SynthDef(\fm2, {
 }).add;
 
 
-SynthDef(\filterModu,{|out=0, in, filMod,qf, which |
+SynthDef(\filterModu,{|out=0, in, filMod=600,filMod2=500,qf=0.5,qf2=0.5,  which=0 |
 
 		var lp,hp, sig;
 
 		sig = In.ar(in,2);
 
-		lp = BLowPass4.ar(sig ,  filMod ,qf);
-/*
-		hp = BHiPass4.ar(sig, filMod,qf);
+		lp = Resonz.ar(sig ,  filMod ,qf);
 
-		sig = SelectX.ar(which, [lp, hp]);*/
+	hp = BHiPass4.ar(sig, filMod2,qf2)*0.2;
 
-		Out.ar(out, lp);
+		sig = SelectX.ar(which, [lp, hp]);
+
+	/*Out.ar(out,Resonz.ar( sig,filMod ,qf));*/
+	Out.ar(out,sig);
 	}).add;
 
 SynthDef(\sequ,{|value, dur, in, out=0, vlAtk=0, vlDec=1,vlSub=0, vlRel=0, atkT=0, decT=1, subsT=0, relT=0, atckC=0, decC=0, relC=0, bus1, bus2|
