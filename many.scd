@@ -26,7 +26,7 @@ SynthDef(\pulModul,{|modu|Out.kr(~mod3, LFTri.kr(modu).range(-40,2200))}).add;
 SynthDef(\ranModul,{|modu|Out.kr(~mod4,LFDNoise0.kr(modu).range(0,2200) )}).add;
 
 SynthDef(\fm, {
-		arg freq= 659.26, freq2=200,freq3=200, mRatio=1, cRatio=1,  amp=1.5, sineRate = 0.0000000095262251,  sineRangeLow=0, pitch = 0, phRise= 0 ,out=0, eFreq =0 , phFm=8, bus2,bus3,bus4,busBP,bus6, bus7, bus8, busSR, busSS, busSP, gra=0.5,lvlDec=1,factor=0, factor2 =0 /*,vlPE =27.1366666667,vlPE2=0.2,dcPE = 0.129066666667*/, rqLPF =0.5, factor3 =1, decE= 0.1936, dur, gain =50/*, crvEP = (-2)*/,gate,pan=0, modu,modu2;
+		arg freq= 659.26, freq2=200,freq3=200, mRatio=1, cRatio=1,  amp=1.5, sineRate = 0.0000000095262251,  sineRangeLow=0, pitch = 0, phRise= 0 ,out=0, eFreq =0 , phFm=8, bus2,bus3,bus4,busBP,bus6, bus7, bus8, busSR, busSS, busSP, gra=0.5,lvlDec=1,factor=0, factor2 =0 /*,vlPE =27.1366666667,vlPE2=0.2,dcPE = 0.129066666667*/, rqLPF =0.5, factor3 =1, decE= 0.1936, dur, gain =50/*, crvEP = (-2)*/,gate,pan=0, modu,modu2, multi;
 
 	var car, mod, mod2, iEnv, sig, filRte;
 
@@ -59,7 +59,7 @@ SynthDef(\fm, {
 
 	//my carrier is a mess but bring interesting outputs
 
-		car =SinOsc.ar( freq+eFreq * cRatio + (In.kr(modu,1)* EnvGen.kr(Env.adsr(sustainLevel: 1,releaseTime: 0.1),factor ))+(In.kr(modu2,1)* factor2)+
+		car =SinOsc.ar( [freq, freq+20, freq -40]* cRatio + (In.kr(modu,1)* EnvGen.kr(Env.adsr(sustainLevel: 1,releaseTime: 0.1),factor ))+(In.kr(~seqBus,1)* factor2)+
 
 			//remove this line as shwon to decrease sound quality so I left it / HERE CHNAGE THE SOUND
 			/*SelectX.ar(SinOsc.kr(0.0020,phFm).range(0,1),[SinOsc.ar(0),mod])*/
@@ -68,7 +68,8 @@ SynthDef(\fm, {
 			//pitch envelope
 			/*+  (EnvGen.kr(Env([vlPE,vlPE2],[dcPE,0],crvEP))*factor2)*/
 			//extra pitch modulation
-			/*+ pitch +  (In.kr(bus4, 1)/factor)  */              );
+			/*+ pitch +  (In.kr(bus4, 1)/factor)  */         ,mul: [1,multi
+			,multi  ]   );
 
 	//transform signal through the shaper
 
@@ -172,16 +173,16 @@ SynthDef(\filterModu,{|out=0, in, filMod=600,filMod2=500,qf=0.5,qf2=0.5,  which=
 	Out.ar(out,sig);
 	}).add;
 
-SynthDef(\sequ,{|value, dur, in, out=0, vlAtk=0, vlDec=1,vlSub=0, vlRel=0, atkT=0, decT=1, subsT=0, relT=0, atckC=0, decC=0, relC=0, bus1, bus2|
+SynthDef(\sequ,{|value, dur, in=0, out=0, vlAtk=0, vlDec=1,vlSub=0, vlRel=0, atkT=0, decT=1, subsT=0, relT=0, atckC=0, decC=0, relC=0, bus1, bus2|
 
-	/*	ReplaceOut.ar(in,  In.ar(in, 2) *    EnvGen.kr(Env(
+		ReplaceOut.ar(in,  In.ar(in, 2) *    EnvGen.kr(Env(
 			[vlAtk,vlDec                  ,vlSub ,vlRel,0],
-			[dur * atkT ,dur *decT  -In.kr(bus1, 1)  , dur * subsT,dur* relT],
-			[atckC,decC ,0     ,relC]),    //decC- (In.kr(bus2, 1)
+			[dur * atkT ,dur *0.1 /*decT */ /*-In.kr(bus1, 1)*/  , dur * subsT,dur* relT],
+			[atckC,/*decC*/-80 ,0     ,relC]),    //decC- (In.kr(bus2, 1)
 
 
 
-	doneAction:2));*/
+	doneAction:2));
 
 
 	Out.kr(~seqBus,EnvGen.kr(Env.step([value],[dur]),doneAction: 2))}).add;
@@ -204,6 +205,7 @@ Pdef(\aqqa,Pbind(\instrument , \sequ, \value,60, \dur,9999)).play
 Bus.free
 ~synthGrp = Group.new;
 ~filterGrp = Group.after(~synthGrp);
+~shapGrp= Group.after(~filterGrp);
 
 
 

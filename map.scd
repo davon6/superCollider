@@ -12,11 +12,12 @@ x= (Synth(\sawModul,[\modu,0.3]));
 c =(Synth(\pulModul,[\modu,0.3]));
 m =(Synth(\ranModul,[\modu,0.3]));
 
+
 k = (Synth( \filterModu, [\dur, inf,\in,~outFil, \filMod],~filterGrp));
 
 //Pdef(\aaa, Pbind(\instrument, \sequ, \value,Pseq([104,500,200],inf),\dur,1)).play(t);
 
-Pbindef(\aaa, \instrument, \sequ, \value,Pseq([104,500,200],inf),\dur,1).play(t);
+Pbindef(\aaa, \instrument, \sequ, \value,Pseq([104,500,200],inf),\dur,0.01, \group,~shapGrp).play(t);
 
 
 
@@ -90,7 +91,7 @@ MIDIdef.cc(\mVo, { |value|var modFreq = value.linlin(0, 127, 0, 1);
 
 
 
-
+v.set(\multi, modFreq.round(0.01).postln);
 	d.set(\multi, modFreq.round(0.01).postln);
 
 },ccNum: 51 );
