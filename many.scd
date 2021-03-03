@@ -12,8 +12,8 @@
 
 SynthDef(\sinModul,{|modu|Out.kr(~mod1, SinOsc.kr(modu).range(-40,2200))}).add;
 SynthDef(\sawModul,{|modu|Out.kr(~mod2, Saw.kr(modu).range(-40,2200))}).add;
-SynthDef(\pulModul,{|modu|Out.kr(~mod3, LFPulse.kr(modu).range(-40,2200))}).add;
-SynthDef(\ranModul,{|modu|Out.kr(~mod4,LFNoise1.kr(modu).range(-40,2200) )}).add;
+SynthDef(\pulModul,{|modu|Out.kr(~mod3, LFTri.kr(modu).range(-40,2200))}).add;
+SynthDef(\ranModul,{|modu|Out.kr(~mod4,LFDNoise0.kr(modu).range(0,2200) )}).add;
 
 SynthDef(\fm, {
 		arg freq= 659.26, freq2=200,freq3=200, mRatio=1, cRatio=1,  amp=0.008, sineRate = 0.0000000095262251,  sineRangeLow=0, pitch = 0, phRise= 0 ,out=0, eFreq =0 , phFm=8, bus2,bus3,bus4,busBP,bus6, bus7, bus8, busSR, busSS, busSP, gra=0.5,lvlDec=1,factor=0, factor2 =0 /*,vlPE =27.1366666667,vlPE2=0.2,dcPE = 0.129066666667*/, rqLPF =0.5, factor3 =1, decE= 0.1936, dur, gain =50/*, crvEP = (-2)*/,gate,pan=0, modu;
