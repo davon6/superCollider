@@ -1,5 +1,5 @@
 SynthDef(\recLoop){|buf=0,in=0,out=0,recording = 1|
-    var input = SoundIn.ar(in);
+	var input = In.ar(~toRecord,1);
 	// Timer measures times between triggers
 	// Changed emits a trigger when recording changes value
 	// Gate updates recEnd only when not recording
@@ -23,11 +23,11 @@ SynthDef(\recLoop){|buf=0,in=0,out=0,recording = 1|
 		startLoop:0,
 		endLoop:recEnd
 	);
-
+Out.ar(0,input!2);
 	Out.ar(0,play);
 }.add
 
-~buf = Buffer.alloc(s,48000*20); // alloc buffer
+~buf = Buffer.alloc(s,s.sampleRate*40 );//,"recFin"); // alloc buffer
 x = Synth(\recLoop,[buf:~buf]); // start synth
 x.set(\recording,0); // start looping
 x.set(\recording,1); // new rec
@@ -38,5 +38,11 @@ x.set(\recording,0); // start new loop
 ~buf.pause
 x.pause
 x.stop
+
+
+x = Synth(\recLoop,[buf:~buf,\recording,1],~recGrp);
+
+
+
 
 x.free

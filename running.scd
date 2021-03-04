@@ -752,7 +752,7 @@ SynthDef(\algo, {
 			duration,//3.0976,//8,//length of the feedback
 			buf,
 			pitchRte,//pitch
-			0//MouseX.kr(0,1)//pos
+			0,//MouseX.kr(0,20)//pos
 		);
 		sig = sig * env * amp;
 

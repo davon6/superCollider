@@ -7,7 +7,8 @@
 
 (
 
-~outFil =Bus.audio(s,2);
+~outFil =Bus.audio(s,1);
+~toRecord=Bus.audio(s,1);
 
 )
 (
@@ -78,7 +79,7 @@ SynthDef(\fm, {
 	sig  = LeakDC.ar(sig);
 
 	// sig = Splay.arFill(2,sig,spread: 0);
-		Out.ar(out, sig!2* amp* EnvGen.kr(Env.adsr(0.1), gate));
+		Out.ar(out, sig /* !*/   * amp* EnvGen.kr(Env.adsr(0.1), gate));
 }).add;
 
 
@@ -153,7 +154,7 @@ SynthDef(\fm2, {
 
 /*sig = Splay.arFill(2,sig,spread: 0);*/
 	sig = Pan2.ar(sig, pan);
-	Out.ar(out, sig!2 * EnvGen.kr(Env.adsr(0.1), gate));
+	Out.ar(out, sig  /* !2*/ * EnvGen.kr(Env.adsr(0.1), gate));
 }).add;
 
 
@@ -161,11 +162,11 @@ SynthDef(\filterModu,{|out=0, in, filMod=600,filMod2=500,qf=0.5,qf2=0.5,  which=
 
 		var lp,hp, sig;
 
-		sig = In.ar(in,2);
+		sig = In.ar(in,1);
 
 		lp = Resonz.ar(sig ,  filMod ,qf);
 
-	hp = BHiPass4.ar(sig, filMod2,qf2)*0.2;
+	hp = BHiPass4.ar(sig, filMod2,qf2)*0.24;
 
 		sig = SelectX.ar(which, [lp, hp]);
 
@@ -173,11 +174,11 @@ SynthDef(\filterModu,{|out=0, in, filMod=600,filMod2=500,qf=0.5,qf2=0.5,  which=
 	Out.ar(out,sig);
 	}).add;
 
-SynthDef(\sequ,{|value, dur, in=0, out=0, vlAtk=0, vlDec=1,vlSub=0, vlRel=0, atkT=0, decT=1, subsT=0, relT=0, atckC=0, decC=0, relC=0, bus1, bus2|
+SynthDef(\sequ,{|value, dur, in=nil, out=0, vlAtk=0, vlDec=1,vlSub=0, vlRel=0, atkT=0, decT=1, subsT=0, relT=0, atckC=0, decC=0, relC=0, bus1, bus2|
 
-		ReplaceOut.ar(in,  In.ar(in, 2) *    EnvGen.kr(Env(
+		ReplaceOut.ar(in,  In.ar(in, 1) *    EnvGen.kr(Env(
 			[vlAtk,vlDec                  ,vlSub ,vlRel,0],
-			[dur * atkT ,dur *0.1 /*decT */ /*-In.kr(bus1, 1)*/  , dur * subsT,dur* relT],
+			[dur * atkT ,dur *0.4 /*decT */ /*-In.kr(bus1, 1)*/  , dur * subsT,dur* relT],
 			[atckC,/*decC*/-80 ,0     ,relC]),    //decC- (In.kr(bus2, 1)
 
 
@@ -206,6 +207,7 @@ Bus.free
 ~synthGrp = Group.new;
 ~filterGrp = Group.after(~synthGrp);
 ~shapGrp= Group.after(~filterGrp);
+~recGrp= Group.after(~shapGrp);
 
 
 

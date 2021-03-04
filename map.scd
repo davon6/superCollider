@@ -8,23 +8,35 @@ d = (Synth( \fm2, [\dur, inf,\stretch, 3.5,\mRatio, 1,\amp, 0.12,\cRatio, 1,\ind
 v = (Synth( \fm, [\dur, inf,\stretch, 3.5,\mRatio, 1,\cRatio, 1,\index, 1,\atkE, 0.1,\amp, 2,\out, ~outFil],~synthGrp));
 
 z=(Synth(\sinModul,[\modu,0.3]));
-x= (Synth(\sawModul,[\modu,0.3]));
+n= (Synth(\sawModul,[\modu,0.3]));
 c =(Synth(\pulModul,[\modu,0.3]));
 m =(Synth(\ranModul,[\modu,0.3]));
 
 
-k = (Synth( \filterModu, [\dur, inf,\in,~outFil, \filMod],~filterGrp));
+k = (Synth( \filterModu, [\dur, inf,\in,~outFil, \out,~toRecord],~filterGrp));
 
 //Pdef(\aaa, Pbind(\instrument, \sequ, \value,Pseq([104,500,200],inf),\dur,1)).play(t);
 
-Pbindef(\aaa, \instrument, \sequ, \value,Pseq([104,500,200],inf),\dur,0.01, \group,~shapGrp).play(t);
+Pbindef(\aaa, \instrument, \sequ, \value,Pseq([104,500,200],inf),\dur,0.01,
+
+
+	\vlDec,Prand([1,0.8,0.4],1),\vlSub,Prand([0,0.4],1), \atkT,Pfuncn({0.00.rrand(0.2,1)}),
+	\decT,Pfuncn({0.02.rrand(0.8,1)}),
+	\subsT,Pfuncn({0.02.rrand(0.4,1)}),
+	\relT,Pfuncn({0.02.rrand(0.6,1)}),
+	\atckC,Pfuncn({-30.rrand(30,1)}),
+	\decC,Pfuncn({-30.rrand(30,1)}),
+	\relC,Pfuncn({-30.rrand(0,1)}),
+
+
+	\group,~shapGrp).play(t);
 
 
 
 MIDIdef.noteOn(\shoc, {|vel, nn, chan, src|[nn].postln;
 	v.set(\factor2,1);
 d.set(\factor2,1);
-
+Pbindef(\aaa, \in, ~toRecord);
 
 },noteNum: 98);
 
@@ -33,6 +45,7 @@ MIDIdef.noteOn(\sec, {|vel, nn, chan, src|
 	[nn].postln;
 	v.set(\gate,0);
 
+		Pbindef(\aaa, \in, nil);
 d.set(\gate,1,\factor,0,\factor2,0,\multi,0);
 },noteNum: 63);
 
@@ -41,6 +54,7 @@ MIDIdef.noteOn(\first, {|vel, nn, chan, src|
 	[nn].postln;
 v.set(\gate,1,\factor,0,\factor2,0);
 d.set(\gate,0);
+	Pbindef(\aaa, \in, nil);
 
 
 },noteNum: 62);
@@ -155,7 +169,7 @@ MIDIdef.cc(\c, { |value|var modFreq = value.linlin(0, 127, 1, 10);
 MIDIdef.cc(\modLF, { |value|var modFreq = value.linlin(0, 127, 00.002, 20);
 
 	z.set(\modu,modFreq.round(0.001));
-	x.set(\modu,modFreq.round(0.001));
+	n.set(\modu,modFreq.round(0.001));
 	c.set(\modu,modFreq.round(0.001));
 	m.set(\modu,modFreq.round(1));
 },ccNum: 48);
