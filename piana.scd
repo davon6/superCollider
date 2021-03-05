@@ -13,7 +13,7 @@ MIDIdef.noteOff(\offPiana, {arg nn;nn.postln;
 	~notes[nn] = nil;
 });
 
-MIDIdef.cc(\twi, { |value|var modFreq = value.linlin(0, 127, 0, 1000);
+MIDIdef.cc(\twi, { |value|var modFreq = value.linlin(0, 127, 0, 600);
 
 	p.set(\mod,modFreq.round(1).postln);
 },ccNum: 7);

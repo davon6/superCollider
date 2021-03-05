@@ -1,6 +1,15 @@
+MIDIClient.init
 
+
+MIDIIn.connectAll;
 //MIDI ALLOC
+(
+~synthGrp = Group.new;
+~filterGrp = Group.after(~synthGrp);
+~shapGrp= Group.after(~filterGrp);
+~recGrp= Group.after(~shapGrp);
 
+)
 (
 
 d = (Synth( \fm2, [\dur, inf,\stretch, 3.5,\mRatio, 1,\amp, 0.12,\cRatio, 1,\index, 1,\atkE, 0.1,\out,~outFil],~synthGrp));
@@ -13,48 +22,69 @@ c =(Synth(\pulModul,[\modu,0.3]));
 m =(Synth(\ranModul,[\modu,0.3]));
 
 
-k = (Synth( \filterModu, [\dur, inf,\in,~outFil, \out,~toRecord],~filterGrp));
+k = (Synth( \filterModu, [\dur, inf,\in,~outFil, \out,0/*~toRecord*/],~filterGrp));
 
 //Pdef(\aaa, Pbind(\instrument, \sequ, \value,Pseq([104,500,200],inf),\dur,1)).play(t);
 
-Pbindef(\aaa, \instrument, \sequ, \value,Pseq([104,500,200],inf),\dur,0.01,
+Pbindef(\aaa, \instrument, \sequ, \value,Pseq([104,500,200],inf),\dur,Pseq([1/1],inf),\group,~shapGrp).play(t);
 
 
-	\vlDec,Prand([1,0.8,0.4],1),\vlSub,Prand([0,0.4],1), \atkT,Pfuncn({0.00.rrand(0.2,1)}),
-	\decT,Pfuncn({0.02.rrand(0.8,1)}),
-	\subsT,Pfuncn({0.02.rrand(0.4,1)}),
-	\relT,Pfuncn({0.02.rrand(0.6,1)}),
-	\atckC,Pfuncn({-30.rrand(30,1)}),
-	\decC,Pfuncn({-30.rrand(30,1)}),
-	\relC,Pfuncn({-30.rrand(0,1)}),
+MIDIdef.noteOn(\res, {|vel, nn, chan, src|[nn].postln;
+
+Pbindef(\aaa,\dur,Pseq([1/1],inf),
+\vlAtk,0,\vlDec,1,\vlSub,1, \vlSub2,1,\vlRel,0, \atkT,0, \decT,1, \subsT,0, \relT,0, \atckC,0, \decC,0, \relC,0,);
+
+},noteNum: 99);
 
 
-	\group,~shapGrp).play(t);
+
+
+
+
 
 
 
 MIDIdef.noteOn(\shoc, {|vel, nn, chan, src|[nn].postln;
 	v.set(\factor2,1);
 d.set(\factor2,1);
-Pbindef(\aaa, \in, ~toRecord);
+Pbindef(\aaa,\dur,Pseq([1/1],inf),
+
+
+	\vlSub,0.8.rrand(0.2,1),\vlSub2,Pkey(\vlSub), \atkT,0.00.rrand(0.2,1).postln,
+	\decT,0.4.rrand(0.6,0.3).postln,
+	\subsT,0.2.rrand(0.3,0.1).postln,
+	\relT,0.12.rrand(0.8,1).postln,
+	\atckC,6.rrand(0,1).postln,
+	\decC,-10.rrand(-2,1).postln,
+	\relC,-8.rrand(-2,1) .postln);
 
 },noteNum: 98);
+
+
+
+
 
 
 MIDIdef.noteOn(\sec, {|vel, nn, chan, src|
 	[nn].postln;
 	v.set(\gate,0);
 
-		Pbindef(\aaa, \in, nil);
+		/*Pbindef(\aaa,	\vlAtk,0,\vlDec,1,\vlSub,1, \vlSub2,1,\vlRel,0, \atkT,0, \decT,1, \subsT,0, \relT,0, \atckC,0, \decC,0, \relC,0,);*/
 d.set(\gate,1,\factor,0,\factor2,0,\multi,0);
 },noteNum: 63);
+
+
+
+
+
+
 
 
 MIDIdef.noteOn(\first, {|vel, nn, chan, src|
 	[nn].postln;
 v.set(\gate,1,\factor,0,\factor2,0);
 d.set(\gate,0);
-	Pbindef(\aaa, \in, nil);
+	Pbindef(\aaa,	\vlAtk,0,\vlDec,1,\vlSub,1, \vlSub2,1,\vlRel,0, \atkT,0, \decT,1, \subsT,0, \relT,0, \atckC,0, \decC,0, \relC,0,);
 
 
 },noteNum: 62);
@@ -105,15 +135,15 @@ MIDIdef.cc(\mVo, { |value|var modFreq = value.linlin(0, 127, 0, 1);
 
 
 
-v.set(\multi, modFreq.round(0.01).postln);
-	d.set(\multi, modFreq.round(0.01).postln);
+v.set(\multi, modFreq.round(0.01));
+	d.set(\multi, modFreq.round(0.01));
 
 },ccNum: 51 );
 
 
 MIDIdef.cc(\wfil, { |value|var modFreq = value.linlin(0, 127, 0, 1);
 
-	k.set(\which, modFreq.round(0.01).postln);
+	k.set(\which, modFreq.round(0.01));
 
 },ccNum: 15 );
 

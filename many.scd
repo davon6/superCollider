@@ -69,7 +69,8 @@ SynthDef(\fm, {
 			//pitch envelope
 			/*+  (EnvGen.kr(Env([vlPE,vlPE2],[dcPE,0],crvEP))*factor2)*/
 			//extra pitch modulation
-			/*+ pitch +  (In.kr(bus4, 1)/factor)  */         ,mul: [1,multi
+			/*+ pitch +  (In.kr(bus4, 1)/factor)  */         ,mul: [1,
+			multi
 			,multi  ]   );
 
 	//transform signal through the shaper
@@ -79,7 +80,7 @@ SynthDef(\fm, {
 	sig  = LeakDC.ar(sig);
 
 	// sig = Splay.arFill(2,sig,spread: 0);
-		Out.ar(out, sig /* !*/   * amp* EnvGen.kr(Env.adsr(0.1), gate));
+	Out.ar(out, sig /* !*/   * amp* EnvGen.kr(Env.adsr(0.1), gate));
 }).add;
 
 
@@ -131,10 +132,13 @@ SynthDef(\fm2, {
 			[cAtk, cRel]
 		)
 	);
-	env = EnvGen.kr(
+	env =EnvGen.kr(Env.adsr(0.1), gate);
+
+
+	/*EnvGen.kr(
 		Env.perc(atk, rel, curve: [cAtk, cRel]),
 		doneAction: 2
-	);
+	);*/
 /*	mod2 =SinOsc.ar(freq3/10, mul:freq3/10* iEnv* index2);*/
 
 	mod = SinOsc.ar(freq2  /*In.kr(~bus.postln,1) */   * mRatio,/*mod2.wrap(0, 16pi),*/ mul:/* freq2 **/ iEnv* index3/*MouseX.kr(0,iEnv)*/);
@@ -147,14 +151,14 @@ SynthDef(\fm2, {
 
 		]
 
-		) * env * amp;
+		) * amp;
 	sig = Shaper.ar(~tfBuf,   car);
 
 	sig  = LeakDC.ar(sig);
 
 /*sig = Splay.arFill(2,sig,spread: 0);*/
-	sig = Pan2.ar(sig, pan);
-	Out.ar(out, sig  /* !2*/ * EnvGen.kr(Env.adsr(0.1), gate));
+	//sig = Pan2.ar(sig, pan);
+	Out.ar(out, sig  /* !2*/ * env);
 }).add;
 
 
@@ -162,7 +166,7 @@ SynthDef(\filterModu,{|out=0, in, filMod=600,filMod2=500,qf=0.5,qf2=0.5,  which=
 
 		var lp,hp, sig;
 
-		sig = In.ar(in,1);
+		sig = In.ar(in,3);
 
 		lp = Resonz.ar(sig ,  filMod ,qf);
 
@@ -174,12 +178,12 @@ SynthDef(\filterModu,{|out=0, in, filMod=600,filMod2=500,qf=0.5,qf2=0.5,  which=
 	Out.ar(out,sig);
 	}).add;
 
-SynthDef(\sequ,{|value, dur, in=nil, out=0, vlAtk=0, vlDec=1,vlSub=0, vlRel=0, atkT=0, decT=1, subsT=0, relT=0, atckC=0, decC=0, relC=0, bus1, bus2|
+SynthDef(\sequ,{|value, dur, in=nil, out=0, vlAtk=0, vlDec=1,vlSub=1,vlSub2=1, vlRel=0, atkT=0, decT=1, subsT=0, relT=0, atckC=0, decC=0, relC=0, bus1, bus2|
 
-		ReplaceOut.ar(in,  In.ar(in, 1) *    EnvGen.kr(Env(
-			[vlAtk,vlDec                  ,vlSub ,vlRel,0],
-			[dur * atkT ,dur *0.4 /*decT */ /*-In.kr(bus1, 1)*/  , dur * subsT,dur* relT],
-			[atckC,/*decC*/-80 ,0     ,relC]),    //decC- (In.kr(bus2, 1)
+		ReplaceOut.ar(in,  In.ar(in, 3) *    EnvGen.kr(Env(
+			[vlAtk,vlDec                  ,vlSub ,vlSub2,vlRel,0],
+			[dur * atkT ,dur * decT  /*-In.kr(bus1, 1)*/  , dur * subsT,dur* relT],
+			[atckC,decC,0     ,relC]),    //decC- (In.kr(bus2, 1)
 
 
 
@@ -195,19 +199,16 @@ SynthDef(\sequ,{|value, dur, in=nil, out=0, vlAtk=0, vlDec=1,vlSub=0, vlRel=0, a
 )
 
 
-Pbindef(\a, \instrument , \sequ, \value,60, \dur,9999).play
-Pdef('a').play()
 
-Pdef(\aa,Pbind(\instrument , \sequ, \value,60, \dur,9999)).play
-
-Pdef(\aqqa,Pbind(\instrument , \sequ, \value,60, \dur,9999)).play
 
 
 Bus.free
-~synthGrp = Group.new;
-~filterGrp = Group.after(~synthGrp);
-~shapGrp= Group.after(~filterGrp);
-~recGrp= Group.after(~shapGrp);
+
+Pbindef.free
+/*~lfogGrp = Group.new;
+
+~synthGrp = Group.after(~lfogGrp);*/
+
 
 
 
