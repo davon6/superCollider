@@ -1,16 +1,13 @@
 
-//maybe eq kick a littl to free bass
-//stereo percu weird
 //percu cutting the 1/2 for progression
 //new env shape for percu in env file
-//slider aka minirise
-//delayfo random melor
+
 // multi valu  freq shifter or single pxrand
-//STEREO IS BROKEN FOR PERCUSSIONS
-//ALSO LONG SNARE GLTICH WITH BASS
-//bus rq for all filter bg
+
 //warning delay is now mono
 /*Buffer.freeAll*/
+
+//\atk, exprand(0.001, 0.05),\rel,exprand(0.05, 1.2),\pan,rand(-1.0, 1.0) pour les petit hits
 s.plotTree
 (
 
