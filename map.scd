@@ -22,7 +22,7 @@ c =(Synth(\pulModul,[\modu,0.3]));
 m =(Synth(\ranModul,[\modu,0.3]));
 
 
-k = (Synth( \filterModu, [\dur, inf,\in,~outFil, \out,0/*~toRecord*/],~filterGrp));
+k = (Synth( \filterModu, [\dur, inf,\in,~outFil, \out,~toRecord],~filterGrp));
 
 //Pdef(\aaa, Pbind(\instrument, \sequ, \value,Pseq([104,500,200],inf),\dur,1)).play(t);
 
@@ -38,7 +38,12 @@ Pbindef(\aaa,\dur,Pseq([1/1],inf),
 
 
 
+MIDIdef.noteOn(\rlong, {|vel, nn, chan, src|[nn].postln;
 
+Pbindef(\aaa,\dur,Pseq([16/1],inf),
+\vlAtk,0,\vlDec,1,\vlSub,1, \vlSub2,1,\vlRel,0, \atkT,0, \decT,1, \subsT,0, \relT,0, \atckC,0, \decC,0, \relC,0,);
+
+},noteNum: 100);
 
 
 
@@ -69,7 +74,8 @@ MIDIdef.noteOn(\sec, {|vel, nn, chan, src|
 	[nn].postln;
 	v.set(\gate,0);
 
-		/*Pbindef(\aaa,	\vlAtk,0,\vlDec,1,\vlSub,1, \vlSub2,1,\vlRel,0, \atkT,0, \decT,1, \subsT,0, \relT,0, \atckC,0, \decC,0, \relC,0,);*/
+		Pbindef(\aaa,\dur,Pseq([4/1],inf),
+\vlAtk,0,\vlDec,1,\vlSub,1, \vlSub2,1,\vlRel,0, \atkT,0, \decT,1, \subsT,0, \relT,0, \atckC,0, \decC,0, \relC,0,);
 d.set(\gate,1,\factor,0,\factor2,0,\multi,0);
 },noteNum: 63);
 
@@ -84,7 +90,7 @@ MIDIdef.noteOn(\first, {|vel, nn, chan, src|
 	[nn].postln;
 v.set(\gate,1,\factor,0,\factor2,0);
 d.set(\gate,0);
-	Pbindef(\aaa,	\vlAtk,0,\vlDec,1,\vlSub,1, \vlSub2,1,\vlRel,0, \atkT,0, \decT,1, \subsT,0, \relT,0, \atckC,0, \decC,0, \relC,0,);
+	Pbindef(\aaa,	\vlAtk,0,\vlDec,1,\vlSub,1, \vlSub2,1,\vlRel,0, \atkT,0, \decT,1, \subsT,0, \relT,0, \atckC,0, \decC,0, \relC,0,Pseq([4/1],inf));
 
 
 },noteNum: 62);

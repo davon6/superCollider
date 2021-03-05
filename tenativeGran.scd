@@ -46,8 +46,9 @@ s.plotTree
 
 		1,
 		~buf.bufnum,
-		pos: 0.8
+		pos: 0.67
 
+		,mul: 0.02
 
 
 	);

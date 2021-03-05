@@ -180,14 +180,14 @@ SynthDef(\filterModu,{|out=0, in, filMod=600,filMod2=500,qf=0.5,qf2=0.5,  which=
 
 SynthDef(\sequ,{|value, dur, in=nil, out=0, vlAtk=0, vlDec=1,vlSub=1,vlSub2=1, vlRel=0, atkT=0, decT=1, subsT=0, relT=0, atckC=0, decC=0, relC=0, bus1, bus2|
 
-		ReplaceOut.ar(in,  In.ar(in, 3) *    EnvGen.kr(Env(
+		ReplaceOut.ar(~toRecord,  In.ar(~toRecord, 3) *    EnvGen.kr(Env(
 			[vlAtk,vlDec                  ,vlSub ,vlSub2,vlRel,0],
 			[dur * atkT ,dur * decT  /*-In.kr(bus1, 1)*/  , dur * subsT,dur* relT],
 			[atckC,decC,0     ,relC]),    //decC- (In.kr(bus2, 1)
 
 
 
-	doneAction:2));
+	doneAction:2) *4);
 
 
 	Out.kr(~seqBus,EnvGen.kr(Env.step([value],[dur]),doneAction: 2))}).add;

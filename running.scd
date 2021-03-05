@@ -723,7 +723,7 @@ SynthDef(\algo, {
 
 	SynthDef.new(\gran, {
 		arg amp=1, buf =0, out=0, atk=1, rel=1, gate=1, sync=1, dens=40, baseDur=0.05, durRand=1, rate=1, rateRand=1, pan =0, panRand=0, grainEnv=(-1), ptrBus =0, ptrSampleDelay=20000, ptrRandSamples= 5000, minPtrDelay=1000,pitchRte=1,duration=8,impulse = 1.2875,pos=0,roomsize, revtime, damping, inputbw, spread = 15, drylevel, earlylevel, dur,
-		taillevel,maxRoomsize,wet=0.4, crv= 12;
+		taillevel,maxRoomsize,wet=0.4, crv= 12, bus;
 
 		var sig, env, densCtrl, durCtrl, rateCtrl, panCtrl, ptr, ptrRand, totalDelay, maxGrainDur;
 
@@ -752,12 +752,29 @@ SynthDef(\algo, {
 			duration,//3.0976,//8,//length of the feedback
 			buf,
 			pitchRte,//pitch
-			0,//MouseX.kr(0,20)//pos
+			pos+ In.kr(bus,1),//MouseX.kr(0,20)//pos
+			mul: amp
 		);
-		sig = sig * env * amp;
+		sig = sig * env /** amp*/;
 
 		Out.ar(out, sig);
 	}).add;
+
+
+	SynthDef(\gran2,{|out=0,impulse=1,duration=8,buf=0,pitchRte=1,pos=0,amp=1, dur,gate=1|
+
+		var env = EnvGen.kr(Env([1,1,0],[dur,0,0]),gate, doneAction:2);
+Out.ar(out,
+	GrainBuf.ar(
+		1,
+		Impulse.ar(impulse),
+			duration,
+			buf,
+			pitchRte,
+			pos,
+			mul: amp
+		)* env
+	);}).add;
 
 SynthDef("TriggerBufferGranular", {arg out=0, bufnum=0, in=0, thresh = 0.004, ampScaler = 1, duration =
 1.5544, pan=0,centerPosition=0.1, interp=1, incrementBy = 200, dur;

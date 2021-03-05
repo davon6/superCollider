@@ -16,7 +16,9 @@ s.plotTree
 
 ~lfoGrp  = Group.new;
 
-~dispatchGrp = Group.after(~lfoGrp);
+~granuGrp= Group.after(~lfoGrp);
+
+~dispatchGrp = Group.after(~granuGrp);
 ~filterGrp  = Group.after(~dispatchGrp);
 
 ~phaserGrp =  Group.after(~filterGrp);
@@ -152,7 +154,7 @@ Ppar([
 
 	/*Pbind(\instrument, \lfo2, \dur,Pseq([1/1],inf), \val, Prand([0,1],inf), \out, ~bus5, \group, ~lfoGrp),*/
 
-/*	~bassShap,*/
+	~bassShap,
 
 
 	/*Pbind(\instrument, \lfo2, \dur, Pseq([16/1],inf), \vl,Pseq([0.0000000095262251,0.0000000095262251,0.0000000095262251, 0.01005859375],inf),
@@ -194,6 +196,15 @@ Ppar([
 	Pbind(\instrument, \wNoise,\dur,Pseq([16/1],1),\dec ,Pkey(\dur),\amp,(-12),\type,\rest/*~noiseStereo1*/)
 	],1),
 
+
+
+
+	/*  //STARTING HERE
+	Pbind(\instrument,\gran,\dur,Pseq([1/4],inf),
+	/*\type, Pseq([\note, \rest,\rest,\rest, \rest,\rest,\rest,\rest],inf),*/
+		\amp, 0.01,\buf, ~buf,\out,0,\gate, 1,\group,~granuGrp,\duration,Pseq([1/4],inf),\impulse,Pseq([1/4],inf),\pos,1.00.rand),*/
+
+
 	Pbind(\instrument,\lead,\dur,Pseq([16384/1],1), \sineRate, (0.0000000095262251/2/2/2/2), \freq,659.255,\out,~phaseBus),
 
 	Pbind(\instrument, \men, \dur, Pseq([16384/1],inf),\out, ~filterSquelch),
@@ -201,7 +212,18 @@ Ppar([
 
 	Pbind(\instrument,\algo,\dur,Pseq([16384/1],1), \sineRate, (0.0000000095262251/2/2/2/2), \freq,162.82/*130*/,\out,~filterBus),
 
+
+
+
 	Pbind(\instrument,\multi,\dur,Pseq([16384/1],1), \out,~distoBg),
+
+
+
+
+
+
+
+
 
 	Pbind(\instrument, \disto, \hpf, 659.255, \dur, inf, \in ,~distoBg, \out,~bgBus , \group, ~distoGrp),
 
@@ -220,6 +242,9 @@ Pbind(\instrument,\comp, \dur,Pseq([1024/1],1),\thr,0.4 ,\sB, 1.04,\sA, 0.2,\atk
 		,\in, ~bgCom ,\ctrl, ~kbus, \group, ~compGrp,\out,~bgLimit),
 Pbind(\instrument, \limiter,\in, ~bgLimit, \dur, inf,\gain,8,\group,~limitGrp,\out,~bgStereo),
 Pbind(\instrument,\stereo, \dur, Pseq([1024/1],1), \in, ~bgStereo   ,\out,0, \spread, 10, \group, ~stereoGrp),
+
+
+
 
 
 
