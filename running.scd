@@ -87,7 +87,7 @@ s.sync;
 	~tfBuf.loadCollection(~tf.asWavetableNoWrap);
 
 
-	d = Buffer.alloc(s, s.sampleRate *0.3872,1);
+	~k = Buffer.alloc(s, s.sampleRate *0.3872,1);
 	e = Buffer.alloc(s, s.sampleRate *   t.beatDur*4 /*0.3872*/,1);
 	f = Buffer.alloc(s, s.sampleRate *  t.beatDur*4);//  (t.beatDur*4)/*1.5488*/,1);
 	~delay = Buffer.alloc(s, 48000 * 3, 2);
@@ -419,11 +419,15 @@ LFNoise0.kr(~hz1beat).range(0.1,0.0)/*,0.02)*/
 
 		sig = Saw.ar(freq,-1,-0.4);
 		sig = sig.lincurve(-1,1,-1,1,-7);
+
+
 		sig = BPeakEQ.ar(
 
 		BLowPass.ar(sig, lpf - In.ar(bus, 1)).round(2**(-16));
 
 			,659.255,12, (4));
+
+	//sig = LPF.ar(LPF.ar LPF.ar(LPF.ar(sig, lpf - In.ar(bus, 1)).round(2**(-16)
 
 		sig = sig * amp.dbamp;
 
@@ -685,17 +689,28 @@ SynthDef(\algo, {
 	SynthDef(\disto, {|out=0,in, hpf= 81.41|Out.ar(out, In.ar(in,1).round(2**(-16)));}).add;
 	// SynthDef(\disto2, {|out=0,in, lpf= 81.41|Out.ar(out, BLowPass.ar( In.ar(in,2),lpf).round(2**(-16)));}).add;
 
-	SynthDef(\gate,{|in, out=0, vlAtk=0, vlDec=1,vlSub=0, vlRel=0, atkT=0, decT=1, subsT=0, relT=0, atckC=0, decC=0, relC=0, bus1, bus2, dur,relSu=0|
+	SynthDef(\gate,{|in, out=0, vlAtk=0, vlDec=1,vlSub=0, vlRel=0, atkT=0, decT=1, subsT=0, relT=0, atckC=0, decC=0, relC=0, bus1, bus2, dur,relSu=0,vlSub2=0|
 	var env;
 
-		env =   In.ar(in, 1) *    EnvGen.kr(Env(
+		/*env =   In.ar(in, 1) *    EnvGen.kr(Env(
 			[vlAtk,vlDec                  ,vlSub ,vlRel,0],
+			[dur * atkT ,dur *decT -  In.kr(bus1, 1) /*- -relSu*/, dur * subsT,dur* relT],
+			[atckC,decC ,0     ,relC]),    //decC- (In.kr(bus2, 1)*/
+
+env =   In.ar(in, 1) *    EnvGen.kr(Env(
+			[vlAtk,vlDec                  ,vlSub ,vlSub2,vlRel,0],
 			[dur * atkT ,dur *decT -  In.kr(bus1, 1) /*- -relSu*/, dur * subsT,dur* relT],
 			[atckC,decC ,0     ,relC]),    //decC- (In.kr(bus2, 1)
 
 
-
 		doneAction:2);
+
+
+			/*[vlAtk,vlDec                  ,vlSub ,vlSub2,vlRel,0],
+			[dur * atkT ,dur * decT  /*-In.kr(bus1, 1)*/  , dur * subsT,dur* relT],
+			[atckC,decC,0     ,relC]),*/
+
+
 
 		Out.ar(out, env);
 }).add;
@@ -735,12 +750,23 @@ SynthDef(\algo, {
 
 	SynthDef.new(\gran, {
 		arg amp=1, buf =0, out=0, atk=1, rel=1, gate=1, sync=1, dens=40, baseDur=0.05, durRand=1, rate=1, rateRand=1, pan =0, panRand=0, grainEnv=(-1), ptrBus =0, ptrSampleDelay=20000, ptrRandSamples= 5000, minPtrDelay=1000,pitchRte=1,duration=8,impulse = 1.2875,pos=0,roomsize, revtime, damping, inputbw, spread = 15, drylevel, earlylevel, dur,
-		taillevel,maxRoomsize,wet=0.4, crv= 12, bus;
+		taillevel,maxRoomsize,wet=0.4, crv= 12;
 
 		var sig, env, densCtrl, durCtrl, rateCtrl, panCtrl, ptr, ptrRand, totalDelay, maxGrainDur;
 
 
 		env = EnvGen.kr(Env([1,1,0],[dur,0,0],crv), gate, doneAction:2);
+
+
+
+			/*vlAtk,vlDec ,vlSub ,vlSub2,vlRel,atkT,decT,subsT,relT,atckC,decC,relC
+		vlAtk must be zero
+
+		[vlAtk,vlDec                  ,vlSub ,vlSub2,vlRel,0],
+			[dur * atkT ,dur * decT  /*-In.kr(bus1, 1)*/  , dur * subsT,dur* relT],
+			[atckC,decC,0     ,relC]),*/
+
+
 
 		/*densCtrl = Select.ar(sync, [Dust.ar(dens), Impulse.ar(dens)]);
 		durCtrl= baseDur * LFNoise1.ar(100).exprange(1/durRand, durRand);
@@ -764,7 +790,7 @@ SynthDef(\algo, {
 			duration,//3.0976,//8,//length of the feedback
 			buf,
 			pitchRte,//pitch
-			pos+ In.kr(bus,1),//MouseX.kr(0,20)//pos
+			pos,//MouseX.kr(0,20)//pos
 			mul: amp
 		);
 		sig = sig * env /** amp*/;
@@ -899,8 +925,15 @@ SynthDef("TriggerBufferGranular", {arg out=0, bufnum=0, in=0, thresh = 0.004, am
 		SynthDef(\EQ, {|out=0, in, val, quant, gain| Out.ar(out, BPeakEQ.ar(
 		In.ar(in, 1),val,quant, gain))};).add;
 
-	SynthDef(\EQ2, {|out=0, in, val, quant, gain| Out.ar(out, BPeakEQ.ar(
-		In.ar(in, 2),val,quant, gain))};).add;
+
+
+
+
+
+
+	SynthDef(\EQHP, {|out=0, in, val, quant, gain,frq=100, vol =0.05| Out.ar(out,
+
+		HPF.ar(HPF.ar(HPF.ar(HPF.ar(HPF.ar(HPF.ar(BPeakEQ.ar(In.ar(in, 1),val,quant, gain),frq),frq),frq),frq),frq),frq)* vol)};).add;
 
 
 
