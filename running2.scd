@@ -157,14 +157,15 @@ Ppar([
 
 
 
-		\vlSub, Pfunc({Pseq([  1.00.rrand(0.2,1)   ],4)},inf),\vlSub2,Pkey(\vlSub),
-				\atkT,Pfunc({Pseq([0.00.rrand(1.00,1) ],4)},inf),
-	/*\decT, Pfunc({Pseq([0.04.rrand(0.4,0.3)],4)},inf),
-	\subsT, Pfunc({Pseq([0.02.rrand(0.3,0.1)],4)},inf),
-	\relT,Pfunc({Pseq([0.12.rrand(0.8,1)],4)},inf),
+\vlSub, Pseq([ Pseq([1.00.rrand(0.2,1)],4) , Pseq([1.00.rrand(0.2,1)],4), Pseq([1.00.rrand(0.2,1)],4), Pseq([1.00.rrand(0.2,1) ],4) ,
+		Pseq([  1.00.rrand(0.2,1)   ],4) , Pseq([  1.00.rrand(0.2,1) ],4), Pseq([  1.00.rrand(0.2,1) ],4) , Pseq([  1.00.rrand(0.2,1)   ],4)           ],inf),\vlSub2,Pkey(\vlSub),
+		\atkT,Pseq([  Pseq([0.00.rrand(1.00,1) ],4),Pseq([0.00.rrand(1.00,1) ],4),Pseq([0.00.rrand(1.00,1) ],4),Pseq([0.00.rrand(1.00,1) ],4),Pseq([0.00.rrand(1.00,1) ],4),Pseq([0.00.rrand(1.00,1) ],4),Pseq([0.00.rrand(1.00,1) ],4),Pseq([0.00.rrand(1.00,1) ],4)],inf),
+	\decT, Pseq([Pseq([0.04.rrand(0.4,0.3)],4),Pseq([0.04.rrand(0.4,0.3)],4),Pseq([0.04.rrand(0.4,0.3)],4),Pseq([0.04.rrand(0.4,0.3)],4),Pseq([0.04.rrand(0.4,0.3)],4),Pseq([0.04.rrand(0.4,0.3)],4),Pseq([0.04.rrand(0.4,0.3)],4),Pseq([0.04.rrand(0.4,0.3)],4)],inf),
+	\subsT, Pseq([Pseq([0.02.rrand(0.3,0.1)],4),Pseq([0.02.rrand(0.3,0.1)],4),Pseq([0.02.rrand(0.3,0.1)],4),Pseq([0.02.rrand(0.3,0.1)],4),Pseq([0.02.rrand(0.3,0.1)],4),Pseq([0.02.rrand(0.3,0.1)],4),Pseq([0.02.rrand(0.3,0.1)],4),Pseq([0.02.rrand(0.3,0.1)],4)],inf),
+	\relT,Pseq([ Pseq([0.12.rrand(0.8,1)],4),Pseq([0.12.rrand(0.8,1)],4),Pseq([0.12.rrand(0.8,1)],4),Pseq([0.12.rrand(0.8,1)],4),Pseq([0.12.rrand(0.8,1)],4),Pseq([0.12.rrand(0.8,1)],4),Pseq([0.12.rrand(0.8,1)],4),Pseq([0.12.rrand(0.8,1)],4)],inf),
 	\atckC,Pfunc({Pseq([6.rrand(0,1)],4)},inf),
-		\decC,Pfunc({Pseq([(-10).rrand(-2,1)],4)},inf),
-		\relC,Pfunc({Pseq([(-8).rrand(-2,1) ],4)},inf),*/
+	\decC,Pseq([Pseq([(-10).rrand(-2,1)],4),Pseq([(-10).rrand(-2,1)],4),Pseq([(-10).rrand(-2,1)],4),Pseq([(-10).rrand(-2,1)],4),Pseq([(-10).rrand(-2,1)],4),Pseq([(-10).rrand(-2,1)],4),Pseq([(-10).rrand(-2,1)],4),Pseq([(-10).rrand(-2,1)],4)],inf),
+	\relC,Pseq([ Pseq([(-8).rrand(-2,1) ],4),Pseq([(-8).rrand(-2,1) ],4),Pseq([(-8).rrand(-2,1) ],4),Pseq([(-8).rrand(-2,1) ],4),Pseq([(-8).rrand(-2,1) ],4),Pseq([(-8).rrand(-2,1) ],4),Pseq([(-8).rrand(-2,1) ],4),Pseq([(-8).rrand(-2,1) ],4)],inf),
 	),
 
 
