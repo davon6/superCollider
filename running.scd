@@ -293,7 +293,7 @@ s.sync;
 
 	SinOsc.kr(Select.kr(LFNoise2.ar(~hz1beat).range(0,3).round(1),
 		[    ~hz1beat/4, ~hzHbeat,~hz1beat,~hz1beat *4 /*,~hzHbeat*4   */  /*,0.321875*/	]
-	)    *  SinOsc.kr(~hzHbeat*4).range((~hz1beat.neg),~hz1beat),ph).range(~hz8Oct/8,~hz1Oct/4)
+	)    *  SinOsc.kr(~hzHbeat*4).range((~hz1beat.neg),~hz1beat),ph).range(~hz8Oct,~hz1Oct/4)
 
 
 		*EnvGen.kr(Env.step([1,0],[dur,0]),doneAction: 2))}).add;
@@ -670,7 +670,7 @@ SynthDef(\algo, {
 		,maxDlT,SinOsc.kr(Lag.kr(MouseX.kr(1.2875,0.00000005)),0,0.01,0.01),0.1)*0.4);}).add;
 
 
-	SynthDef(\disto, {|out=0,in, hpf= 81.41|Out.ar(out, HPF.ar( In.ar(in,1),hpf).round(2**(-16)));}).add;
+	SynthDef(\disto, {|out=0,in, hpf= 81.41|Out.ar(out, In.ar(in,1).round(2**(-16)));}).add;
 	// SynthDef(\disto2, {|out=0,in, lpf= 81.41|Out.ar(out, BLowPass.ar( In.ar(in,2),lpf).round(2**(-16)));}).add;
 
 	SynthDef(\gate,{|in, out=0, vlAtk=0, vlDec=1,vlSub=0, vlRel=0, atkT=0, decT=1, subsT=0, relT=0, atckC=0, decC=0, relC=0, bus1, bus2, dur,relSu=0|
