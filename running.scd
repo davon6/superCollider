@@ -750,16 +750,18 @@ env =   In.ar(in, 1) *    EnvGen.kr(Env(
 
 	SynthDef.new(\gran, {
 		arg amp=1, buf =0, out=0, atk=1, rel=1, gate=1, sync=1, dens=40, baseDur=0.05, durRand=1, rate=1, rateRand=1, pan =0, panRand=0, grainEnv=(-1), ptrBus =0, ptrSampleDelay=20000, ptrRandSamples= 5000, minPtrDelay=1000,pitchRte=1,duration=8,impulse = 1.2875,pos=0,roomsize, revtime, damping, inputbw, spread = 15, drylevel, earlylevel, dur,
-		taillevel,maxRoomsize,wet=0.4, crv= 12;
+		taillevel,maxRoomsize,wet=0.4, crv= 12,vlAtk =0,vlDec=1 ,vlSub=1 ,vlSub2=1,vlRel=0,atkT=0,decT=1,subsT=0,relT=0,atckC=0,decC=0,relC=0;
 
 		var sig, env, densCtrl, durCtrl, rateCtrl, panCtrl, ptr, ptrRand, totalDelay, maxGrainDur;
 
 
-		env = EnvGen.kr(Env([1,1,0],[dur,0,0],crv), gate, doneAction:2);
+		env = EnvGen.kr(Env([vlAtk,vlDec,vlSub,vlSub2,vlRel],
+			[dur * atkT,dur* decT,dur * subsT,dur *relT],
+			[atckC,decC,0,relC]), gate, doneAction:2);
 
+//env = EnvGen.kr(Env([0,1,1,1,0],[0,dur,0,0],[0,0,0,0]), gate, doneAction:2);
 
-
-			/*vlAtk,vlDec ,vlSub ,vlSub2,vlRel,atkT,decT,subsT,relT,atckC,decC,relC
+			/*vlAtk =0,vlDec=1 ,vlSub=1 ,vlSub2=1,vlRel=0,atkT=0,decT=1,subsT=0,relT=0,atckC=0,decC=0,relC=0
 		vlAtk must be zero
 
 		[vlAtk,vlDec                  ,vlSub ,vlSub2,vlRel,0],
