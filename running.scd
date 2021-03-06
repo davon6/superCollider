@@ -240,6 +240,18 @@ s.sync;
 	~revSide=  Bus.audio(s,1);
 
 
+	~eqPerch =  Bus.audio(s,1);
+	~distoPerch =  Bus.audio(s,1);
+	~revPerch =  Bus.audio(s,1);
+	~comPerch=  Bus.audio(s,2);
+	~limitPerch=  Bus.audio(s,2);
+	~stereoPerch=  Bus.audio(s,2);
+
+	~eqBus1=  Bus.audio(s,1);
+	~eqBus2=  Bus.audio(s,1);
+	~eqBus3=  Bus.audio(s,1);
+	~eqBus4=  Bus.audio(s,1);
+
 
 
 	s.sync;
@@ -632,17 +644,17 @@ SynthDef(\algo, {
 			*/            ));
 	}).add;
 
-	SynthDef(\filter,{|out=0, in, busMod, bus7, which, factor3=1, rqLPF=0.5 |
+	SynthDef(\filter,{|out=0, in, busMod, bus7, which, factor3=1, rqLPF=0.5 freqFil=0|
 
 		var lp, bp, hp, sig;
 
 		sig = In.ar(in,1);
 
-		lp = BLowPass4.ar(sig ,  In.kr(busMod, 1) ,In.kr(rqLPF));
+		lp = BLowPass4.ar(sig , freqFil+ In.kr(busMod, 1) ,In.kr(rqLPF));
 
-		bp = BPF.ar(sig,In.kr(busMod, 1) *factor3  ,0.26);
+		bp = BPF.ar(sig,freqFil+ In.kr(busMod, 1) *factor3  ,0.26);
 
-		hp = BHiPass4.ar(sig, In.kr(busMod, 1),/*0.6 */ In.kr(bus7, 1));
+		hp = BHiPass4.ar(sig, freqFil+ In.kr(busMod, 1),/*0.6 */ In.kr(bus7, 1));
 
 		sig = SelectX.ar(which, [lp, bp,hp,sig]);
 
