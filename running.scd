@@ -146,6 +146,7 @@ s.sync;
 
 	~stereoPhase = Bus.audio(s,1);
 	~stetoSnaCom1 = Bus.audio(s,10);
+	~eqBus10= Bus.audio(s,10);
 
 
 	~phaseBus = Bus.audio(s,1);
@@ -253,6 +254,8 @@ s.sync;
 	~eqBus2=  Bus.audio(s,1);
 	~eqBus3=  Bus.audio(s,1);
 	~eqBus4=  Bus.audio(s,1);
+	~eqNoise =  Bus.audio(s,1);
+	 ~eqDs =  Bus.audio(s,1);
 
 	~outFil =Bus.audio(s,1);
 ~toRecord=Bus.audio(s,1);
@@ -950,6 +953,9 @@ SynthDef("TriggerBufferGranular", {arg out=0, bufnum=0, in=0, thresh = 0.004, am
 		HPF.ar(HPF.ar(HPF.ar(HPF.ar(HPF.ar(HPF.ar(BPeakEQ.ar(In.ar(in, 1),val,quant, gain),frq),frq),frq),frq),frq),frq)* vol)};).add;
 
 
+SynthDef(\EQHP10, {|out=0, in, val, quant, gain,frq=100, vol =1| Out.ar(out,
+
+		HPF.ar(HPF.ar(HPF.ar(HPF.ar(HPF.ar(HPF.ar(HPF.ar(BPeakEQ.ar(In.ar(in, 10),val,quant, gain),frq),frq),frq),frq),frq),frq),frq)* vol)};).add;
 
 	"compression init".postln;
 

@@ -1,5 +1,6 @@
 (
-Pseq([~toUse2],inf).play(t);
+//Pseq([~toUse2],inf).play(t);
+Ppar([Pbindf(~kick,\amp, 1),Pbindf(~bass,\amp, 1) ],inf).play(t);
 x = Synth(\recLoop,[buf:~buf,\recording,1],~recGrp);
 )
 x.free;
