@@ -19,9 +19,9 @@ MIDIIn.connectAll;
 )
 (
 
-d = (Synth( \fm2, [\dur, inf,\stretch, 3.5,\mRatio, 1,\amp, 0.06,\cRatio, 1,\index, 1,\atkE, 0.1,\out,~outFil],~synthGrp));
+d = (Synth( \fm2, [\dur, inf,\stretch, 3.5,\mRatio, 1,\amp, 0.03,\cRatio, 1,\index, 1,\atkE, 0.1,\out,~outFil],~synthGrp));
 
-v = (Synth( \fm, [\dur, inf,\stretch, 3.5,\mRatio, 1,\cRatio, 1,\index, 1,\atkE, 0.1,\amp,1,\out, ~outFil],~synthGrp));
+ v = (Synth( \fm, [\dur, inf,\stretch, 3.5,\mRatio, 1,\cRatio, 1,\index, 1,\atkE, 0.1,\amp,0.5,\out, ~outFil],~synthGrp));
 
 z=(Synth(\sinModul,[\modu,0.3]));
 n= (Synth(\sawModul,[\modu,0.3]));
@@ -33,12 +33,12 @@ k = (Synth( \filterModu, [\dur, inf,\in,~outFil, \out,~toRecord],~filterGrp));
 
 //Pdef(\aaa, Pbind(\instrument, \sequ, \value,Pseq([104,500,200],inf),\dur,1)).play(t);
 
-Pbindef(\aaa, \instrument, \sequ, \value,Pseq([104,500,200],inf),\dur,Pseq([4/1],inf),\group,~shapGrp).play(t);
+Pbindef(\aaa, \instrument, \sequ, \value,Pseq([104,500,200],inf),\dur,Pseq([4/1],inf),\in,~toRecord,\group,~shapGrp).play(t);
 
 
 MIDIdef.noteOn(\res, {|vel, nn, chan, src|[nn].postln;
 
-Pbindef(\aaa,\dur,Pseq([1/1],inf),
+Pbindef(\aaa,\dur,Pseq([4/1],inf),
 \vlAtk,0,\vlDec,1,\vlSub,1, \vlSub2,1,\vlRel,0, \atkT,0, \decT,1, \subsT,0, \relT,0, \atckC,0, \decC,0, \relC,0,);
 
 },noteNum: 99);

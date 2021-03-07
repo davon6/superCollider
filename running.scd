@@ -320,7 +320,7 @@ s.sync;
 
 	SinOsc.kr(Select.kr(LFNoise2.ar(~hz1beat).range(0,4).round(1),
 		[    ~hz1beat/4,~hz1beat,~hz1beat,~hzHbeat,~hz1beat *4 /*,~hzHbeat*4   */  /*,0.321875*/	]
-		)    *  SinOsc.kr(~hzHbeat*4).range((~hz1beat.neg),~hz1beat*4),ph).range(~hz8Oct/4,~hz1Oct/4)
+		)    *  SinOsc.kr(~hzHbeat*4).range((~hz1beat.neg),~hz1beat*4),ph).range(~hz8Oct/2,~hz1Oct/4)
 
 
 		*EnvGen.kr(Env.step([1,0],[dur,0]),doneAction: 2))}).add;
@@ -1125,9 +1125,9 @@ SynthDef(\filterModu,{|out=0, in, filMod=600,filMod2=500,qf=0.5,qf2=0.5,  which=
 	Out.ar(out,sig);
 	}).add;
 
-SynthDef(\sequ,{|value, dur, in=nil, out=0, vlAtk=0, vlDec=1,vlSub=1,vlSub2=1, vlRel=0, atkT=0, decT=1, subsT=0, relT=0, atckC=0, decC=0, relC=0, bus1, bus2|
+SynthDef(\sequ,{|value, dur, in=0, out=0, vlAtk=0, vlDec=1,vlSub=1,vlSub2=1, vlRel=0, atkT=0, decT=1, subsT=0, relT=0, atckC=0, decC=0, relC=0, bus1, bus2|
 
-		ReplaceOut.ar(~toRecord,  In.ar(~toRecord, 3)*4 *    EnvGen.kr(Env(
+		ReplaceOut.ar(in,  In.ar(in, 3) *    EnvGen.kr(Env(
 			[vlAtk,vlDec                  ,vlSub ,vlSub2,vlRel,0],
 			[dur * atkT ,dur * decT  /*-In.kr(bus1, 1)*/  , dur * subsT,dur* relT],
 			[atckC,decC,0     ,relC]),    //decC- (In.kr(bus2, 1)
@@ -1137,7 +1137,7 @@ SynthDef(\sequ,{|value, dur, in=nil, out=0, vlAtk=0, vlDec=1,vlSub=1,vlSub2=1, v
 	doneAction:2) );
 
 
-	Out.kr(~seqBus,EnvGen.kr(Env.step([value],[dur]),doneAction: 2))}).add;
+	Out.kr(~seqBus,EnvGen.kr(Env.step([value],[dur]),doneAction: 2)   ) }).add;
 
 	SynthDef(\recLoop){|buf=0,in=0,out=0,recording = 1|
 	var input = In.ar(~toRecord,1);
@@ -1164,11 +1164,11 @@ SynthDef(\sequ,{|value, dur, in=nil, out=0, vlAtk=0, vlDec=1,vlSub=1,vlSub2=1, v
 		startLoop:0,
 		endLoop:recEnd
 	);
-Out.ar(0,input!2);
-	Out.ar(0,play);
-}.add
+		Out.ar(0,HPF.ar(input,100)!2);
+	Out.ar(~dead,play);
+}.add;
 
-
+	~dead=Bus.audio(s,1);
 
 //130.882809922
 //8100
