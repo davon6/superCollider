@@ -65,8 +65,27 @@
 
 Ppar([Pseq([~bass],inf),Pbindf(~snare,\da1,0)],1);//JEEEZ
 
-~toUse =  Pseq([
+~toUse = Pseq([
 
+	Pseq([~bar[2]
+	,Ppar([~bar[2],Pbindf(~cymbal, \dur,Pseq([1/4],32)),
+		Pbindf(~hat, \dur,Pseq([1/4],32)) ],1)],1),
+
+	Pseq([Ppar([~bar[2],Pbindf(~cymbal, \dur,Pseq([1/4],32)),
+		Pbindf(~hat, \dur,Pseq([1/4],32)),
+		   ],1)
+
+	,Ppar([~bar[2],Pbindf(~cymbal, \dur,Pseq([1/4],32)),
+		Pbindf(~hat, \dur,Pseq([1/4],32)),
+		Pbindf(~snare,\type, Pseq([\rest,\rest ,\note, \rest], 4),\da1,0),      ],1)],1),
+
+	Ppar([~bar[5],Pbindf(~cymbal, \dur,Pseq([1/4],60)),
+		Pbindf(~hat, \dur,Pseq([1/4],60)),
+		Pbindf(~snare,\type, Pseq([\rest,\rest ,\note, \rest], 7),\da1,0)],1)
+	,
+	Pseq([Ppar([~bar[3],Pbindf(~cymbal, \dur,Pseq([1/4],48)),
+		Pbindf(~hat, \dur,Pseq([1/4],48)),
+		Pbindf(~snare,\type, Pseq([\rest,\rest ,\note, \rest], 6),\da1,0)],1),  ~kbassRest, ~bassRest],1),
 
 	~perc[5],
 
@@ -85,7 +104,12 @@ Ppar([~bar[6],~snare],1),
 
 	Pseq([~perc[4],Pseq([Pseq([Pbindf(~kick, \dur,Pseq([1/3],1))],1) ,Pseq([Pbindf(~kick, \dur,Pseq([1/12],1))],8)],1)],1),
 
-	Pseq([Pseq([~bassRest],1),~perc[3],Pseq([~bassRest],1)],1)  ,
+	Pseq([Pseq([~bassRest],1),~perc[3],Pseq([~bassRest],1)],1)]  ,inf);
+
+
+	~toUse2 = Prand([
+
+	Pseq([~perc[5]],2),
 
 	Pseq([~perc[3],Pseq([~bassRest],2)],1) ,
 
@@ -121,6 +145,6 @@ Ppar([~bar[6],~snare],1),
 
 	],1)   ],1)
 
-].scramble,inf);
+	],inf);
 )
 

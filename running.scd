@@ -91,6 +91,8 @@ s.sync;
 	e = Buffer.alloc(s, s.sampleRate *   t.beatDur*4 /*0.3872*/,1);
 	f = Buffer.alloc(s, s.sampleRate *  t.beatDur*4);//  (t.beatDur*4)/*1.5488*/,1);
 	~delay = Buffer.alloc(s, 48000 * 3, 2);
+	~buf = Buffer.alloc(s,s.sampleRate*40 );
+	~bufBg = Buffer.alloc(s,s.sampleRate*40 );
 
 	~remyAudio = Buffer.read(s, "/Users/davidmignot/superCollider-master/remy.wav");
 
@@ -252,6 +254,9 @@ s.sync;
 	~eqBus3=  Bus.audio(s,1);
 	~eqBus4=  Bus.audio(s,1);
 
+	~outFil =Bus.audio(s,1);
+~toRecord=Bus.audio(s,1);
+
 
 
 	s.sync;
@@ -278,6 +283,13 @@ s.sync;
 	~bus14 = Bus.control(s,1);
 
 	~bus15 = Bus.control(s,1);
+
+	~mod1= Bus.control(s,1);
+~mod2= Bus.control(s,1);
+~mod3= Bus.control(s,1);
+~mod4= Bus.control(s,1);
+
+~seqBus= Bus.control(s,1);
 	s.sync;
 
 	SynthDef(\playBuf ,{|out = 0,start, trig, dur|Out.ar(out,PlayBuf.ar(2,~remyAudio,trigger: Dust.kr(4.0),startPos: start,doneAction: 2));}).add;
@@ -983,6 +995,172 @@ SynthDef("TriggerBufferGranular", {arg out=0, bufnum=0, in=0, thresh = 0.004, am
 	}).add;
 
 
+
+
+
+SynthDef(\sinModul,{|modu|Out.kr(~mod1, SinOsc.kr(modu).range(-40,2200))}).add;
+SynthDef(\sawModul,{|modu|Out.kr(~mod2, Saw.kr(modu).range(-40,2200))}).add;
+SynthDef(\pulModul,{|modu|Out.kr(~mod3, LFTri.kr(modu).range(-40,2200))}).add;
+SynthDef(\ranModul,{|modu|Out.kr(~mod4,LFDNoise0.kr(modu).range(0,2200) )}).add;
+
+
+SynthDef(\fm, {
+		arg freq= 659.26, freq2=200,freq3=200, mRatio=1, cRatio=1,  amp=1.5, sineRate = 0.0000000095262251,  sineRangeLow=0, pitch = 0, phRise= 0 ,out=0, eFreq =0 , phFm=8, bus2,bus3,bus4,busBP,bus6, bus7, bus8, busSR, busSS, busSP, gra=0.5,lvlDec=1,factor=0, factor2 =0 /*,vlPE =27.1366666667,vlPE2=0.2,dcPE = 0.129066666667*/, rqLPF =0.5, factor3 =1, decE= 0.1936, dur, gain =50/*, crvEP = (-2)*/,gate,pan=0, modu,modu2, multi;
+
+	var car, mod, mod2, iEnv, sig, filRte;
+
+
+
+	iEnv = EnvGen.kr(
+			Env.new(
+
+			[1, 1 * 5, 1 * 5,4.8],
+			[0,0.000000000001,        (/*decE*/ /*dur*/30000   ),      0.0000000001],
+			[4, 4,(-4)]
+		));
+
+	//second level of modulation
+	mod2 = SinOsc.ar(freq3/10, mul:freq3/10 *iEnv /*In.kr( gra, 1)*/ );
+
+	//first level of modulation
+
+		// mod = SinOsc.ar(MouseX.kr(0,freq * mRatio + mod2), mul:freq * mRatio * iEnv);
+
+		mod = SinOsc.ar( freq2 * mRatio + mod2 *
+
+		/*	SinOsc.kr(In.kr(~bus2, 1),In.kr(~bus3, 1)).range([In.kr(~bus11, 1)]), mul:*/
+
+			SinOsc.kr(sineRate,phRise).range([sineRangeLow]), mul:
+
+			/*(*/freq2 * mRatio *iEnv /*In.kr( gra, 1) */  /*) *   In.kr( gra, 1)*/
+
+		);
+
+	//my carrier is a mess but bring interesting outputs
+
+		car =SinOsc.ar( [freq, freq+20, freq -40]* cRatio + (In.kr(modu,1)* EnvGen.kr(Env.adsr(sustainLevel: 1,releaseTime: 0.1),factor ))+(In.kr(~seqBus,1)* factor2)+
+
+			//remove this line as shwon to decrease sound quality so I left it / HERE CHNAGE THE SOUND
+			/*SelectX.ar(SinOsc.kr(0.0020,phFm).range(0,1),[SinOsc.ar(0),mod])*/
+			SelectX.ar(SinOsc.kr((0.00502929687/2/2),phFm).range(0,1),[SinOsc.ar(0),mod])
+
+			//pitch envelope
+			/*+  (EnvGen.kr(Env([vlPE,vlPE2],[dcPE,0],crvEP))*factor2)*/
+			//extra pitch modulation
+			/*+ pitch +  (In.kr(bus4, 1)/factor)  */         ,mul: [1,
+			multi
+			,multi  ]   );
+
+	//transform signal through the shaper
+
+	sig = Shaper.ar(~tfBuf,   car);
+
+	sig  = LeakDC.ar(sig);
+
+	// sig = Splay.arFill(2,sig,spread: 0);
+	Out.ar(out, sig /* !*/   * amp* EnvGen.kr(Env.adsr(0.1), gate));
+}).add;
+
+
+
+SynthDef(\fm2, {
+	arg freq = 500,freq2 = 50, mRatio = 1, cRatio = 1, index = 1, iScale = 5, amp = 0.2, atk = 0.01, rel = 30000, cAtk = 4, cRel = 80, pan = 0, freq3=50, index2=1, index3=1,multi=0, out=0, gate, factor =0,modu,modu2, factor2=0,melo;
+	var car, mod2, env, iEnv, mod, sig;
+	iEnv = EnvGen.kr(
+		Env.new(
+			[index, index * iScale, index],
+			[atk, rel],
+			[cAtk, cRel]
+		)
+	);
+	env =EnvGen.kr(Env.adsr(0.1), gate);
+
+
+	/*EnvGen.kr(
+		Env.perc(atk, rel, curve: [cAtk, cRel]),
+		doneAction: 2
+	);*/
+/*	mod2 =SinOsc.ar(freq3/10, mul:freq3/10* iEnv* index2);*/
+
+	mod = SinOsc.ar(freq2  /*In.kr(~bus.postln,1) */   * mRatio,/*mod2.wrap(0, 16pi),*/ mul:/* freq2 **/ iEnv* index3/*MouseX.kr(0,iEnv)*/);
+
+	car = Saw.ar([freq, freq+20, freq -40] + (In.kr(modu,1)*EnvGen.kr(Env.adsr(sustainLevel: 1,releaseTime: 0.1),factor ))+(In.kr(~seqBus,1)* factor2)
+		/*+ LFNoise0.kr(10.3).range(-40,1200) */ * cRatio,
+		mod.wrap(0, 16pi)*[1,multi
+			,multi
+
+
+		]
+
+		) * amp;
+	sig = Shaper.ar(~tfBuf,   car);
+
+	sig  = LeakDC.ar(sig);
+
+/*sig = Splay.arFill(2,sig,spread: 0);*/
+	//sig = Pan2.ar(sig, pan);
+	Out.ar(out, sig  /* !2*/ * env);
+}).add;
+
+
+SynthDef(\filterModu,{|out=0, in, filMod=600,filMod2=500,qf=0.5,qf2=0.5,  which=0 |
+
+		var lp,hp, sig;
+
+		sig = In.ar(in,3);
+
+		lp = Resonz.ar(sig ,  filMod ,qf);
+
+	hp = BHiPass4.ar(sig, filMod2,qf2)*0.24;
+
+		sig = SelectX.ar(which, [lp, hp]);
+
+	/*Out.ar(out,Resonz.ar( sig,filMod ,qf));*/
+	Out.ar(out,sig);
+	}).add;
+
+SynthDef(\sequ,{|value, dur, in=nil, out=0, vlAtk=0, vlDec=1,vlSub=1,vlSub2=1, vlRel=0, atkT=0, decT=1, subsT=0, relT=0, atckC=0, decC=0, relC=0, bus1, bus2|
+
+		ReplaceOut.ar(~toRecord,  In.ar(~toRecord, 3) *    EnvGen.kr(Env(
+			[vlAtk,vlDec                  ,vlSub ,vlSub2,vlRel,0],
+			[dur * atkT ,dur * decT  /*-In.kr(bus1, 1)*/  , dur * subsT,dur* relT],
+			[atckC,decC,0     ,relC]),    //decC- (In.kr(bus2, 1)
+
+
+
+	doneAction:2) *4);
+
+
+	Out.kr(~seqBus,EnvGen.kr(Env.step([value],[dur]),doneAction: 2))}).add;
+
+	SynthDef(\recLoop){|buf=0,in=0,out=0,recording = 1|
+	var input = In.ar(~toRecord,1);
+	// Timer measures times between triggers
+	// Changed emits a trigger when recording changes value
+	// Gate updates recEnd only when not recording
+	// BufSampleRate because Timer measures seconds and we need samples instead
+	var recEnd = Gate.kr(
+		Timer.kr(Changed.kr(recording)),
+		1-recording
+	)*BufSampleRate.ir(buf);
+
+	// record buf from start to end
+	// run only when recording
+	// jump to start when recording is started
+    var rec = RecordBuf.ar(input,buf,run:recording,loop:0,trigger:recording);
+
+	var play = LoopBuf.ar(1,buf,1,
+		// when gate is positive: loop,
+		// when gate is negative: play normally
+		// (don't loop when recEnd is still at 0)
+		gate:recEnd>1,
+		startPos:0,
+		startLoop:0,
+		endLoop:recEnd
+	);
+Out.ar(0,input!2);
+	Out.ar(0,play);
+}.add
 
 
 

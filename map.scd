@@ -1,3 +1,6 @@
+x = Synth(\recLoop,[buf:~buf,\recording,1],~recGrp);
+x.free;
+~buf.play
 MIDIClient.init
 
 
