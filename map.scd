@@ -1,12 +1,12 @@
 (
 //Pseq([~toUse2],inf).play(t);
-Ppar([Pbindf(~kick,\amp, 1),Pbindf(~bass,\amp, 1) ],inf).play(t);
+ Ppar([Pbindf(~kick,\amp, 10),Pbindf(~bass,\amp, 10) ],inf).play(t);
 x = Synth(\recLoop,[buf:~buf,\recording,1],~recGrp);
 )
 x.free;
 ~buf.play
 MIDIClient.init
-
+s.plotTree
 
 MIDIIn.connectAll;
 //MIDI ALLOC
@@ -19,9 +19,9 @@ MIDIIn.connectAll;
 )
 (
 
-d = (Synth( \fm2, [\dur, inf,\stretch, 3.5,\mRatio, 1,\amp, 0.12,\cRatio, 1,\index, 1,\atkE, 0.1,\out,~outFil],~synthGrp));
+d = (Synth( \fm2, [\dur, inf,\stretch, 3.5,\mRatio, 1,\amp, 0.06,\cRatio, 1,\index, 1,\atkE, 0.1,\out,~outFil],~synthGrp));
 
-v = (Synth( \fm, [\dur, inf,\stretch, 3.5,\mRatio, 1,\cRatio, 1,\index, 1,\atkE, 0.1,\amp, 2,\out, ~outFil],~synthGrp));
+v = (Synth( \fm, [\dur, inf,\stretch, 3.5,\mRatio, 1,\cRatio, 1,\index, 1,\atkE, 0.1,\amp,1,\out, ~outFil],~synthGrp));
 
 z=(Synth(\sinModul,[\modu,0.3]));
 n= (Synth(\sawModul,[\modu,0.3]));
@@ -33,7 +33,7 @@ k = (Synth( \filterModu, [\dur, inf,\in,~outFil, \out,~toRecord],~filterGrp));
 
 //Pdef(\aaa, Pbind(\instrument, \sequ, \value,Pseq([104,500,200],inf),\dur,1)).play(t);
 
-Pbindef(\aaa, \instrument, \sequ, \value,Pseq([104,500,200],inf),\dur,Pseq([1/1],inf),\group,~shapGrp).play(t);
+Pbindef(\aaa, \instrument, \sequ, \value,Pseq([104,500,200],inf),\dur,Pseq([4/1],inf),\group,~shapGrp).play(t);
 
 
 MIDIdef.noteOn(\res, {|vel, nn, chan, src|[nn].postln;

@@ -14,7 +14,7 @@ Bus.free;
 s.options.memSize = 2097152;
 Pseq([~remyAudio],inf).play
 
-Server.default.options.sampleRate =  48000
+Server.default.options.sampleRate =  48000;
 Server.default.options.outDevice_("Audient iD14");
 Server.default.options.outDevice_("External Headphones");
 Server.default.options.outDevice_("Built-in Output");
@@ -91,7 +91,7 @@ s.sync;
 	e = Buffer.alloc(s, s.sampleRate *   t.beatDur*4 /*0.3872*/,1);
 	f = Buffer.alloc(s, s.sampleRate *  t.beatDur*4);//  (t.beatDur*4)/*1.5488*/,1);
 	~delay = Buffer.alloc(s, 48000 * 3, 2);
-	~buf = Buffer.alloc(s,s.sampleRate*40 );
+	~buf = Buffer.alloc(s,s.sampleRate*120 );
 	~bufBg = Buffer.alloc(s,s.sampleRate*40 );
 
 	~remyAudio = Buffer.read(s, "/Users/davidmignot/superCollider-master/remy.wav");
@@ -320,7 +320,7 @@ s.sync;
 
 	SinOsc.kr(Select.kr(LFNoise2.ar(~hz1beat).range(0,4).round(1),
 		[    ~hz1beat/4,~hz1beat,~hz1beat,~hzHbeat,~hz1beat *4 /*,~hzHbeat*4   */  /*,0.321875*/	]
-	)    *  SinOsc.kr(~hzHbeat*4).range((~hz1beat.neg),~hz1beat),ph).range(~hz8Oct,~hz1Oct/4)
+		)    *  SinOsc.kr(~hzHbeat*4).range((~hz1beat.neg),~hz1beat*4),ph).range(~hz8Oct/4,~hz1Oct/4)
 
 
 		*EnvGen.kr(Env.step([1,0],[dur,0]),doneAction: 2))}).add;
@@ -1127,14 +1127,14 @@ SynthDef(\filterModu,{|out=0, in, filMod=600,filMod2=500,qf=0.5,qf2=0.5,  which=
 
 SynthDef(\sequ,{|value, dur, in=nil, out=0, vlAtk=0, vlDec=1,vlSub=1,vlSub2=1, vlRel=0, atkT=0, decT=1, subsT=0, relT=0, atckC=0, decC=0, relC=0, bus1, bus2|
 
-		ReplaceOut.ar(~toRecord,  In.ar(~toRecord, 3) *    EnvGen.kr(Env(
+		ReplaceOut.ar(~toRecord,  In.ar(~toRecord, 3)*4 *    EnvGen.kr(Env(
 			[vlAtk,vlDec                  ,vlSub ,vlSub2,vlRel,0],
 			[dur * atkT ,dur * decT  /*-In.kr(bus1, 1)*/  , dur * subsT,dur* relT],
 			[atckC,decC,0     ,relC]),    //decC- (In.kr(bus2, 1)
 
 
 
-	doneAction:2) *4);
+	doneAction:2) );
 
 
 	Out.kr(~seqBus,EnvGen.kr(Env.step([value],[dur]),doneAction: 2))}).add;
