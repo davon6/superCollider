@@ -15,7 +15,7 @@
 		\amp, (-10),\out,0
 	);
 
-	~cymbal = Pbind(\instrument, \percussion,\type, Pseq([\rest,\rest,\note,\note ,\rest,\note ,\note, \rest],inf),\dur,Pseq([1/4],64 ),\carHz, 525.12070612224,\modHz,1899.3343179398,\modAmp, 0.12875 ,\amp,(-16.3),\rel,Pseq([1/16],inf),\rel2,Pseq([1/16],inf),\latch,8000,\stereoL, 0.00555, \crv1,  (-4.4), \crv1b,(-4), \mulMod, 1691,\out, ~comBusCymb);
+	~cymbal = Pbind(\instrument, \percussion,\type, Pseq([\rest,\rest,\note,\note ,\rest,\note ,\note, \rest].scramble,inf),\dur,Pseq([1/4],64 ),\carHz, 525.12070612224,\modHz,1899.3343179398,\modAmp, 0.12875 ,\amp,(-16.3),\rel,Pseq([1/16],inf),\rel2,Pseq([1/16],inf),\latch,8000,\stereoL, 0.00555, \crv1,  (-4.4), \crv1b,(-4), \mulMod, 1691,\out, ~comBusCymb);
 
 ~hat = Pbind(\instrument,\percussion,\dur,Pseq([1/4], 64),\atk, 0,\rel,0.04840,\rel2,0.02420,\amp,Pseq([( -17), ( -18),( -18),( -19),( -17),( -17),( -18),( -17)],inf), \crv1, (-3), \crv1b, (-5), \modHz, exprand(500,10000).postln, \mulMod, rrand(100, 500).postln, \carHz, exprand(20,10000), \modAmp, 0.12875, \latch, 18500, \stereoR, 0.007,\out,~comBusHat);
 
@@ -79,9 +79,9 @@ Ppar([Pseq([~bass],inf),Pbindf(~snare,\da1,0)],1);//JEEEZ
 		Pbindf(~hat, \dur,Pseq([1/4],32)),
 		Pbindf(~snare,\type, Pseq([\rest,\rest ,\note, \rest], 4),\da1,0),      ],1)],1),
 
-	Ppar([~bar[5],Pbindf(~cymbal, \dur,Pseq([1/4],60)),
+	Pseq([Ppar([~bar[5],Pbindf(~cymbal, \dur,Pseq([1/4],60)),
 		Pbindf(~hat, \dur,Pseq([1/4],60)),
-		Pbindf(~snare,\type, Pseq([\rest,\rest ,\note, \rest], 7),\da1,0)],1)
+		Pbindf(~snare,\type, Pseq([\rest,\rest ,\note, \rest], 7),\da1,0),],1),~bar[1]],1)
 	,
 	Pseq([Ppar([~bar[3],Pbindf(~cymbal, \dur,Pseq([1/4],48)),
 		Pbindf(~hat, \dur,Pseq([1/4],48)),

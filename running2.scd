@@ -171,8 +171,8 @@ Ppar([
 
 
 
-	Pbind(\instrument,\gran,\dur,Prand([ Pseq([1/4],4)  ,   Pseq([1/1],4)   ],inf)  ,
-\type, Pseq([\rest, \rest,\rest,\note, \rest,\rest,\rest,\rest],inf),
+	Pbind(\instrument,\gran,\dur,Prand([ Pseq([1/4],32)  ,   Pseq([1/1],32)   ],inf)  ,//was 4
+\type, Pseq([\rest, \rest,\rest,\note, \rest,\rest,\rest,\rest].scramble,inf),
 		\amp, 1,\buf, ~buf,\out,~distoPerch,\gate, 1,\duration,Pseq([1/1],inf),\impulse,Pseq([1/1],inf),
 
 		\pos,Pseq([ Pseq([0.99999.rand],32),  Pseq([0.99999.rand],32) , Pseq([0.99999.rand],32), Pseq([0.99999.rand],32) ,
@@ -510,6 +510,8 @@ Pxrand([
 
 			\atckC, Pseq([22,0,0,0],inf),
 			 \vlSub,0.2*/
+
+				\relSu,Pfunc({0.15.rand}),
 				\vlSub,~vl11= 0.8.rrand(0.2,1),\vlSub2,Pkey(\vlSub),
 				\atkT,~vl21=0.00.rrand(0.2,1).postln,
 	\decT,~vl31=0.4.rrand(0.6,0.3).postln,
@@ -571,6 +573,9 @@ Pbind(\instrument, \gate, \dur, ~short,
 
 			\atckC, Pseq([22,0,0,0],inf),
 			 \vlSub,0.2*/
+
+
+				\relSu,Pfunc({0.15.rand}),
 				\vlSub,~vl11,\vlSub2,Pkey(\vlSub),
 				\atkT,~vl21,
 	\decT,~vl31,

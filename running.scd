@@ -4,7 +4,7 @@ Pdef.all.do(_.clear);
 Pbindef.all.do(_.clear);
 Pbind.free;
 Pbindf.free;
-~melo1.free;
+
 ~bass.free;
 Bus.free;
 
@@ -91,7 +91,7 @@ s.sync;
 	e = Buffer.alloc(s, s.sampleRate *   t.beatDur*4 /*0.3872*/,1);
 	f = Buffer.alloc(s, s.sampleRate *  t.beatDur*4);//  (t.beatDur*4)/*1.5488*/,1);
 	~delay = Buffer.alloc(s, 48000 * 3, 2);
-	~buf = Buffer.alloc(s,s.sampleRate*120 );
+	~buf = Buffer.alloc(s,s.sampleRate*30 );
 	~bufBg = Buffer.alloc(s,s.sampleRate*40 );
 
 	~remyAudio = Buffer.read(s, "/Users/davidmignot/superCollider-master/remy.wav");
@@ -258,7 +258,8 @@ s.sync;
 	 ~eqDs =  Bus.audio(s,1);
 
 	~outFil =Bus.audio(s,1);
-~toRecord=Bus.audio(s,1);
+	~toRecord=Bus.audio(s,1);
+	~dead=Bus.audio(s,1);
 
 
 
@@ -714,7 +715,7 @@ SynthDef(\algo, {
 
 env =   In.ar(in, 1) *    EnvGen.kr(Env(
 			[vlAtk,vlDec                  ,vlSub ,vlSub2,vlRel,0],
-			[dur * atkT ,dur *decT -  In.kr(bus1, 1) /*- -relSu*/, dur * subsT,dur* relT],
+			[dur * atkT ,dur *decT -  In.kr(bus1, 1)  -relSu, dur * subsT,dur* relT],
 			[atckC,decC ,0     ,relC]),    //decC- (In.kr(bus2, 1)
 
 
@@ -1168,7 +1169,7 @@ SynthDef(\sequ,{|value, dur, in=0, out=0, vlAtk=0, vlDec=1,vlSub=1,vlSub2=1, vlR
 	Out.ar(~dead,play);
 }.add;
 
-	~dead=Bus.audio(s,1);
+
 
 //130.882809922
 //8100

@@ -1,9 +1,12 @@
 
+(
+Pbind(\instrument,\gran,\dur,Pseq([4/1],1),\amp, 1,\buf, ~buf,\out,0,\gate, 1,\duration,Pkey(\dur),\impulse,Pkey(\dur),
+	\vlSub, 0,\vlSub2,Pkey(\vlSub),\decC,Pfunc({(-10).rrand(2,1)}),\pos,Pfunc({0.99999.rand.postln})).play(t)
+)
 
 
-
-
-
+Pbind(\instrument,\gran,\dur,Pseq([4/1],1),\amp, 1,\buf, ~buf,\out,0,\gate, 1,\duration,Pkey(\dur),\impulse,Pkey(\dur),
+	\vlSub, 0,\vlSub2,Pkey(\vlSub),\decC,Pfunc({(-10).rrand(2,1)}),\pos,Pfunc({0.9})).play(t)
 
 
 
