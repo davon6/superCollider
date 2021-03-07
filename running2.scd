@@ -211,7 +211,7 @@ Ppar([
 
 
 
-~toUse2,
+/*~toUse2,*/
 
 
 
@@ -531,7 +531,7 @@ Pxrand([
 
 		Pbind(\instrument, \gate, \dur,  Pseq([1/2],1)
 		,\group, ~gateGrp,
-			\subsT,inf , \in,~gateSquelch ,\out,Pwrand([~reverbSquelch,  ~delayBus ],[10,1].normalizeSum,inf)),
+			\subsT,inf , \in,~gateSquelch ,\out,~reverbSquelch),
 
 	],64)
 	//Prand([
@@ -544,9 +544,9 @@ Pxrand([
 		Pbind(\instrument, \gate, \dur, ~short1, \in,~filterRnd, \out, ~reverbRnd, \group, ~gateGrp),
 
 
-		Pbind(\instrument, \gate, \dur, Prand([     Pseq([1/1],1)  ,Pseq([1/4],1)],1)  /* , \vlDec, 0.6,*/
+		Pbind(\instrument, \gate, \dur, Pseq([1/4],1) /* , \vlDec, 0.6,*/
 		,\group, ~gateGrp,
-			\subsT,inf , \in,~gateSquelch ,\out,~reverbSquelch),
+			\subsT,inf , \in,~gateSquelch ,\out,Pwrand([~reverbSquelch,  ~delayBus ],[10,1].normalizeSum,inf)),
 
 
 

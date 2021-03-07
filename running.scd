@@ -955,7 +955,7 @@ SynthDef("TriggerBufferGranular", {arg out=0, bufnum=0, in=0, thresh = 0.004, am
 
 SynthDef(\EQHP10, {|out=0, in, val, quant, gain,frq=100, vol =1| Out.ar(out,
 
-		HPF.ar(HPF.ar(HPF.ar(HPF.ar(HPF.ar(HPF.ar(HPF.ar(BPeakEQ.ar(In.ar(in, 10),val,quant, gain),frq),frq),frq),frq),frq),frq),frq)* vol)};).add;
+		HPF.ar(HPF.ar(HPF.ar(HPF.ar(HPF.ar(HPF.ar(HPF.ar(HPF.ar(BPeakEQ.ar(In.ar(in, 10),val,quant, gain),frq),frq),frq),frq),frq),frq),frq),frq)* vol)};).add;
 
 	"compression init".postln;
 
