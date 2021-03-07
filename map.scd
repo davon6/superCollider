@@ -1,4 +1,7 @@
+(
+Pseq([~toUse2],inf).play(t);
 x = Synth(\recLoop,[buf:~buf,\recording,1],~recGrp);
+)
 x.free;
 ~buf.play
 MIDIClient.init
@@ -220,7 +223,7 @@ MIDIdef.cc(\myModFreq, { |value|var modFreq = value.linlin(0, 127, 00.002, 3200)
 	d.set(\freq2,modFreq.round(0.001));
 },ccNum: 19);
 
-MIDIdef.cc(\freqx, { |value|var modFreq = value.linlin(0, 127, 00.002, 3200);
+MIDIdef.cc(\freqx, { |value|var modFreq = value.linlin(0, 127, 00.002, 1200);
 
 	v.set(\freq,modFreq.round(0.001));
 

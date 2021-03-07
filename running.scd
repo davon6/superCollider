@@ -315,8 +315,8 @@ s.sync;
 			* SinOsc.kr(~hzHbeat*2).range(~hz1beat.neg, ~hz1beat)).range(~hz8Oct, ~hz1Oct)*/
 
 
-	SinOsc.kr(Select.kr(LFNoise2.ar(~hz1beat).range(0,3).round(1),
-		[    ~hz1beat/4, ~hzHbeat,~hz1beat,~hz1beat *4 /*,~hzHbeat*4   */  /*,0.321875*/	]
+	SinOsc.kr(Select.kr(LFNoise2.ar(~hz1beat).range(0,4).round(1),
+		[    ~hz1beat/4,~hz1beat,~hz1beat,~hzHbeat,~hz1beat *4 /*,~hzHbeat*4   */  /*,0.321875*/	]
 	)    *  SinOsc.kr(~hzHbeat*4).range((~hz1beat.neg),~hz1beat),ph).range(~hz8Oct,~hz1Oct/4)
 
 
