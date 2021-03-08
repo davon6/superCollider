@@ -85,10 +85,13 @@ Pbind(\instrument,\gran,\dur,Pwrand([ Pseq([1/64],256) ,Pseq([1/16],64),Pseq([4/
 
 		Pbind(\instrument, \disto, \dur, inf, \in, ~distoBus4 , \out,~filterBus2 ,\group, ~distoGrp),
 
-
+ß
 	Pbind(\instrument, \filter, \dur,Pseq([4096/1],1), \in,~filterBus2,\which,2,\busMod, ~bus5,\bus7,~bus7, \out,~eqBus2, \group,~filterGrp),
 
-	Pbind(\instrument,\EQHP, \in, ~eqBus2 , \out, ~gateBus2 ,\frq, 100, \dur,inf, \group, ~eqGrp0),
+	Pbind(\instrument,\EQHP, \in, ~eqBus2 , \out, ~gateBus2,
+		\val, 3400.00.rrand(300,0.001),\quant, 16.rrand(4,1), \gain,(-8).rrand((-1),1),
+		\val2, 3400.00.rrand(300,0.001),\quant2, 16.rrand(4,1), \gain2,(-8).rrand((-1),1)
+		,\frq, 100, \dur,inf, \group, ~eqGrp0),
 
 
 

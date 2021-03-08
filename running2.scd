@@ -211,14 +211,14 @@ Ppar([
 
 
 
-~toUse,
+~toUse2,
 
 
 
 	  //STARTING HERE
-/*Pbind(\instrument,\gran,\dur,Prand([Pseq([1/4],16),Pseq([16/1],1),Pseq([1/64],256) ],inf),
+Pbind(\instrument,\gran,\dur,Prand([Pseq([1/4],16),Pseq([16/1],1),Pseq([1/64],256) ],inf),
 	/*\type, Pseq([\note, \rest,\rest,\rest, \rest,\rest,\rest,\rest],inf),*/
-		\amp, 1,\buf, ~buf,\out,~distoBus1,\gate, 1,\group,~granuGrp,\duration,Pkey(\dur),\impulse,Pkey(\dur),\pos,0.9999999999.rand),*/
+		\amp, 1,\buf, ~buf,\out,~distoBus1,\gate, 1,\group,~granuGrp,\duration,Pkey(\dur),\impulse,Pkey(\dur),\pos,0.9999999999.rand),
 
 		Pbind(\instrument, \disto, \dur, inf, \in, ~distoBus1 , \out,~filterBus ,\group, ~distoGrp),
 
@@ -226,8 +226,10 @@ Ppar([
 Pbind(\instrument, \filter, \dur,Pseq([4096/1],1),\which,0, \in,~filterBus,\busMod, ~bus4,\rqLPF,~bus6, \out,~eqBus1, \group,~filterGrp ),
 
 
-//WATCH OUT VOLUME
-Pbind(\instrument,\EQHP, \in, ~eqBus1 , \out, ~gateBus ,\frq, 100, \dur,inf, \group, ~eqGrp0),
+	Pbind(\instrument,\EQHP, \in, ~eqBus1 , \out, ~gateBus,
+		\val, 3400.00.rrand(300,0.001),\quant, 16.rrand(4,1), \gain,(-8).rrand((-1),1),
+		\val2, 3400.00.rrand(300,0.001),\quant2, 16.rrand(4,1), \gain2,(-8).rrand((-1),1)
+		,\frq, 100, \dur,inf, \group, ~eqGrp0),
 
 
 	Pbind(\instrument,\gateS, \vlDec, 1,\vlSub, 1,/* \decC,50,*/\dur,Prand([Pseq([1/4],64)/*,Pseq([1/1 ],64  ) */],inf), \in, ~gateSeqBus , \group, ~gateGrp2,
@@ -235,7 +237,7 @@ Pbind(\instrument,\EQHP, \in, ~eqBus1 , \out, ~gateBus ,\frq, 100, \dur,inf, \gr
 			\rest, \note, \note, \rest, \note, \rest, \note, \rest,
 			\rest, \note, \note, \rest, \note, \rest, \note, \rest,
 			\rest, \note, \note, \rest, \rest, \rest, \rest, \rest,
-			\rest, \note, \note, \rest, \note, \rest, \note, \rest  ],2), Pseq([\note], 64) ], inf),
+			\rest, \note, \note, \rest, \note, \rest, \note, \rest  ].scrambleß,2), Pseq([\note], 64) ], inf),
 		/*\atkT, Pseq([ 0,0.4,0,0 ,0,0,0,0 ],inf),
 		\decT,Pseq([ 1,0.59,1,1,  1,1,1,1],inf),
 		\atckC, Pseq([0,5,0,0 ,  0,0,0,0],inf),*/
@@ -367,14 +369,17 @@ Pbindf( Prand([~quickFix, ~rShort]),\instrument, \reverbS, \dur,inf, \in,~revSid
 
 
 
-	/*Pbind(\instrument,\gran,\dur,Pseq([1/1],inf),
-		\amp, 1,\buf, ~buf,\out,~distoBus3,\gate, 1,\group,~granuGrp,\duration,Pkey(\dur),\impulse,Pkey(\dur),\pos,Pfunc({0.9999999999.rand})),*/
+	Pbind(\instrument,\gran,\dur,Pseq([1/1],inf),
+		\amp, 1,\buf, ~buf,\out,~distoBus3,\gate, 1,\group,~granuGrp,\duration,Pkey(\dur),\impulse,Pkey(\dur),\pos,Pfunc({0.9999999999.rand})),
 
 	Pbind(\instrument, \disto, \dur, inf, \in, ~distoBus3, \out, ~filterSquelch, \group,~distoGrp),
 
 	Pbind(\instrument, \filter, \dur,inf, \in,~filterSquelch,\which,1,\busMod, ~bus9, \out, ~eqBus3, \group,~filterGrp),
 
-	Pbind(\instrument,\EQHP, \in, ~eqBus3 , \out, ~gateSquelch ,\frq, 100, \dur,inf, \group, ~eqGrp0),
+	Pbind(\instrument,\EQHP, \in, ~eqBus3 , \out, ~gateSquelch,
+		\val, 3400.00.rrand(300,0.001),\quant, 16.rrand(4,1), \gain,(-8).rrand((-1),1),
+		\val2, 3400.00.rrand(300,0.001),\quant2, 16.rrand(4,1), \gain2,(-8).rrand((-1),1)
+		,\frq, 100, \dur,inf, \group, ~eqGrp0),
 
 
 
@@ -409,16 +414,19 @@ Pbindf( Prand([~quickFix, ~rShort, ~rLong]),\dur,inf, \in,~reverbSquelch  , \out
 
 
 
-	/*Pbind(\instrument,\gran,\dur,Pwrand([ Pseq([1/64],256) ,Pseq([1/16],64),Pseq([4/1],1)],[4,16,1],inf),
+	Pbind(\instrument,\gran,\dur,Pwrand([ Pseq([1/64],256) ,Pseq([1/16],64),Pseq([4/1],1)],[4,16,1],inf),
 	\group,~granuGrp,
-		\amp, 1,\buf, ~buf,\out,~distoBus4,\gate, 1,\duration,Pkey(\dur),\impulse,Pkey(\dur),\pos,0.99999.rand),*/
+		\amp, 1,\buf, ~buf,\out,~distoBus4,\gate, 1,\duration,Pkey(\dur),\impulse,Pkey(\dur),\pos,0.99999.rand),
 
 		Pbind(\instrument, \disto, \dur, inf, \in, ~distoBus4 , \out,~filterBus2 ,\group, ~distoGrp),
 
 
 	Pbind(\instrument, \filter, \dur,Pseq([4096/1],1), \in,~filterBus2,\which,2,\busMod, ~bus5,\bus7,~bus7, \out,~eqBus2, \group,~filterGrp),
 
-	Pbind(\instrument,\EQHP, \in, ~eqBus2 , \out, ~gateBus2 ,\frq, 100, \dur,inf, \group, ~eqGrp0),
+	Pbind(\instrument,\EQHP, \in, ~eqBus2 , \out, ~gateBus2,
+		\val, 3400.00.rrand(300,0.001),\quant, 16.rrand(4,1), \gain,(-8).rrand((-1),1),
+		\val2, 3400.00.rrand(300,0.001),\quant2, 16.rrand(4,1), \gain2,(-8).rrand((-1),1)
+		,\frq, 100, \dur,inf, \group, ~eqGrp0),
 
 
 
@@ -500,9 +508,9 @@ Pxrand([
 
 
 				Pbind(\instrument, \gate, \dur,Pxrand([ Pseq([1/4],16),Pseq([1/4],64)],1),
-			\type, Pxrand([ Pseq([\note],256) , Pseq([\note,\rest,\note,\rest, \rest,\note,\rest,\note],8),
+			\type, Pxrand([ Pseq([\note],256) , Pseq([\note,\rest,\note,\rest, \rest,\note,\rest,\note].scramble,8),
 
-				Pseq([\rest,\rest,\note,\rest, \rest,\note,\rest,\rest],8)],inf), \group, ~gateGrp,
+				Pseq([\rest,\rest,\note,\rest, \rest,\note,\rest,\rest].scramble,8)],inf), \group, ~gateGrp,
 				\relSu,Pfunc({0.15.rand}),
 				\vlSub,~vl11= 0.8.rrand(0.2,1),\vlSub2,Pkey(\vlSub),
 				\atkT,~vl21=0.00.rrand(0.2,1).postln,

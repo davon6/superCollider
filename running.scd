@@ -949,9 +949,12 @@ SynthDef("TriggerBufferGranular", {arg out=0, bufnum=0, in=0, thresh = 0.004, am
 
 
 
-	SynthDef(\EQHP, {|out=0, in, val, quant, gain,frq=100, vol =0.05| Out.ar(out,
+	SynthDef(\EQHP, {|out=0, in, val, quant, gain,frq=100, vol =0.05, val2,quant2, gain2| Out.ar(out,
 
-		HPF.ar(HPF.ar(HPF.ar(HPF.ar(HPF.ar(HPF.ar(BPeakEQ.ar(In.ar(in, 1),val,quant, gain),frq),frq),frq),frq),frq),frq)* vol)};).add;
+		HPF.ar(HPF.ar(HPF.ar(HPF.ar(HPF.ar(HPF.ar(
+		BPeakEQ.ar(	BPeakEQ.ar(In.ar(in, 1),val,quant, gain),val2,quant2, gain2)
+
+			,frq),frq),frq),frq),frq),frq)* vol)};).add;
 
 
 SynthDef(\EQHP10, {|out=0, in, val, quant, gain,frq=100, vol =1| Out.ar(out,
