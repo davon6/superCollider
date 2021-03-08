@@ -1,6 +1,65 @@
 
+Ppar([
+
+	/*Pseq([Pbindf(~kick,\out,~kbus)],inf),*/
+Pbind(\instrument,\gran,\dur,Pseq([16/1],1),\group,~granuGrp,\amp, 1,\buf, ~buf,\out,~gateMelo,\gate, 1,\duration,Pkey(\dur),\impulse,Pkey(\dur),\pos,0.99999.rand),
+
+
+Pbindf(~rLong,\dur,inf, \in,~gateMelo , \revtime, 15,\out,0,\taillevel,0,\group,~revGrp),
+
+	/*Pbind(\instrument,\comp, \dur,inf,\thr,0.8 ,\sB, 1.015,\sA, 1/2,\atk ,0.0242, \rel ,0.0968,\gain,1,\in, ~comSide ,\ctrl, ~kbus, \out,~limitSide, \group, ~compGrp),
+	Pbind(\instrument, \limiter,\in, ~limitSide, \dur, Pseq([1024/1],1),\gain,9,\group,~limitGrp,\out,~stereoSide),
+
+	Pbind(\instrument,\stereo, \dur, Pseq([16/1],inf), \in, ~stereoSide  ,	\atkT,0.05,\crvA,8,\out,0, \group, ~stereoGrp),*/
+
+	/*Ppar([~kick,~bass],inf)*/
+
+],1).play(t)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Ppar([
+
+	Pseq([Pbindf(~kick,\out,~kbus)],inf),
+Pbind(\instrument,\gran,\dur,Pseq([1/256],1),
+		\group,~granuGrp,\vlSub,0,\vlSub2,0,\decC,(-90),\decT, 0.1, \vlDec,1,
+	\amp, 1,\buf, ~buf,\out,~revSide,\gate, 1,\duration,Pkey(\dur),\impulse,Pkey(\dur),\pos,0.99999.rand),
+
+
+Pbindf(~rLong,\dur,inf, \in,~revSide , \revtime, 15,\out,~comSide,\taillevel,0,\group,~revGrp),
+
+	Pbind(\instrument,\comp, \dur,inf,\thr,0.8 ,\sB, 1.015,\sA, 1/2,\atk ,0.0242, \rel ,0.0968,\gain,1,\in, ~comSide ,\ctrl, ~kbus, \out,~limitSide, \group, ~compGrp),
+	Pbind(\instrument, \limiter,\in, ~limitSide, \dur, Pseq([1024/1],1),\gain,9,\group,~limitGrp,\out,~stereoSide),
+
+	Pbind(\instrument,\stereo, \dur, Pseq([16/1],inf), \in, ~stereoSide  ,	\atkT,0.05,\crvA,8,\out,0, \group, ~stereoGrp),
+
+	/*Ppar([~kick,~bass],inf)*/
+
+],1).play(t)
+
 
 s.plotTree
+
+
+
+
 
 
 (

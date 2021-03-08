@@ -647,6 +647,8 @@ SynthDef(\algo, {
 
 	SynthDef(\dispatch,{|in, out, dur|Out.ar(out, In.ar(in,1)* EnvGen.kr(Env([1,0],[dur,0],60),doneAction:2))}).add;
 	SynthDef(\dispatchS,{|in, out, dur|Out.ar(out, In.ar(in,2)* EnvGen.kr(Env([1,0],[dur,0],60),doneAction:2))}).add;
+
+
 //below dur can be factored to change mod
 	SynthDef(\shift, {|in, out, freq,boo, freq2, factor =1, factor2, factor3, vlPE =27.1366666667,vlPE2=0.2, crvEP = (-2), dcPE = 0.129066666667, dur,
 		vlPE3,vlPE33,crvEP2, dA=0, dA2=0, dA3=0|
@@ -656,7 +658,12 @@ SynthDef(\algo, {
 
 			/*freq:  freq2+    In.kr( boo, 1)  +   (EnvGen.kr(Env([vlPE,vlPE2],[dur/*dcPE*/,0],crvEP),doneAction: dA)*factor2)
 */
-			freq:/*SinOsc.kr(0.3).range(10,-10)*/ 55
+			freq:SinOsc.ar(0.3).range(-100,100)
+
+
+
+
+			/*SinOsc.kr(0.3).range(10,-10)*/
 		   /** EnvGen.kr(Env.step([factor,0],[dur,0]),doneAction: dA3)*//*)*/
 			/*+
 			(EnvGen.kr(Env.step([vlPE3,vlPE33],[dur/*dcPE2*/,0],crvEP2),doneAction: dA2)*factor3)+
@@ -979,22 +986,25 @@ SynthDef(\EQHP10, {|out=0, in, val, quant, gain,frq=100, vol =1| Out.ar(out,
 
 
 
-	SynthDef(\stereo,{|out=0, in, spread=0, level=1, center=0.0,dur|
+	SynthDef(\stereo,{|out=0, in, spread=0, level=1, center=0.0,dur,atkT=0,crvA=0|
 
 		Out.ar(out,
 			Splay.arFill(10,
 				In.ar(in, 1)
-				,spread,level,center)* EnvGen.kr(Env.step([1],[dur]),doneAction: 2)
+				,spread,level,center)* EnvGen.kr(Env([0,1,1,0],[atkT,dur,0],[crvA,0]),doneAction: 2)
+			//EnvGen.kr(Env.step([1],[dur]),doneAction: 2)
 		);
 	}).add;
 
 
-	SynthDef(\stereoS,{|out=0, in, spread=0, level=1, center=0.0,dur,modPan|
+	SynthDef(\stereoS,{|out=0, in, spread=0, level=1, center=0.0,dur,modPan, atkT=0|
 
 		Out.ar(out,
 			Splay.arFill(10,
 				In.ar(in, 1)
-				,spread,level,center+ In.kr(modPan))* EnvGen.kr(Env.step([1],[dur]),doneAction: 2)
+				,spread,level,center+ In.kr(modPan))
+			* EnvGen.kr(Env([0,1,1,0],[atkT,dur,0]),doneAction: 2)
+			//EnvGen.kr(Env.step([1],[dur]),doneAction: 2)
 		);
 	}).add;
 
