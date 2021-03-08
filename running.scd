@@ -321,7 +321,7 @@ s.sync;
 
 	SinOsc.kr(Select.kr(LFNoise2.ar(~hz1beat).range(0,4).round(1),
 		[    ~hz1beat/4,~hz1beat,~hz1beat,~hzHbeat,~hz1beat *4 /*,~hzHbeat*4   */  /*,0.321875*/	]
-		)    *  SinOsc.kr(~hzHbeat*4).range((~hz1beat.neg),~hz1beat*4),ph).range(~hz8Oct/2,~hz1Oct/4)
+		)    *  SinOsc.kr(~hzHbeat*4).range((~hz1beat.neg),~hz1beat*4),ph).range(~hz8Oct,~hz1Oct/4)
 
 
 		*EnvGen.kr(Env.step([1,0],[dur,0]),doneAction: 2))}).add;
@@ -880,7 +880,7 @@ SynthDef("TriggerBufferGranular", {arg out=0, bufnum=0, in=0, thresh = 0.004, am
 
 		input
 			,
-      659.25 *   [8,16,32],
+      1294.5373184/*659.25*/     *   [8,16,32],
 
 			wet
 		).sum * 10;
@@ -897,8 +897,8 @@ SynthDef("TriggerBufferGranular", {arg out=0, bufnum=0, in=0, thresh = 0.004, am
             drylevel.dbamp,
             earlylevel.dbamp,
             taillevel.dbamp,
-				roomsize+1,0.6)
-		+ input	)
+				roomsize+1,0.32)
+		+ a	)
 
 	}).add;
 

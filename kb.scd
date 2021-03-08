@@ -91,7 +91,7 @@ Ppar([Pseq([~bass],inf),Pbindf(~snare,\da1,0)],1);//JEEEZ
 
 	~bar[6],
 
-	Ppar([~bar[6],~hat,Pbindf(~cymbal,\type,Pseq([\rest,\rest,\note,\rest ,\rest,\rest ,\note, \rest],inf)),~snare],1),
+	Ppar([~bar[6],~hat,Pbindf(~cymbal,\type,Pseq([\rest,\rest,\note,\rest ,\rest,\rest ,\note, \rest].scramble,inf)),~snare],1),
 
 Ppar([~bar[6],~hat,~cymbal,~snare],1),
 
