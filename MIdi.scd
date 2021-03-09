@@ -1,3 +1,10 @@
+
+
+MIDIdef.bend(\onTest, {|vel, nn, chan, src|[vel, nn, chan, src].postln});
+
+
+
+
 MIDIClient.init
 
 
@@ -15,10 +22,12 @@ MIDIdef.noteOn(\onTest, {"keydown".postln}).permanent_(true);
 
 MIDIdef(\onTest).permanent_(false;)
 
+MIDIdef.noteOn(\onTest, {|vel, nn, chan, src|[vel, nn, chan, src].postln});
+MIDIdef.cc(\onTest, {|vel, nn, chan, src|[vel, nn, chan, src].postln});
 
 MIDIdef(\hey).free
 
-MIDIdef.noteOn(\onTest, {|vel, nn, chan, src|[vel, nn, chan, src].postln});
+MIDIdef.activeSense(\onTest, {|vel, nn, chan, src|[vel, nn, chan, src].postln});
 
 MIDIdef.cc(\hey,{| func, ccNum, chan, srcID, argTemplate, dispatcher|
 

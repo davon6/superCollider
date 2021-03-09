@@ -1131,7 +1131,7 @@ SynthDef(\filterModu,{|out=0, in, filMod=600,filMod2=500,qf=0.5,qf2=0.5,  which=
 
 		lp = Resonz.ar(sig ,  filMod ,qf);
 
-	hp = BHiPass4.ar(sig, filMod2,qf2)*0.24;
+	hp = BHiPass4.ar(sig, filMod,qf2)*0.24;
 
 		sig = SelectX.ar(which, [lp, hp]);
 
