@@ -56,7 +56,7 @@ Pbindef(\aaa,\dur,Pseq([16/1],inf),
 
 
 
-MIDIdef.noteOn(\shoc, {|vel, nn, chan, src|[nn].postln;
+MIDIdef.cc(\shoc, {|vel, nn, chan, src|[nn].postln;
 	v.set(\factor2,1);
 d.set(\factor2,1);
 Pbindef(\aaa,\dur,Pseq([1/1],inf),
@@ -70,7 +70,7 @@ Pbindef(\aaa,\dur,Pseq([1/1],inf),
 	\decC,-10.rrand(-2,1).postln,
 	\relC,-8.rrand(-2,1) .postln);
 
-},noteNum: 113);
+},ccNum: 113);
 
 
 
@@ -150,16 +150,18 @@ v.set(\multi, modFreq.round(0.01));
 
 },ccNum: 19 );
 
-~wFi = { if(~fi==0,{~fi=1;~fi;},{~fi=0;~fi;});    };
+/*~wFi = { if(~fi==0,{~fi=1;~fi;},{~fi=0;~fi;});    };
 
 MIDIdef.cc(\wfil, { |value|var modFreq = value.linlin(0, 127, 0, 1);
 
 	k.set(\which, ~wFi.().postln);
 
-},ccNum: 115 );
+},ccNum: 115 );*/
 
-MIDIdef.cc(\fil, { |value|var modFreq = value.linlin(0, 127, 60, 2200);
+MIDIdef.cc(\fil, { |value|var modFreq = value.linlin(0, 127, 60, 3000);
 
+	 if(modFreq.round(1).postln <100,{k.set(\which,0);"yo".postln},{});
+		if(modFreq.round(1).postln >2510,{k.set(\which,1);"yo2".postln},{});
 
 	// if(modFreq.round(1).postln >1500,{k.set(\which,0);"yo".postln},{k.set(\which,1)});
 		// if(modFreq.round(1).postln 1510,{);"yo2".postln},{});
@@ -191,7 +193,7 @@ MIDIdef.cc(\filRez, { |value|var modFreq = value.linlin(0, 127, 1, 0.3);
 
 },ccNum: 18 );
 
-MIDIdef.cc(\c, { |value|var modFreq = value.linlin(0, 127, 1, 10);
+MIDIdef.cc(\c, { |value|var modFreq = value.linlin(61, 67, 1, 10);
 
 	//if(modFreq.round(1).postln ==1,{Pbindef(\aaa, \dur,Pseq([16/1],inf));},{});
 	if(modFreq.round(1).postln ==3,{Pbindef(\aaa, \dur,Pseq([4/1],inf));},{});
