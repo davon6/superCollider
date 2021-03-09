@@ -91,7 +91,7 @@ s.sync;
 	e = Buffer.alloc(s, s.sampleRate *   t.beatDur*4 /*0.3872*/,1);
 	f = Buffer.alloc(s, s.sampleRate *  t.beatDur*4);//  (t.beatDur*4)/*1.5488*/,1);
 	~delay = Buffer.alloc(s, 48000 * 3, 2);
-	~buf = Buffer.alloc(s,s.sampleRate*30 );
+	~buf = Buffer.alloc(s,s.sampleRate*60 );
 	~bufBg = Buffer.alloc(s,s.sampleRate*40 );
 
 	~remyAudio = Buffer.read(s, "/Users/davidmignot/superCollider-master/remy.wav");
@@ -260,6 +260,10 @@ s.sync;
 	~outFil =Bus.audio(s,1);
 	~toRecord=Bus.audio(s,1);
 	~dead=Bus.audio(s,1);
+
+
+
+	~comBusHat2=  Bus.audio(s,2);~comBusCymb2=  Bus.audio(s,2);~limitRkick2=  Bus.audio(s,1);~stereoRkick2=  Bus.audio(s,1);~revSide2=  Bus.audio(s,1);~eqNoise2==  Bus.audio(s,1);~eqDs2=  Bus.audio(s,1);~comSide2=  Bus.audio(s,2);~limitSide2=  Bus.audio(s,2);~stereoSide2=  Bus.audio(s,2);~eqNoise2=  Bus.audio(s,1);~noiseRev2=  Bus.audio(s,2);~reverbBus32=  Bus.audio(s,1);~comFuzz32=  Bus.audio(s,2);~limitFuzz32=  Bus.audio(s,2);~stereoBus42=  Bus.audio(s,1);~stetoSnaCom12=  Bus.audio(s,10);~distoBus12=  Bus.audio(s,1);~distoBus42=  Bus.audio(s,1);~distoBus12=  Bus.audio(s,1);~filterBus12=  Bus.audio(s,1);~eqBus12=  Bus.audio(s,1);~reverbBus12=  Bus.audio(s,1);~comFuzz12=  Bus.audio(s,2);~limitFuzz12=  Bus.audio(s,2);~stereoBus12=  Bus.audio(s,1);~filterBus22=  Bus.audio(s,1);~reverbBus22=  Bus.audio(s,1);~comFuzz22=  Bus.audio(s,2);~limitFuzz22=  Bus.audio(s,2);~stereoBus22=  Bus.audio(s,1);~eqBus102=  Bus.audio(s,10);
 
 
 

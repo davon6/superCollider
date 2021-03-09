@@ -159,10 +159,10 @@ MIDIdef.cc(\wfil, { |value|var modFreq = value.linlin(0, 127, 0, 1);
 
 },ccNum: 115 );*/
 
-MIDIdef.cc(\fil, { |value|var modFreq = value.linlin(0, 127, 60, 3000);
+MIDIdef.cc(\fil, { |value|var modFreq = value.linlin(0, 127, 60, 4000);
 
 	 if(modFreq.round(1).postln <100,{k.set(\which,0);"yo".postln},{});
-		if(modFreq.round(1).postln >2510,{k.set(\which,1);"yo2".postln},{});
+		if(modFreq.round(1).postln >3510,{k.set(\which,1);"yo2".postln},{});
 
 	// if(modFreq.round(1).postln >1500,{k.set(\which,0);"yo".postln},{k.set(\which,1)});
 		// if(modFreq.round(1).postln 1510,{);"yo2".postln},{});

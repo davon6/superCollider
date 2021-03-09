@@ -164,7 +164,7 @@ Pbindf(~rLong,\dur,inf, \in,~revSide , \revtime, 15,\out,~comSide,\taillevel,0,\
 	Pbind(\instrument,\comp, \dur,inf,\thr,0.8 ,\sB, 1.015,\sA, 1/2,\atk ,0.0242, \rel ,0.0968,\gain,1,\in, ~comSide ,\ctrl, ~kbus, \out,~limitSide, \group, ~compGrp),
 	Pbind(\instrument, \limiter,\in, ~limitSide, \dur, Pseq([1024/1],1),\gain,1,\group,~limitGrp,\out,~stereoSide),
 
-	Pbind(\instrument,\stereo, \dur, Pseq([16/1],inf), \in, ~stereoSide  ,\spread,1,	\atkT,0.05,\crvA,8,\out,0, \group, ~stereoGrp),
+	Pbind(\instrument,\stereo, \dur, Pseq([16/1],inf), \in, ~stereoSide  ,\spread,1,	\atkT,0.08,\crvA,6,\out,0, \group, ~stereoGrp),
 
 
 
@@ -189,7 +189,7 @@ Pbindf(~rLong,\dur,inf, \in,~revSide , \revtime, 15,\out,~comSide,\taillevel,0,\
 
 	Pbind(\instrument,\gran,\dur,Prand([ Pseq([1/4],32)  ,   Pseq([1/1],32) , Pseq([1/16],32)  ],inf)  ,//was 4
 \type, Pseq([\rest, \rest,\rest,\note, \rest,\rest,\rest,\rest].scramble,inf),
-		\amp, 1,\buf, ~buf,\out,~distoPerch,\gate, 1,\duration,Pseq([1/1],inf),\impulse,Pseq([1/1],inf),
+		\amp, 1,\buf, ~buf,\out,~distoPerch,\gate, 1,\duration,Pkey(\dur)/*Pseq([1/1],inf)*/,\impulse,Pkey(\dur),
 
 		\pos,Pseq([ Pseq([0.99999.rand],24),  Pseq([0.99999.rand],24) , Pseq([0.99999.rand],24), Pseq([0.99999.rand],24) ,
 			Pseq([0.99999.rand],24),  Pseq([0.99999.rand],24) , Pseq([0.99999.rand],24), Pseq([0.99999.rand],24)],inf),
@@ -430,7 +430,7 @@ Pbindf( Prand([~quickFix, ~rShort, ~rLong]),\dur,inf, \in,~reverbSquelch  , \out
 
 
 
-	Pbind(\instrument,\gran,\dur,Pwrand([ Pseq([1/64],256) ,Pseq([1/16],64),Pseq([4/1],1)],[4,16,1],inf),
+Pbind(\instrument,\gran,\dur,Pwrand([ Pseq([1/64],256) ,Pseq([1/16],64),Pseq([4/1],1)],[4,16,1],inf),
 	\group,~granuGrp,
 		\amp, 1,\buf, ~buf,\out,~distoBus4,\gate, 1,\duration,Pkey(\dur),\impulse,Pkey(\dur),\pos,0.99999.rand),
 
