@@ -83,9 +83,9 @@ Ppar([Pseq([~bass],inf),Pbindf(~snare,\da1,0)],1);//JEEEZ
 		Pbindf(~hat, \dur,Pseq([1/4],60)),
 		Pbindf(~snare,\type, Pseq([\rest,\rest ,\note, \rest], 7),\da1,0),],1),~bar[1]],1)
 	,
-	Pseq([Ppar([~bar[3],Pbindf(~cymbal, \dur,Pseq([1/4],48)),
-		Pbindf(~hat, \dur,Pseq([1/4],48)),
-		Pbindf(~snare,\type, Pseq([\rest,\rest ,\note, \rest], 6),\da1,0)],1),  ~kbassRest, ~bassRest],1),
+	Pseq([Ppar([~bar[2],Pbindf(~cymbal, \dur,Pseq([1/4],32)),
+		Pbindf(~hat, \dur,Pseq([1/4],32)),
+		Pbindf(~snare,\type, Pseq([\rest,\rest ,\note, \rest], 4),\da1,0)],1),  ~kbassRest, Pseq([~bassRest],3)],1),
 
 	~perc[5],
 

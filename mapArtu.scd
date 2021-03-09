@@ -9,6 +9,7 @@ MIDIClient.init
 s.plotTree
 
 MIDIIn.connectAll;
+MIDIIn.disconnectAll;
 //MIDI ALLOC
 (
 ~synthGrp = Group.new;

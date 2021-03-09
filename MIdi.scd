@@ -23,7 +23,7 @@ MIDIdef.noteOn(\onTest, {"keydown".postln}).permanent_(true);
 MIDIdef(\onTest).permanent_(false;)
 
 MIDIdef.noteOn(\onTest, {|vel, nn, chan, src|[vel, nn, chan, src].postln});
-MIDIdef.cc(\onTest, {|vel, nn, chan, src|[vel, nn, chan, src].postln});
+MIDIdef.cc(\onTestT, {|vel, nn, chan, src|[vel, nn, chan, src].postln});
 
 MIDIdef(\hey).free
 
