@@ -22,6 +22,9 @@
 	~snare = Pbind(\instrument, \snare,\carHz, 41.2 ,\type, Pseq([\rest ,\rest,\note,\rest], 8),\atk, 0.00502929687,\rel, 0.0968,\rel2, 0.3872,\dur, Pseq([1/2], inf),\amp,(-20.5), \crv1,(-8),\crv2,(-7)   ,\out,0);
 
 
+
+
+
 ~bassRest = Pbindf(~bass,  \type,Pseq([\rest],inf));
 
 ~kbassRest =Ppar([~kick, ~bassRest], 1);
@@ -103,7 +106,7 @@ Ppar([~bar[6],~snare],1),
 
 	Pseq([~perc[4],Pseq([Pseq([Pbindf(~kick, \dur,Pseq([1/3],1))],1) ,Pseq([Pbindf(~kick, \dur,Pseq([1/12],1))],8)],1)],1),
 
-	Pseq([Pseq([~bassRest],1),~perc[3],Pseq([~bassRest],1)],1)]  ,inf);
+	Pseq([Pseq([~bassRest],1),~perc[3],Pseq([~bassRest],1)],1)]  ,1);
 
 
 	~toUse2 = Prand([
@@ -144,6 +147,6 @@ Ppar([~bar[6],~snare],1),
 
 	],1)   ],1)
 
-	],inf);
+	],16);
 )
 

@@ -1,13 +1,13 @@
 (
 //Pseq([~toUse2],inf).play(t);
-Ppar([Pbindf(~kick,\amp, 5),Pbindf(~bass,\amp, 5) ],inf).play(t);
+ Ppar([Pbindf(~kick,\amp, 3),Pbindf(~bass,\amp, 3 )],inf).play(t);
 x = Synth(\recLoop,[buf:~buf,\recording,1],~recGrp);
 )
 x.free;
 ~buf.play
 MIDIClient.init
 s.plotTree
-
+MIDIClient.init
 MIDIIn.connectAll;
 MIDIIn.disconnectAll;
 //MIDI ALLOC
@@ -37,7 +37,7 @@ k = (Synth( \filterModu, [\dur, inf,\in,~outFil, \out,~toRecord],~filterGrp));
 Pbindef(\aaa, \instrument, \sequ, \value,Pseq([104,500,200],inf),\dur,Pseq([4/1],inf),\in,~toRecord,\group,~shapGrp).play(t);
 
 
-MIDIdef.noteOn(\res, {|vel, nn, chan, src|[nn].postln;
+MIDIdef.noteOn(\res, {|vel, nn, chan, src|[nn];
 
 Pbindef(\aaa,\dur,Pseq([4/1],inf),
 \vlAtk,0,\vlDec,1,\vlSub,1, \vlSub2,1,\vlRel,0, \atkT,0, \decT,1, \subsT,0, \relT,0, \atckC,0, \decC,0, \relC,0,);
@@ -46,7 +46,7 @@ Pbindef(\aaa,\dur,Pseq([4/1],inf),
 
 
 
-MIDIdef.noteOn(\rlong, {|vel, nn, chan, src|[nn].postln;
+MIDIdef.noteOn(\rlong, {|vel, nn, chan, src|[nn];
 
 Pbindef(\aaa,\dur,Pseq([16/1],inf),
 \vlAtk,0,\vlDec,1,\vlSub,1, \vlSub2,1,\vlRel,0, \atkT,0, \decT,1, \subsT,0, \relT,0, \atckC,0, \decC,0, \relC,0,);
@@ -57,7 +57,7 @@ Pbindef(\aaa,\dur,Pseq([16/1],inf),
 
 
 
-MIDIdef.cc(\shoc, {|vel, nn, chan, src|[nn].postln;
+MIDIdef.cc(\shoc, {|vel, nn, chan, src|[nn];
 	v.set(\factor2,1);
 d.set(\factor2,1);
 Pbindef(\aaa,\dur,Pseq([1/1],inf),
@@ -221,9 +221,18 @@ MIDIdef.cc(\modLF, { |value|var modFreq = value.linlin(0, 127, 00.002, 20);
 
 MIDIdef.cc(\myModFreq, { |value|var modFreq = value.linlin(0, 127, 00.002, 3200);
 	//
-	v.set(\freq2,modFreq.round(0.001));
+	/*v.set(\freq2,modFreq.round(0.001).postln);*/
 	d.set(\freq2,modFreq.round(0.001));
 },ccNum: 73);
+
+
+MIDIdef.bend(\twi, { |val, chan, src|
+
+
+	v.set(\freq2, val.linlin(0,16383,0,1200).postln);
+
+
+}, chan:  11);
 
 MIDIdef.cc(\freqx, { |value|var modFreq = value.linlin(0, 127, 00.002, 1200);
 
@@ -234,13 +243,13 @@ MIDIdef.cc(\freqx, { |value|var modFreq = value.linlin(0, 127, 00.002, 1200);
 MIDIdef.cc(\freqx2, { |value|var modFreq = value.linlin(0, 127, 26.189, 3200);
 
 
-	d.set(\freq,modFreq.round(0.001).postln);
+	d.set(\freq,modFreq.round(0.001));
 },ccNum: 93 );
 
-MIDIdef.cc(\freqx3, { |value|var modFreq = value.linlin(0, 127, 00.002, 3200);
+MIDIdef.cc(\freqx3, { |value|var modFreq = value.linlin(0, 127, 00.002, 320);
 
 	v.set(\freq3,modFreq.round(0.001));
-	d.set(\freq3,modFreq.round(0.001));
+
 },ccNum: 75 );
 
 MIDIdef.cc(\cv, { |value|var modFreq = value.linlin(0, 127, 00.002, 160);

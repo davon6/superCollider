@@ -91,8 +91,8 @@ s.sync;
 	e = Buffer.alloc(s, s.sampleRate *   t.beatDur*4 /*0.3872*/,1);
 	f = Buffer.alloc(s, s.sampleRate *  t.beatDur*4);//  (t.beatDur*4)/*1.5488*/,1);
 	~delay = Buffer.alloc(s, 48000 * 3, 2);
-	~buf = Buffer.alloc(s,s.sampleRate*60 );
-	~bufBg = Buffer.alloc(s,s.sampleRate*40 );
+	~buf = Buffer.alloc(s,s.sampleRate*120 );
+	~bufBg = Buffer.alloc(s,s.sampleRate*90 );
 
 	~remyAudio = Buffer.read(s, "/Users/davidmignot/superCollider-master/remy.wav");
 
@@ -260,6 +260,8 @@ s.sync;
 	~outFil =Bus.audio(s,1);
 	~toRecord=Bus.audio(s,1);
 	~dead=Bus.audio(s,1);
+	~no1 = Bus.audio(s,10);
+	~no2 = Bus.audio(s,10);
 
 
 
@@ -584,7 +586,7 @@ SynthDef(\men,{|out = 0, dur|Out.ar(out,
 
 			SinOsc.kr(sineRate,phRise).range([sineRangeLow]), mul:
 
-			/*(*/freq * mRatio *iEnv /*In.kr( gra, 1) */  /*) *   In.kr( gra, 1)*/
+			/*(*/  MouseY.kr(freq * mRatio *iEnv) /*In.kr( gra, 1) */  /*) *   In.kr( gra, 1)*/
 
 		);
 
@@ -650,7 +652,7 @@ SynthDef(\algo, {
 
 
 	SynthDef(\dispatch,{|in, out, dur|Out.ar(out, In.ar(in,1)* EnvGen.kr(Env([1,0],[dur,0],60),doneAction:2))}).add;
-	SynthDef(\dispatchS,{|in, out, dur|Out.ar(out, In.ar(in,2)* EnvGen.kr(Env([1,0],[dur,0],60),doneAction:2))}).add;
+	SynthDef(\dispatchS,{|in, out, dur|ReplaceOut.ar(out, In.ar(in,10)* EnvGen.kr(Env([1,0],[dur,0],60),doneAction:2))}).add;
 
 
 //below dur can be factored to change mod
@@ -1044,25 +1046,25 @@ SynthDef(\fm, {
 		));
 
 	//second level of modulation
-	mod2 = SinOsc.ar(freq3/10, mul:freq3/10 *iEnv /*In.kr( gra, 1)*/ );
+	mod2 = SinOsc.ar(659.26/10, mul:659.26/10 *iEnv /*In.kr( gra, 1)*/ );
 
 	//first level of modulation
 
 		// mod = SinOsc.ar(MouseX.kr(0,freq * mRatio + mod2), mul:freq * mRatio * iEnv);
 
-		mod = SinOsc.ar( freq2 * mRatio + mod2 *
+		mod = SinOsc.ar( MouseX.kr( 659.26 * mRatio + mod2 )*
 
 		/*	SinOsc.kr(In.kr(~bus2, 1),In.kr(~bus3, 1)).range([In.kr(~bus11, 1)]), mul:*/
 
 			SinOsc.kr(sineRate,phRise).range([sineRangeLow]), mul:
 
-			/*(*/freq2 * mRatio *iEnv /*In.kr( gra, 1) */  /*) *   In.kr( gra, 1)*/
+			/*(*/        MouseY.kr(   659.26 * mRatio *iEnv) /*In.kr( gra, 1) */  /*) *   In.kr( gra, 1)*/
 
 		);
 
 	//my carrier is a mess but bring interesting outputs
 
-		car =SinOsc.ar( [freq, freq+20, freq -40]* cRatio + (In.kr(modu,1)* EnvGen.kr(Env.adsr(sustainLevel: 1,releaseTime: 0.1),factor ))+(In.kr(~seqBus,1)* factor2)+
+		car =SinOsc.ar( [0.00502929687, 0.00502929687+20, 0.00502929687 +50]* cRatio + (In.kr(modu,1)* EnvGen.kr(Env.adsr(sustainLevel: 1,releaseTime: 0.1),factor ))+(In.kr(~seqBus,1)* factor2)+
 
 			//remove this line as shwon to decrease sound quality so I left it / HERE CHNAGE THE SOUND
 			/*SelectX.ar(SinOsc.kr(0.0020,phFm).range(0,1),[SinOsc.ar(0),mod])*/
