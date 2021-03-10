@@ -18,9 +18,11 @@ MIDIIn.disconnectAll;
 ~recGrp= Group.after(~shapGrp);
 
 )
+//no2 doesnt not go tottsly tru filter at least low
+//manage lower frequency mod
 (
 
-d = (Synth( \fm2, [\dur, inf,\stretch, 3.5,\mRatio, 1,\amp, 0.03,\cRatio, 1,\index, 1,\atkE, 0.1,\out,~outFil],~synthGrp));
+d = (Synth( \fm2, [\dur, inf,\stretch, 3.5,\mRatio, 1,\amp, 0.08,\cRatio, 1,\index, 1,\atkE, 0.1,\out,~outFil],~synthGrp));
 
  v = (Synth( \fm, [\dur, inf,\stretch, 3.5,\mRatio, 1,\cRatio, 1,\index, 1,\atkE, 0.1,\amp,0.5,\out, ~outFil],~synthGrp));
 
@@ -212,9 +214,9 @@ MIDIdef.cc(\c, { |value|var modFreq = value.linlin(61, 67, 1, 10);
 
 MIDIdef.cc(\modLF, { |value|var modFreq = value.linlin(0, 127, 00.002, 20);
 
-	z.set(\modu,modFreq.round(0.001));
-	n.set(\modu,modFreq.round(0.001));
-	c.set(\modu,modFreq.round(0.001));
+	z.set(\modu,modFreq.round(0.0001));
+	n.set(\modu,modFreq.round(0.0001));
+	c.set(\modu,modFreq.round(0.0001));
 	m.set(\modu,modFreq.round(1));
 },ccNum: 77);
 
@@ -234,16 +236,16 @@ MIDIdef.bend(\twi, { |val, chan, src|
 
 }, chan:  11);
 
-MIDIdef.cc(\freqx, { |value|var modFreq = value.linlin(0, 127, 00.002, 1200);
+/*MIDIdef.cc(\freqx, { |value|var modFreq = value.linlin(0, 127, 00.002, 1200);
 
 	v.set(\freq,modFreq.round(0.001));
 
-},ccNum: 93 );
+},ccNum: 93 );*/
 
-MIDIdef.cc(\freqx2, { |value|var modFreq = value.linlin(0, 127, 26.189, 3200);
+MIDIdef.cc(\freqx2, { |value|var modFreq = value.linlin(0, 127, 0.01, 2000);
 
 
-	d.set(\freq,modFreq.round(0.001));
+	d.set(\freq,modFreq.round(0.01).postln);
 },ccNum: 93 );
 
 MIDIdef.cc(\freqx3, { |value|var modFreq = value.linlin(0, 127, 00.002, 320);

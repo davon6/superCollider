@@ -652,7 +652,7 @@ SynthDef(\algo, {
 
 
 	SynthDef(\dispatch,{|in, out, dur|Out.ar(out, In.ar(in,1)* EnvGen.kr(Env([1,0],[dur,0],60),doneAction:2))}).add;
-	SynthDef(\dispatchS,{|in, out, dur|ReplaceOut.ar(out, In.ar(in,10)* EnvGen.kr(Env([1,0],[dur,0],60),doneAction:2))}).add;
+	SynthDef(\dispatchS,{|in, out, dur|ReplaceOut.ar(out, In.ar(in,10)* EnvGen.kr(Env([1,1],[dur,0]),doneAction:2))}).add;
 
 
 //below dur can be factored to change mod
@@ -1108,9 +1108,9 @@ SynthDef(\fm2, {
 	);*/
 /*	mod2 =SinOsc.ar(freq3/10, mul:freq3/10* iEnv* index2);*/
 
-	mod = SinOsc.ar(freq2  /*In.kr(~bus.postln,1) */   * mRatio,/*mod2.wrap(0, 16pi),*/ mul:/* freq2 **/ iEnv* index3/*MouseX.kr(0,iEnv)*/);
+		mod = SinOsc.ar( freq2  /*In.kr(~bus.postln,1) */   * mRatio,/*mod2.wrap(0, 16pi),*/ mul:/* freq2 **/ iEnv* index3/*MouseX.kr(0,iEnv)*/);
 
-	car = Saw.ar([freq, freq+20, freq -40] + (In.kr(modu,1)*EnvGen.kr(Env.adsr(sustainLevel: 1,releaseTime: 0.1),factor ))+(In.kr(~seqBus,1)* factor2)
+		car = Saw.ar(  MouseX.kr([659.26, 659.26+20, 659.26 -40]) + (In.kr(modu,1)*EnvGen.kr(Env.adsr(sustainLevel: 1,releaseTime: 0.1),factor ))+(In.kr(~seqBus,1)* factor2)
 		/*+ LFNoise0.kr(10.3).range(-40,1200) */ * cRatio,
 		mod.wrap(0, 16pi)*[1,multi
 			,multi
