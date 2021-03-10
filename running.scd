@@ -266,7 +266,7 @@ s.sync;
 
 
 	~comBusHat2=  Bus.audio(s,2);~comBusCymb2=  Bus.audio(s,2);~limitRkick2=  Bus.audio(s,1);~stereoRkick2=  Bus.audio(s,1);~revSide2=  Bus.audio(s,1);~eqNoise2==  Bus.audio(s,1);~eqDs2=  Bus.audio(s,1);~comSide2=  Bus.audio(s,2);~limitSide2=  Bus.audio(s,2);~stereoSide2=  Bus.audio(s,2);~eqNoise2=  Bus.audio(s,1);~noiseRev2=  Bus.audio(s,2);~reverbBus32=  Bus.audio(s,1);~comFuzz32=  Bus.audio(s,2);~limitFuzz32=  Bus.audio(s,2);~stereoBus42=  Bus.audio(s,1);~stetoSnaCom12=  Bus.audio(s,10);~distoBus12=  Bus.audio(s,1);~distoBus42=  Bus.audio(s,1);~distoBus12=  Bus.audio(s,1);~filterBus12=  Bus.audio(s,1);~eqBus12=  Bus.audio(s,1);~reverbBus12=  Bus.audio(s,1);~comFuzz12=  Bus.audio(s,2);~limitFuzz12=  Bus.audio(s,2);~stereoBus12=  Bus.audio(s,1);~filterBus22=  Bus.audio(s,1);~reverbBus22=  Bus.audio(s,1);~comFuzz22=  Bus.audio(s,2);~limitFuzz22=  Bus.audio(s,2);~stereoBus22=  Bus.audio(s,1);~eqBus102=  Bus.audio(s,10);
-
+~toLimitlast = Bus.audio(s,10);
 
 
 	s.sync;
@@ -747,9 +747,9 @@ env =   In.ar(in, 1) *    EnvGen.kr(Env(
 	SynthDef(\gateS,{|in, out=0, vlAtk=0, vlDec=1,vlSub=0, vlRel=0, atkT=0, decT=1, subsT=0, relT=0, atckC=0, decC=0, relC=0, bus1, bus2, dur,relSu=0|
 	var env;
 
-		env =   In.ar(in, 2) *    EnvGen.kr(Env(
+		env =   In.ar(in, 10) *    EnvGen.kr(Env(
 			[vlAtk,vlDec                  ,vlSub ,vlRel,0],
-			[dur * atkT ,dur *decT  -In.kr(bus1, 1)  -relSu, dur * subsT,dur* relT],
+			[dur * atkT ,dur *decT  , dur * subsT,dur* relT],
 			[atckC,decC ,0     ,relC]),    //decC- (In.kr(bus2, 1)
 
 
@@ -978,15 +978,20 @@ SynthDef(\EQHP10, {|out=0, in, val, quant, gain,frq=100, vol =1| Out.ar(out,
 
 	SynthDef(\limiter, {|in, out = 0,gain=1,vol =1, du =0.01,rel=0.8, atk =0.01 ,thr= 0.001,sB =1,sA= 0.05|
 
-		Out.ar(out , CompanderD.ar(BHiPass4.ar( In.ar(in,1),100),thr, sB ,sA, atk, rel)* gain;)
+		Out.ar(out , CompanderD.ar(In.ar(in,1),thr, sB ,sA, atk, rel)* gain;)
 	}).add;
 
-	"limiter init".postln;
 
 	SynthDef(\limiterS, {|in, out = 0,gain=1,vol =1, du =0.01,rel=0.8, atk =0.01 ,thr= 0.001,sB =1,sA= 0.05|
 
-		Out.ar(out , CompanderD.ar(BHiPass4.ar( In.ar(in,2),100),thr, sB ,sA, atk, rel)* gain;)
+		Out.ar(out , CompanderD.ar( In.ar(in,2),thr, sB ,sA, atk, rel)* gain;)
 	}).add;
+
+	SynthDef(\limiter10, {|in, out = 0,gain=1,vol =1, du =0.01,rel=0.8, atk =0.01 ,thr= 0.001,sB =1,sA= 0.05|
+
+		Out.ar(out , CompanderD.ar( In.ar(in,10),thr, sB ,sA, atk, rel)* gain;)
+	}).add;
+
 
 	"limiter init".postln;
 

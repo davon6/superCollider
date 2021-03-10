@@ -41,6 +41,7 @@ s.plotTree
 ~compGrp2 = Group.after(~dispatchGrp2);
 ~eqGrp2 = Group.after(~compGrp2);
 ~finalDispatchGrp= Group.after(~eqGrp2);
+~limitGrp2 = Group.after(~finalDispatchGrp);
 
 
 o = {
@@ -126,7 +127,6 @@ Ppar([
 	Pseq([Pbindf(~kick,\out,~kbus)],inf),
 	Pseq([Pbindf(~snare,\out,~snBus)],inf),
 
-	/*Ppar([~cymbal, ~hat],inf),*/
 
 	Pbind(\instrument,\compS, \dur,inf,\thr,0.6 ,\sB, 1.2,\sA, 2,\atk ,0.0001, \rel ,0.04840
 ,\gain,1,\in, ~comBusHat ,\ctrl, ~kbus, \out,0/*~stereoHat*/,\group, ~compGrp),
@@ -138,7 +138,7 @@ Ppar([
 	Pbind(\instrument, \stereo, \dur,9999, \in, ~stereoRkick,  \group, ~stereoGrp),
 
 
-	Pseq([~toUse,~toUse2],inf)  ,
+Pseq([~toUse,~toUse2],inf)  ,
 
 
 
@@ -253,7 +253,7 @@ Pbind(\instrument, \filter, \dur,Pseq([4096/1],1),\which,0, \in,~filterBus,\busM
 		,\frq, 100, \dur,inf, \group, ~eqGrp0),
 
 
-	Pbind(\instrument,\gateS, \vlDec, 1,\vlSub, 1,/* \decC,50,*/\dur,Prand([Pseq([1/4],64)/*,Pseq([1/1 ],64  ) */],inf), \in, ~gateSeqBus , \group, ~gateGrp2,
+	Pbind(\instrument,\gate, \vlDec, 1,\vlSub, 1,/* \decC,50,*/\dur,Prand([Pseq([1/4],64)/*,Pseq([1/1 ],64  ) */],inf), \in, ~gateSeqBus , \group, ~gateGrp2,
 		\type,  Pseq([   Pseq([\note], 128) ,Pseq([
 			\rest, \note, \note, \rest, \note, \rest, \note, \rest,
 			\rest, \note, \note, \rest, \note, \rest, \note, \rest,
@@ -718,7 +718,16 @@ Pbind(\instrument,\EQHP10, \in, ~eqBus102 ,\frq, 100, \dur,inf, \group, ~eqGrp2,
 Pbind(\instrument,\comp10, \dur,inf,\thr,0.4 ,\sB, 1.04,\sA, 0.2,\atk ,0.0968, \rel ,0.3872
 		,\in, ~stetoSnaCom1 ,\ctrl, ~snBus, \out, ~eqBus10,\group, ~compGrp2),
 
-Pbind(\instrument,\EQHP10, \in, ~eqBus10 ,\frq, 100, \dur,inf,\group, ~eqGrp2),
+Pbind(\instrument,\EQHP10, \in, ~eqBus10 ,\out, ~eqBus102,\frq, 100, \dur,inf,\group, ~eqGrp2),
+
+	Pbind(\instrument, \gateS, \dur, Pseq([Pseq([1/1],64),    Pseq([192/1],1)],inf) , \type,Pseq([Pseq([
+Pseq([\rest,\rest, \note,\rest,\rest,\rest,\rest, \note,\note,\rest,\rest,\note,\rest,\rest,\rest,\rest].scramble,1),
+		Pseq([\rest,\rest, \rest,\rest,\rest,\rest,\rest, \rest,\note,\rest,\rest,\note,\rest,\note,\note,\rest].scramble,1)],2)  , \note ],inf)       ,
+	\atkT, 0.2.rrand(0.08), \decT, 0.8.rrand(0.6),\relT, 0.2.rrand(0),\atkT, 4.rrand(1), \vlSub , 0.8.rrand(0.4), \vlSub2, Pkey(\vlSub),\relC, (-5).rrand(-1),
+	\in, ~eqBus102,\group, ~finalDispatchGrp, \out, ~toLimitlast),
+
+	Pbind(\instrument, \limiter10,\in, ~toLimitlast, \dur,inf,\gain,20,\group,~limitGrp2),
+
 
 
 

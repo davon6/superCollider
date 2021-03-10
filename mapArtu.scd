@@ -5,7 +5,7 @@ x = Synth(\recLoop,[buf:~buf,\recording,1],~recGrp);
 )
 x.free;
 ~buf.play
-MIDIClient.init
+
 s.plotTree
 MIDIClient.init
 MIDIIn.connectAll;
@@ -19,7 +19,8 @@ MIDIIn.disconnectAll;
 
 )
 //no2 doesnt not go tottsly tru filter at least low
-//manage lower frequency mod
+// phaser
+//CANT HEAR DELAY IN ARRANGEMENT
 (
 
 d = (Synth( \fm2, [\dur, inf,\stretch, 3.5,\mRatio, 1,\amp, 0.08,\cRatio, 1,\index, 1,\atkE, 0.1,\out,~outFil],~synthGrp));
