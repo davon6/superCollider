@@ -699,11 +699,11 @@ Pbind(\instrument, \gate, \dur, ~short,
 
 
 
-Pbind(\instrument, \dispatchS ,\dur,Pseq([
+Pbind(\instrument, \dispatchS ,\dur,Pwrand([
 		Pseq([16/1],1),
 		Pseq([4/1],4), Pseq([1/1],16)/*,Pseq([1/4],64),*/
 
-	],inf),
+	],[1,4,4],inf),
 
 	\in ,Pwrand([ ~no1, ~no2],[1,1],inf),\out, ~stetoSnaCom1  ,\group,~dispatchGrp2),
 
