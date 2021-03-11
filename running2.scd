@@ -73,7 +73,7 @@ o = {
 
 
 
-(Ppar([Pbind(\instrument,\ptr, \buf, ~k, \out, ~ptrBus,\group,~ptrGrp,\dur,Pseq([1024/1],1)),
+(Ppar([Pbind(\instrument,\ptr, \buf, ~k, \out, ~ptrBus,\group,~ptrGrp,\dur,inf),
 	Pbind(\instrument,\rec, \ptrIn, ~ptrBus, \micIn, ~micBus, \buf, ~k,\group,~recGrp,\dur,inf),
 
 	Pbind(\instrument,\gran,\dur,Pseq([1/1],inf),\amp, 1,\buf, ~k,\out,~limitRkick,\atk, 0,\rel, Pseq([1/4],inf),\gate, 1,\ptrBus, ~ptrBus,\pitchRte,(-1),\ptrRandSamples, 0,\minPtrDelay, 1000,\group,~granGrp,\duration,Pseq([1/4],inf),\impulse,Pseq([1/2],inf),\crv,50),
@@ -82,7 +82,7 @@ o = {
 	Pbind(\instrument,\ptr, \buf, f, \out, ~ptrBus2,\group,~ptrGrp,\dur,inf),
 	Pbind(\instrument,\rec, \ptrIn, ~ptrBus2, \micIn, ~micBus2, \buf, f,\group,~recGrp,\dur,inf),
 
-	Pbind(\instrument,\ptr, \buf, e, \out, ~ptrBus3,\group,~ptrGrp,\dur,Pseq([1024/1],1)),
+	Pbind(\instrument,\ptr, \buf, e, \out, ~ptrBus3,\group,~ptrGrp,\dur,inf),
 	Pbind(\instrument,\rec, \ptrIn, ~ptrBus3, \micIn, ~micBus3, \buf, e,\group,~recGrp,\dur,inf),
 
 	Pbind(\instrument,\gran,\dur,Pseq([1/4],inf),\amp, 1,\buf, f,\out,~reverbBus2,\atk, 0,\rel, Pseq([1/4],inf),\gate, 1,\ptrBus, ~ptrBus2,\ptrRandSamples, 0,\atk,0,\minPtrDelay, 1000,\group,~granGrp,\duration,Pseq([1/4],inf),\impulse,Pseq([1/4],inf),\amp,0.8),
@@ -207,21 +207,21 @@ Pbind(\instrument, \filter, \dur,inf, \in,~hpK,\which,2,\busMod, ~bus5,\bus7,~bu
 	Pseq([  Prand([ ~perc[2]   ,  ~bar[3]],1),
 
 
-	Pbind(\instrument, \dispatch, \dur, Pseq([4/1],1),\in,~rollingK,\out,0,\group,~dispatchGrp2)
+			Pbind(\instrument, \dispatch, \dur, Pseq([4/1],1),\in,Prand([ 0, ~rollingK],inf),\out,0,\group,~dispatchGrp2)
 	],1),
 
 
 	Pseq([ Prand([ ~perc[3]   ,~bar[4] ],1),
 
 
-	Pbind(\instrument, \dispatch, \dur, Pseq([2/1],1),\in,~rollingK,\out,0,\group,~dispatchGrp2)
+	Pbind(\instrument, \dispatch, \dur, Pseq([2/1],1),\in,Prand([ 0, ~rollingK],inf),\out,0,\group,~dispatchGrp2)
 	],1),
 
 
 		Pseq([   Prand([ ~perc[4]   , ~bar[5]  ],1),
 
 
-	Pbind(\instrument, \dispatch, \dur, Pseq([1/1],1),\in,~rollingK,\out,0,\group,~dispatchGrp2)
+	Pbind(\instrument, \dispatch, \dur, Pseq([1/1],1),\in,Prand([ 0, ~rollingK],inf),\out,0,\group,~dispatchGrp2)
 	],1),
 
 
@@ -504,7 +504,7 @@ Pbindf( Prand([~quickFix, ~rShort]),\instrument, \reverbS, \dur,inf, \in,~revDel
 
 Pbind( \instrument, \limiterS,\in,~limitDelay, \dur,inf, \gain,52,\group,~limitGrp,\out ,~comSnaGrpBus2),
 
-	Pbind(\instrument,\compS, \dur,Pseq([1024/1],1),\thr,0.6 ,\sB, 1.04,\sA, 0.2,\atk ,0.0968, \rel ,0.3872
+	Pbind(\instrument,\compS, \dur,inf,\thr,0.6 ,\sB, 1.04,\sA, 0.2,\atk ,0.0968, \rel ,0.3872
 		,\in, ~comSnaGrpBus2 ,\ctrl, ~snBus, \group, ~compGrp2,\out,0),
 
 
