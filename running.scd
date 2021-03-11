@@ -12,7 +12,7 @@ Bus.free;
 
 ~remyAudio.play
 s.options.memSize = 2097152;
-Pseq([~remyAudio],inf).play
+
 
 Server.default.options.sampleRate =  48000;
 Server.default.options.outDevice_("Audient iD14");
@@ -88,11 +88,13 @@ s.sync;
 
 
 	~k = Buffer.alloc(s, s.sampleRate *0.3872,1);
+	~k2 = Buffer.alloc(s, s.sampleRate *1,1);
 	e = Buffer.alloc(s, s.sampleRate *   t.beatDur*4 /*0.3872*/,1);
 	f = Buffer.alloc(s, s.sampleRate *  t.beatDur*4);//  (t.beatDur*4)/*1.5488*/,1);
 	~delay = Buffer.alloc(s, 48000 * 3, 2);
 	~buf = Buffer.alloc(s,s.sampleRate*120 );
 	~bufBg = Buffer.alloc(s,s.sampleRate*90 );
+	~bufKick = Buffer.alloc(s,s.sampleRate*30 );
 
 	~remyAudio = Buffer.read(s, "/Users/davidmignot/superCollider-master/remy.wav");
 
@@ -262,6 +264,14 @@ s.sync;
 	~dead=Bus.audio(s,1);
 	~no1 = Bus.audio(s,10);
 	~no2 = Bus.audio(s,10);
+	~dipatchKB = Bus.audio(s,2);
+	~stereoK= Bus.audio(s,1);
+	~rollingK = Bus.audio(s,10);
+
+	~lpK=Bus.audio(s,1);
+	~hpK=Bus.audio(s,1);
+	~bpK=Bus.audio(s,1);
+
 
 
 
@@ -302,7 +312,8 @@ s.sync;
 ~seqBus= Bus.control(s,1);
 	s.sync;
 
-	SynthDef(\playBuf ,{|out = 0,start, trig, dur|Out.ar(out,PlayBuf.ar(2,~remyAudio,trigger: Dust.kr(4.0),startPos: start,doneAction: 2));}).add;
+	SynthDef(\playBuf ,{|out = 0,start, trig, dur, buf, dA=2|Out.ar(out,PlayBuf.ar(1,buf,trigger:
+		0.002/*Dust.kr(4.0)*/,startPos: start,loop: 1/*,doneAction: dA*/)* EnvGen.kr(Env([0,1,1,0],[0,dur,0])));}).add;
 
 
 	SynthDef(\shap,{|in, out, vl1=80, vl2=0,vl3=0, dA1 =0|
@@ -394,6 +405,32 @@ LFNoise0.kr(~hz1beat).range(0.1,0.0)/*,0.02)*/
 
 	}).add;
 
+	SynthDef(\kick2, {
+		arg amp=0.2,out=0,dur;
+		var sig, env, envF;
+
+		envF = EnvGen.ar(
+			Env(
+				[1700,1319,165,26,0,0],
+				[0.001,0.028,0.1,0,0.4],
+				\exp
+			)
+		);
+
+		env = EnvGen.ar(
+		Env.perc(0.0121, dur),doneAction:2);
+
+
+		sig =
+		BPeakEQ.ar(
+			SinOsc.ar(envF, mul: env)
+			,659.255,16, (-22));
+
+		sig = sig * amp.dbamp ;
+
+		Out.ar(out, sig);
+	}).add;
+
 
 
 	SynthDef(\kick, {
@@ -417,7 +454,7 @@ LFNoise0.kr(~hz1beat).range(0.1,0.0)/*,0.02)*/
 			SinOsc.ar(envF, mul: env)
 			,659.255,16, (-22));
 
-		sig = sig * amp.dbamp  !2;
+		sig = sig * amp.dbamp !2 ;
 
 		Out.ar(out, sig);
 	}).add;
@@ -651,7 +688,10 @@ SynthDef(\algo, {
 
 
 
-	SynthDef(\dispatch,{|in, out, dur|Out.ar(out, In.ar(in,1)* EnvGen.kr(Env([1,0],[dur,0],60),doneAction:2))}).add;
+	SynthDef(\dispatch,{|in, out, dur|Out.ar(out, In.ar(in,1)* EnvGen.kr(Env([0,1,1,0],[0,dur,0,0]),doneAction:2))}).add;
+
+SynthDef(\dispatch2,{|in, out, dur|Out.ar(out, In.ar(in,2)* EnvGen.kr(Env([0,1,1,0],[0,dur,0,0]),doneAction:2))}).add;
+
 	SynthDef(\dispatchS,{|in, out, dur|ReplaceOut.ar(out, In.ar(in,10)* EnvGen.kr(Env([1,1],[dur,0]),doneAction:2))}).add;
 
 
@@ -677,17 +717,17 @@ SynthDef(\algo, {
 			*/            ));
 	}).add;
 
-	SynthDef(\filter,{|out=0, in, busMod, bus7, which, factor3=1, rqLPF=0.5 freqFil=0|
+	SynthDef(\filter,{|out=0, in, busMod, bus7, which, factor3=1, rqLPF=0.5 freqFil=0, qf =0, qf2=0|
 
 		var lp, bp, hp, sig;
 
 		sig = In.ar(in,1);
 
-		lp = BLowPass4.ar(sig , freqFil+ In.kr(busMod, 1) ,In.kr(rqLPF));
+		lp = BLowPass4.ar(sig , freqFil+ In.kr(busMod, 1) ,qf +In.kr(rqLPF));
 
-		bp = BPF.ar(sig,freqFil+ In.kr(busMod, 1) *factor3  ,0.26);
+		bp = BPF.ar(sig,freqFil+ In.kr(busMod, 1) *factor3  ,qf2 +0.26);
 
-		hp = BHiPass4.ar(sig, freqFil+ In.kr(busMod, 1),/*0.6 */ In.kr(bus7, 1));
+		hp = BHiPass4.ar(sig, freqFil+ In.kr(busMod, 1),/*0.6 */ qf2 +In.kr(bus7, 1));
 
 		sig = SelectX.ar(which, [lp, bp,hp,sig]);
 

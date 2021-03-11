@@ -1,6 +1,9 @@
 (
 //Pseq([~toUse2],inf).play(t);
- Ppar([Pbindf(~kick,\amp, 3),Pbindf(~bass,\amp, 3 )],inf).play(t);
+Ppar([
+ Ppar([Pbindf(~kick,\amp, 3),Pbindf(~bass,\amp, 3 ),],inf) ,
+Pbind(\instrument, \dispatch2 ,\in,~dipatchKB, \out,0 ,\group,~dispatchGrp, \dur, Pseq([16/1],inf))
+],1).play(t);
 x = Synth(\recLoop,[buf:~buf,\recording,1],~recGrp);
 )
 x.free;
@@ -12,7 +15,8 @@ MIDIIn.connectAll;
 MIDIIn.disconnectAll;
 //MIDI ALLOC
 (
-~synthGrp = Group.new;
+~dispatchGrp= Group.new;
+~synthGrp = Group.after(~dispatchGrp);
 ~filterGrp = Group.after(~synthGrp);
 ~shapGrp= Group.after(~filterGrp);
 ~recGrp= Group.after(~shapGrp);
@@ -191,7 +195,7 @@ MIDIdef.cc(\filRez, { |value|var modFreq = value.linlin(0, 127, 0.08, 8);
 
 },ccNum: 114 );
 
-MIDIdef.cc(\filRez, { |value|var modFreq = value.linlin(0, 127, 1, 0.3);
+MIDIdef.cc(\filRez2, { |value|var modFreq = value.linlin(0, 127, 1, 0.3);
 
 	k.set(\qf2, modFreq.round(0.01));
 
