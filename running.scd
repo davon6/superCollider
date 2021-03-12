@@ -207,7 +207,7 @@ s.sync;
 	~limitDelay= Bus.audio(s,2);
 
 	~stereoBus1 = Bus.audio(s,1);
-	~stereoBus2 = Bus.audio(s,1);
+	~stereoBus2 = Bus.audio(s,2);
 	~stereoBus3 = Bus.audio(s,1);
 	~stereoBus4 = Bus.audio(s,1);
 
@@ -291,8 +291,14 @@ s.sync;
 
 
 
-	~comBusHat2=  Bus.audio(s,2);~comBusCymb2=  Bus.audio(s,2);~limitRkick2=  Bus.audio(s,1);~stereoRkick2=  Bus.audio(s,1);~revSide2=  Bus.audio(s,1);~eqNoise2==  Bus.audio(s,1);~eqDs2=  Bus.audio(s,1);~comSide2=  Bus.audio(s,2);~limitSide2=  Bus.audio(s,2);~stereoSide2=  Bus.audio(s,2);~eqNoise2=  Bus.audio(s,1);~noiseRev2=  Bus.audio(s,2);~reverbBus32=  Bus.audio(s,1);~comFuzz32=  Bus.audio(s,2);~limitFuzz32=  Bus.audio(s,2);~stereoBus42=  Bus.audio(s,1);~stetoSnaCom12=  Bus.audio(s,10);~distoBus12=  Bus.audio(s,1);~distoBus42=  Bus.audio(s,1);~distoBus12=  Bus.audio(s,1);~filterBus12=  Bus.audio(s,1);~eqBus12=  Bus.audio(s,1);~reverbBus12=  Bus.audio(s,1);~comFuzz12=  Bus.audio(s,2);~limitFuzz12=  Bus.audio(s,2);~stereoBus12=  Bus.audio(s,1);~filterBus22=  Bus.audio(s,1);~reverbBus22=  Bus.audio(s,1);~comFuzz22=  Bus.audio(s,2);~limitFuzz22=  Bus.audio(s,2);~stereoBus22=  Bus.audio(s,1);~eqBus102=  Bus.audio(s,10);
+	~comBusHat2=  Bus.audio(s,2);~comBusCymb2=  Bus.audio(s,2);~limitRkick2=  Bus.audio(s,1);~stereoRkick2=  Bus.audio(s,1);~revSide2=  Bus.audio(s,1);~eqNoise2==  Bus.audio(s,1);~eqDs2=  Bus.audio(s,1);~comSide2=  Bus.audio(s,2);~limitSide2=  Bus.audio(s,2);~stereoSide2=  Bus.audio(s,2);~eqNoise2=  Bus.audio(s,1);~noiseRev2=  Bus.audio(s,2);~reverbBus32=  Bus.audio(s,1);~comFuzz32=  Bus.audio(s,2);~limitFuzz32=  Bus.audio(s,2);~stereoBus42=  Bus.audio(s,1);~stetoSnaCom12=  Bus.audio(s,10);~distoBus12=  Bus.audio(s,1);~distoBus42=  Bus.audio(s,1);~distoBus12=  Bus.audio(s,1);~filterBus12=  Bus.audio(s,1);~eqBus12=  Bus.audio(s,1);~reverbBus12=  Bus.audio(s,1);~comFuzz12=  Bus.audio(s,2);~limitFuzz12=  Bus.audio(s,2);~stereoBus12=  Bus.audio(s,1);~filterBus22=  Bus.audio(s,1);~reverbBus22=  Bus.audio(s,1);~comFuzz22=  Bus.audio(s,2);~limitFuzz22=  Bus.audio(s,2);~stereoBus22=  Bus.audio(s,2);~eqBus102=  Bus.audio(s,10);
 ~toLimitlast = Bus.audio(s,10);
+
+
+
+	~distoBus43 =  Bus.audio(s,1);~filterBus23=  Bus.audio(s,1);  ~eqBus23=  Bus.audio(s,1); ~gateBus23=  Bus.audio(s,1); ~reverbBus23=  Bus.audio(s,1); ~micBus23=  Bus.audio(s,1); ~micBus33=  Bus.audio(s,1);  ~comFuzz23=  Bus.audio(s,2);
+~limitFuzz23=  Bus.audio(s,2); ~stereoBus23=  Bus.audio(s,2); ~no3=  Bus.audio(s,10);
+	~ptrBus23=Bus.audio(s,1); ~ptrBus33=Bus.audio(s,1);
 
 
 	s.sync;
@@ -1083,13 +1089,13 @@ SynthDef(\EQHP10, {|out=0, in, val, quant, gain,frq=100, vol =1| Out.ar(out,
 	}).add;
 
 
-	SynthDef(\stereoS,{|out=0, in, spread=0, level=1, center=0.0,dur,modPan, atkT=0|
+	SynthDef(\stereoS,{|out=0, in, spread=0, level=1, center=0.0,dur,modPan,atkT=0,crvA=0|
 
 		Out.ar(out,
 			Splay.arFill(10,
-				In.ar(in, 1)
+				In.ar(in, 2)
 				,spread,level,center+ In.kr(modPan))
-			* EnvGen.kr(Env([0,1,1,0],[atkT,dur,0]),doneAction: 2)
+			* EnvGen.kr(Env([0,1,1,0],[atkT,dur,0],[crvA,0]),doneAction: 2)
 			//EnvGen.kr(Env.step([1],[dur]),doneAction: 2)
 		);
 	}).add;
