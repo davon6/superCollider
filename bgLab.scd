@@ -47,7 +47,7 @@ MIDIIn.connectAll;
 MIDIdef.noteOn(\piana,{arg vel, nn;
 	[ nn].postln;
 	~notes[nn] = Synth(\atmos, [\freq, nn.midicps, \gate, 1
-		,\amp, vel.linexp(1,127,0.01,0.3),\out,~distoBg
+		,\amp, vel.linexp(1,127,0.01,0.3),\out,~bgFil
 	]);
 });
 
@@ -206,7 +206,7 @@ s.plotTree
 
 o = Synth(\lfo13, [\out,~bus7 ,\dur,9999,\ph,0, \rL,200,\rH,4000]);
 p ={ Out.kr(~bus6, SinOsc.ar(0.42916666666667).range(1,0.4))}.play;
-v = (Synth( \disto, [\in,~distoBg, \out,~bgFil],~distoGrp));
+//v = (Synth( \disto, [\in,~distoBg, \out,~bgFil],~distoGrp));
 k = (Synth( \filterModu, [\in,~bgFil, \out,~bgDelay],~filterGrp));
 d = (Synth( \comb, [\in,~bgDelay,\out,~bgLimit],~delayGrp));
 q = Synth( \limiter,[\in,~bgLimit,\gain, 40,\out,~bgFil2],~limitGrp);

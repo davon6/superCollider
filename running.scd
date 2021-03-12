@@ -97,7 +97,8 @@ s.sync;
 
 	~buf = Buffer.alloc(s,s.sampleRate*120 );
 	~bufBg = Buffer.alloc(s,s.sampleRate*90,2 );
-	~bufKick = Buffer.alloc(s,s.sampleRate*30 );
+	~bufSnoopy = Buffer.alloc(s,s.sampleRate*30 );
+
 
 	~remyAudio = Buffer.read(s, "/Users/davidmignot/superCollider-master/remy.wav");
 
@@ -300,6 +301,10 @@ s.sync;
 ~limitFuzz23=  Bus.audio(s,2); ~stereoBus23=  Bus.audio(s,2); ~no3=  Bus.audio(s,10);
 	~ptrBus23=Bus.audio(s,1); ~ptrBus33=Bus.audio(s,1);
 
+
+
+
+	~stereoBus14=  Bus.audio(s,2);   ~limitFuzz4=  Bus.audio(s,2);~limitFuzz4=  Bus.audio(s,2);~comFuzz4=  Bus.audio(s,2);~reverbBus4=  Bus.audio(s,1);
 
 	s.sync;
 
@@ -1245,8 +1250,8 @@ SynthDef(\sequ,{|value, dur, in=0, out=0, vlAtk=0, vlDec=1,vlSub=1,vlSub2=1, vlR
 
 	Out.kr(~seqBus,EnvGen.kr(Env.step([value],[dur]),doneAction: 2)   ) }).add;
 
-	SynthDef(\recLoop){|buf=0,in=0,out=0,recording = 1|
-	var input = In.ar(~toRecord,1);
+	SynthDef(\recLoop){|buf=0,out=0,recording = 1,in = (~toRecord)|
+	var input = In.ar(in,1);
 	// Timer measures times between triggers
 	// Changed emits a trigger when recording changes value
 	// Gate updates recEnd only when not recording
