@@ -249,7 +249,7 @@ Pbind(\instrument, \filter, \dur,inf, \in,~hpK,\which,2,\busMod, ~bus5,\bus7,~bu
 	],[4,1],1),
 
 
-		],inf),
+		].scramble,inf),
 
 
 /*Pseq([~toUse,~toUse2],inf)  ,*/
