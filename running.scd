@@ -89,8 +89,10 @@ s.sync;
 
 	~k = Buffer.alloc(s, s.sampleRate *0.3872,1);
 	~k2 = Buffer.alloc(s, s.sampleRate *1,1);
-	e = Buffer.alloc(s, s.sampleRate *   t.beatDur*4 /*0.3872*/,1);
-	f = Buffer.alloc(s, s.sampleRate *  t.beatDur*4);//  (t.beatDur*4)/*1.5488*/,1);
+	~e = Buffer.alloc(s, s.sampleRate *   t.beatDur*4 /*0.3872*/,1);
+	~f = Buffer.alloc(s, s.sampleRate *  t.beatDur*4);//  (t.beatDur*4)/*1.5488*/,1);
+	~e2 = Buffer.alloc(s, s.sampleRate *   t.beatDur*4 /*0.3872*/,1);
+	~f2 = Buffer.alloc(s, s.sampleRate *  t.beatDur*4);//  (t.beatDur*4)/*1.5488*/,1);
 	~delay = Buffer.alloc(s, 48000 * 3, 2);
 
 	~buf = Buffer.alloc(s,s.sampleRate*120 );
@@ -154,9 +156,9 @@ s.sync;
 
 	~phaseBus = Bus.audio(s,1);
 
-	~bgBus = Bus.audio(s,2);
+	~bgBus = Bus.audio(s,1);
 	~bgFil = Bus.audio(s,1);
-	~bgFil2= Bus.audio(s,2);
+	~bgFil2= Bus.audio(s,1);
 	~bgDelay= Bus.audio(s,1);
 	~bgDelayS= Bus.audio(s,2);
 	~bgCom = Bus.audio(s,1);
@@ -167,8 +169,8 @@ s.sync;
 
 
 	~distoBg = Bus.audio(s,1);
-
-	~eqBg = Bus.audio(s,2);
+~distoBg2= Bus.audio(s,1);
+	~eqBg = Bus.audio(s,1);
 
 
 
@@ -366,8 +368,9 @@ LFNoise0.kr(~hz1beat).range(0.1,0.0)/*,0.02)*/
 
 
 
-		SynthDef(\lfo13, {|out, dur,ph| Out.kr(out,SinOsc.ar(~hzQbeat,ph).range(1,0.4)
+	SynthDef(\lfo13, {|out, dur,ph, val = (~hzQbeat), rL=1,rH=0.4 | Out.kr(out,SinOsc.ar(val,ph).range(rL,rH)
 *EnvGen.kr(Env.step([1,0],[dur,0]),doneAction: 2))}).add;
+
 
 
 	SynthDef(\lfo14, {|out, val, dur| Out.kr(out, EnvGen.kr(Env.step([val,0],[dur,0]),doneAction: 2))}).add;
@@ -1029,12 +1032,7 @@ SynthDef(\comb, {|out=0, in ,maxDel, delayT,decT|
 		In.ar(in, 1),val,quant, gain))};).add;
 
 
-SynthDef(\EQHPS, {|out=0, in, val, quant, gain,frq=100, vol =0.05, val2,quant2, gain2| Out.ar(out,
 
-		HPF.ar(HPF.ar(HPF.ar(HPF.ar(HPF.ar(HPF.ar(
-		BPeakEQ.ar(	BPeakEQ.ar(In.ar(in, 1),val,quant, gain),val2,quant2, gain2)
-
-			,frq),frq),frq),frq),frq),frq)* vol)};).add;
 
 
 

@@ -83,7 +83,7 @@ SynthDef(\atmos, {arg freq= 659.255, amp=0.3, gate=0,factor=0, bend=0, multi =0,
 
 
 		/*,mod.wrap(0, 16pi)*/,mul:[1,multi
-		,multi])!2;
+		,multi]);
 	env = EnvGen.kr(Env.adsr,gate,doneAction: 2);
 
 
@@ -95,7 +95,7 @@ SynthDef(\atmos, {arg freq= 659.255, amp=0.3, gate=0,factor=0, bend=0, multi =0,
 
 
 
-	sig = sig * env* amp;
+	sig = sig * env;//* amp;
 	Out.ar(out, sig)}).add;
 
 MIDIdef.noteOn(\modLfo3, {|vel, nn, chan, src|[nn].postln;
@@ -104,15 +104,7 @@ MIDIdef.noteOn(\modLfo3, {|vel, nn, chan, src|[nn].postln;
 },noteNum: 40);
 
 
-MIDIdef.cc(\fil, { |value|var modFreq = value.linlin(0, 127, 60, 4000);
 
-	 if(modFreq.round(1)<100,{k.set(\which,0);"yo".postln},{});
-		if(modFreq.round(1)>3510,{k.set(\which,1);"yo2".postln},{});
-
-
-	k.set(\filMod, modFreq.round(1).postln);
-
-},ccNum: 1 );
 
 
 
@@ -158,6 +150,45 @@ MIDIdef.cc(\deT, { |value|var modFreq = value.linlin(0, 127, 0.01,659.255);
 },ccNum: 72 );
 
 
+MIDIdef.cc(\rateLF, { |value|var modFreq = value.linlin(0, 127,0.01 ,5.15);
+
+	o.set(\val, modFreq.round(0.01).postln);
+
+},ccNum:71  );
+
+MIDIdef.cc(\wiF, { |value|var modFreq = value.linlin(0, 127,0.00 ,0.99);
+
+	k.set(\which, modFreq.round(0.01).postln);
+
+},ccNum:74  );
+
+MIDIdef.cc(\fil, { |value|var modFreq = value.linlin(0, 127, 60, 4000);
+
+	/* if(modFreq.round(1)<100,{k.set(\which,0);"yo".postln},{});
+		if(modFreq.round(1)>3510,{k.set(\which,1);"yo2".postln},{});*/
+
+
+	k.set(\filMod, modFreq.round(1).postln);
+
+},ccNum: 1 );
+
+MIDIdef.cc(\revT, { |value|var modFreq = value.linlin(0, 127, 0.3, 5);
+
+
+
+	c.set(\revtime, modFreq.round(0.1).postln);
+
+},ccNum: 75);
+
+MIDIdef.cc(\damp, { |value|var modFreq = value.linlin(0, 127, 0.03, 1);
+
+
+
+	c.set(\damping, modFreq.round(0.01).postln);
+
+},ccNum: 73);
+
+
 )
 s.plotTree
 ~distoGrp =Group.new;
@@ -165,25 +196,33 @@ s.plotTree
 ~delayGrp= Group.after(~filterGrp);
 ~limitGrp= Group.after(~delayGrp);
 ~filterGrp2= Group.after(~limitGrp);
+
 ~eqGrp= Group.after(~filterGrp2);
-~reverbGrp= Group.after(~eqGrp);
+~distoGrp2= Group.after(~eqGrp);
+~reverbGrp= Group.after(~distoGrp2);
 
 ~delayGrp2= Group.after(~reverbGrp);
 ~recGrp= Group.after(~delayGrp2);
 
-v = (Synth( \disto, [\dur, inf,\in,~distoBg, \out,~bgFil],~distoGrp));
-k = (Synth( \filterModu, [\dur, inf,\in,~bgFil, \out,~bgDelay],~filterGrp));
-d = (Synth( \comb, [\dur, inf,\in,~bgDelay,\out,~bgLimit],~delayGrp));
-q = Synth( \limiter,[\dur, inf,\in,~bgLimit,\gain, 20,\out,0/*~bgFil2*/],~limitGrp);
+o = Synth(\lfo13, [\out,~bus7 ,\dur,9999,\ph,0, \rL,200,\rH,3600]);
+p ={ Out.kr(~bus6, SinOsc.ar(0.42916666666667).range(1,0.4))}.play;
+v = (Synth( \disto, [\in,~distoBg, \out,~bgFil],~distoGrp));
+k = (Synth( \filterModu, [\in,~bgFil, \out,~bgDelay],~filterGrp));
+d = (Synth( \comb, [\in,~bgDelay,\out,~bgLimit],~delayGrp));
+q = Synth( \limiter,[\in,~bgLimit,\gain, 40,\out,~bgFil2],~limitGrp);
+k = (Synth( \filter, [\in,~bgFil2,  \busMod,~bus7, \qf, ~bus6,\which,0,\out,~eqBg],~filterGrp2));
+n = (Synth( \EQHP, [\in,~eqBg, \val, 3400.00.rrand(300,0.001),\quant, 16.rrand(4,1), \gain,(-8).rrand((-1),1),\val2, 3400.00.rrand(300,0.001),\quant2, 16.rrand(4,1), \gain2,(-8).rrand((-1),1),\frq, 100, \out,~distoBg2,\vol,2],~eqGrp)  );
+w = (Synth( \disto, [\in,~distoBg2, \out,~bgBus],~distoGrp2));
 
-k = (Synth( \filterModu, [\dur, inf,\in,~bgFil2, \out,~eqBg],~filterGrp2));
-n = (Synth( \EQHPS, [\dur, inf,\in,~eqBg, \out,~bgBus],~eqGrp));
-c = (Synth( \reverbS, [\dur, inf,\in,~bgBus, \out,~toRecord],~reverbGrp));
-z = (Synth( \pingDS, [\bufnum, ~delay,\dur, inf,\in,~bgDelayS, \out,0/*~bgFil2*/],~delayGrp2));
+c = (Synth( \reverb, [\in,~bgBus, \out,~bgDelayS,\roomsize, 80, /* \damping, 0.41,*/ \inputbw, 0.19, \drylevel, -3, \earlylevel, -9, \taillevel, -11 ],~reverbGrp));
+
+
+z = (Synth( \pingDS, [\bufnum, ~delay,\in,~bgDelayS, \out,0/*~toRecord*/],~delayGrp2));
 
 
 x = Synth(\recLoopS,[buf:~bufBg,\recording,1],~recGrp);
 
+s.meter
 to disto, toFilter, toDelay,
 
 ~tofilter with lfo ? toEq, toReverb,         ""toStereo,with lfo               toEq2 , toSnaCom
