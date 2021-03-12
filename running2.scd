@@ -831,6 +831,13 @@ Pbind(\instrument, \gate, \dur, ~short,
 
 
 	Pxrand([
+
+		Pbind(\instrument, \gate, \dur, Pseq([4/1],1),\vlSub,~vl11,\vlSub2,Pkey(\vlSub),\atkT,~vl21,\decT,~vl31,\subsT,~vl41,
+	\relT,~vl51,\atckC,~vl61,\decC,~vl71,\relC,~vl81,\bus1,~bus8,\in, ~gateBus23,\out,
+
+			Pwrand([~micBus23,~micBus33,~reverbBus23],[1,1,16].normalizeSum,inf)),
+
+
 	Pbind(\instrument, \gate, \dur, /*Pseq([4/1],inf)*/Pwrand([ /*Prand([*/~short,Pseq([1/4 ],64)],[4,1].normalizeSum,1) /*inf)*/,\group, ~gateGrp,\relSu,Pfunc({0.15.rand}),\vlSub,~vl11,\vlSub2,Pkey(\vlSub),\atkT,~vl21,\decT,~vl31,\subsT,~vl41,
 	\relT,~vl51,\atckC,~vl61,\decC,~vl71,\relC,~vl81,\bus1,~bus8,\in, ~gateBus23,\out,
 
