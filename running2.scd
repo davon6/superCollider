@@ -224,6 +224,16 @@ Pbind(\instrument, \filter, \dur,inf, \in,~hpK,\which,2,\busMod, ~bus5,\bus7,~bu
 	Pbind(\instrument, \dispatch, \dur, Pseq([1/1],1),\in,Prand([ 0, ~rollingK],inf),\out,0,\group,~dispatchGrp2)
 	],1),
 
+		   Prand([ ~perc[5]   , ~bar[6]
+
+
+
+			//here add otherwise ~bar[1],~bar[2] and whats bar[0] for ?
+
+
+
+		],1),
+
 
 		],inf),
 /*Pseq([~toUse,~toUse2],inf)  ,*/

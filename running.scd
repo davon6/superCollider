@@ -92,8 +92,9 @@ s.sync;
 	e = Buffer.alloc(s, s.sampleRate *   t.beatDur*4 /*0.3872*/,1);
 	f = Buffer.alloc(s, s.sampleRate *  t.beatDur*4);//  (t.beatDur*4)/*1.5488*/,1);
 	~delay = Buffer.alloc(s, 48000 * 3, 2);
+
 	~buf = Buffer.alloc(s,s.sampleRate*120 );
-	~bufBg = Buffer.alloc(s,s.sampleRate*90 );
+	~bufBg = Buffer.alloc(s,s.sampleRate*90,2 );
 	~bufKick = Buffer.alloc(s,s.sampleRate*30 );
 
 	~remyAudio = Buffer.read(s, "/Users/davidmignot/superCollider-master/remy.wav");
@@ -153,12 +154,24 @@ s.sync;
 
 	~phaseBus = Bus.audio(s,1);
 
-	~bgBus = Bus.audio(s,1);
-	~bgFil = Bus.audio(s,2);
+	~bgBus = Bus.audio(s,2);
+	~bgFil = Bus.audio(s,1);
+	~bgFil2= Bus.audio(s,2);
+	~bgDelay= Bus.audio(s,1);
+	~bgDelayS= Bus.audio(s,2);
 	~bgCom = Bus.audio(s,1);
 	~bgLimit = Bus.audio(s,1);
 	~bgStereo = Bus.audio(s,1);
 	~dispatchBg = Bus.audio(s,2);
+
+
+
+	~distoBg = Bus.audio(s,1);
+
+	~eqBg = Bus.audio(s,2);
+
+
+
 
 
 	~filterBus = Bus.audio(s,1);
@@ -174,9 +187,6 @@ s.sync;
 	~distoBass = Bus.audio(s,2);
 	~eqBass = Bus.audio(s,2);
 
-	~distoBg = Bus.audio(s,1);
-
-	~eqBg = Bus.audio(s,2);
 
 	~delayBus = Bus.audio(s,1);
 
@@ -261,7 +271,11 @@ s.sync;
 
 	~outFil =Bus.audio(s,1);
 	~toRecord=Bus.audio(s,1);
+	~toRecord2=Bus.audio(s,2);
 	~dead=Bus.audio(s,1);
+
+	~deadS=Bus.audio(s,2);
+
 	~no1 = Bus.audio(s,10);
 	~no2 = Bus.audio(s,10);
 	~dipatchKB = Bus.audio(s,2);
@@ -957,6 +971,8 @@ SynthDef("TriggerBufferGranular", {arg out=0, bufnum=0, in=0, thresh = 0.004, am
 
 	"reverb init".postln;
 
+
+
 	SynthDef(\pingD, { |out = 0, bufnum = 0, dur, feedback = 0.5, delayTime = 0.3, in /*stereoL =0.00555, stereoR =0, dec=0.5, amp =1*/ |
     var left;
 
@@ -967,6 +983,22 @@ SynthDef("TriggerBufferGranular", {arg out=0, bufnum=0, in=0, thresh = 0.004, am
 	}).add;
 
 
+
+	SynthDef(\pingDS, { |out = 0, bufnum = 0, dur, feedback = 0.5, delayTime = 0.3, in /*stereoL =0.00555, stereoR =0, dec=0.5, amp =1*/ |
+    var left;
+
+		left =	In.ar(in,2);
+
+    Out.ar(out ,PingPong.ar(bufnum, [left,left], delayTime, feedback, 1)
+		/*	* [amp+stereoL,amp+stereoR] * EnvGen.kr(Env([1,1,0],[0,dur,0],4),doneAction:2) */)
+	}).add;
+
+
+/*	SynthDef(\comb, {|out=0, in ,maxDel, delayT,decT|
+		Out.ar(out, CombN.ar(In.ar(in,1),maxDel, delayT,decT))}).add;*/
+
+SynthDef(\comb, {|out=0, in ,maxDel, delayT,decT|
+		Out.ar(out, CombN.ar(In.ar(in,1),MouseX.kr(0.01,2),MouseY.kr(0.01,2),3))}).add;
 
 	SynthDef(\reverbS, {
 		|out=0, roomsize, revtime, damping, inputbw, spread = 15, drylevel, earlylevel,
@@ -997,7 +1029,12 @@ SynthDef("TriggerBufferGranular", {arg out=0, bufnum=0, in=0, thresh = 0.004, am
 		In.ar(in, 1),val,quant, gain))};).add;
 
 
+SynthDef(\EQHPS, {|out=0, in, val, quant, gain,frq=100, vol =0.05, val2,quant2, gain2| Out.ar(out,
 
+		HPF.ar(HPF.ar(HPF.ar(HPF.ar(HPF.ar(HPF.ar(
+		BPeakEQ.ar(	BPeakEQ.ar(In.ar(in, 1),val,quant, gain),val2,quant2, gain2)
+
+			,frq),frq),frq),frq),frq),frq)* vol)};).add;
 
 
 
@@ -1231,6 +1268,37 @@ SynthDef(\sequ,{|value, dur, in=0, out=0, vlAtk=0, vlDec=1,vlSub=1,vlSub2=1, vlR
 	);
 		Out.ar(0,HPF.ar(input,100)!2);
 	Out.ar(~dead,play);
+}.add;
+
+
+
+		SynthDef(\recLoopS){|buf=0,in=0,out=0,recording = 1|
+	var input = In.ar(~toRecord2,2);
+	// Timer measures times between triggers
+	// Changed emits a trigger when recording changes value
+	// Gate updates recEnd only when not recording
+	// BufSampleRate because Timer measures seconds and we need samples instead
+	var recEnd = Gate.kr(
+		Timer.kr(Changed.kr(recording)),
+		1-recording
+	)*BufSampleRate.ir(buf);
+
+	// record buf from start to end
+	// run only when recording
+	// jump to start when recording is started
+    var rec = RecordBuf.ar(input,buf,run:recording,loop:0,trigger:recording);
+
+	var play = LoopBuf.ar(1,buf,1,
+		// when gate is positive: loop,
+		// when gate is negative: play normally
+		// (don't loop when recEnd is still at 0)
+		gate:recEnd>1,
+		startPos:0,
+		startLoop:0,
+		endLoop:recEnd
+	);
+		Out.ar(0,HPF.ar(input,100)!2);
+	Out.ar(~deadS,play);
 }.add;
 
 

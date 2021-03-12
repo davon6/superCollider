@@ -1,4 +1,6 @@
+MIDIClient.init
 
+MIDIIn.connectAll;
 ~notes = Array.newClear(128);
 
 MIDIdef.noteOn(\piana,{arg vel, nn;
@@ -17,12 +19,13 @@ MIDIdef.noteOff(\offPiana, {arg vel, nn;nn.postln;
 
 
 MIDIdef.bend(\twi, { |val, chan, src|
+	[val,chan, src].postln;
 ~bend = val;
 
 	~notes.do{arg synth; synth.set(\bend, val.linlin(0,16383,-2,2))};
 
 	//~notes.set(\mod,modFreq.round(1).postln);
-}, chan:  11);
+}, chan:  0);
 
 SynthDef(\tone, {arg freq= 440, amp=0.3, gate=0, bend=0;var sig, env;
 	sig = LFTri.ar(freq* bend.midiratio)!2;
