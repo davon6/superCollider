@@ -225,7 +225,7 @@ Pbind(\instrument, \filter, \dur,inf, \in,~hpK,\which,2,\busMod, ~bus5,\bus7,~bu
 	],1),
 
 
-	Pseq([ Prand([ ~perc[3]   ,~bar[4] ],1),
+	Pseq([ Pwrand([ ~perc[3]   ,~bar[4] ],[4,1],1),
 
 
 	Pbind(\instrument, \dispatch, \dur, Pseq([2/1],1),\in,Prand([ 0, ~rollingK],inf),\out,0,\group,~dispatchGrp2)
@@ -246,7 +246,7 @@ Pbind(\instrument, \filter, \dur,inf, \in,~hpK,\which,2,\busMod, ~bus5,\bus7,~bu
 
 
 
-		],1),
+	],[4,1],1),
 
 
 		],inf),
