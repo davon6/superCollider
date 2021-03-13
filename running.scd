@@ -900,17 +900,17 @@ env =   In.ar(in, 1) *    EnvGen.kr(Env(
 
 	SynthDef(\gran2,{|out=0,impulse=1,duration=8,buf=0,pitchRte=1,pos=0,amp=1, dur,gate=1|
 
-		var env = EnvGen.kr(Env([1,1,0],[dur,0,0]),gate, doneAction:2);
+		//var env = EnvGen.kr(Env([1,1,0],[dur,0,0]),gate, doneAction:2);
 Out.ar(out,
 	GrainBuf.ar(
 		1,
-		Impulse.ar(impulse),
+		Impulse.ar(impulse     ),
 			duration,
 			buf,
 			pitchRte,
 			pos,
 			mul: amp
-		)* env
+		)//* env
 	);}).add;
 
 SynthDef("TriggerBufferGranular", {arg out=0, bufnum=0, in=0, thresh = 0.004, ampScaler = 1, duration =

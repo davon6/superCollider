@@ -1,6 +1,6 @@
 ~recGrp2=Group.new;
 Pbindf(~kick,\out,~toRecord).play(t);
-x = Synth(\recLoop,[buf:~k2,\recording,1],~recGrp2);
+x = Synth(\recLoop,[buf:~k2,\recording,1, \in,~toRecord],~recGrp2);
 
 ~k2.play
 

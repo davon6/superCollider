@@ -4,7 +4,7 @@ Ppar([
  Ppar([Pbindf(~kick,\amp, 3),Pbindf(~bass,\amp, 3 ),],inf) ,
 Pbind(\instrument, \dispatch2 ,\in,~dipatchKB, \out,0 ,\group,~dispatchGrp, \dur, Pseq([16/1],inf))
 ],1).play(t);
-x = Synth(\recLoop,[buf:~buf,\recording,1],~recGrp);
+x = Synth(\recLoop,[buf:~buf,\recording,1, \in, ~toRecord],~recGrp);
 )
 x.free;
 ~buf.play
