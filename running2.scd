@@ -11,7 +11,7 @@
 
 //IMPORTSNT ~toLimitlast might only block left and UNWANTED feedback with right !!!!
 s.plotTree
-
+~bufSnoopy.play
 (
 ~snoopy = "snoopy".postln;0.99999.rand.postln;
 )
@@ -287,7 +287,7 @@ Pbindf(~rLong,\dur,inf, \in,~revSide , \revtime, 15,\out,~comSide,\taillevel,0,\
 	Pbind(\instrument,\comp, \dur,inf,\thr,0.8 ,\sB, 1.015,\sA, 1/2,\atk ,0.0242, \rel ,0.0968,\gain,1,\in, ~comSide ,\ctrl, ~kbus, \out,~limitSide, \group, ~compGrp),
 	Pbind(\instrument, \limiter,\in, ~limitSide, \dur, inf,\gain,40.8,\group,~limitGrp,\out,~stereoSide),
 
-	Pbind(\instrument,\stereo, \dur, Pseq([16/1],inf), \in, ~stereoSide  ,\spread,1,	\atkT,0.2,\crvA,8, \out,~no1, \group, ~stereoGrp),
+	Pbind(\instrument,\stereo, \dur, Pseq([32/1],inf), \in, ~stereoSide  ,\spread,1,	\atkT,0.2,\crvA,8, \out,~no1, \group, ~stereoGrp),
 
 
 
@@ -826,15 +826,20 @@ Pbind(\instrument, \gate, \dur, ~short,
 		Pbind(\instrument, \gate, \dur, Pseq([4/1],1),\vlSub,~vl11,\vlSub2,Pkey(\vlSub),\atkT,~vl21,\decT,~vl31,\subsT,~vl41,
 	\relT,~vl51,\atckC,~vl61,\decC,~vl71,\relC,~vl81,\bus1,~bus8,\in, ~gateBus2,\out,
 
-			Pwrand([~micBus23,~micBus33,~reverbBus23],[1,1,4].normalizeSum,inf)),
+		Pwrand([/*~micBus23,*/~micBus33,~reverbBus23],[1,4].normalizeSum,inf)),
 
 
 	Pbind(\instrument, \gate, \dur, /*Pseq([4/1],inf)*/Pwrand([ /*Prand([*/~short,Pseq([1/4 ],64)],[4,1].normalizeSum,1) /*inf)*/,\group, ~gateGrp,\relSu,Pfunc({0.15.rand}),\vlSub,~vl11,\vlSub2,Pkey(\vlSub),\atkT,~vl21,\decT,~vl31,\subsT,~vl41,
 	\relT,~vl51,\atckC,~vl61,\decC,~vl71,\relC,~vl81,\bus1,~bus8,\in, ~gateBus2,\out,
 
-		~reverbBus23),
+			~reverbBus23),
+
+
+
 	Pbind(\instrument, \gate, \dur,Pxrand([ Pseq([1/4],16),Pseq([1/4],64)],1),
-			\type, Pxrand([ Pseq([\note],256) , Pseq([\note,\rest,\note,\rest, \rest,\note,\rest,\note].scramble,8),
+
+
+			\type, Pxrand([ /*Pseq([\note],256) , */Pseq([\note,\rest,\note,\rest, \rest,\note,\rest,\note].scramble,8),
 
 				Pseq([\rest,\rest,\note,\rest, \rest,\note,\rest,\rest].scramble,8)],inf), \group, ~gateGrp,
 				\relSu,Pfunc({0.12.exprand(0.04)}),
@@ -848,15 +853,15 @@ Pbind(\instrument, \gate, \dur, ~short,
 		\relC,~vl81
 
 				,\bus1,~bus8,\in, ~gateBus2,\out,
-			Pwrand([~micBus23,~micBus33,~reverbBus23],[1,1,16].normalizeSum,inf)),
+			Pwrand([~micBus23,/*~micBus33,*/~reverbBus23],[1,1].normalizeSum,inf)   ),
 
 	],inf),
 
 
-	 /*Pbind(\instrument,\recLoop,\buf,~bufSnoopy,\recording,1,\group, ~compGrp,\in,~reverbBus23, \dur, inf),*/
+	/*Pbind(\instrument,\recLoop,\buf,~bufSnoopy,\recording,1,\group, ~compGrp,\in,~reverbBus23, \dur, inf),*/
 	// ~bufSnoopy.play
 
-	Pbindf( Prand([~quickFix, ~rShort, ~rLong]),\dur,inf, \in,~reverbBus23  , \out,~comFuzz23,\group,~revGrp),
+ Pbindf( Prand([~quickFix, ~rShort, ~rLong]),\dur,inf, \in,~reverbBus23  , \out,~comFuzz23,\group,~revGrp),
 
 	Pbind(\instrument,\compS, \dur,Pseq([1/1],1),\thr,0.8 ,\sB, 1.015,\sA, 1/2,\atk ,0.0242, \rel ,0.0968,\gain,1,\in, ~comFuzz23 ,\ctrl, ~kbus, \out,~limitFuzz23, \group, ~compGrp),
 	Pbind(\instrument, \limiterS,\in, ~limitFuzz23, \dur, inf,\gain,46,\group,~limitGrp,\out,~stereoBus23),
@@ -866,36 +871,34 @@ Pbind(\instrument,\stereoS, \dur, 9999, \in, ~stereoBus23   ,\out,~no3, \group, 
 
 
 
+//main dispatch
 
-
-
-
-Pbind(\instrument, \dispatchS ,\dur,Pwrand([
+/*Pbind(\instrument, \dispatchS ,\dur,Pwrand([
 		Pseq([16/1],1),
 		Pseq([4/1],4), Pseq([1/1],16)/*,Pseq([1/4],64),*/
 
 	],[1,4,4],inf),
 
-	\in ,Pwrand([ ~no1, ~no2,~no3],[1,1,1],inf),\out, ~stetoSnaCom1  ,\group,~dispatchGrp2),
+	\in ,~no3/*Pwrand([ ~no1, ~no2,~no3],[1,1,1],inf)*/,\out, ~stetoSnaCom1  ,\group,~dispatchGrp2),*/
 
 //DEBUG one more SNOOPY
 
-	/*Pxrand([
-Pbind(\instrument,\gran,\dur,	Pseq([1/1],16)
+	Pxrand([
+Pbind(\instrument,\gran,\dur,	Pseq([1/1],32)
 		,
 	\group,~granuGrp,
 		\type,Pseq([\rest,\rest,\rest,\note, \note,\rest,\rest,\rest].scramble,inf),
-		\amp, 1,\buf, ~bufSnoopy,\out,~reverbBus4,\gate, 1,\duration,Pkey(\dur),\impulse,Pkey(\dur),\pos,Pseq([Pseq([0.99999.rand],16),Pseq([0.99999.rand],16),Pseq([0.99999.rand],16),Pseq([0.99999.rand],16)],inf)),
+		\amp, 1,\buf, ~bufSnoopy,\out,~reverbBus4,\gate, 1,\duration,Pkey(\dur),\impulse,Pkey(\dur),\pos,Prand([Pseq([0.99999.rand],32),Pseq([0.99999.rand],32),Pseq([0.99999.rand],32),Pseq([0.99999.rand],32)],inf)),
 
 
 
 
-	Pbind(\instrument,\gran,\dur,         Pseq([1/4],16)
+	Pbind(\instrument,\gran,\dur,         Pseq([1/4],32)
 		,
 	\group,~granuGrp,
 		\type,Pseq([\rest,\note,\rest,\note, \rest,\rest,\rest,\rest].scramble,inf),
-		\amp, 1,\buf, ~bufSnoopy,\out,~reverbBus4,\gate, 1,\duration,Pkey(\dur),\impulse,Pkey(\dur),\pos,Pseq([Pseq([0.99999.rand],16),Pseq([0.99999.rand],16),Pseq([0.99999.rand],16),Pseq([0.99999.rand],16)],inf)),
-	],inf),*/
+		\amp, 1,\buf, ~bufSnoopy,\out,~reverbBus4,\gate, 1,\duration,Pkey(\dur),\impulse,Pkey(\dur),\pos,Prand([Pseq([0.99999.rand],32),Pseq([0.99999.rand],32),Pseq([0.99999.rand],32),Pseq([0.99999.rand],32)],inf)),
+	],inf),
 
 	Pbindf(~quickFix /*Prand([~quickFix, ~rShort, ~rLong])*/,\dur,inf, \in,~reverbBus4  , \out,~comFuzz4 ,\group,~revGrp),
 
