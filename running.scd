@@ -94,6 +94,7 @@ s.sync;
 	~e2 = Buffer.alloc(s, s.sampleRate *   t.beatDur*4 /*0.3872*/,1);
 	~f2 = Buffer.alloc(s, s.sampleRate *  t.beatDur*4);//  (t.beatDur*4)/*1.5488*/,1);
 	~delay = Buffer.alloc(s, 48000 * 3, 2);
+	b = Buffer.alloc(s, 44100 * 2, 2);
 
 	~buf = Buffer.alloc(s,s.sampleRate*90 );
 	~bufBg = Buffer.alloc(s,s.sampleRate*60,2 );
@@ -157,16 +158,25 @@ s.sync;
 
 	~phaseBus = Bus.audio(s,1);
 
-	~bgBus = Bus.audio(s,1);
+	~bgBus = Bus.audio(s,2);
+
 	~bgFil = Bus.audio(s,1);
 	~bgFil2= Bus.audio(s,1);
 	~bgDelay= Bus.audio(s,1);
-	~bgDelayS= Bus.audio(s,2);
+	~bgDelay2= Bus.audio(s,1);
 	~bgCom = Bus.audio(s,1);
 	~bgLimit = Bus.audio(s,1);
 	~bgStereo = Bus.audio(s,1);
 	~dispatchBg = Bus.audio(s,2);
 
+
+	~bgFil22= Bus.audio(s,2);
+	~bgCom2 = Bus.audio(s,2);
+	~bgLimit2 = Bus.audio(s,10);
+	~bgBus2= Bus.audio(s,10);
+	~bgStereo2 = Bus.audio(s,2);
+	~bgStereo2 = Bus.audio(s,2);
+	~eqBg10 = Bus.audio(s,10);
 
 
 	~distoBg = Bus.audio(s,1);
@@ -341,6 +351,12 @@ s.sync;
 
 	SynthDef(\playBuf ,{|out = 0,start, trig, dur, buf, dA=2|Out.ar(out,PlayBuf.ar(1,buf,trigger:
 		0.002/*Dust.kr(4.0)*/,startPos: start,loop: 1/*,doneAction: dA*/)* EnvGen.kr(Env([0,1,1,0],[0,dur,0])));}).add;
+
+
+
+
+	SynthDef(\playBuf2 ,{|out = 0,start, trig, dur, buf, dA=2|Out.ar(out,PlayBuf.ar(2, buf,trigger:
+		0.002/*Dust.kr(4.0)*/,startPos: start,loop: 1/*,doneAction: dA*/)/** EnvGen.kr(Env([0,1,1,0],[0,dur,0]))*/);}).add;
 
 
 	SynthDef(\shap,{|in, out, vl1=80, vl2=0,vl3=0, dA1 =0|
@@ -723,6 +739,9 @@ SynthDef(\dispatch2,{|in, out, dur|Out.ar(out, In.ar(in,2)* EnvGen.kr(Env([0,1,1
 	SynthDef(\dispatchS,{|in, out, dur|ReplaceOut.ar(out, In.ar(in,10)* EnvGen.kr(Env([1,1],[dur,0]),doneAction:2))}).add;
 
 
+	SynthDef(\dispatchS10,{|in, out, dur|Out.ar(out, In.ar(in,10)* EnvGen.kr(Env([1,1],[dur,0]),doneAction:2))}).add;
+
+
 //below dur can be factored to change mod
 	SynthDef(\shift, {|in, out, freq,boo, freq2, factor =1, factor2, factor3, vlPE =27.1366666667,vlPE2=0.2, crvEP = (-2), dcPE = 0.129066666667, dur,
 		vlPE3,vlPE33,crvEP2, dA=0, dA2=0, dA3=0|
@@ -762,17 +781,17 @@ SynthDef(\dispatch2,{|in, out, dur|Out.ar(out, In.ar(in,2)* EnvGen.kr(Env([0,1,1
 		Out.ar(out, sig);
 	}).add;
 
-	SynthDef(\filterS,{|out=0, in, busMod, bus7, which, factor3=1, rqLPF=0.5 |
+	SynthDef(\filterS,{|out=0, in, busMod, bus7, which, factor3=1, rqLPF=0.5, freqFil=0, qf =0, qf2=0 |
 
 		var lp, bp, hp, sig;
 
 		sig = In.ar(in,2);
 
-		lp = BLowPass4.ar(sig ,  In.kr(busMod, 1) ,In.kr(rqLPF));
+		lp = BLowPass4.ar(sig , freqFil+ In.kr(busMod, 1) ,qf +In.kr(rqLPF));
 
-		bp = BPF.ar(sig,In.kr(busMod, 1) *factor3  ,0.26);
+		bp = BPF.ar(sig,freqFil+In.kr(busMod, 1) *factor3  ,qf2 +0.26);
 
-		hp = BHiPass4.ar(sig, In.kr(busMod, 1),/*0.6 */ In.kr(bus7, 1));
+		hp = BHiPass4.ar(sig, freqFil+ In.kr(busMod, 1),/*0.6 */ qf2 +In.kr(bus7, 1));
 
 		sig = SelectX.ar(which, [lp, bp,hp,sig]);
 
@@ -1003,7 +1022,7 @@ SynthDef("TriggerBufferGranular", {arg out=0, bufnum=0, in=0, thresh = 0.004, am
 
 		left =	In.ar(in,2);
 
-    Out.ar(out ,PingPong.ar(bufnum, [left,left], delayTime, feedback, 1)
+    Out.ar(out ,PingPong.ar(bufnum, left, delayTime, feedback, 1)
 		/*	* [amp+stereoL,amp+stereoR] * EnvGen.kr(Env([1,1,0],[0,dur,0],4),doneAction:2) */)
 	}).add;
 
@@ -1021,8 +1040,8 @@ SynthDef(\comb, {|out=0, in ,maxDel, delayT,decT|
 	var a ,input;
 		input =In.ar(in,2);
 
-		a = Resonz.ar(	input, 659.25 *   [8,16,32],wet).sum * 10;
-    Out.ar(    out, GVerb.ar( a,roomsize,revtime,damping,inputbw, spread,drylevel.dbamp,earlylevel.dbamp,taillevel.dbamp,roomsize+1,0.6))
+		a = Resonz.ar(	input, 1294.5373184 *   [8,16,32],wet).sum * 10;
+    Out.ar(    out, GVerb.ar( a,roomsize,revtime,damping,inputbw, spread,drylevel.dbamp,earlylevel.dbamp,taillevel.dbamp,roomsize+1,0.32)+a)
 }).add;
 
 	"reverb init".postln;
@@ -1098,8 +1117,22 @@ SynthDef(\EQHP10, {|out=0, in, val, quant, gain,frq=100, vol =1| Out.ar(out,
 
 		Out.ar(out,
 			Splay.arFill(10,
-				In.ar(in, 2)
+				Mix.ar(In.ar(in, 2))
 				,spread,level,center+ In.kr(modPan))
+			* EnvGen.kr(Env([0,1,1,0],[atkT,dur,0],[crvA,0]),doneAction: 2)
+			//EnvGen.kr(Env.step([1],[dur]),doneAction: 2)
+		);
+	}).add;
+
+
+
+
+	SynthDef(\stereoS2,{|out=0, in, spread=0, level=1, center=0.0,dur,modPan,atkT=0,crvA=0|
+
+		Out.ar(out,
+			Splay.arFill(10,
+				Mix.ar(In.ar(in, 2))
+				,spread,level, center+ In.kr(modPan))
 			* EnvGen.kr(Env([0,1,1,0],[atkT,dur,0],[crvA,0]),doneAction: 2)
 			//EnvGen.kr(Env.step([1],[dur]),doneAction: 2)
 		);

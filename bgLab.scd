@@ -3,6 +3,8 @@ MIDIClient.init
 
 MIDIIn.connectAll;
 
+MIDIIn.disconnectAll
+
 
 
 ~notes = Array.newClear(128);
@@ -192,6 +194,7 @@ MIDIdef.cc(\damp, { |value|var modFreq = value.linlin(0, 127, 0.03, 1);
 
 )
 s.plotTree
+(
 ~distoGrp =Group.new;
 ~filterGrp= Group.after(~distoGrp);
 ~delayGrp= Group.after(~filterGrp);
@@ -200,33 +203,56 @@ s.plotTree
 
 ~eqGrp= Group.after(~filterGrp2);
 ~distoGrp2= Group.after(~eqGrp);
-~reverbGrp= Group.after(~distoGrp2);
+~delayGrp2= Group.after(~distoGrp2);
 
-~delayGrp2= Group.after(~reverbGrp);
-~recGrp= Group.after(~delayGrp2);
+~reverbGrp= Group.after(~delayGrp2);
 
+
+~recGrp= Group.after(~reverbGrp);
+)
+
+(
 // o = Synth(\lfo13, [\out,~bus7 ,\dur,9999,\ph,0, \rL,200,\rH,4000]);
 
 p ={ Out.kr(~bus6, SinOsc.ar(0.42916666666667).range(1,0.4))}.play;
 //v = (Synth( \disto, [\in,~distoBg, \out,~bgFil],~distoGrp));
 k = (Synth( \filterModu, [\in,~bgFil, \out,~bgDelay],~filterGrp));
 d = (Synth( \comb, [\in,~bgDelay,\out,~bgLimit],~delayGrp));
+
+
+
 q = Synth( \limiter,[\in,~bgLimit,\gain, 40,\out,~eqBg],~limitGrp);
+
+
 
 // k = (Synth( \filter, [\in,~bgFil2,  \busMod,~bus7, \qf, ~bus6,\which,0,\out,0/*~eqBg*/],~filterGrp2));
 
 n = (Synth( \EQHP, [\in,~eqBg, \val, 3400.00.rrand(300,0.001),\quant, 16.rrand(4,1), \gain,(-8).rrand((-1),1),\val2, 3400.00.rrand(300,0.001),\quant2, 16.rrand(4,1), \gain2,(-8).rrand((-1),1),\frq, 100, \out,~distoBg2,\vol,2],~eqGrp)  );
-w = (Synth( \disto, [\in,~distoBg2, \out,~bgBus],~distoGrp2));
-
-c = (Synth( \reverb, [\in,~bgBus, \out,0/*~bgDelayS*/,\roomsize, 80,  \damping, 0.41, \inputbw, 0.19, \drylevel, -3, \earlylevel, -9, \taillevel, -11 ],~reverbGrp));
 
 
-z = (Synth( \pingDS, [\bufnum, ~delay,\in,~bgDelayS, \out,0/*~toRecord*/],~delayGrp2));
+w = (Synth( \disto, [\in,~distoBg2, \out,~bgDelay2],~distoGrp2));
 
 
-x = Synth(\recLoopS,[buf:~bufBg,\recording,1],~recGrp);
 
+
+
+z = (Synth( \pingD, [\bufnum,b /*~delay*/,\in,~bgDelay2, \out,~bgBus],~delayGrp2));
+
+
+
+
+
+
+
+c = (Synth( \reverbS, [\in,~bgBus, \out,~toRecord2,\roomsize, 80,  \damping, 0.41, \inputbw, 0.19, \drylevel, -3, \earlylevel, -9, \taillevel, -11 ],~reverbGrp));
+
+
+
+
+x = Synth(\recLoopS,[buf:~bufBg,\recording,1,\in, ~toRecord2],~recGrp);
+)
 s.meter
 to disto, toFilter, toDelay,
-
-~tofilter with lfo ? toEq, toReverb,         ""toStereo,with lfo               toEq2 , toSnaCom
+Ppar([~kick,~bass],inf).play(t);
+~bufBg.play
+~tofilter with lfo ? toEq, toReverb,        FROM HERE lfo low filter ""toStereo,with lfo               toEq2 , toSnaCom

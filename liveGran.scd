@@ -17,6 +17,8 @@
 ~c=Synth(\gran2,[\amp, 1,\buf, ~buf,\out,0,\gate, 1,\impulse,40.77,\duration,2.8
 	,\pos,0.35,\out, ~distoBus4] /*,~granuGrp*/ );
 
+// ~bg =  Synth(\playBuf2,  [  \buf,~bufBg , \out, ~bgBus2    ]);
+
 )
 
 MIDIClient.init
