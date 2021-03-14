@@ -80,6 +80,22 @@ Pbindef(\aaa,\dur,Pseq([1/1],inf),
 
 },ccNum: 113);
 
+MIDIdef.cc(\shoc, {|vel, nn, chan, src|[nn];
+	v.set(\factor2,1);
+d.set(\factor2,1);
+Pbindef(\aaa,\dur,Pseq([1/1],inf),
+
+
+	\vlSub,0.8.rrand(0.2,1),\vlSub2,Pkey(\vlSub), \atkT,0.00.rrand(0.2,1).postln,
+	\decT,0.4.rrand(0.6,0.3).postln,
+	\subsT,0.2.rrand(0.3,0.1).postln,
+	\relT,0.12.rrand(0.8,1).postln,
+	\atckC,6.rrand(0,1).postln,
+	\decC,-10.rrand(-2,1).postln,
+	\relC,-8.rrand(-2,1) .postln);
+
+},ccNum: 115);
+
 
 
 
@@ -193,9 +209,9 @@ MIDIdef.cc(\filRez, { |value|var modFreq = value.linlin(0, 127, 0.08, 8);
 
 	k.set(\qf, modFreq.round(0.01));
 
-},ccNum: 114 );
+},ccNum: 18 );
 
-MIDIdef.cc(\filRez2, { |value|var modFreq = value.linlin(0, 127, 1, 0.3);
+MIDIdef.cc(\filRez2, { |value|var modFreq = value.linlin(0, 127, 0.3, 1);
 
 	k.set(\qf2, modFreq.round(0.01));
 

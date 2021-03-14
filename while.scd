@@ -2,7 +2,10 @@
 ~bra = [];
 ~bra[0] = \rest.asCompileString;
 ~bra.add(\rest)
+~bra.add(\note)
 
+
+~bra[] = \note
 for(~i = 0;~i>~bru.size,~i = ~i+1)
 
 
@@ -13,7 +16,7 @@ for (3, 7, { arg i; i.postln });
 
 ~i = 0
 
-while({~i<~bru.size},
+while({~i>~bru.size},
 	{
 
 
@@ -26,6 +29,9 @@ while({~i<~bru.size},
 		//"po".postln; ~i = ~i+1;
 
 } );
+
+
+for(
 
 
 
