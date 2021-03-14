@@ -214,7 +214,7 @@ s.plotTree
 (
 // o = Synth(\lfo13, [\out,~bus7 ,\dur,9999,\ph,0, \rL,200,\rH,4000]);
 
-p ={ Out.kr(~bus6, SinOsc.ar(0.42916666666667).range(1,0.4))}.play;
+// p ={ Out.kr(~bus6, SinOsc.ar(0.42916666666667).range(1,0.4))}.play;
 //v = (Synth( \disto, [\in,~distoBg, \out,~bgFil],~distoGrp));
 k = (Synth( \filterModu, [\in,~bgFil, \out,~bgDelay],~filterGrp));
 d = (Synth( \comb, [\in,~bgDelay,\out,~bgLimit],~delayGrp));

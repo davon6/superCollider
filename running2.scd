@@ -17,6 +17,10 @@ s.plotTree
 )
 
 Synth(\playBuf2,  [  \buf,~bufBg , \out, ~bgFil22    ]);
+
+
+
+
 (
 
 ~lfoGrp  = Group.new;
@@ -198,8 +202,8 @@ Pbind(\instrument, \filter, \dur,inf, \in,~hpK,\which,2,\busMod, ~bus5,\bus7,~bu
 
 	Pbind(\instrument, \stereo,  \dur, Prand([Pseq([1/16],1), Pseq([1/16],16),Pseq([1/16],4),  Pseq([1/4],1),Pseq([1/4],4),Pseq([1/4],16), Pseq([1/3],3), Pseq([1/12],12) ,Pseq([1/1],1)  ],inf)  ,     \center, Pfunc({(-0.80).rrand(0.80)}), \in, ~stereoK   , \out,~rollingK,   \group,~stereoGrp),
 
-
-	/*Pseq([
+Pxrand([
+	Pseq([
 	Pseq([  Prand([ ~perc[2]   ,  ~bar[3]],1),
 
 
@@ -231,7 +235,7 @@ Pbind(\instrument, \filter, \dur,inf, \in,~hpK,\which,2,\busMod, ~bus5,\bus7,~bu
 	],[4,1],1),
 
 
-		].scramble,4),*/
+		].scramble,4),
 
 
 
@@ -265,7 +269,10 @@ Pbind(\instrument, \filter, \dur,inf, \in,~hpK,\which,2,\busMod, ~bus5,\bus7,~bu
 
 		    ~perc[5]
 
-		].scramble,inf),
+
+				].scramble,4),
+
+		],inf),
 
 
 
@@ -809,8 +816,7 @@ Pseq([\rest,\rest, \note,\rest,\rest,\rest,\rest, \note,\note,\rest,\rest,\note,
 
 
 
-	/*Pbind(\instrument, \limiter10,\in, ~toLimitlast, \dur,inf,\gain,60,\group,~limitGrp2),*/
-
+	Pbind(\instrument, \limiter10,\in, ~toLimitlast, \dur,inf,\gain,60,\group,~limitGrp2),
 
 
 
