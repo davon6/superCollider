@@ -112,9 +112,9 @@ MIDIdef.cc(\filRez, { |value|var modFreq = value.linlin(0, 127, 0.08, 8);
 
 	k.set(\qf, modFreq.round(0.01));
 
-},ccNum: 114 );
+},ccNum: 18 );
 
-MIDIdef.cc(\filRez2, { |value|var modFreq = value.linlin(0, 127, 1, 0.3);
+MIDIdef.cc(\filRez2, { |value|var modFreq = value.linlin(0, 127, 0.3, 1);
 
 	k.set(\qf2, modFreq.round(0.01));
 
@@ -186,6 +186,7 @@ MIDIdef.cc(\damp, { |value|var modFreq = value.linlin(0, 127, 0.03, 1);
 
 	c.set(\damping, modFreq.round(0.01).postln);
 
+
 },ccNum: 73);
 
 
@@ -204,17 +205,20 @@ s.plotTree
 ~delayGrp2= Group.after(~reverbGrp);
 ~recGrp= Group.after(~delayGrp2);
 
-o = Synth(\lfo13, [\out,~bus7 ,\dur,9999,\ph,0, \rL,200,\rH,4000]);
+// o = Synth(\lfo13, [\out,~bus7 ,\dur,9999,\ph,0, \rL,200,\rH,4000]);
+
 p ={ Out.kr(~bus6, SinOsc.ar(0.42916666666667).range(1,0.4))}.play;
 //v = (Synth( \disto, [\in,~distoBg, \out,~bgFil],~distoGrp));
 k = (Synth( \filterModu, [\in,~bgFil, \out,~bgDelay],~filterGrp));
 d = (Synth( \comb, [\in,~bgDelay,\out,~bgLimit],~delayGrp));
-q = Synth( \limiter,[\in,~bgLimit,\gain, 40,\out,~bgFil2],~limitGrp);
-k = (Synth( \filter, [\in,~bgFil2,  \busMod,~bus7, \qf, ~bus6,\which,0,\out,~eqBg],~filterGrp2));
+q = Synth( \limiter,[\in,~bgLimit,\gain, 40,\out,~eqBg],~limitGrp);
+
+// k = (Synth( \filter, [\in,~bgFil2,  \busMod,~bus7, \qf, ~bus6,\which,0,\out,0/*~eqBg*/],~filterGrp2));
+
 n = (Synth( \EQHP, [\in,~eqBg, \val, 3400.00.rrand(300,0.001),\quant, 16.rrand(4,1), \gain,(-8).rrand((-1),1),\val2, 3400.00.rrand(300,0.001),\quant2, 16.rrand(4,1), \gain2,(-8).rrand((-1),1),\frq, 100, \out,~distoBg2,\vol,2],~eqGrp)  );
 w = (Synth( \disto, [\in,~distoBg2, \out,~bgBus],~distoGrp2));
 
-c = (Synth( \reverb, [\in,~bgBus, \out,~bgDelayS,\roomsize, 80, /* \damping, 0.41,*/ \inputbw, 0.19, \drylevel, -3, \earlylevel, -9, \taillevel, -11 ],~reverbGrp));
+c = (Synth( \reverb, [\in,~bgBus, \out,0/*~bgDelayS*/,\roomsize, 80,  \damping, 0.41, \inputbw, 0.19, \drylevel, -3, \earlylevel, -9, \taillevel, -11 ],~reverbGrp));
 
 
 z = (Synth( \pingDS, [\bufnum, ~delay,\in,~bgDelayS, \out,0/*~toRecord*/],~delayGrp2));
