@@ -21,6 +21,9 @@
 
 )
 
+
+~buf.play
+
 MIDIClient.init
 MIDIIn.connectAll;
 MIDIIn.disconnectAll

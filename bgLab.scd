@@ -247,12 +247,12 @@ z = (Synth( \pingD, [\bufnum,b /*~delay*/,\in,~bgDelay2, \out,~bgBus],~delayGrp2
 c = (Synth( \reverbS, [\in,~bgBus, \out,~toRecord2,\roomsize, 80,  \damping, 0.41, \inputbw, 0.19, \drylevel, -3, \earlylevel, -9, \taillevel, -11 ],~reverbGrp));
 
 
-
+Pseq([Ppar([~kick,~bass],1),~bass,~bass,~bass],inf).play(t);
 
 x = Synth(\recLoopS,[buf:~bufBg,\recording,1,\in, ~toRecord2],~recGrp);
 )
 s.meter
 to disto, toFilter, toDelay,
-Ppar([~kick,~bass],inf).play(t);
+
 ~bufBg.play
 ~tofilter with lfo ? toEq, toReverb,        FROM HERE lfo low filter ""toStereo,with lfo               toEq2 , toSnaCom

@@ -70,13 +70,13 @@ d.set(\factor2,1);
 Pbindef(\aaa,\dur,Pseq([1/1],inf),
 
 \vlDec,2,
-	\vlSub,1.8.rrand(1.2,1),\vlSub2,Pkey(\vlSub), \atkT,0.2.rrand(0.00,1).postln,
-	\decT,0.4.rrand(0.6,0.3).postln,
-	\subsT,0.2.rrand(0.3,0.1).postln,
-	\relT,0.12.rrand(0.8,1).postln,
-	\atckC,6.rrand(0,1).postln,
-	\decC,-10.rrand(-2,1).postln,
-	\relC,-8.rrand(-2,1) .postln);
+	\vlSub,Pfunc({1.8.exprand(1.2,1)}),\vlSub2,Pkey(\vlSub), \atkT,Pfunc({0.20.exprand(0.01).postln}),
+	\decT,Pfunc({0.4.exprand(0.6,0.3).postln}),
+	\subsT,Pfunc({0.2.exprand(0.3,0.1).postln}),
+	\relT,Pfunc({0.12.exprand(0.8,1).postln}),
+	\atckC,Pfunc({6.exprand(0,1).postln}),
+	\decC,Pfunc({-10.exprand(-2,1).postln}),
+		\relC,Pfunc({-8.exprand(-2,1) .postln}));
 
 },ccNum: 113);
 
@@ -86,13 +86,13 @@ d.set(\factor2,1);
 Pbindef(\aaa,\dur,Pseq([1/1],inf),
 
 \vlDec,2,
-		\vlSub,1.8.rrand(1.2,1),\vlSub2,Pkey(\vlSub), \atkT,0.2.rrand(0.00,1).postln,
-	\decT,0.4.rrand(0.6,0.3).postln,
-	\subsT,0.2.rrand(0.3,0.1).postln,
-	\relT,0.12.rrand(0.8,1).postln,
-	\atckC,6.rrand(0,1).postln,
-	\decC,-10.rrand(-2,1).postln,
-	\relC,-8.rrand(-2,1) .postln);
+	\vlSub,Pfunc({1.8.exprand(1.2,1)}),\vlSub2,Pkey(\vlSub), \atkT,Pfunc({0.20.exprand(0.01).postln}),
+	\decT,Pfunc({0.4.exprand(0.6,0.3).postln}),
+	\subsT,Pfunc({0.2.exprand(0.3,0.1).postln}),
+	\relT,Pfunc({0.12.exprand(0.8,1).postln}),
+	\atckC,Pfunc({6.exprand(0,1).postln}),
+	\decC,Pfunc({-10.exprand(-2,1).postln}),
+		\relC,Pfunc({-8.exprand(-2,1) .postln}));
 
 },ccNum: 115);
 

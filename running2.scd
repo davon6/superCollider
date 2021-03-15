@@ -123,7 +123,7 @@ o = {
 
 
 ],1).play(t, quant:1))
-~bass.play(t)
+
 
 
 (
@@ -279,9 +279,25 @@ Pxrand([
 
 		],inf),
 Pseq([
-		Pbind(\instrument, \wNoise,\dur, Pseq([ 15/1],1), \type, \rest),
+		Pbind(\instrument, \wNoise,\dur, Pseq([ 7/1],1), \type, \rest),
 
-		Pbind(\instrument, \wNoise,\dur, Prand([  Pseq([1/1], 1),   Pseq([1/4], 1)],1),\key, Prand([\atk, \dec], 1),\value,Pkey(\dur),\amp,(-13), \finish, { ~key.envirPut(~value) },\out, 0,\type,Prand([\note, \rest],inf))
+
+
+		Pbind(\instrument, \gateS, \dur,Pseq([1/1],1),\atkT,1 ,\decT ,0 ,\atkC, 42, \in,  ~bgFil22,\group, ~gateGrp, \type, Prand([\rest, \note],inf),\out,~slideBus),
+
+		Pbind(\instrument, \wNoise,\dur, Pseq([ 7/1],1), \type, \rest),
+
+
+
+		Pxrand([
+		Pbind(\instrument, \wNoise,\dur,  Pseq([1/1], 1),\key, Prand([\atk, \dec], 1),\value,Pkey(\dur),\amp,(-13), \finish, { ~key.envirPut(~value) },\out, 0,\type,Prand([\note, \rest],inf)),
+
+			Pseq([
+			Pbind(\instrument, \wNoise,\dur,  Pseq([1/4],1),\key, Prand([\atk, \dec], 1),\value,Pkey(\dur),\amp,(-13), \finish, { ~key.envirPut(~value) },\out, 0,\type,Prand([\note, \rest],inf)),
+				Pbind(\instrument, \wNoise,\dur, Pseq([ 3/4],1), \type, \rest),
+		],1)
+
+		],1)
 
 	],inf),
 
@@ -842,7 +858,7 @@ Pseq([\rest,\rest, \note,\rest,\rest,\rest,\rest, \note,\note,\rest,\rest,\note,
 
 	Pbind(\instrument, \EQHP10,  \dur, inf, \in, ~eqBg10, \out,~bgLimit2,\group,~eqGrp2),
 
-	Pbind(\instrument,  \limiterS, \dur, inf, \in,~bgLimit2 ,\out,0, \gain, 40,\group, ~finalDispatchGrp   ),
+	Pbind(\instrument,  \limiterS, \dur, inf, \in,~bgLimit2 ,\out,~bgBus2, \gain, 40,\group, ~finalDispatchGrp   ),
 
 	Pbind(\instrument, \dispatch2, \dur, Pseq([48/1],inf),\in,~bgBus2,\out,0,\type, Pseq([\rest,\note,\rest,\rest].scramble,inf),\group, ~limitGrp2)
 
