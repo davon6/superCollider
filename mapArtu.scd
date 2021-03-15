@@ -69,8 +69,8 @@ MIDIdef.cc(\shoc, {|vel, nn, chan, src|[nn];
 d.set(\factor2,1);
 Pbindef(\aaa,\dur,Pseq([1/1],inf),
 
-
-	\vlSub,0.8.rrand(0.2,1),\vlSub2,Pkey(\vlSub), \atkT,0.00.rrand(0.2,1).postln,
+\vlDec,2,
+	\vlSub,1.8.rrand(1.2,1),\vlSub2,Pkey(\vlSub), \atkT,0.2.rrand(0.00,1).postln,
 	\decT,0.4.rrand(0.6,0.3).postln,
 	\subsT,0.2.rrand(0.3,0.1).postln,
 	\relT,0.12.rrand(0.8,1).postln,
@@ -85,8 +85,8 @@ MIDIdef.cc(\shoc, {|vel, nn, chan, src|[nn];
 d.set(\factor2,1);
 Pbindef(\aaa,\dur,Pseq([1/1],inf),
 
-
-	\vlSub,0.8.rrand(0.2,1),\vlSub2,Pkey(\vlSub), \atkT,0.00.rrand(0.2,1).postln,
+\vlDec,2,
+		\vlSub,1.8.rrand(1.2,1),\vlSub2,Pkey(\vlSub), \atkT,0.2.rrand(0.00,1).postln,
 	\decT,0.4.rrand(0.6,0.3).postln,
 	\subsT,0.2.rrand(0.3,0.1).postln,
 	\relT,0.12.rrand(0.8,1).postln,

@@ -7,7 +7,7 @@ x = Synth(\recLoop,[buf:~k2,\recording,1, \in,~toRecord],~recGrp2);
 
 
 (
-~kick =	Pbind(\instrument, \kick,\dur, Pseq([1/1],1),\amp,( -3.5),\out,0/*~dipatchKB*/);//-3.5 - 10.5
+~kick =	Pbind(\instrument, \kick,\dur, Pseq([1/1],1),\amp,( -3.5),\out,0/*~again*//*~dipatchKB*/);//-3.5 - 10.5
 
 	~bassShap = Pbind(\instrument, \shap, \dur,Pseq([1/1],inf),\dA1,2,\out,~bassShapB);
 
@@ -20,7 +20,7 @@ x = Synth(\recLoop,[buf:~k2,\recording,1, \in,~toRecord],~recGrp2);
 		\rel, t.beatDur/4 * 0.82,
 		\atkcrv, -2,
 		\relcrv, -1,
-		\amp, (-10),\out,0/*~dipatchKB*///-10   -17
+		\amp, (-10),\out,0/*~again*//*~dipatchKB*///-10   -17
 	);
 
 	~cymbal = Pbind(\instrument, \percussion,\type, Pseq([\rest,\rest,\note,\note ,\rest,\note ,\note, \rest].scramble,inf),\dur,Pseq([1/4],64 ),\carHz, 525.12070612224,\modHz,1899.3343179398,\modAmp, 0.12875 ,\amp,(-13.3),\rel,Pseq([1/16],inf),\rel2,Pseq([1/16],inf),\latch,8000,\stereoL, 0.00555, \crv1,  (-4.4), \crv1b,(-4), \mulMod, 1691,\out, ~comBusCymb);
@@ -36,6 +36,7 @@ x = Synth(\recLoop,[buf:~k2,\recording,1, \in,~toRecord],~recGrp2);
 ~bassRest = Pbindf(~bass,  \type,Pseq([\rest],inf));
 
 ~kbassRest =Ppar([~kick, ~bassRest], 1);
+
 
 ~bar = [Ppar([~kick,~bass],1),Ppar([~kick,~bass],4),Ppar([~kick,~bass],8),Ppar([~kick,~bass],12),Ppar([~kick,~bass],14) ,Ppar([~kick,~bass],15) ,Ppar([~kick,~bass],16)];
 
@@ -73,6 +74,7 @@ x = Synth(\recLoop,[buf:~k2,\recording,1, \in,~toRecord],~recGrp2);
 ];
 
 Ppar([Pseq([~bass],inf),Pbindf(~snare,\da1,0)],1);//JEEEZ
+
 
 ~toUse = Pseq([
 

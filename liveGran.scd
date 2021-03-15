@@ -8,13 +8,13 @@
 
 
 (
-~g=Synth(\gran2,[\amp, 1,\buf, ~buf,\out,0,\gate, 1,\impulse,33.48,\duration,0.1
+~g=Synth(\gran2,[\amp, 1,\buf, ~buf,\gate, 1,\impulse,33.48,\duration,0.1
 	,\pos,0.49,\out,~distoBus1] /*,~granuGrp*/ );
 
-~b=Synth(\gran2,[\amp, 1,\buf, ~buf,\out,0,\gate, 1,\impulse,0.67,\duration,1
+~b=Synth(\gran2,[\amp, 1,\buf, ~buf,\gate, 1,\impulse,0.67,\duration,1
 	,\pos,0.84,\out, ~distoBus3 ] /*,~granuGrp*/ );
 
-~c=Synth(\gran2,[\amp, 1,\buf, ~buf,\out,0,\gate, 1,\impulse,40.77,\duration,2.8
+~c=Synth(\gran2,[\amp, 1,\buf, ~buf,\gate, 1,\impulse,40.77,\duration,2.8
 	,\pos,0.35,\out, ~distoBus4] /*,~granuGrp*/ );
 
 // ~bg =  Synth(\playBuf2,  [  \buf,~bufBg , \out, ~bgBus2    ]);

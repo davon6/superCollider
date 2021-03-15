@@ -1,3 +1,8 @@
+~recGrp2=Group.new;
+Pbindf(~kick,\out,~toRecord).play(t);
+x = Synth(\recLoop,[buf:~k2,\recording,1, \in,~toRecord],~recGrp2);
+
+~k2.play
 
 //percu cutting the 1/2 for progression
 //new env shape for percu in env file
@@ -17,7 +22,7 @@ s.plotTree
 )
 
 Synth(\playBuf2,  [  \buf,~bufBg , \out, ~bgFil22    ]);
-
+// ~buf.play
 
 
 
@@ -207,21 +212,21 @@ Pxrand([
 	Pseq([  Prand([ ~perc[2]   ,  ~bar[3]],1),
 
 
-			Pbind(\instrument, \dispatchS10, \dur, Pseq([4/1],1),\in,Prand([ 0, ~rollingK],inf),\out,0,\group,~dispatchGrp2)
+			Pbind(\instrument, \dispatchS10, \dur, Pseq([4/1],1),\in,Prand([ 0, ~rollingK],inf),\out,0,\tS, 0.39550810372374,\group,~dispatchGrp2)
 	],1),
 
 
 	Pseq([ Pwrand([ ~perc[3]   ,~bar[4] ],[4,1],1),
 
 
-	Pbind(\instrument, \dispatchS10, \dur, Pseq([2/1],1),\in,Prand([ 0, ~rollingK],inf),\out,0,\group,~dispatchGrp2)
+	Pbind(\instrument, \dispatchS10, \dur, Pseq([2/1],1),\in,Prand([ 0, ~rollingK],inf),\out,0,\tS, 0.39550810372374,\group,~dispatchGrp2)
 	],1),
 
 
 		Pseq([   Prand([ ~perc[4]   , ~bar[5]  ],1),
 
 
-	Pbind(\instrument, \dispatchS10, \dur, Pseq([1/1],1),\in,Prand([ 0, ~rollingK],inf),\out,0,\group,~dispatchGrp2)
+	Pbind(\instrument, \dispatchS10, \dur, Pseq([1/1],1),\in,Prand([ 0, ~rollingK],inf),\out,0,\tS, 0.39550810372374,\group,~dispatchGrp2)
 	],1),
 
 		   Prand([ ~perc[5]   , ~bar[6]
@@ -244,21 +249,21 @@ Pxrand([
 	Pseq([ ~bar[2],~perc[1] ,
 
 
-			Pbind(\instrument, \dispatchS10, \dur, Pseq([8/1],1),\in,Prand([ 0, ~rollingK],inf),\out,0,\group,~dispatchGrp2)
+			Pbind(\instrument, \dispatchS10, \dur, Pseq([8/1],1),\in,Prand([ 0, ~rollingK],inf),\tS, 0.39550810372374,\out,0,\group,~dispatchGrp2)
 	],1),
 
 
 	Pseq([ ~perc[0],
 
 
-	Pbind(\instrument,\dispatchS10, \dur, Pseq([12/1],1),\in,Prand([ 0, ~rollingK],inf),\out,0,\group,~dispatchGrp2)
+	Pbind(\instrument,\dispatchS10, \dur, Pseq([12/1],1),\in,Prand([ 0, ~rollingK],inf),\tS, 0.39550810372374,\out,0,\group,~dispatchGrp2)
 	],1),
 
 
 	Prand([	Pseq([   Prand([ ~perc[4]   , ~bar[5]  ],1),
 
 
-	Pbind(\instrument,\dispatchS10, \dur, Pseq([1/1],1),\in,Prand([ 0, ~rollingK],inf),\out,0,\group,~dispatchGrp2)
+	Pbind(\instrument,\dispatchS10, \dur, Pseq([1/1],1),\in,Prand([ 0, ~rollingK],inf),\tS, 0.39550810372374,\out,0,\group,~dispatchGrp2)
 	],1),
 
 
@@ -273,8 +278,15 @@ Pxrand([
 				].scramble,4),
 
 		],inf),
+Pseq([
+		Pbind(\instrument, \wNoise,\dur, Pseq([ 15/1],1), \type, \rest),
 
+		Pbind(\instrument, \wNoise,\dur, Prand([  Pseq([1/1], 1),   Pseq([1/4], 1)],1),\key, Prand([\atk, \dec], 1),\value,Pkey(\dur),\amp,(-13), \finish, { ~key.envirPut(~value) },\out, 0,\type,Prand([\note, \rest],inf))
 
+	],inf),
+
+	Pbind(\instrument, \compS, \thr,0.8 ,\sB, 1.015,\sA, 1/2,\atk ,0.0242, \rel ,0.0968,\gain,1,   \dur, inf, \in, ~slideBus , \out,~slideBusToLimit,\ctrl, ~kbus, \group, ~compGrp),
+	Pbind(\instrument, \limiterS, \dur, inf, \in, ~slideBusToLimit, \gain, 20, \group,~limitGrp) ,
 
 	//debug
 
@@ -793,11 +805,11 @@ Pbind(\instrument,\gran,\dur,	Pseq([1/1],32)
 
 
 	Pseq([
-	Pbind(\instrument,\comp10, \dur,Pseq([1/1],64),\thr,0.4 ,\sB, 1.04,\sA, 0.2,\atk ,0.0968, \rel ,0.3872
-		,\in, Pseq([ ~stetoSnaCom12,~stetoSnaCom12,~stetoSnaCom1,~stetoSnaCom1,~stetoSnaCom1,~stetoSnaCom1,~stetoSnaCom1,~stetoSnaCom1 ].scramble,64 )   ,\ctrl, ~snBus, \out,~eqBus10,\group, ~compGrp2),
+	Pbind(\instrument,\comp10, \dur,Pseq([1/1],256),\thr,0.4 ,\sB, 1.04,\sA, 0.2,\atk ,0.0968, \rel ,0.3872
+		,\in, Pseq([ ~stetoSnaCom12,~stetoSnaCom12,~stetoSnaCom1,~stetoSnaCom1,~stetoSnaCom1,~stetoSnaCom1,~stetoSnaCom1,~stetoSnaCom1 ].scramble,256 )   ,\ctrl, ~snBus, \out,~eqBus10,\group, ~compGrp2),
 
 
-		Pbind(\instrument,\comp10, \dur,Pseq([64/1],inf),\thr,0.4 ,\sB, 1.04,\sA, 0.2,\atk ,0.0968, \rel ,0.3872
+		Pbind(\instrument,\comp10, \dur,Pseq([256/1],1),\thr,0.4 ,\sB, 1.04,\sA, 0.2,\atk ,0.0968, \rel ,0.3872
 			,\in, ~stetoSnaCom1  ,\ctrl, ~snBus, \out,~eqBus10,\group, ~compGrp2)],inf),
 
 
@@ -832,7 +844,7 @@ Pseq([\rest,\rest, \note,\rest,\rest,\rest,\rest, \note,\note,\rest,\rest,\note,
 
 	Pbind(\instrument,  \limiterS, \dur, inf, \in,~bgLimit2 ,\out,0, \gain, 40,\group, ~finalDispatchGrp   ),
 
-	Pbind(\instrument, \dispatch2, \dur, Pseq([16/1],1),\in,~bgBus2,\out,0,\group, ~limitGrp2)
+	Pbind(\instrument, \dispatch2, \dur, Pseq([48/1],inf),\in,~bgBus2,\out,0,\type, Pseq([\rest,\note,\rest,\rest].scramble,inf),\group, ~limitGrp2)
 
 
 

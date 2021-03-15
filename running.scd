@@ -9,7 +9,7 @@ Pbindf.free;
 Bus.free;
 
 )
-
+s.plotTree
 ~remyAudio.play
 s.options.memSize = 2097152;
 
@@ -300,7 +300,7 @@ s.sync;
 	~bpK=Bus.audio(s,1);
 
 
-
+~again =Bus.audio(s,10);
 
 	~comBusHat2=  Bus.audio(s,2);~comBusCymb2=  Bus.audio(s,2);~limitRkick2=  Bus.audio(s,1);~stereoRkick2=  Bus.audio(s,1);~revSide2=  Bus.audio(s,1);~eqNoise2==  Bus.audio(s,1);~eqDs2=  Bus.audio(s,1);~comSide2=  Bus.audio(s,2);~limitSide2=  Bus.audio(s,2);~stereoSide2=  Bus.audio(s,2);~eqNoise2=  Bus.audio(s,1);~noiseRev2=  Bus.audio(s,2);~reverbBus32=  Bus.audio(s,1);~comFuzz32=  Bus.audio(s,2);~limitFuzz32=  Bus.audio(s,2);~stereoBus42=  Bus.audio(s,1);~stetoSnaCom12=  Bus.audio(s,10);~distoBus12=  Bus.audio(s,1);~distoBus42=  Bus.audio(s,1);~distoBus12=  Bus.audio(s,1);~filterBus12=  Bus.audio(s,1);~eqBus12=  Bus.audio(s,1);~reverbBus12=  Bus.audio(s,1);~comFuzz12=  Bus.audio(s,2);~limitFuzz12=  Bus.audio(s,2);~stereoBus12=  Bus.audio(s,2);~filterBus22=  Bus.audio(s,1);~reverbBus22=  Bus.audio(s,1);~comFuzz22=  Bus.audio(s,2);~limitFuzz22=  Bus.audio(s,2);~stereoBus22=  Bus.audio(s,2);~eqBus102=  Bus.audio(s,10);
 ~toLimitlast = Bus.audio(s,10);
@@ -315,6 +315,8 @@ s.sync;
 
 
 	~stereoBus14=  Bus.audio(s,2);   ~limitFuzz4=  Bus.audio(s,2);~limitFuzz4=  Bus.audio(s,2);~comFuzz4=  Bus.audio(s,2);~reverbBus4=  Bus.audio(s,1);
+
+	~slideBus=  Bus.audio(s,2);  ~slideBusToLimit=  Bus.audio(s,2);
 
 	s.sync;
 
@@ -732,14 +734,49 @@ SynthDef(\algo, {
 
 
 
+/*	SynthDef(\dispatch,{|in, out, dur|Out.ar(out, In.ar(in,1)* EnvGen.kr(Env([0,1,1,0],[0,dur,0,0]),doneAction:2))}).add;
+
+	//ReplaceOut works
+SynthDef(\dispatch2,{|in, out, dur,tS=1|Out.ar(out, In.ar(in,2)* EnvGen.kr(Env([0,1,1,0],[0,dur,0,0]),timeScale: tS,doneAction:2))}).add;
+
+	SynthDef(\dispatchS,{|in, out, dur|Out.ar(out, In.ar(in,10)* EnvGen.kr(Env([1,1],[dur,0]),doneAction:2))}).add;
+
+
+	SynthDef(\dispatchS102,{|in, out, dur|ReplaceOut.ar(out, In.ar(in,10)* EnvGen.kr(Env([0,1,1,0],[0,dur,0,0]),doneAction:2))}).add;
+
+
+	SynthDef(\dispatchS10,{|in, out, dur|Out.ar(out, In.ar(in,10)* EnvGen.kr(Env([0,1,1,0],[0,dur,0,0]),doneAction:2))}).add;*/
+
+
+
 	SynthDef(\dispatch,{|in, out, dur|Out.ar(out, In.ar(in,1)* EnvGen.kr(Env([0,1,1,0],[0,dur,0,0]),doneAction:2))}).add;
+
+SynthDef(\dispatch2,{|in, out, dur,tS=1|Out.ar(out, In.ar(in,2)* EnvGen.kr(Env([0,1,1,0],[0,dur,0,0]),timeScale: tS,doneAction:2))}).add;
+
+	SynthDef(\dispatchS,{|in, out, dur|ReplaceOut.ar(out, In.ar(in,10)* EnvGen.kr(Env([1,1],[dur,0]),doneAction:2))}).add;
+
+
+	SynthDef(\dispatchS10,{|in, out, dur,tS=1|Out.ar(out, In.ar(in,10)* EnvGen.kr(Env([1,1],[dur,0]),timeScale: tS,doneAction:2))}).add;
+
+
+
+
+
+	///GITHUB VERSION
+
+
+	/*SynthDef(\dispatch,{|in, out, dur|Out.ar(out, In.ar(in,1)* EnvGen.kr(Env([0,1,1,0],[0,dur,0,0]),doneAction:2))}).add;
 
 SynthDef(\dispatch2,{|in, out, dur|Out.ar(out, In.ar(in,2)* EnvGen.kr(Env([0,1,1,0],[0,dur,0,0]),doneAction:2))}).add;
 
 	SynthDef(\dispatchS,{|in, out, dur|ReplaceOut.ar(out, In.ar(in,10)* EnvGen.kr(Env([1,1],[dur,0]),doneAction:2))}).add;
 
 
-	SynthDef(\dispatchS10,{|in, out, dur|Out.ar(out, In.ar(in,10)* EnvGen.kr(Env([1,1],[dur,0]),doneAction:2))}).add;
+	SynthDef(\dispatchS10,{|in, out, dur|Out.ar(out, In.ar(in,10)* EnvGen.kr(Env([1,1],[dur,0]),doneAction:2))}).add;*/
+
+
+
+
 
 
 //below dur can be factored to change mod
@@ -1148,10 +1185,7 @@ SynthDef(\EQHP10, {|out=0, in, val, quant, gain,frq=100, vol =1| Out.ar(out,
 
 
 
-	SynthDef(\comp10, {|in, ctrl, out= 0, dec  , thr  =0.01 ,sB = 1, sA = (1/4), atk = 0.001, rel = 0.04 , gain=1|
 
-		Out.ar(out, Compander.ar(In.ar(in,10) , In.ar(ctrl,1)  , thresh: thr, slopeBelow: sB, slopeAbove: sA, clampTime: atk, relaxTime: rel)* gain );
-	}).add;
 
 
 
@@ -1357,8 +1391,80 @@ SynthDef(\sequ,{|value, dur, in=0, out=0, vlAtk=0, vlDec=1,vlSub=1,vlSub2=1, vlR
 	Out.ar(~deadS,play);
 }.add;
 
-
+s.sync;
 
 //130.882809922
 //8100
+
+
+
+	~kick =	Pbind(\instrument, \kick,\dur, Pseq([1/1],1),\amp,( -3.5),\out,0/*~again*//*~dipatchKB*/);//-3.5 - 10.5
+
+	~bassShap = Pbind(\instrument, \shap, \dur,Pseq([1/1],inf),\dA1,2,\out,~bassShapB);
+
+	~bass = Pbind(
+		\instrument, \bass,
+		\type, Pseq([\rest, \note, \note, \note], inf),
+		\dur, Pseq([1/4],4),\lpf,100,
+		\midinote, 28, \bus, ~bassShapB,
+		\atk, t.beatDur/4 * 0.01,
+		\rel, t.beatDur/4 * 0.82,
+		\atkcrv, -2,
+		\relcrv, -1,
+		\amp, (-10),\out,0/*~again*//*~dipatchKB*///-10   -17
+	);
+
+	~cymbal = Pbind(\instrument, \percussion,\type, Pseq([\rest,\rest,\note,\note ,\rest,\note ,\note, \rest].scramble,inf),\dur,Pseq([1/4],64 ),\carHz, 525.12070612224,\modHz,1899.3343179398,\modAmp, 0.12875 ,\amp,(-13.3),\rel,Pseq([1/16],inf),\rel2,Pseq([1/16],inf),\latch,8000,\stereoL, 0.00555, \crv1,  (-4.4), \crv1b,(-4), \mulMod, 1691,\out, ~comBusCymb);
+
+~hat = Pbind(\instrument,\percussion,\dur,Pseq([1/4], 64),\atk, 0,\rel,0.04840,\rel2,0.02420,\amp,Pseq([( -15.2), ( -15.2),( -15.2),( -16.2),( -14.2),( -14.2),( -15.2),( -14.2)],inf), \crv1, (-3), \crv1b, (-5), \modHz, exprand(500,10000).postln, \mulMod, rrand(100, 500).postln, \carHz, exprand(20,10000), \modAmp, 0.12875, \latch, 18500, \stereoR, 0.007,\out,~comBusHat);
+
+~snare = Pbind(\instrument, \snare,\carHz, 41.2 ,\type, Pseq([\rest ,\rest,\note,\rest], 8),\atk, 0.00502929687,\rel, 0.0968,\rel2, 0.3872,\dur, Pseq([1/2], inf),\amp,(-20.5), \crv1,(-8),\crv2,(-7)   ,\out,0/*~dipatchKB*/);//(-20.5) -28.5
+
+
+
+
+
+~bassRest = Pbindf(~bass,  \type,Pseq([\rest],inf));
+
+~kbassRest =Ppar([~kick, ~bassRest], 1);
+
+
+~bar = [Ppar([~kick,~bass],1),Ppar([~kick,~bass],4),Ppar([~kick,~bass],8),Ppar([~kick,~bass],12),Ppar([~kick,~bass],14) ,Ppar([~kick,~bass],15) ,Ppar([~kick,~bass],16)];
+
+
+
+
+~perc = [
+
+
+	Ppar([~bar[1],Pbindf(~cymbal, \dur,Pseq([1/4],16)),
+		Pbindf(~hat, \dur,Pseq([1/4],16)),
+		Pbindf(~snare,\type, Pseq([\rest,\rest ,\note, \rest], 2)),      ],1),
+
+
+	Ppar([~bar[2],Pbindf(~cymbal, \dur,Pseq([1/4],32)),
+		Pbindf(~hat, \dur,Pseq([1/4],32)),
+		Pbindf(~snare,\type, Pseq([\rest,\rest ,\note, \rest], 4)),      ],1),
+
+	Ppar([~bar[3],Pbindf(~cymbal, \dur,Pseq([1/4],48)),
+		Pbindf(~hat, \dur,Pseq([1/4],48)),
+		Pbindf(~snare,\type, Pseq([\rest,\rest ,\note, \rest], 6))],1),
+
+
+	Ppar([~bar[4],Pbindf(~cymbal, \dur,Pseq([1/4],56)),
+		Pbindf(~hat, \dur,Pseq([1/4],56)),
+		Pbindf(~snare,\type, Pseq([\rest,\rest ,\note, \rest], 7)),],1),
+
+
+	Ppar([~bar[5],Pbindf(~cymbal, \dur,Pseq([1/4],60)),
+		Pbindf(~hat, \dur,Pseq([1/4],60)),
+		Pbindf(~snare,\type, Pseq([\rest,\rest ,\note, \rest], 7))],1),
+
+
+	Ppar([~bar[6],~hat,~cymbal,~snare],1)
+];
+
+	// Ppar([Pseq([~bass],inf),Pbindf(~snare,\da1,0)],1);//JEEEZ
+
+
 });)
