@@ -381,12 +381,33 @@ s.sync;
 			* SinOsc.kr(~hzHbeat*2).range(~hz1beat.neg, ~hz1beat)).range(~hz8Oct, ~hz1Oct)*/
 
 
-	SinOsc.kr(Select.kr(LFNoise2.ar(~hz1beat).range(0,4).round(1),
-		[    ~hz1beat/4,~hz1beat,~hz1beat,~hzHbeat,~hz1beat *4 /*,~hzHbeat*4   */  /*,0.321875*/	]
-		)    *  SinOsc.kr(~hzHbeat*4).range((~hz1beat.neg),~hz1beat*4),ph).range(~hz8Oct,~hz1Oct/4)
+	SinOsc.kr(Select.kr(LFNoise2.ar(~hz1beat).range(0,3).round(1),
+		[    ~hz1beat/4,~hz1beat,~hz1beat,~hzHbeat,/*~hz1beat *4*/ /*,~hzHbeat*4   */  /*,0.321875*/	]
+		)    *  SinOsc.kr(~hzHbeat*4).range((~hz1beat.neg),~hz1beat),ph).range(~hz8Oct,~hz1Oct/4)
 
 
 		*EnvGen.kr(Env.step([1,0],[dur,0]),doneAction: 2))}).add;
+
+
+
+
+
+
+	/*SynthDef(\lfo1, {|out,ph, val=1, dur|Out.kr(out,
+/*	SinOsc.kr(Select.kr(val,
+			[    ~hz1beat, ~hzHbeat/*,0.321875*/	])
+
+			* SinOsc.kr(~hzHbeat*2).range(~hz1beat.neg, ~hz1beat)).range(~hz8Oct, ~hz1Oct)*/
+
+
+	SinOsc.kr(Select.kr(LFNoise2.ar(~hz1beat).range(0,4).round(1),
+		[    ~hz1beat/4,~hz1beat,~hz1beat,~hzHbeat,~hz1beat *4 /*,~hzHbeat*4   */  /*,0.321875*/	]
+		)    *  SinOsc.kr(~hzHbeat*4).range((~hz1beat.neg),~hz1beat*4),ph).range((-340),1500)
+
+
+		*EnvGen.kr(Env.step([1,0],[dur,0]),doneAction: 2))}).add;*/
+
+
 
 
 	SynthDef(\lfo12, {|out, val=1,ph, dur|Out.kr(out,
@@ -834,6 +855,14 @@ SynthDef(\dispatch2,{|in, out, dur|Out.ar(out, In.ar(in,2)* EnvGen.kr(Env([0,1,1
 
 		Out.ar(out, sig);
 	}).add;
+
+	SynthDef(\filterU, {|out=0,in, busMod, busMod2, qfH = 0.822379, qlL = 0.504212|Out.ar(out,  BHiPass4.ar(  In.ar(in,1) , In.kr(busMod) +  500+In.kr(busMod2), qfH)) }).add;
+
+
+
+
+/*
+	SynthDef(\filterU, {|out=0,in, busMod, busMod2, qfH = 0.822379, qlL = 0.504212|Out.ar(out, BLowPass4.ar(   BHiPass4.ar(  In.ar(in,1) , In.kr(busMod) +  500+In.kr(busMod2), qfH),In.kr(busMod) +  700+In.kr(busMod2),qlL )) }).add;*/
 
 	SynthDef(\phaser,{|in, out, rate, maxDlT =0.0968| Out.ar(out, In.ar(in,1)+ AllpassN.ar(In.ar(in,1)
 		,maxDlT,SinOsc.kr(Lag.kr(MouseX.kr(1.2875,0.00000005)),0,0.01,0.01),0.1)*0.4);}).add;

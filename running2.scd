@@ -22,6 +22,10 @@ s.plotTree
 )
 
 Synth(\playBuf2,  [  \buf,~bufBg , \out, ~bgFil22    ]);
+
+/*Synth(\filterU ,[\in,~filterBus2 ,\busMod, ~bus3 , \busMod2,~bus4,\out,   ~eqBus2] ,~filterGrp)*/
+
+Synth(\filterU ,[\in,~filterBus2 ,\busMod, ~bus3 , \busMod2,~bus5,\out,   ~eqBus2] ,~filterGrp)
 // ~buf.play
 
 
@@ -68,7 +72,7 @@ o = {
 */
 
 	Out.kr(~bus1, SinOsc.ar(0.42916666666667).range(1,0.4));
-	Out.kr(~bus3, Line.kr(0.2,0.2,9999));
+	/*Out.kr(~bus3, Line.kr(0.2,0.2,9999));*/
 
 	Out.kr(~bus4, SinOsc.kr(Select.kr(LFNoise2.ar(10.3).range(0,1).round(1),
 		[  5.15 ,0.321875	]
@@ -81,6 +85,14 @@ o = {
 	Out.kr(~bus13, SinOsc.kr(0.64375).range(20.6,41.20));
 
 	Out.kr(~bus14, SinOsc.kr(0.321875).range(-1,1));
+
+
+	Out.kr(~bus4, SinOsc.kr(Select.kr(LFNoise2.ar(10.3).range(0,1).round(1),
+	[  5.15 ,0.321875	]
+) ).range((-300),300));
+
+
+	Out.kr(~bus3, SinOsc.kr(0.3 ).range((-140),1500));
 
 }.play
 
@@ -131,8 +143,8 @@ Ppar([
 
 	// Ppar([	Ppar([~kick, ~bass],16),~cymbal,~hat, ~snare],inf),
 
-	Pbind(\instrument, \lfo1, \dur,Pseq([16/1],inf), \val, Prand([0,1],inf),\ph,Pxrand([1,0,2,3],inf), \out, ~bus5, \group, ~lfoGrp),
-
+	/*Pbind(\instrument, \lfo1, \dur,Pseq([16/1],inf), \val, Prand([0,1],inf),\ph,Pxrand([1,0,2,3],inf), \out, ~bus5, \group, ~lfoGrp),*/
+Pbind(\instrument, \lfo1, \dur,Pseq([16/1],inf),\ph,Pxrand([1,0,2,3],inf), \out, ~bus5, \group, ~lfoGrp),
 
 	Pbind(\instrument, \lfo12, \dur,Pseq([16/1],inf), \val, Prand([0,1],inf),\ph,Pxrand([1,0,2,3],inf), \out, ~bus8, \group, ~lfoGrp),
 
@@ -300,6 +312,8 @@ Pseq([
 		],1)
 
 	],inf),
+
+
 
 	Pbind(\instrument, \compS, \thr,0.8 ,\sB, 1.015,\sA, 1/2,\atk ,0.0242, \rel ,0.0968,\gain,1,   \dur, inf, \in, ~slideBus , \out,~slideBusToLimit,\ctrl, ~kbus, \group, ~compGrp),
 	Pbind(\instrument, \limiterS, \dur, inf, \in, ~slideBusToLimit, \gain, 20, \group,~limitGrp) ,
@@ -755,7 +769,7 @@ Pbind(\instrument, \gate, \dur, ~short,
 	/*Pbind(\instrument,\recLoop,\buf,~bufSnoopy,\recording,1,\group, ~compGrp,\in,~reverbBus23, \dur, inf),*/
 	// ~bufSnoopy.play
 
- Pbindf( Prand([~quickFix, ~rShort, ~rLong]),\dur,inf, \in,~reverbBus23  , \out,~comFuzz23,\group,~revGrp),
+ Pbindf( Prand([~quickFix, ~rShort, ~rLong]),\dur,inf, \in,~reverbBus2  , \out,~comFuzz23,\group,~revGrp),
 
 	Pbind(\instrument,\compS, \dur,Pseq([1/1],1),\thr,0.8 ,\sB, 1.015,\sA, 1/2,\atk ,0.0242, \rel ,0.0968,\gain,1,\in, ~comFuzz23 ,\ctrl, ~kbus, \out,~limitFuzz23, \group, ~compGrp),
 	Pbind(\instrument, \limiterS,\in, ~limitFuzz23, \dur, inf,\gain,46,\group,~limitGrp,\out,~stereoBus23),
@@ -773,7 +787,7 @@ Pbind(\instrument, \dispatchS ,\dur,Pwrand([
 
 	],[1,4,4],           inf),
 
-	\in , Pwrand([ ~no1, ~no2,~no3],[1,1,1],inf),\out, ~stetoSnaCom1  ,\group,~dispatchGrp2),
+	\in , Pwrand([ ~no1, ~no2,~no3],[1,1,1],inf),\out,~stetoSnaCom1  ,\group,~dispatchGrp2),
 
 //DEBUG one more SNOOPY
 

@@ -247,7 +247,8 @@ z = (Synth( \pingD, [\bufnum,b /*~delay*/,\in,~bgDelay2, \out,~bgBus],~delayGrp2
 c = (Synth( \reverbS, [\in,~bgBus, \out,~toRecord2,\roomsize, 80,  \damping, 0.41, \inputbw, 0.19, \drylevel, -3, \earlylevel, -9, \taillevel, -11 ],~reverbGrp));
 
 
-Pseq([Ppar([~kick,~bass],1),~bass,~bass,~bass],inf).play(t);
+/*Pseq([Ppar([~kick,~bass],1),~bass,~bass,~bass],inf).play(t);*/
+Pseq([Ppar([Pbindf(~kick,\amp, 3), Pbindf(~bass,\amp, 3)],1)  ,   Pbindf(~bass,\amp, 3 ,\dur, Pseq([1/4],3),\rel,Pkey(\dur),\type,\note),],inf).play(t)
 
 x = Synth(\recLoopS,[buf:~bufBg,\recording,1,\in, ~toRecord2],~recGrp);
 )
