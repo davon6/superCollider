@@ -871,7 +871,7 @@ SynthDef(\dispatch2,{|in, out, dur|Out.ar(out, In.ar(in,2)* EnvGen.kr(Env([0,1,1
 	SynthDef(\disto, {|out=0,in, hpf= 81.41|Out.ar(out, In.ar(in,1).round(2**(-16)));}).add;
 	// SynthDef(\disto2, {|out=0,in, lpf= 81.41|Out.ar(out, BLowPass.ar( In.ar(in,2),lpf).round(2**(-16)));}).add;
 
-	SynthDef(\gate,{|in, out=0, vlAtk=0, vlDec=1,vlSub=0, vlRel=0, atkT=0, decT=1, subsT=0, relT=0, atckC=0, decC=0, relC=0, bus1, bus2, dur,relSu=0,vlSub2=0|
+	SynthDef(\gate,{|in, out=0, vlAtk=0, vlDec=1,vlSub=0, vlRel=0, atkT=0, decT=1, subsT=0, relT=0, atckC=0, decC=0, relC=0, bus1, bus2, dur,relSu=0,vlSub2=0,tS =1|
 	var env;
 
 		/*env =   In.ar(in, 1) *    EnvGen.kr(Env(
@@ -884,8 +884,7 @@ env =   In.ar(in, 1) *    EnvGen.kr(Env(
 			[dur * atkT ,dur * decT  -relSu - In.kr(bus1, 1)  , dur * subsT-relSu,dur* relT],
 			[atckC,decC ,0     ,relC]),    //decC- (In.kr(bus2, 1)
 
-
-		doneAction:2);
+timeScale: 1,	doneAction:2);
 
 
 			/*[vlAtk,vlDec                  ,vlSub ,vlSub2,vlRel,0],
@@ -897,7 +896,7 @@ env =   In.ar(in, 1) *    EnvGen.kr(Env(
 		Out.ar(out, env);
 }).add;
 
-	SynthDef(\gateS,{|in, out=0, vlAtk=0, vlDec=1,vlSub=0, vlRel=0, atkT=0, decT=1, subsT=0, relT=0, atckC=0, decC=0, relC=0, bus1, bus2, dur,relSu=0|
+	SynthDef(\gateS,{|in, out=0, vlAtk=0, vlDec=1,vlSub=0, vlRel=0, atkT=0, decT=1, subsT=0, relT=0, atckC=0, decC=0, relC=0, bus1, bus2, dur,relSu=0,tS =1|
 	var env;
 
 		env =   In.ar(in, 10) *    EnvGen.kr(Env(
@@ -906,7 +905,7 @@ env =   In.ar(in, 1) *    EnvGen.kr(Env(
 			[atckC,decC ,0     ,relC]),    //decC- (In.kr(bus2, 1)
 
 
-
+timeScale: 1,
 		doneAction:2);
 
 		Out.ar(out, env);
@@ -932,14 +931,14 @@ env =   In.ar(in, 1) *    EnvGen.kr(Env(
 
 	SynthDef.new(\gran, {
 		arg amp=1, buf =0, out=0, atk=1, rel=1, gate=1, sync=1, dens=40, baseDur=0.05, durRand=1, rate=1, rateRand=1, pan =0, panRand=0, grainEnv=(-1), ptrBus =0, ptrSampleDelay=20000, ptrRandSamples= 5000, minPtrDelay=1000,pitchRte=1,duration=8,impulse = 1.2875,pos=0,roomsize, revtime, damping, inputbw, spread = 15, drylevel, earlylevel, dur,
-		taillevel,maxRoomsize,wet=0.4, crv= 12,vlAtk =0,vlDec=1 ,vlSub=1 ,vlSub2=1,vlRel=0,atkT=0,decT=1,subsT=0,relT=0,atckC=0,decC=0,relC=0;
+		taillevel,maxRoomsize,wet=0.4, crv= 12,vlAtk =0,vlDec=1 ,vlSub=1 ,vlSub2=1,vlRel=0,atkT=0,decT=1,subsT=0,relT=0,atckC=0,decC=0,relC=0,tS=1;
 
 		var sig, env, densCtrl, durCtrl, rateCtrl, panCtrl, ptr, ptrRand, totalDelay, maxGrainDur;
 
 
 		env = EnvGen.kr(Env([vlAtk,vlDec,vlSub,vlSub2,vlRel],
 			[dur * atkT,dur* decT,dur * subsT,dur *relT],
-			[atckC,decC,0,relC]), gate, doneAction:2);
+			[atckC,decC,0,relC]), gate,timeScale: tS, doneAction:2);
 
 //env = EnvGen.kr(Env([0,1,1,1,0],[0,dur,0,0],[0,0,0,0]), gate, doneAction:2);
 
@@ -1168,12 +1167,12 @@ SynthDef(\EQHP10, {|out=0, in, val, quant, gain,frq=100, vol =1| Out.ar(out,
 
 
 
-	SynthDef(\stereo,{|out=0, in, spread=0, level=1, center=0.0,dur,atkT=0,crvA=0|
+	SynthDef(\stereo,{|out=0, in, spread=0, level=1, center=0.0,dur,atkT=0,crvA=0,tS=1|
 
 		Out.ar(out,
 			Splay.arFill(10,
 				In.ar(in, 1)
-				,spread,level,center)* EnvGen.kr(Env([0,1,1,0],[atkT,dur,0],[crvA,0]),doneAction: 2)
+				,spread,level,center)* EnvGen.kr(Env([0,1,1,0],[atkT,dur,0],[crvA,0]),timeScale: tS,doneAction: 2)
 			//EnvGen.kr(Env.step([1],[dur]),doneAction: 2)
 		);
 	}).add;
