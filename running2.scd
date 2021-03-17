@@ -11,7 +11,7 @@ x = Synth(\recLoop,[buf:~k2,\recording,1, \in,~toRecord],~recGrp2);
 //bass eq big mess
 //warning delay is now mono
 /*Buffer.freeAll*/
-
+//panning big debate , is there any ?
 //\atk, exprand(0.001, 0.05),\rel,exprand(0.05, 1.2),\pan,rand(-1.0, 1.0) pour les petit hits
 //PANNING Not working on
 //IMPORTSNT ~toLimitlast might only block left and UNWANTED feedback with right !!!!
@@ -348,13 +348,12 @@ Pseq([
 
 
 
-Pbindf(~rLong,\dur,inf, \in,~revSide , \revtime, 15,\out,~comSide,\taillevel,0,\group,~revGrp),
+Pbindf(~rLong,\dur,inf, \in,~revSide , \revtime, 12,\out,~comSide,\taillevel,0,\group,~revGrp),
 
-	Pbind(\instrument,\comp, \dur,inf,\thr,0.8 ,\sB, 1.015,\sA, 1/2,\atk ,0.0242, \rel ,0.0968,\gain,1,\in, ~comSide ,\ctrl, ~kbus, \out,~limitSide, \group, ~compGrp),
-	Pbind(\instrument, \limiter,\in, ~limitSide, \dur, inf,\gain,40.8,\group,~limitGrp,\out,~stereoSide),
+	Pbind(\instrument,\compS, \dur,inf,\thr,0.8 ,\sB, 1.015,\sA, 1/2,\atk ,0.0242, \rel ,0.0968,\gain,1,\in, ~comSide ,\ctrl, ~kbus, \out,~limitSide, \group, ~compGrp),
+	Pbind(\instrument, \limiterS,\in, ~limitSide, \dur, inf,\gain,40.8,\group,~limitGrp,\out,~stereoSide),
 
-	Pbind(\instrument,\stereo, \dur, Pseq([32/1],inf), \in, ~stereoSide  ,\spread,1,	\atkT,0.2,\crvA,22, \out,~no1, \group, ~stereoGrp),
-
+	Pbind(\instrument,\stereoS, \dur, Pseq([32/1],inf), \in, ~stereoSide  ,\spread,1,	\atkT,0.05,\crvA,22,  \decT,0.95,\out,~no1,\tS, 0.39550810372374,\group, ~stereoGrp),
 
 
 
@@ -529,8 +528,6 @@ Pbindf( Prand([~quickFix, ~rShort, ~rLong]),\dur,inf, \in,~reverbSquelch  , \out
 
 
 
-	/*Pbind(\instrument,\recLoop,\buf,~bufSnoopy,\recording,1,\group, ~compGrp,\in,~toRecord, \dur, inf),*/
-	// ~bufSnoopy.play
 
 
 
@@ -709,11 +706,11 @@ Pbind(\instrument, \gate, \dur, ~short,
 
 
 
-	Pbind(\instrument,\compS, \dur,inf,\thr,0.2 ,\sB, 1.086,\sA, 1/2,\atk ,0.0121, \rel ,0.04840, \gain,1/*(50)*/	,\in, ~comFuzz12 ,\ctrl, ~kbus, \out,~limitFuzz12, \group, ~compGrp),
+	Pbind(\instrument,\compS, \dur,inf,\thr,0.2 ,\sB, 1.086,\sA, 1/2,\atk ,0.0121, \rel ,0.04840, \gain,1	,\in, ~comFuzz12 ,\ctrl, ~kbus, \out,~limitFuzz12, \group, ~compGrp),
 
 	Pbind(\instrument, \limiterS,\in, ~limitFuzz12, \dur, inf,\gain,46,\group,~limitGrp,\out,~stereoBus12),
 
-	Pbind(\instrument,\stereo, \dur, 9999, \in, ~stereoBus12   ,\out,~no2, \group, ~stereoGrp)
+	Pbind(\instrument,\stereoS, \dur, Pseq([1/1],inf),\center,Pfunc({  (-0.4).rrand((0.4))   }) ,\in, ~stereoBus12   ,\out,~no2, \group, ~stereoGrp)
 ,
 
 
@@ -777,7 +774,7 @@ Pbind(\instrument, \dispatchS ,\dur,Pwrand([
 
 	],[1,4,4],           inf),
 
-	\in , Pwrand([ ~no1, ~no2,~no3],[1,1,1],inf),\out,~stetoSnaCom1  ,\group,~dispatchGrp2),
+	\in ,Pwrand([ ~no1, ~no2,~no3],[1,1,1],inf),\out,~stetoSnaCom1  ,\group,~dispatchGrp2),
 
 //DEBUG one more SNOOPY
 
@@ -862,7 +859,7 @@ Pseq([\rest,\rest, \note,\rest,\rest,\rest,\rest, \note,\note,\rest,\rest,\note,
 
 	Pbind(\instrument, \EQHP10,  \dur, inf, \in, ~eqBg10, \out,~bgLimit2,\group,~eqGrp2),
 
-	Pbind(\instrument,  \limiterS, \dur, inf, \in,~bgLimit2 ,\out,0/*~bgBus2*/, \gain, 25,\group,~limitGrp2 /*~finalDispatchGrp*/   ),
+	Pbind(\instrument,  \limiterS, \dur, inf, \in,~bgLimit2 ,\out,0, \gain, 15,\group,~limitGrp2   ),
 
 
 

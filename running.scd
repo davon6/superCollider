@@ -1179,13 +1179,13 @@ SynthDef(\EQHP10, {|out=0, in, val, quant, gain,frq=100, vol =1| Out.ar(out,
 	}).add;
 
 
-	SynthDef(\stereoS,{|out=0, in, spread=0, level=1, center=0.0,dur,modPan,atkT=0,crvA=0|
+	SynthDef(\stereoS,{|out=0, in, spread=0, level=1, center=0.0,dur,modPan,atkT=0,decT=1,crvA=0,tS=1|
 
 		Out.ar(out,
 			Splay.arFill(10,
 				Mix.ar(In.ar(in, 2))
 				,spread,level,center+ In.kr(modPan))
-			* EnvGen.kr(Env([0,1,1,0],[atkT,dur,0],[crvA,0]),doneAction: 2)
+			* EnvGen.kr(Env([0,1,1,0],[dur* atkT,dur*decT,0],[crvA,0]),timeScale: tS,doneAction: 2)
 			//EnvGen.kr(Env.step([1],[dur]),doneAction: 2)
 		);
 	}).add;

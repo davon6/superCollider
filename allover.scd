@@ -1,7 +1,7 @@
 /*~c=Synth(\gran2,[\amp, 1,\buf, ~buf,\gate, 1,\impulse,40.77,\duration,2.8
 	,\pos,0.35,\out, ~distoBus4] /*,~granuGrp*/ );*/
 
-
+s.plotTree
 
 ~c=Synth(\gran,[\amp, 1,\buf, ~buf,\dur,99999,\gate, 1,\impulse,0.01,\duration,40
 	,\pos,0,\out, ~distoBus4] /*,~granuGrp*/ );
@@ -74,7 +74,7 @@ Pbind(\instrument, \disto, \dur, inf, \in, ~distoBus4 , \out,~filterBus2 ,\group
 
 (
 
-MIDIdef.cc(\o, { |value|var modFreq = value.linlin(0, 127, 0.01, 42.1);
+MIDIdef.cc(\o, { |value|var modFreq = value.linlin(0, 127, 0.01, 82.4);
 
 	~c.set(\impulse, "imp".postln;modFreq.round(0.01).postln);
 
