@@ -11,7 +11,7 @@ x = Synth(\recLoop,[buf:~k2,\recording,1, \in,~toRecord],~recGrp2);
 //bass eq big mess
 //warning delay is now mono
 /*Buffer.freeAll*/
-//work out \\type
+
 //\atk, exprand(0.001, 0.05),\rel,exprand(0.05, 1.2),\pan,rand(-1.0, 1.0) pour les petit hits
 //PANNING Not working on
 //IMPORTSNT ~toLimitlast might only block left and UNWANTED feedback with right !!!!
@@ -48,12 +48,14 @@ Synth(\filterU ,[\in,~filterBus2 ,\busMod, ~bus3 , \busMod2,~bus5,\out,   ~eqBus
 ~gateGrp2 =  Group.after( ~granGrp);
 
 
+
 ~revGrp = Group.after(~gateGrp2);
 
 ~delayGrp = Group.after(~revGrp);
 ~eqGrp = Group.after(~delayGrp);
 ~dispatchGrp1 = Group.after(~eqGrp);
 ~filterGrp2  = Group.after(~dispatchGrp1);
+
 
 ~compGrp = Group.after(~filterGrp2);
 ~limitGrp = Group.after(~compGrp);
@@ -290,6 +292,12 @@ Pxrand([
 				].scramble,4),
 
 		],inf),
+
+
+
+
+
+
 Pseq([
 		Pbind(\instrument, \wNoise,\dur, Pseq([ 7/1],1), \type, \rest),
 
@@ -478,8 +486,8 @@ Pbind(\instrument, \filter, \dur,inf,\which,0, \in,~filterBus,\busMod, ~bus4,\rq
 
 
 
-	Pbind(\instrument, \pingD, \in, ~delayBus ,\bufnum, b.bufnum/*~delay*/, \dur, inf,\out,~revDelay,\group, ~revGrp),
 
+	Pbind(\instrument, \pingD, \in, ~delayBus ,\bufnum, /*b.bufnum*/~delay, \dur, inf,\out,~revDelay,\group, ~revGrp),
 
 
 Pbindf( Prand([~quickFix, ~rShort]),\instrument, \reverbS, \dur,inf, \in,~revDelay  , \out,~comDelay ,\group,~delayGrp),
@@ -491,7 +499,6 @@ Pbind( \instrument, \limiterS,\in,~limitDelay, \dur,inf, \gain,52,\group,~limitG
 
 	Pbind(\instrument,\compS, \dur,inf,\thr,0.6 ,\sB, 1.04,\sA, 0.2,\atk ,0.0968, \rel ,0.3872
 		,\in, ~comSnaGrpBus2 ,\ctrl, ~snBus, \group, ~compGrp2,\out,0),
-
 
 
 Pbindf( Prand([~quickFix, ~rShort, ~rLong]),\dur,inf, \in,~reverbSquelch  , \out,~comDelay ,\group,~revGrp),
@@ -684,7 +691,7 @@ Pbind(\instrument, \gate, \dur, ~short,
 
 
 
-
+//GIVE GLITCH ~
 //debug glitcvchy
 	Pbind(\instrument,\gran,\dur,Pseq([16/1],inf),
 /*\type, Pseq([\rest, \note,\rest,\note, \note,\note,\rest,\rest].scramble,inf),*/
@@ -711,23 +718,6 @@ Pbind(\instrument, \gate, \dur, ~short,
 
 
 
-
-
-
-	//debug last
-
-///////////////////// SHOULD NOT BE
-		Pbind(\instrument, \disto, \dur, inf, \in, ~distoBus43 , \out,~filterBus23 ,\group, ~distoGrp),
-
-
-	Pbind(\instrument, \filter, \dur,inf, \in,~filterBus23,\which,2,\busMod, ~bus5,\bus7,~bus7, \out,~eqBus23, \group,~filterGrp),
-
-	Pbind(\instrument,\EQHP, \in, ~eqBus23 , \out, ~gateBus23,
-		\val, 3400.00.rrand(300,0.001),\quant, 16.rrand(4,1), \gain,(-8).rrand((-1),1),
-		\val2, 3400.00.rrand(300,0.001),\quant2, 16.rrand(4,1), \gain2,(-8).rrand((-1),1)
-		,\frq, 100, \dur,inf, \group, ~eqGrp0, \vol,0.5),
-
-/////////////////////
 
 	Prand([
 //Pxrand
@@ -868,13 +858,12 @@ Pseq([\rest,\rest, \note,\rest,\rest,\rest,\rest, \note,\note,\rest,\rest,\note,
 	Pbind(\instrument,\compS, \dur,inf,\thr,0.8 ,\sB, 1.2,\sA, 1/2,\atk ,0.01, \rel ,0.0968
 		,\gain,1,\in, ~bgCom2 ,\ctrl, ~kbus, \out,~bgStereo2,\group,~compGrp ),
 
-	Pbind(\instrument,  \stereoS2, \in,~bgStereo2,  \out, ~eqBg10, \modPan,~bus10 ,  \center, 0.1 ,\dur,9999, \group, ~stereoGrp),
+	Pbind(\instrument,  \stereoS2, \in,~bgStereo2,  \out, ~eqBg10, \modPan,~bus10 ,   \center, 0.1  ,\dur,Pseq([48/1],inf),  \group, ~stereoGrp,\type, Pseq([\rest,\note,\rest,\rest].scramble,inf)),
 
 	Pbind(\instrument, \EQHP10,  \dur, inf, \in, ~eqBg10, \out,~bgLimit2,\group,~eqGrp2),
 
-	Pbind(\instrument,  \limiterS, \dur, inf, \in,~bgLimit2 ,\out,~bgBus2, \gain, 40,\group, ~finalDispatchGrp   ),
+	Pbind(\instrument,  \limiterS, \dur, inf, \in,~bgLimit2 ,\out,0/*~bgBus2*/, \gain, 25,\group,~limitGrp2 /*~finalDispatchGrp*/   ),
 
-	Pbind(\instrument, \dispatch2, \dur, Pseq([48/1],inf),\in,~bgBus2,\out,0,\type, Pseq([\rest,\note,\rest,\rest].scramble,inf),\group, ~limitGrp2)
 
 
 

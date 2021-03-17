@@ -127,7 +127,7 @@ MIDIdef.cc(\fdb, { |value|var modFreq = value.linlin(0, 127, 0.01, 1);
 
 	z.set(\feedback, modFreq.round(0.01).postln);
 
-},ccNum: 16 );
+},ccNum: 16 ); //12
 
 
 
@@ -135,13 +135,13 @@ MIDIdef.cc(\delT, { |value|var modFreq = value.linlin(0, 127, 0.01,2);
 
 	d.set(\delayT, modFreq.round(0.01).postln);
 
-},ccNum: 91 );
+},ccNum: 91 ); //14
 
 
 MIDIdef.cc(\maxD, { |value|var modFreq = value.linlin(0, 127, 0.01,2);
 
 	d.set(\maxDel, modFreq.round(0.01).postln);
-},ccNum: 79 );
+},ccNum: 79 ); //15
 
 MIDIdef.cc(\deT, { |value|var modFreq = value.linlin(0, 127, 0.01,659.255);
 
@@ -149,7 +149,7 @@ MIDIdef.cc(\deT, { |value|var modFreq = value.linlin(0, 127, 0.01,659.255);
 
 	~notes.do{arg synth; synth.set(\freq, modFreq.round(0.01))};
 
-},ccNum: 72 );
+},ccNum: 72 );  //16
 
 
 MIDIdef.cc(\rateLF, { |value|var modFreq = value.linlin(0, 127,0.01 ,5.15);
@@ -217,6 +217,9 @@ s.plotTree
 // p ={ Out.kr(~bus6, SinOsc.ar(0.42916666666667).range(1,0.4))}.play;
 //v = (Synth( \disto, [\in,~distoBg, \out,~bgFil],~distoGrp));
 k = (Synth( \filterModu, [\in,~bgFil, \out,~bgDelay],~filterGrp));
+
+
+
 d = (Synth( \comb, [\in,~bgDelay,\out,~bgLimit],~delayGrp));
 
 
@@ -236,7 +239,7 @@ w = (Synth( \disto, [\in,~distoBg2, \out,~bgDelay2],~distoGrp2));
 
 
 
-z = (Synth( \pingD, [\bufnum,b /*~delay*/,\in,~bgDelay2, \out,~bgBus],~delayGrp2));
+z = (Synth( \pingD, [\bufnum,/*b.bufnum*/~delay,\in,~bgDelay2, \out,~bgBus],~delayGrp2));
 
 
 
@@ -248,12 +251,16 @@ c = (Synth( \reverbS, [\in,~bgBus, \out,~toRecord2,\roomsize, 80,  \damping, 0.4
 
 
 /*Pseq([Ppar([~kick,~bass],1),~bass,~bass,~bass],inf).play(t);*/
-Pseq([Ppar([Pbindf(~kick,\amp, 3), Pbindf(~bass,\amp, 3)],1)  ,   Pbindf(~bass,\amp, 3 ,\dur, Pseq([1/4],3),\rel,Pkey(\dur),\type,\note),],inf).play(t)
+
+Pseq([Ppar([Pbindf(~kick,\amp, 3), Pbindf(~bass,\amp, 3)],1)  ,   Pbindf(~bass,\amp, 3 ,\dur, Pseq([1/4],3),\rel,Pkey(\dur),\type,\note),],inf).play(t);
+
+
+
 
 x = Synth(\recLoopS,[buf:~bufBg,\recording,1,\in, ~toRecord2],~recGrp);
 )
 s.meter
-to disto, toFilter, toDelay,
 
-~bufBg.play
-~tofilter with lfo ? toEq, toReverb,        FROM HERE lfo low filter ""toStereo,with lfo               toEq2 , toSnaCom
+
+MIDIdef.noteOn(\onTest, {|vel, nn, chan, src|[vel, nn, chan, src].postln});
+MIDIdef.cc(\onTestT, {|vel, nn, chan, src|[vel, nn, chan, src].postln});
