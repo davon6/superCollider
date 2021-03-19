@@ -114,6 +114,7 @@ s.sync;
 	~long1 = Prand([ Pseq([16/1],1),Pseq([1/1],1),Pseq([4/1],1)],1);
 	~long2 = Prand([ Pseq([16/1],1),Pseq([64/1],1),Pseq([4/1],1)],1);
 
+	~fPo = { |x, y| sin(x) - (sin(y) * log(x * x + 1)) / 10 };
 
 
 	~quickFix =Pbind(\instrument,\reverb, \dur,inf,\roomsize, 40, \revtime, 4, \damping, 0.9, \inputbw, 0.75, \drylevel, -0, \earlylevel, -22, \taillevel, -28);
@@ -622,6 +623,40 @@ LFNoise0.kr(~hz1beat).range(0.1,0.0)/*,0.02)*/
     )
 }).add;
 "side events init".postln;
+
+
+	SynthDef(\rise, {
+	arg freq=659.26, mRatio=1, cRatio=1,
+	index=1, iScale=5, ic_atk=4, ic_rel=(-4),
+	amp=2, rel=3, pan=0, f1,f2,f3, vlAtk=0,atk=0, dec=0,atkE=0  ,dur ,out =0 ,tS=1 ;
+	var car, mod, env, iEnv, mod2;
+	iEnv = EnvGen.kr(
+		Env(
+			[vlAtk, index*iScale, index],//middle was 10
+			[dur*atk, dur* dec],
+			[ic_atk, ic_rel]//atkC was 10
+		),doneAction:2
+	);
+		env =  EnvGen.kr(Env.step([1,1],[dur,0]),timeScale: tS,doneAction: 2);
+	mod2 = SinOsc.ar(freq/10*f3, mul:freq/10 * iEnv);
+	mod = SinOsc.ar(freq * f2 + mod2, mul:freq * mRatio * iEnv);
+	car = SinOsc.ar(freq * f1 + mod) * env * amp;
+	car = Pan2.ar(car, pan);
+	Out.ar(out, car);
+}).add;
+
+
+
+
+
+SynthDef(\trippyRise, {|out=0, ph=0,dur,tS=1|
+	var r = /*  MouseX.kr(0, 20.6); */  SinOsc.ar(0.075,ph).range(0, 20.6);
+	// stereo expansion
+	var phi = LFSaw.ar([50, 50.1], -1).range(0, 2pi);
+	var x = r * cos(phi);
+	var y = r * sin(phi);
+	Out.ar(out,Limiter.ar(~fPo.(x, y), 0.2)* EnvGen.kr(Env.step([1,1],[dur,0]),timeScale: tS,doneAction: 2));
+}).add;
 
 
 

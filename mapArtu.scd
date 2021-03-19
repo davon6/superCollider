@@ -83,8 +83,8 @@ MIDIdef.cc(\shoc, {|vel, nn, chan, src|[nn];
 d.set(\factor2,1);
 Pbindef(\aaa,\dur,Pseq([1/1],inf),
 
-\vlDec,2,
-	\vlSub,Pfunc({1.8.exprand(1.2,1)}),\vlSub2,Pkey(\vlSub), \atkT,Pfunc({0.20.exprand(0.01).postln}),
+\vlDec,1.8,
+	\vlSub,Pfunc({1.6.exprand(1.0,1)}),\vlSub2,Pkey(\vlSub), \atkT,Pfunc({0.20.exprand(0.01).postln}),
 	\decT,Pfunc({0.4.exprand(0.6,0.3).postln}),
 	\subsT,Pfunc({0.2.exprand(0.3,0.1).postln}),
 	\relT,Pfunc({0.12.exprand(0.8,1).postln}),
