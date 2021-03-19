@@ -319,6 +319,13 @@ s.sync;
 
 	~slideBus=  Bus.audio(s,2);  ~slideBusToLimit=  Bus.audio(s,2);
 
+~riFil=  Bus.audio(s,2);
+	 ~riEq=  Bus.audio(s,2);
+	~riDisto=  Bus.audio(s,2);
+	~riRev=  Bus.audio(s,2);
+	~riComp=  Bus.audio(s,2);
+	~riLimit=  Bus.audio(s,2);   /* ===>random ~flanger would be awe*/
+~riStereo=  Bus.audio(s,2);
 	s.sync;
 
 	~bus1 = Bus.control(s,1);
@@ -907,7 +914,9 @@ SynthDef(\dispatch2,{|in, out, dur|Out.ar(out, In.ar(in,2)* EnvGen.kr(Env([0,1,1
 
 
 	SynthDef(\disto, {|out=0,in, hpf= 81.41|Out.ar(out, In.ar(in,1).round(2**(-16)));}).add;
-	// SynthDef(\disto2, {|out=0,in, lpf= 81.41|Out.ar(out, BLowPass.ar( In.ar(in,2),lpf).round(2**(-16)));}).add;
+
+
+	SynthDef(\distoS, {|out=0,in|Out.ar(out, In.ar(in,2).round(2**(-16)));}).add;
 
 	SynthDef(\gate,{|in, out=0, vlAtk=0, vlDec=1,vlSub=0, vlRel=0, atkT=0, decT=1, subsT=0, relT=0, atckC=0, decC=0, relC=0, bus1, bus2, dur,relSu=0,vlSub2=0,tS =1|
 	var env;
@@ -1165,6 +1174,13 @@ SynthDef(\comb, {|out=0, in ,maxDel, delayT,decT|
 		In.ar(in, 1),val,quant, gain))};).add;
 
 
+
+	SynthDef(\EQHP2, {|out=0, in, val, quant, gain,frq=100, vol =0.05, val2,quant2, gain2| Out.ar(out,
+
+		HPF.ar(HPF.ar(HPF.ar(HPF.ar(HPF.ar(HPF.ar(HPF.ar(HPF.ar(
+		BPeakEQ.ar(	BPeakEQ.ar(In.ar(in, 2),val,quant, gain),val2,quant2, gain2),
+
+		frq),frq),frq),frq),frq),frq),frq),frq)* vol)};).add;
 
 
 
