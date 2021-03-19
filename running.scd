@@ -320,6 +320,7 @@ s.sync;
 	~slideBus=  Bus.audio(s,2);  ~slideBusToLimit=  Bus.audio(s,2);
 
 ~riFil=  Bus.audio(s,2);
+	~riFil2=  Bus.audio(s,2);
 	 ~riEq=  Bus.audio(s,2);
 	~riDisto=  Bus.audio(s,2);
 	~riRev=  Bus.audio(s,2);

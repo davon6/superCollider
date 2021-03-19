@@ -85,12 +85,12 @@ o = {
 
 	Out.kr(~bus9, SinOsc.kr( LFTri.kr( 0.321875).range(0.321875,1.2875)).range(82.4,1318.51));//DONT DELETE
 
-	Out.kr(~bus13, SinOsc.kr(0.64375).range(20.6,41.20));
+	/*Out.kr(~bus13, SinOsc.kr(0.64375).range(20.6,41.20));*/
 
 	Out.kr(~bus14, SinOsc.kr(0.321875).range(-1,1));
 
 
-	Out.kr(~bus3, SinOsc.kr(0.3 ).range((-140),1500));
+	/*Out.kr(~bus3, SinOsc.kr(0.3 ).range((-140),1500));*/
 
 }.play
 
@@ -152,6 +152,10 @@ Pbind(\instrument, \lfo1, \dur,Pseq([16/1],inf),\ph,Pxrand([1,0,2,3],inf), \out,
 
 	Pbind(\instrument, \lfo15, \dur,Pseq([4/1],inf), \out,  ~bus15, \group, ~lfoGrp),
 
+
+
+	Pbind(\instrument, \lfo13, \val,0.075,\dur,Pseq([64/1],inf),\rL,60,\rH,3600 \out,  ~bus12, \group, ~lfoGrp),
+	Pbind(\instrument, \lfo13, \val,0.3,\dur,Pseq([16/1],inf),\rL,60,\rH,3600 \out,  ~bus3, \group, ~lfoGrp),
 
 	~bassShap,
 
@@ -368,13 +372,13 @@ Pseq([
 				Pbind(\instrument, \trippyRise, \dur,  Pseq([16/1],1),   \ph, Pfunc({ 6.00.rand}),\type,Prand([\note,\rest],inf),\tS, 0.39550810372374, \out, ~riEq),
 
 
-			Pbind(\instrument,\rise,\dur,Pseq([16/1],1),\atk,1, \vlAtk, Pfunc({4.00.rand}),\f1, Pfunc({1.00.rand}) , \f2, Pfunc({1.00.rand}) , \f3, Pfunc({1.00.rand}),  \ic_atk,Pfunc({10.00.rrand(-5)}),\index,Pfunc({50.00.rrand(1)}),\mRatio,Pfunc({3.rrand(1).postln}),\out , ~riEq,\type,Prand([\note,\rest],inf),\tS, 0.39550810372374),
+			Pbind(\instrument,\rise,\dur,Pseq([16/1],1),\atk,1, \vlAtk, Pfunc({4.00.rand}),\f1, Pfunc({1.00.rand}) , \f2, Pfunc({1.00.rand}) , \f3, Pfunc({1.00.rand}),  \ic_atk,Pfunc({10.00.rrand(-5)}),\index,Pfunc({50.00.rrand(1)}),\mRatio,Pfunc({3.rrand(1).postln}),\out , ~riFil2,\type,Prand([\note,\rest],inf),\tS, 0.39550810372374),
 
 
 
 Pseq([
 Pbind(\instrument,\rise,\dur,Pseq([8/1],1), \vlAtk, Pfunc({4.00.rand}),\f1, Pfunc({1.00.rand}) , \f2, Pfunc({1.00.rand}) , \f3, Pfunc({1.00.rand}),  \ic_atk,Pfunc({10.00.rrand(-5)}), \index,Pfunc({50.00.rrand(1)}),
-					\key, Prand([\atk, \dec], 1),\value,Pkey(\dur),\finish, { ~key.envirPut(~value)},\tS, 0.39550810372374,\type,Prand([\note,\rest],inf),\out,~riEq)],2)
+					\key, Prand([\atk, \dec], 1),\value,Pkey(\dur),\finish, { ~key.envirPut(~value)},\tS, 0.39550810372374,\type,Prand([\note,\rest],inf),\out,~riFil2)],2)
 
 
 
@@ -383,7 +387,7 @@ Pbind(\instrument,\rise,\dur,Pseq([8/1],1), \vlAtk, Pfunc({4.00.rand}),\f1, Pfun
 		],12),
 
 
-	Pbind(\instrument,\rise,\dur,Pseq([64/1],1),\atk,1, \vlAtk, Pfunc({4.00.rand}),\f1, Pfunc({1.00.rand}) , \f2, Pfunc({1.00.rand}) , \f3, Pfunc({1.00.rand}),  \ic_atk,Pfunc({10.00.rrand(-5)}),\index,Pfunc({50.00.rrand(1)}),\mRatio,Pfunc({3.rrand(1).postln}),\out , ~riEq,\type,Prand([\note,\rest],inf),\tS, 0.39550810372374),
+	Pbind(\instrument,\rise,\dur,Pseq([64/1],1),\atk,1, \vlAtk, Pfunc({4.00.rand}),\f1, Pfunc({1.00.rand}) , \f2, Pfunc({1.00.rand}) , \f3, Pfunc({1.00.rand}),  \ic_atk,Pfunc({10.00.rrand(-5)}),\index,Pfunc({50.00.rrand(1)}),\mRatio,Pfunc({3.rrand(1).postln}),\out , ~riFil,\type,Prand([\note,\rest],inf),\tS, 0.39550810372374),
 
 		//HERE THE CLASSIC RISE BUT EASY
 
@@ -391,8 +395,12 @@ Pbind(\instrument,\rise,\dur,Pseq([8/1],1), \vlAtk, Pfunc({4.00.rand}),\f1, Pfun
 
 
 
-/*Pbind(\instrument, \filter , \in,     , \out,~riEq, \group, ~filterGrp),*///NEED A FILTER TO INTRODUCE DONT KNOW HOW
+Pbind(\instrument, \filter , \in,  ~riFil   , \out,~riEq, \busMod, ~bus13, \qf,0.6, \group, ~filterGrp),
+	Pbind(\instrument, \filter , \in,  ~riFil2   , \out,~riEq, \busMod, ~bus3, \qf,0.6, \group, ~filterGrp),
+
+
 Pbind(\instrument,\EQHP2, \in, ~riEq , \out, ~riDisto ,\frq, 100, \dur,inf, \group, ~eqGrp0),
+
 	Pbind(\instrument, \distoS, \dur, inf, \in, ~riDisto , \out,~riRev ,\group, ~distoGrp2),
 
 	Pbindf( ~rShort, \instrument, \reverbS, \dur,inf, \in,~riRev  , \out,~riComp,\group,~revGrp),
