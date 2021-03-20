@@ -83,13 +83,14 @@ MIDIdef.cc(\o, { |value|var modFreq = value.linlin(0, 127, 41.2, 0.01);
 MIDIdef.cc(\t, { |value|var modFreq = value.linlin(0, 127, 0.01, 0.99);
 
 
+
 	~c.set(\pos, "pos".postln;modFreq.round(0.01).postln);
 
 },ccNum: 19 );
 
 
 
-MIDIdef.cc(\p, { |value|var modFreq = value.linlin(0, 127, 0.1, 10);
+MIDIdef.cc(\p, { |value|var modFreq = value.linlin(0, 127, 0.1, 3);
 
 
 	~c.set(\duration, "dur".postln;modFreq.round(0.1).postln);
@@ -101,6 +102,11 @@ MIDIdef.cc(\p, { |value|var modFreq = value.linlin(0, 127, 0.1, 10);
 )
 
 
+
+
+
+
+//OLD
 (
 
 MIDIdef.cc(\o, { |value|var modFreq = value.linlin(0, 127, 0.01, 82.4);
