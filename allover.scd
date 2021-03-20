@@ -4,8 +4,9 @@
 s.plotTree
 
 ~c=Synth(\gran,[\amp, 1,\buf, ~buf,\dur,99999,\gate, 1,\impulse,0.01,\duration,40
-	,\pos,0,\out, ~distoBus4] /*,~granuGrp*/ );
+	,\pos,0,\out, ~filterBus2] /*,~granuGrp*/ );
 
+~buf.play
 ~bufSnoopy.play
 
 Synth(\recLoop,[\buf,~bufSnoopy,\recording,1,\group, ~compGrp,\in,0],~recGrp)
@@ -19,19 +20,21 @@ Pbind(\instrument, \lfo13, \val,~hzQbeat/4,\dur,Pseq([16/1],inf),\ph,Pxrand([1,0
 
 
 
-Pbind(\instrument, \disto, \dur, inf, \in, ~distoBus4 , \out,~filterBus2 ,\group, ~distoGrp),
 
 
 
 
 
-	Pbind(\instrument, \filter, \dur,inf, \in,~filterBus2,\which,2,\busMod, ~bus5,\bus7,~bus7, \out,~eqBus2, \group,~filterGrp,\freqFil, 30.rrand(-30)),
+	Pbind(\instrument, \filter, \dur,inf, \in,~filterBus2,\which,2,\busMod, ~bus5,\bus7,~bus7, \out,~distoBus4, \group,~filterGrp,\freqFil, 30.rrand(-30)),
 
-	Pbind(\instrument, \filter, \dur,inf, \in,~filterBus2,\which,2,\busMod, ~bus5,\bus7,~bus7, \out,~eqBus2, \group,~filterGrp,\freqFil, 30.rrand(-30)),
+	Pbind(\instrument, \filter, \dur,inf, \in,~filterBus2,\which,2,\busMod, ~bus5,\bus7,~bus7, \out,~distoBus4, \group,~filterGrp,\freqFil, 30.rrand(-30)),
 
-	Pbind(\instrument, \filter, \dur,inf, \in,~filterBus2,\which,2,\busMod, ~bus5,\bus7,~bus7, \out,~eqBus2, \group,~filterGrp,\freqFil, 30.rrand(-30)),
+	Pbind(\instrument, \filter, \dur,inf, \in,~filterBus2,\which,2,\busMod, ~bus5,\bus7,~bus7, \out,~distoBus4, \group,~filterGrp,\freqFil, 30.rrand(-30)),
 
-	Pbind(\instrument, \filter, \dur,inf, \in,~filterBus2,\which,2,\busMod, ~bus5,\bus7,~bus7, \out,~eqBus2, \group,~filterGrp,\freqFil, 30.rrand(-30)),
+	Pbind(\instrument, \filter, \dur,inf, \in,~filterBus2,\which,2,\busMod, ~bus5,\bus7,~bus7, \out,~distoBus4, \group,~filterGrp,\freqFil, 30.rrand(-30)),
+
+
+Pbind(\instrument, \disto, \dur, inf, \in, ~distoBus4 , \out,~eqBus2 ,\group, ~distoGrp),
 
 
 
@@ -66,10 +69,10 @@ Pbind(\instrument, \disto, \dur, inf, \in, ~distoBus4 , \out,~filterBus2 ,\group
 )
 (
 ~lfoGrp  = Group.new;
-~distoGrp = Group.after(~lfoGrp);
-~filterGrp = Group.after(~distoGrp);
+~filterGrp = Group.after(~lfoGrp);
+~distoGrp = Group.after(~filterGrp);
 
-~eqGrp0 = Group.after(~filterGrp);
+~eqGrp0 = Group.after(~distoGrp);
 
 ~gateGrp= Group.after(~eqGrp0);
 
