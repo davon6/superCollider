@@ -96,9 +96,9 @@ s.sync;
 	~delay = Buffer.alloc(s, 48000 * 3, 2);
 	b = Buffer.alloc(s, 44100 * 2, 2);
 
-	~buf = Buffer.alloc(s,s.sampleRate*90 );
+	~buf = Buffer.alloc(s,s.sampleRate*60 );
 	~bufBg = Buffer.alloc(s,s.sampleRate*60,2 );
-	~bufSnoopy = Buffer.alloc(s,s.sampleRate*30 );
+	~bufSnoopy = Buffer.alloc(s,s.sampleRate*20 );
 
 
 	~remyAudio = Buffer.read(s, "/Users/davidmignot/superCollider-master/remy.wav");
@@ -910,7 +910,7 @@ SynthDef(\dispatch2,{|in, out, dur|Out.ar(out, In.ar(in,2)* EnvGen.kr(Env([0,1,1
 /*
 	SynthDef(\filterU, {|out=0,in, busMod, busMod2, qfH = 0.822379, qlL = 0.504212|Out.ar(out, BLowPass4.ar(   BHiPass4.ar(  In.ar(in,1) , In.kr(busMod) +  500+In.kr(busMod2), qfH),In.kr(busMod) +  700+In.kr(busMod2),qlL )) }).add;*/
 
-	SynthDef(\phaser,{|in, out, rate, value, dur maxDlT =0.0968,decT=1,amp=0.4| Out.ar(out, In.ar(in,1)+ AllpassN.ar(In.ar(in,1) ,maxDlT,SinOsc.kr(value,0,0.01,0.01),decT)*amp);}).add;
+	SynthDef(\phaser,{|in, out, rate, value, dur maxDlT =0.0968,decT=1,amp=0.4| Out.ar(out, In.ar(in,1)+ AllpassN.ar(In.ar(in,1) ,maxDlT,SinOsc.kr(value,0,0.01,0.01),decT)*amp* EnvGen.kr(Env.step([1,0],[dur,0]))   );}).add;
 
 
 	SynthDef(\disto, {|out=0,in, hpf= 81.41|Out.ar(out, In.ar(in,1).round(2**(-16)));}).add;
@@ -985,7 +985,7 @@ timeScale: 1,
 
 		env = EnvGen.kr(Env([vlAtk,vlDec,vlSub,vlSub2,vlRel],
 			[dur * atkT,dur* decT,dur * subsT,dur *relT],
-			[atckC,decC,0,relC]), gate,timeScale: 1, doneAction:2);
+			[atckC,decC,0,relC]), gate,timeScale: tS, doneAction:2);
 
 //env = EnvGen.kr(Env([0,1,1,1,0],[0,dur,0,0],[0,0,0,0]), gate, doneAction:2);
 

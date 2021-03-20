@@ -16,6 +16,7 @@ Pbindef(\ki, \out,0).play(t)
 //PANNING Not working on
 //IMPORTSNT ~toLimitlast might only block left and UNWANTED feedback with right !!!!
 //to avoid crash no done yet have stored valu for eq of fuzz from record buff to main
+//tripppy rise is not tuned
 s.plotTree
 ~bufSnoopy.play
 (
@@ -35,15 +36,16 @@ Synth(\filterU ,[\in,~filterBus2 ,\busMod, ~bus3 , \busMod2,~bus5,\out,   ~eqBus
 
 ~lfoGrp  = Group.new;
 ~granuGrp= Group.after(~lfoGrp);
-~distoGrp =  Group.after(~granuGrp);
+~phaserGrp =  Group.after(~granuGrp);
+~distoGrp =  Group.after(~phaserGrp);
 ~dispatchGrp = Group.after(~distoGrp);
 ~filterGrp  = Group.after(~dispatchGrp);
 ~distoGrp0 =  Group.after(~filterGrp);
 
 ~eqGrp0 = Group.after(~distoGrp0);
 ~distoGrp2 =  Group.after(~eqGrp0);
-~phaserGrp =  Group.after(~distoGrp2);
-~gateGrp =  Group.after(~phaserGrp);
+
+~gateGrp =  Group.after(~distoGrp2);
 ~ptrGrp = Group.after(~gateGrp);
 ~recGrp = Group.after(~ptrGrp);
 ~granGrp = Group.after(~recGrp);
@@ -795,7 +797,7 @@ Pbind(\instrument, \gate, \dur, ~short,
 	Pbind(\instrument,\gran,\dur,Pseq([16/1],inf),
 /*\type, Pseq([\rest, \note,\rest,\note, \note,\note,\rest,\rest].scramble,inf),*/
 		\amp, 1,\buf, ~buf,\out,~distoBus12,\gate, 1,\duration,Pkey(\dur),\impulse,0.002,
-
+ \tS, 0.39550810372374,
 		\pos,  Pfunc({0.99999.rand.postln })              ),
 
 
@@ -995,7 +997,7 @@ Pbind(\instrument,\gran,\dur,	Pseq([1/1],24)
 	],inf),
 
 
-	Pbind(\instrument, \phas,\in,~phaseBus,\dur ,Pseq([24/1],inf),\value, Pfunc({1.2875.exprand(0.075)}),\amp,Pfunc({1.exprand(0.075)}),\decT,Pfunc({0.7744.exprand(0.0424)}),\out,~distoPerch ),
+	Pbind(\instrument, \phaser,\in,~phaseBus,\dur ,Pseq([24/1],inf),\value, Pfunc({1.2875.exprand(0.075)}),\amp,Pfunc({1.exprand(0.075)}),\decT,Pfunc({0.7744.exprand(0.0424)}),\out,~distoPerch, \group,~phaserGrp),
 
 			Pbind(\instrument, \disto, \dur, inf, \in, ~distoPerch , \out,~eqPerch,\group, ~distoGrp),
 
@@ -1045,7 +1047,7 @@ Pbind(\instrument, \dispatchS ,\dur,Pwrand([
 
 	],[1,4,4],           inf),
 
-	\in , Pwrand([ ~no1, ~no2,~no3],[1,1,4],inf),\out,~stetoSnaCom1  ,\group,~dispatchGrp2),
+	\in , ~no2)/*Pwrand([ ~no1, ~no2,~no3],[1,1,4],inf),\out,~stetoSnaCom1  ,\group,~dispatchGrp2)*/,
 
 
 
