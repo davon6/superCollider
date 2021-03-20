@@ -1481,11 +1481,11 @@ s.sync;
 
 
 
-	~kick =	Pbind(\instrument, \kick,\dur, Pseq([1/1],1),\amp,( -3.5),\out,0/*~again*//*~dipatchKB*/);//-3.5 - 10.5
+	~kick =	Pbindef(\ki, \instrument, \kick,\dur, Pseq([1/1],1),\amp,( -3.5),\out,0);//-3.5 - 10.5
 
 	~bassShap = Pbind(\instrument, \shap, \dur,Pseq([1/1],inf),\dA1,2,\out,~bassShapB);
 
-	~bass = Pbind(
+	~bass = Pbindef(\bass,
 		\instrument, \bass,
 		\type, Pseq([\rest, \note, \note, \note], inf),
 		\dur, Pseq([1/4],4),\lpf,100,

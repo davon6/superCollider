@@ -8,10 +8,10 @@
 
 (
 ~g=Synth(\gran2,[\amp, 1,\buf, ~buf,\gate, 1,\impulse,33.48,\duration,0.1
-	,\pos,0.49,\out,~distoBus1] /*,~granuGrp*/ );
+	,\pos,0.67,\out,~distoBus1] /*,~granuGrp*/ );
 
 ~b=Synth(\gran2,[\amp, 1,\buf, ~buf,\gate, 1,\impulse,0.67,\duration,1
-	,\pos,0.44,\out,~distoBus3 ] /*,~granuGrp*/ );
+	,\pos,0.45,\out,~distoBus3 ] /*,~granuGrp*/ );
 
 ~c=Synth(\gran2,[\amp, 1,\buf, ~buf,\gate, 1,\impulse,41.2,\duration,0.1
 	,\pos,0.16,\out, ~distoBus4] /*,~granuGrp*/ );
