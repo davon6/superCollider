@@ -250,9 +250,9 @@ z = (Synth( \pingD, [\bufnum,/*b.bufnum*/~delay,\in,~bgDelay2, \out,~bgBus],~del
 c = (Synth( \reverbS, [\in,~bgBus, \out,~toRecord2,\roomsize, 80,  \damping, 0.41, \inputbw, 0.19, \drylevel, -3, \earlylevel, -9, \taillevel, -11 ],~reverbGrp));
 
 
-/*Pseq([Ppar([~kick,~bass],1),~bass,~bass,~bass],inf).play(t);*/
 
-Pseq([Ppar([Pbindf(~kick,\amp, 3), Pbindf(~bass,\amp, 3)],1)  ,   Pbindf(~bass,\amp, 3 ,\dur, Pseq([1/4],3),\rel,Pkey(\dur),\type,\note),],inf).play(t);
+
+Pseq([Ppar([Pbindf(~kick,\amp, 1.5), Pbindf(~bass,\amp, 1.5)],1)  ,   Pbindf(~bass,\amp, 1.5 ,\dur, Pseq([1/4],3),\rel,Pkey(\dur),\type,\note),],inf).play(t);
 
 
 
@@ -261,6 +261,6 @@ x = Synth(\recLoopS,[buf:~bufBg,\recording,1,\in, ~toRecord2],~recGrp);
 )
 s.meter
 
-
+~bufBg.play
 MIDIdef.noteOn(\onTest, {|vel, nn, chan, src|[vel, nn, chan, src].postln});
 MIDIdef.cc(\onTestT, {|vel, nn, chan, src|[vel, nn, chan, src].postln});

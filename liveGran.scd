@@ -6,7 +6,6 @@
 	,\pos,0.4,\dur,9999] /*,~granuGrp*/ )
 
 
-
 (
 ~g=Synth(\gran2,[\amp, 1,\buf, ~buf,\gate, 1,\impulse,33.48,\duration,0.1
 	,\pos,0.49,\out,~distoBus1] /*,~granuGrp*/ );

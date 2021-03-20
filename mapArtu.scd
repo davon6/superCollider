@@ -2,11 +2,11 @@
 //Pseq([~toUse2],inf).play(t);
 
 	Ppar([~bassShap,Ppar([Pbindf(~kick,\amp, 3),Pbindf(~bass,\amp, 3 ),],inf)],1).play(t);
-x = Synth(\recLoop,[buf:~buf,\recording,1, \in, ~toRecord],~recGrp);
+x = Synth(\recLoop,[buf:~buf,\recording,1, \in,~toRecord],~recGrp);
 )
 x.free;
 ~buf.play
-
+Pbindef.free
 s.plotTree
 MIDIClient.init
 MIDIIn.connectAll;
@@ -37,9 +37,12 @@ m =(Synth(\ranModul,[\modu,0.3]));
 
 k = (Synth( \filterModu, [\dur, inf,\in,~outFil, \out,~toRecord],~filterGrp));
 
-//Pdef(\aaa, Pbind(\instrument, \sequ, \value,Pseq([104,500,200],inf),\dur,1)).play(t);
+//Pdef(\aaa, Pbind(\instrument, \sequ, \value,Pseq([104,500,200],inf),\dur,1)).play(t); NO
 
-Pbindef(\aaa, \instrument, \sequ, \value,Pseq([104,500,200],inf),\dur,Pseq([4/1],inf),\in,~toRecord,\group,~shapGrp).play(t);
+
+
+
+Pbindef(\aaa, \instrument, \sequ, \value,Pseq([1200.rand,1200.rand,1200.rand],inf),\dur,Pseq([4/1],inf),\in, ~outFil/*~toRecord*/,\group,~shapGrp).play(t);
 
 
 MIDIdef.noteOn(\res, {|vel, nn, chan, src|[nn];
@@ -68,13 +71,13 @@ d.set(\factor2,1);
 Pbindef(\aaa,\dur,Pseq([1/1],inf),
 
 \vlDec,1.8,
-	\vlSub,Pfunc({1.6.exprand(1.0,1)}),\vlSub2,Pkey(\vlSub), \atkT,Pfunc({0.20.exprand(0.01).postln}),
-	\decT,Pfunc({0.4.exprand(0.6,0.3).postln}),
-	\subsT,Pfunc({0.2.exprand(0.3,0.1).postln}),
-	\relT,Pfunc({0.12.exprand(0.8,1).postln}),
-	\atckC,Pfunc({6.exprand(0,1).postln}),
-	\decC,Pfunc({-10.exprand(-2,1).postln}),
-		\relC,Pfunc({-8.exprand(-2,1) .postln}));
+	\vlSub,Pfunc({1.6.exprand(1.0,1)}),\vlSub2,Pkey(\vlSub),\atkT,Pfunc({0.20.exprand(0.01)}),
+	\decT,Pfunc({0.6.exprand(0.8,0.3)}),
+	\subsT,Pfunc({0.2.exprand(0.3,0.1)}),
+	\relT,Pfunc({0.12.exprand(0.8,1)}),
+	\atckC,Pfunc({6.exprand(1,1)}),
+	\decC,Pfunc({-4.exprand(-0.1)}),
+		\relC,Pfunc({-8.exprand(-2,1) }));
 
 },ccNum: 113);
 
@@ -84,13 +87,13 @@ d.set(\factor2,1);
 Pbindef(\aaa,\dur,Pseq([1/1],inf),
 
 \vlDec,1.8,
-	\vlSub,Pfunc({1.6.exprand(1.0,1)}),\vlSub2,Pkey(\vlSub), \atkT,Pfunc({0.20.exprand(0.01).postln}),
-	\decT,Pfunc({0.4.exprand(0.6,0.3).postln}),
-	\subsT,Pfunc({0.2.exprand(0.3,0.1).postln}),
-	\relT,Pfunc({0.12.exprand(0.8,1).postln}),
-	\atckC,Pfunc({6.exprand(0,1).postln}),
-	\decC,Pfunc({-10.exprand(-2,1).postln}),
-		\relC,Pfunc({-8.exprand(-2,1) .postln}));
+	\vlSub,Pfunc({1.6.exprand(1.0,1)}),\vlSub2,Pkey(\vlSub),\atkT,Pfunc({0.20.exprand(0.01)}),
+	\decT,Pfunc({0.6.exprand(0.8,0.3)}),
+	\subsT,Pfunc({0.2.exprand(0.3,0.1)}),
+	\relT,Pfunc({0.12.exprand(0.8,1)}),
+	\atckC,Pfunc({6.exprand(1,1)}),
+	\decC,Pfunc({-4.exprand(-0.1)}),
+		\relC,Pfunc({-8.exprand(-2,1) }));
 
 },ccNum: 115);
 

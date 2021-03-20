@@ -1446,7 +1446,7 @@ SynthDef(\sequ,{|value, dur, in=0, out=0, vlAtk=0, vlDec=1,vlSub=1,vlSub2=1, vlR
 
 
 		SynthDef(\recLoopS){|buf=0,in=0,out=0,recording = 1|
-	var input = In.ar(~toRecord2,2);
+	var input = In.ar(in/*~toRecord2*/,2);
 	// Timer measures times between triggers
 	// Changed emits a trigger when recording changes value
 	// Gate updates recEnd only when not recording
@@ -1470,7 +1470,7 @@ SynthDef(\sequ,{|value, dur, in=0, out=0, vlAtk=0, vlDec=1,vlSub=1,vlSub2=1, vlR
 		startLoop:0,
 		endLoop:recEnd
 	);
-		Out.ar(0,HPF.ar(input,100)!2);
+		Out.ar(0,HPF.ar(input,100));
 	Out.ar(~deadS,play);
 }.add;
 
