@@ -96,7 +96,7 @@ s.sync;
 	~delay = Buffer.alloc(s, 48000 * 3, 2);
 	b = Buffer.alloc(s, 44100 * 2, 2);
 
-	~buf = Buffer.alloc(s,s.sampleRate*60 );
+	~buf = Buffer.alloc(s,s.sampleRate*90 );
 	~bufBg = Buffer.alloc(s,s.sampleRate*60,2 );
 	~bufSnoopy = Buffer.alloc(s,s.sampleRate*20 );
 
@@ -1366,7 +1366,7 @@ SynthDef(\fm2, {
 
 		car = Saw.ar(  MouseX.kr([659.26/4, 659.26/4+20, 659.26/4 -40]) + (In.kr(modu,1)*EnvGen.kr(Env.adsr(sustainLevel: 1,releaseTime: 0.1),factor ))+(In.kr(~seqBus,1)* factor2)
 		/*+ LFNoise0.kr(10.3).range(-40,1200) */ * cRatio,
-		mod.wrap(0, 16pi)*[1,multi
+		mod.wrap(0, 4pi)*[1,multi
 			,multi
 
 
@@ -1401,17 +1401,19 @@ SynthDef(\filterModu,{|out=0, in, filMod=600,filMod2=500,qf=0.5,qf2=0.5,  which=
 
 SynthDef(\sequ,{|value, dur, in=0, out=0, vlAtk=0, vlDec=1,vlSub=1,vlSub2=1, vlRel=0, atkT=0, decT=1, subsT=0, relT=0, atckC=0, decC=0, relC=0, bus1, bus2|
 
-		ReplaceOut.ar(in,  In.ar(in, 3) *    EnvGen.kr(Env(
+		/*ReplaceOut.ar(in,  In.ar(in, 3) *    EnvGen.kr(Env(
 			[vlAtk,vlDec                  ,vlSub ,vlSub2,vlRel,0],
 			[dur * atkT ,dur * decT  /*-In.kr(bus1, 1)*/  , dur * subsT,dur* relT],
 			[atckC,decC,0     ,relC]),    //decC- (In.kr(bus2, 1)
 
 
 
-	doneAction:2) );
+	doneAction:2) );*/
 
 
 	Out.kr(~seqBus,EnvGen.kr(Env.step([value],[dur]),doneAction: 2)   ) }).add;
+
+
 
 	SynthDef(\recLoop){|buf=0,out=0,recording = 1,in = (~toRecord)|
 	var input = In.ar(in,1);

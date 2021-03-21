@@ -122,7 +122,7 @@ Pbind(\instrument, \gate, \dur, Pxrand([ Pseq([1/4],16), Pseq([1/1],1)  ],1),\gr
 
 			Pbind(\instrument, \gate, \dur, Pxrand([ Pseq([1/4],16), Pseq([1/1],1),Pseq([4/1],1)    ],inf),\group, ~gateGrp,/*\relSu,Pfunc({0.12.exprand(0.04)}),*/
 \in, ~gateBus2,
-\relSu,Pfunc({0.12.exprand(0.04)}),
+\relSu,Pfunc({0.2.exprand(0.04)}),
 			\vlSub,Pfunc({0.8.exprand(0.4,1)}),\vlSub2,Pkey(\vlSub), \atkT,Pfunc({0.10.exprand(0.01)}),
 	\decT,Pfunc({0.5.exprand(0.7,0.3)}),
 	\subsT,Pfunc({0.3.exprand(0.4,0.1)}),
