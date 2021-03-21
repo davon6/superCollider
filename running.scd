@@ -727,7 +727,7 @@ SynthDef(\men,{|out = 0, dur|Out.ar(out,
 
 		// mod = SinOsc.ar(MouseX.kr(0,freq * mRatio + mod2), mul:freq * mRatio * iEnv);
 
-		mod = SinOsc.ar( MouseX.kr( freq * mRatio + mod2 ).poll*
+		mod = SinOsc.ar( MouseX.kr( freq * mRatio + mod2 )*
 
 		//mod = SinOsc.ar(freq * mRatio + mod2 *
 

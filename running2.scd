@@ -226,14 +226,14 @@ Pbind(\instrument, \filter, \dur,inf, \in,~hpK,\which,2,\busMod, ~bus5,\bus7,~bu
 
 Pxrand([
 	Pseq([
-	Pseq([  Prand([ ~perc[2]   ,  ~bar[3]],1),
+	Pseq([  Prand([ ~perc[2]   ,  /*~bar[3]*/],1),
 
 
 			Pbind(\instrument, \dispatchS10, \dur, Pseq([4/1],1),\in,Prand([ 0, ~rollingK],inf),\out,0,\tS, 0.39550810372374,\group,~dispatchGrp2)
 	],1),
 
 
-	Pseq([ Pwrand([ ~perc[3]   ,~bar[4] ],[4,1],1),
+	Pseq([ ~perc[3] ,/* Pwrand([ ~perc[3]   ,~bar[4] ],[4,1],1),*/
 
 
 	Pbind(\instrument, \dispatchS10, \dur, Pseq([2/1],1),\in,Prand([ 0, ~rollingK],inf),\out,0,\tS, 0.39550810372374,\group,~dispatchGrp2)
