@@ -264,7 +264,7 @@ MIDIdef.bend(\twi, { |val, chan, src|
 
 },ccNum: 93 );*/
 
-MIDIdef.cc(\freqx2, { |value|var modFreq = value.linlin(0, 127, 0.01, 2000);
+MIDIdef.cc(\freqx2, { |value|var modFreq = value.linlin(0, 127, 0.01, 659.255);
 
 
 	d.set(\freq,modFreq.round(0.01).postln);

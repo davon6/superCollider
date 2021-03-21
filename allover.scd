@@ -3,16 +3,29 @@
 
 s.plotTree
 
-~c=Synth(\gran,[\amp, 1,\buf, ~buf,\dur,99999,\gate, 1,\impulse,0.01,\duration,40
-	,\pos,0,\out, ~filterBus2] /*,~granuGrp*/ );
-
+~c=Synth(\gran,[\amp, 1,\buf, ~buf,\dur,99999,\gate, 1,\impulse,41.2,\duration,0.1
+	,\pos,0.75,\out, ~filterBus2] /*,~granuGrp*/ );
+s.meter
 ~buf.play
 ~bufSnoopy.play
 
-Synth(\recLoop,[\buf,~bufSnoopy,\recording,1,\group, ~compGrp,\in,0],~recGrp)
+Pbindef(\bou, \instrument, \gran,\amp, 1,\buf, ~buf,\dur,99999,\gate, 1,\impulse,41.2,\duration,0.1
+	,\pos,0.75,\out, ~filterBus2)
 
+
+Synth(\recLoop,[\buf,~bufSnoopy,\recording,1,\group, ~compGrp,\in,0],~recGrp)
+Pbindef(\bou,\impulse,0.001,\duration,3).play(t)
+	Pbindef(\bou,\impulse,41.2,\duration,0.1).play(t)
 (
 Ppar([
+
+	/*Pbindef(\bou, \instrument, \gran,\amp, 1,\buf, ~buf,\dur,99999,\gate, 1,\impulse,41.2,\duration,0.1
+	,\pos,0.75,\out, ~filterBus2),*/
+
+
+
+
+
 Pbind(\instrument, \lfo13, \val,~hzQbeat/4,\dur,Pseq([16/1],inf),\ph,Pxrand([1,0,2,3],inf), \out,  ~bus7, \group, ~lfoGrp),
 
 
@@ -27,11 +40,11 @@ Pbind(\instrument, \lfo13, \val,~hzQbeat/4,\dur,Pseq([16/1],inf),\ph,Pxrand([1,0
 
 	Pbind(\instrument, \filter, \dur,inf, \in,~filterBus2,\which,2,\busMod, ~bus5,\bus7,~bus7, \out,~distoBus4, \group,~filterGrp,\freqFil, 30.rrand(-30)),
 
-	Pbind(\instrument, \filter, \dur,inf, \in,~filterBus2,\which,2,\busMod, ~bus5,\bus7,~bus7, \out,~distoBus4, \group,~filterGrp,\freqFil, 30.rrand(-30)),
+/*	Pbind(\instrument, \filter, \dur,inf, \in,~filterBus2,\which,2,\busMod, ~bus5,\bus7,~bus7, \out,~distoBus4, \group,~filterGrp,\freqFil, 30.rrand(-30)),
 
 	Pbind(\instrument, \filter, \dur,inf, \in,~filterBus2,\which,2,\busMod, ~bus5,\bus7,~bus7, \out,~distoBus4, \group,~filterGrp,\freqFil, 30.rrand(-30)),
 
-	Pbind(\instrument, \filter, \dur,inf, \in,~filterBus2,\which,2,\busMod, ~bus5,\bus7,~bus7, \out,~distoBus4, \group,~filterGrp,\freqFil, 30.rrand(-30)),
+	Pbind(\instrument, \filter, \dur,inf, \in,~filterBus2,\which,2,\busMod, ~bus5,\bus7,~bus7, \out,~distoBus4, \group,~filterGrp,\freqFil, 30.rrand(-30)),*/
 
 
 Pbind(\instrument, \disto, \dur, inf, \in, ~distoBus4 , \out,~eqBus2 ,\group, ~distoGrp),
@@ -43,8 +56,9 @@ Pbind(\instrument, \disto, \dur, inf, \in, ~distoBus4 , \out,~eqBus2 ,\group, ~d
 		\val2, 3400.00.rrand(300,0.001),\quant2, 16.rrand(4,1), \gain2,(-8).rrand((-1),1)
 		,\frq, 100, \dur,inf, \group, ~eqGrp0,\vol,4),
 
+	Pxrand([
 
-	Pbind(\instrument, \gate, \dur, Pxrand([ Pseq([1/4],16), Pseq([1/1],4),Pseq([4/1],1)    ],inf),\group, ~gateGrp,/*\relSu,Pfunc({0.12.exprand(0.04)}),*/
+	Pbind(\instrument, \gate, \dur, Pxrand([ Pseq([1/4],16), Pseq([1/1],1),Pseq([4/1],1)    ],1),\group, ~gateGrp,/*\relSu,Pfunc({0.12.exprand(0.04)}),*/
 \in, ~gateBus2,
 
 			\vlSub,Pfunc({0.8.exprand(0.2,1)}),\vlSub2,Pkey(\vlSub), \atkT,Pfunc({0.20.exprand(0.01)}),
@@ -53,11 +67,14 @@ Pbind(\instrument, \disto, \dur, inf, \in, ~distoBus4 , \out,~eqBus2 ,\group, ~d
 	\relT,Pfunc({0.12.exprand(0.8,1)}),
 	\atckC,Pfunc({6.exprand(0,1)}),
 	\decC,Pfunc({-10.exprand(-2,1)}),
-		\relC,Pfunc({-8.exprand(-2,1) }),\out, 0  /*~toRecord*/)
+		\relC,Pfunc({-8.exprand(-2,1) }),\out, 0  /*~toRecord*/),
 
+Pbind(\instrument, \gate, \dur, Pxrand([ Pseq([1/4],16), Pseq([1/1],1)  ],1),\group, ~gateGrp,\relSu,Pfunc({0.12.exprand(0.04)}),
+\in, ~gateBus2,
 
+			\vlSub,1,\vlSub2,Pkey(\vlSub), \out, 0 )
 
-
+	],inf)
 	// ~bufSnoopy.play
 
 
@@ -65,7 +82,7 @@ Pbind(\instrument, \disto, \dur, inf, \in, ~distoBus4 , \out,~eqBus2 ,\group, ~d
 
 ],1).play(t)
 
-
+	/*\relSu,Pfunc({0.06.exprand(0.04)}),*/
 )
 (
 ~lfoGrp  = Group.new;
@@ -83,8 +100,16 @@ Pbind(\instrument, \disto, \dur, inf, \in, ~distoBus4 , \out,~eqBus2 ,\group, ~d
 
 
 (
+MIDIdef.cc(\r, { |value|var modFreq = value.linlin(0, 127, 1.0, 4.0);
 
-MIDIdef.cc(\o, { |value|var modFreq = value.linlin(0, 127, 41.2, 0.01);
+	~c.set(\pitchRte, "imp".postln;modFreq.round(0.1).postln);
+
+},ccNum: 18 );
+
+
+
+
+MIDIdef.cc(\o, { |value|var modFreq = value.linlin(0, 127, 41.2, 0.3);
 
 	~c.set(\impulse, "imp".postln;modFreq.round(0.01).postln);
 
