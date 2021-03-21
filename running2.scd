@@ -602,7 +602,7 @@ Pxrand([
 	\atckC,Pfunc({6.exprand(1,1)}),
 	\decC,Pfunc({-4.exprand(-0.1)}),
 		\relC,Pfunc({-6.exprand(-2,1)}),*/
-			\relSu,Pfunc({0.12.exprand(0.04)}),
+			\relSu,Pfunc({0.10.exprand(0.04)}),
 			\vlSub,Pfunc({0.8.exprand(0.4,1)}),\vlSub2,Pkey(\vlSub), \atkT,Pfunc({0.10.exprand(0.01)}),
 	\decT,Pfunc({0.6.exprand(0.8,0.3)}),
 	\subsT,Pfunc({0.3.exprand(0.4,0.1)}),
@@ -789,7 +789,7 @@ Pbind(\instrument, \gate, \dur, ~short,
 			\type, Pxrand([ /*Pseq([\note],256) , */Pseq([\note,\rest,\note,\rest, \rest,\note,\rest,\note].scramble,8),
 
 				Pseq([\rest,\rest,\note,\rest, \rest,\note,\rest,\rest].scramble,8)],inf), \group, ~gateGrp,
-				\relSu,Pfunc({0.12.exprand(0.04)}),
+				\relSu,Pfunc({0.10.exprand(0.04)}),
 			\vlSub,Pfunc({0.8.exprand(0.4,1)}),\vlSub2,Pkey(\vlSub), \atkT,Pfunc({0.10.exprand(0.01)}),
 	\decT,Pfunc({0.6.exprand(0.8,0.3)}),
 	\subsT,Pfunc({0.3.exprand(0.4,0.1)}),
@@ -813,7 +813,7 @@ Pbind(\instrument, \gate, \dur, ~short,
 		\relC,Pfunc({-4.exprand(-2,1) }),\out,  ~reverbBus23),
 
 
-Pbind(\instrument, \gate, \dur, Pxrand([ Pseq([1/4],16), Pseq([1/1],1)  ],1),\group, ~gateGrp,\relSu,Pfunc({0.12.exprand(0.04)}),
+Pbind(\instrument, \gate, \dur, Pxrand([ Pseq([1/4],16), Pseq([1/1],1)  ],1),\group, ~gateGrp,\relSu,Pfunc({0.10.exprand(0.04)}),
 \in, ~gateBus2,
 
 				\vlSub,1,\vlSub2,Pkey(\vlSub), \out,Pwrand([~micBus23,~micBus33,~reverbBus23],[1,1].normalizeSum,inf)),
@@ -831,7 +831,7 @@ Pbind(\instrument, \gate, \dur, Pxrand([ Pseq([1/4],16), Pseq([1/1],1)  ],1),\gr
  Pbindf( Prand([~quickFix, ~rShort, ~rLong]),\dur,inf, \in,~reverbBus23  , \out,~comFuzz23,\group,~revGrp),
 
 	Pbind(\instrument,\compS, \dur,Pseq([1/1],1),\thr,0.8 ,\sB, 1.015,\sA, 1/2,\atk ,0.0242, \rel ,0.0968,\gain,1,\in, ~comFuzz23 ,\ctrl, ~kbus, \out,~limitFuzz23, \group, ~compGrp),
-	Pbind(\instrument, \limiterS,\in, ~limitFuzz23, \dur, inf,\gain,20,\group,~limitGrp,\out,~stereoBus23),
+	Pbind(\instrument, \limiterS,\in, ~limitFuzz23, \dur, inf,\gain,30,\group,~limitGrp,\out,~stereoBus23),
 
 Pbind(\instrument,\stereoS, \dur, 9999, \in, ~stereoBus23   ,\out,~no3, \group, ~stereoGrp),
 
