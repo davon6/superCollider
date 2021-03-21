@@ -63,7 +63,7 @@ s.sync;
 
 	//this section initialize the shaper
 	"no of seg".postln;
-	numSegs= rrand(1,4).postln;
+	numSegs= rrand(1,2).postln;
 
 
 	~tf = Env(
@@ -76,12 +76,12 @@ s.sync;
 	~tf = ~tf + (
 		Signal.sineFill(
 			1025,
-			[1, 1/4, 1/6, 1/2],
+			[1,/* 1/4, 1/6,*/ 1/2],
 			{rrand(0,2pi)}!16
 		) / 4
 	);
 
-
+	// ~tf.plot
 	~tf = ~tf.normalize;
 
 	~tfBuf.loadCollection(~tf.asWavetableNoWrap);
