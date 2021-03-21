@@ -1500,7 +1500,7 @@ s.sync;
 
 ~hat = Pbind(\instrument,\percussion,\dur,Pseq([1/4], 64),\atk, 0,\rel,0.04840,\rel2,0.02420,\amp,Pseq([( -10.2), ( -10.2),( -10.2),( -11.2),( -9.2),( -9),( -10.2),( -14.2)],inf), \crv1, (-3), \crv1b, (-5), \modHz, exprand(500,10000).postln, \mulMod, rrand(100, 500).postln, \carHz, exprand(20,10000), \modAmp, 0.12875, \latch, 18500, \stereoR, 0.007,\out,~comBusHat);
 
-~snare = Pbind(\instrument, \snare,\carHz, 41.2 ,\type, Pseq([\rest ,\rest,\note,\rest], 8),\atk, 0.00502929687,\rel, 0.0968,\rel2, 0.3872,\dur, Pseq([1/2], inf),\amp,(-15.5), \crv1,(-8),\crv2,(-7)   ,\out,0/*~dipatchKB*/);//(-20.5) -28.5
+~snare = Pbind(\instrument, \snare,\carHz, 41.2 ,\type, Pseq([\rest ,\rest,\note,\rest], 8),\atk, 0.00502929687,\rel, 0.0968,\rel2, 0.3872,\dur, Pseq([1/2], inf),\amp,(-13.5), \crv1,(-8),\crv2,(-7)   ,\out,0/*~dipatchKB*/);//(-20.5) -28.5
 
 
 
