@@ -1,5 +1,5 @@
 ({EnvGen.kr(Env(
-	[0,0.8,~g=  0.7.exprand(0.1,1),~g,0],
+	[~v =0.5.exprand(0.01),0.8,~g=  0.7.exprand(0.1,1),~g,~v],
 	[0.10.exprand(0.01),0.6.exprand(0.8,0.3), 0.2.exprand(0.03,0.1),0.12.exprand(0.8,1)],
 	[6.exprand(1,1), -28.exprand(-0.1),0,-8.exprand(-2,1) ]))
 
