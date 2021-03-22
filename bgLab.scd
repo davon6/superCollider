@@ -5,7 +5,7 @@ MIDIIn.connectAll;
 
 MIDIIn.disconnectAll
 
-
+// ~bufBg.play
 
 ~notes = Array.newClear(128);
 

@@ -530,8 +530,8 @@ LFNoise0.kr(~hz1beat).range(0.1,0.0)/*,0.02)*/
 			SinOsc.ar(envF, mul: env)
 			,659.255,6, (-32));
 
-		sig = sig * amp.dbamp !2 ;
-
+		sig = sig * amp.dbamp  ;
+		sig = Pan2.ar(sig);
 		Out.ar(out, sig);
 	}).add;
 
@@ -558,7 +558,7 @@ LFNoise0.kr(~hz1beat).range(0.1,0.0)/*,0.02)*/
 
 		sig = BPeakEQ.ar(
 
-		BLowPass.ar(sig, lpf - In.ar(bus, 1)).round(2**(-16));
+			LPF.ar(LPF.ar(LPF.ar(LPF.ar(sig, lpf - In.ar(bus, 1)),lpf - In.ar(bus, 1)),lpf - In.ar(bus, 1)),lpf - In.ar(bus, 1)).round(2**(-16));
 
 			,659.255,12, (4));
 
@@ -931,7 +931,7 @@ env =   In.ar(in, 1) *    EnvGen.kr(Env(
 			[dur * atkT ,dur * decT  -relSu - In.kr(bus1, 1)  , dur * subsT-relSu,dur* relT],
 			[atckC,decC ,0     ,relC]),    //decC- (In.kr(bus2, 1)
 
-timeScale: 1,	doneAction:2);
+timeScale: tS,	doneAction:2);
 
 
 			/*[vlAtk,vlDec                  ,vlSub ,vlSub2,vlRel,0],
@@ -952,7 +952,7 @@ timeScale: 1,	doneAction:2);
 			[atckC,decC ,0     ,relC]),    //decC- (In.kr(bus2, 1)
 
 
-timeScale: 1,
+timeScale: tS,
 		doneAction:2);
 
 		Out.ar(out, env);
@@ -1295,7 +1295,7 @@ SynthDef(\fm, {
 			Env.new(
 
 			[1, 1 * 5, 1 * 5,4.8],
-			[0,0.000000000001,        (/*decE*/ /*dur*/30000   ),      0.0000000001],
+			[0,0.000000000001,        (/*decE*/ dur/*30000*/   ),      0.0000000001],
 			[4, 4,(-4)]
 		));
 

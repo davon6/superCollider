@@ -65,7 +65,7 @@ Synth(\filterU ,[\in,~filterBus2 ,\busMod, ~bus3 , \busMod2,~bus5,\out,   ~eqBus
 ~limitGrp = Group.after(~compGrp);
 ~stereoGrp = Group.after(~limitGrp);
 ~dispatchGrp2 = Group.after(~stereoGrp);
-~compGrp2 = Group.after(~dispatchGrp2);
+// ~compGrp2 = Group.after(~dispatchGrp2);
 ~eqGrp2 = Group.after(~compGrp2);
 ~finalDispatchGrp= Group.after(~eqGrp2);
 ~limitGrp2 = Group.after(~finalDispatchGrp);
@@ -330,6 +330,7 @@ Pseq([
 	//debug
 
 
+
 Pseq([
 
 		Pxrand([
@@ -356,9 +357,8 @@ Pseq([
 
 
 
+
 		Pxrand([
-
-
 
 
 
@@ -499,6 +499,8 @@ Pbind(\instrument, \disto, \dur, inf, \in, ~distoBus1 , \out,~eqBus1 ,\group, ~d
 	Pbind(\instrument,\stereo, \dur, 9999, \in, ~stereoBus1   ,\out,~no1, \group, ~stereoGrp),
 
 
+
+
 //debug
 
 
@@ -542,6 +544,7 @@ Pbindf( Prand([~quickFix, ~rShort, ~rLong]),\dur,inf, \in,~reverbSquelch  , \out
 
 
 
+
 //debug
 
 
@@ -570,8 +573,6 @@ Pbindf( Prand([~quickFix, ~rShort, ~rLong]),\dur,inf, \in,~reverbSquelch  , \out
 	Pbind(\instrument, \limiter,\in, ~limitFuzz2, \dur, inf,\gain,30,\group,~limitGrp,\out,~stereoBus2),
 
 Pbind(\instrument,\stereo, \dur, 9999, \in, ~stereoBus2   ,\out,~no1, \group, ~stereoGrp),
-
-
 
 
 
@@ -708,6 +709,7 @@ Pbind(\instrument, \gate, \dur, ~short,
 
 
 
+
 //debug
 
 	Ppar([
@@ -760,8 +762,6 @@ Pbind(\instrument, \gate, \dur, ~short,
 
 	Pbind(\instrument,\stereoS, \dur, Pseq([1/1],inf),\center,Pfunc({  (-0.4).rrand((0.4))   }) ,\in, ~stereoBus12   ,\out,~no2, \group, ~stereoGrp)
 ,
-
-
 
 
 
@@ -837,6 +837,7 @@ Pbind(\instrument,\stereoS, \dur, 9999, \in, ~stereoBus23   ,\out,~no3, \group, 
 
 
 
+
 Pxrand([
 
 
@@ -890,23 +891,6 @@ Pxrand([
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 //DEBUG one more SNOOPY
 
 	///THE IDEA
@@ -918,7 +902,7 @@ Pbind(\instrument,\gran,\dur,	Pseq([1/1],24)
 		,
 	\group,~granuGrp,
 		/*\type,Pseq([\rest,\rest,\rest,\note, \note,\rest,\rest,\rest].scramble,inf),*/
-		\amp, 1,\buf, ~bufSnoopy,\out,~reverbBus4,\gate, 1,\duration,Pkey(\dur),\impulse,Pkey(\dur),\pos,
+		\amp, 1,\buf, ~buf/*Snoopy*/,\out,~reverbBus4,\gate, 1,\duration,Pkey(\dur),\impulse,Pkey(\dur),\pos,
 			Prand([Pseq([0.99999.rand],24),Pseq([0.99999.rand],24),Pseq([0.99999.rand],24),Pseq([0.99999.rand],24),
 		Pseq([0.99999.rand],24),Pseq([0.99999.rand],24),Pseq([0.99999.rand],24),Pseq([0.99999.rand],24)
 
@@ -931,7 +915,7 @@ Pbind(\instrument,\gran,\dur,	Pseq([1/1],24)
 		,
 	\group,~granuGrp,
 		/*\type,Pseq([\rest,\note,\rest,\note, \rest,\rest,\rest,\rest].scramble,inf),*/
-		\amp, 1,\buf, ~bufSnoopy,\out,~reverbBus4,\gate, 1,\duration,Pkey(\dur),\impulse,Pkey(\dur),\pos,Prand([
+		\amp, 1,\buf, ~buf/*Snoopy*/,\out,~reverbBus4,\gate, 1,\duration,Pkey(\dur),\impulse,Pkey(\dur),\pos,Prand([
 				Pseq([0.99999.rand],24),Pseq([0.99999.rand],24),Pseq([0.99999.rand],24),Pseq([0.99999.rand],24),
 				Pseq([0.99999.rand],24),Pseq([0.99999.rand],24),Pseq([0.99999.rand],24),Pseq([0.99999.rand],24)
 
@@ -986,6 +970,7 @@ Pbind(\instrument,\gran,\dur,	Pseq([1/1],24)
 		,\in, ~stetoSnaCom1,\ctrl, ~snBus, \out,~eqBus10,\group, ~compGrp2),*/
 
 
+
 //main dispatch
 
 Pbind(\instrument, \dispatchS ,\dur,Pwrand([
@@ -1015,18 +1000,17 @@ Pbind(\instrument,\EQHP10, \in, ~eqBus10 ,\out, ~eqBus102,\frq, 100, \dur,inf,\g
 
 
 
-
-
 	Pbind(\instrument, \gateS, \dur, Pseq([Pseq([1/1],64),    Pseq([192/1],1)],inf) , \type,Pseq([Pseq([
 Pseq([\rest,\rest, \note,\rest,\rest,\rest,\rest, \note,\note,\rest,\rest,\note,\rest,\rest,\rest,\rest].scramble,1),
 		Pseq([\rest,\rest, \rest,\rest,\rest,\rest,\rest, \rest,\note,\rest,\rest,\note,\rest,\note,\note,\rest].scramble,1)],2)  , \note ],inf)       ,
-	\atkT, 0.2.rrand(0.08), \decT, 0.8.rrand(0.6),\relT, 0.2.rrand(0),\atkT, 4.rrand(1), \vlSub , 0.8.rrand(0.4), \vlSub2, Pkey(\vlSub),\relC, (-5).rrand(-1),
+	\atkT, 0.2.rrand(0.08), \decT, 0.8.rrand(0.6),\relT, 0.2.rrand(0),\atkT, 4.rrand(1), \vlSub , 0.8.rrand(0.4), \vlSub2, Pkey(\vlSub),\relC, (-5).rrand(-1),\tS, 0.39550810372374,
 	\in, ~eqBus102,\group, ~finalDispatchGrp, \out, ~toLimitlast),
 
 
 
 
 	Pbind(\instrument, \limiter10,\in, ~toLimitlast, \dur,inf,\gain,50,\group,~limitGrp2),
+
 
 
 
@@ -1046,13 +1030,11 @@ Pseq([\rest,\rest, \note,\rest,\rest,\rest,\rest, \note,\note,\rest,\rest,\note,
 		,\gain,1,\in, ~bgBus2 ,\ctrl, ~snBus, \out,~bgStereo2,\group,~finalDispatchGrp ),
 
 
-
 ],1).play(t, quant:1)
 
 
 
 )
-
 s.plotTree
 s.meter
 FreqScope.new

@@ -27,7 +27,7 @@ MIDIIn.disconnectAll;
 //CANT HEAR DELAY IN ARRANGEMENT
 (
 
-d = (Synth( \fm2, [\dur, inf,\stretch, 3.5,\mRatio, 1,\amp, 0.08,\cRatio, 1,\index, 1,\atkE, 0.1,\out,~outFil],~synthGrp));
+d = (Synth( \fm2, [\dur, inf,\stretch, 3.5,\mRatio, 1,\amp, 0.16,\cRatio, 1,\index, 1,\atkE, 0.1,\out,~outFil],~synthGrp));
 
  v = (Synth( \fm, [\dur, inf,\stretch, 3.5,\mRatio, 1,\cRatio, 1,\index, 1,\atkE, 0.1,\amp,0.5,\out, ~outFil],~synthGrp));
 
@@ -37,9 +37,8 @@ c =(Synth(\pulModul,[\modu,0.3]));
 m =(Synth(\ranModul,[\modu,0.3]));
 
 
-k = (Synth( \filterModu, [\dur, inf,\in,~outFil, \out, ~gateBus/*~toRecord*/],~filterGrp));
+k = (Synth( \filterModu, [\dur, inf,\in,~outFil, \out, ~gateBus],~filterGrp));
 
-//Pdef(\aaa, Pbind(\instrument, \sequ, \value,Pseq([104,500,200],inf),\dur,1)).play(t); NO
 
 
 Ppar([
@@ -47,16 +46,9 @@ Ppar([
 Pbindef(\aaa, \instrument, \sequ, \value,Pseq([1200.rand,1200.rand,1200.rand],inf),\dur,Pseq([4/1],inf),\in, ~outFil/*~toRecord*/,\group,~shapGrp),
 
 
-	Pbindef(\ga, \instrument, \gate ,\in,~gateBus   , \dur,Pseq([1/1],inf),\group,~shapGrp, \out, ~toRecord,\vlDec,1.8,
-	\vlSub,Pfunc({1.6.exprand(1.0,1)}),\vlSub2,Pkey(\vlSub),\atkT,Pfunc({0.20.exprand(0.01)}),
-	\decT,Pfunc({0.6.exprand(0.8,0.3)}),
-	\subsT,Pfunc({0.2.exprand(0.3,0.1)}),
-	\relT,Pfunc({0.12.exprand(0.8,1)}),
-	\atckC,Pfunc({6.exprand(1,1)}),
-	\decC,Pfunc({-4.exprand(-0.1)}),\relSu,Pfunc({0.10.exprand(0.04)}),
-		\relC,Pfunc({-8.exprand(-2,1) }))    ],1).play(t);
+	Pbindef(\ga, \instrument, \gate ,\in,~gateBus   ,\vlDec,1.8,\vlSub,1.8, \vlSub2,Pkey(\vlSub), \dur,Pseq([4/1],inf) ,    \group,~shapGrp, \out,~toRecord ,\tS, 0.39550810372374 ,\relSu,0,\atkT,0, \decT,1, \subsT,0, \relT,0, \atckC,0, \decC,0, \relC,0,\vlAtk,0) ],1).play(t);
 
-/*Pbindef(\ga2, \instrument, \gate     \group,~shapGrp\out, 0)*/
+
 
 
 MIDIdef.cc(\rateGate, { |value|var modFreq = value.linlin(0, 127, 10, 40);
@@ -86,8 +78,19 @@ Pbindef(\aaa,\dur,Pseq([4/1],inf),
 
 MIDIdef.noteOn(\rlong, {|vel, nn, chan, src|[nn];
 
-Pbindef(\aaa,\dur,Pseq([16/1],inf),
-\vlAtk,0,\vlDec,1,\vlSub,1, \vlSub2,1,\vlRel,0, \atkT,0, \decT,1, \subsT,0, \relT,0, \atckC,0, \decC,0, \relC,0,);
+/*Pbindef(\aaa,\dur,Pseq([16/1],inf),
+\vlAtk,0,\vlDec,1,\vlSub,1, \vlSub2,1,\vlRel,0, \atkT,0, \decT,1, \subsT,0, \relT,0, \atckC,0, \decC,0, \relC,0,);*/
+
+Pbindef(\ga,  \dur,Pxrand([Pseq([1/4],4),   Pseq([1/4],16), Pseq([1/1],1) ],inf),    \group,~shapGrp, \out,0 /*~toRecord*/,\vlDec,1.8,
+		\vlDec,1.8,
+	\vlSub,Pfunc({1.7.exprand(1.1,1)}),\vlSub2,Pkey(\vlSub),\atkT,Pfunc({0.10.exprand(0.01)}),
+	\decT,Pfunc({0.6.exprand(0.8,0.3)}),
+	\subsT,Pfunc({0.2.exprand(0.03,0.1)}),
+	\relT,Pfunc({0.12.exprand(0.8,1)}),
+	\atckC,Pfunc({6.exprand(1,1)}),
+	\decC,Pfunc({-28.exprand(-0.1)}),
+		\relC,Pfunc({-8.exprand(-2,1)}),\vlAtk ,Pfunc({1.00.exprand(0.01)}));
+
 
 },noteNum: 42);
 
@@ -114,7 +117,7 @@ Pbindef(\aaa,\dur,Pseq([1/1],inf),
 	\relT,Pfunc({0.12.exprand(0.8,1)}),
 	\atckC,Pfunc({6.exprand(1,1)}),
 	\decC,Pfunc({-4.exprand(-0.1)}),
-		\relC,Pfunc({-8.exprand(-2,1) }));
+		\relC,Pfunc({-8.exprand(-2,1) }),\relSu,Pfunc({0.20.exprand(0.01)}));
 
 },ccNum: 115);
 
@@ -141,9 +144,9 @@ MIDIdef.noteOn(\first, {|vel, nn, chan, src|
 v.set(\gate,1,\factor,0,\factor2,0);
 d.set(\gate,0);
 	Pbindef(\aaa,	\vlAtk,0,\vlDec,1,\vlSub,1, \vlSub2,1,\vlRel,0, \atkT,0, \decT,1, \subsT,0, \relT,0, \atckC,0, \decC,0, \relC,0,Pseq([4/1],inf));
+Pbindef(\ga   ,\vlDec,1.8,\vlSub,1.8, \vlSub2,Pkey(\vlSub), \dur,Pseq([4/1],inf) ,  \relSu,0,\atkT,0, \decT,1, \subsT,0, \relT,0, \atckC,0, \decC,0, \relC,0,);
 
-
-},noteNum: 36);
+},noteNum: 36); //button 1
 
 
 MIDIdef.noteOn(\modLfo, {|vel, nn, chan, src|[nn].postln;
@@ -237,7 +240,7 @@ MIDIdef.cc(\filRez2, { |value|var modFreq = value.linlin(0, 127, 0.3, 1);
 
 MIDIdef.cc(\c, { |value|var modFreq = value.linlin(61, 67, 1, 10);
 
-	//if(modFreq.round(1).postln ==1,{Pbindef(\aaa, \dur,Pseq([16/1],inf));},{});
+	if(modFreq.round(1).postln ==1,{Pbindef(\aaa, \dur,Pseq([16/1],inf));},{});
 	if(modFreq.round(1).postln ==3,{Pbindef(\aaa, \dur,Pseq([4/1],inf));},{});
 	if(modFreq.round(1).postln ==5,{Pbindef(\aaa, \dur,Pseq([1/1],inf));},{});
 	if(modFreq.round(1).postln ==7,{Pbindef(\aaa, \dur,Pseq([1/4],inf));},{});
@@ -309,4 +312,4 @@ MIDIdef.cc(\hey,{| func, ccNum, chan, srcID, argTemplate, dispatcher|
 
 )
 
-s.plotTree
+/*s.plotTree*/
