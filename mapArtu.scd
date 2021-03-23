@@ -18,7 +18,6 @@ MIDIIn.disconnectAll;
 ~filterGrp = Group.after(~synthGrp);
 ~shapGrp= Group.after(~filterGrp);
 
-
 ~recGrp= Group.after(~shapGrp);
 
 )
@@ -37,7 +36,7 @@ c =(Synth(\pulModul,[\modu,0.3]));
 m =(Synth(\ranModul,[\modu,0.3]));
 
 
-k = (Synth( \filterModu, [\dur, inf,\in,~outFil, \out, ~gateBus],~filterGrp));
+k = (Synth( \filterModu, [\dur, inf,\in,~outFil, \out, ~gateBus,\qf, 0.4, \qf2,0.4],~filterGrp));
 
 
 
@@ -46,7 +45,34 @@ Ppar([
 Pbindef(\aaa, \instrument, \sequ, \value,Pseq([1200.rand,1200.rand,1200.rand],inf),\dur,Pseq([4/1],inf),\in, ~outFil/*~toRecord*/,\group,~shapGrp),
 
 
-	Pbindef(\ga, \instrument, \gate ,\in,~gateBus   ,\vlDec,1.8,\vlSub,1.8, \vlSub2,Pkey(\vlSub), \dur,Pseq([4/1],inf) ,    \group,~shapGrp, \out,~toRecord ,\tS, 0.39550810372374 ,\relSu,0,\atkT,0, \decT,1, \subsT,0, \relT,0, \atckC,0, \decC,0, \relC,0,\vlAtk,0,\vlRel,Pkey(\vlAtk)) ],1).play(t);
+	/*Pbindef(\ga,*/
+
+	Pxrand([
+	Pbind(\instrument, \gate ,\in,~gateBus   ,\vlDec,1.8,\vlSub,1.8, \vlSub2,Pkey(\vlSub),
+		\dur,Pxrand([ Pseq([16/1],1), Pseq([4/1],1) ],1),    \group,~shapGrp, \out,~toRecord ,\tS, 0.39550810372374 ,\relSu,0,\atkT,0, \decT,1, \subsT,0, \relT,0, \atckC,0, \decC,0, \relC,0,\vlAtk,0,\vlRel,Pkey(\vlAtk)),
+
+		Pbind(\instrument, \gate ,\in,~gateBus   ,\vlDec,1.8,
+		\dur,Pxrand([Pseq([1/4],4),   Pseq([1/4],16), Pseq([1/1],1) ],3) ,    \group,~shapGrp, \out,~toRecord,\tS, 0.39550810372374,
+		\vlSub,Pfunc({1.7.exprand(1.1,1)}),\vlSub2,Pkey(\vlSub),\atkT,Pfunc({0.10.exprand(0.01)}),
+	\decT,Pfunc({0.6.exprand(0.8,0.3)}),
+	\subsT,Pfunc({0.2.exprand(0.03,0.1)}),
+	\relT,Pfunc({0.12.exprand(0.8,1)}),
+	\atckC,Pfunc({6.exprand(1,1)}),
+	\decC,Pfunc({-28.exprand(-0.1)}),
+		\relC,Pfunc({-8.exprand(-2,1)}),\vlAtk ,Pfunc({1.00.exprand(0.01)}),\vlRel,Pkey(\vlAtk)
+	)
+	],inf)
+
+
+
+
+
+
+
+
+
+
+],1).play(t);
 
 
 
@@ -78,10 +104,10 @@ Pbindef(\aaa,\dur,Pseq([4/1],inf),
 
 MIDIdef.noteOn(\rlong, {|vel, nn, chan, src|[nn];
 
-/*Pbindef(\aaa,\dur,Pseq([16/1],inf),
-\vlAtk,0,\vlDec,1,\vlSub,1, \vlSub2,1,\vlRel,0, \atkT,0, \decT,1, \subsT,0, \relT,0, \atckC,0, \decC,0, \relC,0,);*/
+Pbindef(\aaa,\dur,Pseq([16/1],inf),
+\vlAtk,0,\vlDec,1,\vlSub,1, \vlSub2,1,\vlRel,0, \atkT,0, \decT,1, \subsT,0, \relT,0, \atckC,0, \decC,0, \relC,0,);
 
-Pbindef(\ga,  \dur,Pxrand([Pseq([1/4],4),   Pseq([1/4],16), Pseq([1/1],1) ],inf),    \group,~shapGrp, \out,0 /*~toRecord*/,\vlDec,1.8,
+/*Pbindef(\ga,  \dur,Pxrand([Pseq([1/4],4),   Pseq([1/4],16), Pseq([1/1],1) ],inf),    \group,~shapGrp, \out,0 /*~toRecord*/,\vlDec,1.8,
 		\vlDec,1.8,
 	\vlSub,Pfunc({1.7.exprand(1.1,1)}),\vlSub2,Pkey(\vlSub),\atkT,Pfunc({0.10.exprand(0.01)}),
 	\decT,Pfunc({0.6.exprand(0.8,0.3)}),
@@ -89,7 +115,7 @@ Pbindef(\ga,  \dur,Pxrand([Pseq([1/4],4),   Pseq([1/4],16), Pseq([1/1],1) ],inf)
 	\relT,Pfunc({0.12.exprand(0.8,1)}),
 	\atckC,Pfunc({6.exprand(1,1)}),
 	\decC,Pfunc({-28.exprand(-0.1)}),
-		\relC,Pfunc({-8.exprand(-2,1)}),\vlAtk ,Pfunc({1.00.exprand(0.01)}),\vlRel,Pkey(\vlAtk));
+		\relC,Pfunc({-8.exprand(-2,1)}),\vlAtk ,Pfunc({1.00.exprand(0.01)}),\vlRel,Pkey(\vlAtk));*/
 
 
 },noteNum: 42);
