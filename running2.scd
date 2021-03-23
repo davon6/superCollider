@@ -855,7 +855,7 @@ Pbind(\instrument,\gran,\dur,	Pseq([1/1],24)
 
 
 
-	Pbind(\instrument,\gran,\dur,         Pseq([4/1],16)
+	Pbind(\instrument,\gran,\dur,         Pseq([4/1],inf)
 		,
 /*	\group,~granuGrp,*/
 		/*\type,Pseq([\rest,\note,\rest,\note, \rest,\rest,\rest,\rest].scramble,inf),*/
@@ -896,11 +896,11 @@ Pbind(\instrument,\gran,\dur,	Pseq([1/1],24)
 
 //main dispatch
 
-Pbind(\instrument, \dispatchS ,\dur,Pwrand([
+Pbind(\instrument, \gateS ,\dur,Pwrand([
 		Pseq([16/1],1),
 		Pseq([4/1],4), Pseq([1/1],16)/*,Pseq([1/4],64),*/
 
-	],[1,4,4],           inf),
+	],[1,4,4],           inf),\tS, 0.39550810372374, \vlSub,1, \vlSub2, Pkey(\vlSub),
 
 	\in , Pwrand([ ~no1, ~no2,~no3],[1,1,4],inf) ,\out,~stetoSnaCom1  ,\group,~dispatchGrp2),
 
@@ -922,7 +922,7 @@ Pbind(\instrument, \dispatchS ,\dur,Pwrand([
 
 		Pbind(\instrument, \gateS, \dur, Pseq([Pseq([1/1],64),    Pseq([192/1],1)],inf) , \type,Pseq([Pseq([
 Pseq([\rest,\rest, \note,\rest,\rest,\rest,\rest, \note,\note,\rest,\rest,\note,\rest,\rest,\rest,\rest].scramble,1),
-		Pseq([\rest,\rest, \rest,\rest,\rest,\rest,\rest, \rest,\note,\rest,\rest,\note,\rest,\note,\note,\rest].scramble,1)],2)  , \note ],inf)       ,
+		Pseq([\rest,\rest, \rest,\rest,\rest,\rest,\rest, \rest,\note,\rest,\rest,\note,\rest,\note,\note,\rest].scramble,1)],2)  , \note ],inf)        ,
 	\atkT, 0.2.rrand(0.08), \decT, 0.8.rrand(0.6),\relT, 0.2.rrand(0),\atkT, 4.rrand(1), \vlSub , 0.8.rrand(0.4), \vlSub2, Pkey(\vlSub),\relC, (-5).rrand(-1),\tS, 0.39550810372374,
 	\in, ~eqBus102,\group, ~finalDispatchGrp, \out, ~toLimitlast),
 
@@ -991,3 +991,4 @@ s.plotTree
 s.meter
 FreqScope.new
 
+~buf.play
