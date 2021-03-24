@@ -21,7 +21,7 @@ Synth(\recLoop,[\buf,~bufSnoopy,\recording,1,\group, ~compGrp,\in,0],~recGrp)
 
 Synth(\lead,[\freq, 659.26,\out, ~filterBus2])
 
-
+Synth(\lead,[\freq, 659.26,\out, 0])
 
 (
 Ppar([

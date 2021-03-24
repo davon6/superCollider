@@ -398,7 +398,7 @@ s.sync;
 
 	SinOsc.kr(Select.kr(LFNoise2.ar(~hz1beat).range(0,3).round(1),
 		[    ~hz1beat/4,~hz1beat,~hz1beat,~hzHbeat,/*~hz1beat *4*/ /*,~hzHbeat*4   */  /*,0.321875*/	]
-		)    *  SinOsc.kr(~hzHbeat*4).range((~hz1beat.neg),~hz1beat),ph).range(~hz8Oct/4,~hz1Oct/4)
+		)    *  SinOsc.kr(~hzHbeat*4).range((~hz1beat.neg),~hz1beat),ph).range(~hz8Oct/16,~hz1Oct/4)
 
 
 		*EnvGen.kr(Env.step([1,0],[dur,0]),doneAction: 2))}).add;
@@ -545,14 +545,14 @@ LFNoise0.kr(~hz1beat).range(0.1,0.0)/*,0.02)*/
 	SynthDef(\bass,{
 		arg freq=41.2, dure=1, amp=0.5,
 		atkcrv=1, relcrv=5,
-		atk=0, rel=0.1, lpf=100, out = 0, bus, dur;
+		atk=0, rel=0.1, lpf=100, out = 0, bus, dur,cho=0;
 
 		var sig, env, lvlBa;
 
 		env = EnvGen.ar(
 			Env(
 				[0,1,0],
-				[atk,rel],
+				[atk,rel-cho],
 				[atkcrv,relcrv]
 			),
 			doneAction:2
@@ -1490,20 +1490,22 @@ s.sync;
 
 
 
-	~kick =	Pbindef(\ki, \instrument, \kick,\dur, Pseq([1/1],1),\amp,(-1),\out,0);//-3.5 - 10.5
+	~kick =	Pbindef(\ki, \instrument, \kick,\dur, Pseq([1/1],1),\amp,(-4),\out,0);//-3.5 - 10.5
 
 	~bassShap = Pbind(\instrument, \shap, \dur,Pseq([1/1],inf),\dA1,2,\out,~bassShapB);
 
 	~bass = Pbindef(\bass,
 		\instrument, \bass,
 		\type, Pseq([\rest, \note, \note, \note], inf),
+
+		\cho, Pseq([0,0.004,0.008,0],inf),
 		\dur, Pseq([1/4],4),\lpf,100,
 		\midinote, 28, \bus, ~bassShapB,
 		\atk, t.beatDur/4 * 0.01,
 		\rel, t.beatDur/4 * 0.82,
 		\atkcrv, -2,
 		\relcrv, -1,
-		\amp, (-5),\out,0/*~again*//*~dipatchKB*///-10   -17
+		\amp, (-8),\out,0/*~again*//*~dipatchKB*///-10   -17
 	);
 
 	~cymbal = Pbind(\instrument, \percussion,\type, Pseq([\rest,\rest,\note,\note ,\rest,\note ,\note, \rest].scramble,inf),\dur,Pseq([1/4],64 ),\carHz, 525.12070612224,\modHz,1899.3343179398,\modAmp, 0.12875 ,\amp,(-8.3),\rel,Pseq([1/16],inf),\rel2,Pseq([1/16],inf),\latch,8000,\stereoL, 0.00555, \crv1,  (-4.4), \crv1b,(-4), \mulMod, 1691,\out, ~comBusCymb);
