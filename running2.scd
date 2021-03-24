@@ -1083,7 +1083,7 @@ Pseq([\rest,\rest, \note,\rest,\rest,\rest,\rest, \note,\note,\rest,\rest,\note,
 
 
 
-	Pbind(\instrument, \limiter10,\in, ~toLimitlast, \out, ~new10,\dur,inf,\gain,1,\group,~limitGrp2),
+	Pbind(\instrument, \limiter10,\in, ~toLimitlast, \out, ~new10,\dur,inf,\gain,10,\group,~limitGrp2),
 
 
 

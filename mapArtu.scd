@@ -26,9 +26,9 @@ MIDIIn.disconnectAll;
 //CANT HEAR DELAY IN ARRANGEMENT
 (
 
-d = (Synth( \fm2, [\dur, inf,\stretch, 3.5,\mRatio, 1,\amp, 0.16,\cRatio, 1,\index, 1,\atkE, 0.1,\out,~toRecord/*~outFil*/],~synthGrp));
+d = (Synth( \fm2, [\dur, inf,\stretch, 3.5,\mRatio, 1,\amp, 0.16,\cRatio, 1,\index, 1,\atkE, 0.1,\out,~outFil],~synthGrp));
 
- v = (Synth( \fm, [\dur, inf,\stretch, 3.5,\mRatio, 1,\cRatio, 1,\index, 1,\atkE, 0.1,\amp,0.5,\out,~toRecord /*~outFil*/],~synthGrp));
+ v = (Synth( \fm, [\dur, inf,\stretch, 3.5,\mRatio, 1,\cRatio, 1,\index, 1,\atkE, 0.1,\amp,0.5,\out,~outFil],~synthGrp));
 
 z=(Synth(\sinModul,[\modu,0.3]));
 n= (Synth(\sawModul,[\modu,0.3]));
@@ -36,7 +36,7 @@ c =(Synth(\pulModul,[\modu,0.3]));
 m =(Synth(\ranModul,[\modu,0.3]));
 
 
-// k = (Synth( \filterModu, [\dur, inf,\in,~outFil, \out, ~toRecord/*~gateBus*/,\qf, 0.4, \qf2,0.4],~filterGrp));
+ k = (Synth( \filterModu, [\dur, inf,\in,~outFil, \out,~toRecord/*~gateBus*/,\qf, 0.4, \qf2,0.4,\filMod,100],~filterGrp));
 
 
 
@@ -233,7 +233,24 @@ MIDIdef.cc(\wfil, { |value|var modFreq = value.linlin(0, 127, 0, 1);
 
 },ccNum: 115 );*/
 
-MIDIdef.cc(\fil, { |value|var modFreq = value.linlin(0, 127, 30, 3500);
+
+//filter here
+
+
+
+MIDIdef.bend(\ben, { |val, chan, src|
+
+
+	k.set(\filMod,  val.linlin(0,16383,50,1400).postln);
+
+
+	 if( val.linlin(0,16383,50,1400) <60,{k.set(\which,0);"yo".postln},{});
+		if( val.linlin(0,16383,50,1400) >1350,{k.set(\which,1);"yo2".postln},{});
+
+	//~notes.set(\mod,modFreq.round(1).postln);
+}, chan:  0);
+
+/*MIDIdef.cc(\fil, { |value|var modFreq = value.linlin(0, 127, 30, 3500);
 
 	 if(modFreq.round(1).postln <50,{k.set(\which,0);"yo".postln},{});
 		if(modFreq.round(1).postln >3410,{k.set(\which,1);"yo2".postln},{});
@@ -243,7 +260,11 @@ MIDIdef.cc(\fil, { |value|var modFreq = value.linlin(0, 127, 30, 3500);
 
 	k.set(\filMod, modFreq.round(1));
 
-},ccNum: 1 );
+},ccNum: 1 );*/
+
+
+
+
 
 
 /*MIDIdef.cc(\fil2, { |value|var modFreq = value.linlin(0, 127, 60, 4200);
