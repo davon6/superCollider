@@ -830,7 +830,7 @@ Pbind(\instrument, \gate, \dur, ~short,
 	\decC,Pfunc({-28.exprand(-0.1)}),
 		\relC,Pfunc({-8.exprand(-2,1)}),\vlAtk ,Pfunc({1.00.exprand(0.01)}),\vlRel,Pkey(\vlAtk),
 			\in, ~gateBus2,\out,
-			~reverbBus23/*Pwrand([~micBus23,/*~micBus33,*/~reverbBus23],[1,1].normalizeSum,inf)*/),
+			Pwrand([~micBus23,/*~micBus33,*/~reverbBus23],[1,1].normalizeSum,inf)),
 	//new
 
 			Pbind(\instrument, \gate, \dur, Pxrand([ Pseq([1/4],16), Pseq([1/1],1),Pseq([4/1],1)    ],1),\group, ~gateGrp,/*\relSu,Pfunc({0.12.exprand(0.04)}),*/
@@ -855,7 +855,7 @@ Pbind(\instrument, \gate, \dur, ~short,
 Pbind(\instrument, \gate, \dur, Pxrand([ Pseq([1/4],16), Pseq([1/1],1)  ],1),\group, ~gateGrp,\relSu,Pfunc({0.10.exprand(0.04)}),
 \in, ~gateBus2,
 
-				\vlSub,1,\vlSub2,Pkey(\vlSub), \out, ~reverbBus23/*Pwrand([~micBus23,~micBus33,~reverbBus23],[1,1].normalizeSum,inf)*/),
+				\vlSub,1,\vlSub2,Pkey(\vlSub), \out,Pwrand([~micBus23,~micBus33,~reverbBus23],[1,1].normalizeSum,inf)),
 
 
 
