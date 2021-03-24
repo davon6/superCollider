@@ -331,6 +331,8 @@ s.sync;
 	~riComp=  Bus.audio(s,2);
 	~riLimit=  Bus.audio(s,2);   /* ===>random ~flanger would be awe*/
 ~riStereo=  Bus.audio(s,2);
+
+	~gateBou=  Bus.audio(s,2);
 	s.sync;
 
 	~bus1 = Bus.control(s,1);
@@ -560,11 +562,13 @@ LFNoise0.kr(~hz1beat).range(0.1,0.0)/*,0.02)*/
 		sig = sig.lincurve(-1,1,-1,1,-7);
 
 
-		sig = BPeakEQ.ar(
+		sig =   BPeakEQ.ar(
+			BPeakEQ.ar(
 
 			LPF.ar(LPF.ar(LPF.ar(LPF.ar(sig, lpf - In.ar(bus, 1)),lpf - In.ar(bus, 1)),lpf - In.ar(bus, 1)),lpf - In.ar(bus, 1)).round(2**(-16));
 
-			,659.255,12, (4));
+			,659.255,12, (4))
+			,164.81375,12, (12));
 
 	//sig = LPF.ar(LPF.ar LPF.ar(LPF.ar(sig, lpf - In.ar(bus, 1)).round(2**(-16)
 
@@ -1499,7 +1503,7 @@ s.sync;
 		\rel, t.beatDur/4 * 0.82,
 		\atkcrv, -2,
 		\relcrv, -1,
-		\amp, (-3),\out,0/*~again*//*~dipatchKB*///-10   -17
+		\amp, (-5),\out,0/*~again*//*~dipatchKB*///-10   -17
 	);
 
 	~cymbal = Pbind(\instrument, \percussion,\type, Pseq([\rest,\rest,\note,\note ,\rest,\note ,\note, \rest].scramble,inf),\dur,Pseq([1/4],64 ),\carHz, 525.12070612224,\modHz,1899.3343179398,\modAmp, 0.12875 ,\amp,(-8.3),\rel,Pseq([1/16],inf),\rel2,Pseq([1/16],inf),\latch,8000,\stereoL, 0.00555, \crv1,  (-4.4), \crv1b,(-4), \mulMod, 1691,\out, ~comBusCymb);

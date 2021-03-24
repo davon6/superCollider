@@ -36,7 +36,7 @@ c =(Synth(\pulModul,[\modu,0.3]));
 m =(Synth(\ranModul,[\modu,0.3]));
 
 
-k = (Synth( \filterModu, [\dur, inf,\in,~outFil, \out, ~gateBus,\qf, 0.4, \qf2,0.4],~filterGrp));
+k = (Synth( \filterModu, [\dur, inf,\in,~outFil, \out, ~toRecord/*~gateBus*/,\qf, 0.4, \qf2,0.4],~filterGrp));
 
 
 
@@ -47,7 +47,7 @@ Pbindef(\aaa, \instrument, \sequ, \value,Pseq([1200.rand,1200.rand,1200.rand],in
 
 	/*Pbindef(\ga,*/
 
-	Pxrand([
+	/*Pxrand([
 	Pbind(\instrument, \gate ,\in,~gateBus   ,\vlDec,1.8,\vlSub,1.8, \vlSub2,Pkey(\vlSub),
 		\dur,Pxrand([ Pseq([16/1],1), Pseq([4/1],1) ],1),    \group,~shapGrp, \out,~toRecord ,\tS, 0.39550810372374 ,\relSu,0,\atkT,0, \decT,1, \subsT,0, \relT,0, \atckC,0, \decC,0, \relC,0,\vlAtk,0,\vlRel,Pkey(\vlAtk)),
 
@@ -61,7 +61,7 @@ Pbindef(\aaa, \instrument, \sequ, \value,Pseq([1200.rand,1200.rand,1200.rand],in
 	\decC,Pfunc({-28.exprand(-0.1)}),
 		\relC,Pfunc({-8.exprand(-2,1)}),\vlAtk ,Pfunc({1.00.exprand(0.01)}),\vlRel,Pkey(\vlAtk)
 	)
-	],inf)
+	],inf)*/
 
 
 
