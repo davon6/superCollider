@@ -82,11 +82,11 @@ s.sync;
 		\rel, t.beatDur/4 * 0.82,
 		\atkcrv, -2,
 		\relcrv, -1,
-		\amp, (-8),\out,0/*~again*//*~dipatchKB*///-10   -17
+		\amp, (-10),\out,0/*~again*//*~dipatchKB*///-10   -17
 	);
 
 
-~kick =	Pbindef(\ki, \instrument, \kick,\dur, Pseq([1/1],1),\amp,(-4),\out,0);
+~kick =	Pbindef(\ki, \instrument, \kick,\dur, Pseq([1/1],1),\amp,(-6),\out,0);
 	s.sync;
 
 	Ppar([~kick, ~bass],inf).play(t)
