@@ -1159,14 +1159,14 @@ Pseq([
 
 				/*Pseq([ ~newCOn,~new10,~new10,~new10,~new10,~new10,~new10,~new10 ].scramble,256 )*/
 
-				,\ctrl, ~snBus, \out,~eqBus10,\group, ~compGrp2,\tS, 0.39550810372374,),].scramble, 64),
+				,\ctrl, ~snBus, \out,~eqBus10,\group, ~compGrp2,\tS, 0.39550810372374,),].scramble, 16),
 
 
 
 
 
-		Pbind(\instrument,\comp10, \dur,Pseq([256/1],1),\thr,0.4 ,\sB, 1.04,\sA, 0.2,\atk ,0.0968, \rel ,0.3872
-			,\in, ~new10  ,\ctrl, ~snBus, \out,~eqBus10,\group, ~compGrp2,\tS, 0.39550810372374,)
+		Pbind(\instrument,\comp10, \dur,Pseq([64/1],1),\thr,0.4 ,\sB, 1.04,\sA, 0.2,\atk ,0.0968, \rel ,0.3872
+			,\in, ~new10  ,\ctrl, ~snBus, \out,~no3/*~eqBus10*/,\group, ~compGrp2,\tS, 0.39550810372374,)
 
 
 
