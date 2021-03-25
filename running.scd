@@ -936,7 +936,7 @@ SynthDef(\dispatch2,{|in, out, dur|Out.ar(out, In.ar(in,2)* EnvGen.kr(Env([0,1,1
 
 env =   In.ar(in, 1) *    EnvGen.kr(Env(
 			[vlAtk,vlDec                  ,vlSub ,vlSub2,vlRel,0],
-			[dur * atkT ,dur * decT  -relSu - In.kr(bus1, 1)  , dur * subsT-relSu,dur* relT],
+			[dur * atkT ,dur * decT  -relSu /*- In.kr(bus1, 1)*/  , dur * subsT-relSu,dur* relT],
 			[atckC,decC ,0     ,relC]),    //decC- (In.kr(bus2, 1)
 
 timeScale: tS,	doneAction:2);

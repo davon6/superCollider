@@ -2,7 +2,10 @@
 //Pseq([~toUse2],inf).play(t);
 
 	Ppar([~bassShap,Ppar([Pbindf(~kick,\amp, 2),Pbindf(~bass,\amp, 2 ),],inf)],1).play(t);
-x = Synth(\recLoop,[buf:~buf,\recording,1, \in,~toRecord],~recGrp);
+// x = Synth(\recLoop,[buf:~buf,\recording,1, \in,~toRecord],~recGrp);
+
+
+x = Synth(\recLoop,[buf:~bufSnoopy,\recording,1, \in,~toRecord],~recGrp);
 )
 x.free;
 ~buf.play
@@ -36,7 +39,7 @@ c =(Synth(\pulModul,[\modu,0.3]));
 m =(Synth(\ranModul,[\modu,0.3]));
 
 
- k = (Synth( \filterModu, [\dur, inf,\in,~outFil, \out,~toRecord/*~gateBus*/,\qf, 0.4, \qf2,0.4,\filMod,100],~filterGrp));
+ k = (Synth( \filterModu, [\dur, inf,\in,~outFil, \out,/*~toRecord*/~gateBus,\qf, 0.4, \qf2,0.4,\filMod,100],~filterGrp));
 
 
 
@@ -45,9 +48,9 @@ Ppar([
 Pbindef(\aaa, \instrument, \sequ, \value,Pseq([1200.rand,1200.rand,1200.rand],inf),\dur,Pseq([4/1],inf),\in, ~outFil/*~toRecord*/,\group,~shapGrp),
 
 
-	/*Pbindef(\ga,*/
+//special mode
 
-	/*Pxrand([
+	Pxrand([
 	Pbind(\instrument, \gate ,\in,~gateBus   ,\vlDec,1.8,\vlSub,1.8, \vlSub2,Pkey(\vlSub),
 		\dur,Pxrand([ Pseq([16/1],1), Pseq([4/1],1) ],1),    \group,~shapGrp, \out,~toRecord ,\tS, 0.39550810372374 ,\relSu,0,\atkT,0, \decT,1, \subsT,0, \relT,0, \atckC,0, \decC,0, \relC,0,\vlAtk,0,\vlRel,Pkey(\vlAtk)),
 
@@ -61,7 +64,7 @@ Pbindef(\aaa, \instrument, \sequ, \value,Pseq([1200.rand,1200.rand,1200.rand],in
 	\decC,Pfunc({-28.exprand(-0.1)}),
 		\relC,Pfunc({-8.exprand(-2,1)}),\vlAtk ,Pfunc({1.00.exprand(0.01)}),\vlRel,Pkey(\vlAtk)
 	)
-	],inf)*/
+	],inf)
 
 
 
@@ -236,9 +239,9 @@ MIDIdef.cc(\wfil, { |value|var modFreq = value.linlin(0, 127, 0, 1);
 
 //filter here
 
+//ususal
 
-
-MIDIdef.bend(\ben, { |val, chan, src|
+/*MIDIdef.bend(\ben, { |val, chan, src|
 
 
 	k.set(\filMod,  val.linlin(0,16383,50,1400).postln);
@@ -248,9 +251,13 @@ MIDIdef.bend(\ben, { |val, chan, src|
 		if( val.linlin(0,16383,50,1400) >1350,{k.set(\which,1);"yo2".postln},{});
 
 	//~notes.set(\mod,modFreq.round(1).postln);
-}, chan:  0);
+}, chan:  0);*/
 
-/*MIDIdef.cc(\fil, { |value|var modFreq = value.linlin(0, 127, 30, 3500);
+
+
+
+//Special mode
+MIDIdef.cc(\fil, { |value|var modFreq = value.linlin(0, 127, 30, 3500);
 
 	 if(modFreq.round(1).postln <50,{k.set(\which,0);"yo".postln},{});
 		if(modFreq.round(1).postln >3410,{k.set(\which,1);"yo2".postln},{});
@@ -260,7 +267,7 @@ MIDIdef.bend(\ben, { |val, chan, src|
 
 	k.set(\filMod, modFreq.round(1));
 
-},ccNum: 1 );*/
+},ccNum: 1 );
 
 
 
