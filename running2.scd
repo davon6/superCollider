@@ -1136,7 +1136,7 @@ Pseq([\rest,\rest, \note,\rest,\rest,\rest,\rest, \note,\note,\rest,\rest,\note,
 			,\in, ~new10  ,\ctrl, ~snBus, \out,~eqBus10,\group, ~compGrp2,\tS, 0.39550810372374,),*/
 
 
-	Prand([//you want Pxrand here
+	Pxrand([//you want Pxrand here
 	Pbind(\instrument,\comp10, \dur,  Pseq([4/1],16) /*Pseq([1/1],256)*/,\thr,0.4 ,\sB, 1.04,\sA, 0.2,\atk ,0.0968, \rel ,0.3872
 		,\in,Pseq([ ~newCOn,~new10/*,~newCOn,~new10,~newCOn,~new10,~newCOn*/ ],16 )
 
