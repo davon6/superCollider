@@ -98,7 +98,7 @@ o = {
 
 	/*Out.kr(~bus13, SinOsc.kr(0.64375).range(20.6,41.20));*/
 
-	Out.kr(~bus14, SinOsc.kr(0.321875).range(-1,1));
+	Out.kr(~bus14, SinOsc.kr(0.321875).range(-1,1));//NOT USED
 
 
 	/*Out.kr(~bus3, SinOsc.kr(0.3 ).range((-140),1500));*/
@@ -1154,7 +1154,7 @@ Pseq([
 
 			,\ctrl, ~snBus, \out,~eqBus10,\group, ~compGrp2,\tS, 0.39550810372374,),
 
-			Pbind(\instrument,\comp10, \dur,  Pseq([3/4],1) /*Pseq([1/1],256)*/,\thr,0.4 ,\sB, 1.04,\sA, 0.2,\atk ,0.0968, \rel ,0.3872
+			Pbind(\instrument,\comp10, \dur,  Pseq([3/1],1) /*Pseq([1/1],256)*/,\thr,0.4 ,\sB, 1.04,\sA, 0.2,\atk ,0.0968, \rel ,0.3872
 		,\in,Pxrand([~newCOn,~new10,],inf )
 
 				/*Pseq([ ~newCOn,~new10,~new10,~new10,~new10,~new10,~new10,~new10 ].scramble,256 )*/
