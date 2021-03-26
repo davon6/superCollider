@@ -1030,19 +1030,27 @@ Pbind(\instrument,\gran,\dur,	Pseq([1/1],24)
 	Pbind(\instrument,\stereo, \dur, 9999, \in, ~stereoPerch ,\spread,1  ,\center,Pxrand([ Pfunc({0.80.rand}),Pfunc({-0.80.rand})],inf), \out,~stetoSnaCom12/*~no1*/, \group, ~stereoGrp),
 
 
+//HAVE A 16/1 WOULD INCREASE THE FU HERE + 16/1 birng back the slow atttack probleme from grainbuf
 
-	Pbind(\instrument,\gran,\dur,         Pseq([4/1],inf)
-		,
+	Prand([
+	Pbind(\instrument,\gran,\dur,   Pseq([4/1],4),
 /*	\group,~granuGrp,*/
 		/*\type,Pseq([\rest,\note,\rest,\note, \rest,\rest,\rest,\rest].scramble,inf),*/
-		\amp, 1,\buf, ~buf/*Snoopy*/,\out,~filterBou,\gate, 1,\duration,Pkey(\dur),\impulse,0.003,\pos,Prand([
-				Pseq([0.99999.rand],4),Pseq([0.99999.rand],4),Pseq([0.99999.rand],4),Pseq([0.99999.rand],4),
-			Pseq([0.99999.rand],4),Pseq([0.99999.rand],4),Pseq([0.99999.rand],4),Pseq([0.99999.rand],4),
+		\amp, 1,\buf, ~buf/*Snoopy*/,\out,~filterBou,\gate, 1,\duration,Pkey(\dur),\impulse,0.003,\pos,Pxrand([
+				Pseq([0.900.rand],4),Pseq([0.900.rand],4),Pseq([0.900.rand],4),Pseq([0.900.rand],4),
+			Pseq([0.900.rand],4),Pseq([0.900.rand],4),Pseq([0.900.rand],4),Pseq([0.900.rand],4),
+				Pseq([0.900.rand],4),Pseq([0.900.rand],4),Pseq([0.900.rand],4),Pseq([0.900.rand],4),
+			Pseq([0.900.rand],4),Pseq([0.900.rand],4),Pseq([0.900.rand],4),Pseq([0.900.rand],4),
+],inf)),
 
-		],inf)
 
-),
-
+	Pbind(\instrument,\gran,\dur,    Pseq([16/1],1)  ,
+/*	\group,~granuGrp,*/
+		/*\type,Pseq([\rest,\note,\rest,\note, \rest,\rest,\rest,\rest].scramble,inf),*/
+		\amp, 1,\buf, ~buf/*Snoopy*/,\out,~filterBou,\gate, 1,\duration,Pkey(\dur),\impulse,0.003,\pos,Pxrand([
+				0.900.rand,0.900.rand,0.900.rand,0.900.rand,0.900.rand,0.900.rand,0.900.rand,0.900.rand,0.900.rand,0.900.rand,0.900.rand,0.900.rand,0.900.rand,0.900.rand,0.900.rand,0.900.rand
+],inf)),
+	],inf),
 
 	Pbind(\instrument, \filter, \in ,~filterBou, \dur, inf ,\busMod, ~bus3, \qf,0.8, \out,~distoBou, \group ,~filterGrp),
 
