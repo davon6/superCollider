@@ -257,13 +257,13 @@ Pxrand([
 	],1),
 
 
-		Pseq([   Prand([ ~perc[4]   , ~bar[5]  ],1),
+		Pseq([   Prand([ ~perc[4]   /*, ~bar[5]*/  ],1),
 
 
 	Pbind(\instrument, \dispatchS10, \dur, Pseq([1/1],1),\in,Prand([ 0, ~rollingK],inf),\out,0,\tS, 0.39550810372374,\group,~dispatchGrp2)
 	],1),
 
-		   Prand([ ~perc[5]   , ~bar[6]
+		   Prand([ ~perc[5]   ,/* ~bar[6]*/
 
 
 
@@ -294,7 +294,7 @@ Pxrand([
 	],1),
 
 
-	Prand([	Pseq([   Prand([ ~perc[4]   , ~bar[5]  ],1),
+	Prand([	Pseq([   Prand([ ~perc[4]   /*, ~bar[5] */ ],1),
 
 
 	Pbind(\instrument,\dispatchS10, \dur, Pseq([1/1],1),\in,Prand([ 0, ~rollingK],inf),\tS, 0.39550810372374,\out,0,\group,~dispatchGrp2)
@@ -868,8 +868,10 @@ Pbind(\instrument,\playBuf,  \buf,~buf , \out, ~filterBus23,\dur,Pseq([64/1],inf
 		Pbind(\instrument, \gate, \dur, Pseq([4/1 ],1),\group, ~gateGrp,
 \in, ~gateBus23,\tS, 0.39550810372374,
 
-				\vlSub,0.8,\vlSub2,Pkey(\vlSub), \out,Pwrand([~micBus33,~reverbBus23],[1,1,1].normalizeSum,inf)),
+				\vlSub,0.8,\vlSub2,Pkey(\vlSub), \out,Pwrand([~micBus33,~reverbBus23],[1,1].normalizeSum,inf)),
 
+Pbind(\instrument,\gate,\dur,Pxrand([ Pseq([1/4],1),Pseq([1/1],1)],1), \in,~gateBus23  ,\out, Pwrand([~micBus33,~reverbBus23],[1,1].normalizeSum,inf),\group, ~gateGrp,
+	\atkC,9.00.rrand(2),	\atkT,1, \decT,0),
 
 		Pbind(\instrument, \gate ,\in,~gateBus23   ,\vlDec,1.8,
 		\dur,Pxrand([Pseq([1/4],4),   Pseq([1/4],16), Pseq([1/1],1) ],3) ,    \group,~gateGrp, \out,Pwrand([~micBus23,~micBus33,~reverbBus23],[1,1,4].normalizeSum,inf),\tS, 0.39550810372374,
@@ -902,7 +904,7 @@ Pbind(\instrument, \gate, \dur, Pxrand([ Pseq([1/4],16), Pseq([1/1],1)  ],1),\gr
  Pbindf( Prand([~quickFix, ~rShort, ~rLong]),\dur,inf, \in,~reverbBus23  , \out,~comFuzz23,\group,~revGrp),
 
 	Pbind(\instrument,\compS, \dur,Pseq([1/1],1),\thr,0.8 ,\sB, 1.015,\sA, 1/2,\atk ,0.0242, \rel ,0.0968,\gain,1,\in, ~comFuzz23 ,\ctrl, ~kbus, \out,~limitFuzz23, \group, ~compGrp),
-	Pbind(\instrument, \limiterS,\in, ~limitFuzz23, \dur, inf,\gain,30,\group,~limitGrp,\out,~stereoBus23),
+	Pbind(\instrument, \limiterS,\in, ~limitFuzz23, \dur, inf,\gain,8,\group,~limitGrp,\out,~stereoBus23),
 
 Pbind(\instrument,\stereoS, \dur, 9999, \in, ~stereoBus23   ,\out, ~no3, \group, ~stereoGrp),
 
@@ -1069,7 +1071,7 @@ Pbind(\instrument,\gran,\dur,	Pseq([1/1],24)
 	Pbind(\instrument,\compS, \dur,inf,\thr,0.2 ,\sB, 1.086,\sA, 1/2,\atk ,0.0121, \rel ,0.04840, \gain,1	,\in, ~comFuzz4 ,\ctrl, ~kbus, \out,~limitFuzz4, \group, ~compGrp),
 
 
-	Pbind(\instrument, \limiterS,\in, ~limitFuzz4, \dur,inf,\gain,10,\group,~limitGrp,\out,~stereoBus14),
+	Pbind(\instrument, \limiterS,\in, ~limitFuzz4, \dur,inf,\gain,5,\group,~limitGrp,\out,~stereoBus14),
 
 	Pbind(\instrument,\stereoS, \dur, 9999, \in, ~stereoBus14   ,\out, ~newCOn, \group, ~stereoGrp),
 

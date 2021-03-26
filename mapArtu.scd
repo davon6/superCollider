@@ -39,7 +39,7 @@ c =(Synth(\pulModul,[\modu,0.3]));
 m =(Synth(\ranModul,[\modu,0.3]));
 
 
- k = (Synth( \filterModu, [\dur, inf,\in,~outFil, \out,~toRecord /*~gateBus*/,\qf, 0.4, \qf2,0.4,\filMod,100, \filFreq, 200, \which,0],~filterGrp));
+ k = (Synth( \filterModu, [\dur, inf,\in,~outFil, \out,~toRecord /*~gateBus*/,\qf, 0.4, \qf2,0.4,\filMod,100, \filFreq, 200,\filFreq2, 1160, \which,0],~filterGrp));
 
 
 
@@ -242,8 +242,24 @@ MIDIdef.cc(\wfil, { |value|var modFreq = value.linlin(0, 127, 0, 1);
 //ususal
 
 
-
 MIDIdef.bend(\ben, { |val, chan, src|
+
+
+	k.set(\filMod,  val.linlin(0,16383,(-1150),1100)/*postln*/);
+
+
+if( val.linlin(0,16383, (-1150),1100).postln <(-120),{k.set(\which,0);},{});
+		if( val.linlin(0,16383,(-1150),1100) >1050,{k.set(\which,1);},{});
+
+
+	/*if( val.linlin(0,16383, (-150),1100) ==475.0381493011,{k.set(\which,1);},{});*/
+
+
+}, chan:  0);
+
+
+
+/*MIDIdef.bend(\ben, { |val, chan, src|
 
 
 	k.set(\filMod,  val.linlin(0,16383,(-150),1100)/*postln*/);
@@ -256,7 +272,7 @@ if( val.linlin(0,16383, (-150),1100).postln <(-120),{k.set(\which,0);},{});
 	/*if( val.linlin(0,16383, (-150),1100) ==475.0381493011,{k.set(\which,1);},{});*/
 
 
-}, chan:  0);
+}, chan:  0);*/
 
 
 /*MIDIdef.bend(\ben, { |val, chan, src|

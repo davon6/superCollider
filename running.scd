@@ -1391,13 +1391,13 @@ SynthDef(\fm2, {
 }).add;
 
 
-SynthDef(\filterModu,{|out=0, in, filMod=600,filMod2=500,qf=0.5,qf2=0.5,  which=0, filFreq =0|
+SynthDef(\filterModu,{|out=0, in, filMod=600,filMod2=500,qf=0.5,qf2=0.5,  which=0, filFreq2 =0, filFreq =0|
 
 		var lp,hp, sig;
 
 		sig = In.ar(in,3);
 
-		lp = Resonz.ar(sig , filFreq+ filMod ,qf);
+		lp = Resonz.ar(sig , filFreq2+ filMod ,qf);
 
 	hp = BHiPass4.ar(sig, filFreq +filMod,qf2)*0.24;
 
