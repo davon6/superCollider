@@ -913,6 +913,8 @@ Pbind(\instrument,\stereoS, \dur, 9999, \in, ~stereoBus23   ,\out, ~no3, \group,
 
 
 
+	//THIS IS TOO SHORTT 1/4 HAVE SOME 1/1
+
 	//debug
 
 	Pxrand([
@@ -1166,7 +1168,7 @@ Pseq([
 
 
 		Pbind(\instrument,\comp10, \dur,Pseq([64/1],1),\thr,0.4 ,\sB, 1.04,\sA, 0.2,\atk ,0.0968, \rel ,0.3872
-			,\in, ~new10  ,\ctrl, ~snBus, \out,~no3/*~eqBus10*/,\group, ~compGrp2,\tS, 0.39550810372374,)
+			,\in, ~no3/*~new10*/  ,\ctrl, ~snBus, \out,~eqBus10,\group, ~compGrp2,\tS, 0.39550810372374,)
 
 
 

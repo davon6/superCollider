@@ -1407,6 +1407,23 @@ SynthDef(\filterModu,{|out=0, in, filMod=600,filMod2=500,qf=0.5,qf2=0.5,  which=
 	Out.ar(out,sig);
 	}).add;
 
+
+	SynthDef(\filterModu2,{|out=0, in, filMod=600,filMod2=500,qf=0.5,qf2=0.5,  which=0, filFreq =0|
+
+		var lp,hp, sig;
+
+		sig = In.ar(in,1);
+
+		lp = Resonz.ar(sig , filFreq+ filMod ,qf);
+
+	hp = BHiPass4.ar(sig, filFreq +filMod,qf2)*0.24;
+
+		sig = SelectX.ar(which, [lp, sig, hp]);
+
+	/*Out.ar(out,Resonz.ar( sig,filMod ,qf));*/
+	Out.ar(out,sig);
+	}).add;
+
 SynthDef(\sequ,{|value, dur, in=0, out=0, vlAtk=0, vlDec=1,vlSub=1,vlSub2=1, vlRel=0, atkT=0, decT=1, subsT=0, relT=0, atckC=0, decC=0, relC=0, bus1, bus2|
 
 		/*ReplaceOut.ar(in,  In.ar(in, 3) *    EnvGen.kr(Env(

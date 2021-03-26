@@ -33,7 +33,7 @@ MIDIdef.cc(\hey,{| func, ccNum, chan, srcID, argTemplate, dispatcher|
 
 	[func, ccNum, chan, srcID, argTemplate, dispatcher].postln;
 });
-
+MIDIFunc.bend({|func, chan, srcID, argTemplate, dispatcher|[func, chan, srcID, argTemplate, dispatcher].postln});
 
 MIDIdef.activeSense(\onTest2, {|vel, nn, chan, src|[vel, nn, chan, src].postln});
 
