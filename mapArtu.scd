@@ -1,7 +1,7 @@
 (
 //Pseq([~toUse2],inf).play(t);
 
-	Ppar([~bassShap,Ppar([Pbindf(~kick,\amp, 2),Pbindf(~bass,\amp, 2 ),],inf)],1).play(t);
+Ppar([~bassShap,Ppar([Pbindf(~kick,\amp, (-1)),Pbindf(~bass,\amp, (-3) ),],inf)],1).play(t);
 x = Synth(\recLoop,[buf:~buf,\recording,1, \in,~toRecord],~recGrp);
 
 
@@ -39,7 +39,7 @@ c =(Synth(\pulModul,[\modu,0.3]));
 m =(Synth(\ranModul,[\modu,0.3]));
 
 
- k = (Synth( \filterModu, [\dur, inf,\in,~outFil, \out,~toRecord /*~gateBus*/,\qf, 0.4, \qf2,0.4,\filMod,100, \filFreq, 200,\filFreq2, 1160, \which,0],~filterGrp));
+ k = (Synth( \filterModu, [\dur, inf,\in,~outFil, \out,~toRecord/*~gateBus*/,\qf, 0.4, \qf2,0.4,\filMod,100, \filFreq, 100,\filFreq2, 1200, \which,0],~filterGrp));
 
 
 
@@ -245,11 +245,11 @@ MIDIdef.cc(\wfil, { |value|var modFreq = value.linlin(0, 127, 0, 1);
 MIDIdef.bend(\ben, { |val, chan, src|
 
 
-	k.set(\filMod,  val.linlin(0,16383,(-1150),1100)/*postln*/);
+	k.set(\filMod,  val.linlin(0,16383,(-1200),800)/*postln*/);
 
 
-if( val.linlin(0,16383, (-1150),1100).postln <(-120),{k.set(\which,0);},{});
-		if( val.linlin(0,16383,(-1150),1100) >1050,{k.set(\which,1);},{});
+if( val.linlin(0,16383, (-1200),800).postln <(-120),{k.set(\which,0);},{});
+		if( val.linlin(0,16383,(-1200),800) >750,{k.set(\which,1);},{});
 
 
 	/*if( val.linlin(0,16383, (-150),1100) ==475.0381493011,{k.set(\which,1);},{});*/
