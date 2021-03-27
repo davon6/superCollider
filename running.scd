@@ -1250,6 +1250,18 @@ SynthDef(\EQHP10, {|out=0, in, val, quant, gain,frq=100, vol =1| Out.ar(out,
 		Out.ar(out,
 			Splay.arFill(10,
 				Mix.ar(In.ar(in, 2))
+				,spread,level,center/*+ In.kr(modPan)*/)
+			* EnvGen.kr(Env([0,1,1,0],[dur* atkT,dur*decT,0],[crvA,0]),timeScale: tS,doneAction: 2)
+			//EnvGen.kr(Env.step([1],[dur]),doneAction: 2)
+		);
+	}).add;
+
+
+	SynthDef(\stereoX,{|out=0, in, spread=0, level=1, center=0.0,dur,modPan,atkT=0,decT=1,crvA=0,tS=1|
+
+		Out.ar(out,
+			Splay.arFill(10,
+				Mix.ar(In.ar(in, 2))
 				,spread,level,center+ In.kr(modPan))
 			* EnvGen.kr(Env([0,1,1,0],[dur* atkT,dur*decT,0],[crvA,0]),timeScale: tS,doneAction: 2)
 			//EnvGen.kr(Env.step([1],[dur]),doneAction: 2)
@@ -1527,7 +1539,7 @@ s.sync;
 		\rel, t.beatDur/4 * 0.83,
 		\atkcrv, -2,
 		\relcrv, -1,
-		\amp, (-13),\out,0/*~again*//*~dipatchKB*///-10   -17
+		\amp,(-19)/*(-13)*/,\out,0/*~again*//*~dipatchKB*///-10   -17
 	);
 
 	~cymbal = Pbind(\instrument, \percussion,\type, Pseq([\rest,\rest,\note,\note ,\rest,\note ,\note, \rest].scramble,inf),\dur,Pseq([1/4],64 ),\carHz, 525.12070612224,\modHz,1899.3343179398,\modAmp, 0.12875 ,\amp,(-20.3),\rel,Pseq([1/16],inf),\rel2,Pseq([1/16],inf),\latch,8000,\stereoL, 0.00555, \crv1,  (-4.4), \crv1b,(-4), \mulMod, 1691,\out, ~comBusCymb);
