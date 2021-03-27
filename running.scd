@@ -1207,9 +1207,9 @@ SynthDef(\comb, {|out=0, in ,maxDel, delayT,decT|
 			,frq),frq),frq),frq),frq),frq)* vol)};).add;
 
 
-SynthDef(\EQHP10, {|out=0, in, val, quant, gain,frq=100, vol =1| Out.ar(out,
+SynthDef(\EQHP10, {|out=0, in, val, quant, gain, val2, quant2, gain2 frq=100, vol =1| Out.ar(out,
 
-		HPF.ar(HPF.ar(HPF.ar(HPF.ar(HPF.ar(HPF.ar(HPF.ar(HPF.ar(BPeakEQ.ar(In.ar(in, 10),val,quant, gain),frq),frq),frq),frq),frq),frq),frq),frq)* vol)};).add;
+		HPF.ar(HPF.ar(HPF.ar(HPF.ar(HPF.ar(HPF.ar(HPF.ar(HPF.ar(BPeakEQ.ar(BPeakEQ.ar(In.ar(in, 10),val2,quant2, gain2)    ,val,quant, gain)   ,frq),frq),frq),frq),frq),frq),frq),frq)* vol)};).add;
 
 	"compression init".postln;
 
