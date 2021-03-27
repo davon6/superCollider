@@ -1126,7 +1126,7 @@ Pseq([
 
 	],inf),
 
-	Pbind(\instrument,\EQHP10, \in, ~eqBus10 ,\out, 0,\frq, 100, \dur,inf,\group, ~eqGrp2,\val,1800,\quant,4, \gain,(-12),\val2,2600,\quant2,16, \gain2,(-18)),
+	Pbind(\instrument,\EQHP10, \in, ~eqBus10 ,\out, 0,\frq, 100, \dur,inf,\group, ~eqGrp2,\val,11800,\quant,1, \gain,(-8),\val2,2600,\quant2,8, \gain2,(-6)),
 
 
 
