@@ -332,6 +332,8 @@ s.sync;
 	~riLimit=  Bus.audio(s,2);   /* ===>random ~flanger would be awe*/
 ~riStereo=  Bus.audio(s,2);
 
+
+	~snareEQ=  Bus.audio(s,2);
 	~gateBou=  Bus.audio(s,2);
 	s.sync;
 
@@ -370,6 +372,9 @@ s.sync;
 		0.002/*Dust.kr(4.0)*/,startPos: start,loop: 1/*,doneAction: dA*/)* EnvGen.kr(Env([0,1,1,0],[0,dur,0]),timeScale: tS,doneAction: 2));}).add;
 
 
+
+	SynthDef(\playBufX ,{|out = 0,start, trig, dur, buf, dA=2, tS=1,impulse=0.001|Out.ar(out,PlayBuf.ar(1,buf,trigger:
+		Impulse.kr(impulse* (60/~bpm)),startPos: start,loop: 0,doneAction: 2));}).add;
 
 
 	SynthDef(\playBuf2 ,{|out = 0,start, trig, dur, buf, dA=2|Out.ar(out,PlayBuf.ar(2, buf,trigger:
@@ -565,7 +570,7 @@ LFNoise0.kr(~hz1beat).range(0.1,0.0)/*,0.02)*/
 		sig =   BPeakEQ.ar(
 			BPeakEQ.ar(
 
-			LPF.ar(LPF.ar(LPF.ar(LPF.ar(sig, lpf - In.ar(bus, 1)),lpf - In.ar(bus, 1)),lpf - In.ar(bus, 1)),lpf - In.ar(bus, 1)).round(2**(-16));
+			LPF.ar(LPF.ar(LPF.ar(sig, lpf - In.ar(bus, 1)),lpf - In.ar(bus, 1)),lpf - In.ar(bus, 1)).round(2**(-16));
 
 			,659.255,12, (4))
 			,164.81375,12, (12));
@@ -1507,7 +1512,7 @@ s.sync;
 
 
 
-	~kick =	Pbindef(\ki, \instrument, \kick,\dur, Pseq([1/1],1),\amp,(-6),\out,0);//-3.5 - 10.5
+	~kick =	Pbindef(\ki, \instrument, \kick,\dur, Pseq([1/1],1),\amp,(-10),\out,0);//-3.5 - 10.5
 
 	~bassShap = Pbind(\instrument, \shap, \dur,Pseq([1/1],inf),\dA1,2,\out,~bassShapB);
 
@@ -1515,21 +1520,21 @@ s.sync;
 		\instrument, \bass,
 		\type, Pseq([\rest, \note, \note, \note], inf),
 
-		\cho, Pseq([0,0.004,0.002,0],inf),
+		\cho, Pseq([0,0.00378125,0.001890625,0],inf),
 		\dur, Pseq([1/4],4),\lpf,100,
 		\midinote, 28, \bus, ~bassShapB,
 		\atk, t.beatDur/4 * 0.01,
-		\rel, t.beatDur/4 * 0.82,
+		\rel, t.beatDur/4 * 0.83,
 		\atkcrv, -2,
 		\relcrv, -1,
-		\amp, (-12),\out,0/*~again*//*~dipatchKB*///-10   -17
+		\amp, (-13),\out,0/*~again*//*~dipatchKB*///-10   -17
 	);
 
-	~cymbal = Pbind(\instrument, \percussion,\type, Pseq([\rest,\rest,\note,\note ,\rest,\note ,\note, \rest].scramble,inf),\dur,Pseq([1/4],64 ),\carHz, 525.12070612224,\modHz,1899.3343179398,\modAmp, 0.12875 ,\amp,(-13.3),\rel,Pseq([1/16],inf),\rel2,Pseq([1/16],inf),\latch,8000,\stereoL, 0.00555, \crv1,  (-4.4), \crv1b,(-4), \mulMod, 1691,\out, ~comBusCymb);
+	~cymbal = Pbind(\instrument, \percussion,\type, Pseq([\rest,\rest,\note,\note ,\rest,\note ,\note, \rest].scramble,inf),\dur,Pseq([1/4],64 ),\carHz, 525.12070612224,\modHz,1899.3343179398,\modAmp, 0.12875 ,\amp,(-20.3),\rel,Pseq([1/16],inf),\rel2,Pseq([1/16],inf),\latch,8000,\stereoL, 0.00555, \crv1,  (-4.4), \crv1b,(-4), \mulMod, 1691,\out, ~comBusCymb);
 
-~hat = Pbind(\instrument,\percussion,\dur,Pseq([1/4], 64),\atk, 0,\rel,0.04840,\rel2,0.02420,\amp,Pseq([( -15.2), ( -15.2),( -15.2),( -16.2),( -14.2),( -14),( -15.2),( -15.2)],inf), \crv1, (-3), \crv1b, (-5), \modHz, exprand(500,10000).postln, \mulMod, rrand(100, 500).postln, \carHz, exprand(20,10000), \modAmp, 0.12875, \latch, 18500, \stereoR, 0.007,\out,~comBusHat);
+~hat = Pbind(\instrument,\percussion,\dur,Pseq([1/4], 64),\atk, 0,\rel,0.04840,\rel2,0.02420,\amp,Pseq([( -18.2), ( -18.2),( -18.2),( -19.2),( -17.2),( -17),( -18.2),( -18.2)],inf), \crv1, (-3), \crv1b, (-5), \modHz, exprand(500,10000).postln, \mulMod, rrand(100, 500).postln, \carHz, exprand(20,10000), \modAmp, 0.12875, \latch, 18500, \stereoR, 0.007,\out,~comBusHat);
 
-~snare = Pbind(\instrument, \snare,\carHz, 41.2 ,\type, Pseq([\rest ,\rest,\note,\rest], 8),\atk, 0.00502929687,\rel, 0.0968,\rel2, 0.3872,\dur, Pseq([1/2], inf),\amp,(-13.5), \crv1,(-8),\crv2,(-7)   ,\out,0/*~dipatchKB*/);//(-20.5) -28.5
+~snare = Pbind(\instrument, \snare,\carHz, 41.2 ,\type, Pseq([\rest ,\rest,\note,\rest], 8),\atk, 0.00502929687,\rel, 0.0968,\rel2, 0.3872,\dur, Pseq([1/2], inf),\amp,(-16.5), \crv1,(-8),\crv2,(-7)   ,\out,~snareEQ);
 
 
 
@@ -1549,21 +1554,21 @@ s.sync;
 
 	Ppar([~bar[1],Pbindf(~cymbal, \dur,Pseq([1/4],16)),
 		Pbindf(~hat, \dur,Pseq([1/4],16)),
-		Pbindf(~snare,\type, Pseq([\rest,\rest ,\note, \rest], 2)),      ],1),
+		Pbindf(~snare,\type, Pseq([\rest,\rest ,\note, \rest], 2)),    ],1),
 
 
 	Ppar([~bar[2],Pbindf(~cymbal, \dur,Pseq([1/4],32)),
 		Pbindf(~hat, \dur,Pseq([1/4],32)),
-		Pbindf(~snare,\type, Pseq([\rest,\rest ,\note, \rest], 4)),      ],1),
+		Pbindf(~snare,\type, Pseq([\rest,\rest ,\note, \rest], 4)),     ],1),
 
 	Ppar([~bar[3],Pbindf(~cymbal, \dur,Pseq([1/4],48)),
 		Pbindf(~hat, \dur,Pseq([1/4],48)),
-		Pbindf(~snare,\type, Pseq([\rest,\rest ,\note, \rest], 6))],1),
+		Pbindf(~snare,\type, Pseq([\rest,\rest ,\note, \rest], 6) )],1),
 
 
 	Ppar([~bar[4],Pbindf(~cymbal, \dur,Pseq([1/4],56)),
 		Pbindf(~hat, \dur,Pseq([1/4],56)),
-		Pbindf(~snare,\type, Pseq([\rest,\rest ,\note, \rest], 7)),],1),
+		Pbindf(~snare,\type, Pseq([\rest,\rest ,\note, \rest], 7))],1),
 
 
 	Ppar([~bar[5],Pbindf(~cymbal, \dur,Pseq([1/4],60)),
@@ -1571,7 +1576,7 @@ s.sync;
 		Pbindf(~snare,\type, Pseq([\rest,\rest ,\note, \rest], 7))],1),
 
 
-	Ppar([~bar[6],~hat,~cymbal,~snare],1)
+	Ppar([~bar[6],~hat,~cymbal/*,~snare*/],1)
 ];
 
 	// Ppar([Pseq([~bass],inf),Pbindf(~snare,\da1,0)],1);//JEEEZ

@@ -45,7 +45,12 @@ m =(Synth(\ranModul,[\modu,0.3]));
 
 Ppar([
 
-Pbindef(\aaa, \instrument, \sequ, \value,Pseq([1200.rand,1200.rand,1200.rand],inf),\dur,Pseq([4/1],inf),\in, ~outFil/*~toRecord*/,\group,~shapGrp),
+Pbindef(\aaa, \instrument, \sequ, \value,
+		Pseq([Scale.major(\just).degreeToFreq(7.rand, 76.midicps, -1),Scale.major(\just).degreeToFreq(7.rand, 76.midicps, 01),Scale.major(\just).degreeToFreq(7.rand, 76.midicps, -1)],inf),
+
+			//1200.rand,1200.rand,1200.rand],inf),
+
+		\dur,Pseq([4/1],inf),\in, ~outFil/*~toRecord*/,\group,~shapGrp),
 
 
 //special mode
@@ -353,8 +358,8 @@ MIDIdef.cc(\c, { |value|var modFreq = value.linlin(61, 67, 1, 10);
 
 	if(modFreq.round(1).postln ==1,{Pbindef(\aaa, \dur,Pseq([16/1],inf));},{});
 	if(modFreq.round(1).postln ==3,{Pbindef(\aaa, \dur,Pseq([4/1],inf));},{});
-	if(modFreq.round(1).postln ==5,{Pbindef(\aaa, \dur,Pseq([1/1],inf));},{});
-	if(modFreq.round(1).postln ==7,{Pbindef(\aaa, \dur,Pseq([1/4],inf));},{});
+	if(modFreq.round(1).postln ==6,{Pbindef(\aaa, \dur,Pseq([1/1],inf));},{});
+	if(modFreq.round(1).postln ==10,{Pbindef(\aaa, \dur,Pseq([1/4],inf));},{});
 
 
 /*switch (modFreq,
