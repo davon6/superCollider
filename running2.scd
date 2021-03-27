@@ -626,7 +626,7 @@ Pbind(\instrument,\stereoS, \dur, 9999, \in, ~stereoBus2   ,\out,~no1, \group, ~
 
 //GATES
 
-Pxrand([
+Pseq([
 
 
 	Pbind(\instrument, \gate, \dur, Pseq([1/4],3),\group, ~gateGrp,\vlSub,Pfunc({0.8.exprand(0.1,1)}),\vlSub2,Pkey(\vlSub), \atkT,Pfunc({0.20.exprand(0.01)}),\decT,Pfunc({0.6.exprand(0.8,0.3)}),
@@ -704,7 +704,7 @@ Pbind(\instrument, \gate, \dur, ~short,
 
 
 
-],inf),
+].scramble,inf),
 
 
 
