@@ -334,6 +334,7 @@ s.sync;
 
 
 	~snareEQ=  Bus.audio(s,2);
+	~snareLimit=  Bus.audio(s,2);
 	~gateBou=  Bus.audio(s,2);
 	s.sync;
 
@@ -368,8 +369,8 @@ s.sync;
 ~seqBus= Bus.control(s,1);
 	s.sync;
 
-	SynthDef(\playBuf ,{|out = 0,start, trig, dur, buf, dA=2, tS=1|Out.ar(out,PlayBuf.ar(1,buf,trigger:
-		0.002/*Dust.kr(4.0)*/,startPos: start,loop: 1/*,doneAction: dA*/)* EnvGen.kr(Env([0,1,1,0],[0,dur,0]),timeScale: tS,doneAction: 2));}).add;
+	SynthDef(\playBuf ,{|out = 0,start, trig= 0.002, dur, buf, dA=2, tS=1|Out.ar(out,PlayBuf.ar(1,buf,trigger:
+		trig/*Dust.kr(4.0)*/,startPos: start,loop: 1/*,doneAction: dA*/)* EnvGen.kr(Env([0,1,1,0],[0,dur,0]),timeScale: tS,doneAction: 2));}).add;
 
 
 
@@ -550,14 +551,14 @@ LFNoise0.kr(~hz1beat).range(0.1,0.0)/*,0.02)*/
 	SynthDef(\bass,{
 		arg freq=41.2, dure=1, amp=0.5,
 		atkcrv=1, relcrv=5,
-		atk=0, rel=0.1, lpf=100, out = 0, bus, dur,cho=0;
+		atk=0, rel=0.1, lpf=100, out = 0, bus, dur,cho=0,rel2;
 
 		var sig, env, lvlBa;
 
-		env = EnvGen.ar(
+		env = EnvGen.kr(
 			Env(
-				[0,1,0],
-				[atk,rel-cho],
+				[0,1,0.7,0],
+				[atk,rel-cho,rel2],
 				[atkcrv,relcrv]
 			),
 			doneAction:2
@@ -606,24 +607,26 @@ LFNoise0.kr(~hz1beat).range(0.1,0.0)/*,0.02)*/
 }).add;
 
 	SynthDef.new(\snare, {
-		arg carHz=500, modHz=100, modAmp=1, atk=0.01, rel=1, amp=0.2, pan=0,rel2=2,out=0,latch=12000, da1=2, da2=2, crv1=(-3),crv2 = (-2);
+		arg carHz=500, modHz=100, modAmp=1, atk=0, atk2=0, rel=1, amp=0.2, pan=0,rel2=2,out=0,latch=12000, da1=2, da2=2, crv1=(-3),crv2 = (-2);
 	var car, mod, env, car2, mod2,env2, sig;
 
-	env = EnvGen.kr(Env.perc(0, rel,curve:crv1), doneAction:da1);
+	env = EnvGen.kr(Env.perc(atk, rel,curve:crv1), doneAction:da1);
 
-	env2 = EnvGen.kr(Env.perc(0, rel2, 1, crv2), doneAction:da2);
+	env2 = EnvGen.kr(Env.perc(atk2, rel2, 1, crv2), doneAction:da2);
 
 	mod = SinOsc.ar(modHz, mul:1691);
 	car = SinOsc.ar(carHz + mod) * env * 0.321875;
 
 	car2 = BrownNoise.ar(0.321875) * env2 ;
 
-	sig = HPF.ar( car+car2,500);
+	sig = car+car2;
 
-		Out.ar(out,Pan2.ar( Latch.ar(sig,Impulse.ar(latch)))
-			* amp.dbamp);
+	Out.ar(out,Pan2.ar( /*Latch.ar(sig,Impulse.ar(latch))*/ sig.clip(-41.2,41.2)   )
+		* amp.dbamp);
 
 }).add;
+
+	/*.clip(-0.2,0.3)*/
 
 	SynthDef(\wNoise, {
 
@@ -1524,7 +1527,7 @@ s.sync;
 
 
 
-	~kick =	Pbindef(\ki, \instrument, \kick,\dur, Pseq([1/1],1),\amp,(-10),\out,0);//-3.5 - 10.5
+	~kick =	Pbindef(\ki, \instrument, \kick,\dur, Pseq([1/1],1),\amp,(-8),\out,0);//-3.5 - 10.5
 
 	~bassShap = Pbind(\instrument, \shap, \dur,Pseq([1/1],inf),\dA1,2,\out,~bassShapB);
 
@@ -1537,17 +1540,17 @@ s.sync;
 		\midinote, 28, \bus, ~bassShapB,
 		\atk, t.beatDur/4 * 0.01,
 		\rel, t.beatDur/4 * 0.83,
+		\rel2, t.beatDur/4 * 0.2,
 		\atkcrv, -2,
 		\relcrv, -1,
-		\amp,(-19)/*(-13)*/,\out,0/*~again*//*~dipatchKB*///-10   -17
+		\amp,(-17)/*(-13)*/,\out,0/*~again*//*~dipatchKB*///-10   -17
 	);
 
 	~cymbal = Pbind(\instrument, \percussion,\type, Pseq([\rest,\rest,\note,\note ,\rest,\note ,\note, \rest].scramble,inf),\dur,Pseq([1/4],64 ),\carHz, 525.12070612224,\modHz,1899.3343179398,\modAmp, 0.12875 ,\amp,(-20.3),\rel,Pseq([1/16],inf),\rel2,Pseq([1/16],inf),\latch,8000,\stereoL, 0.00555, \crv1,  (-4.4), \crv1b,(-4), \mulMod, 1691,\out, ~comBusCymb);
 
 ~hat = Pbind(\instrument,\percussion,\dur,Pseq([1/4], 64),\atk, 0,\rel,0.04840,\rel2,0.02420,\amp,Pseq([( -18.2), ( -18.2),( -18.2),( -19.2),( -17.2),( -17),( -18.2),( -18.2)],inf), \crv1, (-3), \crv1b, (-5), \modHz, exprand(500,10000).postln, \mulMod, rrand(100, 500).postln, \carHz, exprand(20,10000), \modAmp, 0.12875, \latch, 18500, \stereoR, 0.007,\out,~comBusHat);
 
-~snare = Pbind(\instrument, \snare,\carHz, 41.2 ,\type, Pseq([\rest ,\rest,\note,\rest], 8),\atk, 0.00502929687,\rel, 0.0968,\rel2, 0.3872,\dur, Pseq([1/2], inf),\amp,(-16.5), \crv1,(-8),\crv2,(-7)   ,\out,~snareEQ);
-
+	~snare = Pbind(\instrument, \snare,\carHz, 41.2 ,\type, Pseq([\rest ,\rest,\note,\rest], 99999),\atk, 0.00502929687,\rel, 0.0968,\rel2, 0.3872,\dur, Pseq([1/2], inf),\amp,(-16.5), \crv1,(-8),\crv2,(-7)   ,\out,~snareEQ, \atk,t.beatDur * 0.02, \atk2,Pkey(\atk));
 
 
 
@@ -1595,3 +1598,6 @@ s.sync;
 
 
 });)
+
+
+Ppar([ ~bassShap, Ppar([~kick, ~bass],inf)],1).play(t)

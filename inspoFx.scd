@@ -794,7 +794,7 @@ Adding new components into a signal to make it richer; modulation side effects a
 
 {SinOsc.ar(440,0,0.5).clip(-0.2,0.3)}.scope
 
-
+{SinOsc.ar(440,0,0.5)}.scope
 
 {SinOsc.ar(440,0,0.1).round(2**(-7))}.scope //bit reduction to 7 bit signal
 
