@@ -335,6 +335,20 @@ s.sync;
 
 	~snareEQ=  Bus.audio(s,2);
 	~snareLimit=  Bus.audio(s,2);
+
+	~percuEq=  Bus.audio(s,2);
+
+	~percuRev=  Bus.audio(s,2);
+	~percuLimit=  Bus.audio(s,2);
+
+	~percuCom=  Bus.audio(s,2);
+
+	~percuCom2=  Bus.audio(s,2);
+
+	~cymbalEq=  Bus.audio(s,2);
+	~hatEq=  Bus.audio(s,2);
+
+
 	~gateBou=  Bus.audio(s,2);
 	s.sync;
 
@@ -600,24 +614,24 @@ LFNoise0.kr(~hz1beat).range(0.1,0.0)/*,0.02)*/
 
 	car2 = WhiteNoise.ar(modAmp) * env2 ;
 
-	sig =  HPF.ar(Latch.ar(tanh(car+car2),Impulse.ar(latch)),3000);
+		sig =  Latch.ar(tanh(car+car2),Impulse.ar(latch));
 
 		Out.ar(out, sig/*.dup * amp.dbamp*/
 		* [amp.dbamp+stereoL,amp.dbamp+stereoR]);
 }).add;
 
 	SynthDef.new(\snare, {
-		arg carHz=500, modHz=100, modAmp=1, atk=0, atk2=0, rel=1, amp=0.2, pan=0,rel2=2,out=0,latch=12000, da1=2, da2=2, crv1=(-3),crv2 = (-2);
+		arg carHz=500, modHz=100, modAmp=1, atk=0, atk2=0, rel=1, amp=0.2, pan=0,rel2=2,out=0,latch=12000, da1=2, da2=2, crv1=(-3),crv2 = (-2) , noiLv  =0.321875, tS=1;
 	var car, mod, env, car2, mod2,env2, sig;
 
-	env = EnvGen.kr(Env.perc(atk, rel,curve:crv1), doneAction:da1);
+	env = EnvGen.kr(Env.perc(atk, rel,curve:crv1), timeScale: tS,doneAction:da1);
 
-	env2 = EnvGen.kr(Env.perc(atk2, rel2, 1, crv2), doneAction:da2);
+	env2 = EnvGen.kr(Env.perc(atk2, rel2, 1, crv2),timeScale: tS, doneAction:da2);
 
 	mod = SinOsc.ar(modHz, mul:1691);
 	car = SinOsc.ar(carHz + mod) * env * 0.321875;
 
-	car2 = BrownNoise.ar(0.321875) * env2 ;
+	car2 = BrownNoise.ar(noiLv) * env2 ;
 
 	sig = car+car2;
 
@@ -1550,7 +1564,7 @@ s.sync;
 
 ~hat = Pbind(\instrument,\percussion,\dur,Pseq([1/4], 64),\atk, 0,\rel,0.04840,\rel2,0.02420,\amp,Pseq([( -18.2), ( -18.2),( -18.2),( -19.2),( -17.2),( -17),( -18.2),( -18.2)],inf), \crv1, (-3), \crv1b, (-5), \modHz, exprand(500,10000).postln, \mulMod, rrand(100, 500).postln, \carHz, exprand(20,10000), \modAmp, 0.12875, \latch, 18500, \stereoR, 0.007,\out,~comBusHat);
 
-	~snare = Pbind(\instrument, \snare,\carHz, 41.2 ,\type, Pseq([\rest ,\rest,\note,\rest], 99999),\atk, 0.00502929687,\rel, 0.0968,\rel2, 0.3872,\dur, Pseq([1/2], inf),\amp,(-16.5), \crv1,(-8),\crv2,(-7)   ,\out,~snareEQ, \atk,t.beatDur * 0.02, \atk2,Pkey(\atk));
+	~snare = Pbind(\instrument, \snare,\carHz, 41.2 ,\type, Pseq([\rest ,\rest,\note,\rest], 8),\atk, 0.00502929687,\rel, 0.0968,\rel2, 0.3872,\dur, Pseq([1/2], inf),\amp,(-16.5), \crv1,(-8),\crv2,(-7)   ,\out,0, \atk,t.beatDur * 0.02, \atk2,Pkey(\atk)).play(t);
 
 
 

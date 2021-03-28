@@ -18,6 +18,8 @@ Pbindef(\ki, \out,0).play(t)
 //to avoid crash no done yet have stored valu for eq of fuzz from record buff to main
 //tripppy rise is not tuned
 //     ({PlayBuf.ar(1, ~buf, 1,Impulse.kr(1.2875),~buf.numFrames.rand)}.play)
+
+//comp10 might be overlapping
 s.plotTree
 ~bufSnoopy.play
 (
@@ -190,13 +192,20 @@ Pbind(\instrument, \lfo1, \dur,Pseq([16/1],inf),\ph,Pxrand([1,0,2,3],inf), \out,
 	Pbind(\instrument, \lfo13,\val,~hzQbeat,\out,~bus10 ,\dur,999,\ph,0, \rL,(-0.8),\rH,0.8, \group, ~lfoGrp),
 
 
-	Pbind(\instrument, \kick,\dur, Pseq([1/1],inf),\amp,(-6),\out,~kbus),
+	Pbind(\instrument, \kick,\dur, Pseq([1/1],inf),\amp,(-8),\out,~kbus),
 	Pbind(\instrument, \snare,\carHz, 41.2 ,\type, Pseq([\rest ,\rest,\note,\rest], inf),\atk, 0.00502929687,\rel, 0.0968,\rel2, 0.3872,\dur, Pseq([1/2], inf),\amp,(-16.5), \crv1,(-8),\crv2,(-7)   ,\out,~snBus),
 
 
 	Pbind(\instrument,\compS, \dur,inf,\thr,0.6 ,\sB, 1.2,\sA, 2,\atk ,0.0001, \rel ,0.04840
-,\gain,1,\in, ~comBusHat ,\ctrl, ~kbus, \out,0/*~dipatchKB*/,\group, ~compGrp),
-	Pbind(\instrument,\compS,\dur,inf,\thr,0.6 ,\sB, 1,\sA, 4,\atk ,0.001, \rel ,0.04840,\gain,1,\in, ~comBusCymb ,\ctrl, ~kbus, \out,0/*~dipatchKB*/,\group, ~compGrp),
+,\gain,1,\in, ~comBusHat ,\ctrl, ~kbus, \out,~hatEq,\group, ~compGrp),
+	Pbind(\instrument,\compS,\dur,inf,\thr,0.6 ,\sB, 1,\sA, 4,\atk ,0.001, \rel ,0.04840,\gain,1,\in, ~comBusCymb ,\ctrl, ~kbus, \out,~cymbalEq,\group, ~compGrp),
+
+
+	Pbind(\instrument , \EQHP2, \frq, 3000 ,\dur, inf,\in, ~hatEq, \group, ~eqGrp,/*\val, 1800, \quant, 8, \gain, (-10), \val, 10,*/ \out , 0),
+	Pbind(\instrument , \EQHP2, \frq, 3000 ,\dur, inf,\in, ~cymbalEq, \group, ~eqGrp,/*\val, 1800, \quant, 8, \gain, (-10), \val, 10,*/ \out , 0),
+
+
+
 
 
 	Pbind(\instrument , \EQHP2, \frq, 300 ,\dur, inf,\in, ~snareEQ, \group, ~eqGrp,\val, 1800, \quant, 8, \gain, (-10), \val, 10, \out , ~snareLimit),
@@ -324,6 +333,32 @@ Pxrand([
 
 
 
+	Pbind(\instrument, \snare,\carHz, 41.2 ,\type,Pseq([
+
+	Pseq([\note ,\rest,\note,\rest,\note ,\rest,\note,\rest,\note ,\rest,\note,\rest,\note ,\rest,\note,\rest].scramble, 4),
+	Pseq([\note ,\rest,\note,\rest,\note ,\rest,\note,\rest,\note ,\rest,\note,\rest,\note ,\rest,\note,\rest].scramble, 4),
+	Pseq([\note ,\rest,\note,\rest,\note ,\rest,\note,\rest,\note ,\rest,\note,\rest,\note ,\rest,\note,\rest].scramble, 4),
+	Pseq([\note ,\rest,\note,\rest,\note ,\rest,\note,\rest,\note ,\rest,\note,\rest,\note ,\rest,\note,\rest].scramble, 4),
+],inf),
+	\modHz,240.00.rand.postln  , \carHz,140.00.rrand(10.00).postln , \noiLv,1.00.rand,
+
+
+\atk, 0.00502929687,\rel,0.3872.rrand(0.05),\rel2, 0.3872.rrand(0.05),\dur, Pseq([1/4], inf),\amp,(-16.5), \crv1,(-8.00).rrand(-2.00),\crv2,(-7.00).rrand(-2.00)   ,\out,~percuEq, \atk,t.beatDur * 0.02, \atk2,Pkey(\atk)/*,\tS, 0.39550810372374*/),
+
+
+	Pbind(\instrument , \EQHP2, \frq, 100 ,\dur, inf,\in, ~percuEq, \group, ~eqGrp0,\val, 1800, \quant, 8, \gain, (-10), \val, 10, \out , ~percuRev),
+
+	 Pbindf( ~quickFix, \instrument, \reverbS, \dur,inf, \in,~percuRev  , \out,~percuCom,\group,~revGrp),
+
+	Pbind(\instrument,\compS, \dur,inf,\thr,0.6 ,\sB, 1.2,\sA, 2,\atk ,0.0001, \rel ,0.04840
+,\gain,1,\in, ~percuCom ,\ctrl, ~kbus, \out,~percuLimit,\group, ~compGrp),
+
+	Pbind(\instrument , \limiterS,\dur, inf, \in,~percuLimit, \gain, 10,\group, ~limitGrp,\out,~percuCom2),
+
+
+/*
+
+
 Pseq([
 		Pbind(\instrument, \wNoise,\dur, Pseq([ 7/1],1), \type, \rest),
 
@@ -353,7 +388,7 @@ Pseq([
 
 	//debug
 
-
+*/
 
 Pseq([
 
@@ -1105,7 +1140,7 @@ Pseq([\rest,\rest, \note,\rest,\rest,\rest,\rest, \note,\note,\rest,\rest,\note,
 
 
 
-	Pxrand([
+	Pseq([
 	Pbind(\instrument,\comp10, \dur,  Pseq([4/1],16) /*Pseq([1/1],256)*/,\thr,0.4 ,\sB, 1.04,\sA, 0.2,\atk ,0.0968, \rel ,0.3872
 		,\in,Pseq([ ~newCOn,~new10 ],16 )
 
@@ -1133,11 +1168,15 @@ Pseq([
 
 
 	Pbind(\instrument,\comp10, \dur,Pseq([64/1],1),\thr,0.4 ,\sB, 1.04,\sA, 0.2,\atk ,0.0968, \rel ,0.3872
-			,\in, ~no3  ,\ctrl, ~snBus, \out,~eqBus10,\group, ~compGrp2,\tS, 0.39550810372374,)
+			,\in, ~no3  ,\ctrl, ~snBus, \out,~eqBus10,\group, ~compGrp2,\tS, 0.39550810372374,),
 
 
+		Pbind(\instrument,\comp10, \dur,Pseq([4/1],16),
+			/*Pseq([64/1],1)*/\thr,0.4 ,\sB, 1.04,\sA, 0.2,\atk ,0.0968, \rel ,0.3872
+			,\in, Pxrand([ Pseq([~percuCom2, ~no3,~newCOn,~new10 ].scramble,inf), Pseq([~percuCom2, Pseq([~no3,~newCOn,~new10].scramble,1), ].scramble,inf) ],inf),\ctrl, ~snBus, \out,~eqBus10,\group, ~compGrp2,\tS, 0.39550810372374,)
 
-	],inf),
+
+	].scramble,inf),
 
 	Pbind(\instrument,\EQHP10, \in, ~eqBus10 ,\out, 0,\frq, 100, \dur,inf,\group, ~eqGrp2,\val,11800,\quant,1, \gain,(-8),\val2,2600,\quant2,8, \gain2,(-6),\vol, 1.2),
 
