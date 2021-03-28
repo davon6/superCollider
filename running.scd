@@ -1549,7 +1549,7 @@ s.sync;
 		\instrument, \bass,
 		\type, Pseq([\rest, \note, \note, \note], inf),
 
-		\cho, Pseq([0,0.00378125,0.001890625,0],inf),
+		\cho, Pseq([0,0.00378125*4,0.001890625*4,0],inf),
 		\dur, Pseq([1/4],4),\lpf,100,
 		\midinote, 28, \bus, ~bassShapB,
 		\atk, t.beatDur/4 * 0.01,
