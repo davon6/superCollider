@@ -344,6 +344,7 @@ s.sync;
 	~percuCom=  Bus.audio(s,2);
 
 	~percuCom2=  Bus.audio(s,2);
+	~percuFil=  Bus.audio(s,2);
 
 	~cymbalEq=  Bus.audio(s,2);
 	~hatEq=  Bus.audio(s,2);
@@ -621,15 +622,15 @@ LFNoise0.kr(~hz1beat).range(0.1,0.0)/*,0.02)*/
 }).add;
 
 	SynthDef.new(\snare, {
-		arg carHz=500, modHz=100, modAmp=1, atk=0, atk2=0, rel=1, amp=0.2, pan=0,rel2=2,out=0,latch=12000, da1=2, da2=2, crv1=(-3),crv2 = (-2) , noiLv  =0.321875, tS=1;
+		arg carHz=500, modHz=100, modAmp=1691, modAmp2=0.321875, atk=0, atk2=0, rel=1, amp=0.2, pan=0,rel2=2,out=0,latch=12000, da1=2, da2=2, crv1=(-3),crv2 = (-2) , noiLv  =0.321875, tS=1;
 	var car, mod, env, car2, mod2,env2, sig;
 
 	env = EnvGen.kr(Env.perc(atk, rel,curve:crv1), timeScale: tS,doneAction:da1);
 
 	env2 = EnvGen.kr(Env.perc(atk2, rel2, 1, crv2),timeScale: tS, doneAction:da2);
 
-	mod = SinOsc.ar(modHz, mul:1691);
-	car = SinOsc.ar(carHz + mod) * env * 0.321875;
+	mod = SinOsc.ar(modHz, mul:modAmp);
+	car = SinOsc.ar(carHz + mod) * env * modAmp2;
 
 	car2 = BrownNoise.ar(noiLv) * env2 ;
 
@@ -1166,6 +1167,16 @@ SynthDef("TriggerBufferGranular", {arg out=0, bufnum=0, in=0, thresh = 0.004, am
 
     Out.ar(out ,PingPong.ar(bufnum, left, delayTime, feedback, 1)
 		/*	* [amp+stereoL,amp+stereoR] * EnvGen.kr(Env([1,1,0],[0,dur,0],4),doneAction:2) */)
+	}).add;
+
+
+	SynthDef(\pingDSX, { |out = 0, bufnum = 0, dur, feedback = 0.5, delayTime = 0.3, in, tS=1 |
+    var left;
+
+		left =	In.ar(in,2);
+
+    Out.ar(out ,PingPong.ar(bufnum, left, delayTime, feedback, 3)
+		* EnvGen.kr(Env.step([1,1],[dur,0],4),timeScale: tS,doneAction:2) )
 	}).add;
 
 
