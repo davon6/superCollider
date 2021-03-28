@@ -1017,7 +1017,7 @@ Pbind(\instrument,\gran,\dur,	Pseq([1/1],24)
 	Pbind(\instrument,\stereo, \dur, 9999, \in, ~stereoPerch ,\spread,1  ,\center,Pxrand([ Pfunc({0.80.rand}),Pfunc({-0.80.rand})],inf), \out,~stetoSnaCom12/*~no1*/, \group, ~stereoGrp),
 
 
-//HAVE A 16/1 WOULD INCREASE THE FU HERE + 16/1 birng back the slow atttack probleme from grainbuf
+//IMPLEMENT PLAYBUF HERE BELOW !!!!!!!
 
 	Prand([
 	Pbind(\instrument,\gran,\dur,   Pseq([4/1],4),
