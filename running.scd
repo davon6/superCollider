@@ -98,6 +98,8 @@ s.sync;
 	~delay3 = Buffer.alloc(s, 48000 * 3, 2);
 	~delay4 = Buffer.alloc(s, 48000 * 3, 2);
 	~delay5 = Buffer.alloc(s, 48000 * 3, 2);
+	~delay6= Buffer.alloc(s, 48000 * 3, 2);
+
 	b = Buffer.alloc(s, 44100 * 2, 2);
 
 	~buf = Buffer.alloc(s,s.sampleRate*90 );
@@ -356,6 +358,7 @@ s.sync;
 	~cymbalEq=  Bus.audio(s,2);
 	~hatEq=  Bus.audio(s,2);
 
+	~no2Delay = Bus.audio(s,1);
 
 
 	~gateBou=  Bus.audio(s,2);
