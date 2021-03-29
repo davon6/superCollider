@@ -345,13 +345,17 @@ s.sync;
 	~percuRev=  Bus.audio(s,2);
 	~percuLimit=  Bus.audio(s,2);
 
+	~percuDelay=  Bus.audio(s,2);
+
 	~percuCom=  Bus.audio(s,2);
+	~percuComb=  Bus.audio(s,2);
 
 	~percuCom2=  Bus.audio(s,2);
 	~percuFil=  Bus.audio(s,2);
 
 	~cymbalEq=  Bus.audio(s,2);
 	~hatEq=  Bus.audio(s,2);
+
 
 
 	~gateBou=  Bus.audio(s,2);
@@ -1190,6 +1194,10 @@ SynthDef("TriggerBufferGranular", {arg out=0, bufnum=0, in=0, thresh = 0.004, am
 SynthDef(\comb, {|out=0, in ,maxDel, delayT,decT|
 		Out.ar(out, CombN.ar(In.ar(in,1),MouseX.kr(0.01,2),MouseY.kr(0.01,2),3))}).add;
 
+
+	SynthDef(\combS, {|out=0, in ,maxDel, delayT,decT,dur, tS=1|
+		Out.ar(out, CombN.ar(In.ar(in,2),/*MouseX.kr(0.01,2)*/maxDel, delayT /*MouseY.kr(0.01,2)*/,decT/*3*/)* EnvGen.kr(Env.step([1,1],[dur,0]),timeScale: tS,doneAction:2) )}).add;
+
 	SynthDef(\reverbS, {
 		|out=0, roomsize, revtime, damping, inputbw, spread = 15, drylevel, earlylevel,
     taillevel,maxRoomsize,wet=0.4,in =0,wF =0, spread2=0, level=1, center=0.0, multi = 2|
@@ -1212,6 +1220,11 @@ SynthDef(\comb, {|out=0, in ,maxDel, delayT,decT|
 	SynthDef(\compS, {|in, ctrl, out= 0, dec  , thr  =0.01 ,sB = 1, sA = (1/4), atk = 0.001, rel = 0.04 , gain=1|
 
 		Out.ar(out, Compander.ar(In.ar(in,2) , In.ar(ctrl,1)  , thresh: thr, slopeBelow: sB, slopeAbove: sA, clampTime: atk, relaxTime: rel)* gain );
+	}).add;
+
+	SynthDef(\compSX, {|in, ctrl, out= 0, dec  , thr  =0.01 ,sB = 1, sA = (1/4), atk = 0.001, rel = 0.04 , gain=1,tS=1,dur|
+
+		Out.ar(out, Compander.ar(In.ar(in,2) , In.ar(ctrl,1)  , thresh: thr, slopeBelow: sB, slopeAbove: sA, clampTime: atk, relaxTime: rel)* gain * EnvGen.kr(Env([1,1],[dur,0]),timeScale: tS,doneAction: 2 ));
 	}).add;
 
 
@@ -1556,20 +1569,20 @@ s.sync;
 
 
 
-	~kick =	Pbindef(\ki, \instrument, \kick,\dur, Pseq([1/1],1),\amp,(-8),\out,0);//-3.5 - 10.5
+	~kick =	Pbindef(\ki, \instrument, \kick,\dur, Pseq([1/1],1),\amp,(-9),\out,0);//-3.5 - 10.5
 
 	~bassShap = Pbind(\instrument, \shap, \dur,Pseq([1/1],inf),\dA1,2,\out,~bassShapB);
-
+//Problem overlapping
 	~bass = Pbindef(\bass,
 		\instrument, \bass,
 		\type, Pseq([\rest, \note, \note, \note], inf),
 
-		\cho, Pseq([0,0.00378125*4,0.001890625*4,0],inf),
+		\cho, Pseq([0,0.00378125*1,0.001890625*1,0],inf),
 		\dur, Pseq([1/4],4),\lpf,100,
 		\midinote, 28, \bus, ~bassShapB,
 		\atk, t.beatDur/4 * 0.01,
-		\rel, t.beatDur/4 * 0.83,
-		\rel2, t.beatDur/4 * 0.2,
+		\rel, t.beatDur/4 * 0.84,
+		\rel2, t.beatDur/4 * 0.112,
 		\atkcrv, -2,
 		\relcrv, -1,
 		\amp,(-17)/*(-13)*/,\out,0/*~again*//*~dipatchKB*///-10   -17

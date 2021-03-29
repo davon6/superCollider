@@ -34,6 +34,7 @@ Synth(\filterU ,[\in,~filterBus2 ,\busMod, ~bus3 , \busMod2,~bus5,\out,   ~eqBus
 // ~buf.play
 ~buf.play
 
+Ppar([~bassShap, Ppar([~kick, ~bass],inf)],1).play(t)
 
 (
 
@@ -70,7 +71,9 @@ Synth(\filterU ,[\in,~filterBus2 ,\busMod, ~bus3 , \busMod2,~bus5,\out,   ~eqBus
 
 
 ~compGrp = Group.after(~filterGrp2);
-~limitGrp = Group.after(~compGrp);
+~delayGrp2 = Group.after(~compGrp);
+~combGrp = Group.after(~delayGrp2);
+~limitGrp = Group.after(~combGrp);
 ~stereoGrp = Group.after(~limitGrp);
 ~dispatchGrp2 = Group.after(~stereoGrp);
 
@@ -106,15 +109,10 @@ o = {
 
 	/*Out.kr(~bus3, SinOsc.kr(0.3 ).range((-140),1500));*/
 
-}.play
+}.play;
 
 
 
-)
-
-
-
-(
 
 
 
@@ -495,20 +493,30 @@ Pbind(\instrument, \snare,\carHz, 41.2 ,\type,Pseq([
 	Pseq([\note ,\rest,\note,\rest,\note ,\rest,\note,\rest,\note ,\rest,\note,\rest,\note ,\rest,\note,\rest].scramble, 4),
 	Pseq([\note ,\rest,\note,\rest,\note ,\rest,\note,\rest,\note ,\rest,\note,\rest,\note ,\rest,\note,\rest].scramble, 4),
 ],inf),
-	\modHz,240.00.rand.postln  , \carHz,140.00.rrand(10.00).postln , \noiLv,1.00.rand,
+	\modHz,140.00.rand.postln  , \carHz,140.00.rrand(10.00).postln , \noiLv,1.00.rand,
 
 //has to change, cMon! maybe add a disto
-	\atk, 0.00502929687,\rel,0.0968.rrand(0.05),\rel2, 0.0968.rrand(0.05),\dur, Pseq([1/4], inf),\amp,(-16.5), \crv1,(-12.00).rrand(-4.00),\crv2,(-12.00).rrand(-4.00)   ,\out,~percuFil/*~percuEq*/, \atk,t.beatDur * 0.02, \atk2,Pkey(\atk)/*,\tS, 0.39550810372374*/,\modAmp,5000.00.rrand(1.00),\modAmp2,5000.00.rrand(1.00)),
+	\atk, 0.00502929687,\rel,0.0968.rrand(0.05),\rel2, 0.0968.rrand(0.05),\dur, Pseq([1/4], inf),\amp,(-16.5), \crv1,(-12.00).rrand(-4.00),\crv2,(-12.00).rrand(-4.00)   ,\out,~percuFil/*~percuEq*/, \atk,t.beatDur * 0.02, \atk2,Pkey(\atk)/*,\tS, 0.39550810372374*/,\modAmp,1000.00.rrand(1.00),\modAmp2,1000.00.rrand(1.00)),
 
 
 	Pbind(\instrument, \filterS, \dur,inf,\which,2, \in,~percuFil,\busMod, ~bus4,\rqLPF,~bus7, \out,~percuEq, \group,~filterGrp ,\freqFil, 30.rrand(-30)),
 
 	Pbind(\instrument , \EQHP2, \frq, 100 ,\dur, inf,\in, ~percuEq, \group, ~eqGrp0,\val, 1800, \quant, 8, \gain, (-10), \val, 10, \out , ~percuRev),
 
+
+	/*, REPLACE WITH A FLANGER*/
+
 	 Pbindf( ~quickFix, \instrument, \reverbS, \dur,inf, \in,~percuRev  , \out,~percuCom,\group,~revGrp),
 
-	Pbind(\instrument,\compS, \dur,inf,\thr,0.6 ,\sB, 1.2,\sA, 2,\atk ,0.0001, \rel ,0.04840
-,\gain,1,\in, ~percuCom ,\ctrl, ~kbus, \out,~percuLimit,\group, ~compGrp),
+	Pbind(\instrument,\compSX, \dur,Pseq([4/1],inf),\thr,0.6 ,\sB, 1.2,\sA, 2,\atk ,0.0001, \rel ,0.04840
+		,\gain,1,\in, ~percuCom ,\ctrl, ~kbus, \out,Pwrand([~percuDelay,~percuLimit],[1,4].normalizeSum,inf),\group, ~compGrp ,\tS, 0.39550810372374),
+
+	Pbind(\instrument, \pingDSX, \in, ~percuDelay ,\bufnum, /*b.bufnum*/Pseq([~delay2,~delay3,~delay4,~delay5],inf), \dur, Pseq([4/1],inf),\out,~percuComb,\group, ~delayGrp2,\delayTime,Pfunc({0.3.rrand(0.04)})/*0.04*/,\feedback,  1.00.rrand(0.1)),
+
+	///*MouseX.kr(0.01,2)*/maxDel, delayT /*MouseY.kr(0.01,2)*/,decT/*3*/)
+	Pbind(\instrument, \combS,\in, ~percuComb,\out,~percuLimit,\dur, Pseq([4/1],inf),\group,~combGrp,
+		\maxDel,Pfunc({2.00.rrand(0.01)}), \delayT,Pfunc({2.00.rrand(0.01)}),\decT,3.00.rrand(0.1),\tS, 0.39550810372374
+	),
 
 Pbind(\instrument , \limiterS,\dur, inf, \in,~percuLimit, \gain, 12,\group, ~limitGrp,\out,~percuCom2),],1).play(t, quant:1))
 
