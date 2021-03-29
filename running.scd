@@ -94,6 +94,10 @@ s.sync;
 	~e2 = Buffer.alloc(s, s.sampleRate *   t.beatDur*4 /*0.3872*/,1);
 	~f2 = Buffer.alloc(s, s.sampleRate *  t.beatDur*4);//  (t.beatDur*4)/*1.5488*/,1);
 	~delay = Buffer.alloc(s, 48000 * 3, 2);
+	~delay2 = Buffer.alloc(s, 48000 * 3, 2);
+	~delay3 = Buffer.alloc(s, 48000 * 3, 2);
+	~delay4 = Buffer.alloc(s, 48000 * 3, 2);
+	~delay5 = Buffer.alloc(s, 48000 * 3, 2);
 	b = Buffer.alloc(s, 44100 * 2, 2);
 
 	~buf = Buffer.alloc(s,s.sampleRate*90 );
@@ -1173,9 +1177,9 @@ SynthDef("TriggerBufferGranular", {arg out=0, bufnum=0, in=0, thresh = 0.004, am
 	SynthDef(\pingDSX, { |out = 0, bufnum = 0, dur, feedback = 0.5, delayTime = 0.3, in, tS=1 |
     var left;
 
-		left =	In.ar(in,2);
+		left =	Mix.ar(In.ar(in,2));
 
-    Out.ar(out ,PingPong.ar(bufnum, left, delayTime, feedback, 3)
+		Out.ar(out ,PingPong.ar(bufnum, [left,left], delayTime, feedback, 3)
 		* EnvGen.kr(Env.step([1,1],[dur,0],4),timeScale: tS,doneAction:2) )
 	}).add;
 
