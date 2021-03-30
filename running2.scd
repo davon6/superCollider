@@ -415,14 +415,17 @@ Pxrand([
 	Pseq([  Prand([ ~perc[2]   ,  /*~bar[3]*/],1),
 
 
-			Pbind(\instrument, \dispatchS10, \dur, Pseq([4/1],1),\in,Prand([ 0, ~rollingK],inf),\out,0,\tS, 0.39550810372374,\group,~dispatchGrp2)
+				Prand([
+			Pbind(\instrument, \dispatchS10, \dur, Pseq([4/1],1),\in,~rollingK,\out,0,\tS, 0.39550810372374,\group,~dispatchGrp2)
+
+					,Pseq([~kbassRest, Pseq([~bassRest],3)],1)
 	],1),
 
 
 	Pseq([ ~perc[3] ,/* Pwrand([ ~perc[3]   ,~bar[4] ],[4,1],1),*/
 
+	s,
 
-	Pbind(\instrument, \dispatchS10, \dur, Pseq([2/1],1),\in,Prand([ 0, ~rollingK],inf),\out,0,\tS, 0.39550810372374,\group,~dispatchGrp2)
 	],1),
 
 
@@ -451,8 +454,12 @@ Pxrand([
 	Pseq([
 	Pseq([~perc[1]/* ~bar[2]*/,~perc[1] ,
 
+Prand([
+			Pbind(\instrument, \dispatchS10, \dur, Pseq([8/1],1),\in,~rollingK,\tS, 0.39550810372374,\out,0,\group,~dispatchGrp2)
+						,Pseq([~kbassRest, Pseq([~bassRest],5),~kbassRest,~bassRest],1)
+	],1),
 
-			Pbind(\instrument, \dispatchS10, \dur, Pseq([8/1],1),\in,Prand([ 0, ~rollingK],inf),\tS, 0.39550810372374,\out,0,\group,~dispatchGrp2)
+
 	],1),
 
 
