@@ -39,7 +39,7 @@ c =(Synth(\pulModul,[\modu,0.075]));
 m =(Synth(\ranModul,[\modu,0.3]));
 
 
- k = (Synth( \filterModu, [\dur, inf,\in,~outFil, \out,0/*~toRecord*//*~gateBus*/,\qf, 0.4, \qf2,0.4,\filMod,100, \filFreq, 100,\filFreq2, 1200, \which,0],~filterGrp));
+k = (Synth( \filterModu, [\dur, inf,\in,~outFil, \out,[0,1]/*~toRecord*//*~gateBus*/,\qf, 0.4, \qf2,0.4,\filMod,100, \filFreq, 100,\filFreq2, 1200, \which,0],~filterGrp));
 
 
 
