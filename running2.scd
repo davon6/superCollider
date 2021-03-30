@@ -81,6 +81,7 @@ Ppar([~bassShap, Ppar([~kick, ~bass],inf)],1).play(t)
 
 ~compGrp2 = Group.after(~limitGrp2);
 ~eqGrp2 = Group.after(~compGrp2);
+~shifGrp= Group.after(~eqGrp2);
 
 
 
@@ -448,15 +449,20 @@ Pxrand([
 	Pbind(\instrument, \dispatchS10, \dur, Pseq([1/1],1),\in,Prand([ 0, ~rollingK],inf),\out,0,\tS, 0.39550810372374,\group,~dispatchGrp2)
 	],1),
 
-		   Prand([ ~perc[5]   ,/* ~bar[6]*/
+		   Prand([ ~perc[5]                 ,/* ~bar[6]*/
 
 
 
-			//here add otherwise ~bar[1],~bar[2] and whats bar[0] for ?
+
+				Pseq([~perc[3],
+				Ppar([
+					Pseq([Pbindf(~kick, \out,~eqBass)],4),Pseq([	Pbindf(~bass,\out,~eqBass)],4),
+
+						Pbind(\instrument, \shift2, \in,~eqBass,\dur, Pseq([4/1],1), \out,0, \freq,Pfunc({120.rand}), \group,~shifGrp,\tS, 0.39550810372374,)],1)
 
 
 
-	],[4,1],1),
+			],1) ],1)
 
 
 		].scramble,4),
@@ -483,19 +489,25 @@ Prand([
 	],1),
 
 
-	Prand([	Pseq([   Prand([ ~perc[4]   /*, ~bar[5] */ ],1),
+/*	Prand([*/	Pseq([   Prand([ ~perc[4]   /*, ~bar[5] */ ],1),
 
 
 	Pbind(\instrument,\dispatchS10, \dur, Pseq([1/1],1),\in,Prand([ 0, ~rollingK],inf),\tS, 0.39550810372374,\out,0,\group,~dispatchGrp2)
 	],1),
 
 
-			Pxrand([ ~perc[5], Pseq([~kbassRest, Pseq([ ~bassRest], 15),],1)],1)
+			Pxrand([ ~perc[5], Pseq([~kbassRest, Pseq([ ~bassRest], 7) ,   Ppar([
+					Pseq([Pbindf(~kick, \out,~eqBass)],4),Pseq([	Pbindf(~bass,\out,~eqBass)],4),
+
+						Pbind(\instrument, \shift2, \in,~eqBass,\dur, Pseq([4/1],1), \out,0, \freq,Pfunc({120.rand}), \group,~shifGrp,\tS, 0.39550810372374,)],1), Pseq([~kbassRest, Pseq([ ~bassRest], 3)   ],1)],1)
 
 		],1)
 		,
 
-		    ~perc[5]
+			Pseq([ ~perc[4],Ppar([~kick, 	~bassMel[~scale]],1)
+
+
+			],1)
 
 
 				].scramble,4),

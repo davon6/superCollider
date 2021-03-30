@@ -23,6 +23,15 @@ MIDIIn.disconnectAll;
 
 ~recGrp= Group.after(~shapGrp);
 
+
+
+~scl = [Pbindef(\aaa, \instrument, \sequ, \value,
+		Pseq([Scale.major(\just).degreeToFreq(7.rand, 76.midicps, -1),Scale.major(\just).degreeToFreq(7.rand, 76.midicps, 01),Scale.major(\just).degreeToFreq(7.rand, 76.midicps, -1)],inf),\dur,Pseq([4/1],inf),\in, ~outFil/*~toRecord*/,\group,~shapGrp),
+
+
+Pbindef(\aaa, \instrument, \sequ, \value,
+	Pseq([Scale.minor(\just).degreeToFreq(7.rand, 76.midicps, -1),Scale.minor(\just).degreeToFreq(7.rand, 76.midicps, 01),Scale.minor(\just).degreeToFreq(7.rand, 76.midicps, -1)],inf),\dur,Pseq([4/1],inf),\in, ~outFil/*~toRecord*/,\group,~shapGrp)];
+
 )
 //no2 doesnt not go tottsly tru filter at least low
 // phaser
@@ -43,44 +52,7 @@ k = (Synth( \filterModu, [\dur, inf,\in,~outFil, \out,[0,1]/*~toRecord*//*~gateB
 
 
 
-Ppar([
-
-Pbindef(\aaa, \instrument, \sequ, \value,
-		Pseq([Scale.major(\just).degreeToFreq(7.rand, 76.midicps, -1),Scale.major(\just).degreeToFreq(7.rand, 76.midicps, 01),Scale.major(\just).degreeToFreq(7.rand, 76.midicps, -1)],inf),
-
-			//1200.rand,1200.rand,1200.rand],inf),
-
-		\dur,Pseq([4/1],inf),\in, ~outFil/*~toRecord*/,\group,~shapGrp),
-
-
-//special mode
-
-	/*Pxrand([
-	Pbind(\instrument, \gate ,\in,~gateBus   ,\vlDec,1.8,\vlSub,1.8, \vlSub2,Pkey(\vlSub),
-		\dur,Pxrand([ Pseq([16/1],1), Pseq([4/1],1) ],1),    \group,~shapGrp, \out,~toRecord ,\tS, 0.39550810372374 ,\relSu,0,\atkT,0, \decT,1, \subsT,0, \relT,0, \atckC,0, \decC,0, \relC,0,\vlAtk,0,\vlRel,Pkey(\vlAtk)),
-
-		Pbind(\instrument, \gate ,\in,~gateBus   ,\vlDec,1.8,
-		\dur,Pxrand([Pseq([1/4],4),   Pseq([1/4],16), Pseq([1/1],1) ],3) ,    \group,~shapGrp, \out,~toRecord,\tS, 0.39550810372374,
-		\vlSub,Pfunc({1.7.exprand(1.1,1)}),\vlSub2,Pkey(\vlSub),\atkT,Pfunc({0.10.exprand(0.01)}),
-	\decT,Pfunc({0.6.exprand(0.8,0.3)}),
-	\subsT,Pfunc({0.2.exprand(0.03,0.1)}),
-	\relT,Pfunc({0.12.exprand(0.8,1)}),
-	\atckC,Pfunc({6.exprand(1,1)}),
-	\decC,Pfunc({-28.exprand(-0.1)}),
-		\relC,Pfunc({-8.exprand(-2,1)}),\vlAtk ,Pfunc({1.00.exprand(0.01)}),\vlRel,Pkey(\vlAtk)
-	)
-	],inf)*/
-
-
-
-
-
-
-
-
-
-
-],1).play(t);
+~scl[~scale].play(t);
 
 
 

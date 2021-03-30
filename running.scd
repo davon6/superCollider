@@ -36,6 +36,7 @@ s.waitForBoot({
 	~hzQbeat = ~hz1beat/4;
 	~hzHbeat = ~hzQbeat/4;
 	~hz8Oct = ~hz1beat * 2048;
+	~scale = 2.rand;
 
 
 s.sync;
@@ -1652,7 +1653,8 @@ s.sync;
 ];
 
 	// Ppar([Pseq([~bass],inf),Pbindf(~snare,\da1,0)],1);//JEEEZ
-
+~bassMel=[	Pbindf(~bass,\freq, Scale.major(\just).degreeToFreq(7.rand, 76.midicps, -4)),
+		Pbindf(~bass,\freq, Scale.minor(\just).degreeToFreq(7.rand, 76.midicps, -4))]
 
 });)
 
