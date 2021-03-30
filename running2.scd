@@ -290,19 +290,20 @@ Pbind(\instrument, \gateS ,\dur,Pxrand([
 
 //main dispatch
 	Pxrand([
-	Pbind(\instrument,\gateS, \dur,Pseq([1/1],256),\in,Pxrand([ Pseq([ ~stetoSnaCom12,~stetoSnaCom12,~stetoSnaCom1,~stetoSnaCom1,~stetoSnaCom1,~stetoSnaCom1,~stetoSnaCom1,~stetoSnaCom1 ].scramble,256 )   ,
-Pseq([ ~stetoSnaCom12,~stetoSnaCom1,~stetoSnaCom1,~stetoSnaCom1,~stetoSnaCom1,~stetoSnaCom1,~stetoSnaCom1,~stetoSnaCom1 ].scramble,256 ) ],inf),\out,~eqBus102,\group, ~gateGrp3,\tS, 0.39550810372374,),
+	Pbind(\instrument,\gateS, \dur,Pseq([1/1],64),\in,Pxrand([ Pseq([ ~stetoSnaCom12,~stetoSnaCom12,~stetoSnaCom1,~stetoSnaCom1,~stetoSnaCom1,~stetoSnaCom1,~stetoSnaCom1,~stetoSnaCom1 ].scramble,64 )   ,
+Pseq([ ~stetoSnaCom12,~stetoSnaCom1,~stetoSnaCom1,~stetoSnaCom1,~stetoSnaCom1,~stetoSnaCom1,~stetoSnaCom1,~stetoSnaCom1 ].scramble,64 ),Pseq([ ~stetoSnaCom12,~stetoSnaCom12,~stetoSnaCom1,~stetoSnaCom1,~stetoSnaCom1,~stetoSnaCom1,~stetoSnaCom1,~stetoSnaCom1 ].scramble,64 ),Pseq([ ~stetoSnaCom12,~stetoSnaCom1,~stetoSnaCom1,~stetoSnaCom1,~stetoSnaCom1,~stetoSnaCom1,~stetoSnaCom1,~stetoSnaCom1 ].scramble,64 ) ],inf),\out,~eqBus102,\group, ~gateGrp3,\tS, 0.39550810372374,),
 
 
-Pbind(\instrument,\gateS, \dur,Pseq([256/1],1),\in, ~stetoSnaCom1  , \out,  ~eqBus102,\group, ~gateGrp3,\tS, 0.39550810372374,)],inf),
+Pbind(\instrument,\gateS, \dur,Pseq([64/1],1),\in, ~stetoSnaCom1  , \out,  ~eqBus102,\group, ~gateGrp3,\tS, 0.39550810372374,)],inf),
 
 
 
 
 	Pxrand([
-		Pbind(\instrument, \gateS, \dur,Pseq([1/1],64) , \type,Pseq([Pseq([
-Pseq([\rest,\rest, \note,\rest,\rest,\rest,\rest, \note,\note,\rest,\rest,\note,\rest,\rest,\rest,\rest].scramble,1),
-		Pseq([\rest,\rest, \rest,\rest,\rest,\rest,\rest, \rest,\note,\rest,\rest,\note,\rest,\note,\note,\rest].scramble,1)],2) ],inf)        ,
+		Pbind(\instrument, \gateS, \dur,Pseq([1/1],64) , \type,/*Pseq([*/
+Pseq([\rest,\rest, \note,\rest,\rest,\rest,\rest, \note,\note,\rest,\rest,\note,\rest,\rest,\rest,\rest].scramble,inf)
+
+		/*Pseq([\rest,\rest, \rest,\rest,\rest,\rest,\rest, \rest,\note,\rest,\rest,\note,\rest,\note,\note,\rest].scramble,1) ],inf)        */,
 	\atkT,0.1, \decT, 0.8.rrand(0.6),\subsT, 0.2,\relT, 0.2.rrand(0),\atkT, 4.rrand(1), \vlSub , 0.8.rrand(0.4), \vlSub2, Pkey(\vlSub),\relC, (-5).rrand(-1),\tS, 0.39550810372374,
 	\in, ~eqBus102,\group, ~finalDispatchGrp, \out, ~toLimitlast),
 
@@ -479,13 +480,16 @@ Pxrand([
 
 				].scramble,4),
 
+
+		/*Pbind(\instrument, \shift2, \in,~toRecord2,\dur, inf, \out,0, \group,~shifGrp)*/
+
 ],inf),],1)/*.play(t, quant:1)*/)
 
 
 ~no4.stop;
 (~no4 = Ppar([
 
-Pbind(\instrument, \snare,\carHz, 41.2 ,\type,Pseq([
+Pbind(\instrument, \snare,/*\carHz, 41.2 */\type,Pseq([
 
 	Pseq([\note ,\rest,\note,\rest,\note ,\rest,\note,\rest,\note ,\rest,\note,\rest,\note ,\rest,\note,\rest].scramble, 4),
 	Pseq([\note ,\rest,\note,\rest,\note ,\rest,\note,\rest,\note ,\rest,\note,\rest,\note ,\rest,\note,\rest].scramble, 4),
@@ -541,10 +545,10 @@ Pseq([
 
 
 		Pxrand([
-		Pbind(\instrument, \wNoise,\dur,  Pseq([1/1], 1),\key, Prand([\atk, \dec], 1),\value,Pkey(\dur),\amp,(-18), \finish, { ~key.envirPut(~value) },\out, 0,\type,Prand([\note, \rest],inf)),
+		Pbind(\instrument, \wNoise,\dur,  Pseq([1/1], 1),\key, Prand([\atk, \dec], 1),\value,Pkey(\dur),\amp,(-18), \finish, { ~key.envirPut(~value) },\out, ~slideBus,\type,Prand([\note, \rest],inf)),
 
 			Pseq([
-			Pbind(\instrument, \wNoise,\dur,  Pseq([1/4],1),\key, Prand([\atk, \dec], 1),\value,Pkey(\dur),\amp,(-18), \finish, { ~key.envirPut(~value) },\out, 0,\type,Prand([\note, \rest],inf)),
+			Pbind(\instrument, \wNoise,\dur,  Pseq([1/4],1),\key, Prand([\atk, \dec], 1),\value,Pkey(\dur),\amp,(-18), \finish, { ~key.envirPut(~value) },\out, ~slideBus,\type,Prand([\note, \rest],inf)),
 				Pbind(\instrument, \wNoise,\dur, Pseq([ 3/4],1), \type, \rest),
 		],1)
 
@@ -617,7 +621,7 @@ Pbind(\instrument, \filter , \in,  ~riFil   ,\dur,inf, \out,~riEq, \busMod, ~bus
 
 	Pbindf( ~rShort, \instrument, \reverbS, \dur,inf, \in,~riRev  , \out,~riComp,\group,~revGrp),
 	Pbind(\instrument,\compS, \dur,inf,\thr,0.8 ,\sB, 1.015,\sA, 1/2,\atk ,0.0242, \rel ,0.0968,\gain,1,\in, ~riComp ,\ctrl, ~kbus, \out,~riLimit, \group, ~compGrp),
-	Pbind(\instrument, \limiterS,\in, ~riLimit, \dur, inf,\gain,5,\group,~limitGrp,\out,~riStereo),
+	Pbind(\instrument, \limiterS,\in, ~riLimit, \dur, inf,\gain,1.8,\group,~limitGrp,\out,~riStereo),
 
 	Pbind(\instrument,\stereoS, \dur, Pseq([64/1],inf), \in, ~riStereo  , \center,Pfunc({0.20.rrand(-0.2)}),\spread,1,\out,0,\tS, 0.39550810372374,\group, ~stereoGrp),
 
@@ -815,7 +819,7 @@ Ppar([
 	//NO2
 
 	Pbind( \instrument, \playBuf, \impulse, 0.075/*Pseq([16/1],inf)*/,
-	\dur,Pkey(\impulse), \tS,  0.39550810372374,\start,Pfunc({ ~buf.numFrames.rrand(100000)- 100000}),\buf,~buf,\out, ~distoBus12),
+	\dur,Pseq([16/1],inf), \tS,  0.39550810372374,\start,Pfunc({ ~buf.numFrames.rrand(100000)- 100000}),\buf,~buf,\out, ~distoBus12),
 
 
 
@@ -1069,11 +1073,11 @@ Pbind(\instrument,\stereo, \dur, 9999, \in, ~stereoPerch ,\spread,1  ,\center,Px
 
 	Prand([
 
-		Pbind( \instrument, \playBuf, \impulse, Prand([0.3,0.075],1) ,
-		\dur,Pkey(\impulse), \tS,  0.39550810372374,\start,Pfunc({( ~buf.numFrames.rrand(100000)- 100000)}),\buf,~buf,\out, ~filterBou,\loopy,0),
+		Pbind( \instrument, \playBuf, \impulse, 0.075,
+		\dur,Pseq([16/1],inf), \tS,  0.39550810372374,\start,Pfunc({( ~buf.numFrames.rrand(100000)- 100000)}),\buf,~buf,\out, ~filterBou,\loopy,0),
 
 		Pbind( \instrument, \playBuf, \impulse, 0.3,
-		\dur,Pkey(\impulse), \tS,  0.39550810372374,\start,Pxrand([
+			\dur,Pseq([4/1],inf), \tS,  0.39550810372374,\start,Pxrand([
 			Pseq([(~buf.numFrames.rrand(100000)- 100000)],4),Pseq([(~buf.numFrames.rrand(100000)- 100000)],4),Pseq([(~buf.numFrames.rrand(100000)- 100000)],4),Pseq([(~buf.numFrames.rrand(100000)- 100000)],4),
 				Pseq([(~buf.numFrames.rrand(100000)- 100000)],4),Pseq([(~buf.numFrames.rrand(100000)- 100000)],4),Pseq([(~buf.numFrames.rrand(100000)- 100000)],4),Pseq([(~buf.numFrames.rrand(100000)- 100000)],4),
 				Pseq([(~buf.numFrames.rrand(100000)- 100000)],4),Pseq([(~buf.numFrames.rrand(100000)- 100000)],4),Pseq([(~buf.numFrames.rrand(100000)- 100000)],4),Pseq([(~buf.numFrames.rrand(100000)- 100000)],4),
