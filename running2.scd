@@ -172,8 +172,8 @@ Pxrand([
 	Pbind(\instrument, \lfo13,\val,~hzQbeat,\out,~bus10 ,\dur,999,\ph,0, \rL,(-0.8),\rH,0.8, \group, ~lfoGrp),
 
 
-	Pbind(\instrument, \kick,\dur, Pseq([1/1],inf),\amp,(-8),\out,~kbus),
-	Pbind(\instrument, \snare,\carHz, 41.2 ,\type, Pseq([\rest ,\rest,\note,\rest], inf),\atk, 0.00502929687,\rel, 0.0968,\rel2, 0.3872,\dur, Pseq([1/2], inf),\amp,(-16.5), \crv1,(-8),\crv2,(-7)   ,\out,~snBus),
+	Pbind(\instrument, \kick,\dur, Pseq([1/1],inf),\amp,(-9),\out,~kbus),
+	Pbind(\instrument, \snare,\carHz, 41.2 ,\type, Pseq([\rest ,\rest,\note,\rest], inf),\atk, 0.00502929687,\rel, 0.0968,\rel2, 0.3872,\dur, Pseq([1/2], inf),\amp,(-17), \crv1,(-8),\crv2,(-7)   ,\out,~snBus),
 
 
 	Pbind(\instrument,\compS, \dur,inf,\thr,0.6 ,\sB, 1.2,\sA, 2,\atk ,0.0001, \rel ,0.04840
@@ -412,20 +412,33 @@ Pbind(\instrument, \filter, \dur,inf, \in,~hpK,\which,2,\busMod, ~bus5,\bus7,~bu
 
 Pxrand([
 	Pseq([
+
 	Pseq([  Prand([ ~perc[2]   ,  /*~bar[3]*/],1),
 
 
 				Prand([
-			Pbind(\instrument, \dispatchS10, \dur, Pseq([4/1],1),\in,~rollingK,\out,0,\tS, 0.39550810372374,\group,~dispatchGrp2)
+			Pbind(\instrument, \dispatchS10, \dur, Pseq([4/1],1),\in,~rollingK,\out,0,\tS, 0.39550810372374,\group,~dispatchGrp2),
 
-					,Pseq([~kbassRest, Pseq([~bassRest],3)],1)
-	],1),
+				Pseq([~kbassRest, Pseq([~bassRest],3)],1),
+				Ppar([
+					Pseq([Pbindf(~kick, \out,~eqBass)],4),Pseq([	Pbindf(~bass,\out,~eqBass)],4),
+
+						Pbind(\instrument, \shift2, \in,~eqBass,\dur, Pseq([4/1],1), \out,0, \freq,Pfunc({120.rand}), \group,~shifGrp,\tS, 0.39550810372374,)],1)
+
+
+	],1),	],1),
 
 
 	Pseq([ ~perc[3] ,/* Pwrand([ ~perc[3]   ,~bar[4] ],[4,1],1),*/
 
-	s,
+	/*s,*/
+	Ppar([
 
+					Pbindf(~kick, \out,~eqBass),
+	Pbindf(~bass,\out,~eqBass, \type,\note,\dur,Pseq([2/1],1),\rel, 2* (60/~bpm)),
+
+	Pbind(\instrument, \shift2, \in,~eqBass,\dur, Pseq([2/1],1), \out,0, \freq,Pfunc({120.rand}), \group,~shifGrp)
+],1)
 	],1),
 
 
@@ -452,18 +465,18 @@ Pxrand([
 
 
 	Pseq([
-	Pseq([~perc[1]/* ~bar[2]*/,~perc[1] ,
+			Pseq([ Pseq([~kbassRest, Pseq([ ~bassRest], 3)],1)  ,~perc[1] ,
 
 Prand([
 			Pbind(\instrument, \dispatchS10, \dur, Pseq([8/1],1),\in,~rollingK,\tS, 0.39550810372374,\out,0,\group,~dispatchGrp2)
 						,Pseq([~kbassRest, Pseq([~bassRest],5),~kbassRest,~bassRest],1)
-	],1),
+	],1)
 
 
 	],1),
 
 
-	Pseq([ ~perc[0],
+	Pseq([ ~perc[0]      ,
 
 
 	Pbind(\instrument,\dispatchS10, \dur, Pseq([12/1],1),\in,Prand([ 0, ~rollingK],inf),\tS, 0.39550810372374,\out,0,\group,~dispatchGrp2)
@@ -490,7 +503,7 @@ Prand([
 
 		/*Pbind(\instrument, \shift2, \in,~toRecord2,\dur, inf, \out,0, \group,~shifGrp)*/
 
-],inf),],1)/*.play(t, quant:1)*/)
+],inf) ],1)/*.play(t, quant:1)*/)
 
 
 ~no4.stop;
@@ -1153,7 +1166,7 @@ o.stop; ~base.stop; ~kb.stop; ~no4.stop; ~rises.stop; ~lp.stop;~bp.stop;~hp.stop
 
 
 
-(~track = Ppar([ ~base, ~kb , ~mainLead],1).play(t,quant:1))
+(~track = Ppar([ ~base, ~kb ],1).play(t,quant:1))
 s.plotTree
 s.meter
 FreqScope.new
