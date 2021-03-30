@@ -395,8 +395,8 @@ s.sync;
 ~seqBus= Bus.control(s,1);
 	s.sync;
 
-	SynthDef(\playBuf ,{|out = 0,start, trig= 0.002, dur, buf, dA=2, tS=1|Out.ar(out,PlayBuf.ar(1,buf,trigger:
-		trig/*Dust.kr(4.0)*/,startPos: start,loop: 1/*,doneAction: dA*/)* EnvGen.kr(Env([0,1,1,0],[0,dur,0]),timeScale: tS,doneAction: 2));}).add;
+	SynthDef(\playBuf ,{|out = 0,start, trig= 0.002, dur, buf, dA=2, tS=1, loopy=1|Out.ar(out,PlayBuf.ar(1,buf,trigger:
+		trig/*Dust.kr(4.0)*/,startPos: start,loop: loopy/*,doneAction: dA*/)* EnvGen.kr(Env([0,1,1,0],[0,dur,0]),timeScale: tS,doneAction: 2));}).add;
 
 
 
@@ -898,6 +898,30 @@ SynthDef(\dispatch2,{|in, out, dur|Out.ar(out, In.ar(in,2)* EnvGen.kr(Env([0,1,1
 			/*freq:  freq2+    In.kr( boo, 1)  +   (EnvGen.kr(Env([vlPE,vlPE2],[dur/*dcPE*/,0],crvEP),doneAction: dA)*factor2)
 */
 			freq:SinOsc.ar(0.3).range(-100,100)
+
+
+
+
+			/*SinOsc.kr(0.3).range(10,-10)*/
+		   /** EnvGen.kr(Env.step([factor,0],[dur,0]),doneAction: dA3)*//*)*/
+			/*+
+			(EnvGen.kr(Env.step([vlPE3,vlPE33],[dur/*dcPE2*/,0],crvEP2),doneAction: dA2)*factor3)+
+
+			*/            ));
+	}).add;
+
+
+
+
+		SynthDef(\shift2, {|in, out, freq,boo, freq2, factor =1, factor2, factor3, vlPE =27.1366666667,vlPE2=0.2, crvEP = (-2), dcPE = 0.129066666667, dur,
+		vlPE3,vlPE33,crvEP2, dA=0, dA2=0, dA3=0|
+
+
+		Out.ar(out, FreqShift.ar(In.ar(in, 2)/*.sign*/,
+
+			/*freq:  freq2+    In.kr( boo, 1)  +   (EnvGen.kr(Env([vlPE,vlPE2],[dur/*dcPE*/,0],crvEP),doneAction: dA)*factor2)
+*/
+			/*freq:SinOsc.ar(0.3).range(-100,100)*/MouseX.kr(0,2000)
 
 
 
