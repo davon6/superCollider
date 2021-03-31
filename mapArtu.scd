@@ -32,11 +32,11 @@ MIDIIn.disconnectAll;
 Pbindef(\aaa, \instrument, \sequ, \value,
 	Pseq([Scale.minor(\just).degreeToFreq(7.rand, 76.midicps, -1),Scale.minor(\just).degreeToFreq(7.rand, 76.midicps, 01),Scale.minor(\just).degreeToFreq(7.rand, 76.midicps, -1)],inf),\dur,Pseq([4/1],inf),\in, ~outFil/*~toRecord*/,\group,~shapGrp)];
 
-)
+
 //no2 doesnt not go tottsly tru filter at least low
 // phaser
 //CANT HEAR DELAY IN ARRANGEMENT
-(
+
 
 d = (Synth( \fm2, [\dur, inf,\stretch, 3.5,\mRatio, 1,\amp, 0.18,\cRatio, 1,\index, 1,\atkE, 0.1,\out,~outFil],~synthGrp));
 
