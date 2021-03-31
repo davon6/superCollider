@@ -686,7 +686,7 @@ LFNoise0.kr(~hz1beat).range(0.1,0.0)/*,0.02)*/
 			[vlAtk, index*iScale, index],//middle was 10
 			[dur*atk, dur* dec],
 			[ic_atk, ic_rel]//atkC was 10
-		),doneAction:2
+		),timeScale: tS,doneAction:2
 	);
 		env =  EnvGen.kr(Env.step([1,1],[dur,0]),timeScale: tS,doneAction: 2);
 	mod2 = SinOsc.ar(freq/10*f3, mul:freq/10 * iEnv);
@@ -861,12 +861,12 @@ SynthDef(\dispatch2,{|in, out, dur,tS=1|Out.ar(out, In.ar(in,2)* EnvGen.kr(Env([
 
 	SynthDef(\dispatch,{|in, out, dur|Out.ar(out, In.ar(in,1)* EnvGen.kr(Env([0,1,1,0],[0,dur,0,0]),doneAction:2))}).add;
 
-SynthDef(\dispatch2,{|in, out, dur,tS=1|Out.ar(out, In.ar(in,2)* EnvGen.kr(Env([0,1,1,0],[0,dur,0,0]),timeScale: tS,doneAction:2))}).add;
+SynthDef(\dispatch2,{|in, out, dur,tS=1|Out.ar(out, In.ar(in,2)*  EnvGen.kr(Env.step([1,0],[dur,0]),timeScale: tS,doneAction:2))}).add;
 
-	SynthDef(\dispatchS,{|in, out, dur|ReplaceOut.ar(out, In.ar(in,10)* EnvGen.kr(Env([1,1],[dur,0]),doneAction:2))}).add;
+	SynthDef(\dispatchS,{|in, out, dur,tS=1|ReplaceOut.ar(out, In.ar(in,10) *EnvGen.kr(Env.step([1,0],[dur,0]),timeScale: tS,doneAction:2))}).add;
 
 
-	SynthDef(\dispatchS10,{|in, out, dur,tS=1|Out.ar(out, In.ar(in,10)* EnvGen.kr(Env([1,1],[dur,0]),timeScale: tS,doneAction:2))}).add;
+	SynthDef(\dispatchS10,{|in, out, dur,tS=1|Out.ar(out, In.ar(in,10)* EnvGen.kr(Env.step([1,0],[dur,0]),timeScale: tS,doneAction:2))}).add;
 
 
 
@@ -919,7 +919,7 @@ SynthDef(\dispatch2,{|in, out, dur|Out.ar(out, In.ar(in,2)* EnvGen.kr(Env([0,1,1
 
 
 		Out.ar(out, FreqShift.ar(In.ar(in, 2)/*.sign*/,
-freq         )* EnvGen.kr(Env([1,1],[dur,0]),timeScale: tS,doneAction:2))}).add;
+freq         )* EnvGen.kr(Env.step([1,0],[dur,0]),timeScale: tS,doneAction:2))}).add;
 
 
 
@@ -1240,8 +1240,8 @@ SynthDef(\comb, {|out=0, in ,maxDel, delayT,decT|
 
 	SynthDef(\compSX, {|in, ctrl, out= 0, dec  , thr  =0.01 ,sB = 1, sA = (1/4), atk = 0.001, rel = 0.04 , gain=1,tS=1,dur|
 
-		Out.ar(out, Compander.ar(In.ar(in,2) , In.ar(ctrl,1)  , thresh: thr, slopeBelow: sB, slopeAbove: sA, clampTime: atk, relaxTime: rel)* gain * EnvGen.kr(Env([1,1],[dur,0]),timeScale: tS,doneAction: 2 ));
-	}).add;
+		Out.ar(out, Compander.ar(In.ar(in,2) , In.ar(ctrl,1)  , thresh: thr, slopeBelow: sB, slopeAbove: sA, clampTime: atk, relaxTime: rel)* gain * EnvGen.kr(Env.step([1,0],[dur,0]),timeScale: tS,doneAction:2))}).add;
+
 
 
 		SynthDef(\EQ, {|out=0, in, val, quant, gain| Out.ar(out, BPeakEQ.ar(
@@ -1299,7 +1299,7 @@ SynthDef(\EQHP10, {|out=0, in, val, quant, gain, val2, quant2, gain2 frq=100, vo
 
 		Out.ar(out,
 			Splay.arFill(10,
-				In.ar(in, 1)
+				{ In.ar(in, 1)}
 				,spread,level,center)* EnvGen.kr(Env([0,1,1,0],[atkT,dur,0],[crvA,0]),timeScale: tS,doneAction: 2)
 			//EnvGen.kr(Env.step([1],[dur]),doneAction: 2)
 		);
@@ -1310,7 +1310,7 @@ SynthDef(\EQHP10, {|out=0, in, val, quant, gain, val2, quant2, gain2 frq=100, vo
 
 		Out.ar(out,
 			Splay.arFill(10,
-				Mix.ar(In.ar(in, 2))
+				{Mix.ar(In.ar(in, 2))}
 				,spread,level,center/*+ In.kr(modPan)*/)
 			* EnvGen.kr(Env([0,1,1,0],[dur* atkT,dur*decT,0],[crvA,0]),timeScale: tS,doneAction: 2)
 			//EnvGen.kr(Env.step([1],[dur]),doneAction: 2)
@@ -1322,7 +1322,7 @@ SynthDef(\EQHP10, {|out=0, in, val, quant, gain, val2, quant2, gain2 frq=100, vo
 
 		Out.ar(out,
 			Splay.arFill(10,
-				Mix.ar(In.ar(in, 2))
+				{	Mix.ar(In.ar(in, 2))}
 				,spread,level,center+ In.kr(modPan))
 			* EnvGen.kr(Env([0,1,1,0],[dur* atkT,dur*decT,0],[crvA,0]),timeScale: tS,doneAction: 2)
 			//EnvGen.kr(Env.step([1],[dur]),doneAction: 2)
@@ -1348,8 +1348,7 @@ SynthDef(\EQHP10, {|out=0, in, val, quant, gain, val2, quant2, gain2 frq=100, vo
 
 	SynthDef(\comp10, {|in, ctrl, out= 0, dec  , thr  =0.01 ,sB = 1, sA = (1/4), atk = 0.001, rel = 0.04 , gain=1, dur,tS=1|
 
-		Out.ar(out, Compander.ar(In.ar(in,10) , In.ar(ctrl,1)  , thresh: thr, slopeBelow: sB, slopeAbove: sA, clampTime: atk, relaxTime: rel)* gain* EnvGen.kr(Env([1,1],[dur,0]),timeScale: tS,doneAction: 2 ));
-	}).add;
+		Out.ar(out, Compander.ar(In.ar(in,10) , In.ar(ctrl,1)  , thresh: thr, slopeBelow: sB, slopeAbove: sA, clampTime: atk, relaxTime: rel)* gain* EnvGen.kr(Env.step([1,0],[dur,0]),timeScale: tS,doneAction:2))}).add;
 
 
 
@@ -1608,7 +1607,7 @@ s.sync;
 
 ~hat = Pbind(\instrument,\percussion,\dur,Pseq([1/4], 64),\atk, 0,\rel,0.04840,\rel2,0.02420,\amp,Pseq([( -18.2), ( -18.2),( -18.2),( -19.2),( -17.2),( -17),( -18.2),( -18.2)],inf), \crv1, (-3), \crv1b, (-5), \modHz, exprand(500,10000).postln, \mulMod, rrand(100, 500).postln, \carHz, exprand(20,10000), \modAmp, 0.12875, \latch, 18500, \stereoR, 0.007,\out,~comBusHat);
 
-	~snare = Pbind(\instrument, \snare,\carHz, 41.2 ,\type, Pseq([\rest ,\rest,\note,\rest], 8),\atk, 0.00502929687,\rel, 0.0968,\rel2, 0.3872,\dur, Pseq([1/2], inf),\amp,(-17), \crv1,(-8),\crv2,(-7)   ,\out,~snareEQ, \atk,t.beatDur * 0.02, \atk2,Pkey(\atk));
+	~snare = Pbind(\instrument, \snare,\carHz, 41.2 ,\type, Pseq([\rest ,\rest,\note,\rest], 8),\atk, 0.00502929687,\rel, 0.0968,\rel2, 0.3872,\dur, Pseq([1/2], inf),\amp,(-17.2), \crv1,(-8),\crv2,(-7)   ,\out,~snareEQ, \atk,t.beatDur * 0.02, \atk2,Pkey(\atk));
 
 
 
