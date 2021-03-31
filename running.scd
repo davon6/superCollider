@@ -592,12 +592,12 @@ SynthDef(\kick, {
 	s.sync;
 
 		SynthDef.new(\percussion, {
-	arg carHz=500, modHz=1899.3343179398, modAmp=0, atk=0.01, rel=1, amp=0.2, pan=0,rel2=1,out=0, latch = 6000, crv1, crv1b, mulMod, stereoL=0, stereoR=0;
+	arg carHz=500, modHz=1899.3343179398, modAmp=0, atk=0, rel=1, amp=0.2, pan=0,rel2=1,out=0, latch = 6000, crv1, crv1b, mulMod, stereoL=0, stereoR=0;
 	var car, mod, env, car2, mod2,env2,sig;
 
 	env = EnvGen.kr(Env.perc(atk, rel,1,crv1), doneAction:2);
 
-	env2 = EnvGen.kr(Env.perc(0.001, rel2, 1, crv1b), doneAction:2);
+	env2 = EnvGen.kr(Env.perc(0, rel2, 1, crv1b), doneAction:2);
 
 	mod = SinOsc.ar(modHz, mul:mulMod);
 	car = SinOsc.ar(carHz + mod) * env * 0.05;
@@ -1584,7 +1584,7 @@ s.sync;
 
 ~hat = Pbind(\instrument,\percussion,\dur,Pseq([1/4], 64),\atk, 0,\rel,0.04840,\rel2,0.02420,\amp,Pseq([( -16.2), ( -17.2),( -16.2),( -18.2),( -17.2),( -17),( -16.2),( -16.2)],inf), \crv1, (-3), \crv1b, (-5), \modHz, exprand(500,10000).postln, \mulMod, rrand(100, 500).postln, \carHz, exprand(20,10000), \modAmp, 0.12875, \latch, 18500, \stereoR, 0.007,\out,~comBusHat);
 
-	~snare = Pbind(\instrument, \snare,\carHz, 41.2 ,\type, Pseq([\rest ,\rest,\note,\rest], 8),\atk, 0.00502929687,\rel, 0.0968,\rel2, 0.3872,\dur, Pseq([1/2], inf),\amp,(-17.2), \crv1,(-8),\crv2,(-7)   ,\out,~snareEQ, \atk,t.beatDur * 0.02, \atk2,Pkey(\atk));
+	~snare = Pbind(\instrument, \snare,\carHz, 41.2 ,\type, Pseq([\rest ,\rest,\note,\rest], 8),\atk, 0.00502929687,\rel, 0.0968,\rel2, 0.3872,\dur, Pseq([1/2], inf),\amp,(-16.8), \crv1,(-8),\crv2,(-7)   ,\out,~snareEQ, \atk,t.beatDur * 0.02, \atk2,Pkey(\atk));
 
 
 
@@ -1635,4 +1635,25 @@ s.sync;
 });)
 
 
-Ppar([ ~bassShap, Ppar([Pbindf(~kick,\amp,(-8)), Pbindf(~bass, \amp,(-12))],inf)],1).play(t)
+
+
+(
+
+Ppar([~hat,
+
+	Pbind(\instrument, \kick,\dur, Pseq([1/1],inf),\amp,(-10),\out,~kbus),
+	Pbind(\instrument, \snare,\carHz, 41.2 ,\type, Pseq([\rest ,\rest,\note,\rest], inf),\atk, 0.00502929687,\rel, 0.0968,\rel2, 0.3872,\dur, Pseq([1/2], inf),\amp,(-16.8), \crv1,(-8),\crv2,(-7)   ,\out,~snBus),
+
+
+	Pbind(\instrument,\compS, \dur,inf,\thr,0.6 ,\sB, 1.2,\sA, 2,\atk ,0.0001, \rel ,0.04840
+,\gain,1,\in, ~comBusHat ,\ctrl, ~kbus, \out,~hatEq,\group, ~compGrp),
+	Pbind(\instrument,\compS,\dur,inf,\thr,0.6 ,\sB, 1,\sA, 4,\atk ,0.001, \rel ,0.04840,\gain,1,\in, ~comBusCymb ,\ctrl, ~kbus, \out,~cymbalEq,\group, ~compGrp),
+
+
+	Pbind(\instrument , \EQHP2, \frq, 3000 ,\dur, inf,\in, ~hatEq, \group, ~compGrp2, \out , 0,\vol,1.6),
+	Pbind(\instrument , \EQHP2, \frq, 3000 ,\dur, inf,\in, ~cymbalEq, \group, ~compGrp2,\out , 0,\vol,1.6),
+
+
+	Pbind(\instrument , \EQHP2, \frq, 120 ,\dur, inf,\in, ~snareEQ, \group, ~eqGrp,\val, 1800, \quant, 8, \gain, (-10), \val, 10, \out , ~snareLimit),
+
+	Pbind(\instrument , \limiterS,\dur, inf, \in,~snareLimit, \gain, 20,\group, ~limitGrp),~bassShap, Ppar([Pbindf(~kick,\amp,(-8)), Pbindf(~bass, \amp,(-12))],inf)],1).play(t))

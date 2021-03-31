@@ -114,6 +114,13 @@ o = {
 }.play;
 
 
+~prch1;~prch2;~prch3;~prch4;~prch5;~prch6;~prch7;~prch8; ~prch9;~prch10;~prch11;~prch12;~prch13;~prch14;~prch15;~prch16;
+
+//that really matter
+~main1;~main2;~main3;~main4;
+
+~lpL; ~bpL;
+
 )
 
 (
@@ -176,7 +183,7 @@ Pxrand([
 
 
 	Pbind(\instrument, \kick,\dur, Pseq([1/1],inf),\amp,(-10),\out,~kbus),
-	Pbind(\instrument, \snare,\carHz, 41.2 ,\type, Pseq([\rest ,\rest,\note,\rest], inf),\atk, 0.00502929687,\rel, 0.0968,\rel2, 0.3872,\dur, Pseq([1/2], inf),\amp,(-17.2), \crv1,(-8),\crv2,(-7)   ,\out,~snBus),
+	Pbind(\instrument, \snare,\carHz, 41.2 ,\type, Pseq([\rest ,\rest,\note,\rest], inf),\atk, 0.00502929687,\rel, 0.0968,\rel2, 0.3872,\dur, Pseq([1/2], inf),\amp,(-16.8), \crv1,(-8),\crv2,(-7)   ,\out,~snBus),
 
 
 	Pbind(\instrument,\compS, \dur,inf,\thr,0.6 ,\sB, 1.2,\sA, 2,\atk ,0.0001, \rel ,0.04840
@@ -184,8 +191,8 @@ Pxrand([
 	Pbind(\instrument,\compS,\dur,inf,\thr,0.6 ,\sB, 1,\sA, 4,\atk ,0.001, \rel ,0.04840,\gain,1,\in, ~comBusCymb ,\ctrl, ~kbus, \out,~cymbalEq,\group, ~compGrp),
 
 
-	Pbind(\instrument , \EQHP2, \frq, 3000 ,\dur, inf,\in, ~hatEq, \group, ~compGrp2, \out , ~deadS,\vol,1.6),
-	Pbind(\instrument , \EQHP2, \frq, 3000 ,\dur, inf,\in, ~cymbalEq, \group, ~compGrp2,\out , ~deadS,\vol,1.6),
+	Pbind(\instrument , \EQHP2, \frq, 3000 ,\dur, inf,\in, ~hatEq, \group, ~compGrp2, \out , ~deadS,\vol,4),
+	Pbind(\instrument , \EQHP2, \frq, 3000 ,\dur, inf,\in, ~cymbalEq, \group, ~compGrp2,\out , ~deadS,\vol,4),
 
 
 	Pbind(\instrument , \EQHP2, \frq, 120 ,\dur, inf,\in, ~snareEQ, \group, ~eqGrp,\val, 1800, \quant, 8, \gain, (-10), \val, 10, \out , ~snareLimit),
@@ -374,7 +381,7 @@ Pxrand([
 
 	Pbind(\instrument,\EQHP10, \in, ~eqBus10 ,\out, 0,\frq, 100, \dur,inf,\group, ~eqGrp2,\val,11800,\quant,1, \gain,(-8),\val2,2600,\quant2,8, \gain2,(-6),\vol, 1.2),
 
-	Pbind(\instrument,\compS, \dur,inf,\thr,0.6 ,\sB, 1.04,\sA, 0.2,\atk ,0.0242, \rel ,0.0968,\ctrl,~eqBus10 ,   \in, ~deadS ,\group,~eqGrp2)
+	Pbind(\instrument,\compS, \dur,inf,\thr,0.8 ,\sB, 1.04,\sA, 0.2,\atk ,0.0242, \rel ,0.0968,\ctrl,~eqBus10 ,   \in, ~deadS ,\group,~eqGrp2)
 
 
 
@@ -922,7 +929,7 @@ Ppar([
 
 
 	//SUPER IMPORTNT ::: ( ~buf.numFrames.rrand(100000)- 100000)
-Pbind( \instrument, \playBufX, \impulse, Prand([0.3,0.075],1) ,
+Pbind( \instrument, \playBufX, \impulse, 0.075,
 		\dur,inf, \tS,  0.39550810372374,\start,( ~buf.numFrames.rrand(100000)- 100000),\buf,~buf,\out, ~filterRnd),
 
 
