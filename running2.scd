@@ -322,12 +322,12 @@ Pseq([\rest,\rest, \note,\rest,\rest,\rest,\rest, \note,\note,\rest,\rest,\note,
 	Pseq([
 
 
-	Pbind(\instrument,\comp10, \dur,  Pseq([4/1],16) /*Pseq([1/1],256)*/,\thr,0.4 ,\sB, 1.04,\sA, 0.2,\atk ,0.0968, \rel ,0.3872
+		Pbind(\instrument,\comp10, \dur, Pxrand([ Pseq([4/1],16) , Pseq([8/1],8)  ],1) ,\thr,0.4 ,\sB, 1.04,\sA, 0.2,\atk ,0.0968, \rel ,0.3872
 		,\in,Pseq([ ~newCOn,~new10 ],inf )
 
 			,\ctrl, ~snBus, \out,~eqBus10,\group, ~compGrp2,\tS, 0.39550810372374,),
 
-
+Prand([
 
 Pseq([
 	Pbind(\instrument,\comp10, \dur,  Pseq([1/1],1) /*Pseq([1/1],256)*/,\thr,0.4 ,\sB, 1.04,\sA, 0.2,\atk ,0.0968, \rel ,0.3872
@@ -335,7 +335,13 @@ Pseq([
 
 			Pbind(\instrument,\comp10, \dur,  Pseq([3/1],1) /*Pseq([1/1],256)*/,\thr,0.4 ,\sB, 1.04,\sA, 0.2,\atk ,0.0968, \rel ,0.3872,\in,Pxrand([~newCOn,~new10,],inf ), \ctrl, ~snBus, \out,~eqBus10,\group, ~compGrp2,\tS, 0.39550810372374)].scramble, 16),
 
+		Pseq([
+	Pbind(\instrument,\comp10, \dur,  Pseq([2/1],1) /*Pseq([1/1],256)*/,\thr,0.4 ,\sB, 1.04,\sA, 0.2,\atk ,0.0968, \rel ,0.3872
+				,\in,Pxrand([~newCOn,~new10,],inf)	,\ctrl, ~snBus, \out,~eqBus10,\group, ~compGrp2,\tS, 0.39550810372374,),
 
+			Pbind(\instrument,\comp10, \dur,  Pseq([6/1],1) /*Pseq([1/1],256)*/,\thr,0.4 ,\sB, 1.04,\sA, 0.2,\atk ,0.0968, \rel ,0.3872,\in,Pxrand([~newCOn,~new10,],inf ), \ctrl, ~snBus, \out,~eqBus10,\group, ~compGrp2,\tS, 0.39550810372374)].scramble, 8),
+
+		],1),
 
 
 
@@ -506,7 +512,7 @@ Prand([
 		],1)
 		,
 
-			Pseq([ ~perc[4],Ppar([~kick, 	~bassMel[~scale]],1)
+			Pseq([ ~perc[4],Ppar([~kick, Pxrand([~kbassRest,	~bassMel[~scale]],1)],1)
 
 
 			],1)
@@ -518,7 +524,7 @@ Prand([
 		/*Pbind(\instrument, \shift2, \in,~toRecord2,\dur, inf, \out,0, \group,~shifGrp)*/
 
 ],inf),
-Pbind(\instrument, \limiterS, \dur, inf, \in,~dipatchKB, \gain,1, \group, ~limitGrp2)
+Pbind(\instrument, \limiterS, \dur, inf, \in,~dipatchKB, \gain,20, \group, ~limitGrp2)
 
 
 ],1)/*.play(t, quant:1)*/)
