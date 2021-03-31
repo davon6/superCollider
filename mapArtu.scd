@@ -1,13 +1,13 @@
 
 
-Ppar([~bassShap,Ppar([Pbindf(~kick,\amp, (-5)),Pbindf(~bass,\amp, (-12) ),],inf)],1).play(t);
+Ppar([~bassShap,Ppar([Pbindf(~kick,\amp, (-5)),Pbindf(~bass,\amp, (-7) ),],inf)],1).play(t);
 
 (
 k.set(\out,~toRecord);
 x = Synth(\recLoop,[buf:~buf,\recording,1, \in,~toRecord],~recGrp);
 )
 
-x.free;
+~buf.free;
 ~buf.play
 Pbindef.free
 s.plotTree
@@ -38,9 +38,9 @@ Pbindef(\aaa, \instrument, \sequ, \value,
 //CANT HEAR DELAY IN ARRANGEMENT
 
 
-d = (Synth( \fm2, [\dur, inf,\stretch, 3.5,\mRatio, 1,\amp, 0.18,\cRatio, 1,\index, 1,\atkE, 0.1,\out,~outFil],~synthGrp));
+d = (Synth( \fm2, [\dur, inf,\stretch, 3.5,\mRatio, 1,\amp, 0.18,\cRatio, 1,\index, 1,\atkE, 0.1,\out,0],~synthGrp));
 
- v = (Synth( \fm, [\dur, inf,\stretch, 3.5,\mRatio, 1,\cRatio, 1,\index, 1,\atkE, 0.1,\amp,0.5,\out,~outFil],~synthGrp));
+ v = (Synth( \fm, [\dur, inf,\stretch, 3.5,\mRatio, 1,\cRatio, 1,\index, 1,\atkE, 0.1,\amp,0.5,\out,0],~synthGrp));
 
 z=(Synth(\sinModul,[\modu,0.075]));
 n= (Synth(\sawModul,[\modu,0.075]));
@@ -48,7 +48,7 @@ c =(Synth(\pulModul,[\modu,0.075]));
 m =(Synth(\ranModul,[\modu,0.3]));
 
 
-k = (Synth( \filterModu, [\dur, inf,\in,~outFil, \out,[0,1]/*~toRecord*//*~gateBus*/,\qf, 0.4, \qf2,0.4,\filMod,100, \filFreq, 100,\filFreq2, 1200, \which,0],~filterGrp));
+/*k = (Synth( \filterModu, [\dur, inf,\in,~outFil, \out,[0,1]/*~toRecord*//*~gateBus*/,\qf, 0.4, \qf2,0.4,\filMod,100, \filFreq, 100,\filFreq2, 1200, \which,0],~filterGrp));*/
 
 
 
@@ -187,8 +187,15 @@ MIDIdef.noteOn(\modLfo4, {|vel, nn, chan, src|[nn].postln;
 
 MIDIdef.noteOn(\oFF, {|vel, nn, chan, src|
 	[nn].postln;
-v.set(\gate,0);
-d.set(\gate,0);
+/*v.set(\gate,0);
+d.set(\gate,0);*/
+
+
+	/*k.set(\out,~toRecord);*/
+	d.set(\out,~toRecord);
+	v.set(\out,~toRecord);
+
+x = Synth(\recLoop,[buf:~buf,\recording,1, \in,~toRecord],~recGrp);
 
 },noteNum: 43);
 
@@ -219,7 +226,7 @@ MIDIdef.cc(\wfil, { |value|var modFreq = value.linlin(0, 127, 0, 1);
 //ususal
 
 
-MIDIdef.bend(\ben, { |val, chan, src|
+/*MIDIdef.bend(\ben, { |val, chan, src|
 
 
 	k.set(\filMod,  val.linlin(0,16383,(-1200),800)/*postln*/);
@@ -232,7 +239,7 @@ if( val.linlin(0,16383, (-1200),800).postln <(-120),{k.set(\which,0);},{});
 	/*if( val.linlin(0,16383, (-150),1100) ==475.0381493011,{k.set(\which,1);},{});*/
 
 
-}, chan:  0);
+}, chan:  0);*/
 
 
 
@@ -402,6 +409,49 @@ MIDIdef.cc(\hey,{| func, ccNum, chan, srcID, argTemplate, dispatcher|
 	[func, ccNum, chan, srcID, argTemplate, dispatcher].postln;
 });
 
+)
+
+
+
+
+
+//SNOOPY
+(
+~filterGrp = Group.new;
+~recGrp= Group.after(~filterGrp);
+
+Ppar([~bassShap,Ppar([Pbindf(~kick,\amp, (-5)),Pbindf(~bass,\amp, (-7) ),],inf)],1).play(t);
+)
+
+~buf.play
+~bufSnoopy.play
+(
+g = Synth(  \playBufX,[ \impulse, 0.0001,\loo,1,\buf,~buf,\out, ~bgFil]);
+
+
+
+k = Synth(\filterU, [\out,0,\in, ~bgFil, \lFrq,900,\hFrq,300 ], ~filterGrp);
+
+
+MIDIdef.cc(\lpF, { |value|var modFreq = value.linlin(0, 127, 20, 5000);
+
+	 k.set(\lFrq, "lp: ".postln;modFreq.round(1).post;)},ccNum: 18 );
+
+
+
+
+MIDIdef.cc(\hpF, { |value|var modFreq = value.linlin(0, 127, 20, 3000);
+
+k.set(\hFrq, "hp: ".postln;modFreq.round(1).post);},ccNum: 72 );
+
+
+MIDIdef.noteOn(\rec, {|vel, nn, chan, src|
+
+	k.set(\out,~toRecord);
+
+x = Synth(\recLoop,[buf:~bufSnoopy,\recording,1, \in,~toRecord],~recGrp);
+
+},noteNum: 43);
 )
 
 /*s.plotTree*/

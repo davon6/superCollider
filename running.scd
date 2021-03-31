@@ -105,7 +105,7 @@ s.sync;
 
 	~buf = Buffer.alloc(s,s.sampleRate*90 );
 	~bufBg = Buffer.alloc(s,s.sampleRate*60,2 );
-	~bufSnoopy = Buffer.alloc(s,s.sampleRate*20 );
+	~bufSnoopy = Buffer.alloc(s,s.sampleRate*90 );
 
 
 	~remyAudio = Buffer.read(s, "/Users/davidmignot/superCollider-master/remy.wav");
@@ -401,8 +401,8 @@ s.sync;
 
 
 
-	SynthDef(\playBufX ,{|out = 0,start, trig, dur, buf, dA=2, tS=1,impulse=0.001|Out.ar(out,PlayBuf.ar(1,buf,trigger:
-		Impulse.kr(impulse* (60/~bpm)),startPos: start,loop: 0,doneAction: 2));}).add;
+	SynthDef(\playBufX ,{|out = 0,start, trig, dur, buf, dA=2, loo=0,tS=1,impulse=0.001|Out.ar(out,PlayBuf.ar(1,buf,trigger:
+		Impulse.kr(impulse* (60/~bpm)),startPos: start,loop:loo,doneAction: 2));}).add;
 
 
 	SynthDef(\playBuf2 ,{|out = 0,start, trig, dur, buf, dA=2|Out.ar(out,PlayBuf.ar(2, buf,trigger:
@@ -934,7 +934,7 @@ freq         )* EnvGen.kr(Env.step([1,0],[dur,0]),timeScale: tS,doneAction:2))})
 		Out.ar(out, sig);
 	}).add;
 
-	SynthDef(\filterU, {|out=0,in, busMod, busMod2, qfH = 0.822379, qlL = 0.504212|Out.ar(out,  BHiPass4.ar(  In.ar(in,1) , In.kr(busMod) +  500+In.kr(busMod2), qfH)) }).add;
+/*	SynthDef(\filterU, {|out=0,in, busMod, busMod2, qfH = 0.822379, qlL = 0.504212|Out.ar(out,  BHiPass4.ar(  In.ar(in,1) , In.kr(busMod) +  500+In.kr(busMod2), qfH)) }).add;*/
 
 
 
@@ -1424,9 +1424,9 @@ SynthDef(\fm2, {
 	);*/
 /*	mod2 =SinOsc.ar(freq3/10, mul:freq3/10* iEnv* index2);*/
 
-		mod = SinOsc.ar( freq2  /*In.kr(~bus.postln,1) */   * mRatio,/*mod2.wrap(0, 16pi),*/ mul:/* freq2 **/ iEnv* index3/*MouseX.kr(0,iEnv)*/);
+		mod = SinOsc.ar( freq2  /*In.kr(~bus.postln,1) */   * mRatio + (In.kr(modu,1)*EnvGen.kr(Env.adsr(sustainLevel: 1,releaseTime: 0.1),factor )),/*mod2.wrap(0, 16pi),*/ mul:/* freq2 **/ iEnv* index3/*MouseX.kr(0,iEnv)*/);
 
-		car = Saw.ar(  MouseX.kr([659.26/4, 659.26/4+20, 659.26/4 -40]) + (In.kr(modu,1)*EnvGen.kr(Env.adsr(sustainLevel: 1,releaseTime: 0.1),factor ))+(In.kr(~seqBus,1)* factor2)
+		car = Saw.ar(  MouseX.kr([659.26/4, 659.26/4+20, 659.26/4 -40])+(In.kr(~seqBus,1)* factor2)
 		/*+ LFNoise0.kr(10.3).range(-40,1200) */ * cRatio,
 		mod.wrap(0, 4pi)*[1,multi
 			,multi
@@ -1449,7 +1449,7 @@ SynthDef(\filterModu,{|out=0, in, filMod=600,filMod2=500,qf=0.5,qf2=0.5,  which=
 
 		var lp,hp, sig;
 
-		sig = In.ar(in,3);
+		sig = In.ar(in,1);
 
 		lp = Resonz.ar(sig , filFreq2+ filMod ,qf);
 
@@ -1491,6 +1491,10 @@ SynthDef(\sequ,{|value, dur, in=0, out=0, vlAtk=0, vlDec=1,vlSub=1,vlSub2=1, vlR
 
 
 	Out.kr(~seqBus,EnvGen.kr(Env.step([value],[dur]),doneAction: 2)   ) }).add;
+
+
+
+	SynthDef(\filterU, {|out=0,in,  hFrq=900,lFrq=300 ,qfH = 0.822379, qlL = 0.504212|Out.ar(out, BLowPass4.ar(   BHiPass4.ar(  In.ar(in,1) , hFrq , qfH), lFrq,qlL )) }).add;
 
 
 
