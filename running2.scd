@@ -456,7 +456,7 @@ Pxrand([
 				Prand([
 			Pbind(\instrument, \dispatchS10, \dur, Pseq([4/1],1),\in,~rollingK,\out,0,\tS, 0.39550810372374,\group,~dispatchGrp2),
 
-				Pseq([~kbassRest, Pseq([~bassRest],3)],1),
+				Pseq([~kick, Pseq([~bassRest],3)],1),
 				Ppar([
 					Pseq([Pbindf(~kick, \out,~eqBass)],4),Pseq([	Pbindf(~bass,\out,~eqBass)],4),
 
@@ -524,11 +524,11 @@ Pxrand([
 
 
 	Pseq([
-			Pseq([ Pseq([~kbassRest, Pseq([ ~bassRest], 3)],1)  ,~perc[1] ,
+			Pseq([ Pseq([~kick, Pseq([ ~bassRest], 3)],1)  ,~perc[1] ,
 
 Prand([
 			Pbind(\instrument, \dispatchS10, \dur, Pseq([8/1],1),\in,~rollingK,\tS, 0.39550810372374,\out,0,\group,~dispatchGrp2)
-						,Pseq([~kbassRest, Pseq([~bassRest],5),~kbassRest,~bassRest],1)
+						,Pseq([~kick, Pseq([~bassRest],5),~kick,~bassRest],1)
 	],1)
 
 
@@ -549,15 +549,15 @@ Prand([
 	],1),
 
 
-			Pxrand([ ~perc[5], Pseq([~kbassRest, Pseq([ ~bassRest], 7) ,   Ppar([
+			Pxrand([ ~perc[5], Pseq([~kick, Pseq([ ~bassRest], 7) ,   Ppar([
 					Pseq([Pbindf(~kick, \out,~eqBass)],4),Pseq([	Pbindf(~bass,\out,~eqBass)],4),
 
-						Pbind(\instrument, \shift2, \in,~eqBass,\dur, Pseq([4/1],1), \out,~dipatchKB, \freq,Pfunc({120.rand}), \group,~shifGrp,\tS, 0.39550810372374,)],1), Pseq([~kbassRest, Pseq([ ~bassRest], 3)   ],1)],1)
+						Pbind(\instrument, \shift2, \in,~eqBass,\dur, Pseq([4/1],1), \out,~dipatchKB, \freq,Pfunc({120.rand}), \group,~shifGrp,\tS, 0.39550810372374,)],1), Pseq([~kick, Pseq([ ~bassRest], 3)   ],1)],1)
 
 		],1)
 		,
 
-			Pseq([ ~perc[4],Ppar([~kick, Pxrand([~kbassRest,	~bassMel[~scale]],1)],1)
+			Pseq([ ~perc[4],Ppar([~kick, Pxrand([~kick,	~bassMel[~scale]],1)],1)
 
 
 			],1)
@@ -570,9 +570,7 @@ Prand([
 
 ],inf),
 
-
-	//why does it overlap!!!!! IMPORTANT
-Pbind(\instrument, \limiterS, \dur, inf, \in,~dipatchKB, \gain,70, \group, ~limitGrp2),
+Pbind(\instrument, \limiterS, \dur, inf, \in,~dipatchKB, \gain,78, \group, ~limitGrp2),
 
 
 
