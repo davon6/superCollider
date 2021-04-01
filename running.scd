@@ -297,6 +297,11 @@ s.sync;
 
 	~deadS=Bus.audio(s,2);
 
+	~rythmFil=Bus.audio(s,2);
+	~rythmFilEQ=Bus.audio(s,2);
+	~rythmComp=Bus.audio(s,2);
+	~rythmLimit=Bus.audio(s,2);
+
 	~no1 = Bus.audio(s,10);
 	~no2 = Bus.audio(s,10);
 	~dipatchKB = Bus.audio(s,2);
@@ -400,8 +405,8 @@ s.sync;
 		trig/*Dust.kr(4.0)*/,startPos: start,loop: loopy/*,doneAction: dA*/)* EnvGen.kr(Env([0,1,1,0],[0,dur,0]),timeScale: tS,doneAction: 2));}).add;
 
 
-	SynthDef(\playBufS ,{|out = 0,start, trig= 0.002, dur, buf, dA=2, tS=1, loopy=1|Out.ar(out,PlayBuf.ar(2,buf,trigger:
-		trig/*Dust.kr(4.0)*/,startPos: start,loop: loopy/*,doneAction: dA*/)* EnvGen.kr(Env([0,1,1,0],[0,dur,0]),timeScale: tS,doneAction: 2));}).add;
+	SynthDef(\playBufS ,{|out = 0,start, trig= 0.002, dur, buf, dA=2, tS=1, loopy=1,vl=1|Out.ar(out,PlayBuf.ar(2,buf,trigger:
+		trig/*Dust.kr(4.0)*/,startPos: start,loop: loopy/*,doneAction: dA*/)* EnvGen.kr(Env([0,vl,vl,0],[0,dur,0]),timeScale: tS,doneAction: 2));}).add;
 
 
 	SynthDef(\playBufX ,{|out = 0,start, trig, dur, buf, dA=2, loo=0,tS=1,impulse=0.001|Out.ar(out,PlayBuf.ar(1,buf,trigger:
@@ -578,7 +583,7 @@ SynthDef(\kick, {
 		sig =   BPeakEQ.ar(
 			BPeakEQ.ar(
 
-			LPF.ar(LPF.ar(LPF.ar(sig, lpf - In.ar(bus, 1)),lpf - In.ar(bus, 1)),lpf - In.ar(bus, 1)).round(2**(-16));
+			LPF.ar(LPF.ar(sig,lpf - In.ar(bus, 1)),lpf - In.ar(bus, 1)).round(2**(-16));
 
 			,659.255,12, (4))
 			,164.81375,12, (12));
@@ -1568,7 +1573,7 @@ s.sync;
 
 
 
-	~kick =	Pbindef(\ki, \instrument, \kick,\dur, Pseq([1/1],1),\amp,(-10),\out,0);//-3.5 - 10.5
+	~kick =	Pbindef(\ki, \instrument, \kick,\dur, Pseq([1/1],1),\amp,(-12),\out,0);//-3.5 - 10.5
 
 	~bassShap = Pbind(\instrument, \shap, \dur,Pseq([1/1],inf),\dA1,2,\out,~bassShapB);
 //Problem overlapping
@@ -1576,7 +1581,7 @@ s.sync;
 		\instrument, \bass,
 		\type, Pseq([\rest, \note, \note, \note], inf),
 
-		\cho, Pseq([0,0.00378125*1,0.001890625*1,0],inf),
+		\cho, Pseq([0,0.00378125*4,0.001890625*4,0],inf),
 		\dur, Pseq([1/4],4),\lpf,100,
 		\midinote, 28, \bus, ~bassShapB,
 		\atk, t.beatDur/4 * 0.01,
@@ -1584,7 +1589,7 @@ s.sync;
 		\rel2, t.beatDur/4 * 0.112,
 		\atkcrv, -2,
 		\relcrv, -1,
-		\amp,(-13)/*(-13)*/,\out,0/*~again*//*~dipatchKB*///-10   -17
+		\amp,(-15.4)/*(-13)*/,\out,0/*~again*//*~dipatchKB*///-10   -17
 	);
 
 	~cymbal = Pbind(\instrument, \percussion,\type, Pseq([\rest,\rest,\note,\note ,\rest,\note ,\note, \rest].scramble,inf),\dur,Pseq([1/4],64 ),\carHz, 525.12070612224,\modHz,1899.3343179398,\modAmp, 0.12875 ,\amp,(-20.5),\rel,Pseq([1/16],inf),\rel2,Pseq([1/16],inf),\latch,8000,\stereoL, 0.00555, \crv1,  (-4.4), \crv1b,(-4), \mulMod, 1691,\out, ~comBusCymb);
@@ -1593,6 +1598,11 @@ s.sync;
 
 	~snare = Pbind(\instrument, \snare,\carHz, 41.2 ,\type, Pseq([\rest ,\rest,\note,\rest], 8),\atk, 0.00502929687,\rel, 0.0968,\rel2, 0.3872,\dur, Pseq([1/2], inf),\amp,(-16.8), \crv1,(-8),\crv2,(-7)   ,\out,~snareEQ, \atk,t.beatDur * 0.02, \atk2,Pkey(\atk));
 
+
+	/*~snare = Pbind(\instrument, \snare,\carHz, 41.2 ,\type,
+		 Pseq([\rest ,\rest,\note,\rest,\note ,\rest,\note,\note].scramble, 16)
+
+		/*Pseq([\rest ,\rest,\note,\rest,\note ,\rest,\note,\rest].scramble, 16)*/,\atk, 0.00502929687,\rel, 0.0968,\rel2, 0.3872,\dur, Pseq([1/4], inf),\amp,(-16.8), \crv1,(-8),\crv2,(-7)   ,\out,~snareEQ, \atk,t.beatDur * 0.02, \atk2,Pkey(\atk));*/
 
 
 ~bassRest = Pbindf(~bass,  \type,Pseq([\rest],inf));

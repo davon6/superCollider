@@ -7,28 +7,18 @@ Pbindef(\ki, \out,0).play(t)
 //percu cutting the 1/2 for progression
 //new env shape for percu in env file
 
-// multi valu  freq shifter or single pxrand
-//bass eq big mess
-//warning delay is now mono
-/*Buffer.freeAll*/
+
 //panning big debate , is there any ?
-//\atk, exprand(0.001, 0.05),\rel,exprand(0.05, 1.2),\pan,rand(-1.0, 1.0) pour les petit hits
 //PANNING Not working on
 //IMPORTSNT ~toLimitlast might only block left and UNWANTED feedback with right !!!!
-//to avoid crash no done yet have stored valu for eq of fuzz from record buff to main
-//tripppy rise is not tuned
-//     ({PlayBuf.ar(1, ~buf, 1,Impulse.kr(1.2875),~buf.numFrames.rand)}.play)
-//add filter to percu ~no4
+
+
 //comp10 might be overlapping
 s.plotTree
-
+/* KB AND BASE have unrecorded */
 
 Synth(\playBuf2,  [  \buf,~bufBg , \out, ~bgFil22    ]);
 
-/*Synth(\filterU ,[\in,~filterBus2 ,\busMod, ~bus3 , \busMod2,~bus4,\out,   ~eqBus2] ,~filterGrp)*/
-
-Synth(\filterU ,[\in,~filterBus2 ,\busMod, ~bus3 , \busMod2,~bus5,\out,   ~eqBus2] ,~filterGrp)
-// ~buf.play
 ~buf.play
 
 Ppar([~bassShap, Ppar([~kick, ~bass],inf)],1).play(t)
@@ -120,7 +110,7 @@ o = {
 ~prch1;~prch2;~prch3;~prch4;~prch5;~prch6;~prch7;~prch8; ~prch9;~prch10;~prch11;~prch12;~prch13;~prch14;~prch15;~prch16;
 
 //that really matter
-~main1 =( ~buf.numFrames.rrand(100000)- 100000);~main2=( ~buf.numFrames.rrand(100000)- 100000);~main3=( ~buf.numFrames.rrand(100000)- 100000);~main4=( ~buf.numFrames.rrand(100000)- 100000);
+~main1 =( ~buf.numFrames.rrand(100000)- 100000);~main2=( ~buf.numFrames.rrand(100000)- 100000);~main3=( ~buf.numFrames.rrand(100000)- 100000);~main4=( ~buf.numFrames.rrand(100000)- 100000); ~rythm=( ~bufBg.numFrames.rrand(100000)- 100000);
 
 ~lpL; ~bpL;
 
@@ -451,7 +441,7 @@ Pbind(\instrument, \filter, \dur,inf, \in,~bpK,\which,1,\busMod, ~bus9, \out, ~l
 Pbind(\instrument, \filter, \dur,inf, \in,~hpK,\which,2,\busMod, ~bus5,\bus7,~bus7, \out,~limitRnd, \group,~filterGrp),
 
 
-	Pbind(\instrument, \limiter,\dur,inf,\gain, 15, \in,~limitRnd  ,  \out,~stereoK, \group, ~limitGrp),
+	Pbind(\instrument, \limiter,\dur,inf,\gain, 22, \in,~limitRnd  ,  \out,~stereoK, \group, ~limitGrp),
 
 
 	Pbind(\instrument, \stereo,  \dur, Prand([Pseq([1/16],1), Pseq([1/16],16),Pseq([1/16],4),  Pseq([1/4],1),Pseq([1/4],4),Pseq([1/4],16), Pseq([1/3],3), Pseq([1/12],12) ,Pseq([1/1],1)  ],inf)  ,\tS, 0.39550810372374,     \center, Pfunc({(-0.80).rrand(0.80)}), \in, ~stereoK   , \out,~rollingK , \group,~stereoGrp),
@@ -459,7 +449,8 @@ Pbind(\instrument, \filter, \dur,inf, \in,~hpK,\which,2,\busMod, ~bus5,\bus7,~bu
 Pxrand([
 	Pseq([
 
-	Pseq([  Prand([ ~perc[2]   ,  /*~bar[3]*/],1),
+	Pseq([  Ppar([ ~perc[2]   ,  Pbind( \instrument, \playBufS, \impulse,0.6 ,
+	\dur,Pseq([1/2],24), \tS,  0.39550810372374,\start,~rythm,\buf,~bufBg,\out,  ~rythmFil,\loopy,0	,\type, Pseq([\rest,\note,\rest,\rest],inf))],1),
 
 
 				Prand([
@@ -475,11 +466,14 @@ Pxrand([
 	],1),	],1),
 
 
-	Pseq([ ~perc[3] ,/* Pwrand([ ~perc[3]   ,~bar[4] ],[4,1],1),*/
-
+	Pseq([/*Ppar([ */~perc[3] ,/* Pwrand([ ~perc[3]   ,~bar[4] ],[4,1],1),*/ /*Pbind( \instrument, \playBufS, \impulse,0.6 ,
+	\dur,Pseq([1/2],28), \tS,  0.39550810372374,\start,~rythm,\buf,~bufBg,\out,  ~rythmFil,\loopy,0	,\type, Pseq([\rest,\note,\rest,\rest],inf))
+			],1),*/
 	/*s,*/
 	Ppar([
-
+				  Pbind( \instrument, \playBufS, \impulse,0.6 ,
+	\dur,Pseq([1/2],4), \tS,  0.39550810372374,\start,~rythm,\buf,~bufBg,\out,  ~rythmFil,\loopy,0	,\type, Pseq([\rest,\note,\rest,\rest],inf))
+			,
 					Pbindf(~kick, \out,~eqBass),
 	Pbindf(~bass,\out,~eqBass, \type,\note,\dur,Pseq([2/1],1),\rel, 2* (60/~bpm)),
 
@@ -488,19 +482,33 @@ Pxrand([
 	],1),
 
 
-			Pseq([   Prand([ ~perc[4]   , Ppar([ ~bar[5],Pbindf(~snare,\type, Pseq([\rest,\rest ,\note, \rest], 7),\da1,0)  ],1)],1),
+		Ppar([	Pseq([   Prand([ ~perc[4],Pbind( \instrument, \playBufS, \impulse,0.6 ,
+	\dur,Pseq([1/2],48), \tS,  0.39550810372374,\start,~rythm,\buf,~bufBg,\out,  ~rythmFil,\loopy,0	,\type, Pseq([\rest,\note,\rest,\rest],inf))
+			   , Ppar([ ~bar[5],Pbindf(~snare,\type, Pseq([\rest,\rest ,\note, \rest], 7),\da1,0)  ],1)],1),
 
 
 	Pbind(\instrument, \dispatchS10, \dur, Pseq([1/1],1),\in,Prand([ 0, ~rollingK],inf),\out,0,\tS, 0.39550810372374,\group,~dispatchGrp2)
-	],1),
-
-		   Prand([ ~perc[5]                 ,/* ~bar[6]*/
-
-
+	],1)
+		,  Pbind( \instrument, \playBufS, \impulse,0.6 ,
+				\dur,Pseq([1/2],32), \tS,  0.39550810372374,\start,~rythm,\buf,~bufBg,\out,  ~rythmFil,\loopy,0	,\type, Pseq([\rest,\note,\rest,\rest],inf))],1),
 
 
-				Pseq([~perc[3],
+		   Prand([ Ppar([ ~perc[5]    ,  Pbind( \instrument, \playBufS, \impulse,0.6 ,
+				\dur,Pseq([1/2],32), \tS,  0.39550810372374,\start,~rythm,\buf,~bufBg,\out,  ~rythmFil,\loopy,0	,\type, Pseq([\rest,\note,\rest,\rest],inf)) ],1) ,/* ~bar[6]*/
+
+
+
+
+			Pseq([	/*Ppar([*/~perc[3]/*, Pbind( \instrument, \playBufS, \impulse,0.6 ,
+	\dur,Pseq([1/2],24), \tS,  0.39550810372374,\start,~rythm,\buf,~bufBg,\out,  ~rythmFil,\loopy,0	,\type, Pseq([\rest,\note,\rest,\rest],inf))
+			],1)*/
+				,
+
 				Ppar([
+
+				/*Pbind( \instrument, \playBufS, \impulse,0.6 ,
+	\dur,Pseq([1/2],4), \tS,  0.39550810372374,\start,~rythm,\buf,~bufBg,\out,  ~rythmFil,\loopy,0	,\type, Pseq([\rest,\note,\rest,\rest],inf))
+		,*/
 					Pseq([Pbindf(~kick, \out,~eqBass)],4),Pseq([	Pbindf(~bass,\out,~eqBass)],4),
 
 						Pbind(\instrument, \shift2, \in,~eqBass,\dur, Pseq([4/1],1), \out,~dipatchKB, \freq,Pfunc({120.rand}), \group,~shifGrp,\tS, 0.39550810372374,)],1)
@@ -564,7 +572,23 @@ Prand([
 
 
 	//why does it overlap!!!!! IMPORTANT
-Pbind(\instrument, \limiterS, \dur, inf, \in,~dipatchKB, \gain,70, \group, ~limitGrp2)
+Pbind(\instrument, \limiterS, \dur, inf, \in,~dipatchKB, \gain,70, \group, ~limitGrp2),
+
+
+
+	/*Pseq([Pbind( \instrument, \playBufS, \impulse,0.6 ,
+		\dur,Pseq([1/2],8), \tS,  0.39550810372374,\start,~rythm,\buf,~bufBg,\out, ~rythmFil,\loopy,0	,\type, Pseq([\rest,\note,\rest,\rest],inf))],inf)*/
+
+	//INCORPORAE SLIGHT MOVEMENT
+
+	Pbind(\instrument, \filterS,\freqFil,800, \in,~rythmFil,\which,0,\qf2,0.6, \dur, inf, \out,~rythmFilEQ, \group,~filterGrp),
+
+	Pbind(\instrument, \EQHP2, \in,~rythmFilEQ,\dur, inf, \out,~rythmLimit, \group,~eqGrp,\vol,10),
+
+	Pbind(\instrument, \limiterS, \dur, inf, \in,~rythmLimit,\out,~rythmComp, \gain,22, \group, ~limitGrp),
+
+	Pbind(\instrument,\compS, \dur,inf,\thr,0.8 ,\sB, 1.2,\sA, 2,\atk ,0.001, \rel ,0.3872
+		,\gain,1,\in,~rythmComp  ,\ctrl, ~snBus, \out, 0,\group, ~compGrp2 ,\tS, 0.39550810372374),
 
 
 ],1))
@@ -732,7 +756,7 @@ Pbind(\instrument, \filter , \in,  ~riFil   ,\dur,inf, \out,~riEq, \busMod, ~bus
 Pbindf(~rLong,\dur,inf, \in,~revSide , \revtime, 12,\out,~comSide,\taillevel,0,\group,~revGrp),
 
 	Pbind(\instrument,\compS, \dur,inf,\thr,0.8 ,\sB, 1.015,\sA, 1/2,\atk ,0.0242, \rel ,0.0968,\gain,1,\in, ~comSide ,\ctrl, ~kbus, \out,~limitSide, \group, ~compGrp),
-	Pbind(\instrument, \limiterS,\in, ~limitSide, \dur, inf,\gain,15,\group,~limitGrp,\out,~stereoSide),
+	Pbind(\instrument, \limiterS,\in, ~limitSide, \dur, inf,\gain,12,\group,~limitGrp,\out,~stereoSide),
 
 	Pbind(\instrument,\stereoS, \dur, Pseq([16/1],inf), \in, ~stereoSide  ,\spread,1,	\atkT,0.05,\crvA,22,  \decT,0.95,\out,~no1,\tS, 0.39550810372374,\group, ~stereoGrp),
 
@@ -965,9 +989,9 @@ Pbind( \instrument, \playBufX, \impulse, 0.075,
 
 
 	Pseq([ Pseq([Pbind( \instrument, \playBuf, \impulse, 0.3 ,
-		\dur,Pseq([4/1],1), \tS,  0.39550810372374,\start,~main3,\buf,~bufSnoopy,\out, ~gateSeqRnd),],4),
+		\dur,Pseq([4/1],1), \tS,  0.39550810372374,\start,~main3,\buf,~bufSnoopy,\out, ~gateSeqRnd,\loopy,0)],4),
 	Pseq([Pbind( \instrument, \playBuf, \impulse, 0.075 ,
-		\dur,Pseq([16/1],1), \tS,  0.39550810372374,\start,~main3,\buf,~bufSnoopy,\out, ~gateSeqRnd),],1) ],inf),
+		\dur,Pseq([16/1],1), \tS,  0.39550810372374,\start,~main3,\buf,~bufSnoopy,\out, ~gateSeqRnd,\loopy,0),],1) ],inf),
 
 
 	Pbind( \instrument, \playBufX, \impulse,0.075 ,/*Pseq([ Pseq([1/16],64),Pseq([1/4],16),Pseq([1/1],4),Pseq([4/1],1) ].scramble,1)*/
