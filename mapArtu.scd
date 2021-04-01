@@ -435,14 +435,14 @@ k = Synth(\filterU, [\out,0,\in, ~bgFil, \lFrq,900,\hFrq,300 ], ~filterGrp);
 
 MIDIdef.cc(\lpF, { |value|var modFreq = value.linlin(0, 127, 20, 5000);
 
-	 k.set(\lFrq, "lp: ".postln;modFreq.round(1).post;)},ccNum: 18 );
+	 k.set(\lFrq, "lp: ".postln;modFreq.round(1).post;)},ccNum: 18 );// is 10
 
 
 
 
 MIDIdef.cc(\hpF, { |value|var modFreq = value.linlin(0, 127, 20, 3000);
 
-k.set(\hFrq, "hp: ".postln;modFreq.round(1).post);},ccNum: 72 );
+k.set(\hFrq, "hp: ".postln;modFreq.round(1).post);},ccNum: 72 );// is 16
 
 
 MIDIdef.noteOn(\rec, {|vel, nn, chan, src|
