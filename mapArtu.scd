@@ -418,7 +418,8 @@ MIDIdef.cc(\hey,{| func, ccNum, chan, srcID, argTemplate, dispatcher|
 //SNOOPY
 (
 ~filterGrp = Group.new;
-~recGrp= Group.after(~filterGrp);
+~distoGrp= Group.after(~filterGrp);
+~recGrp= Group.after(~distoGrp);
 
 Ppar([~bassShap,Ppar([Pbindf(~kick,\amp, (-5)),Pbindf(~bass,\amp, (-7) ),],inf)],1).play(t);
 )
@@ -430,7 +431,8 @@ g = Synth(  \playBufX,[ \impulse, 0.0001,\loo,1,\buf,~buf,\out, ~bgFil]);
 
 
 
-k = Synth(\filterU, [\out,0,\in, ~bgFil, \lFrq,900,\hFrq,300 ], ~filterGrp);
+k = Synth(\filterU, [\out,~distoBg,\in, ~bgFil, \lFrq,900,\hFrq,300 ], ~filterGrp);
+d = Synth(\disto,[\in,~distoBg,\out,0],~distoGrp);
 
 
 MIDIdef.cc(\lpF, { |value|var modFreq = value.linlin(0, 127, 20, 5000);
