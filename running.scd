@@ -544,22 +544,24 @@ SynthDef(\kick, {
 
 		envF = EnvGen.ar(
 			Env(
-				[1700,1319,165,26,0,0],
-				[0.001,0.008,0.1,0,0.4],
+				[5178.15,1539.47,165,26,0,0],
+				[0.001,0.008,0.1,0,0.1],
 				\exp
 			)
 		);
 
-		env = EnvGen.ar(
-		Env.perc(0, 0.40),doneAction:2);
+		env =EnvGen.ar(
+	Env([1 , 0.4, 1,    1,1,0],
+		[0.008, 0.08, 0,0.006,0.03],[0,-30,5,5,-5]),doneAction:2);
+	//EnvGen.ar(Env.perc(0, 0.40),doneAction:2);
 
 
 		sig =
 		BPeakEQ.ar(
-			BPeakEQ.ar(
+		// BPeakEQ.ar(
 		//BPeakEQ.ar(
 			SinOsc.ar(envF, mul: env)
-				,41.2, 4,4)
+			// ,41.2, 4,4)
 ,1318.51,4, (-8));
 		//,659.255,16, (-4));
 
@@ -567,6 +569,7 @@ SynthDef(\kick, {
 		sig = Pan2.ar(sig);
 		Out.ar(out, sig);
 	}).add;
+
 
 	SynthDef(\bass,{
 		arg freq=41.2, dure=1, amp=0.5,
@@ -1574,7 +1577,7 @@ s.sync;
 
 /*Pbindef(\ki,   \out, 0) ;Pbindef(\bass, \out, 0) ;
 	Pbindef(\ki,   \out, 700) ;Pbindef(\bass, \out, 700);*/
-	~kick =	Pbindef(\ki, \instrument, \kick,\dur, Pseq([1/1],1),\amp,(-12.2),\out,0);//-3.5 - 10.5
+	~kick =	Pbindef(\ki, \instrument, \kick,\dur, Pseq([1/1],1),\amp,(-15.2),\out,0);//-3.5 - 10.5
 
 	~bassShap = Pbind(\instrument, \shap, \dur,Pseq([1/1],inf),\dA1,2,\out,~bassShapB);
 //Problem overlapping
@@ -1590,7 +1593,7 @@ s.sync;
 		\rel2, t.beatDur/4 * 0.112,
 		\atkcrv, -2,
 		\relcrv, -1,
-		\amp,(-15.6)/*(-13)*/,\out,0/*~again*//*~dipatchKB*///-10   -17
+		\amp,(-17.6)/*(-13)*/,\out,0/*~again*//*~dipatchKB*///-10   -17
 	);
 
 	~cymbal = Pbind(\instrument, \percussion,\type, Pseq([\rest,\rest,\note,\note ,\rest,\note ,\note, \rest].scramble,inf),\dur,Pseq([1/4],64 ),\carHz, 525.12070612224,\modHz,1899.3343179398,\modAmp, 0.12875 ,\amp,(-20.5),\rel,Pseq([1/16],inf),\rel2,Pseq([1/16],inf),\latch,8000,\stereoL, 0.00555, \crv1,  (-4.4), \crv1b,(-4), \mulMod, 1691,\out, ~comBusCymb);

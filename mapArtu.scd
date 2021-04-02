@@ -1,6 +1,6 @@
 
 
-Ppar([~bassShap,Ppar([Pbindf(~kick,\amp, (-5)),Pbindf(~bass,\amp, (-7) ),],inf)],1).play(t);
+Ppar([~bassShap,Ppar([Pbindf(~kick,\amp, (-4)),Pbindf(~bass,\amp, (-6) ),],inf)],1).play(t);
 
 (
 k.set(\out,~toRecord);
@@ -26,11 +26,11 @@ MIDIIn.disconnectAll;
 
 
 ~scl = [Pbindef(\aaa, \instrument, \sequ, \value,
-		Pseq([Scale.major(\just).degreeToFreq(7.rand, 76.midicps, -1),Scale.major(\just).degreeToFreq(7.rand, 76.midicps, 01),Scale.major(\just).degreeToFreq(7.rand, 76.midicps, -1)],inf),\dur,Pseq([4/1],inf),\in, ~outFil/*~toRecord*/,\group,~shapGrp),
+		Pseq([Scale.major(\just).degreeToFreq(7.rand, 76.midicps, -3),Scale.major(\just).degreeToFreq(7.rand, 76.midicps, -2),Scale.major(\just).degreeToFreq(7.rand, 76.midicps, -3)],inf),\dur,Pseq([4/1],inf),\in, ~outFil/*~toRecord*/,\group,~shapGrp),
 
 
 Pbindef(\aaa, \instrument, \sequ, \value,
-	Pseq([Scale.minor(\just).degreeToFreq(7.rand, 76.midicps, -1),Scale.minor(\just).degreeToFreq(7.rand, 76.midicps, 01),Scale.minor(\just).degreeToFreq(7.rand, 76.midicps, -1)],inf),\dur,Pseq([4/1],inf),\in, ~outFil/*~toRecord*/,\group,~shapGrp)];
+	Pseq([Scale.minor(\just).degreeToFreq(7.rand, 76.midicps, -3),Scale.minor(\just).degreeToFreq(7.rand, 76.midicps, -2),Scale.minor(\just).degreeToFreq(7.rand, 76.midicps, -3)],inf),\dur,Pseq([4/1],inf),\in, ~outFil/*~toRecord*/,\group,~shapGrp)];
 
 
 //no2 doesnt not go tottsly tru filter at least low
@@ -57,7 +57,7 @@ m =(Synth(\ranModul,[\modu,0.3]));
 
 
 
-MIDIdef.cc(\rateGate, { |value|var modFreq = value.linlin(0, 127, 10, 40);
+/*MIDIdef.cc(\rateGate, { |value|var modFreq = value.linlin(0, 127, 10, 40);
 
 
 	if(modFreq.round(1).postln ==20,{Pbindef(\ga,   \dur,Pseq([4/1],inf));},{});
@@ -66,7 +66,7 @@ MIDIdef.cc(\rateGate, { |value|var modFreq = value.linlin(0, 127, 10, 40);
 
 
 
-},ccNum: 18 );//is 10
+},ccNum: 18 );//is 10*/
 
 
 
@@ -87,17 +87,6 @@ MIDIdef.noteOn(\rlong, {|vel, nn, chan, src|[nn];
 Pbindef(\aaa,\dur,Pseq([16/1],inf),
 \vlAtk,0,\vlDec,1,\vlSub,1, \vlSub2,1,\vlRel,0, \atkT,0, \decT,1, \subsT,0, \relT,0, \atckC,0, \decC,0, \relC,0,);
 
-/*Pbindef(\ga,  \dur,Pxrand([Pseq([1/4],4),   Pseq([1/4],16), Pseq([1/1],1) ],inf),    \group,~shapGrp, \out,0 /*~toRecord*/,\vlDec,1.8,
-		\vlDec,1.8,
-	\vlSub,Pfunc({1.7.exprand(1.1,1)}),\vlSub2,Pkey(\vlSub),\atkT,Pfunc({0.10.exprand(0.01)}),
-	\decT,Pfunc({0.6.exprand(0.8,0.3)}),
-	\subsT,Pfunc({0.2.exprand(0.03,0.1)}),
-	\relT,Pfunc({0.12.exprand(0.8,1)}),
-	\atckC,Pfunc({6.exprand(1,1)}),
-	\decC,Pfunc({-28.exprand(-0.1)}),
-		\relC,Pfunc({-8.exprand(-2,1)}),\vlAtk ,Pfunc({1.00.exprand(0.01)}),\vlRel,Pkey(\vlAtk));*/
-
-
 },noteNum: 42);
 
 
@@ -116,14 +105,14 @@ MIDIdef.cc(\shoc, {|vel, nn, chan, src|[nn];
 d.set(\factor2,1);
 Pbindef(\aaa,\dur,Pseq([1/1],inf),
 
-\vlDec,1.8,
+/*\vlDec,1.8,
 	\vlSub,Pfunc({1.6.exprand(1.0,1)}),\vlSub2,Pkey(\vlSub),\atkT,Pfunc({0.20.exprand(0.01)}),
 	\decT,Pfunc({0.6.exprand(0.8,0.3)}),
 	\subsT,Pfunc({0.2.exprand(0.3,0.1)}),
 	\relT,Pfunc({0.12.exprand(0.8,1)}),
 	\atckC,Pfunc({6.exprand(1,1)}),
 	\decC,Pfunc({-4.exprand(-0.1)}),
-		\relC,Pfunc({-8.exprand(-2,1) }),\relSu,Pfunc({0.20.exprand(0.01)}));
+		\relC,Pfunc({-8.exprand(-2,1) }),\relSu,Pfunc({0.20.exprand(0.01)})*/);
 
 },ccNum: 115);
 
@@ -313,7 +302,7 @@ if( val.linlin(0,16383, (-150),800).postln <(-120),{k.set(\which,0);},{});
 
 
 
-MIDIdef.cc(\rise, { |value|var modFreq = value.linlin(0, 127, 0, 100);
+MIDIdef.cc(\rise, { |value|var modFreq = value.linlin(0, 127, 0, 1000);
 
 	v.set(\cRatio, modFreq.round(1).postln);
 
@@ -333,7 +322,7 @@ MIDIdef.cc(\rise, { |value|var modFreq = value.linlin(0, 127, 0, 100);
 
 MIDIdef.cc(\c, { |value|var modFreq = value.linlin(61, 67, 1, 10);
 
-	if(modFreq.round(1).postln ==1,{Pbindef(\aaa, \dur,Pseq([16/1],inf));},{});
+	//if(modFreq.round(1).postln ==1,{Pbindef(\aaa, \dur,Pseq([16/1],inf));},{});
 	if(modFreq.round(1).postln ==3,{Pbindef(\aaa, \dur,Pseq([4/1],inf));},{});
 	if(modFreq.round(1).postln ==6,{Pbindef(\aaa, \dur,Pseq([1/1],inf));},{});
 	if(modFreq.round(1).postln ==10,{Pbindef(\aaa, \dur,Pseq([1/4],inf));},{});
@@ -362,7 +351,7 @@ MIDIdef.cc(\myModFreq, { |value|var modFreq = value.linlin(0, 127, 00.002, 3200)
 	d.set(\freq2,modFreq.round(0.001));
 },ccNum: 73);
 
-
+//??
 MIDIdef.bend(\twi, { |val, chan, src|
 
 
@@ -428,7 +417,6 @@ g = Synth(  \playBufX,[ \impulse, 0.0001,\loo,1,\buf,~buf,\out, ~bgFil]);
 k = Synth(\filterU, [\out,~distoBg,\in, ~bgFil, \lFrq,900,\hFrq,300,\qfH ,0.4, \qlL ,0.4 ], ~filterGrp);
 d = Synth(\disto,[\in,~distoBg,\out,0],~distoGrp);
 
-
 MIDIdef.cc(\lpF, { |value|var modFreq = value.linlin(0, 127, 100, 5000);
 
 	 k.set(\lFrq, "lp: ".postln;modFreq.round(1).post;)},ccNum: 18 );// is 10
@@ -439,6 +427,21 @@ MIDIdef.cc(\lpF, { |value|var modFreq = value.linlin(0, 127, 100, 5000);
 MIDIdef.cc(\hpF, { |value|var modFreq = value.linlin(0, 127, 20, 3000);
 
 k.set(\hFrq, "hp: ".postln;modFreq.round(1).post);},ccNum: 72 );// is 16
+
+
+
+
+
+/*MIDIdef.cc(\lpF, { |value|var modFreq = value.linlin(61, 67, 1000, 5000);
+
+	 k.set(\lFrq, "lp: ".postln;modFreq.round(1).post;)},ccNum: 112 );  // is 112
+
+
+
+
+MIDIdef.cc(\hpF, { |value|var modFreq = value.linlin(0, 127, 20, 3000);
+
+k.set(\hFrq, "hp: ".postln;modFreq.round(1).post);},ccNum: 72 );// is 8*/
 
 
 MIDIdef.noteOn(\rec, {|vel, nn, chan, src|

@@ -292,7 +292,7 @@ Pseq([ ~stetoSnaCom12,~no1,~no1,~no1,~no1,~no1,~no1,~no1 ].scramble,64 ),
 //try no things
 			/*Pseq([ ~stetoSnaCom12,~stetoSnaCom1,~stetoSnaCom1,~stetoSnaCom1,~stetoSnaCom1,~stetoSnaCom1,~stetoSnaCom1,~stetoSnaCom1 ,
 				~stetoSnaCom12,~stetoSnaCom1,~stetoSnaCom1,~stetoSnaCom1,~stetoSnaCom1,~stetoSnaCom1,~stetoSnaCom1,~stetoSnaCom1
-		].scramble,32 ) */],inf),\out,~eqBus102,\group, ~gateGrp3,\tS, 0.39550810372374,),
+		].scramble,32 ) */],inf),\out,0/*~eqBus102*/,\group, ~gateGrp3,\tS, 0.39550810372374,),
 
 
 Pbind(\instrument,\gateS, \dur,Pseq([64/1],1),\in, ~no1  , \out,  ~eqBus102,\group, ~gateGrp3,\tS, 0.39550810372374,)],inf),
@@ -324,6 +324,7 @@ Pseq([\rest,\rest, \note,\rest,\rest,\rest,\rest, \note,\note,\rest,\rest,\note,
 	Pbind(\instrument,\comp10, \dur, Pxrand([ Pseq([4/1],16) ,/* Pseq([1/2],128) */  Pseq([8/1],8)    ],1) ,\thr,0.4 ,\sB, 1.04,\sA, 0.2,\atk ,0.0968, \rel ,0.3872
 		,\in,Pseq([ ~newCOn,~new10 ],inf),\ctrl, ~snBus, \out,~eqBus10,\group, ~compGrp2,\tS, 0.39550810372374,),
 
+		/*
 Prand([
 
 Pseq([
@@ -365,7 +366,7 @@ Pxrand([
 			/*Pseq([64/1],1)*/\thr,0.4 ,\sB, 1.04,\sA, 0.2,\atk ,0.0968, \rel ,0.3872
 			,\in,Prand([~percuCom2 ,~rndBus],1)/*Pseq([~percuCom2, Pxrand([~no3,~newCOn,~new10],inf), ].scramble,inf)*/,\ctrl, ~snBus, \out,~eqBus10,\group, ~compGrp2,\tS, 0.39550810372374,)
 
-
+*/
 	].scramble,inf),
 
 	Pbind(\instrument,\EQHP10, \in, ~eqBus10 ,\out, 0,\frq, 100, \dur,inf,\group, ~eqGrp2,\val,11800,\quant,1, \gain,(-8),\val2,2600,\quant2,8, \gain2,(-6),\vol, 1.2),
@@ -1213,7 +1214,7 @@ Pbind(\instrument,\stereoS, \dur, 9999, \in, ~stereoRkick2   ,\out, ~no3, \group
 )
 
 
-~test =Ppar([/*~bassShap,Ppar([~kick ,~bass],inf),*/~base, ~percheur],1).play(t);
+~test =Ppar([/*~bassShap,Ppar([~kick ,~bass],inf),*/~sequ,~base, ~percheur],1).play(t);
 ~percheur.stop;
 (~percheur = //percheur
 
