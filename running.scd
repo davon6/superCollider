@@ -317,6 +317,8 @@ s.sync;
 	~hpK=Bus.audio(s,1);
 	~bpK=Bus.audio(s,1);
 
+
+
 ~new10 =Bus.audio(s,10);
 ~again =Bus.audio(s,10);
 	~distoBou=Bus.audio(s,1);
@@ -948,13 +950,6 @@ freq         )* EnvGen.kr(Env.step([1,0],[dur,0]),timeScale: tS,doneAction:2))})
 		Out.ar(out, sig);
 	}).add;
 
-/*	SynthDef(\filterU, {|out=0,in, busMod, busMod2, qfH = 0.822379, qlL = 0.504212|Out.ar(out,  BHiPass4.ar(  In.ar(in,1) , In.kr(busMod) +  500+In.kr(busMod2), qfH)) }).add;*/
-
-
-
-
-/*
-	SynthDef(\filterU, {|out=0,in, busMod, busMod2, qfH = 0.822379, qlL = 0.504212|Out.ar(out, BLowPass4.ar(   BHiPass4.ar(  In.ar(in,1) , In.kr(busMod) +  500+In.kr(busMod2), qfH),In.kr(busMod) +  700+In.kr(busMod2),qlL )) }).add;*/
 
 	SynthDef(\phaser,{|in, out, rate, value, dur maxDlT =0.0968,decT=1,amp=0.4| Out.ar(out, In.ar(in,1)+ AllpassN.ar(In.ar(in,1) ,maxDlT,SinOsc.kr(value,0,0.01,0.01),decT)*amp* EnvGen.kr(Env.step([1,0],[dur,0]),doneAction: 2)   );}).add;
 
@@ -1577,8 +1572,8 @@ s.sync;
 //130.882809922
 //8100
 
-
-
+/*Pbindef(\ki,   \out, 0) ;Pbindef(\bass, \out, 0) ;
+	Pbindef(\ki,   \out, 700) ;Pbindef(\bass, \out, 700);*/
 	~kick =	Pbindef(\ki, \instrument, \kick,\dur, Pseq([1/1],1),\amp,(-12.2),\out,0);//-3.5 - 10.5
 
 	~bassShap = Pbind(\instrument, \shap, \dur,Pseq([1/1],inf),\dA1,2,\out,~bassShapB);
