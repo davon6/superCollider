@@ -106,6 +106,7 @@ s.sync;
 	~buf = Buffer.alloc(s,s.sampleRate*90 );
 	~bufBg = Buffer.alloc(s,s.sampleRate*60,2 );
 	~bufSnoopy = Buffer.alloc(s,s.sampleRate*90 );
+	~leTout = Buffer.alloc(s,s.sampleRate*90,2 );
 
 
 	~remyAudio = Buffer.read(s, "/Users/davidmignot/superCollider-master/remy.wav");
@@ -306,7 +307,7 @@ s.sync;
 	~rythmFilEQ=Bus.audio(s,2);
 	~rythmComp=Bus.audio(s,2);
 	~rythmLimit=Bus.audio(s,2);
-~no5 = Bus.audio(s,10);
+	~toCom = Bus.audio(s,10);
 	~no1 = Bus.audio(s,10);
 	~no2 = Bus.audio(s,10);
 	~dipatchKB = Bus.audio(s,2);
@@ -987,17 +988,15 @@ timeScale: tS,	doneAction:2);
 		Out.ar(out, env);
 }).add;
 
-	SynthDef(\gateS,{|in, out=0, vlAtk=0, vlDec=1,vlSub=0, vlRel=0, atkT=0, decT=1, subsT=0, relT=0, atckC=0, decC=0, relC=0, bus1, bus2, dur,relSu=0,tS =1|
+	SynthDef(\gateS,{|in, out=0, vlAtk=0, vlDec=1,vlSub=1,vlSub2=1 vlRel=0, atkT=0, decT=1, subsT=0, relT=0, atckC=0, decC=0, relC=0, bus1, bus2, dur,relSu=0,tS =1|
 	var env;
 
-		env =   In.ar(in, 10) *    EnvGen.kr(Env(
-			[vlAtk,vlDec                  ,vlSub ,vlRel,0],
-			[dur * atkT ,dur *decT  , dur * subsT,dur* relT],
-			[atckC,decC ,0     ,relC]),    //decC- (In.kr(bus2, 1)
+	env =   In.ar(in, 10) *    EnvGen.kr(Env(
+			[vlAtk,vlDec                  ,vlSub ,vlSub2,vlRel,0],
+			[dur * atkT ,dur * decT  -relSu  , dur * subsT-relSu,dur* relT],
+			[atckC,decC ,0     ,relC]),
 
-
-timeScale: tS,
-		doneAction:2);
+timeScale: tS,	doneAction:2);
 
 		Out.ar(out, env);
 }).add;

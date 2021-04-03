@@ -1,6 +1,6 @@
 
 
-Ppar([~bassShap,Ppar([Pbindf(~kick,\amp, (-4)),Pbindf(~bass,\amp, (-6) ),],inf)],1).play(t);
+Ppar([~bassShap,Ppar([Pbindf(~kick,\amp, (-4)),Pbindf(~bass,\amp, (-7) ),],inf)],1).play(t);
 
 (
 k.set(\out,~toRecord);
@@ -199,7 +199,7 @@ MIDIdef.cc(\mVo, { |value|var modFreq = value.linlin(0, 127, 0, 1);
 v.set(\multi, modFreq.round(0.01));
 	d.set(\multi, modFreq.round(0.01));
 
-},ccNum: 19 );
+},ccNum: 19 ); //is 11
 
 /*~wFi = { if(~fi==0,{~fi=1;~fi;},{~fi=0;~fi;});    };
 
@@ -417,7 +417,7 @@ g = Synth(  \playBufX,[ \impulse, 0.0001,\loo,1,\buf,~buf,\out, ~bgFil]);
 k = Synth(\filterU, [\out,~distoBg,\in, ~bgFil, \lFrq,900,\hFrq,300,\qfH ,0.4, \qlL ,0.4 ], ~filterGrp);
 d = Synth(\disto,[\in,~distoBg,\out,0],~distoGrp);
 
-MIDIdef.cc(\lpF, { |value|var modFreq = value.linlin(0, 127, 100, 5000);
+MIDIdef.cc(\lpF, { |value|var modFreq = value.linlin(0, 127, 100,8000);
 
 	 k.set(\lFrq, "lp: ".postln;modFreq.round(1).post;)},ccNum: 18 );// is 10
 
