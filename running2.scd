@@ -17,7 +17,7 @@ Pbindef(\ki, \out,0).play(t)
 s.plotTree
 /* KB AND BASE have unrecordeds    ~bufSnoopy       and     ~bufBg{!=~no4, ~kb, ~rises}   */
 
-Synth(\playBuf2,  [  \buf,~bufBg , \out, ~bgFil22    ]);
+Synth(\playBuf2,  [  \buf,/*~bufBg*/ , \out, ~bgFil22    ]);
 
 ~buf.play
 ~bufBg.play
@@ -520,7 +520,7 @@ Pbind(\instrument, \snare,/*\carHz, 41.2 */\type,Pseq([
 	Pseq([\note ,\rest,\note,\rest,\note ,\rest,\note,\rest,\note ,\rest,\note,\rest,\note ,\rest,\note,\rest].scramble, 4),
 	Pseq([\note ,\rest,\note,\rest,\note ,\rest,\note,\rest,\note ,\rest,\note,\rest,\note ,\rest,\note,\rest].scramble, 4),
 ],inf),
-	\modHz,240.00.rand.postln  , \carHz,140.00.rrand(10.00).postln , \noiLv,1.00.rand,
+	\modHz,240.00.rand , \carHz,140.00.rrand(10.00), \noiLv,1.00.rand,
 
 //has to change, cMon! maybe add a disto
 	\atk, 0.00502929687,\rel,0.0968.rrand(0.05),\rel2, 0.0968.rrand(0.05),\dur, Pseq([1/4], inf),\amp,(-16.5), \crv1,(-12.00).rrand(-4.00),\crv2,(-12.00).rrand(-4.00)   ,\out,~percuFil/*~percuEq*/, \atk,t.beatDur * 0.02, \atk2,Pkey(\atk)/*,\tS, 0.39550810372374*/,\modAmp,5000.00.rrand(1.00),\modAmp2,5000.00.rrand(1.00)),
@@ -708,9 +708,21 @@ Pbind(\instrument,\stereo, \dur, 9999, \in, ~stereoBus4   ,\out,~no1, \group, ~s
 Ppar([
 
 
+//For init
 
-
+/*Pseq([
 Pseq([
+Pbind( \instrument, \playBuf, \impulse, 0.3 ,
+				\dur,    Prand([ Pseq([1/4],4) , Pseq([1/1],1)],1), \tS,  0.39550810372374,\start,Pfunc({(~main1+100000).exprand("1".postln;~main1.postln)}),\buf,~bufSnoopy,\out, ~eqBus1,\loopy,0)],4),
+Pseq([
+Pbind( \instrument, \playBuf, \impulse, 0.3 ,
+		\dur, Prand([ Pseq([1/4],4) , Pseq([1/1],1)],1), \tS,  0.39550810372374,\start,Pfunc({(~main2+100000).exprand("2".postln;~main2.postln)}),\buf,~bufSnoopy,\out, ~eqBus1,\loopy,0)],4),
+	Pseq([
+Pbind( \instrument, \playBuf, \impulse, 0.3 ,
+			\dur, Prand([ Pseq([1/4],4) , Pseq([1/1],1)],1), \tS,  0.39550810372374,\start,Pfunc({(~main3+100000).exprand("3".postln;~main3.postln)}),\buf,~bufSnoopy,\out, ~eqBus1,\loopy,0)],4)].scramble,inf),*/
+
+
+	Pseq([
 Pseq([
 Pbind( \instrument, \playBuf, \impulse, 0.3 ,
 				\dur,    Prand([ Pseq([1/4],4) , Pseq([1/1],1)],1), \tS,  0.39550810372374,\start,Pfunc({(~main1+100000).exprand(~main1)}),\buf,~bufSnoopy,\out, ~eqBus1,\loopy,0)],4),
@@ -720,6 +732,7 @@ Pbind( \instrument, \playBuf, \impulse, 0.3 ,
 	Pseq([
 Pbind( \instrument, \playBuf, \impulse, 0.3 ,
 			\dur, Prand([ Pseq([1/4],4) , Pseq([1/1],1)],1), \tS,  0.39550810372374,\start,Pfunc({(~main3+100000).exprand(~main3)}),\buf,~bufSnoopy,\out, ~eqBus1,\loopy,0)],4)].scramble,inf),
+
 
 
 
@@ -734,12 +747,12 @@ Pbind( \instrument, \playBuf, \impulse, 0.3 ,
 
 
 		Pbind(\instrument, \gate, \dur, Pseq([4/1 ],1),\group, ~gateGrp,
-			\in,Pwrand([~gateBus,~reverbSquelch ],[4,1].normalizeSum,inf),\tS, 0.39550810372374,
+			\in,~gateBus,\tS, 0.39550810372374,
 
 				\vlSub,0.8,\vlSub2,Pkey(\vlSub), \out,~filterBus),
 
 		Pbind(\instrument,\gate,\dur,Pxrand([ Pseq([1/4],1),Pseq([1/1],1)],1), \in,  ~gateBus,\out,
-			Pwrand([~filterBus,~reverbSquelch ],[4,1].normalizeSum,inf)),\group, ~gateGrp,
+			Pwrand([~filterBus,~reverbSquelch ],[16,1].normalizeSum,inf),\group, ~gateGrp,
 \atkC,9.00.rrand(2),	\atkT,1, \decT,0),
 
 
@@ -1119,7 +1132,7 @@ Pbind(\instrument, \gate, \dur,Pwrand([~short,Pseq([1/4 ],16)],[4,1].normalizeSu
 	)
 
 .stop
-(~fx=Ppar([	Pbind(\instrument, \pingD, \in, ~delayBus ,\bufnum, /*b.bufnum*/~delay, \dur, inf,\out,~revDelay,\group, ~revGrp),
+(~fx=Ppar([	Pbind(\instrument, \pingD, \in, ~delayBus ,\bufnum, /*b.bufnum*/~delay, \feedback,0.4 ,\dur, inf,\out,~revDelay,\group, ~revGrp),
 
 
 Pbindf( Prand([~quickFix, ~rShort]),\instrument, \reverbS, \dur,inf, \in,~revDelay  , \out,~comDelay ,\group,~delayGrp),
@@ -1169,8 +1182,9 @@ x = Synth(\recLoop10,[buf:~bufBg,\recording,1, \in,0],~recGrp2);// still neeeded
 x = Synth(\recLoop10,[buf:~bufBg,\recording,1, \in,~toCom],~recGrp2);
 
 
-x = Synth(\recLoop10,[buf:~leTout,\recording,1, \in,0],~recGrp2);
+x = Synth(\recLoop10,[buf:~leTout,\recording,1, \in,~toCom],~recGrp2);//  no
 
+~leTout.free
 ~leTout.play
 ~bufBg.play
 ~buf.play

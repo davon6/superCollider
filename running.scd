@@ -1453,15 +1453,9 @@ SynthDef(\fm2, {
 	env =EnvGen.kr(Env.adsr(0.1), gate);
 
 
-	/*EnvGen.kr(
-		Env.perc(atk, rel, curve: [cAtk, cRel]),
-		doneAction: 2
-	);*/
-/*	mod2 =SinOsc.ar(freq3/10, mul:freq3/10* iEnv* index2);*/
+		mod = SinOsc.ar( freq2  /*In.kr(~bus.postln,1) */   * mRatio + (In.kr(modu,1)*EnvGen.kr(Env.adsr(sustainLevel: 1,releaseTime: 0.1),factor ))+(In.kr(~seqBus,1)* factor2),/*mod2.wrap(0, 16pi),*/ mul:/* freq2 **/ iEnv* index3/*MouseX.kr(0,iEnv)*/);
 
-		mod = SinOsc.ar( freq2  /*In.kr(~bus.postln,1) */   * mRatio + (In.kr(modu,1)*EnvGen.kr(Env.adsr(sustainLevel: 1,releaseTime: 0.1),factor )),/*mod2.wrap(0, 16pi),*/ mul:/* freq2 **/ iEnv* index3/*MouseX.kr(0,iEnv)*/);
-
-		car = Saw.ar(  MouseX.kr([659.26/4, 659.26/4+20, 659.26/4 -40])+(In.kr(~seqBus,1)* factor2)
+		car = Saw.ar(  MouseX.kr([659.26/4, 659.26/4+20, 659.26/4 -40])
 		/*+ LFNoise0.kr(10.3).range(-40,1200) */ * cRatio,
 		mod.wrap(0, 4pi)*[1,multi
 			,multi
@@ -1474,9 +1468,7 @@ SynthDef(\fm2, {
 
 	sig  = LeakDC.ar(sig);
 
-/*sig = Splay.arFill(2,sig,spread: 0);*/
-	//sig = Pan2.ar(sig, pan);
-	Out.ar(out, sig  /* !2*/ * env);
+	Out.ar(out, sig * env);
 }).add;
 
 
@@ -1534,7 +1526,7 @@ SynthDef(\sequ,{|value, dur, in=0, out=0, vlAtk=0, vlDec=1,vlSub=1,vlSub2=1, vlR
 
 
 	SynthDef(\recLoop){|buf=0,out=0,recording = 1,in = (~toRecord)|
-	var input = In.ar(in,1);
+		var input = Mix.ar(In.ar(in,1));
 	// Timer measures times between triggers
 	// Changed emits a trigger when recording changes value
 	// Gate updates recEnd only when not recording

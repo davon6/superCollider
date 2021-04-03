@@ -196,7 +196,7 @@ MIDIdef.cc(\mVo, { |value|var modFreq = value.linlin(0, 127, 0, 1);
 
 
 
-v.set(\multi, modFreq.round(0.01));
+v.set(\multi, modFreq.round(0.01).postln);
 	d.set(\multi, modFreq.round(0.01));
 
 },ccNum: 19 ); //is 11
