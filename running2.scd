@@ -446,8 +446,7 @@ Pxrand([
 
 				Pseq([~kick, Pseq([~bassRest],3)],1),
 				Ppar([
-					Pseq([Pbindf(~kick, \out,~eqBass)],4),Pseq([	Pbindf(~bass,\out,~eqBass)],4),
-
+					Ppar([Pbindf(~kick, \out,~eqBass),	Pbindf(~bass,\out,~eqBass), Pbindf(~hat2, \out,~eqBass, )],4),
 						Pbind(\instrument, \shift2, \in,~eqBass,\dur, Pseq([4/1],1), \out,~dipatchKB, \freq,Pfunc({120.rand}), \group,~shifGrp,\tS, 0.39550810372374,)],1)
 
 
@@ -460,29 +459,29 @@ Pxrand([
 	/*s,*/
 	Ppar([
 				  Pbind( \instrument, \playBuf10, \impulse,0.6 ,
-	\dur,Pseq([1/2],4), \tS,  0.39550810372374,\start,~rythm,\buf,~leTout,\out,  ~rythmFil,\loopy,0	,\type, Pseq([\rest,\note,\rest,\rest],inf))
+	\dur,Pseq([1/4],8), \tS,  0.39550810372374,\start,~rythm,\buf,~leTout,\out,  ~rythmFil,\loopy,0	,\type, Pseq([\rest,\rest,\note,\rest],inf))
 			,
 					Pbindf(~kick, \out,~eqBass),
 	Pbindf(~bass,\out,~eqBass, \type,\note,\dur,Pseq([2/1],1),\rel, 2* (60/~bpm)),
-
+Pbindf(~hat2, \out,~eqBass, \type,\note,\dur,Pseq([2/1],1),\rel, 2* (60/~bpm)),
 	Pbind(\instrument, \shift2, \in,~eqBass,\dur, Pseq([2/1],1), \out,~dipatchKB, \freq,Pfunc({120.rand}), \group,~shifGrp)
 ],1)
 	],1),
 
 
 		Ppar([	Pseq([   Prand([ ~perc[4],Pbind( \instrument, \playBuf10, \impulse,0.6 ,
-	\dur,Pseq([1/2],48), \tS,  0.39550810372374,\start,~rythm,\buf,~leTout,\out,  ~rythmFil,\loopy,0	,\type, Pseq([\rest,\note,\rest,\rest,\rest,\note,\rest,\rest,\rest,\note,\rest,\rest,\rest,\note,\rest,\rest,\rest,\rest,\rest,\rest],inf))
+	\dur,Pseq([1/4],96), \tS,  0.39550810372374,\start,~rythm,\buf,~leTout,\out,  ~rythmFil,\loopy,0	,\type, Pseq([\rest,\note,\rest,\rest,\rest,\note,\rest,\rest,\rest,\note,\rest,\rest,\rest,\note,\rest,\rest,\rest,\rest,\rest,\rest],inf))
 			   , Ppar([ ~bar[5],Pbindf(~snare,\type, Pseq([\rest,\rest ,\note, \rest], 7),\da1,0)  ],1)],1),
 
 
 	Pbind(\instrument, \dispatchS10, \dur, Pseq([1/1],1),\in,Prand([ 0, ~rollingK],inf),\out,0,\tS, 0.39550810372374,\group,~dispatchGrp2)
 	],1)
 		,  Pbind( \instrument, \playBuf10, \impulse,0.6 ,
-				\dur,Pseq([1/2],32), \tS,  0.39550810372374,\start,~rythm,\buf,~leTout,\out,  ~rythmFil,\loopy,0	,\type, Pseq([\rest,\note,\rest,\rest],inf))],1),
+				\dur,Pseq([1/4],64), \tS,  0.39550810372374,\start,~rythm,\buf,~leTout,\out,  ~rythmFil,\loopy,0	,\type, Pseq([\rest,\rest,\note,\rest],inf))],1),
 
 
 		   Prand([ Ppar([ ~perc[5]    ,  Pbind( \instrument, \playBuf10, \impulse,0.6 ,
-				\dur,Pseq([1/2],32), \tS,  0.39550810372374,\start,~rythm,\buf,~leTout,\out,  ~rythmFil,\loopy,0	,\type, Pseq([\rest,\note,\rest,\rest],inf)) ],1) ,/* ~bar[6]*/
+				\dur,Pseq([1/4],64), \tS,  0.39550810372374,\start,~rythm,\buf,~leTout,\out,  ~rythmFil,\loopy,0	,\type, Pseq([\rest,\rest,\note,\rest/*\rest,\rest,\rest,\rest*/],inf)) ],1) ,/* ~bar[6]*/
 
 
 
@@ -495,9 +494,9 @@ Pxrand([
 				Ppar([
 
 				Pbind( \instrument, \playBuf10, \impulse,0.6 ,
-	\dur,Pseq([1/2],4), \tS,  0.39550810372374,\start,~rythm,\buf,~leTout,\out,  ~rythmFil,\loopy,0	,\type, Pseq([\rest,\note,\rest,\rest],inf))
+	\dur,Pseq([1/4],8), \tS,  0.39550810372374,\start,~rythm,\buf,~leTout,\out,  ~rythmFil,\loopy,0	,\type, Pseq([\rest,\rest,\note,\rest],inf))
 		,
-					Pseq([Pbindf(~kick, \out,~eqBass)],4),Pseq([	Pbindf(~bass,\out,~eqBass)],4),
+					Ppar([Pbindf(~kick, \out,~eqBass),Pbindf(~bass,\out,~eqBass),Pbindf(~hat2, \out,~eqBass)],4),
 
 						Pbind(\instrument, \shift2, \in,~eqBass,\dur, Pseq([4/1],1), \out,~dipatchKB, \freq,Pfunc({120.rand}), \group,~shifGrp,\tS, 0.39550810372374,)],1)
 
@@ -538,8 +537,8 @@ Prand([
 
 
 			Pxrand([ ~perc[5], Pseq([~kick, Pseq([ ~bassRest], 7) ,   Ppar([
-					Pseq([Pbindf(~kick, \out,~eqBass)],4),Pseq([	Pbindf(~bass,\out,~eqBass)],4),
-
+					Ppar([Pbindf(~kick, \out,~eqBass),	Pbindf(~bass,\out,~eqBass),
+Pbindf(~hat2, \out,~eqBass)],4),
 						Pbind(\instrument, \shift2, \in,~eqBass,\dur, Pseq([4/1],1), \out,~dipatchKB, \freq,Pfunc({120.rand}), \group,~shifGrp,\tS, 0.39550810372374,)],1), Pseq([~kick, Pseq([ ~bassRest], 3)   ],1)],1)
 
 		],1)

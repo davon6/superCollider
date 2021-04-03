@@ -417,7 +417,7 @@ Ppar([~bassShap,Ppar([Pbindf(~kick,\amp, (-5)),Pbindf(~bass,\amp, (-7) ),],inf)]
 ~buf.play
 ~bufSnoopy.play
 (
-g = Synth(  \playBufX,[ \impulse, 0.0001,\loo,1,\buf,~buf,\out, ~bgFil]);
+g = Synth(  \playBufX,[ \impulse, 0.00001,\loo,1,\buf,~buf,\out, ~bgFil]);
 
 
 
