@@ -292,7 +292,7 @@ Pxrand([
 
 	Pseq([
 
-		Pseq([
+	Pseq([
 		Pseq([
 Pbind(\instrument, \playBuf10N,  \out, ~toCom,\dur,Pseq([ Pseq([8/1],1),  Pseq([1/1],6),Pseq([2/1],1)
 ].scramble,1),\in,Pseq([~fusible, ~fusible,~fusible, ~fusible,~finGran, ~finGran,~finGran,~finGran].scramble,inf)

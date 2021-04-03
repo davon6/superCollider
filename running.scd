@@ -299,7 +299,7 @@ s.sync;
 	 ~eqDs =  Bus.audio(s,1);
 
 	~outFil =Bus.audio(s,1);
-	~toRecord=Bus.audio(s,1);
+	~toRecord=Bus.audio(s,3);
 	~toRecord2=Bus.audio(s,2);
 	~dead=Bus.audio(s,1);
 
@@ -1465,7 +1465,7 @@ SynthDef(\fm2, {
 
 		mod = SinOsc.ar( freq2  /*In.kr(~bus.postln,1) */   * mRatio + (In.kr(modu,1)*EnvGen.kr(Env.adsr(sustainLevel: 1,releaseTime: 0.1),factor ))+(In.kr(~seqBus,1)* factor2),/*mod2.wrap(0, 16pi),*/ mul:/* freq2 **/ iEnv* index3/*MouseX.kr(0,iEnv)*/);
 
-		car = Saw.ar(  MouseX.kr([659.26/4, 659.26/4+20, 659.26/4 -40])
+		car = Saw.ar(  MouseX.kr(0.3,[659.26/4, 659.26/4+20, 659.26/4 -40])
 		/*+ LFNoise0.kr(10.3).range(-40,1200) */ * cRatio,
 		mod.wrap(0, 4pi)*[1,multi
 			,multi
@@ -1551,7 +1551,7 @@ SynthDef(\sequ,{|value, dur, in=0, out=0, vlAtk=0, vlDec=1,vlSub=1,vlSub2=1, vlR
 	// jump to start when recording is started
     var rec = RecordBuf.ar(input,buf,run:recording,loop:0,trigger:recording);
 
-	var play = LoopBuf.ar(1,buf,1,
+	var play = LoopBuf.ar(3,buf,1,
 		// when gate is positive: loop,
 		// when gate is negative: play normally
 		// (don't loop when recEnd is still at 0)
@@ -1651,6 +1651,8 @@ s.sync;
 		\amp,(-17.6)/*(-13)*/,\out,0/*~again*//*~dipatchKB*///-10   -17
 	);
 
+	~hat2 =Pbind(\instrument, \percussion,\rel,0.04840,\rel2,0.02420,\amp, -23.2, \crv1, (-3), \crv1b, (-5), \modHz, exprand(500,10000), \mulMod, rrand(100, 500), \carHz, exprand(20,10000), \modAmp, 0.82875,\dur,Pseq([1/1],1) );
+
 	~cymbal = Pbind(\instrument, \percussion,\type, Pseq([\rest,\rest,\note,\note ,\rest,\note ,\note, \rest].scramble,inf),\dur,Pseq([1/4],64 ),\carHz, 525.12070612224,\modHz,1899.3343179398,\modAmp, 0.12875 ,\amp,(-20.5),\rel,Pseq([1/16],inf),\rel2,Pseq([1/16],inf),\latch,8000,\stereoL, 0.00555, \crv1,  (-4.4), \crv1b,(-4), \mulMod, 1691,\out, ~comBusCymb);
 
 ~hat = Pbind(\instrument,\percussion,\dur,Pseq([1/4], 64),\atk, 0,\rel,0.04840,\rel2,0.02420,\amp,Pseq([( -16.2), ( -17.2),( -16.2),( -18.2),( -17.2),( -17),( -16.2),( -16.2)],inf), \crv1, (-3), \crv1b, (-5), \modHz, exprand(500,10000).postln, \mulMod, rrand(100, 500).postln, \carHz, exprand(20,10000), \modAmp, 0.12875, \latch, 18500, \stereoR, 0.007,\out,~comBusHat);
@@ -1669,7 +1671,7 @@ s.sync;
 ~kbassRest =Ppar([~kick, ~bassRest], 1);
 
 
-~bar = [Ppar([~kick,~bass],1),Ppar([~kick,~bass],4),Ppar([~kick,~bass],8),Ppar([~kick,~bass],12),Ppar([~kick,~bass],14) ,Ppar([~kick,~bass],15) ,Ppar([~kick,~bass],16)];
+~bar = [Ppar([~kick,~hat2,~bass],1),Ppar([~kick,~hat2,~bass],4),Ppar([~kick,~hat2,~bass],8),Ppar([~kick,~hat2,~bass],12),Ppar([~kick,~hat2,~bass],14) ,Ppar([~kick,~hat2,~bass],15) ,Ppar([~kick,~hat2,~bass],16)];
 
 
 

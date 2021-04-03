@@ -344,7 +344,7 @@ MIDIdef.cc(\modLF, { |value|var modFreq = value.linlin(0, 127, 00.002, 20);
 },ccNum: 77);
 
 
-MIDIdef.cc(\modLF, { |value|var modFreq = value.linlin(0, 127, 00.002, 1.2875);
+MIDIdef.cc(\moduLF, { |value|var modFreq = value.linlin(0, 127, 00.002, 1.2875);
 
 
 	c.set(\modu,modFreq.round(0.001));
