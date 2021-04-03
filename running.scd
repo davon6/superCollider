@@ -228,7 +228,7 @@ s.sync;
 
 	~stereoBus1 = Bus.audio(s,1);
 	~stereoBus2 = Bus.audio(s,2);
-	~stereoBus3 = Bus.audio(s,1);
+	~stereoBus3 = Bus.audio(s,2);
 	~stereoBus4 = Bus.audio(s,1);
 
 	~stereoCymb = Bus.audio(s,1);
