@@ -104,9 +104,9 @@ s.sync;
 	b = Buffer.alloc(s, 44100 * 2, 2);
 
 	~buf = Buffer.alloc(s,s.sampleRate*90 );
-	~bufBg = Buffer.alloc(s,s.sampleRate*60,2 );
+	~bufBg = Buffer.alloc(s,s.sampleRate*60,10 );
 	~bufSnoopy = Buffer.alloc(s,s.sampleRate*90 );
-	~leTout = Buffer.alloc(s,s.sampleRate*90,2 );
+	~leTout = Buffer.alloc(s,s.sampleRate*90,10);
 
 
 	~remyAudio = Buffer.read(s, "/Users/davidmignot/superCollider-master/remy.wav");
@@ -301,12 +301,15 @@ s.sync;
 	~dead=Bus.audio(s,1);
 
 	~deadS=Bus.audio(s,2);
+
+	~dead10=Bus.audio(s,10);
+
 	~rndBus=Bus.audio(s,2);
 
-	~rythmFil=Bus.audio(s,2);
-	~rythmFilEQ=Bus.audio(s,2);
-	~rythmComp=Bus.audio(s,2);
-	~rythmLimit=Bus.audio(s,2);
+	~rythmFil=Bus.audio(s,10);
+	~rythmFilEQ=Bus.audio(s,10);
+	~rythmComp=Bus.audio(s,10);
+	~rythmLimit=Bus.audio(s,10);
 	~toCom = Bus.audio(s,10);
 	~no1 = Bus.audio(s,10);
 	~no2 = Bus.audio(s,10);
@@ -415,6 +418,9 @@ s.sync;
 
 
 	SynthDef(\playBufS ,{|out = 0,start, trig= 0.002, dur, buf, dA=2, tS=1, loopy=1,vl=1|Out.ar(out,PlayBuf.ar(2,buf,trigger:
+		trig/*Dust.kr(4.0)*/,startPos: start,loop: loopy/*,doneAction: dA*/)* EnvGen.kr(Env([0,vl,vl,0],[0,dur,0]),timeScale: tS,doneAction: 2));}).add;
+
+	SynthDef(\playBuf10 ,{|out = 0,start, trig= 0.002, dur, buf, dA=2, tS=1, loopy=1,vl=1|Out.ar(out,PlayBuf.ar(10,buf,trigger:
 		trig/*Dust.kr(4.0)*/,startPos: start,loop: loopy/*,doneAction: dA*/)* EnvGen.kr(Env([0,vl,vl,0],[0,dur,0]),timeScale: tS,doneAction: 2));}).add;
 
 
@@ -942,6 +948,24 @@ freq         )* EnvGen.kr(Env.step([1,0],[dur,0]),timeScale: tS,doneAction:2))})
 		var lp, bp, hp, sig;
 
 		sig = In.ar(in,2);
+
+		lp = BLowPass4.ar(sig , freqFil+ In.kr(busMod, 1) ,qf +In.kr(rqLPF));
+
+		bp = BPF.ar(sig,freqFil+In.kr(busMod, 1) *factor3  ,qf2 +0.26);
+
+		hp = BHiPass4.ar(sig, freqFil+ In.kr(busMod, 1),/*0.6 */ qf2 +In.kr(bus7, 1));
+
+		sig = SelectX.ar(which, [lp, bp,hp,sig]);
+
+		Out.ar(out, sig);
+	}).add;
+
+
+	SynthDef(\filter10,{|out=0, in, busMod, bus7, which, factor3=1, rqLPF=0.5, freqFil=0, qf =0, qf2=0 |
+
+		var lp, bp, hp, sig;
+
+		sig = In.ar(in,10);
 
 		lp = BLowPass4.ar(sig , freqFil+ In.kr(busMod, 1) ,qf +In.kr(rqLPF));
 
@@ -1556,7 +1580,7 @@ SynthDef(\sequ,{|value, dur, in=0, out=0, vlAtk=0, vlDec=1,vlSub=1,vlSub2=1, vlR
 	// jump to start when recording is started
     var rec = RecordBuf.ar(input,buf,run:recording,loop:0,trigger:recording);
 
-	var play = LoopBuf.ar(1,buf,1,
+	var play = LoopBuf.ar(2,buf,1,
 		// when gate is positive: loop,
 		// when gate is negative: play normally
 		// (don't loop when recEnd is still at 0)
@@ -1567,6 +1591,36 @@ SynthDef(\sequ,{|value, dur, in=0, out=0, vlAtk=0, vlDec=1,vlSub=1,vlSub2=1, vlR
 	);
 		Out.ar(0,HPF.ar(input,100));
 	Out.ar(~deadS,play);
+}.add;
+
+
+		SynthDef(\recLoop10){|buf=0,in=0,out=0,recording = 1|
+	var input = In.ar(in/*~toRecord2*/,10);
+	// Timer measures times between triggers
+	// Changed emits a trigger when recording changes value
+	// Gate updates recEnd only when not recording
+	// BufSampleRate because Timer measures seconds and we need samples instead
+	var recEnd = Gate.kr(
+		Timer.kr(Changed.kr(recording)),
+		1-recording
+	)*BufSampleRate.ir(buf);
+
+	// record buf from start to end
+	// run only when recording
+	// jump to start when recording is started
+    var rec = RecordBuf.ar(input,buf,run:recording,loop:0,trigger:recording);
+
+	var play = LoopBuf.ar(10,buf,1,
+		// when gate is positive: loop,
+		// when gate is negative: play normally
+		// (don't loop when recEnd is still at 0)
+		gate:recEnd>1,
+		startPos:0,
+		startLoop:0,
+		endLoop:recEnd
+	);
+		Out.ar(0,HPF.ar(input,100));
+	Out.ar(~dead10,play);
 }.add;
 
 s.sync;
