@@ -1,5 +1,5 @@
-
-
+//
+// modulators cooked
 Ppar([~bassShap,Ppar([Pbindf(~kick,\amp, (-4)),Pbindf(~bass,\amp, (-7) ),],inf)],1).play(t);
 
 (
@@ -340,8 +340,15 @@ MIDIdef.cc(\modLF, { |value|var modFreq = value.linlin(0, 127, 00.002, 20);
 
 	z.set(\modu,modFreq.round(0.001));
 	n.set(\modu,modFreq.round(0.001));
-	c.set(\modu,modFreq.round(0.001));
 	m.set(\modu,modFreq.round(0.01));
+},ccNum: 77);
+
+
+MIDIdef.cc(\modLF, { |value|var modFreq = value.linlin(0, 127, 00.002, 1.2875);
+
+
+	c.set(\modu,modFreq.round(0.001));
+
 },ccNum: 77);
 
 
@@ -454,7 +461,7 @@ x = Synth(\recLoop,[buf:~bufSnoopy,\recording,1, \in,~toRecord],~recGrp);
 
 
 
-MIDIdef.cc(\filRez, { |value|var modFreq = value.linlin(0, 127, 0.2, 8);
+MIDIdef.cc(\filRez, { |value|var modFreq = value.linlin(0, 127, 0.3, 8);
 
 	k.set(\qlL, modFreq.round(0.1));},ccNum: 19 );// is 11
 

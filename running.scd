@@ -106,7 +106,7 @@ s.sync;
 	~buf = Buffer.alloc(s,s.sampleRate*90 );
 	~bufBg = Buffer.alloc(s,s.sampleRate*60,10 );
 	~bufSnoopy = Buffer.alloc(s,s.sampleRate*90 );
-	~leTout = Buffer.alloc(s,s.sampleRate*90,10);
+	~leTout = Buffer.alloc(s,s.sampleRate* (256* t.beatDur),10);
 
 
 	~remyAudio = Buffer.read(s, "/Users/davidmignot/superCollider-master/remy.wav");
@@ -164,6 +164,8 @@ s.sync;
 	~stetoSnaCom1 = Bus.audio(s,10);
 	~eqBus10= Bus.audio(s,10);
 
+	~eqBus210= Bus.audio(s,10);
+
 
 	~phaseBus = Bus.audio(s,1);
 
@@ -186,6 +188,7 @@ s.sync;
 	~bgStereo2 = Bus.audio(s,2);
 	~bgStereo2 = Bus.audio(s,2);
 	~eqBg10 = Bus.audio(s,10);
+	~finGran = Bus.audio(s,10);
 
 
 	~distoBg = Bus.audio(s,1);
@@ -312,7 +315,7 @@ s.sync;
 	~rythmLimit=Bus.audio(s,10);
 	~toCom = Bus.audio(s,10);
 	~no1 = Bus.audio(s,10);
-	~no2 = Bus.audio(s,10);
+	~fusible = Bus.audio(s,10);
 	~dipatchKB = Bus.audio(s,2);
 	~stereoK= Bus.audio(s,1);
 	~rollingK = Bus.audio(s,10);
@@ -422,6 +425,13 @@ s.sync;
 
 	SynthDef(\playBuf10 ,{|out = 0,start, trig= 0.002, dur, buf, dA=2, tS=1, loopy=1,vl=1|Out.ar(out,PlayBuf.ar(10,buf,trigger:
 		trig/*Dust.kr(4.0)*/,startPos: start,loop: loopy/*,doneAction: dA*/)* EnvGen.kr(Env([0,vl,vl,0],[0,dur,0]),timeScale: tS,doneAction: 2));}).add;
+
+
+
+	SynthDef(\playBuf10N ,{|out = 0,start, trig= 0.002, dur, buf, dA=2, tS=1, loopy=1,vl=1,in|Out.ar(~fusible,PlayBuf.ar(10,buf,trigger:
+		trig/*Dust.kr(4.0)*/,startPos: start,loop: loopy/*,doneAction: dA*/)* EnvGen.kr(Env([0,vl,vl,0],[0,dur,0]),timeScale: tS,doneAction: 2));
+
+	Out.ar(out,In.ar( in, 10));}).add;
 
 
 	SynthDef(\playBufX ,{|out = 0,start, trig, dur, buf, dA=2, loo=0,tS=1,impulse=0.001|Out.ar(out,PlayBuf.ar(1,buf,trigger:
