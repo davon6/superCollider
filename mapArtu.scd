@@ -2,10 +2,10 @@
 // multi voices aie
 Ppar([~bassShap,Ppar([Pbindf(~kick,\amp, (-4)),Pbindf(~bass,\amp, (-7) ),],inf)],1).play(t);
 
-(
+/*(
 k.set(\out,~toRecord);
 x = Synth(\recLoop,[buf:~buf,\recording,1, \in,~toRecord],~recGrp);
-)
+)*/
 
 ~buf.free;
 ~buf.play
@@ -40,7 +40,7 @@ Pbindef(\aaa, \instrument, \sequ, \value,
 
 d = (Synth( \fm2, [\dur, inf,\stretch, 3.5,\mRatio, 1,\amp, 0.18,\cRatio, 1,\index, 1,\atkE, 0.1,\out,~outFil],~synthGrp));
 
- v = (Synth( \fm, [\dur, inf,\stretch, 3.5,\mRatio, 1,\cRatio, 1,\index, 1,\atkE, 0.1,\amp,0.5,\out,0],~synthGrp));
+ v = (Synth( \fm, [\dur, inf,\stretch, 3.5,\mRatio, 1,\cRatio, 1,\index, 1,\atkE, 0.1,\amp,0.2,\out,0],~synthGrp));
 ~v = Synth(  \comb,[\in, ~outFil,\out,0],~combGrp,);
 
 z=(Synth(\sinModul,[\modu,0.075]));
@@ -68,6 +68,23 @@ m =(Synth(\ranModul,[\modu,0.3]));
 
 
 },ccNum: 18 );//is 10*/
+
+
+
+MIDIdef.noteOn(\oFF, {|vel, nn, chan, src|
+	[nn].postln;
+/*v.set(\gate,0);
+d.set(\gate,0);*/
+
+
+	/*k.set(\out,~toRecord);*/
+	/*d.set(\out,~toRecord);
+	~v.set(\out,~toRecord);
+*/
+x = Synth(\recLoop,[buf:~buf,\recording,1, \in,0/*~toRecord*/],~recGrp);
+
+},noteNum: 43);
+
 
 
 
@@ -175,19 +192,6 @@ MIDIdef.noteOn(\modLfo4, {|vel, nn, chan, src|[nn].postln;
 
 
 
-MIDIdef.noteOn(\oFF, {|vel, nn, chan, src|
-	[nn].postln;
-/*v.set(\gate,0);
-d.set(\gate,0);*/
-
-
-	/*k.set(\out,~toRecord);*/
-	d.set(\out,~toRecord);
-	v.set(\out,~toRecord);
-
-x = Synth(\recLoop,[buf:~buf,\recording,1, \in,~toRecord],~recGrp);
-
-},noteNum: 43);
 
 
 
@@ -418,7 +422,7 @@ MIDIdef.cc(\hey,{| func, ccNum, chan, srcID, argTemplate, dispatcher|
 ~distoGrp= Group.after(~filterGrp);
 ~recGrp= Group.after(~distoGrp);
 
-Ppar([~bassShap,Ppar([Pbindf(~kick,\amp, (-5)),Pbindf(~bass,\amp, (-7) ),],inf)],1).play(t);
+// Ppar([~bassShap,Ppar([Pbindf(~kick,\amp, (-5)),Pbindf(~bass,\amp, (-7) ),],inf)],1).play(t);
 )
 
 ~buf.play

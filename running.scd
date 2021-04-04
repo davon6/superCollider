@@ -163,7 +163,7 @@ s.sync;
 	~stereoPhase = Bus.audio(s,1);
 	~stetoSnaCom1 = Bus.audio(s,10);
 	~eqBus10= Bus.audio(s,10);
-
+~eqBus310= Bus.audio(s,10);
 	~eqBus210= Bus.audio(s,10);
 
 
@@ -299,7 +299,7 @@ s.sync;
 	 ~eqDs =  Bus.audio(s,1);
 
 	~outFil =Bus.audio(s,1);
-	~toRecord=Bus.audio(s,3);
+	~toRecord=Bus.audio(s,1);
 	~toRecord2=Bus.audio(s,2);
 	~dead=Bus.audio(s,1);
 
@@ -670,10 +670,10 @@ SynthDef(\kick, {
 
 	SynthDef(\wNoise, {
 
-		arg in=0, mix=0.2, amp = (-20), dec =0,sub2 =3, valStart= 10000,valEnd =100, wFil=1, pan =0, durF =3,out =0,atk=0;
+		arg in=0, mix=0.2, amp = (-20), dec =0,sub2 =3, valStart= 10000,valEnd =100, wFil=1, pan =0, durF =3,out =0,atk=0, tS=1;
 	var env,dry, wet, sig,env2, ori;
 
-		env = EnvGen.kr(Env([0,amp.dbamp,0],[atk,dec,0],[3,-2]),doneAction:2);
+		env = EnvGen.kr(Env([0,amp.dbamp,0],[atk,dec,0],[3,-2]),timeScale: tS,doneAction:2);
 
 	sig =  SelectX.ar(wFil,[
 			LPF.ar(WhiteNoise.ar(env),XLine.kr(valStart,valEnd,durF)),
@@ -1230,7 +1230,7 @@ SynthDef("TriggerBufferGranular", {arg out=0, bufnum=0, in=0, thresh = 0.004, am
 		Out.ar(out, CombN.ar(In.ar(in,1),maxDel, delayT,decT))}).add;*/
 
 SynthDef(\comb, {|out=0, in ,maxDel, delayT,decT|
-		Out.ar(out, CombN.ar(In.ar(in,1),MouseX.kr(0.01,2),MouseY.kr(0.01,2),3))}).add;
+		Out.ar(out, CombN.ar(In.ar(in,1),MouseX.kr(0.01,2),MouseY.kr(0.01,2),3,0.1))}).add;
 
 
 	SynthDef(\combS, {|out=0, in ,maxDel, delayT,decT,dur, tS=1|
@@ -1387,8 +1387,8 @@ SynthDef(\EQHP10, {|out=0, in, val, quant, gain, val2, quant2, gain2 frq=100, vo
 
 SynthDef(\sinModul,{|modu|Out.kr(~mod1, SinOsc.kr(modu).range(-40,2200))}).add;
 SynthDef(\sawModul,{|modu|Out.kr(~mod2, Saw.kr(modu).range(-40,2200))}).add;
-SynthDef(\pulModul,{|modu|Out.kr(~mod3, LFTri.kr(modu).range(-40,2200))}).add;
-SynthDef(\ranModul,{|modu|Out.kr(~mod4,LFDNoise0.kr(modu).range(0,2200) )}).add;
+SynthDef(\pulModul,{|modu|Out.kr(~mod3, LFTri.kr(modu).range(-40,1200))}).add;
+SynthDef(\ranModul,{|modu|Out.kr(~mod4,LFDNoise0.kr(modu).range(0,4200) )}).add;
 
 
 SynthDef(\fm, {
@@ -1536,7 +1536,7 @@ SynthDef(\sequ,{|value, dur, in=0, out=0, vlAtk=0, vlDec=1,vlSub=1,vlSub2=1, vlR
 
 
 	SynthDef(\recLoop){|buf=0,out=0,recording = 1,in = (~toRecord)|
-		var input = Mix.ar(In.ar(in,1));
+		var input = /* Mix.ar(*/ In.ar(in,1)/*)*/;
 	// Timer measures times between triggers
 	// Changed emits a trigger when recording changes value
 	// Gate updates recEnd only when not recording
@@ -1551,7 +1551,7 @@ SynthDef(\sequ,{|value, dur, in=0, out=0, vlAtk=0, vlDec=1,vlSub=1,vlSub2=1, vlR
 	// jump to start when recording is started
     var rec = RecordBuf.ar(input,buf,run:recording,loop:0,trigger:recording);
 
-	var play = LoopBuf.ar(3,buf,1,
+	var play = LoopBuf.ar(1,buf,1,
 		// when gate is positive: loop,
 		// when gate is negative: play normally
 		// (don't loop when recEnd is still at 0)
@@ -1591,8 +1591,8 @@ SynthDef(\sequ,{|value, dur, in=0, out=0, vlAtk=0, vlDec=1,vlSub=1,vlSub2=1, vlR
 		startLoop:0,
 		endLoop:recEnd
 	);
-		Out.ar(0,HPF.ar(input,100));
-	Out.ar(~deadS,play);
+		/*Out.ar(0,HPF.ar(input,100));*/
+		Out.ar(0,BHiPass4.ar(play),100);
 }.add;
 
 
@@ -1632,7 +1632,7 @@ s.sync;
 
 /*Pbindef(\ki,   \out, 0) ;Pbindef(\bass, \out, 0) ;
 	Pbindef(\ki,   \out, 700) ;Pbindef(\bass, \out, 700);*/
-	~kick =	Pbindef(\ki, \instrument, \kick,\dur, Pseq([1/1],1),\amp,(-15.2),\out,0);//-3.5 - 10.5
+	~kick =	Pbindef(\ki, \instrument, \kick,\dur, Pseq([1/1],1),\amp,(-17.2),\out,0);//-3.5 - 10.5
 
 	~bassShap = Pbind(\instrument, \shap, \dur,Pseq([1/1],inf),\dA1,2,\out,~bassShapB);
 //Problem overlapping
@@ -1648,10 +1648,10 @@ s.sync;
 		\rel2, t.beatDur/4 * 0.112,
 		\atkcrv, -2,
 		\relcrv, -1,
-		\amp,(-17.6)/*(-13)*/,\out,0/*~again*//*~dipatchKB*///-10   -17
+		\amp,(-19.6)/*(-13)*/,\out,0/*~again*//*~dipatchKB*///-10   -17
 	);
 
-	~hat2 =Pbind(\instrument, \percussion,\rel,0.04840,\rel2,0.02420,\amp, -25.2, \crv1, (-3), \crv1b, (-5), \modHz, exprand(500,10000), \mulMod, rrand(100, 500), \carHz, exprand(20,10000), \modAmp, 0.82875.rrand(0.4),\dur,Pseq([1/1],1) );
+	~hat2 =Pbind(\instrument, \percussion,\rel,0.04840,\rel2,0.02420,\amp, -26.2, \crv1, (-3), \crv1b, (-5), \modHz, exprand(500,10000), \mulMod, rrand(100, 500), \carHz, exprand(20,10000), \modAmp, 0.82875.rrand(0.4),\dur,Pseq([1/1],1) );
 
 	~cymbal = Pbind(\instrument, \percussion,\type, Pseq([\rest,\rest,\note,\note ,\rest,\note ,\note, \rest].scramble,inf),\dur,Pseq([1/4],64 ),\carHz, 525.12070612224,\modHz,1899.3343179398,\modAmp, 0.12875 ,\amp,(-20.5),\rel,Pseq([1/16],inf),\rel2,Pseq([1/16],inf),\latch,8000,\stereoL, 0.00555, \crv1,  (-4.4), \crv1b,(-4), \mulMod, 1691,\out, ~comBusCymb);
 
