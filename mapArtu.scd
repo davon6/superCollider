@@ -435,17 +435,27 @@ g = Synth(  \playBufX,[ \impulse, 0.00001,\loo,1,\buf,~buf,\out, ~bgFil]);
 k = Synth(\filterU, [\out,~distoBg,\in, ~bgFil, \lFrq,900,\hFrq,300,\qfH ,0.4, \qlL ,0.4 ], ~filterGrp);
 d = Synth(\disto,[\in,~distoBg,\out,0],~distoGrp);
 
-MIDIdef.cc(\lpF, { |value|var modFreq = value.linlin(0, 127, 100,15000);
+/*MIDIdef.cc(\lpF, { |value|var modFreq = value.linlin(0, 127, 500,15000);
+
+	 k.set(\lFrq, "lp: ".postln;modFreq.round(1).post;)},ccNum: 18 );// is 10*/
+
+
+
+MIDIdef.cc(\lpF, { |value|var modFreq = value.linlin(0, 127, 500,22000);
 
 	 k.set(\lFrq, "lp: ".postln;modFreq.round(1).post;)},ccNum: 18 );// is 10
 
 
 
 
-MIDIdef.cc(\hpF, { |value|var modFreq = value.linlin(0, 127, 20, 3000);
+
+/*MIDIdef.cc(\hpF, { |value|var modFreq = value.linlin(0, 127, 20, 3000);
+
+k.set(\hFrq, "hp: ".postln;modFreq.round(1).post);},ccNum: 72 );// is 16*/
+
+MIDIdef.cc(\hpF, { |value|var modFreq = value.linlin(0, 127, 20, 2000);
 
 k.set(\hFrq, "hp: ".postln;modFreq.round(1).post);},ccNum: 72 );// is 16
-
 
 
 
@@ -464,11 +474,11 @@ k.set(\hFrq, "hp: ".postln;modFreq.round(1).post);},ccNum: 72 );// is 8*/
 
 MIDIdef.noteOn(\rec, {|vel, nn, chan, src|
 
-	k.set(\out,~toRecord);
+	// k.set(\out,~toRecord);
 
-x = Synth(\recLoop,[buf:~bufSnoopy,\recording,1, \in,~toRecord],~recGrp);
+x = Synth(\recLoop,[buf:~bufSnoopy,\recording,1, \in,0],~recGrp);
 
-},noteNum: 43);
+},noteNum: 43);// is 43
 
 
 

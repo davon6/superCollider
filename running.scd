@@ -166,7 +166,8 @@ s.sync;
 ~eqBus310= Bus.audio(s,10);
 	~eqBus210= Bus.audio(s,10);
 
-
+	~kickHatEq = Bus.audio(s,2);
+~bassEq = Bus.audio(s,2);
 	~phaseBus = Bus.audio(s,1);
 
 	~bgBus = Bus.audio(s,2);
@@ -562,14 +563,14 @@ SynthDef(\kick, {
 		envF = EnvGen.ar(
 			Env(
 				[5178.15,1539.47,165,26,0,0],
-				[0.001,0.008,0.1,0,0.1],
+				[0.001,0.008,0.1,0,0.01],
 				\exp
 			)
 		);
 
 		env =EnvGen.ar(
 	Env([1 , 0.4, 1,    1,1,0],
-		[0.008, 0.08, 0,0.006,0.03],[0,-30,5,5,-5]),doneAction:2);
+		[0.008, 0.08, 0,0.006,0.01],[0,-30,5,5,-5]),doneAction:2);
 	//EnvGen.ar(Env.perc(0, 0.40),doneAction:2);
 
 
@@ -591,15 +592,15 @@ SynthDef(\kick, {
 	SynthDef(\bass,{
 		arg freq=41.2, dure=1, amp=0.5,
 		atkcrv=1, relcrv=5,
-		atk=0, rel=0.1, lpf=100, out = 0, bus, dur,cho=0,rel2;
+		atk=0, rel=0.1, lpf=100, out = 0, bus, dur,cho=0,rel2,relcrv2;
 
 		var sig, env, lvlBa;
 
 		env = EnvGen.kr(
 			Env(
-				[0,1,0.7,0],
+				[0,1,0.6,0],
 				[atk,rel-cho,rel2],
-				[atkcrv,relcrv]
+				[atkcrv,relcrv,relcrv2]
 			),
 			doneAction:2
 		);
@@ -608,13 +609,15 @@ SynthDef(\kick, {
 		sig = sig.lincurve(-1,1,-1,1,-7);
 
 
-		sig =   BPeakEQ.ar(
+		sig =  BPeakEQ.ar(
 			BPeakEQ.ar(
 
-			LPF.ar(LPF.ar(sig,lpf - In.ar(bus, 1)),lpf - In.ar(bus, 1)).round(2**(-16));
+			LPF.ar(LPF.ar(sig.round(2**(-16),lpf - In.ar(bus, 1)),lpf - In.ar(bus, 1))
 
-			,659.255,12, (4))
-			,164.81375,12, (12));
+			,2637.02 /*659.255*4*/ ,4, (-4))
+		,164.81375,1, (-20))
+
+		);
 
 	//sig = LPF.ar(LPF.ar LPF.ar(LPF.ar(sig, lpf - In.ar(bus, 1)).round(2**(-16)
 
@@ -927,12 +930,20 @@ SynthDef(\dispatch2,{|in, out, dur|Out.ar(out, In.ar(in,2)* EnvGen.kr(Env([0,1,1
 
 
 
-		SynthDef(\shift2, {|in, out, freq, dur, tS=1
+		/*SynthDef(\shift2, {|in, out, freq, dur, tS=1
 		vlPE3,vlPE33,crvEP2, dA=0, dA2=0, dA3=0|
 
 
 		Out.ar(out, FreqShift.ar(In.ar(in, 2)/*.sign*/,
-freq         )* EnvGen.kr(Env.step([1,0],[dur,0]),timeScale: tS,doneAction:2))}).add;
+freq         )* EnvGen.kr(Env.step([1,0],[dur,0]),timeScale: tS,doneAction:2))}).add;*/
+
+
+	SynthDef(\shift2, {|in, out, freq, dur, tS=1
+		vlPE3,vlPE33,crvEP2, dA=0, dA2=0, dA3=0|
+
+
+		Out.ar(out, FreqShift.ar(In.ar(in, 2)/*.sign*/,
+freq         )* EnvGen.kr(Env([0,1,1,0],[0.055,dur-0.055,0],4),timeScale: tS,doneAction:2))}).add;
 
 
 
@@ -1270,6 +1281,10 @@ SynthDef(\comb, {|out=0, in ,maxDel, delayT,decT|
 		In.ar(in, 1),val,quant, gain))};).add;
 
 
+	SynthDef(\EQ2, {|out=0, in, val, quant, gain| Out.ar(out, BPeakEQ.ar(
+		In.ar(in, 2),val,quant, gain))};).add;
+
+
 
 	SynthDef(\EQHP2, {|out=0, in, val, quant, gain,frq=100, vol =0.05, val2,quant2, gain2| Out.ar(out,
 
@@ -1560,8 +1575,9 @@ SynthDef(\sequ,{|value, dur, in=0, out=0, vlAtk=0, vlDec=1,vlSub=1,vlSub2=1, vlR
 		startLoop:0,
 		endLoop:recEnd
 	);
-		Out.ar(0,HPF.ar(input,100)!2);
-	Out.ar(~dead,play);
+		/*Out.ar(0,HPF.ar(input,100));*/
+		Out.ar(0,BHiPass4.ar(play),100);
+		Out.ar(0,play);
 }.add;
 
 
@@ -1592,7 +1608,8 @@ SynthDef(\sequ,{|value, dur, in=0, out=0, vlAtk=0, vlDec=1,vlSub=1,vlSub2=1, vlR
 		endLoop:recEnd
 	);
 		/*Out.ar(0,HPF.ar(input,100));*/
-		Out.ar(0,BHiPass4.ar(play),100);
+		//Out.ar(0,BHiPass4.ar(play),100);
+		Out.ar(0,play);
 }.add;
 
 
@@ -1632,7 +1649,7 @@ s.sync;
 
 /*Pbindef(\ki,   \out, 0) ;Pbindef(\bass, \out, 0) ;
 	Pbindef(\ki,   \out, 700) ;Pbindef(\bass, \out, 700);*/
-	~kick =	Pbindef(\ki, \instrument, \kick,\dur, Pseq([1/1],1),\amp,(-17.2),\out,0);//-3.5 - 10.5
+	~kick =	Pbindef(\ki, \instrument, \kick,\dur, Pseq([1/1],1),\amp,(-14.2),\out,0);//-3.5 - 10.5
 
 	~bassShap = Pbind(\instrument, \shap, \dur,Pseq([1/1],inf),\dA1,2,\out,~bassShapB);
 //Problem overlapping
@@ -1640,18 +1657,18 @@ s.sync;
 		\instrument, \bass,
 		\type, Pseq([\rest, \note, \note, \note], inf),
 
-		\cho, Pseq([0,0.00378125*4,0.001890625*4,0],inf),
+		\cho, Pseq([0.00378125*4,0.001890625*4,0,0],inf),
 		\dur, Pseq([1/4],4),\lpf,100,
 		\midinote, 28, \bus, ~bassShapB,
-		\atk, t.beatDur/4 * 0.01,
-		\rel, t.beatDur/4 * 0.84,
-		\rel2, t.beatDur/4 * 0.112,
+		\atk, t.beatDur/4 * 0.05,
+		\rel, t.beatDur/4 * 0.98,
+		\rel2, t.beatDur/4 * 0.012,
 		\atkcrv, -2,
-		\relcrv, -1,
-		\amp,(-19.6)/*(-13)*/,\out,0/*~again*//*~dipatchKB*///-10   -17
+		\relcrv, -2,\relcrv2, -4,
+		\amp,(-14.6)/*(-13)*/,\out,~bassEq
 	);
 
-	~hat2 =Pbind(\instrument, \percussion,\rel,0.04840,\rel2,0.02420,\amp, -26.2, \crv1, (-3), \crv1b, (-5), \modHz, exprand(500,10000), \mulMod, rrand(100, 500), \carHz, exprand(20,10000), \modAmp, 0.82875.rrand(0.4),\dur,Pseq([1/1],1) );
+	~hat2 =Pbind(\instrument, \percussion,\rel,0.04840,\rel2,0.02420,\amp, -26.2, \crv1, (-4), \crv1b, (-5), \modHz, exprand(500,10000), \mulMod, rrand(100, 500), \carHz, exprand(20,10000), \modAmp, 0.82875.rrand(0.4),\dur,Pseq([1/1],1) ,\out, ~kickHatEq);
 
 	~cymbal = Pbind(\instrument, \percussion,\type, Pseq([\rest,\rest,\note,\note ,\rest,\note ,\note, \rest].scramble,inf),\dur,Pseq([1/4],64 ),\carHz, 525.12070612224,\modHz,1899.3343179398,\modAmp, 0.12875 ,\amp,(-20.5),\rel,Pseq([1/16],inf),\rel2,Pseq([1/16],inf),\latch,8000,\stereoL, 0.00555, \crv1,  (-4.4), \crv1b,(-4), \mulMod, 1691,\out, ~comBusCymb);
 
@@ -1672,6 +1689,8 @@ s.sync;
 
 
 ~bar = [Ppar([~kick,~hat2,~bass],1),Ppar([~kick,~hat2,~bass],4),Ppar([~kick,~hat2,~bass],8),Ppar([~kick,~hat2,~bass],12),Ppar([~kick,~hat2,~bass],14) ,Ppar([~kick,~hat2,~bass],15) ,Ppar([~kick,~hat2,~bass],16)];
+
+
 
 
 
