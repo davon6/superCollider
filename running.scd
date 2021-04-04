@@ -1465,7 +1465,7 @@ SynthDef(\fm2, {
 
 		mod = SinOsc.ar( freq2  /*In.kr(~bus.postln,1) */   * mRatio + (In.kr(modu,1)*EnvGen.kr(Env.adsr(sustainLevel: 1,releaseTime: 0.1),factor ))+(In.kr(~seqBus,1)* factor2),/*mod2.wrap(0, 16pi),*/ mul:/* freq2 **/ iEnv* index3/*MouseX.kr(0,iEnv)*/);
 
-		car = Saw.ar(  MouseX.kr(0.3,[659.26/4, 659.26/4+20, 659.26/4 -40])
+		car = Saw.ar( /* MouseX.kr(0.3,*/[659.26/4, 659.26/4+20, 659.26/4 -40]/*)*/
 		/*+ LFNoise0.kr(10.3).range(-40,1200) */ * cRatio,
 		mod.wrap(0, 4pi)*[1,multi
 			,multi

@@ -1,5 +1,5 @@
 //
-// modulators cooked
+// multi voices aie
 Ppar([~bassShap,Ppar([Pbindf(~kick,\amp, (-4)),Pbindf(~bass,\amp, (-7) ),],inf)],1).play(t);
 
 (
@@ -18,19 +18,19 @@ MIDIIn.disconnectAll;
 (
 ~dispatchGrp= Group.new;
 ~synthGrp = Group.after(~dispatchGrp);
-~filterGrp = Group.after(~synthGrp);
-~shapGrp= Group.after(~filterGrp);
+~combGrp = Group.after(~synthGrp);
+~shapGrp= Group.after(~combGrp);
 
 ~recGrp= Group.after(~shapGrp);
 
 
 
 ~scl = [Pbindef(\aaa, \instrument, \sequ, \value,
-		Pseq([Scale.major(\just).degreeToFreq(7.rand, 76.midicps, -3),Scale.major(\just).degreeToFreq(7.rand, 76.midicps, -2),Scale.major(\just).degreeToFreq(7.rand, 76.midicps, -3)],inf),\dur,Pseq([4/1],inf),\in, ~outFil/*~toRecord*/,\group,~shapGrp),
+		Pseq([Scale.major(\just).degreeToFreq(7.rand, 76.midicps, -3),Scale.major(\just).degreeToFreq(7.rand, 76.midicps, -2),Scale.major(\just).degreeToFreq(7.rand, 76.midicps, -3)],inf),\dur,Pseq([4/1],inf),/*\in, ~outFil/*~toRecord*/,*/\group,~shapGrp),
 
 
 Pbindef(\aaa, \instrument, \sequ, \value,
-	Pseq([Scale.minor(\just).degreeToFreq(7.rand, 76.midicps, -3),Scale.minor(\just).degreeToFreq(7.rand, 76.midicps, -2),Scale.minor(\just).degreeToFreq(7.rand, 76.midicps, -3)],inf),\dur,Pseq([4/1],inf),\in, ~outFil/*~toRecord*/,\group,~shapGrp)];
+	Pseq([Scale.minor(\just).degreeToFreq(7.rand, 76.midicps, -3),Scale.minor(\just).degreeToFreq(7.rand, 76.midicps, -2),Scale.minor(\just).degreeToFreq(7.rand, 76.midicps, -3)],inf),\dur,Pseq([4/1],inf)/*,\in, ~outFil/*~toRecord*/*/,\group,~shapGrp)];
 
 
 //no2 doesnt not go tottsly tru filter at least low
@@ -38,9 +38,10 @@ Pbindef(\aaa, \instrument, \sequ, \value,
 //CANT HEAR DELAY IN ARRANGEMENT
 
 
-d = (Synth( \fm2, [\dur, inf,\stretch, 3.5,\mRatio, 1,\amp, 0.18,\cRatio, 1,\index, 1,\atkE, 0.1,\out,0],~synthGrp));
+d = (Synth( \fm2, [\dur, inf,\stretch, 3.5,\mRatio, 1,\amp, 0.18,\cRatio, 1,\index, 1,\atkE, 0.1,\out,~outFil],~synthGrp));
 
  v = (Synth( \fm, [\dur, inf,\stretch, 3.5,\mRatio, 1,\cRatio, 1,\index, 1,\atkE, 0.1,\amp,0.5,\out,0],~synthGrp));
+~v = Synth(  \comb,[\in, ~outFil,\out,0],~combGrp,);
 
 z=(Synth(\sinModul,[\modu,0.075]));
 n= (Synth(\sawModul,[\modu,0.075]));
@@ -318,6 +319,12 @@ MIDIdef.cc(\rise, { |value|var modFreq = value.linlin(0, 127, 0, 1000);
 
 },ccNum: 1 );*/
 
+MIDIdef.cc(\cRa, { |value|var modFreq = value.linlin(0, 127, 1, 0.1);
+
+	d.set(\cRatio,modFreq.round(0.1));
+
+},ccNum: 75 ); //i s8
+
 
 
 MIDIdef.cc(\c, { |value|var modFreq = value.linlin(61, 67, 1, 10);
@@ -424,7 +431,7 @@ g = Synth(  \playBufX,[ \impulse, 0.00001,\loo,1,\buf,~buf,\out, ~bgFil]);
 k = Synth(\filterU, [\out,~distoBg,\in, ~bgFil, \lFrq,900,\hFrq,300,\qfH ,0.4, \qlL ,0.4 ], ~filterGrp);
 d = Synth(\disto,[\in,~distoBg,\out,0],~distoGrp);
 
-MIDIdef.cc(\lpF, { |value|var modFreq = value.linlin(0, 127, 100,8000);
+MIDIdef.cc(\lpF, { |value|var modFreq = value.linlin(0, 127, 100,15000);
 
 	 k.set(\lFrq, "lp: ".postln;modFreq.round(1).post;)},ccNum: 18 );// is 10
 
