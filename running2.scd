@@ -639,7 +639,7 @@ Pbindf(~hat2, \out,~eqBass)],4),
 
 ],inf),
 
-Pbind(\instrument, \limiterS, \dur, inf, \in,~dipatchKB, \gain,50, \group, ~limitGrp2),
+Pbind(\instrument, \limiterS, \dur, inf, \in,~dipatchKB, \gain,60, \group, ~limitGrp2),
 
 
 
@@ -649,7 +649,7 @@ Pbind(\instrument, \limiterS, \dur, inf, \in,~dipatchKB, \gain,50, \group, ~limi
 
 	Pbind(\instrument, \EQHP10, \in,~rythmFilEQ,\dur, inf, \out,~rythmLimit, \group,~eqGrp,\vol,10),
 
-	Pbind(\instrument, \limiter10, \dur, inf, \in,~rythmLimit,\out,~rythmComp, \gain,22, \group, ~limitGrp),
+	Pbind(\instrument, \limiter10, \dur, inf, \in,~rythmLimit,\out,~rythmComp, \gain,27, \group, ~limitGrp),
 
 	Pbind(\instrument,\comp10, \dur,inf,\thr,0.7 ,\sB, 1.2,\sA, 2,\atk ,0.001, \rel ,0.3872,\dur,99999
 		,\gain,1,\in,~rythmComp  ,\ctrl, ~kbus, \out, 0,\group, ~compGrp2 ,\tS, 0.39550810372374),
