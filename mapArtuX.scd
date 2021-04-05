@@ -219,6 +219,33 @@ MIDIdef.noteOn(\modLfo4, {|vel, nn, chan, src|[nn].postln;
 
 
 
+MIDIdef.noteOn(\modLfox, {|vel, nn, chan, src|[nn].postln;
+	v.set(\factorx,1,\modu, ~mod1);
+	/*d.set(\factorx,1,\modu, ~mod1 );
+~v.set(\factorx,1,\modu, ~mod1 );*/
+},noteNum: 72);
+
+MIDIdef.noteOn(\modLfo2x, {|vel, nn, chan, src|[nn].postln;
+	v.set(\factorx,1,\modu, ~mod2);
+	/*d.set(\factorx,1,\modu, ~mod2 );
+~v.set(\factorx,1,\modu, ~mod2 );*/
+},noteNum: 71);
+
+MIDIdef.noteOn(\modLfo3x, {|vel, nn, chan, src|[nn].postln;
+	v.set(\factor,1,\modu, ~mod3);
+	/*d.set(\factorx,1,\modu, ~mod3 );
+	~v.set(\factorx,1,\modu, ~mod3 );*/
+},noteNum: 69);
+
+MIDIdef.noteOn(\modLfo4x, {|vel, nn, chan, src|[nn].postln;
+	v.set(\factorx,1,\modu, ~mod4);
+	/*d.set(\factorx,1,\modu, ~mod4 );
+~v.set(\factorx,1,\modu, ~mod4 );*/
+},noteNum: 67);
+
+
+
+
 
 
 

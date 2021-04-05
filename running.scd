@@ -39,6 +39,7 @@ s.waitForBoot({
 	~scale = 2.rand;
 
 
+
 s.sync;
 	"buff init".postln;
 
@@ -180,6 +181,12 @@ s.sync;
 	~bgLimit = Bus.audio(s,1);
 	~bgStereo = Bus.audio(s,1);
 	~dispatchBg = Bus.audio(s,2);
+	~no2= Bus.audio(s,10);
+
+	~no2ToRev = Bus.audio(s,1);
+	~no2ToCom = Bus.audio(s,2);
+	~no2ToLimit = Bus.audio(s,2);
+	~no2ToStereo = Bus.audio(s,2);
 
 
 	~bgFil22= Bus.audio(s,2);
@@ -282,7 +289,7 @@ s.sync;
 
 	~newBus1=  Bus.audio(s,2);
 	~newBus2=  Bus.audio(s,2);
-
+~fusible1 = Bus.audio(s,1);
 
 
 	~eqPerch =  Bus.audio(s,1);
@@ -350,7 +357,7 @@ s.sync;
 	~stereoBus14=  Bus.audio(s,2);   ~limitFuzz4=  Bus.audio(s,2);~limitFuzz4=  Bus.audio(s,2);~comFuzz4=  Bus.audio(s,2);~reverbBus4=  Bus.audio(s,1);
 
 	~slideBus=  Bus.audio(s,2);  ~slideBusToLimit=  Bus.audio(s,2);
-
+~slideEq=  Bus.audio(s,2);
 ~riFil=  Bus.audio(s,2);
 	~riFil2=  Bus.audio(s,2);
 	 ~riEq=  Bus.audio(s,2);
@@ -435,8 +442,17 @@ s.sync;
 	Out.ar(out,In.ar( in, 10));}).add;
 
 
+	SynthDef(\playBuf1N ,{|out = 0,start, trig= 0.002, dur, buf, dA=2, tS=1, loopy=1,vl=1,in|Out.ar(~fusible1,PlayBuf.ar(1,buf,trigger:
+		trig/*Dust.kr(4.0)*/,startPos: start,loop: loopy/*,doneAction: dA*/)* EnvGen.kr(Env([0,vl,vl,0],[0,dur,0]),timeScale: tS,doneAction: 2));
+
+	Out.ar(out,In.ar( in, 10));}).add;
+
+
 	SynthDef(\playBufX ,{|out = 0,start, trig, dur, buf, dA=2, loo=0,tS=1,impulse=0.001|Out.ar(out,PlayBuf.ar(1,buf,trigger:
 		Impulse.kr(impulse* (60/~bpm)),startPos: start,loop:loo,doneAction: 2));}).add;
+
+	/*SynthDef(\playBufX1 ,{|out = 0,start, trig, dur, buf, dA=2, loo=0,tS=1,impulse=0.001|Out.ar(out,PlayBuf.ar(1,buf,trigger:
+		Impulse.kr(impulse),startPos: start,loop:loo,doneAction: 2));}).add;*/
 
 
 	SynthDef(\playBuf2 ,{|out = 0,start, trig, dur, buf, dA=2|Out.ar(out,PlayBuf.ar(2, buf,trigger:
@@ -1241,7 +1257,13 @@ SynthDef("TriggerBufferGranular", {arg out=0, bufnum=0, in=0, thresh = 0.004, am
 		Out.ar(out, CombN.ar(In.ar(in,1),maxDel, delayT,decT))}).add;*/
 
 SynthDef(\comb, {|out=0, in ,maxDel, delayT,decT|
-		Out.ar(out, CombN.ar(In.ar(in,1),MouseX.kr(0.01,2),MouseY.kr(0.01,2),3,0.1))}).add;
+		Out.ar(out, CombN.ar(In.ar(in,1),0.7744/*MouseX.kr(0.01,2)*/,MouseY.kr(0.001,0.6).poll,3.0976,0.09))}).add;
+
+
+	SynthDef(\combX, {|out=0, in ,maxDel, delayT,decT=3,dur, tS=1,modu,factor=0,factor2=0|
+		Out.ar(out, CombN.ar(In.ar(in,1),1.5488/*MouseX.kr(0.01,2)*/,/*VarLag.kr(delayT,0.04)*/delayT+ MouseY.kr(0.001,0.6)
+			+ (In.kr(modu,1)*EnvGen.kr(Env.adsr(sustainLevel: 1,releaseTime: 0.1),factor ))+(In.kr(~seqBus,1)* factor2)
+			,decT,0.09)* EnvGen.kr(Env.step([1,1],[dur,0]),timeScale: tS,doneAction:2) )}).add;
 
 
 	SynthDef(\combS, {|out=0, in ,maxDel, delayT,decT,dur, tS=1|
@@ -1463,6 +1485,63 @@ SynthDef(\fm, {
 	Out.ar(out, sig /* !*/   * amp* EnvGen.kr(Env.adsr(0.1), gate));
 }).add;
 
+	SynthDef(\fmX, {
+		arg freq= 659.26, freq2=200,freq3=200, mRatio=1, cRatio=1,  amp=1.5, sineRate = 0.0000000095262251,  sineRangeLow=0, pitch = 0, phRise= 0 ,out=0, eFreq =0 , phFm=8, bus2,bus3,bus4,busBP,bus6, bus7, bus8, busSR, busSS, busSP, gra=0.5,lvlDec=1,factor=0, factor2 =0 ,factorx=0, factorx2 =0,factorxx=0, factorxx2 =0  /*,vlPE =27.1366666667,vlPE2=0.2,dcPE = 0.129066666667*/, rqLPF =0.5, factor3 =1, decE= 0.1936, dur, gain =50/*, crvEP = (-2)*/,gate,pan=0, modu,modu2, multi;
+
+	var car, mod, mod2, iEnv, sig, filRte;
+
+
+
+	iEnv = EnvGen.kr(
+			Env.new(
+
+			[1, 1 * 5, 1 * 5,4.8],
+			[0,0.000000000001,        (/*decE*/ dur/*30000*/   ),      0.0000000001],
+			[4, 4,(-4)]
+		));
+
+	//second level of modulation
+	mod2 = SinOsc.ar(659.26/10+ (In.kr(modu,1)* EnvGen.kr(Env.adsr(sustainLevel: 1,releaseTime: 0.1),factorxx ))+(In.kr(~seqBus,1)* factorxx2), mul:659.26/10 *iEnv /*In.kr( gra, 1)*/ );
+
+	//first level of modulation
+
+		// mod = SinOsc.ar(MouseX.kr(0,freq * mRatio + mod2), mul:freq * mRatio * iEnv);
+
+		mod = SinOsc.ar( MouseX.kr( 659.26 * mRatio + mod2 )*
+
+		/*	SinOsc.kr(In.kr(~bus2, 1),In.kr(~bus3, 1)).range([In.kr(~bus11, 1)]), mul:*/
+
+			SinOsc.kr(sineRate,phRise).range([sineRangeLow])+ (In.kr(modu,1)* EnvGen.kr(Env.adsr(sustainLevel: 1,releaseTime: 0.1),factorx ))+(In.kr(~seqBus,1)* factorx2), mul:
+
+			/*(*/        MouseY.kr(   659.26 * mRatio *iEnv) /*In.kr( gra, 1) */  /*) *   In.kr( gra, 1)*/
+
+		);
+
+	//my carrier is a mess but bring interesting outputs
+
+		car =SinOsc.ar( [0.00502929687, 0.00502929687+20, 0.00502929687 +50]+ cRatio + (In.kr(modu,1)* EnvGen.kr(Env.adsr(sustainLevel: 1,releaseTime: 0.1),factor ))+(In.kr(~seqBus,1)* factor2)+
+
+			//remove this line as shwon to decrease sound quality so I left it / HERE CHNAGE THE SOUND
+			/*SelectX.ar(SinOsc.kr(0.0020,phFm).range(0,1),[SinOsc.ar(0),mod])*/
+			SelectX.ar(SinOsc.kr((0.00502929687/2/2),phFm).range(0,1),[SinOsc.ar(0),mod])
+
+			//pitch envelope
+			/*+  (EnvGen.kr(Env([vlPE,vlPE2],[dcPE,0],crvEP))*factor2)*/
+			//extra pitch modulation
+			/*+ pitch +  (In.kr(bus4, 1)/factor)  */         ,mul: [1,
+			multi
+			,multi  ]   );
+
+	//transform signal through the shaper
+
+	sig = Shaper.ar(~tfBuf,   car);
+
+	sig  = LeakDC.ar(sig);
+
+	// sig = Splay.arFill(2,sig,spread: 0);
+	Out.ar(out, sig /* !*/   * amp* EnvGen.kr(Env.adsr(0.1), gate));
+}).add;
+
 
 
 SynthDef(\fm2, {
@@ -1551,7 +1630,7 @@ SynthDef(\sequ,{|value, dur, in=0, out=0, vlAtk=0, vlDec=1,vlSub=1,vlSub2=1, vlR
 
 
 	SynthDef(\recLoop){|buf=0,out=0,recording = 1,in = (~toRecord)|
-		var input = /* Mix.ar(*/ In.ar(in,1)/*)*/;
+		var input =  Mix.ar(In.ar(in,1));
 	// Timer measures times between triggers
 	// Changed emits a trigger when recording changes value
 	// Gate updates recEnd only when not recording
@@ -1577,7 +1656,7 @@ SynthDef(\sequ,{|value, dur, in=0, out=0, vlAtk=0, vlDec=1,vlSub=1,vlSub2=1, vlR
 	);
 		/*Out.ar(0,HPF.ar(input,100));*/
 		Out.ar(0,BHiPass4.ar(play),100);
-		Out.ar(0,play);
+		/*Out.ar(0,play);*/
 }.add;
 
 
