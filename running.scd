@@ -110,6 +110,10 @@ s.sync;
 	~leTout = Buffer.alloc(s,s.sampleRate* (256* t.beatDur),10);
 
 
+	~buf2 = Buffer.alloc(s,s.sampleRate*90 );
+	~bufSnoopy2 = Buffer.alloc(s,s.sampleRate*90 );
+
+
 	~remyAudio = Buffer.read(s, "/Users/davidmignot/superCollider-master/remy.wav");
 
 "Shaper init".postln;
@@ -1256,8 +1260,8 @@ SynthDef("TriggerBufferGranular", {arg out=0, bufnum=0, in=0, thresh = 0.004, am
 /*	SynthDef(\comb, {|out=0, in ,maxDel, delayT,decT|
 		Out.ar(out, CombN.ar(In.ar(in,1),maxDel, delayT,decT))}).add;*/
 
-SynthDef(\comb, {|out=0, in ,maxDel, delayT,decT|
-		Out.ar(out, CombN.ar(In.ar(in,1),0.7744/*MouseX.kr(0.01,2)*/,MouseY.kr(0.001,0.6).poll,3.0976,0.09))}).add;
+SynthDef(\comb, {|out=0, in ,maxDel, delayT,decT=6.1952|
+		Out.ar(out, CombN.ar(In.ar(in,1),0.7744/*MouseX.kr(0.01,2)*/,MouseY.kr(0.001,0.6), decT ,0.09))}).add;
 
 
 	SynthDef(\combX, {|out=0, in ,maxDel, delayT,decT=3,dur, tS=1,modu,factor=0,factor2=0|
@@ -1557,10 +1561,14 @@ SynthDef(\fm2, {
 	env =EnvGen.kr(Env.adsr(0.1), gate);
 
 
-		mod = SinOsc.ar( freq2  /*In.kr(~bus.postln,1) */   * mRatio + (In.kr(modu,1)*EnvGen.kr(Env.adsr(sustainLevel: 1,releaseTime: 0.1),factor ))+(In.kr(~seqBus,1)* factor2),/*mod2.wrap(0, 16pi),*/ mul:/* freq2 **/ iEnv* index3/*MouseX.kr(0,iEnv)*/);
+		/*mod = SinOsc.ar( freq2  /*In.kr(~bus.postln,1) */   * mRatio + (In.kr(modu,1)*EnvGen.kr(Env.adsr(sustainLevel: 1,releaseTime: 0.1),factor ))+(In.kr(~seqBus,1)* factor2),/*mod2.wrap(0, 16pi),*/ mul:/* freq2 **/ iEnv* index3/*MouseX.kr(0,iEnv)*/);*/
+
+		mod = SinOsc.ar( freq2  * mRatio , mul: iEnv* index3);
 
 		car = Saw.ar( /* MouseX.kr(0.3,*/[659.26/4, 659.26/4+20, 659.26/4 -40]/*)*/
-		/*+ LFNoise0.kr(10.3).range(-40,1200) */ * cRatio,
+
+		/*+ LFNoise0.kr(10.3).range(-40,1200) */ * cRatio
+			+ (In.kr(modu,1)*EnvGen.kr(Env.adsr(sustainLevel: 1,releaseTime: 0.1),factor ))+(In.kr(~seqBus,1)* factor2),
 		mod.wrap(0, 4pi)*[1,multi
 			,multi
 
