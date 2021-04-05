@@ -595,12 +595,12 @@ SynthDef(\kick, {
 
 
 		sig =
-		BPeakEQ.ar(
+		//BPeakEQ.ar(
 		// BPeakEQ.ar(
 		//BPeakEQ.ar(
-			SinOsc.ar(envF, mul: env)
+			SinOsc.ar(envF, mul: env);
 			// ,41.2, 4,4)
-,1318.51,4, (-8));
+//,1318.51,4, (-8));
 		//,659.255,16, (-4));
 
 		sig = sig * amp.dbamp  ;

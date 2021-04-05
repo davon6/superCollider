@@ -5,24 +5,24 @@ SynthDef(\kick, {
 		envF = EnvGen.ar(
 			Env(
 				[5178.15,1539.47,165,26,0,0],
-				[0.001,0.008,0.1,0,0.1],
+				[0.001,0.008,0.1,0,0.01],
 				\exp
 			)
 		);
 
 		env =EnvGen.ar(
 	Env([1 , 0.4, 1,    1,1,0],
-		[0.008, 0.08, 0,0.006,0.03],[0,-30,5,5,-5]),doneAction:2);
+		[0.008, 0.08, 0,0.006,0.01],[0,-30,5,5,-5]),doneAction:2);
 	//EnvGen.ar(Env.perc(0, 0.40),doneAction:2);
 
 
 		sig =
-		BPeakEQ.ar(
+		//BPeakEQ.ar(
 		// BPeakEQ.ar(
 		//BPeakEQ.ar(
-			SinOsc.ar(envF, mul: env)
+			SinOsc.ar(envF, mul: env);
 			// ,41.2, 4,4)
-,1318.51,4, (-8));
+//,1318.51,4, (-8));
 		//,659.255,16, (-4));
 
 		sig = sig * amp.dbamp  ;
