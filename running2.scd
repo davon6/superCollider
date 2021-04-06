@@ -29,6 +29,8 @@ Synth(\playBuf2,  [  \buf,/*~bufBg*/ , \out, ~bgFil22    ]);
 	Pbind( \instrument, \playBufX, \impulse,0.075 ,/*Pseq([ Pseq([1/16],64),Pseq([1/4],16),Pseq([1/1],4),Pseq([4/1],1) ].scramble,1)*/
 		\dur,inf, \tS,  0.39550810372374,\start,0,\buf,~bufSnoopy,\out, 0,\loo,1),
 
+	Pbind(\instrument ,	\EQ2,\dur, inf, \in,~kickHatEq, \out,0,\group, ~eqGrp, \val, 659.255, \quant,1.7, \gain ,(-20)),
+
 	~bassShap, Ppar([~hat2,~kick, ~bass],inf),
 	Pbind(\instrument ,	\EQHP2,\dur, inf, \in,~bassEq, \out,0,\group, ~eqGrp, \frq, 20.6,\vol,1/*\val, 659.255, \quant,1, \gain ,(-20)*/),
 
@@ -109,8 +111,10 @@ o = {
 
 	/*Out.kr(~bus13, SinOsc.kr(0.64375).range(20.6,41.20));*/
 
-	Out.kr(~bus14, SinOsc.kr(0.321875).range(-1,1));//NOT USED
+	/*Out.kr(~bus14, SinOsc.kr(0.321875).range(-1,1));//NOT USED*/
 
+
+	Out.kr(~bus14, SinOsc.kr( LFTri.kr( 0.321875).range(0.321875,1.2875)).range(0.84,0.3));
 
 	/*Out.kr(~bus3, SinOsc.kr(0.3 ).range((-140),1500));*/
 
@@ -202,6 +206,8 @@ Pxrand([
 	Pbind(\instrument, \lfo13,\val,(~hzQbeat/4),\out,~bus2 ,\dur,999,\ph,0, \rL,200,\rH,4000, \group, ~lfoGrp),
 
 	Pbind(\instrument, \lfo13,\val,~hzQbeat,\out,~bus10 ,\dur,999,\ph,0, \rL,(-0.8),\rH,0.8, \group, ~lfoGrp),
+
+	Pbind(\instrument, \lfoSaw, \out, ~bus8, \dur, Pseq([4/1],inf), \ph, Pfunc({8pi.rrand(0.01)}), \gte,Pfunc({  (10).exprand(1).neg    }), \group, ~lfoGrp),
 
 
 	Pbind(\instrument, \kick,\dur, Pseq([1/1],inf),\amp,(-14.2),\out,~kbus),
@@ -804,12 +810,11 @@ Pbind(\instrument, \filter , \in,  ~riFil   ,\dur,inf, \out,~riDisto, \busMod, ~
 
 	Pbind(\instrument, \distoS, \dur, inf, \in, ~riDisto , \out,~riEq ,\group, ~distoGrp0),
 
-	Pbind(\instrument,\EQHP2, \in, ~riEq , \out, ~riRev ,\frq, 600, \dur,inf, \group, ~eqGrp0, \val,3600, \quant,8, \gain,(-6),\val2,11800,\quant2,1, \gain2,(-8)),
+	Pbind(\instrument,\EQHP2, \in, ~riEq , \out, ~toGateX ,\frq, 600, \dur,inf, \group, ~eqGrp0, \val,3600, \quant,8, \gain,(-6),\val2,11800,\quant2,1, \gain2,(-8)),
 
 
 
-
-
+Pbind(\instrument, \gateX,\dur,9999, \tS, 0.39550810372374, \busMod, ~bus8 ,\in, ~toGateX,\out,~riRev,\group, ~gateGrp),
 
 
 

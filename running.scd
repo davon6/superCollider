@@ -295,7 +295,7 @@ s.sync;
 	~newBus2=  Bus.audio(s,2);
 ~fusible1 = Bus.audio(s,1);
 
-
+~toGateX =  Bus.audio(s,2);
 	~eqPerch =  Bus.audio(s,1);
 	~distoPerch =  Bus.audio(s,1);
 	~revPerch =  Bus.audio(s,1);
@@ -427,6 +427,8 @@ s.sync;
 ~mod3= Bus.control(s,1);
 ~mod4= Bus.control(s,1);
 
+
+
 	~mod1x= Bus.control(s,1);
 ~mod2x= Bus.control(s,1);
 ~mod3x= Bus.control(s,1);
@@ -543,12 +545,29 @@ LFNoise0.kr(~hz1beat).range(0.1,0.0)/*,0.02)*/
 	)    *  SinOsc.kr(~hzHbeat*2).range((~hz1beat.neg),~hz1beat)).range(~hz8Oct,~hz1Oct),);*/
 
 
-	SynthDef(\lfoSaw, {|out, val, dur|Out.kr(out,
+
+
+	/*SynthDef(\lfoSaw, {|out, val, dur|Out.kr(out,
 		//Saw.kr(val).range(~hz1beat*256, ~hz1beat*2048)* EnvGen.kr(Env.step([1],[dur]),doneAction: 2)
 
 
 		Saw.kr(val).range(~hz1beat*256, ~hz1beat*2048)* EnvGen.kr(Env.step([1],[dur]),doneAction: 2)
+	)}).add;*/
+
+	SynthDef(\lfoSaw, {|out, val, dur,tS=1,ph =0,gte=(-4)|Out.kr(out,
+
+		Saw.ar(/*MouseY.kr(0.24,20.6)*/SinOsc.ar(0.0025,ph).range(0.24,20.6)
+
+			,-1,-0.4).range(-1,0).lincurve(-1,2,5,-3,gte)* EnvGen.kr(Env.step([1,0],[dur,0]),timeScale: tS,doneAction: 2)
 	)}).add;
+
+
+	SynthDef(\lfoPulse, {|out, val, dur,tS=1,ph =0,gte=(-4),frq=1,wdth=0.5|Out.kr(out,
+
+		LFPulse.kr(frq/*MouseY.kr(0.001,32)*/,width:In.kr(wdth,1)/*MouseX.kr(0.1,1) */)* EnvGen.kr(Env.step([1,0],[dur,0]),timeScale: tS,doneAction: 2)
+	)}).add;
+
+
 
 	SynthDef(\lfo2, {|out, val=1, dur|Out.kr(out,
 
@@ -1077,7 +1096,7 @@ timeScale: tS,	doneAction:2);
 }).add;
 
 
-
+	SynthDef(\gateX,{|in, out=0,busMod|Out.ar(out,  In.ar(in, 2)* In.kr(busMod))}).add;
 
 	SynthDef.new(\ptr, {
 		arg out=0, buf=0,dec=1 ;
