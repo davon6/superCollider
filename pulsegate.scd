@@ -6,7 +6,7 @@ SynthDef(\lfoPulse, {|out, val, dur,tS=1,ph =0,gte=(-4),frq=1,wdth=0.5|Out.kr(ou
 		LFPulse.kr(frq/*MouseY.kr(0.001,32)*/,width:wdth/*MouseX.kr(0.1,1) */)* EnvGen.kr(Env.step([1,0],[dur,0]),timeScale: tS,doneAction: 2)
 	)}).add;
 
-
+(
 Ppar([
 
 	~bassShap, Ppar([~hat2,~kick, ~bass],inf),
@@ -14,7 +14,7 @@ Ppar([
 	Pbind(\instrument ,	\EQ2,\dur, inf, \in,~kickHatEq, \out,0,\group, ~gateGrp, \val, 659.255, \quant,1.7, \gain ,(-20)),
 
 
-	Pbind(\instrument, \lfoPulse, \out, ~bus13, \dur, Prand([ Pseq([8/1],1), Pseq([2/1],1)],inf),\group,~lfoGrp ,\frq,Pfunc({20.6.exprand(0.3)}),\wdth,~bus14 ),
+	Pbind(\instrument, \lfoPulse, \out, ~bus13, \dur,/* Prand([ */Pseq([4/1],inf)/* , Pseq([2/1],2)],inf)*/,\group,~lfoGrp ,\frq,Pfunc({20.6.rrand(0.321875)}),\wdth,~bus14 ),
 
 Pbind( \instrument, \playBuf, \impulse, 0.025,
 		\dur,99999, \tS,  0.39550810372374,\start,Pfunc({( ~buf.numFrames.rrand(1400000)- 1400000)}),\buf,/*Prand([*/~bufSnoopy/*,~bufSnoopy2],inf)*/,\out, ~toGateX,\loopy,1),
@@ -22,7 +22,7 @@ Pbind(\instrument, \gateX,\dur,9999, \tS, 0.39550810372374, \busMod, ~bus13 ,\in
 
 ],1).play(t)
 
-
+)
 
 Ppar([
 

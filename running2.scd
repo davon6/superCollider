@@ -114,7 +114,7 @@ o = {
 	/*Out.kr(~bus14, SinOsc.kr(0.321875).range(-1,1));//NOT USED*/
 
 
-	Out.kr(~bus14, SinOsc.kr( LFTri.kr( 0.321875).range(0.321875,1.2875)).range(0.84,0.3));
+	Out.kr(~bus14, SinOsc.kr( LFTri.kr( 0.08046875).range(0.321875,1.2875)).range(1,0.42));
 
 	/*Out.kr(~bus3, SinOsc.kr(0.3 ).range((-140),1500));*/
 
@@ -209,6 +209,8 @@ Pxrand([
 
 	Pbind(\instrument, \lfoSaw, \out, ~bus8, \dur, Pseq([4/1],inf), \ph, Pfunc({8pi.rrand(0.01)}), \gte,Pfunc({  (10).exprand(1).neg    }), \group, ~lfoGrp),
 
+	Pbind(\instrument, \lfoPulse, \out, ~bus13, \dur,/* Prand([ */Pseq([4/1],inf)/* , Pseq([2/1],2)],inf)*/,\group,~lfoGrp ,\frq,Pfunc({20.6.rrand(0.321875)}),\wdth,~bus14 ),
+
 
 	Pbind(\instrument, \kick,\dur, Pseq([1/1],inf),\amp,(-14.2),\out,~kbus),
 	Pbind(\instrument, \snare,\carHz, 41.2 ,\type, Pseq([\rest ,\rest,\note,\rest], inf),\atk, 0.00502929687,\rel, 0.0968,\rel2, 0.3872,\dur, Pseq([1/2], inf),\amp,(-16.6), \crv1,(-8),\crv2,(-7)   ,\out,~snBus),
@@ -237,7 +239,10 @@ Pxrand([
 	//no2
 
 	Pbind( \instrument, \playBuf, \impulse, 0.025,
-		\dur,99999, \tS,  0.39550810372374,\start,Pfunc({( ~buf.numFrames.rrand(1400000)- 1400000)}),\buf,/*Prand([*/~bufSnoopy/*,~bufSnoopy2],inf)*/,\out, ~no2ToRev,\loopy,1),
+		\dur,99999, \tS,  0.39550810372374,\start,Pfunc({( ~buf.numFrames.rrand(1400000)- 1400000)}),\buf,/*Prand([*/~bufSnoopy/*,~bufSnoopy2],inf)*/,\out, ~toGateX,\loopy,1),
+
+
+	Pbind(\instrument, \gateX,\dur,9999, \tS, 0.39550810372374, \busMod, ~bus13 ,\in, ~toGateX,\out,~no2ToRev,\group, ~gateGrp),
 
 
 	Pbindf( Prand([~quickFix, ~rShort]),\dur,inf, \in, ~no2ToRev , \out, ~no2ToCom,\group,~revGrp),
@@ -714,8 +719,10 @@ Pbind(\instrument , \limiterS,\dur, inf, \in,~percuLimit, \gain, 72,\group, ~lim
 /*Pbind(\instrument,\stereoS, \dur, 99999999, \in,   ,,\spread,1,\out,0,\tS, 0.39550810372374,\group, ~stereoGrp),*/
 
 
-
 (~track = Ppar([ ~base,/* ~kb , */~rises, ],1).play(t,quant:1))
+
+
+//MASSIVE GLITVCH DONT KNOW WHY
 ~rises.stop;
 (~rises =
 
@@ -917,7 +924,15 @@ Pbind( \instrument, \playBuf, \impulse, 0.3 ,
 		Pbind(\instrument, \gate, \dur, Pseq([4/1 ],1),\group, ~gateGrp,
 			\in,~gateBus,\tS, 0.39550810372374,
 
-				\vlSub,0.8,\vlSub2,Pkey(\vlSub), \out,~filterBus),
+				\vlSub,0.8,\vlSub2,Pkey(\vlSub), \out,~filterBus,
+
+		\atkT,Pfunc({0.10.exprand(0.01)}),
+	\decT,Pfunc({0.6.exprand(0.8,0.3)}),
+	\subsT,Pfunc({0.2.exprand(0.1)}),
+	\relT,Pfunc({0.22.exprand(0.1,1)}),
+	\atckC,Pfunc({6.exprand(1,1)}),
+	\decC,Pfunc({-4.exprand(-0.1)}),
+			\relC,Pfunc({-8.exprand(-2,1)}),\vlAtk ,Pfunc({1.00.exprand(0.01)}),\vlRel,Pfunc({0.1.exprand(0.01)})),
 
 		Pbind(\instrument,\gate,\dur,Pxrand([ Pseq([1/4],1),Pseq([1/1],1)],1), \in,  ~gateBus,\out,
 			Pwrand([~filterBus,~reverbSquelch ],[16,1].normalizeSum,inf),\group, ~gateGrp,
@@ -1369,7 +1384,7 @@ Pbindf( ~church,\dur,inf, \in,~reverbSquelch  , \out,~comSquelch ,\group,~revGrp
 ~base; ~kb; ~no4; ~rises; ~lp;~bp; ~hp;~deNo2; ~mainLead;~percheur;~passant
 ~base.play(t)/*~deNo2, */
 
-(~track = Ppar([~fx,~passant,~rises,~kb,~base,~no4,~mainLead,~percheur,~sequ],1).play(t,quant:1))
+(~track = Ppar([~fx,~passant,/*~rises,*/~kb,~base,~no4,~mainLead,~percheur,~sequ],1).play(t,quant:1))
 
 Pseq([~kick],inf).play(t, quant:1)
 Ppar([~bassShap,Pseq([~bass],inf)],1).play(t, quant:1)

@@ -564,7 +564,10 @@ LFNoise0.kr(~hz1beat).range(0.1,0.0)/*,0.02)*/
 
 	SynthDef(\lfoPulse, {|out, val, dur,tS=1,ph =0,gte=(-4),frq=1,wdth=0.5|Out.kr(out,
 
-		LFPulse.kr(frq/*MouseY.kr(0.001,32)*/,width:In.kr(wdth,1)/*MouseX.kr(0.1,1) */)* EnvGen.kr(Env.step([1,0],[dur,0]),timeScale: tS,doneAction: 2)
+		LFPulse.kr(/*frq*/
+			LFNoise0.kr(1.2875).range(0.001,20.6)
+
+			/*MouseY.kr(0.001,32) */ ,width:In.kr(wdth,1)/*MouseX.kr(0.4,1).poll */)* EnvGen.kr(Env.step([1,0],[dur,0]),timeScale: tS,doneAction: 2)
 	)}).add;
 
 
