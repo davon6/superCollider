@@ -425,6 +425,12 @@ s.sync;
 ~mod3= Bus.control(s,1);
 ~mod4= Bus.control(s,1);
 
+	~mod1x= Bus.control(s,1);
+~mod2x= Bus.control(s,1);
+~mod3x= Bus.control(s,1);
+~mod4x= Bus.control(s,1);
+	~seqBusx= Bus.control(s,1);
+
 ~seqBus= Bus.control(s,1);
 	s.sync;
 
@@ -1260,8 +1266,8 @@ SynthDef("TriggerBufferGranular", {arg out=0, bufnum=0, in=0, thresh = 0.004, am
 /*	SynthDef(\comb, {|out=0, in ,maxDel, delayT,decT|
 		Out.ar(out, CombN.ar(In.ar(in,1),maxDel, delayT,decT))}).add;*/
 
-SynthDef(\comb, {|out=0, in ,maxDel, delayT,decT=6.1952|
-		Out.ar(out, CombN.ar(In.ar(in,1),0.7744/*MouseX.kr(0.01,2)*/,MouseY.kr(0.001,0.6), decT ,0.09))}).add;
+SynthDef(\comb, {|out=0, in ,maxDel, delayT,decT=6.1952,amp=0.09|
+		Out.ar(out, CombN.ar(In.ar(in,1),0.7744/*MouseX.kr(0.01,2)*/,MouseY.kr(0.001,0.6), decT ,amp))}).add;
 
 
 	SynthDef(\combX, {|out=0, in ,maxDel, delayT,decT=3,dur, tS=1,modu,factor=0,factor2=0|
@@ -1426,10 +1432,10 @@ SynthDef(\EQHP10, {|out=0, in, val, quant, gain, val2, quant2, gain2 frq=100, vo
 
 
 
-SynthDef(\sinModul,{|modu|Out.kr(~mod1, SinOsc.kr(modu).range(-40,2200))}).add;
-SynthDef(\sawModul,{|modu|Out.kr(~mod2, Saw.kr(modu).range(-40,2200))}).add;
-SynthDef(\pulModul,{|modu|Out.kr(~mod3, LFTri.kr(modu).range(-40,1200))}).add;
-SynthDef(\ranModul,{|modu|Out.kr(~mod4,LFDNoise0.kr(modu).range(0,4200) )}).add;
+SynthDef(\sinModul,{|modu, busMod|Out.kr(busMod, SinOsc.kr(modu).range(-40,2200))}).add;
+SynthDef(\sawModul,{|modu, busMod|Out.kr(busMod, Saw.kr(modu).range(-40,2200))}).add;
+SynthDef(\pulModul,{|modu, busMod|Out.kr(busMod, LFTri.kr(modu).range(-40,1200))}).add;
+SynthDef(\ranModul,{|modu, busMod|Out.kr(busMod,LFDNoise0.kr(modu).range(0,4200) )}).add;
 
 
 SynthDef(\fm, {
@@ -1515,7 +1521,7 @@ SynthDef(\fm, {
 
 		/*	SinOsc.kr(In.kr(~bus2, 1),In.kr(~bus3, 1)).range([In.kr(~bus11, 1)]), mul:*/
 
-			SinOsc.kr(sineRate,phRise).range([sineRangeLow])+ (In.kr(modu,1)* EnvGen.kr(Env.adsr(sustainLevel: 1,releaseTime: 0.1),factorx ))+(In.kr(~seqBus,1)* factorx2), mul:
+			SinOsc.kr(sineRate,phRise).range([sineRangeLow])+ (In.kr(modu,1)* EnvGen.kr(Env.adsr(sustainLevel: 1,releaseTime: 0.1),factorx ))+(In.kr(~seqBusx,1)* factorx2), mul:
 
 			/*(*/        MouseY.kr(   659.26 * mRatio *iEnv) /*In.kr( gra, 1) */  /*) *   In.kr( gra, 1)*/
 
@@ -1523,11 +1529,11 @@ SynthDef(\fm, {
 
 	//my carrier is a mess but bring interesting outputs
 
-		car =SinOsc.ar( [0.00502929687, 0.00502929687+20, 0.00502929687 +50]+ cRatio + (In.kr(modu,1)* EnvGen.kr(Env.adsr(sustainLevel: 1,releaseTime: 0.1),factor ))+(In.kr(~seqBus,1)* factor2)+
+		car =SinOsc.ar( ([0.00502929687, 0.00502929687+20, 0.00502929687 +50] + (In.kr(modu,1)* EnvGen.kr(Env.adsr(sustainLevel: 1,releaseTime: 0.1),factor ))+(In.kr(~seqBus,1)* factor2)+
 
 			//remove this line as shwon to decrease sound quality so I left it / HERE CHNAGE THE SOUND
 			/*SelectX.ar(SinOsc.kr(0.0020,phFm).range(0,1),[SinOsc.ar(0),mod])*/
-			SelectX.ar(SinOsc.kr((0.00502929687/2/2),phFm).range(0,1),[SinOsc.ar(0),mod])
+			SelectX.ar(SinOsc.kr((0.00502929687/2/2),phFm).range(0,1),[SinOsc.ar(0),mod]))* cRatio
 
 			//pitch envelope
 			/*+  (EnvGen.kr(Env([vlPE,vlPE2],[dcPE,0],crvEP))*factor2)*/
@@ -1757,9 +1763,9 @@ s.sync;
 
 	~hat2 =Pbind(\instrument, \percussion,\rel,0.04840,\rel2,0.02420,\amp, -26.2, \crv1, (-4), \crv1b, (-5), \modHz, exprand(500,10000), \mulMod, rrand(100, 500), \carHz, exprand(20,10000), \modAmp, 0.82875.rrand(0.4),\dur,Pseq([1/1],1) ,\out, ~kickHatEq);
 
-	~cymbal = Pbind(\instrument, \percussion,\type, Pseq([\rest,\rest,\note,\note ,\rest,\note ,\note, \rest].scramble,inf),\dur,Pseq([1/4],64 ),\carHz, 525.12070612224,\modHz,1899.3343179398,\modAmp, 0.12875 ,\amp,(-20.5),\rel,Pseq([1/16],inf),\rel2,Pseq([1/16],inf),\latch,8000,\stereoL, 0.00555, \crv1,  (-4.4), \crv1b,(-4), \mulMod, 1691,\out, ~comBusCymb);
+	~cymbal = Pbind(\instrument, \percussion,\type, Pseq([\rest,\rest,\note,\note ,\rest,\note ,\note, \rest].scramble,inf),\dur,Pseq([1/4],64 ),\carHz, 525.12070612224,\modHz,1899.3343179398,\modAmp, 0.12875 ,\amp,(-17.5),\rel,Pseq([1/16],inf),\rel2,Pseq([1/16],inf),\latch,8000,\stereoL, 0.00555, \crv1,  (-4.4), \crv1b,(-4), \mulMod, 1691,\out, ~comBusCymb);
 
-~hat = Pbind(\instrument,\percussion,\dur,Pseq([1/4], 64),\atk, 0,\rel,0.04840,\rel2,0.02420,\amp,Pseq([( -16.2), ( -17.2),( -16.2),( -18.2),( -17.2),( -17),( -16.2),( -16.2)],inf), \crv1, (-3), \crv1b, (-5), \modHz, exprand(500,10000).postln, \mulMod, rrand(100, 500).postln, \carHz, exprand(20,10000), \modAmp, 0.12875, \latch, 18500, \stereoR, 0.007,\out,~comBusHat);
+~hat = Pbind(\instrument,\percussion,\dur,Pseq([1/4], 64),\atk, 0,\rel,0.04840,\rel2,0.02420,\amp,Pseq([( -13.2), ( -14.2),( -13.2),( -15.2),( -14.2),( -14),( -13.2),( -13.2)],inf), \crv1, (-3), \crv1b, (-5), \modHz, exprand(500,10000).postln, \mulMod, rrand(100, 500).postln, \carHz, exprand(20,10000), \modAmp, 0.12875, \latch, 18500, \stereoR, 0.007,\out,~comBusHat);
 
 	~snare = Pbind(\instrument, \snare,\carHz, 41.2 ,\type, Pseq([\rest ,\rest,\note,\rest], 8),\atk, 0.00502929687,\rel, 0.0968,\rel2, 0.3872,\dur, Pseq([1/2], inf),\amp,(-16.6), \crv1,(-8),\crv2,(-7)   ,\out,~snareEQ, \atk,t.beatDur * 0.02, \atk2,Pkey(\atk));
 
