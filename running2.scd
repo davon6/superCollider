@@ -709,7 +709,7 @@ Pbind(\instrument , \limiterS,\dur, inf, \in,~percuLimit, \gain, 72,\group, ~lim
 
 
 
-(~track = Ppar([ ~base, ~kb , ~rises, ],1).play(t,quant:1))
+(~track = Ppar([ ~base,/* ~kb , */~rises, ],1).play(t,quant:1))
 ~rises.stop;
 (~rises =
 
@@ -853,10 +853,12 @@ Pbindf(~rLong,\dur,inf, \in,~revSide , \revtime, 10,\out,~comSide,\taillevel,0,\
 	Pbind(\instrument,\comp, \dur,inf,\thr,0.8 ,\sB, 1.015,\sA, 1/2,\atk ,0.0242, \rel ,0.0968,\gain,1,\in, ~comFuzz3 ,\ctrl, ~kbus, \out,~limitFuzz3, \group, ~compGrp),
 	Pbind(\instrument, \limiter,\in, ~limitFuzz3, \dur, inf,\gain,15,\group,~limitGrp,\out,~stereoBus4),
 
-Pbind(\instrument,\stereo, \dur, 9999, \in, ~stereoBus4   ,\out,/*~no1*/~eqBus210, \group, ~stereoGrp),],1)/*.play(t, quant:1)*/)
+Pbind(\instrument,\stereo, \dur, 9999, \in, ~stereoBus4   ,\out,/*~no1*/ ~eqBus210, \group, ~stereoGrp),
 
-Pbind(\instrument,\EQHP10, \in, ~eqBus210 ,\out, 0,\frq, 600, \dur,inf,\group, ~eqGrp2,\val,11800,\quant,16, \gain,(-8),\val2,2600,\quant2,8, \gain2,(-8),\vol, 2.2),
+Pbind(\instrument,\EQHP10, \in, ~eqBus210 ,\out, 0,\frq, 100, \dur,inf,\group, ~eqGrp2,\val,11800,\quant,16, \gain,(-8),\val2,2600,\quant2,8, \gain2,(-8),\vol, 1)
 
+	,],1)
+)
 
 ~sequ.play(t)
 ~t = Ppar([~base, ~kb,~sequ],1).play(t,quant:1)

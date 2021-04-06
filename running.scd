@@ -336,6 +336,8 @@ s.sync;
 	~hpK=Bus.audio(s,1);
 	~bpK=Bus.audio(s,1);
 
+	~outFil2=Bus.audio(s,2);
+	~outDisto2=Bus.audio(s,2);
 
 
 ~new10 =Bus.audio(s,10);
@@ -1031,6 +1033,8 @@ freq         )* EnvGen.kr(Env([0,1,1,0],[0.055,dur-0.055,0],4),timeScale: tS,don
 
 	SynthDef(\disto, {|out=0,in, hpf= 81.41|Out.ar(out, In.ar(in,1).round(2**(-16)));}).add;
 
+	/*SynthDef(\disto3, {|out=0,in|Out.ar(out, In.ar(in,3).round(2**(-16)));}).add;*/
+
 
 	SynthDef(\distoS, {|out=0,in|Out.ar(out, In.ar(in,2).round(2**(-16)));}).add;
 
@@ -1270,6 +1274,10 @@ SynthDef(\comb, {|out=0, in ,maxDel, delayT,decT=6.1952,amp=0.09|
 		Out.ar(out, CombN.ar(In.ar(in,1),0.7744/*MouseX.kr(0.01,2)*/,MouseY.kr(0.001,0.6), decT ,amp))}).add;
 
 
+	SynthDef(\comb2, {|out=0, in ,maxDel, delayT,decT=6.1952,amp=0.09|
+		Out.ar(out, CombN.ar(In.ar(in,2),0.7744/*MouseX.kr(0.01,2)*/,MouseY.kr(0.001,0.6), decT ,amp))}).add;
+
+
 	SynthDef(\combX, {|out=0, in ,maxDel, delayT,decT=3,dur, tS=1,modu,factor=0,factor2=0|
 		Out.ar(out, CombN.ar(In.ar(in,1),1.5488/*MouseX.kr(0.01,2)*/,/*VarLag.kr(delayT,0.04)*/delayT+ MouseY.kr(0.001,0.6)
 			+ (In.kr(modu,1)*EnvGen.kr(Env.adsr(sustainLevel: 1,releaseTime: 0.1),factor ))+(In.kr(~seqBus,1)* factor2)
@@ -1496,7 +1504,7 @@ SynthDef(\fm, {
 }).add;
 
 	SynthDef(\fmX, {
-		arg freq= 659.26, freq2=200,freq3=200, mRatio=1, cRatio=1,  amp=1.5, sineRate = 0.0000000095262251,  sineRangeLow=0, pitch = 0, phRise= 0 ,out=0, eFreq =0 , phFm=8, bus2,bus3,bus4,busBP,bus6, bus7, bus8, busSR, busSS, busSP, gra=0.5,lvlDec=1,factor=0, factor2 =0 ,factorx=0, factorx2 =0,factorxx=0, factorxx2 =0  /*,vlPE =27.1366666667,vlPE2=0.2,dcPE = 0.129066666667*/, rqLPF =0.5, factor3 =1, decE= 0.1936, dur, gain =50/*, crvEP = (-2)*/,gate,pan=0, modu,modu2, multi;
+		arg freq= 659.26, freq2=200,freq3=200, mRatio=1, cRatio=1,  amp=1.5, sineRate = 0.0000000095262251,  sineRangeLow=0, pitch = 0, phRise= 0 ,out=0, eFreq =0 , phFm=8, bus2,bus3,bus4,busBP,bus6, bus7, bus8, busSR, busSS, busSP, gra=0.5,lvlDec=1,factor=0, factor2 =0 ,factorx=0, factorx2 =0,factorxx=0, factorxx2 =0  /*,vlPE =27.1366666667,vlPE2=0.2,dcPE = 0.129066666667*/, rqLPF =0.5, factor3 =1, decE= 0.1936, dur, gain =50/*, crvEP = (-2)*/,gate,pan=0, modu,modu2, multi=0;
 
 	var car, mod, mod2, iEnv, sig, filRte;
 
@@ -1523,17 +1531,21 @@ SynthDef(\fm, {
 
 			SinOsc.kr(sineRate,phRise).range([sineRangeLow])+ (In.kr(modu,1)* EnvGen.kr(Env.adsr(sustainLevel: 1,releaseTime: 0.1),factorx ))+(In.kr(~seqBusx,1)* factorx2), mul:
 
-			/*(*/        MouseY.kr(   659.26 * mRatio *iEnv) /*In.kr( gra, 1) */  /*) *   In.kr( gra, 1)*/
+			/*(*/        MouseY.kr(  659.26 * mRatio *iEnv) /*In.kr( gra, 1) */  /*) *   In.kr( gra, 1)*/
 
 		);
 
 	//my carrier is a mess but bring interesting outputs
 
-		car =SinOsc.ar( ([0.00502929687, 0.00502929687+20, 0.00502929687 +50] + (In.kr(modu,1)* EnvGen.kr(Env.adsr(sustainLevel: 1,releaseTime: 0.1),factor ))+(In.kr(~seqBus,1)* factor2)+
+		car =SinOsc.ar( ( /*+*/
+
+			(In.kr(modu,1)* EnvGen.kr(Env.adsr(sustainLevel: 1,releaseTime: 0.1),factor ))+(In.kr(~seqBus,1)* factor2)+
 
 			//remove this line as shwon to decrease sound quality so I left it / HERE CHNAGE THE SOUND
 			/*SelectX.ar(SinOsc.kr(0.0020,phFm).range(0,1),[SinOsc.ar(0),mod])*/
-			SelectX.ar(SinOsc.kr((0.00502929687/2/2),phFm).range(0,1),[SinOsc.ar(0),mod]))* cRatio
+			SelectX.ar(SinOsc.kr((0.00502929687/2/2),phFm).range(0,1),[SinOsc.ar(0),mod])+
+			[0.00502929687, 0.00502929687-30, 0.00502929687 +50]
+		)* cRatio
 
 			//pitch envelope
 			/*+  (EnvGen.kr(Env([vlPE,vlPE2],[dcPE,0],crvEP))*factor2)*/
@@ -1549,7 +1561,7 @@ SynthDef(\fm, {
 	sig  = LeakDC.ar(sig);
 
 	// sig = Splay.arFill(2,sig,spread: 0);
-	Out.ar(out, sig /* !*/   * amp* EnvGen.kr(Env.adsr(0.1), gate));
+	Out.ar(out, sig!2 /* !*/   * amp* EnvGen.kr(Env.adsr(0.1), gate));
 }).add;
 
 

@@ -17,7 +17,7 @@ x = Synth(\recLoop,[buf:~buf,\recording,1, \in,~toRecord],~recGrp);
 ],1).play(t))
 
 ~buf.free;
-~buf.play
+~buf2.play
 Pbindef.free
 s.plotTree
 MIDIClient.init
@@ -50,13 +50,16 @@ Pbindef(\aaa, \instrument, \sequ, \value,
 
 d = (Synth( \fm2, [\dur, inf,\stretch, 3.5,\mRatio, 1,\amp, 0.16,\cRatio, 1,\index, 1,\atkE, 0.1,\out,~outFil],~synthGrp));
 
- v = (Synth( \fmX, [\dur, inf,\stretch, 3.5,\mRatio, 1,\cRatio, 1,\index, 1,\atkE, 0.1,\amp,0.18,\out,~outFil],~synthGrp));
+ v = (Synth( \fmX, [\dur, inf,\stretch, 3.5,\mRatio, 1,\cRatio, 1,\index, 1,\atkE, 0.1,\amp,0.18,\out,~outFil3],~synthGrp));
 /*~v = Synth(  \comb,[\in, ~outFil,\out,0],~combGrp,);*/
 
-~v =  Synth(/* Pbind(\instrument, */\comb,[ \dur, 9999/*Pseq([16/1],inf)*/,\in, ~outFil,\out,0,/*\group,*/\delayT,0.01,\amp,0.8,
+~v =  Synth(/* Pbind(\instrument, */\comb3,[ \dur, 9999/*Pseq([16/1],inf)*/,\in, ~outFil3,\out,~outDisto3/*~distoBg*/,/*\group,*/\delayT,0.01,\amp,0.8,
 
 	/*Pfunc({9.00.rand.postln}),*/
 	/*Pwhite(0.0121,6),*/\tS, 0.39550810372374],~combGrp);
+
+
+h = Synth(\disto3,[\in,  ~outDisto3 /*~distoBg*/,\out,0],~shapGrp);
 
 
 z=(Synth(\sinModul,[\modu,0.075,\busMod,~mod1]));
@@ -103,7 +106,7 @@ d.set(\gate,0);*/
 	/*d.set(\out,~toRecord);
 	~v.set(\out,~toRecord);
 */
-x = Synth(\recLoop,[buf:~buf,\recording,1, \in,0/*~toRecord*/],~recGrp);
+x = Synth(\recLoop,[buf:~buf2,\recording,1, \in,0/*~toRecord*/],~recGrp);
 
 },noteNum: 43);
 
@@ -367,7 +370,7 @@ MIDIdef.cc(\moduLF, { |value|var modFreq = value.linlin(0, 127, 00.002, 1.2875);
 },ccNum: 77);
 
 //
-MIDIdef.cc(\modLF, { |value|var modFreq = value.linlin(0, 127, 00.002, 1.2875);
+MIDIdef.cc(\modLFx, { |value|var modFreq = value.linlin(0, 127, 00.002, 1.2875);
 
 	~z.set(\modu,modFreq.round(0.001));
 	~n.set(\modu,modFreq.round(0.001));
@@ -376,14 +379,14 @@ MIDIdef.cc(\modLF, { |value|var modFreq = value.linlin(0, 127, 00.002, 1.2875);
 
 
 
-MIDIdef.cc(\moRa, { |value|var modFreq = value.linlin(0, 127, 00.002, 20.6);
+MIDIdef.cc(\moRax, { |value|var modFreq = value.linlin(0, 127, 00.002, 20.6);
 
 
 	~m.set(\modu,modFreq.round(0.01));
 },ccNum: 76);// is 4
 
 
-MIDIdef.cc(\moduLF, { |value|var modFreq = value.linlin(0, 127, 00.002, 1.2875);
+MIDIdef.cc(\moduLFx, { |value|var modFreq = value.linlin(0, 127, 00.002, 1.2875);
 
 
 	~c.set(\modu,modFreq.round(0.001));
@@ -461,8 +464,8 @@ g = Synth(  \playBufX,[ \impulse, 0.00001,\loo,1,\buf,~buf2,\out, ~bgFil]);
 
 
 
-k = Synth(\filterU, [\out,~distoBg,\in, ~bgFil, \lFrq,900,\hFrq,300,\qfH ,0.4, \qlL ,0.4 ], ~filterGrp);
-d = Synth(\disto,[\in,~distoBg,\out,0],~distoGrp);
+k = Synth(\filterU, [\out,0/*~distoBg*/,\in, ~bgFil, \lFrq,900,\hFrq,300,\qfH ,0.4, \qlL ,0.4 ], ~filterGrp);
+/*d = Synth(\disto,[\in,~distoBg,\out,0],~distoGrp);*/
 
 
 
