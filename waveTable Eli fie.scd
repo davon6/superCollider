@@ -61,7 +61,7 @@ s.boot;
 //more complex trigonometric expression
 ~sig.waveFill({
 	arg x, y, i;
-	sin(x.squared) + cos(x.sqrt);
+	sin(x.squared) + cos(x.sqrt).abs;
 }, 0, 2pi)
 )
 
@@ -187,7 +187,7 @@ x = {
 	index = LFSaw.ar(freq,0,amp);
 	//index = index * LFSaw.kr([2,2.5]).exprange(0.3,1);
 	Out.ar(2, index);
-	sig = Shaper.ar(b.bufnum, index, 0.5);
+	sig = Shaper.ar(~t.bufnum, index, 0.5);
 	sig = LeakDC.ar(sig);
 }.play;
 )
@@ -199,7 +199,7 @@ SynthDef(\shape, {
 	arg freq=70, amp=1;
 	var index, sig;
 	index = LFSaw.ar(freq, 0, amp);
-	sig = Shaper.ar(b.bufnum, index)*0.5;
+	sig = Shaper.ar(~t.bufnum, index)*0.5;
 	sig = LeakDC.ar(sig);
 	Out.ar(0, sig!2);
 }).add;

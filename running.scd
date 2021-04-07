@@ -89,6 +89,24 @@ s.sync;
 	~tfBuf.loadCollection(~tf.asWavetableNoWrap);
 
 
+
+
+	~b = Buffer.alloc(s, 2048);
+~sig = Signal.newClear(1024);
+
+
+s.sync;
+
+//more complex trigonometric expression
+~sig.waveFill({
+	arg x, y, i;
+	sin(x.squared) + cos(x.sqrt);
+}, 0, 2pi);
+
+
+ ~wtx = ~sig.asWavetable;
+	~b.loadCollection(~wtx);
+
 	~k = Buffer.alloc(s, s.sampleRate *0.3872,1);
 	~k2 = Buffer.alloc(s, s.sampleRate *1,1);
 	~e = Buffer.alloc(s, s.sampleRate *   t.beatDur*4 /*0.3872*/,1);
@@ -165,6 +183,8 @@ s.sync;
 
 	~gate2Bus = Bus.audio(s,1);
 
+	~gateBus3= Bus.audio(s,1);
+
 	~stereoPhase = Bus.audio(s,1);
 	~stetoSnaCom1 = Bus.audio(s,10);
 	~eqBus10= Bus.audio(s,10);
@@ -191,6 +211,8 @@ s.sync;
 	~no2ToCom = Bus.audio(s,2);
 	~no2ToLimit = Bus.audio(s,2);
 	~no2ToStereo = Bus.audio(s,2);
+
+	~toEq = Bus.audio(s,1);
 
 
 	~bgFil22= Bus.audio(s,2);
@@ -296,6 +318,7 @@ s.sync;
 ~fusible1 = Bus.audio(s,1);
 
 ~toGateX =  Bus.audio(s,2);
+	~toGateX2 =  Bus.audio(s,2);
 	~eqPerch =  Bus.audio(s,1);
 	~distoPerch =  Bus.audio(s,1);
 	~revPerch =  Bus.audio(s,1);
@@ -462,8 +485,8 @@ s.sync;
 	Out.ar(out,In.ar( in, 10));}).add;
 
 
-	SynthDef(\playBufX ,{|out = 0,start, trig, dur, buf, dA=2, loo=0,tS=1,impulse=0.001|Out.ar(out,PlayBuf.ar(1,buf,trigger:
-		Impulse.kr(impulse* (60/~bpm)),startPos: start,loop:loo,doneAction: 2));}).add;
+	SynthDef(\playBufX ,{|out = 0,start, trig, dur, amp=1,buf, dA=2, loo=0,tS=1,impulse=0.001|Out.ar(out,PlayBuf.ar(1,buf,trigger:
+		Impulse.kr(impulse* (60/~bpm),mul: amp),startPos: start,loop:loo,doneAction: 2));}).add;
 
 	/*SynthDef(\playBufX1 ,{|out = 0,start, trig, dur, buf, dA=2, loo=0,tS=1,impulse=0.001|Out.ar(out,PlayBuf.ar(1,buf,trigger:
 		Impulse.kr(impulse),startPos: start,loop:loo,doneAction: 2));}).add;*/
@@ -537,6 +560,8 @@ LFNoise0.kr(~hz1beat).range(0.1,0.0)/*,0.02)*/
 
 	SynthDef(\lfo14, {|out, val, dur| Out.kr(out, EnvGen.kr(Env.step([val,0],[dur,0]),doneAction: 2))}).add;
 
+
+
 	SynthDef(\lfo15, {|out, val, dur|Out.kr(out,  SinOsc.kr( ~hz1beat/4).range(~hz1beat*64, ~hz1beat*1024)
 		*EnvGen.kr(Env.step([1,0],[dur,0]),doneAction: 2))}).add;
 
@@ -569,6 +594,18 @@ LFNoise0.kr(~hz1beat).range(0.1,0.0)/*,0.02)*/
 
 			/*MouseY.kr(0.001,32) */ ,width:In.kr(wdth,1)/*MouseX.kr(0.4,1).poll */)* EnvGen.kr(Env.step([1,0],[dur,0]),timeScale: tS,doneAction: 2)
 	)}).add;
+
+
+
+	SynthDef(\lfoSin, {|out, val, dur,tS=1,ph =0,gte=(-4),frq=1,wdth=0.5|Out.kr(out,
+
+		/*SinOsc.kr(MouseY.kr(0.3,20.6)).range(0,MouseX.kr(0.2,1) )*/
+
+		Osc.ar(~b.bufnum, LFNoise0.kr(1.2875).range(0.075,2.53888) )/*MouseY.kr(0.3,3.23888))*/.range(-0.6,1)
+
+		* EnvGen.kr(Env.step([1,0],[dur,0]),timeScale: tS,doneAction: 2)
+	)}).add;
+
 
 
 
@@ -1101,6 +1138,9 @@ timeScale: tS,	doneAction:2);
 
 	SynthDef(\gateX,{|in, out=0,busMod|Out.ar(out,  In.ar(in, 2)* In.kr(busMod))}).add;
 
+
+	SynthDef(\gateX2,{|in, out=0,tS=1,busMod,dur|Out.ar(out,  In.ar(in, 2)* In.kr(busMod)* EnvGen.kr(Env.step([1,1],[dur,0]),timeScale: tS,doneAction: 2))}).add;
+
 	SynthDef.new(\ptr, {
 		arg out=0, buf=0,dec=1 ;
 		var sig;
@@ -1296,8 +1336,8 @@ SynthDef(\comb, {|out=0, in ,maxDel, delayT,decT=6.1952,amp=0.09|
 		Out.ar(out, CombN.ar(In.ar(in,1),0.7744/*MouseX.kr(0.01,2)*/,MouseY.kr(0.001,0.6), decT ,amp))}).add;
 
 
-	SynthDef(\comb2, {|out=0, in ,maxDel, delayT,decT=6.1952,amp=0.09|
-		Out.ar(out, CombN.ar(In.ar(in,2),0.7744/*MouseX.kr(0.01,2)*/,MouseY.kr(0.001,0.6), decT ,amp))}).add;
+	SynthDef(\comb2, {|out=0, in ,maxDel, delayT,decT=6.1952,amp=0.09| // reverse for fun 0.001,0.6)
+		Out.ar(out, CombN.ar(In.ar(in,2),0.7744/*MouseX.kr(0.01,2)*/,MouseY.kr(0.6,0.001), decT ,amp))}).add;
 
 
 	SynthDef(\combX, {|out=0, in ,maxDel, delayT,decT=3,dur, tS=1,modu,factor=0,factor2=0|

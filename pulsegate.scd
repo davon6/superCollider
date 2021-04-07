@@ -1,6 +1,45 @@
 ~lfoGrp = Group.new;
 ~gateGrp= Group.after(~lfoGrp);
 
+
+
+
+
+Ppar([
+
+	~bassShap, Ppar([~hat2,~kick, ~bass],inf),
+	Pbind(\instrument ,	\EQHP2,\dur, inf, \in,~bassEq, \out,0,\group, ~gateGrp, \frq, 20.6,\vol,1/*\val, 659.255, \quant,1, \gain ,(-20)*/),
+	Pbind(\instrument ,	\EQ2,\dur, inf, \in,~kickHatEq, \out,0,\group, ~gateGrp, \val, 659.255, \quant,1.7, \gain ,(-20)),
+
+
+
+	Pbind(\instrument, \lfoSin, \out, ~bus15, \dur, 999999/*Pseq([4/1],inf), \ph, Pfunc({8pi.rrand(0.01)}), \gte,Pfunc({  (10).exprand(1).neg    })*/, \group, ~lfoGrp),
+
+
+
+Pbind( \instrument, \playBuf, \impulse, 0.3,
+	\dur,99999, \tS,  0.39550810372374,\start,2794913.4540558,\buf,/*Prand([*/~bufSnoopy/*,~bufSnoopy2],inf)*/,\out, ~toGateX,\loopy,1),
+
+
+	Pbind(\instrument, \gateX,\dur,Prand([Pseq([1/1],1),Pseq([3/1],1)],1), \tS, 0.39550810372374, \busMod, ~bus15 ,\in, ~toGateX,\out,0,\group, ~gateGrp)],1).play(t)
+
+
+
+Pseq([
+Pbind( \instrument, \playBuf, \impulse, 20.6 ,
+				\dur,    Pseq([1/4],4) , \tS,  0.39550810372374,\start,Pfunc({( ~buf.numFrames.rrand(1400000)- 1400000).postln}),\buf,/*Prand([*/~bufSnoopy/*,~bufSnoopy2],inf)*/,\out, 0,\loopy,0)],inf).play(t)
+
+
+Pbind( \instrument, \playBuf, \impulse, 20.6,
+	\dur,99999, \tS,  0.39550810372374,\start,1031502.2611618,\buf,/*Prand([*/~bufSnoopy/*,~bufSnoopy2],inf)*/,\out, 0,\loopy,1).play(t)
+
+
+
+
+
+
+
+
 SynthDef(\lfoPulse, {|out, val, dur,tS=1,ph =0,gte=(-4),frq=1,wdth=0.5|Out.kr(out,
 
 		LFPulse.kr(frq/*MouseY.kr(0.001,32)*/,width:wdth/*MouseX.kr(0.1,1) */)* EnvGen.kr(Env.step([1,0],[dur,0]),timeScale: tS,doneAction: 2)
