@@ -419,6 +419,14 @@ s.sync;
 	~no2Delay = Bus.audio(s,1);
 
 
+	~toEqFlo= Bus.audio(s,1);
+	~toGateFlo= Bus.audio(s,1);
+	~toReverbFlo= Bus.audio(s,1);
+	~toCompFlo=  Bus.audio(s,2);
+	~toLimitFlo=  Bus.audio(s,2);
+	~toStereoFlo=  Bus.audio(s,2);
+
+
 	~gateBou=  Bus.audio(s,2);
 	s.sync;
 
@@ -1566,7 +1574,7 @@ SynthDef(\fm, {
 }).add;
 
 	SynthDef(\fmX, {
-		arg freq= 659.26, freq2=200,freq3=200, mRatio=1, cRatio=1,  amp=1.5, sineRate = 0.0000000095262251,  sineRangeLow=0, pitch = 0, phRise= 0 ,out=0, eFreq =0 , phFm=8, bus2,bus3,bus4,busBP,bus6, bus7, bus8, busSR, busSS, busSP, gra=0.5,lvlDec=1,factor=0, factor2 =0 ,factorx=0, factorx2 =0,factorxx=0, factorxx2 =0  /*,vlPE =27.1366666667,vlPE2=0.2,dcPE = 0.129066666667*/, rqLPF =0.5, factor3 =1, decE= 0.1936, dur, gain =50/*, crvEP = (-2)*/,gate,pan=0, modu,modu2, multi=0;
+		arg freq= 659.26, freq2=200,freq3=200, mRatio=1, cRatio=1,  amp=1.5, sineRate = 0.0000000095262251,  sineRangeLow=0, pitch = 0, phRise= 0 ,out=0, eFreq =0 , phFm=8, bus2,bus3,bus4,busBP,bus6, bus7, bus8, busSR, busSS, busSP, gra=0.5,lvlDec=1,factor=0, factor2 =0 ,factorx=0, factorx2 =0,factorxx=0, factorxx2 =0  /*,vlPE =27.1366666667,vlPE2=0.2,dcPE = 0.129066666667*/, rqLPF =0.5, factor3 =1, decE= 0.1936, dur, gain =50/*, crvEP = (-2)*/,gate,pan=0, modu,modu2, multi=0,modux=0;
 
 	var car, mod, mod2, iEnv, sig, filRte;
 
@@ -1591,7 +1599,7 @@ SynthDef(\fm, {
 
 		/*	SinOsc.kr(In.kr(~bus2, 1),In.kr(~bus3, 1)).range([In.kr(~bus11, 1)]), mul:*/
 
-			SinOsc.kr(sineRate,phRise).range([sineRangeLow])+ (In.kr(modu,1)* EnvGen.kr(Env.adsr(sustainLevel: 1,releaseTime: 0.1),factorx ))+(In.kr(~seqBusx,1)* factorx2), mul:
+			SinOsc.kr(sineRate,phRise).range([sineRangeLow])+ (In.kr(modux,1)* EnvGen.kr(Env.adsr(sustainLevel: 1,releaseTime: 0.1),factorx ))+(In.kr(~seqBusx,1)* factorx2), mul:
 
 			/*(*/        MouseY.kr(  659.26 * mRatio *iEnv) /*In.kr( gra, 1) */  /*) *   In.kr( gra, 1)*/
 

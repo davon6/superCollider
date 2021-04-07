@@ -207,13 +207,13 @@ d.set(\gate,0);
 MIDIdef.noteOn(\modLfo, {|vel, nn, chan, src|[nn].postln;
 	v.set(\factor,1,\modu, ~mod1);
 	d.set(\factor,1,\modu, ~mod1 );
-~v.set(\factor,1,\modu, ~mod1 );
+/*~v.set(\factor,1,\modu, ~mod1 );*/
 },noteNum: 38);
 
 MIDIdef.noteOn(\modLfo2, {|vel, nn, chan, src|[nn].postln;
 	v.set(\factor,1,\modu, ~mod2);
 	d.set(\factor,1,\modu, ~mod2 );
-~v.set(\factor,1,\modu, ~mod2 );
+/*~v.set(\factor,1,\modu, ~mod2 );*/
 },noteNum: 39);
 
 MIDIdef.noteOn(\modLfo3, {|vel, nn, chan, src|[nn].postln;
@@ -232,29 +232,29 @@ MIDIdef.noteOn(\modLfo4, {|vel, nn, chan, src|[nn].postln;
 
 
 MIDIdef.noteOn(\modLfox, {|vel, nn, chan, src|[nn].postln;
-	v.set(\factorx,1,\modu, ~mod1x);
+	v.set(\factorx,1,\modux, ~mod1x);
 
 },noteNum: 72);
 
 MIDIdef.noteOn(\modLfo2x, {|vel, nn, chan, src|[nn].postln;
-	v.set(\factorx,1,\modu, ~mod2x);
+	v.set(\factorx,1,\modux, ~mod2x);
 
 },noteNum: 71);
 
 MIDIdef.noteOn(\modLfo3x, {|vel, nn, chan, src|[nn].postln;
-	v.set(\factor,1,\modu, ~mod3x);
+	v.set(\factor,1,\modux, ~mod3x);
 
 },noteNum: 69);
 
 MIDIdef.noteOn(\modLfo4x, {|vel, nn, chan, src|[nn].postln;
-	v.set(\factorx,1,\modu, ~mod4x);
+	v.set(\factorx,1,\modux, ~mod4x);
 
 },noteNum: 67);
 
 
 
 
-MIDIdef.noteOn(\modLfox, {|vel, nn, chan, src|[nn].postln;
+/*MIDIdef.noteOn(\modLfox, {|vel, nn, chan, src|[nn].postln;
 	v.set(\factorx,1,\modu, ~mod1);
 	/*d.set(\factorx,1,\modu, ~mod1 );
 ~v.set(\factorx,1,\modu, ~mod1 );*/
@@ -276,7 +276,7 @@ MIDIdef.noteOn(\modLfo4x, {|vel, nn, chan, src|[nn].postln;
 	v.set(\factorx,1,\modu, ~mod4);
 	/*d.set(\factorx,1,\modu, ~mod4 );
 ~v.set(\factorx,1,\modu, ~mod4 );*/
-},noteNum: 67);
+},noteNum: 67);*/
 
 
 
@@ -355,7 +355,7 @@ MIDIdef.cc(\modLF, { |value|var modFreq = value.linlin(0, 127, 00.002, 1.2875);
 
 
 
-MIDIdef.cc(\moRa, { |value|var modFreq = value.linlin(0, 127, 00.002, 20.6);
+MIDIdef.cc(\moRa, { |value|var modFreq = value.linlin(0, 127, 00.01, 20.6);
 
 n.set(\modu,modFreq.round(0.01));
 	m.set(\modu,modFreq.round(0.01));
@@ -386,7 +386,7 @@ MIDIdef.cc(\moRax, { |value|var modFreq = value.linlin(0, 127, 00.002, 20.6);
 },ccNum: 76);// is 4
 
 
-MIDIdef.cc(\moduLFx, { |value|var modFreq = value.linlin(0, 127, 00.002, 1.2875);
+MIDIdef.cc(\moduuux, { |value|var modFreq = value.linlin(0, 127, 00.002, 1.2875);
 
 
 	~c.set(\modu,modFreq.round(0.001));
