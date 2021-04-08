@@ -167,6 +167,8 @@ s.sync;
 	~micBus4 = Bus.audio(s,1);
 	~ptrBus4 = Bus.audio(s,1);
 
+	~distoPercu= Bus.audio(s,2);
+
 
 
 	~gateBus = Bus.audio(s,1);
