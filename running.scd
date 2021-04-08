@@ -13,7 +13,7 @@ s.plotTree
 ~remyAudio.play
 s.options.memSize = 2097152;
 
-
+Server.default.options.numOutputBusChannels = 16;
 Server.default.options.sampleRate =  48000;
 Server.default.options.outDevice_("Audient iD14");
 Server.default.options.outDevice_("External Headphones");
@@ -100,9 +100,10 @@ s.sync;
 //more complex trigonometric expression
 ~sig.waveFill({
 	arg x, y, i;
-	sin(x.squared) + cos(x.sqrt);
+	sin(x.squared) + cos(x.sqrt).abs;
 }, 0, 2pi);
 
+	// ~sig.plot
 
  ~wtx = ~sig.asWavetable;
 	~b.loadCollection(~wtx);
@@ -265,7 +266,7 @@ s.sync;
 	~comDelay = Bus.audio(s,2);
 	~limitDelay= Bus.audio(s,2);
 
-	~stereoBus1 = Bus.audio(s,1);
+	~stereoBus1 = Bus.audio(s,2);
 	~stereoBus2 = Bus.audio(s,2);
 	~stereoBus3 = Bus.audio(s,2);
 	~stereoBus4 = Bus.audio(s,1);
@@ -429,7 +430,7 @@ s.sync;
 	~toStereoFlo=  Bus.audio(s,2);
 
 
-	~gateBou=  Bus.audio(s,2);
+	~gateBou=  Bus.audio(s,1);
 	s.sync;
 
 	~bus1 = Bus.control(s,1);
@@ -1433,6 +1434,16 @@ SynthDef(\EQHP10, {|out=0, in, val, quant, gain, val2, quant2, gain2 frq=100, vo
 
 		Out.ar(out , CompanderD.ar( In.ar(in,2),thr, sB ,sA, atk, rel)* gain;)
 	}).add;
+
+
+	SynthDef(\limiterStoMixer, {|in, out = 0,gain=1,vol =1, du =0.01,rel=0.8, atk =0.01 ,thr= 0.001,sB =1,sA= 0.05,
+		c1=0,c2=0,c3=0,c4=0,c5=0,c6 =0 |
+
+		Out.ar(out , CompanderD.ar( In.ar(in,2),thr, sB ,sA, atk, rel)* gain;);
+
+		Out.ar( 0,  CompanderD.ar( In.ar(in,2),thr, sB ,sA, atk, rel)* gain * [0,0,c1,c2,c3,c4,c5,c6]);
+	}).add;
+
 
 	SynthDef(\limiter10, {|in, out = 0,gain=1,vol =1, du =0.01,rel=0.8, atk =0.01 ,thr= 0.001,sB =1,sA= 0.05|
 
