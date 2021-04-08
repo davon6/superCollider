@@ -3,7 +3,7 @@
 
 
 
-
+(
 
 Ppar([
 
@@ -24,6 +24,9 @@ Pbind( \instrument, \playBuf, \impulse, 0.3,
 	Pbind(\instrument, \gateX,\dur,Prand([Pseq([1/1],1),Pseq([3/1],1)],1), \tS, 0.39550810372374, \busMod, ~bus15 ,\in, ~toGateX,\out,0,\group, ~gateGrp)],1).play(t)
 
 
+
+
+)
 
 Pseq([
 Pbind( \instrument, \playBuf, \impulse, 20.6 ,
