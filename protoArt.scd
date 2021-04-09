@@ -34,13 +34,22 @@ MIDIIn.disconnectAll;
 
 
 
-~scl = [Pbindef(\aaa, \instrument, \sequ, \value,
+~scl = [
+	Ppar([
+	Pbindef(\aaa2, \instrument, \sequ,\out, ~seqBusx, \value,
 		Pseq([Scale.major(\just).degreeToFreq(7.rand, 76.midicps, -3),Scale.major(\just).degreeToFreq(7.rand, 76.midicps, -2),Scale.major(\just).degreeToFreq(7.rand, 76.midicps, -3)],inf),\dur,Pseq([4/1],inf),/*\in, ~outFil/*~toRecord*/,*/\group,~shapGrp),
 
 
+	Pbindef(\aaa, \instrument, \sequ,\out, ~seqBus, \value,
+			Pseq([Scale.major(\just).degreeToFreq(7.rand, 76.midicps, -3),Scale.major(\just).degreeToFreq(7.rand, 76.midicps, -2),Scale.major(\just).degreeToFreq(7.rand, 76.midicps, -3)],inf),\dur,Pseq([4/1],inf),/*\in, ~outFil/*~toRecord*/,*/\group,~shapGrp)],1),
 
-Pbindef(\aaa, \instrument, \sequ, \value,
-	Pseq([Scale.minor(\just).degreeToFreq(7.rand, 76.midicps, -3),Scale.minor(\just).degreeToFreq(7.rand, 76.midicps, -2),Scale.minor(\just).degreeToFreq(7.rand, 76.midicps, -3)],inf),\dur,Pseq([4/1],inf)/*,\in, ~outFil/*~toRecord*/*/,\group,~shapGrp)];
+Ppar([
+
+		Pbindef(\aaa2, \instrument, \sequ, \out, ~seqBusx,\value,
+	Pseq([Scale.minor(\just).degreeToFreq(7.rand, 76.midicps, -3),Scale.minor(\just).degreeToFreq(7.rand, 76.midicps, -2),Scale.minor(\just).degreeToFreq(7.rand, 76.midicps, -3)],inf),\dur,Pseq([4/1],inf)/*,\in, ~outFil/*~toRecord*/*/,\group,~shapGrp),
+
+Pbindef(\aaa, \instrument, \sequ, \out, ~seqBus,\value,
+	Pseq([Scale.minor(\just).degreeToFreq(7.rand, 76.midicps, -3),Scale.minor(\just).degreeToFreq(7.rand, 76.midicps, -2),Scale.minor(\just).degreeToFreq(7.rand, 76.midicps, -3)],inf),\dur,Pseq([4/1],inf)/*,\in, ~outFil/*~toRecord*/*/,\group,~shapGrp)],1)];
 
 
 //no2 doesnt not go tottsly tru filter at least low
@@ -125,12 +134,12 @@ Pbindef(\aaa,\dur,Pseq([4/1],inf),
 
 
 
-MIDIdef.noteOn(\rlong, {|vel, nn, chan, src|[nn];
+/*MIDIdef.noteOn(\rlong, {|vel, nn, chan, src|[nn];
 
 Pbindef(\aaa,\dur,Pseq([16/1],inf),
 \vlAtk,0,\vlDec,1,\vlSub,1, \vlSub2,1,\vlRel,0, \atkT,0, \decT,1, \subsT,0, \relT,0, \atckC,0, \decC,0, \relC,0,);
 
-},noteNum: 42);
+},noteNum: 42);*/
 
 
 
@@ -183,11 +192,13 @@ Pbindef(\aaa,\dur,Pseq([1/1],inf),
 
 MIDIdef.noteOn(\sec, {|vel, nn, chan, src|
 	[nn].postln;
-	v.set(\gate,0);
+	/*v.set(\gate,0);
 
 		Pbindef(\aaa,\dur,Pseq([4/1],inf),
 \vlAtk,0,\vlDec,1,\vlSub,1, \vlSub2,1,\vlRel,0, \atkT,0, \decT,1, \subsT,0, \relT,0, \atckC,0, \decC,0, \relC,0,);
-d.set(\gate,1,\factor,0,\factor2,0,\multi,0);
+d.set(\gate,1,\factor,0,\factor2,0,\multi,0);*/
+	v.set(\factorx2,1);
+
 },noteNum: 37);
 
 
@@ -345,6 +356,17 @@ MIDIdef.cc(\c, { |value|var modFreq = value.linlin(61, 67, 1, 10);
 		"goshDefa".postln;);*/
 
 },ccNum: 112 );
+
+
+/*MIDIdef.cc(\sequx, { |value|var modFreq = value.linlin(61, 67, 1, 10);
+
+
+	if(modFreq.round(1).postln ==3,{Pbindef(\aaa2, \dur,Pseq([4/1],inf));},{});
+	if(modFreq.round(1).postln ==6,{Pbindef(\aaa2, \dur,Pseq([1/1],inf));},{});
+	if(modFreq.round(1).postln ==10,{Pbindef(\aaa2, \dur,Pseq([1/4],inf));},{});
+
+
+},ccNum:  );*/
 
 MIDIdef.cc(\modLF, { |value|var modFreq = value.linlin(0, 127, 00.002, 1.2875);
 

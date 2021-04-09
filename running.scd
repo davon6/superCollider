@@ -171,10 +171,10 @@ s.sync;
 	~micBus4 = Bus.audio(s,1);
 	~ptrBus4 = Bus.audio(s,1);
 
-	~distoPercu= Bus.audio(s,2);
+	~distoPercu= Bus.audio(s,1);
 
 
-
+~percuStereo= Bus.audio(s,2);
 	~gateBus = Bus.audio(s,1);
 	~gateBus2 = Bus.audio(s,1);
 	~gateRnd = Bus.audio(s,1);
@@ -348,7 +348,7 @@ s.sync;
 
 	~dead10=Bus.audio(s,10);
 
-	~rndBus=Bus.audio(s,2);
+	~rndBus=Bus.audio(s,10);
 
 	~rythmFil=Bus.audio(s,10);
 	~rythmFilEQ=Bus.audio(s,10);
@@ -403,12 +403,12 @@ s.sync;
 ~riStereo=  Bus.audio(s,2);
 
 
-	~snareEQ=  Bus.audio(s,2);
-	~snareLimit=  Bus.audio(s,2);
+	~snareEQ=  Bus.audio(s,1);
+	~snareLimit=  Bus.audio(s,1);
 
-	~percuEq=  Bus.audio(s,2);
+	~percuEq=  Bus.audio(s,1);
 
-	~percuRev=  Bus.audio(s,2);
+	~percuRev=  Bus.audio(s,1);
 	~percuLimit=  Bus.audio(s,2);
 
 	~percuDelay=  Bus.audio(s,2);
@@ -417,13 +417,15 @@ s.sync;
 	~percuComb=  Bus.audio(s,2);
 
 	~percuCom2=  Bus.audio(s,2);
-	~percuFil=  Bus.audio(s,2);
+	~percuFil=  Bus.audio(s,1);
 
 	~cymbalEq=  Bus.audio(s,2);
 	~hatEq=  Bus.audio(s,2);
 
 	~no2Delay = Bus.audio(s,1);
 
+	~toPan2= Bus.audio(s,1);
+	~toPan22= Bus.audio(s,1);
 
 	~toEqFlo= Bus.audio(s,1);
 	~toGateFlo= Bus.audio(s,1);
@@ -765,8 +767,7 @@ SynthDef(\kick, {
 
 	sig = car+car2;
 
-	Out.ar(out,Pan2.ar( /*Latch.ar(sig,Impulse.ar(latch))*/ sig.clip(-41.2,41.2)   )
-		* amp.dbamp);
+	Out.ar(out,sig.clip(-41.2,41.2) * amp.dbamp);
 
 }).add;
 
@@ -1410,7 +1411,12 @@ SynthDef(\comb, {|out=0, in ,maxDel, delayT,decT=6.1952,amp=0.09|
 		frq),frq),frq),frq),frq),frq),frq),frq)* vol)};).add;
 
 
+SynthDef(\EQHP96, {|out=0, in, val, quant, gain,frq=100, vol =0.05, val2,quant2, gain2,val3,shelf, gain3| Out.ar(out,
 
+		HPF.ar(HPF.ar(HPF.ar(HPF.ar(HPF.ar(HPF.ar(HPF.ar(HPF.ar(BHiShelf.ar(
+			BPeakEQ.ar(	BPeakEQ.ar(In.ar(in, 1),val,quant, gain),val2,quant2, gain2),val3,shelf, gain3),
+
+		frq),frq),frq),frq),frq),frq),frq),frq)* vol)};).add;
 
 
 	SynthDef(\EQHP, {|out=0, in, val, quant, gain,frq=100, vol =0.05, val2,quant2, gain2| Out.ar(out,
@@ -1445,6 +1451,15 @@ SynthDef(\EQHP10, {|out=0, in, val, quant, gain, val2, quant2, gain2 frq=100, vo
 		Out.ar(out , CompanderD.ar( In.ar(in,2),thr, sB ,sA, atk, rel)* gain;);
 
 		Out.ar( 0,  CompanderD.ar( In.ar(in,2),thr, sB ,sA, atk, rel)* gain * [0,0,c1,c2,c3,c4,c5,c6,c7,c8,c9,c10,c11,c12,c13,c14,c15]);
+	}).add;
+
+
+	SynthDef(\limiter10toMixer, {|in, out = 0,gain=1,vol =1, du =0.01,rel=0.8, atk =0.01 ,thr= 0.001,sB =1,sA= 0.05,
+		c1=0,c2=0,c3=0,c4=0,c5=0,c6 =0,c7 =0,c8 =0,c9 =0,c10 =0,c11 =0,c12 =0,c13 =0,c14 =0,c15 =0 |
+
+		Out.ar(out , CompanderD.ar( In.ar(in,10),thr, sB ,sA, atk, rel)* gain;);
+
+		Out.ar( 0,  CompanderD.ar( In.ar(in,10),thr, sB ,sA, atk, rel)* gain * [0,0,c1,c2,c3,c4,c5,c6,c7,c8,c9,c10,c11,c12,c13,c14,c15]);
 	}).add;
 
 
@@ -1507,13 +1522,13 @@ SynthDef(\EQHP10, {|out=0, in, val, quant, gain, val2, quant2, gain2 frq=100, vo
 
 
 
-	SynthDef(\stereoS2,{|out=0, in, spread=0, level=1, center=0.0,dur,modPan,atkT=0,crvA=0|
+	SynthDef(\stereoS2,{|out=0, in, spread=0, level=1, center=0.0,dur,modPan,atkT=0,crvA=0,tS=1|
 
 		Out.ar(out,
 			Splay.arFill(10,
-				Mix.ar(In.ar(in, 2))
+					{	Mix.ar(In.ar(in, 2))}
 				,spread,level, center+ In.kr(modPan))
-			* EnvGen.kr(Env([0,1,1,0],[atkT,dur,0],[crvA,0]),doneAction: 2)
+			* EnvGen.kr(Env([0,1,1,0],[atkT,dur,0],[crvA,0]),timeScale: tS,doneAction: 2)
 			//EnvGen.kr(Env.step([1],[dur]),doneAction: 2)
 		);
 	}).add;
@@ -1745,9 +1760,12 @@ SynthDef(\sequ,{|value, dur, in=0, out=0, vlAtk=0, vlDec=1,vlSub=1,vlSub2=1, vlR
 	doneAction:2) );*/
 
 
-	Out.kr(~seqBus,EnvGen.kr(Env.step([value],[dur]),doneAction: 2)   ) }).add;
+		/*Out.kr(~seqBusx,EnvGen.kr(Env.step([value],[dur]),doneAction: 2));*/
+	Out.kr(out,EnvGen.kr(Env.step([value],[dur]),doneAction: 2)   ) }).add;
 
 
+
+	SynthDef(\pan2,{|out=0,in|Out.ar(out, Pan2.ar(In.ar(in)))}).add;
 
 	SynthDef(\filterU, {|out=0,in,  hFrq=900,lFrq=300 ,qfH = 0.822379, qlL = 0.504212|Out.ar(out, BLowPass4.ar(   BHiPass4.ar(  In.ar(in,1) , hFrq , qfH), lFrq,qlL )) }).add;
 
