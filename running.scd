@@ -11,11 +11,14 @@ Bus.free;
 )
 s.plotTree
 ~remyAudio.play
-s.options.memSize = 2097152;
 
-Server.default.options.numOutputBusChannels = 16;
+(
+s.options.memSize = 2097152;
+Server.default.options.numOutputBusChannels = 20;
 Server.default.options.sampleRate =  48000;
 Server.default.options.outDevice_("Audient iD14");
+)
+
 Server.default.options.outDevice_("External Headphones");
 Server.default.options.outDevice_("Built-in Output");
 
@@ -982,7 +985,7 @@ SynthDef(\dispatch2,{|in, out, dur,tS=1|Out.ar(out, In.ar(in,2)*  EnvGen.kr(Env.
 
 	SynthDef(\dispatchS10,{|in, out, dur,tS=1|Out.ar(out, In.ar(in,10)* EnvGen.kr(Env.step([1,0],[dur,0]),timeScale: tS,doneAction:2))}).add;
 
-
+SynthDef(\dispatch2X,{|in, out=0, dur,tS=1|ReplaceOut.ar(out, In.ar(in,2)*  EnvGen.kr(Env.step([1,0],[dur,0]),timeScale: tS,doneAction:2))}).add;
 
 
 
@@ -1437,11 +1440,23 @@ SynthDef(\EQHP10, {|out=0, in, val, quant, gain, val2, quant2, gain2 frq=100, vo
 
 
 	SynthDef(\limiterStoMixer, {|in, out = 0,gain=1,vol =1, du =0.01,rel=0.8, atk =0.01 ,thr= 0.001,sB =1,sA= 0.05,
-		c1=0,c2=0,c3=0,c4=0,c5=0,c6 =0 |
+		c1=0,c2=0,c3=0,c4=0,c5=0,c6 =0,c7 =0,c8 =0,c9 =0,c10 =0,c11 =0,c12 =0,c13 =0,c14 =0,c15 =0 |
 
 		Out.ar(out , CompanderD.ar( In.ar(in,2),thr, sB ,sA, atk, rel)* gain;);
 
-		Out.ar( 0,  CompanderD.ar( In.ar(in,2),thr, sB ,sA, atk, rel)* gain * [0,0,c1,c2,c3,c4,c5,c6]);
+		Out.ar( 0,  CompanderD.ar( In.ar(in,2),thr, sB ,sA, atk, rel)* gain * [0,0,c1,c2,c3,c4,c5,c6,c7,c8,c9,c10,c11,c12,c13,c14,c15]);
+	}).add;
+
+
+	SynthDef(\playBuf10NToMixer ,{|out = 0,start, trig= 0.002, dur, buf, dA=2, tS=1, loopy=1,vl=1,in,c1=0,c2=0,c3=0,c4=0,c5=0,c6 =0,c7 =0,c8 =0,c9 =0,c10 =0,c11 =0,c12 =0,c13 =0,c14 =0,c15 =0 |Out.ar(~fusible,PlayBuf.ar(10,buf,trigger:
+		trig/*Dust.kr(4.0)*/,startPos: start,loop: loopy/*,doneAction: dA*/)* EnvGen.kr(Env([0,vl,vl,0],[0,dur,0]),timeScale: tS,doneAction: 2));
+
+	Out.ar(out,In.ar( in, 10));
+
+
+	Out.ar(0,PlayBuf.ar(10,buf,trigger:
+		trig/*Dust.kr(4.0)*/,startPos: start,loop: loopy/*,doneAction: dA*/)* [0,0,c1,c2,c3,c4,c5,c6,c7,c8,c9,c10,c11,c12,c13,c14,c15]* EnvGen.kr(Env([0,vl,vl,0],[0,dur,0]),timeScale: tS,doneAction: 2));
+
 	}).add;
 
 

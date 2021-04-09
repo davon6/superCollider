@@ -15,5 +15,4 @@
 
 
 
-
-.revert
+Pbind(\instrument, \dispatch2X,\in,~toLimitFlo, \dur,Pseq([16/1],1),\tS, 0.39550810372374 ,).play(t)
