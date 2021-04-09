@@ -198,6 +198,7 @@ s.sync;
 	~eqBus210= Bus.audio(s,10);
 
 	~kickHatEq = Bus.audio(s,2);
+	~kickHatEq2 = Bus.audio(s,2);
 ~bassEq = Bus.audio(s,2);
 	~phaseBus = Bus.audio(s,1);
 
@@ -1361,8 +1362,8 @@ SynthDef(\comb, {|out=0, in ,maxDel, delayT,decT=6.1952,amp=0.09|
 			,decT,0.09)* EnvGen.kr(Env.step([1,1],[dur,0]),timeScale: tS,doneAction:2) )}).add;
 
 
-	SynthDef(\combS, {|out=0, in ,maxDel, delayT,decT,dur, tS=1|
-		Out.ar(out, CombN.ar(In.ar(in,2),/*MouseX.kr(0.01,2)*/maxDel, delayT /*MouseY.kr(0.01,2)*/,decT/*3*/)* EnvGen.kr(Env.step([1,1],[dur,0]),timeScale: tS,doneAction:2) )}).add;
+	SynthDef(\combS, {|out=0, in ,maxDel, delayT,decT,dur, tS=1,amp=1|
+		Out.ar(out, CombN.ar(In.ar(in,2),/*MouseX.kr(0.01,2)*/maxDel, delayT /*MouseY.kr(0.01,2)*/,decT/*3*/,amp)* EnvGen.kr(Env.step([1,1],[dur,0]),timeScale: tS,doneAction:2) )}).add;
 
 	SynthDef(\reverbS, {
 		|out=0, roomsize, revtime, damping, inputbw, spread = 15, drylevel, earlylevel,
