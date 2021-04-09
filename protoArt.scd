@@ -253,7 +253,7 @@ MIDIdef.noteOn(\modLfo2x, {|vel, nn, chan, src|[nn].postln;
 },noteNum: 71);
 
 MIDIdef.noteOn(\modLfo3x, {|vel, nn, chan, src|[nn].postln;
-	v.set(\factor,1,\modux, ~mod3x);
+	v.set(\factorx,1,\modux, ~mod3x);
 
 },noteNum: 69);
 
@@ -358,6 +358,23 @@ MIDIdef.cc(\c, { |value|var modFreq = value.linlin(61, 67, 1, 10);
 },ccNum: 112 );
 
 
+MIDIdef.cc(\cMelox, { |value|var modFreq = value.linlin(61, 67, 1, 10);
+
+	//if(modFreq.round(1).postln ==1,{Pbindef(\aaa, \dur,Pseq([16/1],inf));},{});
+	if(modFreq.round(1).postln ==3,{Pbindef(\aaa2, \dur,Pseq([4/1],inf));},{});
+	if(modFreq.round(1).postln ==6,{Pbindef(\aaa2, \dur,Pseq([1/1],inf));},{});
+	if(modFreq.round(1).postln ==10,{Pbindef(\aaa2, \dur,Pseq([1/4],inf));},{});
+
+
+/*switch (modFreq,
+		1, "gosh".postln;,
+        20,"gosh2".postln;,
+
+		"goshDefa".postln;);*/
+
+},ccNum: 114 );
+
+
 /*MIDIdef.cc(\sequx, { |value|var modFreq = value.linlin(61, 67, 1, 10);
 
 
@@ -401,7 +418,7 @@ MIDIdef.cc(\modLFx, { |value|var modFreq = value.linlin(0, 127, 00.002, 1.2875);
 
 
 
-MIDIdef.cc(\moRax, { |value|var modFreq = value.linlin(0, 127, 00.002, 20.6);
+MIDIdef.cc(\moRax, { |value|var modFreq = value.linlin(0, 127, 0.01, 20.6);
 
 
 	~m.set(\modu,modFreq.round(0.01));
