@@ -673,7 +673,7 @@ SynthDef(\kick, {
 
 		env =EnvGen.ar(
 	Env([1 , 0.4, 1,    1,1,0],
-		[0.008, 0.08, 0,0.006,0.01],[0,-30,5,5,-5]),doneAction:2);
+		[0.008, 0.08, 0,0.006,0.01],[-2,-30,5,5,-5]),doneAction:2);
 	//EnvGen.ar(Env.perc(0, 0.40),doneAction:2);
 
 
@@ -1972,6 +1972,6 @@ Ppar([~hat,
 	Pbind(\instrument , \EQHP2, \frq, 3000 ,\dur, inf,\in, ~cymbalEq, \group, ~compGrp2,\out , 0,\vol,1.6),
 
 
-	Pbind(\instrument , \EQHP2, \frq, 120 ,\dur, inf,\in, ~snareEQ, \group, ~eqGrp,\val, 1800, \quant, 8, \gain, (-10), \val, 10, \out , ~snareLimit),
+	Pbind(\instrument , \EQHP, \frq, 120 ,\dur, inf,\in, ~snareEQ, \group, ~eqGrp,\val, 1800, \quant, 8, \gain, (-10), \val, 10, \out , ~snareLimit),
 
 	Pbind(\instrument , \limiterS,\dur, inf, \in,~snareLimit, \gain, 20,\group, ~limitGrp),~bassShap, Ppar([Pbindf(~kick,\amp,(-8)), Pbindf(~bass, \amp,(-12))],inf)],1).play(t))

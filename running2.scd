@@ -674,7 +674,7 @@ Pbindf(~hat2, \out,~eqBass)],4),
 
 ],inf),
 
-Pbind(\instrument, \limiterS, \dur, inf, \in,~dipatchKB, \gain,67, \group, ~limitGrp2),
+Pbind(\instrument, \limiterS, \dur, inf, \in,~dipatchKB, \gain,92, \group, ~limitGrp2),
 
 
 
