@@ -11,7 +11,7 @@ Bus.free;
 )
 s.plotTree
 ~remyAudio.play
-
+s.meter
 (
 s.options.memSize = 2097152;
 Server.default.options.numOutputBusChannels = 20;
@@ -220,6 +220,7 @@ s.sync;
 	~no2ToStereo = Bus.audio(s,2);
 
 	~toEq = Bus.audio(s,1);
+	~bellFlang= Bus.audio(s,2);
 
 
 	~bgFil22= Bus.audio(s,2);
@@ -263,7 +264,8 @@ s.sync;
 	~reverbSquelch = Bus.audio(s,1);
 	~reverbMelo = Bus.audio(s,1);
 
-
+	~dumSnaEq= Bus.audio(s,1);
+	~dumSnaLimit= Bus.audio(s,1);
 
 
 	~revDelay= Bus.audio(s,2);
@@ -302,6 +304,13 @@ s.sync;
 
 	~limitRkick = Bus.audio(s,1);
 	~gateShap = Bus.audio(s, 2);
+
+	~riTriptoDisto = Bus.audio(s, 2);
+	~riTriptoEq = Bus.audio(s, 2);
+	~riTriptoRev = Bus.audio(s, 2);
+	~riTriptoComp = Bus.audio(s, 2);
+	~riTriptoLimit = Bus.audio(s, 2);
+	~riTriptoStereo = Bus.audio(s, 2);
 
 
 	~kbus = Bus.audio(s,1);
@@ -461,6 +470,8 @@ s.sync;
 	~bus14 = Bus.control(s,1);
 
 	~bus15 = Bus.control(s,1);
+
+	~bus16 = Bus.control(s,1);
 
 	~mod1= Bus.control(s,1);
 ~mod2= Bus.control(s,1);
@@ -735,12 +746,12 @@ SynthDef(\kick, {
 	s.sync;
 
 		SynthDef.new(\percussion, {
-	arg carHz=500, modHz=1899.3343179398, modAmp=0, atk=0, rel=1, amp=0.2, pan=0,rel2=1,out=0, latch = 6000, crv1, crv1b, mulMod, stereoL=0, stereoR=0;
+	arg carHz=500, modHz=1899.3343179398, modAmp=0, atk=0, rel=1, amp=0.2, pan=0,rel2=1,out=0, latch = 6000, crv1, crv1b, mulMod, stereoL=0, stereoR=0, dA1=2, dA2=2,atk2=0;
 	var car, mod, env, car2, mod2,env2,sig;
 
-	env = EnvGen.kr(Env.perc(atk, rel,1,crv1), doneAction:2);
+	env = EnvGen.kr(Env.perc(atk, rel,1,crv1), doneAction:dA1);
 
-	env2 = EnvGen.kr(Env.perc(0, rel2, 1, crv1b), doneAction:2);
+	env2 = EnvGen.kr(Env.perc(atk, rel2, 1, crv1b), doneAction:dA2);
 
 	mod = SinOsc.ar(modHz, mul:mulMod);
 	car = SinOsc.ar(carHz + mod) * env * 0.05;
@@ -807,7 +818,7 @@ SynthDef(\kick, {
 			[ic_atk, ic_rel]//atkC was 10
 		),timeScale: tS,doneAction:2
 	);
-		env =  EnvGen.kr(Env.step([1,1],[dur,0]),timeScale: tS,doneAction: 2);
+		env = EnvGen.kr(Env([0,1,1,0],[dur*0.01,dur*0.97,0,dur*0.02],[6,0,0-6]),timeScale: tS,doneAction: 2);
 	mod2 = SinOsc.ar(freq/10*f3, mul:freq/10 * iEnv);
 	mod = SinOsc.ar(freq * f2 + mod2, mul:freq * mRatio * iEnv);
 	car = SinOsc.ar(freq * f1 + mod) * env * amp;
@@ -825,7 +836,7 @@ SynthDef(\trippyRise, {|out=0, ph=0,dur,tS=1|
 	var phi = LFSaw.ar([42.1, 42.2], -1).range(0, 2pi);
 	var x = r * cos(phi);
 	var y = r * sin(phi);
-	Out.ar(out,Limiter.ar(~fPo.(x, y), 0.2)* EnvGen.kr(Env.step([1,1],[dur,0]),timeScale: tS,doneAction: 2));
+		Out.ar(out,Limiter.ar(~fPo.(x, y), 0.2)*  EnvGen.kr(Env([0,1,1,0],[dur*0.05 ,dur*0.90,0,dur*0.05],[6,0,0-6]),timeScale: tS,doneAction: 2))
 }).add;
 
 
@@ -1864,6 +1875,25 @@ SynthDef(\sequ,{|value, dur, in=0, out=0, vlAtk=0, vlDec=1,vlSub=1,vlSub2=1, vlR
 	Out.ar(~dead10,play);
 }.add;
 
+
+
+	SynthDef(\flanger, {arg flangefreq=0.3, fdback=0.3,in,tS=1,dur,out=0;
+
+		var input, effect;
+
+		input=In.ar(in,2);
+
+		input= input+ LocalIn.ar(2);
+
+		effect= DelayN.ar(input,0.02,SinOsc.kr(flangefreq,0,0.005,0.005)); //max delay of 20msec
+
+		LocalOut.ar(fdback*effect);
+
+		//LocalOut.ar(fdback*BPF.ar(effect,MouseX.kr(1000,10000),0.1)); //alternative with filter in the feedback loop
+
+		Out.ar(out,effect * EnvGen.kr(Env.step([1,1],[dur,0]),timeScale: tS,doneAction: 2));
+	}).add;
+
 s.sync;
 
 //130.882809922
@@ -1892,6 +1922,7 @@ s.sync;
 
 	~hat2 =Pbind(\instrument, \percussion,\rel,0.04840,\rel2,0.02420,\amp, -26.2, \crv1, (-4), \crv1b, (-5), \modHz, exprand(500,10000), \mulMod, rrand(100, 500), \carHz, exprand(20,10000), \modAmp, 0.82875.rrand(0.4),\dur,Pseq([1/1],1) ,\out, ~kickHatEq);
 
+	//HARD WIRED
 	~cymbal = Pbind(\instrument, \percussion,\type, Pseq([\rest,\rest,\note,\note ,\rest,\note ,\note, \rest].scramble,inf),\dur,Pseq([1/4],64 ),\carHz, 525.12070612224,\modHz,1899.3343179398,\modAmp, 0.12875 ,\amp,(-17.5),\rel,Pseq([1/16],inf),\rel2,Pseq([1/16],inf),\latch,8000,\stereoL, 0.00555, \crv1,  (-4.4), \crv1b,(-4), \mulMod, 1691,\out, ~comBusCymb);
 
 ~hat = Pbind(\instrument,\percussion,\dur,Pseq([1/4], 64),\atk, 0,\rel,0.04840,\rel2,0.02420,\amp,Pseq([( -13.2), ( -14.2),( -13.2),( -15.2),( -14.2),( -14),( -13.2),( -13.2)],inf), \crv1, (-3), \crv1b, (-5), \modHz, exprand(500,10000).postln, \mulMod, rrand(100, 500).postln, \carHz, exprand(20,10000), \modAmp, 0.12875, \latch, 18500, \stereoR, 0.007,\out,~comBusHat);
@@ -1899,10 +1930,12 @@ s.sync;
 	~snare = Pbind(\instrument, \snare,\carHz, 41.2 ,\type, Pseq([\rest ,\rest,\note,\rest], 8),\atk, 0.00502929687,\rel, 0.0968,\rel2, 0.3872,\dur, Pseq([1/2], inf),\amp,(-15), \crv1,(-8),\crv2,(-7)   ,\out,~snareEQ, \atk,t.beatDur * 0.02, \atk2,Pkey(\atk));
 
 
-	/*~snare = Pbind(\instrument, \snare,\carHz, 41.2 ,\type,
-		 Pseq([\rest ,\rest,\note,\rest,\note ,\rest,\note,\note].scramble, 16)
+	~bell = Pbind(\instrument, \percussion, \dur,Pseq([4/1],1 ),\carHz, Pfunc({1050.12070612224.rrand(150)}),\modHz,Pfunc({9334.3179398.rrand(0.1)}),\modAmp,Pfunc({ 0.00875.rrand(0.0001)}) ,\amp,1,\rel,4.5544,\rel2,4.242,\stereoL, 0.00555, \crv1,  (-7.4), \crv1b,(-42), \mulMod, 901,\out, ~bellFlang,\latch,8900,\atk,0.01,\atk2,Pfunc({0.3.rrand(0.01)}));
 
-		/*Pseq([\rest ,\rest,\note,\rest,\note ,\rest,\note,\rest].scramble, 16)*/,\atk, 0.00502929687,\rel, 0.0968,\rel2, 0.3872,\dur, Pseq([1/4], inf),\amp,(-16.8), \crv1,(-8),\crv2,(-7)   ,\out,~snareEQ, \atk,t.beatDur * 0.02, \atk2,Pkey(\atk));*/
+	~noise = Pbind(\instrument, \wNoise,\dur, Pseq([4/1],1),\dec ,Pkey(\dur),\amp,(-2),\out,~eqNoise);
+
+	~hit = Pbind(\instrument,\gran,\dur,~short1,\amp, 1,\buf,~bufSnoopy,\out,~eqDs,\gate, 1,\duration,Pkey(\dur),\impulse,0.003,
+				\vlSub, 0.8,\vlSub2,Pkey(\vlSub),\decC,Pfunc({(-10).rrand(2,1)}),\pos,Pfunc({0.90000.rand}));
 
 
 ~bassRest = Pbindf(~bass,  \type,Pseq([\rest],inf));
