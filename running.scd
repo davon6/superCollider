@@ -746,12 +746,12 @@ SynthDef(\kick, {
 	s.sync;
 
 		SynthDef.new(\percussion, {
-	arg carHz=500, modHz=1899.3343179398, modAmp=0, atk=0, rel=1, amp=0.2, pan=0,rel2=1,out=0, latch = 6000, crv1, crv1b, mulMod, stereoL=0, stereoR=0, dA1=2, dA2=2,atk2=0;
+	arg carHz=500, modHz=1899.3343179398, modAmp=0, atk=0, rel=1, amp=0.2, pan=0,rel2=1,out=0, latch = 6000, crv1, crv1b, mulMod, stereoL=0, stereoR=0, dA1=2, dA2=2,atk2=0,tS=1;
 	var car, mod, env, car2, mod2,env2,sig;
 
-	env = EnvGen.kr(Env.perc(atk, rel,1,crv1), doneAction:dA1);
+	env = EnvGen.kr(Env.perc(atk, rel,1,crv1),timeScale: tS, doneAction:dA1);
 
-	env2 = EnvGen.kr(Env.perc(atk, rel2, 1, crv1b), doneAction:dA2);
+	env2 = EnvGen.kr(Env.perc(atk, rel2, 1, crv1b),timeScale: tS, doneAction:dA2);
 
 	mod = SinOsc.ar(modHz, mul:mulMod);
 	car = SinOsc.ar(carHz + mod) * env * 0.05;
@@ -1941,7 +1941,7 @@ s.sync;
 
 
 	//MAYBE ?
-	~hit2= Pbind(\instrument, \percussion,\dur,Pseq([1/4],1 ),\carHz, 525.12070612224.rrand(0.01),\modHz,11899.3343179398.rrand(0.001),\modAmp, 0.12875.rrand(0.000001).postln ,\amp,(-17.5),\rel,Pseq([1/1],inf),\rel2,Pseq([1/4],inf),\latch,8000,\stereoL, 0.00555, \crv1,  (-14.4).rrand(-1), \crv1b,(-4), \mulMod, 1691,\out, 0);
+	~hit2= Pbind(\instrument, \percussion,\dur,Pseq([1/4],1 ),\carHz,Pfunc({ 525.12070612224.rrand(0.01)}),\modHz,Pfunc({ 11899.3343179398.rrand(0.001)}),\modAmp,Pfunc({  0.12875.rrand(0.000001).postln}) ,\amp,(-17.5),\rel,Pseq([1/1],inf),\rel2,Pseq([1/4],inf),\latch,8000,\stereoL, 0.00555, \crv1, Pfunc({  (-14.4).rrand(-1)}), \crv1b,(-4), \mulMod, 1691,\out, 0);
 
 
 ~bassRest = Pbindf(~bass,  \type,Pseq([\rest],inf));

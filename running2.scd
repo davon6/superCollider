@@ -14,7 +14,7 @@ Ppar([Pbindef(\bass, \out,0),Pbindef(\ki, \out,0)],1).play(t)
 //panning big debate , is there any ?
 //PANNING Not working on
 //IMPORTSNT ~toLimitlast might only block left and UNWANTED feedback with right !!!!
-
+// Percu Dynamic EQ not quiet right
 
 //comp10 might be overlapping
 s.plotTree
