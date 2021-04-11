@@ -238,7 +238,26 @@ s.sync;
 	~eqBg = Bus.audio(s,1);
 
 
+	~riToEq= Bus.audio(s,2);
+	~riToComp= Bus.audio(s,2);
+	~riToDisto= Bus.audio(s,2);
+	~riToLimit= Bus.audio(s,2);
+	~riToRev  = Bus.audio(s,2);
 
+	~flanToEq= Bus.audio(s,2);
+	~flanToComp= Bus.audio(s,2);
+	~flanToDisto= Bus.audio(s,2);
+	~flanToLimit= Bus.audio(s,2);
+	~flanToRev  = Bus.audio(s,2);
+	~flanToStereo  = Bus.audio(s,2);
+
+	~bigRiToEnv= Bus.audio(s,2);
+	~bigRiToEq= Bus.audio(s,2);
+	~bigRiToComp= Bus.audio(s,2);
+	~bigRiToDisto= Bus.audio(s,2);
+	~bigRiToLimit= Bus.audio(s,2);
+	~bigRiToRev  = Bus.audio(s,2);
+	~bigRiToStereo  = Bus.audio(s,2);
 
 
 	~filterBus = Bus.audio(s,1);
@@ -378,6 +397,8 @@ s.sync;
 	~outFil2=Bus.audio(s,2);
 	~outDisto2=Bus.audio(s,2);
 
+	~riToEnv=Bus.audio(s,2);
+
 
 ~new10 =Bus.audio(s,10);
 ~again =Bus.audio(s,10);
@@ -472,6 +493,8 @@ s.sync;
 	~bus15 = Bus.control(s,1);
 
 	~bus16 = Bus.control(s,1);
+
+	~bus17 = Bus.control(s,1);
 
 	~mod1= Bus.control(s,1);
 ~mod2= Bus.control(s,1);
@@ -635,6 +658,10 @@ LFNoise0.kr(~hz1beat).range(0.1,0.0)/*,0.02)*/
 	)}).add;
 
 
+
+SynthDef(\envSli, {|out, val1=20, dur,tS=1, crv =7|Out.kr(out,
+	EnvGen.kr(Env([val1,20000],[dur*0.95,dur*0.05],crv ),timeScale: tS,doneAction: 2)
+)}).add;
 
 
 	SynthDef(\lfo2, {|out, val=1, dur|Out.kr(out,
@@ -1458,31 +1485,31 @@ SynthDef(\EQHP10, {|out=0, in, val, quant, gain, val2, quant2, gain2 frq=100, vo
 
 
 	SynthDef(\limiterStoMixer, {|in, out = 0,gain=1,vol =1, du =0.01,rel=0.8, atk =0.01 ,thr= 0.001,sB =1,sA= 0.05,
-		c1=0,c2=0,c3=0,c4=0,c5=0,c6 =0,c7 =0,c8 =0,c9 =0,c10 =0,c11 =0,c12 =0,c13 =0,c14 =0,c15 =0 |
+		c1=0,c2=0,c3=0,c4=0,c5=0,c6 =0,c7 =0,c8 =0,c9 =0,c10 =0,c11 =0,c12 =0,c13 =0,c14 =0,c15 =0,c16=0,c17=0,c18=0,c19=0,c20 =0|
 
 		Out.ar(out , CompanderD.ar( In.ar(in,2),thr, sB ,sA, atk, rel)* gain;);
 
-		Out.ar( 0,  CompanderD.ar( In.ar(in,2),thr, sB ,sA, atk, rel)* gain * [0,0,c1,c2,c3,c4,c5,c6,c7,c8,c9,c10,c11,c12,c13,c14,c15]);
+		Out.ar( 0,  CompanderD.ar( In.ar(in,2),thr, sB ,sA, atk, rel)* gain * [0,0,c1,c2,c3,c4,c5,c6,c7,c8,c9,c10,c11,c12,c13,c14,c15,c16,c17,c18,c19,c20]);
 	}).add;
 
 
 	SynthDef(\limiter10toMixer, {|in, out = 0,gain=1,vol =1, du =0.01,rel=0.8, atk =0.01 ,thr= 0.001,sB =1,sA= 0.05,
-		c1=0,c2=0,c3=0,c4=0,c5=0,c6 =0,c7 =0,c8 =0,c9 =0,c10 =0,c11 =0,c12 =0,c13 =0,c14 =0,c15 =0 |
+		c1=0,c2=0,c3=0,c4=0,c5=0,c6 =0,c7 =0,c8 =0,c9 =0,c10 =0,c11 =0,c12 =0,c13 =0,c14 =0,c15 =0, c16=0,c17=0,c18=0,c19=0,c20 =0|
 
 		Out.ar(out , CompanderD.ar( In.ar(in,10),thr, sB ,sA, atk, rel)* gain;);
 
-		Out.ar( 0,  CompanderD.ar( In.ar(in,10),thr, sB ,sA, atk, rel)* gain * [0,0,c1,c2,c3,c4,c5,c6,c7,c8,c9,c10,c11,c12,c13,c14,c15]);
+		Out.ar( 0,  CompanderD.ar( In.ar(in,10),thr, sB ,sA, atk, rel)* gain * [0,0,c1,c2,c3,c4,c5,c6,c7,c8,c9,c10,c11,c12,c13,c14,c15,c16,c17,c18,c19,c20]);
 	}).add;
 
 
-	SynthDef(\playBuf10NToMixer ,{|out = 0,start, trig= 0.002, dur, buf, dA=2, tS=1, loopy=1,vl=1,in,c1=0,c2=0,c3=0,c4=0,c5=0,c6 =0,c7 =0,c8 =0,c9 =0,c10 =0,c11 =0,c12 =0,c13 =0,c14 =0,c15 =0 |Out.ar(~fusible,PlayBuf.ar(10,buf,trigger:
+	SynthDef(\playBuf10NToMixer ,{|out = 0,start, trig= 0.002, dur, buf, dA=2, tS=1, loopy=1,vl=1,in,c1=0,c2=0,c3=0,c4=0,c5=0,c6 =0,c7 =0,c8 =0,c9 =0,c10 =0,c11 =0,c12 =0,c13 =0,c14 =0,c15 =0,c16=0,c17=0,c18=0,c19=0,c20 =0 |Out.ar(~fusible,PlayBuf.ar(10,buf,trigger:
 		trig/*Dust.kr(4.0)*/,startPos: start,loop: loopy/*,doneAction: dA*/)* EnvGen.kr(Env([0,vl,vl,0],[0,dur,0]),timeScale: tS,doneAction: 2));
 
 	Out.ar(out,In.ar( in, 10));
 
 
 	Out.ar(0,PlayBuf.ar(10,buf,trigger:
-		trig/*Dust.kr(4.0)*/,startPos: start,loop: loopy/*,doneAction: dA*/)* [0,0,c1,c2,c3,c4,c5,c6,c7,c8,c9,c10,c11,c12,c13,c14,c15]* EnvGen.kr(Env([0,vl,vl,0],[0,dur,0]),timeScale: tS,doneAction: 2));
+		trig/*Dust.kr(4.0)*/,startPos: start,loop: loopy/*,doneAction: dA*/)* [0,0,c1,c2,c3,c4,c5,c6,c7,c8,c9,c10,c11,c12,c13,c14,c15,c16,c17,c18,c19,c20]* EnvGen.kr(Env([0,vl,vl,0],[0,dur,0]),timeScale: tS,doneAction: 2));
 
 	}).add;
 
@@ -1551,16 +1578,6 @@ SynthDef(\EQHP10, {|out=0, in, val, quant, gain, val2, quant2, gain2 frq=100, vo
 	SynthDef(\comp10, {|in, ctrl, out= 0, dec  , thr  =0.01 ,sB = 1, sA = (1/4), atk = 0.001, rel = 0.04 , gain=1, dur,tS=1|
 
 		Out.ar(out, Compander.ar(In.ar(in,10) , In.ar(ctrl,1)  , thresh: thr, slopeBelow: sB, slopeAbove: sA, clampTime: atk, relaxTime: rel)* gain* EnvGen.kr(Env.step([1,0],[dur,0]),timeScale: tS,doneAction:2))}).add;
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -1941,7 +1958,7 @@ s.sync;
 
 
 	//MAYBE ?
-	~hit2= Pbind(\instrument, \percussion,\dur,Pseq([1/4],1 ),\carHz,Pfunc({ 525.12070612224.rrand(0.01)}),\modHz,Pfunc({ 11899.3343179398.rrand(0.001)}),\modAmp,Pfunc({  0.12875.rrand(0.000001).postln}) ,\amp,(-17.5),\rel,Pseq([1/1],inf),\rel2,Pseq([1/4],inf),\latch,8000,\stereoL, 0.00555, \crv1, Pfunc({  (-14.4).rrand(-1)}), \crv1b,(-4), \mulMod, 1691,\out, 0);
+	~hit2= Pbind(\instrument, \percussion,\dur,Pseq([1/4],1 ),\carHz,Pfunc({ 525.12070612224.rrand(0.01)}),\modHz,Pfunc({ 11899.3343179398.rrand(0.001)}),\modAmp,Pfunc({  0.12875.rrand(0.000001)}) ,\amp,(-17.5),\rel,Pseq([1/1],inf),\rel2,Pseq([1/4],inf),\latch,8000,\stereoL, 0.00555, \crv1, Pfunc({  (-14.4).rrand(-1)}), \crv1b,(-4), \mulMod, 1691,\out, 0);
 
 
 ~bassRest = Pbindf(~bass,  \type,Pseq([\rest],inf));
@@ -1989,6 +2006,38 @@ s.sync;
 	// Ppar([Pseq([~bass],inf),Pbindf(~snare,\da1,0)],1);//JEEEZ
 ~bassMel=[	Pbindf(~bass,\freq, Scale.major(\just).degreeToFreq(7.rand, 76.midicps, -4)),
 		Pbindf(~bass,\freq, Scale.minor(\just).degreeToFreq(7.rand, 76.midicps, -4))]
+
+
+
+	~riseSet = Pxrand([
+
+		Ppar([
+
+	Prand([
+
+				Pbind(\instrument,\gran,\dur,Pseq([1/256],1),
+		\group,~granuGrp,\vlSub,0,\vlSub2,0,\decC,(-90),\decT, 0.1, \vlDec,1,
+	\amp, 1,\buf,/*Prand([*/ ~buf/*,~buf2],inf)*/,\out,~noiseStereo2,\gate, 1,\duration,Pkey(\dur),\impulse,0.003,\pos,0.90000.rand),
+
+		Pbind(\instrument, \wNoise,\dur, ~short1,\dec ,Pkey(\dur),\amp,(-20),\out,~eqNoise,\tS, 0.39550810372374,),
+
+		Pbind(\instrument,\gran,\dur,~short1,\amp, 1,\buf,/*Prand([ */~bufSnoopy/*,~bufSnoopy2],inf)*/,\out,~eqDs,\gate, 1,\duration,Pkey(\dur),\impulse,0.003,
+				\vlSub, 0.8,\vlSub2,Pkey(\vlSub),\decC,Pfunc({(-10).rrand(2,1)}),\pos,Pfunc({0.90000.rand}))],1),
+
+
+	Pbind(\instrument, \wNoise,\dur,Pseq([16/1],1),\dec ,Pkey(\dur),\amp,(-12),\type,\rest/*~noiseStereo1*/,\tS, 0.39550810372374, )
+		],1),
+
+
+
+				Pbind(\instrument, \trippyRise, \dur,  Pseq([16/1],1),   \ph, Pfunc({ 6.00.rand}),\type,Prand([\note,\rest],inf),\tS, 0.39550810372374, \out, ~riEq),
+
+
+			Pbind(\instrument,\rise,\dur,Pseq([16/1],1),\atk,1, \vlAtk, Pfunc({4.00.rand}),\f1, Pfunc({1.00.rand}) , \f2, Pfunc({1.00.rand}) , \f3, Pfunc({1.00.rand}),  \ic_atk,Pfunc({10.00.rrand(-5)}),\index,Pfunc({50.00.rrand(1)}),\mRatio,Pfunc({3.rrand(1)}),\out ,~riDisto,\type,Prand([\note,\rest],inf),\tS, 0.39550810372374),
+
+
+
+],2);
 
 });)
 

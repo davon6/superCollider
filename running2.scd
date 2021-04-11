@@ -96,6 +96,8 @@ o = {
 	+SinOsc.kr(SelectX.kr(LFNoise0.kr(5.15).range(0,2).round(1),[1.2875,5.15,20.6])).range(0.08,0.00));
 
 */
+	/*Out.kr(~bus17, Osc.kr(~bc.bufnum,0.3 ).range(-900,900));*/
+
 
 	Out.kr(~bus1, SinOsc.ar(0.42916666666667).range(1,0.4));
 	/*Out.kr(~bus3, Line.kr(0.2,0.2,9999));*/
@@ -669,7 +671,7 @@ Pbind(\instrument, \limiterS, \dur, inf, \in,~dipatchKB, \gain,96, \group, ~limi
 
 	Pbind(\instrument, \EQHP10, \in,~rythmFilEQ,\dur, inf, \out,~rythmLimit, \group,~eqGrp,\vol,10,\val,500,\quant,4, \gain,(-12)),
 
-	Pbind(\instrument, \limiter10toMixer,\c12,1, \dur, inf, \in,~rythmLimit,\out,~rythmComp, \gain,26, \group, ~limitGrp),
+	Pbind(\instrument, \limiter10toMixer,\c20,1, \dur, inf, \in,~rythmLimit,\out,~rythmComp, \gain,26, \group, ~limitGrp),
 
 	Pbind(\instrument,\comp10, \dur,inf,\thr,0.7 ,\sB, 1.2,\sA, 2,\atk ,0.001, \rel ,0.3872,\dur,99999
 		,\gain,1,\in,~rythmComp  ,\ctrl, ~kbus, \out, 0,\group, ~compGrp2 ,\tS, 0.39550810372374),
@@ -1396,7 +1398,7 @@ Pbindf( Prand([~quickFix, ~rShort]),\instrument, \reverbS, \dur,inf, \in,~revDel
 	Pbind(\instrument,\compS, \dur,inf,\thr,0.2 ,\sB, 1.2,\sA, 1/4,\atk ,0.0484, \rel ,0.3872
 ,\gain, 10,\in, ~comDelay ,\ctrl, ~kbus, \out,~limitDelay, \group, ~compGrp),
 
-	Pbind(\instrument, \limiterStoMixer,\c15,1,\in,~limitDelay, \dur,inf, \gain,20,\group,~limitGrp,\out ,~stereoBus3),
+	Pbind(\instrument, \limiterStoMixer,\c18,1,\in,~limitDelay, \dur,inf, \gain,20,\group,~limitGrp,\out ,~stereoBus3),
 
 
 
@@ -1405,7 +1407,7 @@ Pbindf( ~church,\dur,inf, \in,~reverbSquelch  , \out,~comSquelch ,\group,~revGrp
 	Pbind(\instrument,\comp, \dur,inf,\thr,0.2 ,\sB, 1.2,\sA, 1/4,\atk ,0.0484, \rel ,0.3872
 ,\gain, 22,\in, ~comSquelch ,\ctrl, ~kbus, \out,~limitSquelch, \group, ~compGrp),
 
-	Pbind(\instrument, \limiterStoMixer,\c16,1,\in, ~limitSquelch, \dur, inf,\gain,20,\group,~limitGrp,\out,~stereoBus3),
+	Pbind(\instrument, \limiterStoMixer,\c19,1,\in, ~limitSquelch, \dur, inf,\gain,20,\group,~limitGrp,\out,~stereoBus3),
 
 
 
