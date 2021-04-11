@@ -474,7 +474,7 @@ Pbind(\instrument, \playBuf10N,  \out,~toCom,\dur,Pseq([ Pseq([8/1],1),  Pseq([1
 		,\in, ~toCom  ,\ctrl, ~snBus, \out, ~toGate10   ,\group, ~compGrp2,\tS, 0.39550810372374),
 
 
-	Pbind(\instrument,\gateS, \dur, Pxrand([ Pseq([4/1],4), Pseq([1/1],4), Pseq([1/1],1) ,
+	Pbind(\instrument,\gateS, \dur, Prand([ Pseq([4/1],4), Pseq([1/1],4), Pseq([1/1],1) ,
 		Pseq([4/1],1)],inf),
 		\in,  Pxrand([~toGate10, ~toGate102], inf)  ,\out ,~eqBus10,  \group, ~gateGrp6,\tS, 0.39550810372374),
 
