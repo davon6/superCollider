@@ -17,7 +17,7 @@ s.plotTree
 ],1).play(t))
 
 ~buf.free;
-~buf2.play
+~buf.play
 Pbindef.free
 s.plotTree
 MIDIClient.init

@@ -243,6 +243,7 @@ s.sync;
 	~riToDisto= Bus.audio(s,2);
 	~riToLimit= Bus.audio(s,2);
 	~riToRev  = Bus.audio(s,2);
+	~riToStereo = Bus.audio(s,2);
 
 	~flanToEq= Bus.audio(s,2);
 	~flanToComp= Bus.audio(s,2);
@@ -361,12 +362,16 @@ s.sync;
 	~limitPerch=  Bus.audio(s,2);
 	~stereoPerch=  Bus.audio(s,2);
 
+	~toGate10 =  Bus.audio(s,10);
+	~toGate102  =  Bus.audio(s,10);
+
 	~eqBus1=  Bus.audio(s,1);
 	~eqBus2=  Bus.audio(s,1);
 	~eqBus3=  Bus.audio(s,1);
 	~eqBus4=  Bus.audio(s,1);
 	~eqNoise =  Bus.audio(s,1);
 	 ~eqDs =  Bus.audio(s,1);
+	~filterNoise  =  Bus.audio(s,1);
 
 	~outFil =Bus.audio(s,1);
 	~toRecord=Bus.audio(s,1);
@@ -547,12 +552,12 @@ s.sync;
 		0.002/*Dust.kr(4.0)*/,startPos: start,loop: 1/*,doneAction: dA*/)/** EnvGen.kr(Env([0,1,1,0],[0,dur,0]))*/);}).add;
 
 
-	SynthDef(\shap,{|in, out, vl1=80, vl2=0,vl3=0, dA1 =0|
+	SynthDef(\shap,{|in, out, vl1=80, vl2=0,vl3=0, dA1 =0,tS=1|
 	var halfBeat, shap;
 
 	halfBeat = t.beatDur * 0.5;
 
-		shap = EnvGen.ar(Env([vl1,vl2],[halfBeat,halfBeat],6),doneAction:dA1);
+		shap = EnvGen.ar(Env([vl1,vl2],[halfBeat,halfBeat],6),timeScale: tS,doneAction:dA1);
 
 	Out.ar(out, shap);
 
@@ -1103,6 +1108,24 @@ freq         )* EnvGen.kr(Env([0,1,1,0],[0.055,dur-0.055,0],4),timeScale: tS,don
 		sig = SelectX.ar(which, [lp, bp,hp,sig]);
 
 		Out.ar(out, sig);
+	}).add;
+
+
+	SynthDef(\filterX,{|out=0, in, busMod, bus7, which, factor3=1, rqLPF=0.5 freqFil=0, qf =0, qf2=0,tS=1,dur|
+
+		var lp, bp, hp, sig;
+
+		sig = In.ar(in,1);
+
+		lp = BLowPass4.ar(sig , freqFil+ In.kr(busMod, 1) ,qf +In.kr(rqLPF));
+
+		bp = BPF.ar(sig,freqFil+ In.kr(busMod, 1) *factor3  ,qf2 +0.26);
+
+		hp = BHiPass4.ar(sig, freqFil+ In.kr(busMod, 1),/*0.6 */ qf2 +In.kr(bus7, 1));
+
+		sig = SelectX.ar(which, [lp, bp,hp,sig]);
+
+		Out.ar(out, sig*EnvGen.kr(Env.step([1,0],[dur,0]),timeScale: tS,doneAction:2) );
 	}).add;
 
 	SynthDef(\filterS,{|out=0, in, busMod, bus7, which, factor3=1, rqLPF=0.5, freqFil=0, qf =0, qf2=0 |
@@ -1929,9 +1952,9 @@ s.sync;
 
 /*Pbindef(\ki,   \out, 0) ;Pbindef(\bass, \out, 0) ;
 	Pbindef(\ki,   \out, 700) ;Pbindef(\bass, \out, 700);*/
-	~kick =	Pbindef(\ki, \instrument, \kick,\dur, Pseq([1/1],1),\amp,(-10.2),\out,0);//-3.5 - 10.5
+	~kick =	Pbindef(\ki, \instrument, \kick,\dur, Pseq([1/1],1),\amp,(-13.2),\out,0);//-3.5 - 10.5
 
-	~bassShap = Pbind(\instrument, \shap, \dur,Pseq([1/1],inf),\dA1,2,\out,~bassShapB);
+	~bassShap = Pbind(\instrument, \shap, \dur,Pseq([1/1],inf),\dA1,2,\out,~bassShapB, \tS, 0.39550810372374);
 //Problem overlapping
 	~bass = Pbindef(\bass,
 		\instrument, \bass,
@@ -1945,7 +1968,7 @@ s.sync;
 		\rel2, t.beatDur/4 * 0.012,
 		\atkcrv, -2,
 		\relcrv, -2,\relcrv2, -4,
-		\amp,(-12.6)/*(-13)*/,\out,~bassEq
+		\amp,(-14.6)/*(-13)*/,\out,~bassEq
 	);
 
 	~hat2 =Pbind(\instrument, \percussion,\rel,0.04840,\rel2,0.02420,\amp, (-28.2), \crv1, (-4), \crv1b, (-5), \modHz, exprand(500,10000), \mulMod, rrand(100, 500), \carHz, exprand(20,10000), \modAmp, 0.82875.rrand(0.4),\dur,Pseq([1/1],1) ,\out, ~kickHatEq);
@@ -1957,12 +1980,12 @@ s.sync;
 
 ~hat = Pbind(\instrument,\percussion,\dur,Pseq([1/4], 64),\atk, 0,\rel,0.04840,\rel2,0.02420,\amp,Pseq([( -13.2), ( -14.2),( -13.2),( -15.2),( -14.2),( -14),( -13.2),( -13.2)],inf), \crv1, (-3), \crv1b, (-5), \modHz, exprand(500,10000).postln, \mulMod, rrand(100, 500).postln, \carHz, exprand(20,10000), \modAmp, 0.12875, \latch, 18500, \stereoR, 0.007,\out,~comBusHat);
 
-	~snare = Pbind(\instrument, \snare,\carHz, 41.2 ,\type, Pseq([\rest ,\rest,\note,\rest], 8),\atk, 0.00502929687,\rel, 0.0968,\rel2, 0.3872,\dur, Pseq([1/2], inf),\amp,(-14), \crv1,(-8),\crv2,(-7)   ,\out,~snareEQ, \atk,t.beatDur * 0.02, \atk2,Pkey(\atk));
+	~snare = Pbind(\instrument, \snare,\carHz, 41.2 ,\type, Pseq([\rest ,\rest,\note,\rest], 8),\atk, 0.00502929687,\rel, 0.0968,\rel2, 0.3872,\dur, Pseq([1/2], inf),\amp,(-12), \crv1,(-8),\crv2,(-7)   ,\out,~snareEQ, \atk,t.beatDur * 0.02, \atk2,Pkey(\atk));
 
 
 	~bell = Pbind(\instrument, \percussion, \dur,Pseq([4/1],1 ),\carHz, Pfunc({1050.12070612224.rrand(150)}),\modHz,Pfunc({9334.3179398.rrand(0.1)}),\modAmp,Pfunc({ 0.00875.rrand(0.0001)}) ,\amp,1,\rel,4.5544,\rel2,4.242,\stereoL, 0.00555, \crv1,  (-7.4), \crv1b,(-42), \mulMod, 901,\out, ~bellFlang,\latch,8900,\atk,0.01,\atk2,Pfunc({0.3.rrand(0.01)}));
 
-	~noise = Pbind(\instrument, \wNoise,\dur, Pseq([4/1],1),\dec ,Pkey(\dur),\amp,(-2),\out,~eqNoise);
+	~noise = Pbind(\instrument, \wNoise,\dur, Pseq([4/1],1),\dec ,Pkey(\dur),\amp,(-2),\out,~filterNoise);
 
 	~hit = Pbind(\instrument,\gran,\dur,~short1,\amp, 1,\buf,~bufSnoopy,\out,~eqDs,\gate, 1,\duration,Pkey(\dur),\impulse,0.003,
 				\vlSub, 0.8,\vlSub2,Pkey(\vlSub),\decC,Pfunc({(-10).rrand(2,1)}),\pos,Pfunc({0.90000.rand}));
@@ -2016,11 +2039,10 @@ s.sync;
 
 	// Ppar([Pseq([~bass],inf),Pbindf(~snare,\da1,0)],1);//JEEEZ
 ~bassMel=[	Pbindf(~bass,\freq, Scale.major(\just).degreeToFreq(7.rand, 76.midicps, -4)),
-		Pbindf(~bass,\freq, Scale.minor(\just).degreeToFreq(7.rand, 76.midicps, -4))]
+		Pbindf(~bass,\freq, Scale.minor(\just).degreeToFreq(7.rand, 76.midicps, -4))];
 
 
-
-	~riseSet = Pxrand([
+~riseSet = Pxrand([
 
 		Ppar([
 
@@ -2036,19 +2058,22 @@ s.sync;
 				\vlSub, 0.8,\vlSub2,Pkey(\vlSub),\decC,Pfunc({(-10).rrand(2,1)}),\pos,Pfunc({0.90000.rand}))],1),
 
 
-	Pbind(\instrument, \wNoise,\dur,Pseq([16/1],1),\dec ,Pkey(\dur),\amp,(-12),\type,\rest/*~noiseStereo1*/,\tS, 0.39550810372374, )
+	Pbind(\instrument, \wNoise,\dur,Pseq([16/1],1),\dec ,Pkey(\dur),\amp,(-12),\tS, 0.39550810372374, )
 		],1),
 
 
 
-				Pbind(\instrument, \trippyRise, \dur,  Pseq([16/1],1),   \ph, Pfunc({ 6.00.rand}),\type,Prand([\note,\rest],inf),\tS, 0.39550810372374, \out, ~riEq),
+
+				Pbind(\instrument, \trippyRise, \dur,  Pseq([16/1],1),   \ph, Pfunc({ 6.00.rand}),\tS, 0.39550810372374, \out, ~riEq),
 
 
-			Pbind(\instrument,\rise,\dur,Pseq([16/1],1),\atk,1, \vlAtk, Pfunc({4.00.rand}),\f1, Pfunc({1.00.rand}) , \f2, Pfunc({1.00.rand}) , \f3, Pfunc({1.00.rand}),  \ic_atk,Pfunc({10.00.rrand(-5)}),\index,Pfunc({50.00.rrand(1)}),\mRatio,Pfunc({3.rrand(1)}),\out ,~riDisto,\type,Prand([\note,\rest],inf),\tS, 0.39550810372374),
+			Pbind(\instrument,\rise,\dur,Pseq([16/1],1),\atk,1, \vlAtk, Pfunc({4.00.rand}),\f1, Pfunc({1.00.rand}) , \f2, Pfunc({1.00.rand}) , \f3, Pfunc({1.00.rand}),  \ic_atk,Pfunc({10.00.rrand(-5)}),\index,Pfunc({50.00.rrand(1)}),\mRatio,Pfunc({3.rrand(1)}),\out ,~riDisto,\tS, 0.39550810372374),
 
 
 
 ],2);
+
+
 
 });)
 

@@ -11,7 +11,7 @@ Pbind(\instrument ,	\EQ2,\dur, inf, \in,~kickHatEq2, \out,~kbus,\group, ~eqGrp, 
 
 ,*/
 
-Pbind(\instrument, \snare,/*\carHz, 41.2 */\type,Pseq([
+Pbind(\instrument, \snare, \type,Pseq([
 
 	Pseq([\note ,\rest,\note,\rest,\note ,\rest,\note,\rest,\note ,\rest,\note,\rest,\note ,\rest,\note,\rest].scramble, 4),
 	Pseq([\note ,\rest,\note,\rest,\note ,\rest,\note,\rest,\note ,\rest,\note,\rest,\note ,\rest,\note,\rest].scramble, 4),
@@ -29,12 +29,9 @@ Pbind(\instrument, \snare,/*\carHz, 41.2 */\type,Pseq([
 
 	Pbind(\instrument, \filter, \dur,inf,\which,2, \in,~percuFil,\busMod, ~bus4,\rqLPF,~bus7, \out,~percuEq/*~revSide2*/, \group,~filterGrp ,\freqFil, 30.rrand(-30)),
 
-	/*Pbind(\instrument, \distoS, \dur, inf, \in, ~revSide2 , \out,~percuEq ,\group, ~distoGrp0),*/
 
 	Pbind(\instrument , \EQHP96, \frq, 100 ,\dur, inf,\in, ~percuEq, \group, ~eqGrp0,\val, 1800, \quant, 4, \gain, (-20),\val2,12000,\quant2,4, \gain2,(-12),\out , ~percuRev, \val3,3000,\shelf,1, \gain3,(-15)),
 
-
-	/*, REPLACE WITH A FLANGER*/
 
 	 Pbindf( ~quickFix, \instrument, \reverb, \dur,inf, \in,~percuRev  , \out,~percuCom,\group,~revGrp),
 
@@ -49,8 +46,7 @@ Pbind(\instrument, \snare,/*\carHz, 41.2 */\type,Pseq([
 		\maxDel,2, \delayT,Pfunc({6.rrand(0.01)}),\decT,1.00.rrand(0.1),\tS, 0.39550810372374, \amp,0.4
 	),
 
-Pbind(\instrument, \limiterStoMixer,\c8,1,\dur, inf, \in,~percuLimit, \gain,46,\group, ~limitGrp,\out,~percuStereo),
-
+Pbind(\instrument, \limiterStoMixer,\c8,1,\dur, inf, \in,~percuLimit, \gain,38,\group, ~limitGrp,\out,~percuStereo),
 
 	Pbind(\instrument,\stereoS2, \dur, Pseq([16/1],inf), \in, ~percuStereo  ,\spread,Prand([0,1],inf),\out,0/*~percuCom2*/,\tS, 0.39550810372374,\group, ~stereoGrp, \center,Pfunc({0.3.rrand(-0.3)}),\modPan, ~bus10),
 
