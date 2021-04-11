@@ -496,20 +496,20 @@ s.sync;
 
 	~bus17 = Bus.control(s,1);
 
+	~bus18 = Bus.control(s,1);
+
 	~mod1= Bus.control(s,1);
-~mod2= Bus.control(s,1);
-~mod3= Bus.control(s,1);
-~mod4= Bus.control(s,1);
-
-
+	~mod2= Bus.control(s,1);
+	~mod3= Bus.control(s,1);
+	~mod4= Bus.control(s,1);
 
 	~mod1x= Bus.control(s,1);
-~mod2x= Bus.control(s,1);
-~mod3x= Bus.control(s,1);
-~mod4x= Bus.control(s,1);
-	~seqBusx= Bus.control(s,1);
+	~mod2x= Bus.control(s,1);
+	~mod3x= Bus.control(s,1);
+	~mod4x= Bus.control(s,1);
 
-~seqBus= Bus.control(s,1);
+	~seqBusx= Bus.control(s,1);
+	~seqBus= Bus.control(s,1);
 	s.sync;
 
 	SynthDef(\playBuf ,{|out = 0,start, trig= 0.002, dur, buf, dA=2, tS=1, loopy=1|Out.ar(out,PlayBuf.ar(1,buf,trigger:
@@ -1263,20 +1263,31 @@ timeScale: tS,	doneAction:2);
 	}).add;
 
 
-	SynthDef(\gran2,{|out=0,impulse=1,duration=8,buf=0,pitchRte=1,pos=0,amp=1, dur,gate=1|
+	SynthDef.new(\gran2, {
+		arg amp=1, buf =0, out=0, minPtrDelay=1000,pitchRte=1,duration=8,impulse = 1.2875, crv= 12,vlAtk =0,vlDec=1 ,vlSub=1,dur ,vlSub2=1,vlRel=0,atkT=0,decT=1,subsT=0,relT=0,atckC=0,decC=0,relC=0,tS=1,pos=0,busMod;
 
-		//var env = EnvGen.kr(Env([1,1,0],[dur,0,0]),gate, doneAction:2);
-Out.ar(out,
-	GrainBuf.ar(
-		1,
-		Impulse.ar(impulse     ),
-			duration,
+		var sig, env, densCtrl, durCtrl, rateCtrl, panCtrl, ptr, ptrRand, totalDelay, maxGrainDur;
+
+
+		env = EnvGen.kr(Env([vlAtk,vlDec,vlSub,vlSub2,vlRel],
+			[dur * atkT,dur* decT,dur * subsT,dur *relT],
+			[atckC,decC,0,relC]),timeScale: tS, doneAction:2);
+
+
+
+		sig = GrainBuf.ar(
+			1,
+			Impulse.ar(impulse),//Impulse.ar(0.0968),//lenth of interval ///20.6 and 10.3 are funny was 1
+			duration,//3.0976,//8,//length of the feedback
 			buf,
-			pitchRte,
-			pos,
+			pitchRte + In.kr(busMod,1)  ,//pitch
+			pos,//MouseX.kr(0,20)//pos
 			mul: amp
-		)//* env
-	);}).add;
+		);
+		sig = sig * env ;
+
+		Out.ar(out, sig);
+	}).add;
 
 SynthDef("TriggerBufferGranular", {arg out=0, bufnum=0, in=0, thresh = 0.004, ampScaler = 1, duration =
 1.5544, pan=0,centerPosition=0.1, interp=1, incrementBy = 200, dur;
