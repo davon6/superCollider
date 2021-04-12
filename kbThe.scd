@@ -42,7 +42,7 @@ SynthDef(\kick, {
 		\rel2, t.beatDur/4 * 0.0012,
 		\atkcrv, -2,
 		\relcrv, -2,\relcrv2, -4
-		,\amp,(-14.6)/*(-13)*/,\out,~bassEq
+		,\amp,(-12.6)/*(-13)*/,\out,~bassEq
 	);
 
 
@@ -56,29 +56,43 @@ Ppar([
 
 	Pbind(\instrument ,	\EQHP2,\dur, inf, \in,~bassEq, \out,0,\group, ~eqGrp, \frq, 20.6,\vol,1),
 
-	~bassShap, Ppar([~hat2,~kick,/*~bassZ*/],1),
+	~bassShap, Ppar([/*~hat2,~kick,*/~bassZ],1),
 
 ],1).play(t);
-x = Synth(\recLoop,[buf:~k2,\recording,1, \in,0/*~toRecord*/],~recGrp2);
+x = Synth(\recLoop,[buf:~b3,\recording,1, \in,0/*~toRecord*/],~recGrp2);
 )
 
 
-Pseq([~k2,~b3],inf).play
+Pbindef( \kbRec, \instrument, \playBufS, \trig, 0.3 ,\dur,  Pseq([1/1],inf), \tS,  0.39550810372374,\buf,~kb2,\out, 0,\loopy,0,\start,8020).play(t)
 
+
+Pbindef( \kbRec,\start,7900);
+Pseq([~k2,~b3],inf).play
+~kb2.play
 ~k2.play
 ~b3.play
+(
+~eqGrp=Group.new;
+~stereoGrp=Group.after(~eqGrp);
+~recGrp2=Group.after(~stereoGrp);
+)
+// Ppar([
+Pbindef( \kiki,\start,8220);
 
-Ppar([
+Pbindef( \baba,\start,8520);
+(
 Ppar([
 
-	Pbind( \instrument, \playBuf, \impulse, 0.003 ,\dur,    Pseq([1/1],1), \tS,  0.39550810372374,\buf,~k2,\out, ~kbToPan2,\loopy,0,\start,8400),
+	Pbindef( \kiki,\instrument, \playBuf, \impulse, 0.003 ,\dur,    Pseq([1/1],inf), \tS,  0.39550810372374,\buf,~k2,\out, ~kbToPan2,\loopy,0,\start,8220),
 Pseq([
 				Pbind(\instrument, \wNoise,\dur,Pseq([1/4],1),\dec ,Pkey(\dur),\amp,(-12),\tS, 0.39550810372374,\type, \rest  ),
-		Pbind( \instrument, \playBuf, \impulse, 0.003 ,\dur,    Pseq([3/4],1), \tS,  0.39550810372374,\buf,~b3,\out, ~kbToPan2,\loopy,0,\start,8400)],1)],inf),
+		Pbindef( \baba, \instrument, \playBuf, \impulse, 0.003 ,\dur,    Pseq([3/4],1), \tS,  0.39550810372374,\buf,~b3,\out, ~kbToPan2,\loopy,0,\start,8520)],inf),
 Pbind(\instrument, \pan2, \in,~kbToPan2,\out,0 ,\group,~stereoGrp,\dur, inf)
-],1).play(t)
 
 
+],1).play(t);
+x = Synth(\recLoopS,[buf:~kb2,\recording,1, \in,0/*~toRecord*/],~recGrp2);
+)
 ~eqGrp=Group.new;
 ~recGrp2=Group.after(~eqGrp);
 

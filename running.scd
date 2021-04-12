@@ -114,6 +114,8 @@ s.sync;
 	~k = Buffer.alloc(s, s.sampleRate *0.3872,1);
 	~k2 = Buffer.alloc(s, s.sampleRate *1,1);
 	~b3 = Buffer.alloc(s, s.sampleRate *1,1);
+	~kb1 = Buffer.alloc(s, s.sampleRate *1,1);
+	~kb2 = Buffer.alloc(s, s.sampleRate *1,2);
 	~e = Buffer.alloc(s, s.sampleRate *   t.beatDur*4 /*0.3872*/,1);
 	~f = Buffer.alloc(s, s.sampleRate *  t.beatDur*4);//  (t.beatDur*4)/*1.5488*/,1);
 	~e2 = Buffer.alloc(s, s.sampleRate *   t.beatDur*4 /*0.3872*/,1);
@@ -552,8 +554,8 @@ s.sync;
 		Impulse.kr(impulse),startPos: start,loop:loo,doneAction: 2));}).add;*/
 
 
-	SynthDef(\playBuf2 ,{|out = 0,start, trig, dur, buf, dA=2|Out.ar(out,PlayBuf.ar(2, buf,trigger:
-		0.002/*Dust.kr(4.0)*/,startPos: start,loop: 1/*,doneAction: dA*/)/** EnvGen.kr(Env([0,1,1,0],[0,dur,0]))*/);}).add;
+	SynthDef(\playBuf2 ,{|out = 0,start, trig=0.002, dur, buf, dA=2|Out.ar(out,PlayBuf.ar(2, buf,trigger:
+		trig/*Dust.kr(4.0)*/,startPos: start,loop: 1/*,doneAction: dA*/)/** EnvGen.kr(Env([0,1,1,0],[0,dur,0]))*/);}).add;
 
 
 	SynthDef(\shap,{|in, out, vl1=80, vl2=0,vl3=0, dA1 =0,tS=1|
@@ -1989,7 +1991,7 @@ s.sync;
 
 /*Pbindef(\ki,   \out, 0) ;Pbindef(\bass, \out, 0) ;
 	Pbindef(\ki,   \out, 700) ;Pbindef(\bass, \out, 700);*/
-	~kick =	Pbindef(\ki, \instrument, \kick,\dur, Pseq([1/1],1),\amp,(-13.2),\out,0);//-3.5 - 10.5
+	~kick =	Pbindef(\ki, \instrument, \kick,\dur, Pseq([1/1],1),\amp,(-10.2),\out,0);//-3.5 - 10.5
 
 	~bassShap = Pbind(\instrument, \shap, \dur,Pseq([1/1],inf),\dA1,2,\out,~bassShapB, \tS, 0.39550810372374);
 //Problem overlapping
@@ -2020,7 +2022,7 @@ s.sync;
 		\rel2, t.beatDur/4 * 0.0012,
 		\atkcrv, -2,
 		\relcrv, -2,\relcrv2, -4
-		,\amp,(-14.6)/*(-13)*/,\out,~bassEq
+		,\amp,(-12.6)/*(-13)*/,\out,~bassEq
 	);
 
 	~hat2 =Pbind(\instrument, \percussion,\rel,0.04840,\rel2,0.02420,\amp, (-28.2), \crv1, (-4), \crv1b, (-5), \modHz, exprand(500,10000), \mulMod, rrand(100, 500), \carHz, exprand(20,10000), \modAmp, 0.82875.rrand(0.4),\dur,Pseq([1/1],1) ,\out, ~kickHatEq);
@@ -2028,7 +2030,7 @@ s.sync;
 	//HARD WIRED
 	/*~cymbal = Pbind(\instrument, \percussion,\type, Pseq([\rest,\rest,\note,\note ,\rest,\note ,\note, \rest].scramble,inf),\dur,Pseq([1/4],64 ),\carHz, 525.12070612224,\modHz,1899.3343179398,\modAmp, 0.12875 ,\amp,(-17.5),\rel,Pseq([1/16],inf),\rel2,Pseq([1/16],inf),\latch,8000,\stereoL, 0.00555, \crv1,  (-4.4), \crv1b,(-4), \mulMod, 1691,\out, ~comBusCymb);*/
 
-	~cymbal = Pbind(\instrument, \percussion,\type, Pseq([\rest,\rest,\note,\note ,\rest,\note ,\note, \rest].scramble,inf),\dur,Pseq([1/4],64 ),\carHz, 525.12070612224.rrand(0.01),\modHz,11899.3343179398.rrand(0.001),\modAmp, 0.12875.rrand(0.000001).postln ,\amp,(-17.5),\rel,Pseq([1/4],inf),\rel2,Pseq([1/16],inf),\latch,8000,\stereoL, 0.00555, \crv1,  (-14.4).rrand(-1), \crv1b,(-4), \mulMod, 1691,\out, ~comBusCymb);
+	~cymbal = Pbind(\instrument, \percussion,\type, Pseq([\rest,\rest,\note,\note ,\rest,\note ,\note, \rest].scramble,inf),\dur,Pseq([1/4],64 ),\carHz, 525.12070612224.rrand(0.01),\modHz,11899.3343179398.rrand(0.001),\modAmp, 0.12875.rrand(0.000001).postln ,\amp,(-18.5),\rel,Pseq([1/4],inf),\rel2,Pseq([1/16],inf),\latch,8000,\stereoL, 0.00555, \crv1,  (-14.4).rrand(-1), \crv1b,(-4), \mulMod, 1691,\out, ~comBusCymb);
 
 ~hat = Pbind(\instrument,\percussion,\dur,Pseq([1/4], 64),\atk, 0,\rel,0.04840,\rel2,0.02420,\amp,Pseq([( -13.2), ( -14.2),( -13.2),( -15.2),( -14.2),( -14),( -13.2),( -13.2)],inf), \crv1, (-3), \crv1b, (-5), \modHz, exprand(500,10000).postln, \mulMod, rrand(100, 500).postln, \carHz, exprand(20,10000), \modAmp, 0.12875, \latch, 18500, \stereoR, 0.007,\out,~comBusHat);
 
@@ -2054,7 +2056,7 @@ s.sync;
 
 ~bar = [Ppar([~kick,~hat2,~bass],1),Ppar([~kick,~hat2,~bass],4),Ppar([~kick,~hat2,~bass],8),Ppar([~kick,~hat2,~bass],12),Ppar([~kick,~hat2,~bass],14) ,Ppar([~kick,~hat2,~bass],15) ,Ppar([~kick,~hat2,~bass],16)];
 
-
+	~bar = [Pbindef( \kbRec, \dur,  Pseq([1/1],1)),Pbindef( \kbRec, \dur,  Pseq([1/1],4)),Pbindef( \kbRec, \dur,  Pseq([1/1],8)),Pbindef( \kbRec, \dur,  Pseq([1/1],12)),Pbindef( \kbRec, \dur,  Pseq([1/1],14)),Pbindef( \kbRec, \dur,  Pseq([1/1],15)),Pbindef( \kbRec, \dur,  Pseq([1/1],16))];
 
 
 
