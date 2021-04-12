@@ -37,19 +37,21 @@ MIDIIn.disconnectAll;
 ~scl = [
 	Ppar([
 	Pbindef(\aaa2, \instrument, \sequ,\out, ~seqBusx, \value,
-		Pseq([Scale.major(\just).degreeToFreq(7.rand, 76.midicps, -3),Scale.major(\just).degreeToFreq(7.rand, 76.midicps, -2),Scale.major(\just).degreeToFreq(7.rand, 76.midicps, -3)],inf),\dur,Pseq([4/1],inf),/*\in, ~outFil/*~toRecord*/,*/\group,~shapGrp),
+		Pseq([Scale.major(\just).degreeToFreq(7.rand, 76.midicps, -3),Scale.major(\just).degreeToFreq(7.rand, 76.midicps, -2),Scale.major(\just).degreeToFreq(7.rand, 76.midicps, -3)],inf),\dur,Pxrand([ Pseq([4/1],1),Pseq([1/1],4), Pseq([1/4],16)],inf),\group,~shapGrp),
 
 
 	Pbindef(\aaa, \instrument, \sequ,\out, ~seqBus, \value,
-			Pseq([Scale.major(\just).degreeToFreq(7.rand, 76.midicps, -3),Scale.major(\just).degreeToFreq(7.rand, 76.midicps, -2),Scale.major(\just).degreeToFreq(7.rand, 76.midicps, -3)],inf),\dur,Pseq([4/1],inf),/*\in, ~outFil/*~toRecord*/,*/\group,~shapGrp)],1),
+			Pseq([Scale.major(\just).degreeToFreq(7.rand, 76.midicps, -3),Scale.major(\just).degreeToFreq(7.rand, 76.midicps, -2),Scale.major(\just).degreeToFreq(7.rand, 76.midicps, -3)],inf),\dur,
+			Pxrand([ Pseq([4/1],1),Pseq([1/1],4), Pseq([1/4],16)],inf)
+			,\group,~shapGrp)],1),
 
 Ppar([
 
 		Pbindef(\aaa2, \instrument, \sequ, \out, ~seqBusx,\value,
-	Pseq([Scale.minor(\just).degreeToFreq(7.rand, 76.midicps, -3),Scale.minor(\just).degreeToFreq(7.rand, 76.midicps, -2),Scale.minor(\just).degreeToFreq(7.rand, 76.midicps, -3)],inf),\dur,Pseq([4/1],inf)/*,\in, ~outFil/*~toRecord*/*/,\group,~shapGrp),
+	Pseq([Scale.minor(\just).degreeToFreq(7.rand, 76.midicps, -3),Scale.minor(\just).degreeToFreq(7.rand, 76.midicps, -2),Scale.minor(\just).degreeToFreq(7.rand, 76.midicps, -3)],inf),\dur,Pxrand([ Pseq([4/1],1),Pseq([1/1],4), Pseq([1/4],16)],inf),\group,~shapGrp),
 
 Pbindef(\aaa, \instrument, \sequ, \out, ~seqBus,\value,
-	Pseq([Scale.minor(\just).degreeToFreq(7.rand, 76.midicps, -3),Scale.minor(\just).degreeToFreq(7.rand, 76.midicps, -2),Scale.minor(\just).degreeToFreq(7.rand, 76.midicps, -3)],inf),\dur,Pseq([4/1],inf)/*,\in, ~outFil/*~toRecord*/*/,\group,~shapGrp)],1)];
+	Pseq([Scale.minor(\just).degreeToFreq(7.rand, 76.midicps, -3),Scale.minor(\just).degreeToFreq(7.rand, 76.midicps, -2),Scale.minor(\just).degreeToFreq(7.rand, 76.midicps, -3)],inf),\dur,Pxrand([ Pseq([4/1],1),Pseq([1/1],4), Pseq([1/4],16)],inf),\group,~shapGrp)],1)];
 
 
 //no2 doesnt not go tottsly tru filter at least low
@@ -485,7 +487,7 @@ MIDIdef.cc(\hey,{| func, ccNum, chan, srcID, argTemplate, dispatcher|
 
 
 
-
+FreqScope.new
 
 //SNOOPY
 (
@@ -508,9 +510,9 @@ k = Synth(\filterU, [\out,0/*~distoBg*/,\in, ~bgFil, \lFrq,900,\hFrq,300,\qfH ,0
 
 
 
-MIDIdef.cc(\lpF, { |value|var modFreq = value.linlin(0, 127, 500,22000);
+/*MIDIdef.cc(\lpF, { |value|var modFreq = value.linlin(0, 127, 500,22000);
 
-	 k.set(\lFrq, "lp: ".postln;modFreq.round(1).post;)},ccNum: 18 );// is 10
+	 k.set(\lFrq, "lp: ".postln;modFreq.round(1).post;)},ccNum: 18 );// is 10*/
 
 
 
