@@ -1868,8 +1868,8 @@ SynthDef(\sequ,{|value, dur, in=0, out=0, vlAtk=0, vlDec=1,vlSub=1,vlSub2=1, vlR
 
 	SynthDef(\pan2,{|out=0,in|Out.ar(out, Pan2.ar(In.ar(in)))}).add;
 
-	SynthDef(\filterU, {|out=0,in,  hFrq=900,lFrq=300 ,qfH = 0.822379, qlL = 0.504212|Out.ar(out, BLowPass4.ar(   BHiPass4.ar(  In.ar(in,1) , hFrq , qfH), /*lFrq*/
-		MouseX.kr(20,22000),qlL )) }).add;
+	SynthDef(\filterU, {|out=0,in,  hFrq=900,lFrq=300 ,qfH = 0.822379, qlL = 0.504212|Out.ar(out, BLowPass4.ar(   BHiPass4.ar(  In.ar(in,1) , hFrq , qfH), lFrq
+		/*MouseX.kr(20,22000)*/,qlL )) }).add;
 
 
 
