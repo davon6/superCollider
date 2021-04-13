@@ -128,6 +128,7 @@ s.sync;
 	~delay6= Buffer.alloc(s, 48000 * 3, 2);
 
 	b = Buffer.alloc(s, 44100 * 2, 2);
+	~b2 = Buffer.alloc(s,48000,1);
 
 	~buf = Buffer.alloc(s,s.sampleRate*90 );
 	~bufBg = Buffer.alloc(s,s.sampleRate*60,10 );
@@ -240,6 +241,7 @@ s.sync;
 	~distoBg = Bus.audio(s,1);
 ~distoBg2= Bus.audio(s,1);
 	~eqBg = Bus.audio(s,1);
+	~outDisto = Bus.audio(s,1);
 
 
 	~riToEq= Bus.audio(s,2);
@@ -513,11 +515,20 @@ s.sync;
 	~mod2= Bus.control(s,1);
 	~mod3= Bus.control(s,1);
 	~mod4= Bus.control(s,1);
+	~mod5= Bus.control(s,1);
 
 	~mod1x= Bus.control(s,1);
 	~mod2x= Bus.control(s,1);
 	~mod3x= Bus.control(s,1);
 	~mod4x= Bus.control(s,1);
+	~mod5x= Bus.control(s,1);
+
+
+	~mod1xx= Bus.control(s,1);
+	~mod2xx= Bus.control(s,1);
+	~mod3xx= Bus.control(s,1);
+	~mod4xx= Bus.control(s,1);
+	~mod5xx= Bus.control(s,1);
 
 	~seqBusx= Bus.control(s,1);
 	~seqBus= Bus.control(s,1);
@@ -1462,10 +1473,17 @@ SynthDef(\comb, {|out=0, in ,maxDel, delayT,decT=6.1952,amp=0.09|
 		Out.ar(out, CombN.ar(In.ar(in,1),0.7744/*MouseX.kr(0.01,2)*/,MouseY.kr(0.001,0.6), decT ,amp))}).add;
 
 
-	SynthDef(\comb2, {|out=0, in ,maxDel, delayT,decT=6.1952,amp=0.09| // reverse for fun 0.001,0.6)
-		Out.ar(out, CombN.ar(In.ar(in,2),0.7744/*MouseX.kr(0.01,2)*/,MouseY.kr(0.6,0.001), decT ,amp))}).add;
+	SynthDef(\comb2, {|out=0, in ,maxDel=0.7744, delayT,decT=6.1952,amp=0.09| // reverse for fun was 0.001,0.6)
+		Out.ar(out, BufCombN.ar(~b2.bufnum, In.ar(in,2),/*maxDel/*MouseX.kr(0.01,2)*/,*/MouseY.kr(0.6,0.001), decT ,amp))}).add;
 
 
+
+
+	SynthDef(\comb1, {|out=0, in ,maxDel=0.7744, delayT,decT=6.1952,amp=0.09| // reverse for fun was 0.001,0.6)
+		Out.ar(out, BufCombN.ar(~b2.bufnum, In.ar(in,1),/*MouseY.kr(0.6,0.001)*/MouseX.kr(0.024,0)+ SinOsc.kr(MouseY.kr(20,0),phase: 3,add: 0).range(0.000000001, 0.001), decT ,amp))}).add;
+
+
+	// BufCombN.ar(b.bufnum, WhiteNoise.ar(0.01), XLine.kr(0.0001, 0.01, 20), -0.2) }.play;
 	SynthDef(\combX, {|out=0, in ,maxDel, delayT,decT=3,dur, tS=1,modu,factor=0,factor2=0|
 		Out.ar(out, CombN.ar(In.ar(in,1),1.5488/*MouseX.kr(0.01,2)*/,/*VarLag.kr(delayT,0.04)*/delayT+ MouseY.kr(0.001,0.6)
 			+ (In.kr(modu,1)*EnvGen.kr(Env.adsr(sustainLevel: 1,releaseTime: 0.1),factor ))+(In.kr(~seqBus,1)* factor2)
@@ -1654,10 +1672,11 @@ SynthDef(\EQHP10, {|out=0, in, val, quant, gain, val2, quant2, gain2 frq=100, vo
 
 
 
-SynthDef(\sinModul,{|modu, busMod|Out.kr(busMod, SinOsc.kr(modu).range(-40,2200))}).add;
-SynthDef(\sawModul,{|modu, busMod|Out.kr(busMod, Saw.kr(modu).range(-40,2200))}).add;
-SynthDef(\pulModul,{|modu, busMod|Out.kr(busMod, LFTri.kr(modu).range(-40,1200))}).add;
-SynthDef(\ranModul,{|modu, busMod|Out.kr(busMod,LFDNoise0.kr(modu).range(0,4200) )}).add;
+SynthDef(\sinModul,{|modu, busMod,hS=2200|Out.kr(busMod, SinOsc.kr(modu).range(-40,hS=2200))}).add;
+SynthDef(\sawModul,{|modu, busMod,hS|Out.kr(busMod, Saw.kr(modu).range(-40,hS))}).add;
+SynthDef(\pulModul,{|modu, busMod,hS=1200|Out.kr(busMod, LFTri.kr(modu).range(-40,hS))}).add;
+SynthDef(\ranModul,{|modu, busMod, hS=4200|Out.kr(busMod,LFDNoise0.kr(modu).range(0,hS) )}).add;
+	SynthDef(\squaModul,{|modu, busMod,wdth=0.5,hS=1200,lS=0|Out.kr(busMod,Pulse.kr(modu,wdth).range(lS,hS) )}).add;
 
 
 SynthDef(\fm, {
@@ -1718,7 +1737,7 @@ SynthDef(\fm, {
 }).add;
 
 	SynthDef(\fmX, {
-		arg freq= 659.26, freq2=200,freq3=200, mRatio=1, cRatio=1,  amp=1.5, sineRate = 0.0000000095262251,  sineRangeLow=0, pitch = 0, phRise= 0 ,out=0, eFreq =0 , phFm=8, bus2,bus3,bus4,busBP,bus6, bus7, bus8, busSR, busSS, busSP, gra=0.5,lvlDec=1,factor=0, factor2 =0 ,factorx=0, factorx2 =0,factorxx=0, factorxx2 =0  /*,vlPE =27.1366666667,vlPE2=0.2,dcPE = 0.129066666667*/, rqLPF =0.5, factor3 =1, decE= 0.1936, dur, gain =50/*, crvEP = (-2)*/,gate,pan=0, modu,modu2, multi=0,modux=0;
+		arg freq= 659.26, freq2=200,freq3=200, mRatio=1, cRatio=1,  amp=1.5, sineRate = 0.0000000095262251,  sineRangeLow=0, pitch = 0, phRise= 0 ,out=0, eFreq =0 , phFm=8, bus2,bus3,bus4,busBP,bus6, bus7, bus8, busSR, busSS, busSP, gra=0.5,lvlDec=1,factor=0, factor2 =0 ,factorx=0, factorx2 =0,factorxx=0, factorxx2 =0  /*,vlPE =27.1366666667,vlPE2=0.2,dcPE = 0.129066666667*/, rqLPF =0.5, factor3 =1, decE= 0.1936, dur, gain =50/*, crvEP = (-2)*/,gate,pan=0, modu,modu2, multi=0, multi2=0,modux=0,moduxx=0;
 
 	var car, mod, mod2, iEnv, sig, filRte;
 
@@ -1733,19 +1752,32 @@ SynthDef(\fm, {
 		));
 
 	//second level of modulation
-	mod2 = SinOsc.ar(659.26/10+ (In.kr(modu,1)* EnvGen.kr(Env.adsr(sustainLevel: 1,releaseTime: 0.1),factorxx ))+(In.kr(~seqBus,1)* factorxx2), mul:659.26/10 *iEnv /*In.kr( gra, 1)*/ );
+	mod2 = SinOsc.ar(659.26/10+ (In.kr(moduxx,1)* EnvGen.kr(Env.adsr(sustainLevel: 1,releaseTime: 0.1),factorxx ))+(In.kr(~seqBus,1)* factorxx2), mul:659.26/10 *iEnv /*In.kr( gra, 1)*/ );
 
 	//first level of modulation
 
 		// mod = SinOsc.ar(MouseX.kr(0,freq * mRatio + mod2), mul:freq * mRatio * iEnv);
 
-		mod = SinOsc.ar( MouseX.kr( 659.26 * mRatio + mod2 )*
+		mod = SinOsc.ar( [MouseX.kr( 659.26 * mRatio + mod2 ),
+	 MouseX.kr( 659.26 * mRatio + mod2 )-30,
+		MouseX.kr( 659.26 * mRatio + mod2 )+50 ]
+
+
+
+
+
+			*
 
 		/*	SinOsc.kr(In.kr(~bus2, 1),In.kr(~bus3, 1)).range([In.kr(~bus11, 1)]), mul:*/
 
 			SinOsc.kr(sineRate,phRise).range([sineRangeLow])+ (In.kr(modux,1)* EnvGen.kr(Env.adsr(sustainLevel: 1,releaseTime: 0.1),factorx ))+(In.kr(~seqBusx,1)* factorx2), mul:
 
-			/*(*/        MouseY.kr(164.815,  659.26 * mRatio *iEnv) /*In.kr( gra, 1) */  /*) *   In.kr( gra, 1)*/
+			/*(*/      [  MouseY.kr(164.815,  659.26 * mRatio *iEnv) /*In.kr( gra, 1) */
+			,MouseY.kr(164.815,  659.26 * mRatio *iEnv)* multi2
+			,MouseY.kr(164.815,  659.26 * mRatio *iEnv)* multi2  ]
+
+
+			/*) *   In.kr( gra, 1)*/
 
 		);
 
@@ -1757,7 +1789,7 @@ SynthDef(\fm, {
 
 			//remove this line as shwon to decrease sound quality so I left it / HERE CHNAGE THE SOUND
 			/*SelectX.ar(SinOsc.kr(0.0020,phFm).range(0,1),[SinOsc.ar(0),mod])*/
-			SelectX.ar(SinOsc.kr((0.00502929687/2/2),phFm).range(0,1),[SinOsc.ar(0),mod])+
+			SelectX.ar(SinOsc.kr((0.00502929687/2/2),phFm).range(0,1),[SinOsc.ar(0),mod!2])+
 			[0.00502929687, 0.00502929687-30, 0.00502929687 +50]
 		)* cRatio
 
@@ -2091,6 +2123,9 @@ s.sync;
 	Ppar([~bar[6],~hat,~cymbal/*,~snare*/],1)
 ];
 
+
+	//OFF RN
+
 	// Ppar([Pseq([~bass],inf),Pbindf(~snare,\da1,0)],1);//JEEEZ
 ~bassMel=[	Pbindf(~bass,\freq, Scale.major(\just).degreeToFreq(7.rand, 76.midicps, -4)),
 		Pbindf(~bass,\freq, Scale.minor(\just).degreeToFreq(7.rand, 76.midicps, -4))];
@@ -2126,6 +2161,11 @@ s.sync;
 
 
 ],2);
+
+
+	~bang =Pseq([
+Pbind( \instrument, \playBuf10, \impulse, 10 ,
+		\dur,   Pseq([1/2],1) , \tS,  0.39550810372374,\start,(~leTout.numFrames/ 256 * 145.rand),\buf,~leTout,\out, ~again,\loopy,0)],4);
 
 
 
