@@ -247,6 +247,11 @@ s.sync;
 	~riToEq= Bus.audio(s,2);
 	~riToComp= Bus.audio(s,2);
 	~riToDisto= Bus.audio(s,2);
+	~riToDisto2= Bus.audio(s,2);
+	~riToDisto3= Bus.audio(s,2);
+	~riToEnv2= Bus.audio(s,2);
+	~riToEnv3= Bus.audio(s,2);
+
 	~riToLimit= Bus.audio(s,2);
 	~riToRev  = Bus.audio(s,2);
 	~riToStereo = Bus.audio(s,2);
@@ -415,6 +420,10 @@ s.sync;
 
 ~new10 =Bus.audio(s,10);
 ~again =Bus.audio(s,10);
+	~again2 =Bus.audio(s,10);
+
+	~bigRiLastEq=Bus.audio(s,10);
+
 	~distoBou=Bus.audio(s,1);
 	~filterBou=Bus.audio(s,1);
 
@@ -477,6 +486,7 @@ s.sync;
 	~toCompFlo=  Bus.audio(s,2);
 	~toLimitFlo=  Bus.audio(s,2);
 	~toStereoFlo=  Bus.audio(s,2);
+	~risesGate=  Bus.audio(s,10);
 
 
 	~gateBou=  Bus.audio(s,1);
@@ -902,7 +912,7 @@ SynthDef(\envSli, {|out, val1=20, val2=20000,  dur,tS=1, crv =7|Out.kr(out,
 			[ic_atk, ic_rel]//atkC was 10
 		),timeScale: tS,doneAction:2
 	);
-		env = EnvGen.kr(Env([0,1,1,0],[dur*0.01,dur*0.94,0,dur*0.05]/*[dur*0.01,dur*0.97,0,dur*0.02]*/,[6,0,0-8]),timeScale: tS,doneAction: 2);
+		env = EnvGen.kr(Env([0,1,1,0],[dur*0.01,dur*0.98,0,dur*0.02]/*[dur*0.01,dur*0.97,0,dur*0.02]*/,[6,0,0-8]),timeScale: tS,doneAction: 2);
 	mod2 = SinOsc.ar(freq/10*f3, mul:freq/10 *iEnv);
 	mod = SinOsc.ar(freq * f2 + mod2, mul:freq * mRatio * iEnv);
 	car = SinOsc.ar(freq * f1 + mod) * env * amp;
@@ -2093,7 +2103,7 @@ s.sync;
 
 	~bell = Pbind(\instrument, \percussion, \dur,Pseq([4/1],1 ),\carHz, Pfunc({1050.12070612224.rrand(150)}),\modHz,Pfunc({9334.3179398.rrand(0.1)}),\modAmp,Pfunc({ 0.00875.rrand(0.0001)}) ,\amp,1,\rel,4.5544,\rel2,4.242,\stereoL, 0.00555, \crv1,  (-7.4), \crv1b,(-42), \mulMod, 901,\out, ~bellFlang,\latch,8900,\atk,0.01,\atk2,Pfunc({0.3.rrand(0.01)}));
 
-	~noise = Pbind(\instrument, \wNoise,\dur, Pseq([4/1],1),\dec ,Pkey(\dur),\amp,(1),\out,~filterNoise);
+	~noise = Pbind(\instrument, \wNoise,\dur, Pseq([4/1],1),\dec ,Pkey(\dur),\amp,(4),\out,~filterNoise);
 
 	~hit = Pbind(\instrument,\gran,\dur,~short1,\amp, 1,\buf,~bufSnoopy,\out,~eqDs,\gate, 1,\duration,Pkey(\dur),\impulse,0.003,
 				\vlSub, 0.8,\vlSub2,Pkey(\vlSub),\decC,Pfunc({(-10).rrand(2,1)}),\pos,Pfunc({0.90000.rand}));
