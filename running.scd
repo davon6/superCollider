@@ -511,6 +511,9 @@ s.sync;
 
 	~bus18 = Bus.control(s,1);
 
+	~bus19 = Bus.control(s,1);
+	~bus20 = Bus.control(s,1);
+
 	~mod1= Bus.control(s,1);
 	~mod2= Bus.control(s,1);
 	~mod3= Bus.control(s,1);
@@ -582,7 +585,7 @@ s.sync;
 
 
 
-	SynthDef(\lfo1, {|out,ph, val=1, dur|Out.kr(out,
+	SynthDef(\lfo1, {|out,ph, val=1, dur,tS=1|Out.kr(out,
 /*	SinOsc.kr(Select.kr(val,
 			[    ~hz1beat, ~hzHbeat/*,0.321875*/	])
 
@@ -594,7 +597,7 @@ s.sync;
 		)    *  SinOsc.kr(~hzHbeat*4).range((~hz1beat.neg),~hz1beat),ph).range(~hz8Oct/16,~hz1Oct/4)
 
 
-		*EnvGen.kr(Env.step([1,0],[dur,0]),doneAction: 2))}).add;
+		*EnvGen.kr(Env.step([1,0],[dur,0]),timeScale: tS,doneAction: 2))}).add;
 
 
 
@@ -618,25 +621,25 @@ s.sync;
 
 
 
-	SynthDef(\lfo12, {|out, val=1,ph, dur|Out.kr(out,
+	SynthDef(\lfo12, {|out, val=1,ph, dur,tS=1|Out.kr(out,
 LFNoise0.kr(~hz1beat).range(0.1,0.0)/*,0.02)*/
 		+SinOsc.kr(SelectX.kr(LFNoise0.kr(~hz1beat*4).range(0,1).round(1),[~hz1beat,~hz1beat*4,~hz1beat*16]),ph).range(0.2,0.00)
-*EnvGen.kr(Env.step([0.08,0],[dur,0]),doneAction: 2))}).add;
+*EnvGen.kr(Env.step([0.08,0],[dur,0]),timeScale: tS,doneAction: 2))}).add;
 
 
 
 
-	SynthDef(\lfo13, {|out, dur,ph, val = (~hzQbeat), rL=1,rH=0.4 | Out.kr(out,SinOsc.ar(val,ph).range(rL,rH)
-*EnvGen.kr(Env.step([1,0],[dur,0]),doneAction: 2))}).add;
+	SynthDef(\lfo13, {|out, dur,ph, val = (~hzQbeat), rL=1,rH=0.4,tS=1 | Out.kr(out,SinOsc.ar(val,ph).range(rL,rH)
+*EnvGen.kr(Env.step([1,0],[dur,0]),timeScale: tS,doneAction: 2))}).add;
 
 
 
-	SynthDef(\lfo14, {|out, val, dur| Out.kr(out, EnvGen.kr(Env.step([val,0],[dur,0]),doneAction: 2))}).add;
+	SynthDef(\lfo14, {|out, val, dur,tS=1| Out.kr(out, EnvGen.kr(Env.step([val,0],[dur,0]),timeScale: tS,doneAction: 2))}).add;
 
 
 
-	SynthDef(\lfo15, {|out, val, dur|Out.kr(out,  SinOsc.kr( ~hz1beat/4).range(~hz1beat*64, ~hz1beat*1024)
-		*EnvGen.kr(Env.step([1,0],[dur,0]),doneAction: 2))}).add;
+	SynthDef(\lfo15, {|out, val, dur,tS=1|Out.kr(out,  SinOsc.kr( ~hz1beat/4).range(~hz1beat*64, ~hz1beat*1024)
+		*EnvGen.kr(Env.step([1,0],[dur,0]),timeScale: tS,doneAction: 2))}).add;
 
 	/*Out.kr(~bus5, SinOsc.kr(Select.kr(LFNoise2.ar(~hz1beat).range(0,1).round(1),
 		[    ~hz1beat, ~hzHbeat/*,0.321875*/	]
@@ -686,12 +689,12 @@ SynthDef(\envSli, {|out, val1=20, val2=20000,  dur,tS=1, crv =7|Out.kr(out,
 )}).add;
 
 
-	SynthDef(\lfo2, {|out, val=1, dur|Out.kr(out,
+	SynthDef(\lfo2, {|out, val=1, dur,tS=1|Out.kr(out,
 
 		LFNoise1.kr(~hz1beat).range(0.10,0.0)/*,0.02)*/
 		+SinOsc.kr(SelectX.kr(LFNoise0.kr(~hz1beat*4).range(0,1).round(1),[~hz1beat,~hz1beat*4,~hz1beat*16])).range(0.06,0.00)
 
-		*EnvGen.kr(Env.step([1,0],[dur,0]),doneAction: 2))}).add;
+		*EnvGen.kr(Env.step([1,0],[dur,0]),timeScale: tS,doneAction: 2))}).add;
 
 
 	/*Out.kr(~bus8,  /*Lag.kr(*/LFNoise1.kr(~hz1beat).range(0.10,0.0)/*,0.02)*/
@@ -701,7 +704,7 @@ SynthDef(\envSli, {|out, val1=20, val2=20000,  dur,tS=1, crv =7|Out.kr(out,
 	SynthDef(\lfo,{|out, vl1, vl2, dur, tim = 0.0484, crv =(-12)|
 		Out.kr(out,VarLag.kr( Line.kr(vl1, vl2, dur, doneAction: 2),tim,crv));}).add;
 
-	SynthDef(\lfo3,{|out| Out.kr(out ,EnvGen.kr(Env([143,0],[0.4,0],-30),doneAction: 2))}).add;
+	SynthDef(\lfo3,{|out,tS=1| Out.kr(out ,EnvGen.kr(Env([143,0],[0.4,0],-30),timeScale: tS,doneAction: 2))}).add;
 
 
 	SynthDef(\lfo2,{|out, out2, out3, riseT, flatT, dur, vl=0.0000000095262251, vl2=0, vl3=0|
@@ -899,12 +902,31 @@ SynthDef(\envSli, {|out, val1=20, val2=20000,  dur,tS=1, crv =7|Out.kr(out,
 			[ic_atk, ic_rel]//atkC was 10
 		),timeScale: tS,doneAction:2
 	);
-		env = EnvGen.kr(Env([0,1,1,0],[dur*0.01,dur*0.97,0,dur*0.02],[6,0,0-6]),timeScale: tS,doneAction: 2);
-	mod2 = SinOsc.ar(freq/10*f3, mul:freq/10 * iEnv);
+		env = EnvGen.kr(Env([0,1,1,0],[dur*0.01,dur*0.94,0,dur*0.05]/*[dur*0.01,dur*0.97,0,dur*0.02]*/,[6,0,0-8]),timeScale: tS,doneAction: 2);
+	mod2 = SinOsc.ar(freq/10*f3, mul:freq/10 *iEnv);
 	mod = SinOsc.ar(freq * f2 + mod2, mul:freq * mRatio * iEnv);
 	car = SinOsc.ar(freq * f1 + mod) * env * amp;
 	car = Pan2.ar(car, pan);
 	Out.ar(out, car);
+}).add;
+
+
+		SynthDef(\rise2, {
+	arg freq=659.26, mRatio=1, cRatio=1,
+	index=1, iScale=5, ic_atk=4, ic_rel=(-4),
+	amp=2, rel=3, pan=0, f1,f2,f3, vlAtk=0,atk=0, dec=0,atkE=0  ,dur ,out =0 ,tS=1 ,iEnv,busMod,triMod=0.075;
+	var car, mod, env, mod2;
+
+
+
+		mod2 = SinOsc.ar(freq/10*f3, mul:freq/10 * In.kr(iEnv,1));
+		mod = SinOsc.ar(freq * f2 + mod2, mul:freq * mRatio * In.kr(iEnv));
+		car = SinOsc.ar((freq * f1 + mod)*
+			/*In.kr(busMod)) */LFTri.kr(triMod))
+
+		/** env */* amp;
+	car = Pan2.ar(car, pan);
+	Out.ar(out, car*EnvGen.kr(Env([0,1,1,0],[dur*0.01,dur*0.97,0,dur*0.02],[6,0,0-6]),timeScale: tS,doneAction: 2));
 }).add;
 
 
@@ -2071,7 +2093,7 @@ s.sync;
 
 	~bell = Pbind(\instrument, \percussion, \dur,Pseq([4/1],1 ),\carHz, Pfunc({1050.12070612224.rrand(150)}),\modHz,Pfunc({9334.3179398.rrand(0.1)}),\modAmp,Pfunc({ 0.00875.rrand(0.0001)}) ,\amp,1,\rel,4.5544,\rel2,4.242,\stereoL, 0.00555, \crv1,  (-7.4), \crv1b,(-42), \mulMod, 901,\out, ~bellFlang,\latch,8900,\atk,0.01,\atk2,Pfunc({0.3.rrand(0.01)}));
 
-	~noise = Pbind(\instrument, \wNoise,\dur, Pseq([4/1],1),\dec ,Pkey(\dur),\amp,(-2),\out,~filterNoise);
+	~noise = Pbind(\instrument, \wNoise,\dur, Pseq([4/1],1),\dec ,Pkey(\dur),\amp,(1),\out,~filterNoise);
 
 	~hit = Pbind(\instrument,\gran,\dur,~short1,\amp, 1,\buf,~bufSnoopy,\out,~eqDs,\gate, 1,\duration,Pkey(\dur),\impulse,0.003,
 				\vlSub, 0.8,\vlSub2,Pkey(\vlSub),\decC,Pfunc({(-10).rrand(2,1)}),\pos,Pfunc({0.90000.rand}));
@@ -2131,7 +2153,7 @@ s.sync;
 		Pbindf(~bass,\freq, Scale.minor(\just).degreeToFreq(7.rand, 76.midicps, -4))];
 
 
-~riseSet = Pxrand([
+/*~riseSet = Pxrand([
 
 		Ppar([
 
@@ -2160,7 +2182,7 @@ s.sync;
 
 
 
-],2);
+],2);*/
 
 
 	~bang =Pseq([

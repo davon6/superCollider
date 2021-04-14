@@ -33,25 +33,33 @@ MIDIIn.disconnectAll;
 ~recGrp= Group.after(~shapGrp);
 
 
+~ma1=Scale.major(\just).degreeToFreq(7.rand, 76.midicps, -3);
+~ma2=Scale.major(\just).degreeToFreq(7.rand, 76.midicps, -2);
+~ma3=Scale.major(\just).degreeToFreq(7.rand, 76.midicps, -3);
+
+
+~mi1=Scale.minor(\just).degreeToFreq(7.rand, 76.midicps, -3);
+~mi2=Scale.minor(\just).degreeToFreq(7.rand, 76.midicps, -2);
+~mi3=Scale.minor(\just).degreeToFreq(7.rand, 76.midicps, -3);
 
 ~scl = [
 	Ppar([
 	Pbindef(\aaa2, \instrument, \sequ,\out, ~seqBusx, \value,
-		Pseq([Scale.major(\just).degreeToFreq(7.rand, 76.midicps, -3),Scale.major(\just).degreeToFreq(7.rand, 76.midicps, -2),Scale.major(\just).degreeToFreq(7.rand, 76.midicps, -3)],inf),\dur,Pxrand([ Pseq([4/1],1),Pseq([1/1],4), Pseq([1/4],16)],inf),\group,~shapGrp),
+		Pseq([~ma1,~ma2,~ma3,~ma2],inf),\dur,Pxrand([ Pseq([4/1],1),Pseq([1/1],4), Pseq([1/4],16)],inf),\group,~shapGrp),
 
 
 	Pbindef(\aaa, \instrument, \sequ,\out, ~seqBus, \value,
-			Pseq([Scale.major(\just).degreeToFreq(7.rand, 76.midicps, -3),Scale.major(\just).degreeToFreq(7.rand, 76.midicps, -2),Scale.major(\just).degreeToFreq(7.rand, 76.midicps, -3)],inf),\dur,
+			Pseq([~ma1,~ma2,~ma3,~ma2],inf),\dur,
 			Pxrand([ Pseq([4/1],1),Pseq([1/1],4), Pseq([1/4],16)],inf)
 			,\group,~shapGrp)],1),
 
 Ppar([
 
 		Pbindef(\aaa2, \instrument, \sequ, \out, ~seqBusx,\value,
-	Pseq([Scale.minor(\just).degreeToFreq(7.rand, 76.midicps, -3),Scale.minor(\just).degreeToFreq(7.rand, 76.midicps, -2),Scale.minor(\just).degreeToFreq(7.rand, 76.midicps, -3)],inf),\dur,Pxrand([ Pseq([4/1],1),Pseq([1/1],4), Pseq([1/4],16)],inf),\group,~shapGrp),
+	Pseq([~mi1,~mi2,~mi3,~mi2],inf),\dur,Pxrand([ Pseq([4/1],1),Pseq([1/1],4), Pseq([1/4],16)],inf),\group,~shapGrp),
 
 Pbindef(\aaa, \instrument, \sequ, \out, ~seqBus,\value,
-	Pseq([Scale.minor(\just).degreeToFreq(7.rand, 76.midicps, -3),Scale.minor(\just).degreeToFreq(7.rand, 76.midicps, -2),Scale.minor(\just).degreeToFreq(7.rand, 76.midicps, -3)],inf),\dur,Pxrand([ Pseq([4/1],1),Pseq([1/1],4), Pseq([1/4],16)],inf),\group,~shapGrp)],1)];
+	Pseq([~mi1,~mi2,~mi3,~mi2],inf),\dur,Pxrand([ Pseq([4/1],1),Pseq([1/1],4), Pseq([1/4],16)],inf),\group,~shapGrp)],1)];
 
 
 //no2 doesnt not go tottsly tru filter at least low
