@@ -6,8 +6,12 @@
 k.set(\out,~toRecord);
 x = Synth(\recLoop,[buf:~buf,\recording,1, \in,~toRecord],~recGrp);
 )*/
+
+// add another comb, flimiter after filter, too much couine, maybe automate chnage of waveform but also rate
 s.plotTree
 1* t.beatDur
+MIDIdef.noteOn(\onTest, {|vel, nn, chan, src|[vel, nn, chan, src].postln});
+MIDIdef.cc(\onTestT, {|vel, nn, chan, src|[vel, nn, chan, src].postln});
 
 (Ppar([
 
@@ -72,7 +76,7 @@ d = (Synth( \fm2, [\dur, inf,\stretch, 3.5,\mRatio, 1,\amp, 0.16,\cRatio, 1,\ind
  v = (Synth( \fmX, [\dur, inf,\stretch, 3.5,\mRatio, 1,\cRatio, 1,\index, 1,\atkE, 0.1,\amp,0.18,\out,~outFil],~synthGrp));
 /*~v = Synth(  \comb,[\in, ~outFil,\out,0],~combGrp,);*/
 
-~v =  Synth(/* Pbind(\instrument, */\comb1,[ \dur, 9999/*Pseq([16/1],inf)*/,\in, ~outFil,\out,~outDisto/*~distoBg*/,/*\group,*/\delayT,0.01,\amp,0.4,\maxDel,0.7744,\decT,-0.2,
+~v =  Synth(/* Pbind(\instrument, */\comb1,[ \dur, 9999/*Pseq([16/1],inf)*/,\in, ~outFil,\out,~outDisto/*~distoBg*/,/*\group,*/\delayT,0.01,\amp,0.8,\maxDel,0.7744,\decT,-0.2,
 
 	/*Pfunc({9.00.rand.postln}),*/
 	/*Pwhite(0.0121,6),*/\tS, 0.39550810372374],~combGrp);
@@ -163,12 +167,12 @@ x = Synth(\recLoop,[buf:~buf,\recording,1, \in,0/*~toRecord*/],~recGrp);
 
 
 
-MIDIdef.noteOn(\res, {|vel, nn, chan, src|[nn];
+/*MIDIdef.noteOn(\res, {|vel, nn, chan, src|[nn];
 
 Pbindef(\aaa,\dur,Pseq([4/1],inf),
 \vlAtk,0,\vlDec,1,\vlSub,1, \vlSub2,1,\vlRel,0, \atkT,0, \decT,1, \subsT,0, \relT,0, \atckC,0, \decC,0, \relC,0,);
 
-},noteNum: 72);
+},noteNum: 72);*/
 
 
 
@@ -211,26 +215,26 @@ MIDIdef.cc(\mDel, { |value|var modFreq = value.linlin(0, 127, -0.0001, -0.50);
 ~v.set(\decT, modFreq.round(0.0001).postln);
 
 
-},ccNum: 79 );  //is 15
+},ccNum: 75 );  //is 8
 
 
 
-MIDIdef.cc(\shoc, {|vel, nn, chan, src|[nn];
+/*MIDIdef.cc(\shoc, {|vel, nn, chan, src|[nn];
 	v.set(\factor2,1);
 d.set(\factor2,1);
 	~v.set(\factor2,1);
 
-Pbindef(\aaa,\dur,Pseq([1/1],inf),);
+/*Pbindef(\aaa,\dur,Pseq([1/1],inf),);*/
 
 },ccNum: 113);
 
-MIDIdef.cc(\shoc, {|vel, nn, chan, src|[nn];
+MIDIdef.cc(\shoc2, {|vel, nn, chan, src|[nn];
 	v.set(\factor2,1);
 d.set(\factor2,1);
 	/*~v.set(\factor2,1);*/
 
-
-Pbindef(\aaa,\dur,Pseq([1/1],inf),
+/*
+Pbindef(\aaa,\dur,Pseq([1/1],inf),*/
 
 /*\vlDec,1.8,
 	\vlSub,Pfunc({1.6.exprand(1.0,1)}),\vlSub2,Pkey(\vlSub),\atkT,Pfunc({0.20.exprand(0.01)}),
@@ -241,14 +245,14 @@ Pbindef(\aaa,\dur,Pseq([1/1],inf),
 	\decC,Pfunc({-4.exprand(-0.1)}),
 		\relC,Pfunc({-8.exprand(-2,1) }),\relSu,Pfunc({0.20.exprand(0.01)})*/);
 
-},ccNum: 115);
+},ccNum: 115);*/
 
 
 
 
 
 
-MIDIdef.noteOn(\sec, {|vel, nn, chan, src|
+/*MIDIdef.noteOn(\sec, {|vel, nn, chan, src|
 	[nn].postln;
 	/*v.set(\gate,0);
 
@@ -257,7 +261,7 @@ MIDIdef.noteOn(\sec, {|vel, nn, chan, src|
 d.set(\gate,1,\factor,0,\factor2,0,\multi,0);*/
 	v.set(\factorx2,1);
 
-},noteNum: 37);
+},noteNum: 37);*/
 
 
 
@@ -265,7 +269,7 @@ d.set(\gate,1,\factor,0,\factor2,0,\multi,0);*/
 
 MIDIdef.noteOn(\first, {|vel, nn, chan, src|
 	[nn].postln;
-v.set(\gate,1,\factor,0,\factor2,0,\factorx,0,\factorx2,0,\factorxx,0);
+v.set(\gate,1/*,\factor,0,\factor2,0,\factorx,0,\factorx2,0,\factorxx,0*/);
 /*d.set(\gate,0);
 	Pbindef(\aaa,	\vlAtk,0,\vlDec,1,\vlSub,1, \vlSub2,1,\vlRel,0, \atkT,0, \decT,1, \subsT,0, \relT,0, \atckC,0, \decC,0, \relC,0,Pseq([4/1],inf));
 	Pbindef(\ga   ,\vlDec,1.8,\vlSub,1.8, \vlSub2,Pkey(\vlSub), \dur,Pseq([4/1],inf) ,  \relSu,0,\atkT,0, \decT,1, \subsT,0, \relT,0, \atckC,0, \decC,0, \relC,0,\vlAtk,0,\vlRel,Pkey(\vlAtk));*/
@@ -273,116 +277,154 @@ v.set(\gate,1,\factor,0,\factor2,0,\factorx,0,\factorx2,0,\factorxx,0);
 },noteNum: 36); //button 1
 
 
+
+
+
+
+MIDIdef.cc(\f1, { |value|var modFreq = value.linlin(0, 127, 0, 1);
+
+	v.set(\factor, modFreq.round(0.001).postln);
+},ccNum: 18 ); //is 10
+
+MIDIdef.cc(\f2, { |value|var modFreq = value.linlin(0, 127, 0, 1);
+
+	v.set(\factor2, modFreq.round(0.001).postln);
+},ccNum: 19 );//is 11
+
+MIDIdef.cc(\f1x, { |value|var modFreq = value.linlin(0, 127, 0, 1);
+
+	v.set(\factorx, modFreq.round(0.001).postln);
+},ccNum: 16 );//is 12
+
+MIDIdef.cc(\f2x, { |value|var modFreq = value.linlin(0, 127, 0, 1);
+
+	v.set(\factorx2, modFreq.round(0.001).postln);
+},ccNum: 17 );//is 13
+
+MIDIdef.cc(\f1xx, { |value|var modFreq = value.linlin(0, 127, 0, 1);
+
+	v.set(\factorxx, modFreq.round(0.001).postln);
+},ccNum: 91 );//is 14
+
+
+/*\factor,0,\factor2,0,\factorx,0,\factorx2,0,\factorxx,0*/
+
+MIDIdef.cc(\f1xxx, { |value|var modFreq = value.linlin(0, 127, 0, 100);
+
+	v.set(\factorx, modFreq.round(0.01).postln);
+},ccNum: 72 );//is 16
+
+
 MIDIdef.noteOn(\modLfo, {|vel, nn, chan, src|[nn].postln;
-	v.set(\factor,1,\modu, ~mod1);
-	d.set(\factor,1,\modu, ~mod1 );
+	v.set(/*\factor,1,*/\modu, ~mod1);
+	d.set(/*\factor,1,*/\modu, ~mod1 );
 /*~v.set(\factor,1,\modu, ~mod1 );*/
 },noteNum: 38);
 
 MIDIdef.noteOn(\modLfo2, {|vel, nn, chan, src|[nn].postln;
-	v.set(\factor,1,\modu, ~mod2);
-	d.set(\factor,1,\modu, ~mod2 );
+	v.set(/*\factor,1,*/\modu, ~mod2);
+	d.set(/*\factor,1,*/\modu, ~mod2 );
 /*~v.set(\factor,1,\modu, ~mod2 );*/
 },noteNum: 39);
 
 MIDIdef.noteOn(\modLfo3, {|vel, nn, chan, src|[nn].postln;
-	v.set(\factor,1,\modu, ~mod3);
-	d.set(\factor,1,\modu, ~mod3 );
+	v.set(/*\factor,1,*/\modu, ~mod3);
+	d.set(/*\factor,1,*/\modu, ~mod3 );
 	/*~v.set(\factor,1,\modu, ~mod3 );*/
 },noteNum: 40);
 
 MIDIdef.noteOn(\modLfo4, {|vel, nn, chan, src|[nn].postln;
-	v.set(\factor,1,\modu, ~mod4);
-	d.set(\factor,1,\modu, ~mod4 );
+	v.set(/*\factor,1,*/\modu, ~mod4);
+	d.set(/*\factor,1,*/\modu, ~mod4 );
 /*~v.set(\factor,1,\modu, ~mod4 );*/
 },noteNum: 41);
 
 
 MIDIdef.noteOn(\modLfo5, {|vel, nn, chan, src|[nn];
-v.set(\factor,1,\modu, ~mod5);
+v.set(/*\factor,1,*/\modu, ~mod5);
 
 },noteNum: 42);
 
 
 
 MIDIdef.noteOn(\modLfox, {|vel, nn, chan, src|[nn].postln;
-	v.set(\factorx,1,\modux, ~mod1x);
+	v.set(/*\factorx,1,*/\modux, ~mod1x);
 
 },noteNum: 72);
 
 MIDIdef.noteOn(\modLfo2x, {|vel, nn, chan, src|[nn].postln;
-	v.set(\factorx,1,\modux, ~mod2x);
+	v.set(/*\factorx,1,*/\modux, ~mod2x);
 
 },noteNum: 71);
 
 MIDIdef.noteOn(\modLfo3x, {|vel, nn, chan, src|[nn].postln;
-	v.set(\factorx,1,\modux, ~mod3x);
+	v.set(/*\factorx,1,*/\modux, ~mod3x);
 
 },noteNum: 69);
 
 MIDIdef.noteOn(\modLfo4x, {|vel, nn, chan, src|[nn].postln;
-	v.set(\factorx,1,\modux, ~mod4x);
+	v.set(/*\factorx,1,*/\modux, ~mod4x);
 
 },noteNum: 67);
 
 
 MIDIdef.noteOn(\modLfo5x, {|vel, nn, chan, src|[nn].postln;
-	v.set(\factorx,1,\modux, ~mod5x);
+	v.set(/*\factorx,1,*/\modux, ~mod5x);
 
 },noteNum: 65);
 
 
 MIDIdef.noteOn(\modLfox1, {|vel, nn, chan, src|[nn].postln;
-	v.set(\factorxx,1,\moduxx, ~mod1x);
+	v.set(/*\factorxx,1,*/\moduxx, ~mod1x);
 
 },noteNum: 55);
 
 MIDIdef.noteOn(\modLfo2x2, {|vel, nn, chan, src|[nn].postln;
-	v.set(\factorxx,1,\moduxx, ~mod2x);
+	v.set(/*\factorxx,1,*/\moduxx, ~mod2x);
 
 },noteNum: 53);
 
 MIDIdef.noteOn(\modLfo3x3, {|vel, nn, chan, src|[nn].postln;
-	v.set(\factorxx,1,\moduxx, ~mod3x);
+	v.set(/*\factorxx,1,*/\moduxx, ~mod3x);
 
 },noteNum: 52);
 
 MIDIdef.noteOn(\modLfo4x4, {|vel, nn, chan, src|[nn].postln;
-	v.set(\factorxx,1,\moduxx, ~mod4x);
+	v.set(/*\factorxx,1,*/\moduxx, ~mod4x);
 
 },noteNum: 50);
 
 
 MIDIdef.noteOn(\modLfo4x5, {|vel, nn, chan, src|[nn].postln;
-	v.set(\factorxx,1,\moduxx, ~mod5x);
+	v.set(/*\factorxx,1,*/\moduxx, ~mod5x);
 
 },noteNum: 48);
 
 
 
 MIDIdef.noteOn(\modLfox1x, {|vel, nn, chan, src|[nn].postln;
-	v.set(\factorxx,1,\moduxx, ~mod1xx);
+	v.set(/*\factorxx,1,*/\moduxx, ~mod1xx);
 
 },noteNum: 64);
 
 MIDIdef.noteOn(\modLfo2x2x, {|vel, nn, chan, src|[nn].postln;
-	v.set(\factorxx,1,\moduxx, ~mod2xx);
+	v.set(/*\factorxx,1,*/\moduxx, ~mod2xx);
 
 },noteNum: 62);
 
 MIDIdef.noteOn(\modLfo3x3x, {|vel, nn, chan, src|[nn].postln;
-	v.set(\factorxx,1,\moduxx, ~mod3xx);
+	v.set(/*\factorxx,1,*/\moduxx, ~mod3xx);
 
 },noteNum: 60);
 
 MIDIdef.noteOn(\modLfo4x4x, {|vel, nn, chan, src|[nn].postln;
-	v.set(\factorxx,1,\moduxx, ~mod4xx);
+	v.set(/*\factorxx,1,*/\moduxx, ~mod4xx);
 
 },noteNum: 59);
 
 
 MIDIdef.noteOn(\modLfo4x5x, {|vel, nn, chan, src|[nn].postln;
-	v.set(\factorxx,1,\moduxx, ~mod5xx);
+	v.set(/*\factorxx,1,*/\moduxx, ~mod5xx);
 
 },noteNum: 57);
 
@@ -423,23 +465,23 @@ MIDIdef.noteOn(\modLfo4x, {|vel, nn, chan, src|[nn].postln;
 
 
 
-MIDIdef.cc(\mVo, { |value|var modFreq = value.linlin(0, 127, 0, 1);
+MIDIdef.cc(\mVo, { |value|var modFreq = value.linlin(61, 67, 0, 1);
 
 
 
 v.set(\multi, modFreq.round(0.01).postln);
 	d.set(\multi, modFreq.round(0.01));
 
-},ccNum: 19 ); //is 11
+},ccNum: 112 ); //is 11
 
-MIDIdef.cc(\mVo2, { |value|var modFreq = value.linlin(0, 127, 0, 1);
+MIDIdef.cc(\mVo2, { |value|var modFreq = value.linlin(61, 67, 0, 1);
 
 
 
 v.set(\multi2, modFreq.round(0.01).postln);
 	/*d.set(\multi2, modFreq.round(0.01));*/
 
-},ccNum: 16 ); //is 12
+},ccNum: 114 ); //is 12
 
 
 
@@ -605,13 +647,13 @@ MIDIdef.cc(\myModFreq, { |value|var modFreq = value.linlin(0, 127, 00.001, 1200)
 },ccNum: 73);
 
 
-
+/*KEEP IN CASE
 MIDIdef.cc(\cRa, { |value|var modFreq = value.linlin(0, 127, -10, 100);
 
 	~p.set(\lS,modFreq.round(1));
 	~px.set(\lS,modFreq.round(1));
 
-},ccNum: 75 ); //i s8
+},ccNum: 75 ); //i s8*/
 
 //??
 MIDIdef.bend(\twi, { |val, chan, src|
@@ -646,21 +688,15 @@ MIDIdef.cc(\freqx3, { |value|var modFreq = value.linlin(0, 127, 00.002, 320);
 
 },ccNum: 75 );*/
 
-MIDIdef.cc(\cv, { |value|var modFreq = value.linlin(0, 127, 00.002, 40);
+/*MIDIdef.cc(\cv, { |value|var modFreq = value.linlin(0, 127, 00.002, 40);
 
 	/*v.set(\index3,modFreq.round(0.001));*/
 	d.set(\index3,modFreq.round(0.001));
-},ccNum: 72 );
+},ccNum: 72 );*/
 
 )
 
-(
-MIDIdef.cc(\hey,{| func, ccNum, chan, srcID, argTemplate, dispatcher|
 
-	[func, ccNum, chan, srcID, argTemplate, dispatcher].postln;
-});
-
-)
 
 
 
