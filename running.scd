@@ -311,7 +311,7 @@ s.sync;
 	~stereoCymb = Bus.audio(s,1);
 	~stereoHat = Bus.audio(s,1);
 	~stereoRkick = Bus.audio(s,1);
-
+~stereoBus3b= Bus.audio(s,2);
 
 	~comRnd = Bus.audio(s,2);
 	~comMelo = Bus.audio(s,2);
@@ -323,7 +323,7 @@ s.sync;
 	~comBusCymb = Bus.audio(s,2);
 
 	~comSnaGrpBus = Bus.audio(s,2);
-	~comSnaGrpBus2 = Bus.audio(s,2);
+	~comSnaGrpBus2 = Bus.audio(s,10);
 
 	~limitFuzz = Bus.audio(s,2);
 	~limitFuzz2 = Bus.audio(s,2);
@@ -2096,7 +2096,7 @@ s.sync;
 
 	~cymbal = Pbind(\instrument, \percussion,\type, Pseq([\rest,\rest,\note,\note ,\rest,\note ,\note, \rest].scramble,inf),\dur,Pseq([1/4],64 ),\carHz, 525.12070612224.rrand(0.01),\modHz,11899.3343179398.rrand(0.001),\modAmp, 0.12875.rrand(0.000001).postln ,\amp,(-18.5),\rel,Pseq([1/4],inf),\rel2,Pseq([1/16],inf),\latch,8000,\stereoL, 0.00555, \crv1,  (-14.4).rrand(-1), \crv1b,(-4), \mulMod, 1691,\out, ~comBusCymb);
 
-~hat = Pbind(\instrument,\percussion,\dur,Pseq([1/4], 64),\atk, 0,\rel,0.04840,\rel2,0.02420,\amp,Pseq([( -13.2), ( -14.2),( -13.2),( -15.2),( -14.2),( -14),( -13.2),( -13.2)],inf), \crv1, (-3), \crv1b, (-5), \modHz, exprand(500,10000).postln, \mulMod, rrand(100, 500).postln, \carHz, exprand(20,10000), \modAmp, 0.12875, \latch, 18500, \stereoR, 0.007,\out,~comBusHat);
+~hat = Pbind(\instrument,\percussion,\dur,Pseq([1/4], 64),\atk, 0,\rel,0.04840,\rel2,0.02420,\amp,Pseq([( -16.2), ( -16.7),( -16.5),( -16.2),( -16.2),( -15.9),( -16.2),( -16.2)],inf), \crv1, (-3), \crv1b, (-5), \modHz, exprand(500,10000).postln, \mulMod, rrand(100, 500).postln, \carHz, exprand(20,10000), \modAmp, 0.12875, \latch, 18500, \stereoR, 0.007,\out,~comBusHat);
 
 	~snare = Pbind(\instrument, \snare,\carHz, 41.2 ,\type, Pseq([\rest ,\rest,\note,\rest], 8),\atk, 0.00502929687,\rel, 0.0968,\rel2, 0.3872,\dur, Pseq([1/2], inf),\amp,(-12), \crv1,(-8),\crv2,(-7)   ,\out,~snareEQ, \atk,t.beatDur * 0.02, \atk2,Pkey(\atk));
 
