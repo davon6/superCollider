@@ -287,7 +287,7 @@ s.sync;
 
 
 	~delayBus = Bus.audio(s,1);
-
+~delayBus2= Bus.audio(s,1);
 	~reverbBus = Bus.audio(s,1);
 	~reverbBus2 = Bus.audio(s,1);
 	~reverbBus3 = Bus.audio(s,1);
@@ -1476,6 +1476,15 @@ SynthDef("TriggerBufferGranular", {arg out=0, bufnum=0, in=0, thresh = 0.004, am
 		/*	* [amp+stereoL,amp+stereoR] * EnvGen.kr(Env([1,1,0],[0,dur,0],4),doneAction:2) */)
 	}).add;
 
+
+	SynthDef(\pingD10, { |out = 0, bufnum = 0, dur, feedback = 0.5, delayTime = 0.3, in /*stereoL =0.00555, stereoR =0, dec=0.5, amp =1*/ |
+    var left;
+
+		left =	Mix.ar(In.ar(in,10));
+
+    Out.ar(out ,PingPong.ar(bufnum, [left,left], delayTime, feedback, 1)
+		/*	* [amp+stereoL,amp+stereoR] * EnvGen.kr(Env([1,1,0],[0,dur,0],4),doneAction:2) */)
+	}).add;
 
 
 	SynthDef(\pingDS, { |out = 0, bufnum = 0, dur, feedback = 0.5, delayTime = 0.3, in /*stereoL =0.00555, stereoR =0, dec=0.5, amp =1*/ |

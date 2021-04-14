@@ -519,7 +519,7 @@ Pbind(\instrument, \playBuf10N,  \out,~toCom,\dur,Pseq([ Pseq([8/1],1),  Pseq([1
 		Pseq([4/1],1)],inf),
 		\in,  Pxrand([~toGate10,~toGate102], inf)  ,\out ,Pwrand([~eqBus10,
 
-		~delayBus,~reverbSquelch],[16,4,1].normalizeSum,inf)
+		~delayBus2,~reverbSquelch],[16,4,1].normalizeSum,inf)
 
 	,  \group, ~gateGrp6,\tS, 0.39550810372374),
 
@@ -1483,6 +1483,9 @@ Pbind(\instrument, \gate, \dur,Pwrand([~short,Pseq([1/4 ],16)],[4,1].normalizeSu
 
 .stop
 (~fx=Ppar([	Pbind(\instrument, \pingD, \in, ~delayBus ,\bufnum, /*b.bufnum*/~delay, \feedback,0.38 ,\dur, inf,\out,~revDelay,\group, ~revGrp),
+
+
+	Pbind(\instrument, \pingD10, \in, ~delayBus2 ,\bufnum, /*b.bufnum*/~delay, \feedback,0.38 ,\dur, inf,\out,~revDelay,\group, ~revGrp),
 
 
 Pbindf( Prand([~quickFix, ~rShort]),\instrument, \reverbS, \dur,inf, \in,~revDelay  , \out,~comDelay ,\group,~delayGrp),
