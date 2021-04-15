@@ -113,7 +113,7 @@ s.sync;
 
 	~k = Buffer.alloc(s, s.sampleRate *0.3872,1);
 	~k2 = Buffer.alloc(s, s.sampleRate *1,1);
-	~b3 = Buffer.alloc(s, s.sampleRate *1,1);
+	~b3 = Buffer.alloc(s, s.sampleRate *5,1);
 	~kb1 = Buffer.alloc(s, s.sampleRate *1,1);
 	~kb2 = Buffer.alloc(s, s.sampleRate *1,2);
 	~e = Buffer.alloc(s, s.sampleRate *   t.beatDur*4 /*0.3872*/,1);
@@ -479,6 +479,7 @@ s.sync;
 
 	~toPan2= Bus.audio(s,1);
 	~toPan22= Bus.audio(s,1);
+~toPan3= Bus.audio(s,1);
 
 	~toEqFlo= Bus.audio(s,1);
 	~toGateFlo= Bus.audio(s,1);
@@ -523,6 +524,8 @@ s.sync;
 
 	~bus19 = Bus.control(s,1);
 	~bus20 = Bus.control(s,1);
+	~bus21 = Bus.control(s,1);
+	~bus22 = Bus.control(s,1);
 
 	~mod1= Bus.control(s,1);
 	~mod2= Bus.control(s,1);
@@ -547,8 +550,18 @@ s.sync;
 	~seqBus= Bus.control(s,1);
 	s.sync;
 
-	SynthDef(\playBuf ,{|out = 0,start, trig= 0.002, dur, buf, dA=2, tS=1, loopy=1|Out.ar(out,PlayBuf.ar(1,buf,trigger:
-		trig/*Dust.kr(4.0)*/,startPos: start,loop: loopy/*,doneAction: dA*/)* EnvGen.kr(Env([0,1,1,0],[0,dur,0]),timeScale: tS,doneAction: 2));}).add;
+	SynthDef(\playBuf ,{|out = 0,start, trig= 0.002, dur, buf, dA=2,rte=1 , tS=1, loopy=1,	decT=1, subsT=0  |Out.ar(out,PlayBuf.ar(1,buf,rte ,trigger:
+		trig/*Dust.kr(4.0)*/,startPos: start,loop: loopy/*,doneAction: dA*/)* /*EnvGen.kr(Env([0,1,1,0],[0,dur,0]),timeScale: tS,doneAction: 2)*/
+	EnvGen.kr(Env([0,1,1,1,0],[0,dur*decT,dur* subsT]),timeScale: tS,doneAction: 2)
+
+	);}).add;
+
+
+	SynthDef(\playBufMod ,{|out = 0,start, trig= 0.002, dur, buf, dA=2,rte=1 , tS=1, loopy=1,	decT=1, subsT=0 ,modP |Out.ar(out,PlayBuf.ar(1,buf,rte+ In.kr(modP) ,trigger:
+		trig/*Dust.kr(4.0)*/,startPos: start,loop: loopy/*,doneAction: dA*/)* /*EnvGen.kr(Env([0,1,1,0],[0,dur,0]),timeScale: tS,doneAction: 2)*/
+	EnvGen.kr(Env([0,1,1,1,0],[0,dur*decT,dur* subsT]),timeScale: tS,doneAction: 2)
+
+	);}).add;
 
 
 	SynthDef(\playBufS ,{|out = 0,start, trig= 0.002, dur, buf, dA=2, tS=1, loopy=1,vl=1|Out.ar(out,PlayBuf.ar(2,buf,trigger:
@@ -2066,7 +2079,7 @@ s.sync;
 	Pbindef(\ki,   \out, 700) ;Pbindef(\bass, \out, 700);*/
 	~kick =	Pbindef(\ki, \instrument, \kick,\dur, Pseq([1/1],1),\amp,(-10.2),\out,0);//-3.5 - 10.5
 
-	~bassShap = Pbind(\instrument, \shap, \dur,Pseq([1/1],inf),\dA1,2,\out,~bassShapB, \tS, 0.39550810372374);
+	~bassShap = Pbind(\instrument, \shap, \dur,Pseq([1/1],1),\dA1,2,\out,~bassShapB, \tS, 0.39550810372374);
 //Problem overlapping
 	/*~bass = Pbindef(\bass,
 		\instrument, \bass,
