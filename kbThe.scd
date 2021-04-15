@@ -87,6 +87,8 @@ Pbindef( \kbRec, \instrument, \playBufS, \trig, 0.3 ,\dur,  Pseq([1/1],inf), \tS
 
 
 Pbindef( \kbRec,\start,7930);
+s.plotTree
+Pbindef( \kbRec,\vl,0.4)//Just for last night
 Pseq([~k2,~b3],inf).play
 ~kb2.play
 ~k2.play
