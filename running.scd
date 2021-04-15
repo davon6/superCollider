@@ -22,6 +22,9 @@ Server.default.options.outDevice_("Audient iD14");
 Server.default.options.outDevice_("External Headphones");
 Server.default.options.outDevice_("Built-in Output");
 
+Server.default.options.outDevice_("MacBook Air Speakers");
+
+
 ~kick.play
 ServerOptions.outDevices
 (
@@ -302,6 +305,10 @@ s.sync;
 	~revDelay= Bus.audio(s,2);
 	~comDelay = Bus.audio(s,2);
 	~limitDelay= Bus.audio(s,2);
+
+	~riToGate= Bus.audio(s,2);
+	~riToGate2= Bus.audio(s,2);
+	~riToGate3= Bus.audio(s,2);
 
 	~stereoBus1 = Bus.audio(s,2);
 	~stereoBus2 = Bus.audio(s,2);
@@ -925,7 +932,7 @@ SynthDef(\envSli, {|out, val1=20, val2=20000,  dur,tS=1, crv =7|Out.kr(out,
 			[ic_atk, ic_rel]//atkC was 10
 		),timeScale: tS,doneAction:2
 	);
-		env = EnvGen.kr(Env([0,1,1,0],[dur*0.01,dur*0.98,0,dur*0.02]/*[dur*0.01,dur*0.97,0,dur*0.02]*/,[6,0,0-8]),timeScale: tS,doneAction: 2);
+		env = EnvGen.kr(Env([0,1,1,0],[dur*0.035,dur*0.93,0,dur*0.035]/*[dur*0.01,dur*0.97,0,dur*0.02]*/,[12,0,0-12]),timeScale: tS,doneAction: 2);
 	mod2 = SinOsc.ar(freq/10*f3, mul:freq/10 *iEnv);
 	mod = SinOsc.ar(freq * f2 + mod2, mul:freq * mRatio * iEnv);
 	car = SinOsc.ar(freq * f1 + mod) * env * amp;
@@ -1297,6 +1304,20 @@ timeScale: tS,	doneAction:2);
 	var env;
 
 	env =   In.ar(in, 10) *    EnvGen.kr(Env(
+			[vlAtk,vlDec                  ,vlSub ,vlSub2,vlRel,0],
+			[dur * atkT ,dur * decT  -relSu  , dur * subsT-relSu,dur* relT],
+			[atckC,decC ,0     ,relC]),
+
+timeScale: tS,	doneAction:2);
+
+		Out.ar(out, env);
+}).add;
+
+
+	SynthDef(\gate2,{|in, out=0, vlAtk=0, vlDec=1,vlSub=1,vlSub2=1 vlRel=0, atkT=0, decT=1, subsT=0, relT=0, atckC=0, decC=0, relC=0, bus1, bus2, dur,relSu=0,tS =1|
+	var env;
+
+	env =   In.ar(in, 2) *    EnvGen.kr(Env(
 			[vlAtk,vlDec                  ,vlSub ,vlSub2,vlRel,0],
 			[dur * atkT ,dur * decT  -relSu  , dur * subsT-relSu,dur* relT],
 			[atckC,decC ,0     ,relC]),
