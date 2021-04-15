@@ -108,7 +108,7 @@ Pbind(\instrument, \trippyRise, \dur,  Pseq([16/1],1),   \ph, Pfunc({ 6.00.rand}
 
 
 Ppar([
-			Pxrand([~bang,Pbindf( Pxrand([ ~bell,~noise, ~hit2],inf) ,\dur, Pseq([3/1],1))],1),
+			Pxrand([Pbindf(~bang ,\dur, Pseq([8/1],1)) ,Pbindf( Pxrand([ ~bell,~noise, ~hit2],inf) ,\dur, Pseq([8/1],1))],1),
 
 			Pbind(\instrument,\filterX,  \freqFil,Pfunc({3000.rrand(80)}),\in,~filterNoise,\out, ~eqNoise, \group,~filterGrp,\dur,Pseq([3/1],1),\tS, 0.39550810372374),
 
