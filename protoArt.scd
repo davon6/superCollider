@@ -125,11 +125,11 @@ Scale.majorPentatonic(\just).degreeToFreq(7.rand, 76.midicps, -22),
 	Scale.majorPentatonic(\just).degreeToFreq(7.rand, 76.midicps, -22),
 	Scale.majorPentatonic(\just).degreeToFreq(7.rand, 76.midicps, -21),
 	Scale.majorPentatonic(\just).degreeToFreq(7.rand, 76.midicps, -20),
-Scale.majorPentatonic(\just).degreeToFreq(7.rand, 76.midicps, -10)
+Scale.majorPentatonic(\just).degreeToFreq(7.rand, 76.midicps, -20)//maybe the secret -10
 
 ].scramble,inf)).play(t);
 
-// Pbindef(\vComb, \delayT,Pfunc({0.08.exprand(0.0000001)}));
+// Pbindef(\vComb, \delayT,Pfunc({0.0008.rrand(0.00008)}));
 
 
 
