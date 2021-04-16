@@ -37,33 +37,48 @@ MIDIIn.disconnectAll;
 ~recGrp= Group.after(~shapGrp);
 
 
-~ma1=Scale.major(\just).degreeToFreq(7.rand, 76.midicps, -3);
-~ma2=Scale.major(\just).degreeToFreq(7.rand, 76.midicps, -2);
-~ma3=Scale.major(\just).degreeToFreq(7.rand, 76.midicps, -3);
 
 
-~mi1=Scale.minor(\just).degreeToFreq(7.rand, 76.midicps, -3);
-~mi2=Scale.minor(\just).degreeToFreq(7.rand, 76.midicps, -2);
-~mi3=Scale.minor(\just).degreeToFreq(7.rand, 76.midicps, -3);
+
+
+
+	~ma1=Scale.majorPentatonic(\just).degreeToFreq(7.rand, 76.midicps, -3);
+	~ma2= Scale.majorPentatonic(\just).degreeToFreq(7.rand, 76.midicps, -2);
+	~ma3= Scale.majorPentatonic(\just).degreeToFreq(7.rand, 76.midicps, -3);
+	~ma4= Scale.majorPentatonic(\just).degreeToFreq(7.rand, 76.midicps, -3);
+	~ma5= Scale.majorPentatonic(\just).degreeToFreq(7.rand, 76.midicps, -3);
+	~ma6=Scale.majorPentatonic(\just).degreeToFreq(7.rand, 76.midicps, -2);
+	~ma7= Scale.majorPentatonic(\just).degreeToFreq(7.rand, 76.midicps, -1);
+	~ma8=Scale.majorPentatonic(\just).degreeToFreq(7.rand, 76.midicps, -1);
+
+~mi1=Scale.minorPentatonic(\just).degreeToFreq(7.rand, 76.midicps, -3);
+	~mi2= Scale.minorPentatonic(\just).degreeToFreq(7.rand, 76.midicps, -2);
+	~mi3= Scale.minorPentatonic(\just).degreeToFreq(7.rand, 76.midicps, -3);
+	~mi4= Scale.minorPentatonic(\just).degreeToFreq(7.rand, 76.midicps, -3);
+	~mi5= Scale.minorPentatonic(\just).degreeToFreq(7.rand, 76.midicps, -3);
+	~mi6=Scale.minorPentatonic(\just).degreeToFreq(7.rand, 76.midicps, -2);
+	~mi7= Scale.minorPentatonic(\just).degreeToFreq(7.rand, 76.midicps, -1);
+	~mi8=Scale.minorPentatonic(\just).degreeToFreq(7.rand, 76.midicps, -1);
+
+
+
 
 ~scl = [
 	Ppar([
 	Pbindef(\aaa2, \instrument, \sequ,\out, ~seqBusx, \value,
-		Pseq([~ma1,~ma2,~ma3,~ma2],inf),\dur,Pxrand([ Pseq([4/1],1),Pseq([1/1],4), Pseq([1/4],16)],inf),\group,~shapGrp),
+		Pseq([~ma1,~ma2,~ma3,~ma4,~ma5,~ma6,~ma7,~ma8].scramble,inf),\dur,Pxrand([ Pseq([4/1],1),Pseq([1/1],4), Pseq([1/4],16)],inf),\legato, 2,\group,~shapGrp),
 
 
 	Pbindef(\aaa, \instrument, \sequ,\out, ~seqBus, \value,
-			Pseq([~ma1,~ma2,~ma3,~ma2],inf),\dur,
-			Pxrand([ Pseq([4/1],1),Pseq([1/1],4), Pseq([1/4],16)],inf)
-			,\group,~shapGrp)],1),
+			Pseq([~ma1,~ma2,~ma3,~ma4,~ma5,~ma6,~ma7,~ma8].scramble,inf),\dur,Pxrand([ Pseq([4/1],1),Pseq([1/1],4), Pseq([1/4],16)],inf),\legato, 2,\group,~shapGrp)],1);
 
 Ppar([
 
 		Pbindef(\aaa2, \instrument, \sequ, \out, ~seqBusx,\value,
-	Pseq([~mi1,~mi2,~mi3,~mi2],inf),\dur,Pxrand([ Pseq([4/1],1),Pseq([1/1],4), Pseq([1/4],16)],inf),\group,~shapGrp),
+	Pseq([~mi1,~mi2,~mi3,~mi4,~mi5,~mi6,~mi7,~mi8].scramble,inf),\dur,Pxrand([ Pseq([4/1],1),Pseq([1/1],4), Pseq([1/4],16)],inf),\group,~shapGrp,\legato, 2),
 
 Pbindef(\aaa, \instrument, \sequ, \out, ~seqBus,\value,
-	Pseq([~mi1,~mi2,~mi3,~mi2],inf),\dur,Pxrand([ Pseq([4/1],1),Pseq([1/1],4), Pseq([1/4],16)],inf),\group,~shapGrp)],1)];
+Pseq([~mi1,~mi2,~mi3,~mi4,~mi5,~mi6,~mi7,~mi8].scramble,inf),\dur,Pxrand([ Pseq([4/1],1),Pseq([1/1],4), Pseq([1/4],16)],inf),\group,~shapGrp,\legato, 2)],1)];
 
 
 //no2 doesnt not go tottsly tru filter at least low
@@ -71,15 +86,55 @@ Pbindef(\aaa, \instrument, \sequ, \out, ~seqBus,\value,
 //CANT HEAR DELAY IN ARRANGEMENT
 
 
-d = (Synth( \fm2, [\dur, inf,\stretch, 3.5,\mRatio, 1,\amp, 0.16,\cRatio, 1,\index, 1,\atkE, 0.1,\out,~outFil],~synthGrp));
+/*d = (Synth( \fm2, [\dur, inf,\stretch, 3.5,\mRatio, 1,\amp, 0.16,\cRatio, 1,\index, 1,\atkE, 0.1,\out,~outFil],~synthGrp));*/
 
  v = (Synth( \fmX, [\dur, inf,\stretch, 3.5,\mRatio, 1,\cRatio, 1,\index, 1,\atkE, 0.1,\amp,0.18,\out,~outFil],~synthGrp));
 /*~v = Synth(  \comb,[\in, ~outFil,\out,0],~combGrp,);*/
 
-~v =  Synth(/* Pbind(\instrument, */\comb1,[ \dur, 9999/*Pseq([16/1],inf)*/,\in, ~outFil,\out,~outDisto/*~distoBg*/,/*\group,*/\delayT,0.01,\amp,0.8,\maxDel,0.7744,\decT,-0.2,
+/*~v =  Synth(/* Pbind(\instrument, */\comb1,[ \dur, 9999/*Pseq([16/1],inf)*/,\in, ~outFil,\out,~outDisto/*~distoBg*/,/*\group,*/\delayT,0.01,\amp,0.8,\maxDel,0.7744,\decT,-0.2,
 
 	/*Pfunc({9.00.rand.postln}),*/
-	/*Pwhite(0.0121,6),*/\tS, 0.39550810372374],~combGrp);
+	/*Pwhite(0.0121,6),*/\tS, 0.39550810372374],~combGrp);*/
+
+
+
+
+
+Pbindef(\vComb, \instrument, \comb1,\tS, 0.39550810372374, \dur,Pseq([1/4],inf)
+,\in, ~outFil,\out,0/*~outDisto*/,\group,~combGrp,\decT,-0.2, \amp,0.8, \maxDel,0.7744,\delayT,0.01,
+/*	\delayT,
+Pseq([
+Scale.majorPentatonic(\just).degreeToFreq(7.rand, 76.midicps, -12),
+	Scale.majorPentatonic(\just).degreeToFreq(7.rand, 76.midicps, -11),
+	Scale.majorPentatonic(\just).degreeToFreq(7.rand, 76.midicps, -12),
+	Scale.majorPentatonic(\just).degreeToFreq(7.rand, 76.midicps, -12),
+	Scale.majorPentatonic(\just).degreeToFreq(7.rand, 76.midicps, -12),
+	Scale.majorPentatonic(\just).degreeToFreq(7.rand, 76.midicps, -11),
+	Scale.majorPentatonic(\just).degreeToFreq(7.rand, 76.midicps, -10),
+Scale.majorPentatonic(\just).degreeToFreq(7.rand, 76.midicps, -10)
+
+].scramble,inf)*/
+
+
+\delayT,
+Pseq([
+Scale.majorPentatonic(\just).degreeToFreq(7.rand, 76.midicps, -22),
+	Scale.majorPentatonic(\just).degreeToFreq(7.rand, 76.midicps, -21),
+	Scale.majorPentatonic(\just).degreeToFreq(7.rand, 76.midicps, -22),
+	Scale.majorPentatonic(\just).degreeToFreq(7.rand, 76.midicps, -22),
+	Scale.majorPentatonic(\just).degreeToFreq(7.rand, 76.midicps, -22),
+	Scale.majorPentatonic(\just).degreeToFreq(7.rand, 76.midicps, -21),
+	Scale.majorPentatonic(\just).degreeToFreq(7.rand, 76.midicps, -20),
+Scale.majorPentatonic(\just).degreeToFreq(7.rand, 76.midicps, -10)
+
+].scramble,inf)).play(t);
+
+// Pbindef(\vComb, \delayT,Pfunc({0.08.exprand(0.0000001)}));
+
+
+
+
+
 
 
 h = Synth(\disto,[\in,  ~outDisto /*~distoBg*/,\out,0],~shapGrp);
@@ -162,6 +217,16 @@ x = Synth(\recLoop,[buf:~buf,\recording,1, \in,0/*~toRecord*/],~recGrp);
 },noteNum: 43);
 
 
+MIDIdef.cc(\ml, { |value|var modFreq = value.linlin(0, 127, 0, 0.8);
+
+
+
+
+Pbindef(\vComb,\multi, modFreq.round(0.01).postln);
+
+},ccNum: 79 ); //is 15
+
+
 
 
 
@@ -208,11 +273,13 @@ MIDIdef.cc(\ro, { |value|var modFreq = value.linlin(0, 127, 0.000, 1.000);
 
 },ccNum: 91 ); //is 14*/
 
-MIDIdef.cc(\mDel, { |value|var modFreq = value.linlin(0, 127, -0.0001, -0.50);
+MIDIdef.cc(\mDel, { |value|var modFreq = value.linlin(0, 127, -0.00001, -0.05);
 
 
 
-~v.set(\decT, modFreq.round(0.0001).postln);
+	// ~v.set(\decT, modFreq.round(0.00001).postln);
+
+	Pbindef('vComb',\decT, modFreq.round(0.00001).postln);
 
 
 },ccNum: 75 );  //is 8
@@ -281,25 +348,33 @@ v.set(\gate,1/*,\factor,0,\factor2,0,\factorx,0,\factorx2,0,\factorxx,0*/);
 
 
 
-MIDIdef.cc(\f1, { |value|var modFreq = value.linlin(0, 127, 0, 1);
 
-	v.set(\factor, modFreq.round(0.001).postln);
-},ccNum: 18 ); //is 10
 
 MIDIdef.cc(\f2, { |value|var modFreq = value.linlin(0, 127, 0, 1);
 
 	v.set(\factor2, modFreq.round(0.001).postln);
-},ccNum: 19 );//is 11
+},ccNum:   18 ); //is 10
+
+
+MIDIdef.cc(\f2x, { |value|var modFreq = value.linlin(0, 127, 0, 1);
+
+	v.set(\factorx2, modFreq.round(0.001).postln);
+},ccNum:        19 );//is 11
+
 
 MIDIdef.cc(\f1x, { |value|var modFreq = value.linlin(0, 127, 0, 1);
 
 	v.set(\factorx, modFreq.round(0.001).postln);
 },ccNum: 16 );//is 12
 
-MIDIdef.cc(\f2x, { |value|var modFreq = value.linlin(0, 127, 0, 1);
 
-	v.set(\factorx2, modFreq.round(0.001).postln);
-},ccNum: 17 );//is 13
+MIDIdef.cc(\f1, { |value|var modFreq = value.linlin(0, 127, 0, 1);
+
+	v.set(\factor, modFreq.round(0.001).postln);
+},ccNum:  17 );//is 13
+
+
+
 
 MIDIdef.cc(\f1xx, { |value|var modFreq = value.linlin(0, 127, 0, 1);
 
@@ -470,11 +545,11 @@ MIDIdef.cc(\mVo, { |value|var modFreq = value.linlin(61, 67, 0, 1);
 
 
 v.set(\multi, modFreq.round(0.01).postln);
-	d.set(\multi, modFreq.round(0.01));
+	/*d.set(\multi, modFreq.round(0.01));*/
 
 },ccNum: 112 ); //is 11
 
-MIDIdef.cc(\mVo2, { |value|var modFreq = value.linlin(61, 67, 0, 1);
+MIDIdef.cc(\mVo2, { |value|var modFreq = value.linlin(61, 67, 0, 0.4);
 
 
 
