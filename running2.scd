@@ -525,14 +525,21 @@ Pbind(\instrument, \playBuf10N,  \out,~toCom,\dur,Pseq([ Pseq([8/1],1),  Pseq([1
 	Pbind(\instrument,\comp10, \dur,9999,\thr,0.4 ,\sB, 1.04,\sA, 0.2,\atk ,0.0968, \rel ,0.3872
 		,\in, ~toCom  ,\ctrl, ~snBus, \out,/*~eqBus10*/~toGate10 ,\group, ~compGrp2,\tS, 0.39550810372374),
 
+	Prand([
 
 	Pbind(\instrument,\gateS, \dur, Prand([ Pseq([4/1],4), Pseq([1/1],4), Pseq([1/1],1) ,
-		Pseq([4/1],1)],inf),
+		Pseq([4/1],1)],1),
 		\in,  Pxrand([~toGate10,~toGate102], inf)  ,\out ,Pwrand([~eqBus10,
 
 		~delayBus2,~reverbSquelch],[16,1,1].normalizeSum,inf)
 
 	,  \group, ~gateGrp6,\tS, 0.39550810372374),
+
+
+		Pbind(\instrument,\gateS, \dur,Pseq([1/8],8),\type,Pseq([\note, \rest],inf),
+		\in,  Pxrand([~toGate10,~toGate102], inf)  ,\out ,Pwrand([~eqBus10,
+
+		~delayBus2],[2,1].normalizeSum,inf),  \group, ~gateGrp6,\tS, 0.39550810372374),
 
 
 
@@ -1524,10 +1531,10 @@ Ppar([~base,~fx],1).play(t)
 (~fx=Ppar([
 
 //maybe add a limiter
-		Pbind(\instrument, \pingD, \in, ~delayBus2 ,\bufnum, ~delayX, \feedback,0.38 ,\dur, inf,\out,0,\group,~extraDelay),
+		Pbind(\instrument, \pingD, \in, ~delayBus2 ,\bufnum, ~delayX, \feedback,0.38 ,\dur, inf,\out,~delayToLimit,\group,~extraDelay),
 
 
-
+Pbind(\instrument, \limiterS , \in,~delayToLimit, \dur,inf, \gain,20,\group,~limitGrp4,\out ,0/*~stereoBus3*/),
 
 	Pbind(\instrument, \pingD, \in, ~delayBus ,\bufnum, /*b.bufnum*/~delay, \feedback,0.38 ,\dur, inf,\out,/*~comDelay*/~revDelay,\group,~revGrp),
 

@@ -203,6 +203,7 @@ s.sync;
 	~gateSeqRnd = Bus.audio(s,1);
 	~gateSeqSquelch = Bus.audio(s,1);
 	~gateSeqMelo = Bus.audio(s,1);
+	~delayToLimit= Bus.audio(s,2);
 
 	~gate2Bus = Bus.audio(s,1);
 
