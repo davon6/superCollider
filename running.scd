@@ -130,6 +130,7 @@ s.sync;
 	~e2 = Buffer.alloc(s, s.sampleRate *   t.beatDur*4 /*0.3872*/,1);
 	~f2 = Buffer.alloc(s, s.sampleRate *  t.beatDur*4);//  (t.beatDur*4)/*1.5488*/,1);
 	~delay = Buffer.alloc(s, 48000 * 3, 2);
+	~delayX = Buffer.alloc(s, 48000 * 3, 2);
 	~delay2 = Buffer.alloc(s, 48000 * 3, 2);
 	~delay3 = Buffer.alloc(s, 48000 * 3, 2);
 	~delay4 = Buffer.alloc(s, 48000 * 3, 2);
@@ -240,11 +241,11 @@ s.sync;
 	~bellFlang= Bus.audio(s,2);
 
 
-	~bgFil22= Bus.audio(s,2);
-	~bgCom2 = Bus.audio(s,2);
+	~bgFil22= Bus.audio(s,1);
+	~bgCom2 = Bus.audio(s,1);
 	~bgLimit2 = Bus.audio(s,10);
 	~bgBus2= Bus.audio(s,10);
-	~bgStereo2 = Bus.audio(s,2);
+	~bgStereo2 = Bus.audio(s,1);
 	~bgStereo2 = Bus.audio(s,2);
 	~eqBg10 = Bus.audio(s,10);
 	~finGran = Bus.audio(s,10);
@@ -1780,6 +1781,18 @@ SynthDef(\EQHP10, {|out=0, in, val, quant, gain, val2, quant2, gain2 frq=100, vo
 		Out.ar(out,
 			Splay.arFill(10,
 				{	Mix.ar(In.ar(in, 2))}
+				,spread,level,center+ In.kr(modPan))
+			* EnvGen.kr(Env([0,1,1,0],[dur* atkT,dur*decT,0],[crvA,0]),timeScale: tS,doneAction: 2)
+			//EnvGen.kr(Env.step([1],[dur]),doneAction: 2)
+		);
+	}).add;
+
+
+	SynthDef(\stereoX1,{|out=0, in, spread=0, level=1, center=0.0,dur,modPan,atkT=0,decT=1,crvA=0,tS=1|
+
+		Out.ar(out,
+			Splay.arFill(10,
+				In.ar(in, 1)
 				,spread,level,center+ In.kr(modPan))
 			* EnvGen.kr(Env([0,1,1,0],[dur* atkT,dur*decT,0],[crvA,0]),timeScale: tS,doneAction: 2)
 			//EnvGen.kr(Env.step([1],[dur]),doneAction: 2)
