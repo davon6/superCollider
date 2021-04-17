@@ -24,6 +24,7 @@ FreqScope.new
 ~buf.play
 Pbindef.free
 s.plotTree
+s.meter
 MIDIClient.init
 MIDIIn.connectAll;
 MIDIIn.disconnectAll;
@@ -33,8 +34,9 @@ MIDIIn.disconnectAll;
 ~synthGrp = Group.after(~dispatchGrp);
 ~combGrp = Group.after(~synthGrp);
 ~shapGrp= Group.after(~combGrp);
+~limitGrp= Group.after(~shapGrp);
 
-~recGrp= Group.after(~shapGrp);
+~recGrp= Group.after(~limitGrp);
 
 
 
@@ -101,7 +103,7 @@ Pseq([~mi1,~mi2,~mi3,~mi4,~mi5,~mi6,~mi7,~mi8].scramble,inf),\dur,Pxrand([ Pseq(
 
 
 Pbindef(\vComb, \instrument, \comb1,\tS, 0.39550810372374, \dur,Pseq([1/4],inf)
-,\in, ~outFil,\out,0/*~outDisto*/,\group,~combGrp,\decT,-0.2, \amp,0.8, \maxDel,0.7744,\delayT,0.01,
+,\in, ~outFil,\out,~outDisto,\group,~combGrp,\decT,-0.2, \amp,0.8, \maxDel,0.7744,\delayT,0.01,
 /*	\delayT,
 Pseq([
 Scale.majorPentatonic(\just).degreeToFreq(7.rand, 76.midicps, -12),
@@ -137,7 +139,9 @@ Scale.majorPentatonic(\just).degreeToFreq(7.rand, 76.midicps, -20)//maybe the se
 
 
 
-h = Synth(\disto,[\in,  ~outDisto /*~distoBg*/,\out,0],~shapGrp);
+h = Synth(\disto,[\in,  ~outDisto /*~distoBg*/,\out,~outTolimit],~shapGrp);
+
+l = Synth(\limiter,[\in, ~outTolimit,\out,0, \gain, 20],~limitGrp);
 
 
 z=(Synth(\sinModul,[\modu,0.075,\busMod,~mod1]));
@@ -273,13 +277,13 @@ MIDIdef.cc(\ro, { |value|var modFreq = value.linlin(0, 127, 0.000, 1.000);
 
 },ccNum: 91 ); //is 14*/
 
-MIDIdef.cc(\mDel, { |value|var modFreq = value.linlin(0, 127, -0.00001, -0.05);
+MIDIdef.cc(\mDel, { |value|var modFreq = value.linlin(0, 127, -0.0, -0.5);
 
 
 
 	// ~v.set(\decT, modFreq.round(0.00001).postln);
 
-	Pbindef('vComb',\decT, modFreq.round(0.00001).postln);
+	Pbindef('vComb',\decT, modFreq.round(0.01).postln);
 
 
 },ccNum: 75 );  //is 8

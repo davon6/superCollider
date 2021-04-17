@@ -26,9 +26,14 @@ Server.default.options.outDevice_("MacBook Air Speakers");
 
 
 ~kick.play
-ServerOptions.outDevices
+ServerOptions.outDevices;
+
+
 (
-s.waitForBoot({
+ s.waitForBoot({
+
+
+
 
 
 	var numSegs;
@@ -37,6 +42,7 @@ s.waitForBoot({
 
 	~hz1beat = ~bpm * 16/60/32;
 
+	/*t.beatDur/2048*/
 
 	~hz1Oct = ~bpm * 16/30;
 	~hzQbeat = ~hz1beat/4;
@@ -145,6 +151,9 @@ s.sync;
 
 	~remyAudio = Buffer.read(s, "/Users/davidmignot/superCollider-master/remy.wav");
 
+
+	/*	~remyAudio = Buffer.read(s,
+*/
 "Shaper init".postln;
 
 	s.sync;
@@ -462,7 +471,7 @@ s.sync;
 	~riLimit=  Bus.audio(s,2);   /* ===>random ~flanger would be awe*/
 ~riStereo=  Bus.audio(s,2);
 
-
+~outTolimit=  Bus.audio(s,1);
 	~snareEQ=  Bus.audio(s,1);
 	~snareLimit=  Bus.audio(s,1);
 
@@ -534,7 +543,7 @@ s.sync;
 	~bus21 = Bus.control(s,1);
 	~bus22 = Bus.control(s,1);
 
-	~mod1= Bus.control(s,1);
+	/*~mod1= Bus.control(s,1);
 	~mod2= Bus.control(s,1);
 	~mod3= Bus.control(s,1);
 	~mod4= Bus.control(s,1);
@@ -553,9 +562,12 @@ s.sync;
 	~mod4xx= Bus.control(s,1);
 	~mod5xx= Bus.control(s,1);
 
-	~seqBusx= Bus.control(s,1);
+	~seqBusx= Bus.control(s,1);*/
 	~seqBus= Bus.control(s,1);
 	s.sync;
+
+
+
 
 	SynthDef(\playBuf ,{|out = 0,start, trig= 0.002, dur, buf, dA=2,rte=1 , tS=1, loopy=1,	decT=1, subsT=0  |Out.ar(out,PlayBuf.ar(1,buf,rte ,trigger:
 		trig/*Dust.kr(4.0)*/,startPos: start,loop: loopy/*,doneAction: dA*/)* /*EnvGen.kr(Env([0,1,1,0],[0,dur,0]),timeScale: tS,doneAction: 2)*/
@@ -593,6 +605,11 @@ s.sync;
 
 	SynthDef(\playBufX ,{|out = 0,start, trig, dur, amp=1,buf, dA=2, loo=0,tS=1,impulse=0.001|Out.ar(out,PlayBuf.ar(1,buf,trigger:
 		Impulse.kr(impulse* (60/~bpm),mul: amp),startPos: start,loop:loo,doneAction: 2));}).add;
+
+
+	/*SynthDef(\playBufX2 ,{|out = 0,start, trig, dur, amp=1,buf, dA=2, loo=0,tS=1,impulse=0.001|Out.ar(out,PlayBuf.ar(2,buf,trigger:
+		Impulse.kr(impulse* (60/~bpm),mul: amp),startPos: start,loop:loo,doneAction: 2));}).add;*/
+
 
 	/*SynthDef(\playBufX1 ,{|out = 0,start, trig, dur, buf, dA=2, loo=0,tS=1,impulse=0.001|Out.ar(out,PlayBuf.ar(1,buf,trigger:
 		Impulse.kr(impulse),startPos: start,loop:loo,doneAction: 2));}).add;*/
@@ -1574,15 +1591,34 @@ SynthDef(\comb, {|out=0, in ,maxDel, delayT,decT=6.1952,amp=0.09|
 		SynthDef(\comb1, {|out=0, in ,maxDel=0.7744, delayT,decT=6.1952,amp=0.09,tS=1,dur,multi=0| // reverse for fun was 0.001,0.6)
 		Out.ar(out, BufCombN.ar(~b2.bufnum, In.ar(in,1),/*MouseY.kr(0.6,0.001)*/
 
-			[delayT+ MouseX.kr(0.024,0),  delayT+ MouseX.kr(0.024,0)+0.00001392889167817/*,    delayT+ MouseX.kr(0.024,0)+0.05*/]
+			/*[delayT+ MouseX.kr(0.024,0),  delayT+ MouseX.kr(0.024,0)+0.00001392889167817/*,    delayT+ MouseX.kr(0.024,0)+0.05*/]*/
 
+			[delayT+ MouseY.kr(0.024,0),  delayT+ MouseY.kr(0.024,0)+0.00001392889167817,    delayT+ MouseX.kr(0.024,0)-0.00001692889167817]
 
 
 			/*+ SinOsc.kr(MouseY.kr(20,0),phase: 3,add: 0).range(0.000000001, 0.001)*/,
 
 
 
-			decT ,[amp,multi/*,multi*/])* EnvGen.kr(Env.step([1,1],[dur,0]),timeScale: tS,doneAction:2) )}).add;
+			decT ,[amp,multi,multi])!2* EnvGen.kr(Env.step([1,1],[dur,0]),timeScale: tS,doneAction:2) )}).add;
+
+
+	SynthDef(\comb1, {|out=0, in ,maxDel=0.7744, delayT,decT=6.1952,amp=0.09,tS=1,dur,multi=0,f1=0,f2=0,f3=0,fx=0,busMod,fr=0,modS,modT,modSa,modR |
+		Out.ar(out, BufCombN.ar(~b2.bufnum, In.ar(in,1),/*MouseY.kr(0.6,0.001)*/
+
+			/*[delayT+ MouseX.kr(0.024,0),  delayT+ MouseX.kr(0.024,0)+0.00001392889167817/*,    delayT+ MouseX.kr(0.024,0)+0.05*/]*/
+
+			[delayT+ MouseY.kr(0.024,0),  delayT+ MouseY.kr(0.024,0)+0.00001392889167817,    delayT+ MouseX.kr(0.024,0)-0.00001692889167817]
+
+			+ (In.kr(busMod,1)*fx)
+
+				+ (SinOsc.kr(modS/*MouseY.kr(20,0)*/,phase: 3,add: 0).range(0.000000001, 0.001)* f1)
+				+ (LFTri.kr(modT).range(0.000000001, 0.001) *f2)
+				+ (Saw.kr(modSa).range(0.000000001, 0.001) * f3)
+				+ (LFDNoise0.kr(modR).range(-0.0008,-0.00008)*fr)
+
+
+			,decT ,[amp,multi,multi])!2/** EnvGen.kr(Env.step([1,1],[dur,0]),timeScale: tS,doneAction:2) */)}).add;
 
 
 	// BufCombN.ar(b.bufnum, WhiteNoise.ar(0.01), XLine.kr(0.0001, 0.01, 20), -0.2) }.play;
@@ -1864,15 +1900,9 @@ SynthDef(\fm, {
 	 MouseX.kr( 659.26 * mRatio + mod2 )-30,
 		MouseX.kr( 659.26 * mRatio + mod2 )+50 ]
 
-
-
-
-
-
-
 		/*	SinOsc.kr(In.kr(~bus2, 1),In.kr(~bus3, 1)).range([In.kr(~bus11, 1)]), mul:*/
 
-			/* * SinOsc.kr(sineRate,phRise).range([sineRangeLow])*/+ (In.kr(modux,1)* EnvGen.kr(Env.adsr(sustainLevel: 1,releaseTime: 0.1),factorx ))+(In.kr(~seqBusx,1)* factorx2), mul:
+			 * SinOsc.kr(sineRate,phRise).range([sineRangeLow])+ (In.kr(modux,1)* EnvGen.kr(Env.adsr(sustainLevel: 1,releaseTime: 0.1),factorx ))/*+(In.kr(~seqBusx,1)* factorx2)*/, mul:
 
 			/*(*/      [  MouseY.kr(164.815,  659.26 * mRatio *iEnv) /*In.kr( gra, 1) */
 			,MouseY.kr(164.815,  659.26 * mRatio *iEnv)* multi2
@@ -1909,7 +1939,7 @@ SynthDef(\fm, {
 	sig  = LeakDC.ar(sig);
 
 	// sig = Splay.arFill(2,sig,spread: 0);
-	Out.ar(out, sig!2 /* !*/   * amp* EnvGen.kr(Env.adsr(0.1), gate));
+	Out.ar(out, sig!2 /* !*/   * amp/** EnvGen.kr(Env.adsr(0.1), gate)*/);
 }).add;
 
 
@@ -2265,34 +2295,17 @@ s.sync;
 ],2);*/
 
 
-	~bang =Pseq([
+	~bang = /*Pseq([*/
 Pbind( \instrument, \playBuf10, \impulse, 10 ,
-		\dur,   Pseq([1/2],1) , \tS,  0.39550810372374,\start,(~leTout.numFrames/ 256 * 145.rand),\buf,~leTout,\out, ~again,\loopy,0)],4);
+		\dur,   Pseq([1/2],4) , \tS,  0.39550810372374,\start,(~leTout.numFrames/ 256 * 145.rand),\buf,~leTout,\out, ~again,\loopy,0);/*],4);*/
 
 
 
-});)
+});
+
+
+)
 
 
 
 
-(
-
-Ppar([~hat,
-
-	Pbind(\instrument, \kick,\dur, Pseq([1/1],inf),\amp,(-10),\out,~kbus),
-	Pbind(\instrument, \snare,\carHz, 41.2 ,\type, Pseq([\rest ,\rest,\note,\rest], inf),\atk, 0.00502929687,\rel, 0.0968,\rel2, 0.3872,\dur, Pseq([1/2], inf),\amp,(-16.8), \crv1,(-8),\crv2,(-7)   ,\out,~snBus),
-
-
-	Pbind(\instrument,\compS, \dur,inf,\thr,0.6 ,\sB, 1.2,\sA, 2,\atk ,0.0001, \rel ,0.04840
-,\gain,1,\in, ~comBusHat ,\ctrl, ~kbus, \out,~hatEq,\group, ~compGrp),
-	Pbind(\instrument,\compS,\dur,inf,\thr,0.6 ,\sB, 1,\sA, 4,\atk ,0.001, \rel ,0.04840,\gain,1,\in, ~comBusCymb ,\ctrl, ~kbus, \out,~cymbalEq,\group, ~compGrp),
-
-
-	Pbind(\instrument , \EQHP2, \frq, 3000 ,\dur, inf,\in, ~hatEq, \group, ~compGrp2, \out , 0,\vol,1.6),
-	Pbind(\instrument , \EQHP2, \frq, 3000 ,\dur, inf,\in, ~cymbalEq, \group, ~compGrp2,\out , 0,\vol,1.6),
-
-
-	Pbind(\instrument , \EQHP, \frq, 120 ,\dur, inf,\in, ~snareEQ, \group, ~eqGrp,\val, 1800, \quant, 8, \gain, (-10), \val, 10, \out , ~snareLimit),
-
-	Pbind(\instrument , \limiterS,\dur, inf, \in,~snareLimit, \gain, 20,\group, ~limitGrp),~bassShap, Ppar([Pbindf(~kick,\amp,(-8)), Pbindf(~bass, \amp,(-12))],inf)],1).play(t))

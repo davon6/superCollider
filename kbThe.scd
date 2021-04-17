@@ -66,7 +66,7 @@ x = Synth(\recLoop,[buf:~b3,\recording,1, \in,0/*~toRecord*/],~recGrp2);
 Ppar([
 	Pbind(\instrument, \kick,\dur, Pseq([1/1],inf),\amp,(-10.2),\out,~kbus),
 
-Pbindef( \kbRec, \instrument, \playBufS, \trig, 0.3 ,\dur,  Pseq([1/1],inf), \tS,  0.39550810372374,\buf,~kb2,\out, 0,\loopy,0,\start,7930),
+Pbindef( \kbRec, \instrument, \playBufS, \trig, 0.3 ,\dur,  Pseq([1/1],inf), \tS,  0.39550810372374,\buf,~kb2,\out, 0,\loopy,0,\start,7980),
 
 	Ppar([~snare,~cymbal,~hat],inf),
 
@@ -78,15 +78,15 @@ Pbindef( \kbRec, \instrument, \playBufS, \trig, 0.3 ,\dur,  Pseq([1/1],inf), \tS
 	Pbind(\instrument, \pan2,\in, ~toPan2,\dur, inf,\group, ~limitGrp,\group, ~stereoGrp),
 
 
-		Pbind(\instrument,\compS, \dur,inf,\thr,0.6 ,\sB, 1.2,\sA, 2,\atk ,0.0001, \rel ,0.04840
+	/*	Pbind(\instrument,\compS, \dur,inf,\thr,0.6 ,\sB, 1.2,\sA, 2,\atk ,0.0001, \rel ,0.04840
 ,\gain,1,\in, ~comBusHat ,\ctrl, ~kbus, \out,~hatEq,\group, ~compGrp),
 	Pbind(\instrument,\compS,\dur,inf,\thr,0.6 ,\sB, 1,\sA, 4,\atk ,0.001, \rel ,0.04840,\gain,1,\in, ~comBusCymb ,\ctrl, ~kbus, \out,~cymbalEq,\group, ~compGrp),
 	Pbind(\instrument , \EQHP2, \frq, 3000 ,\dur, inf,\in, ~hatEq, \group, ~compGrp2, \out , 0,\vol,4),
-	Pbind(\instrument , \EQHP2, \frq, 3000 ,\dur, inf,\in, ~cymbalEq, \group, ~compGrp2,\out , 0,\vol,4),
+	Pbind(\instrument , \EQHP2, \frq, 3000 ,\dur, inf,\in, ~cymbalEq, \group, ~compGrp2,\out , 0,\vol,4),*/
 ],1).play(t))
 
 
-Pbindef( \kbRec,\start,7930);
+Pbindef( \kbRec,\start,7980);
 s.plotTree
 Pbindef( \kbRec,\vl,0.4)//Just for last night
 Pseq([~k2,~b3],inf).play
@@ -100,8 +100,8 @@ Pseq([~k2,~b3],inf).play
 )
 // Ppar([
 Pbindef( \kiki,\start,8220);
-Pbindef(\baba, \subsT ,Pseq([0,0.01,0.02],inf))
-Pbindef( \baba,\start,8715);
+Pbindef(\baba, \subsT ,Pseq([0,0.03,0.05],inf))
+Pbindef( \baba,\start,8760);
 
 
 (
@@ -112,13 +112,13 @@ Ppar([
 	Pbindef( \kiki,\instrument, \playBuf, \impulse, 0.003 ,\dur,    Pseq([1/1],inf), \tS,  0.39550810372374,\buf,~k2,\out, ~kbToPan2,\loopy,0,\start,8220),
 
 Pseq([Pbind(\instrument, \wNoise,\dur,Pseq([1/4],1),\dec ,Pkey(\dur),\amp,(-12),\tS, 0.39550810372374,\type, \rest  ),
-		Pbindef( \baba, \instrument, \playBuf, \impulse, 0.003 ,\dur,    Pseq([1/4],3), \tS,  0.39550810372374,\buf,~b3,\out, ~kbToPan2,\loopy,0,\start,8715,  \decT,0.95,\subsT ,Pseq([0,0.01,0.02],inf))],inf),
+		Pbindef( \baba, \instrument, \playBuf, \impulse, 0.003 ,\dur,    Pseq([1/4],3), \tS,  0.39550810372374,\buf,~b3,\out, ~kbToPan2,\loopy,0,\start,8760,  \decT,0.95,\subsT ,Pseq([0,0.03,0.05],inf))],inf),
 Pbind(\instrument, \pan2, \in,~kbToPan2,\out,0 ,\group,~stereoGrp,\dur, inf),
 
-/*Ppar([~snare,~cymbal,~hat],inf),
+Ppar([~snare,~cymbal,~hat],inf),
 
 
-		Pbind(\instrument , \EQHP96, \frq, 120 ,\dur, inf,\in, ~snareEQ, \group, ~eqGrp,\val, 1800, \quant, 8, \gain, (-10), /*\val, 10,*/ \out , ~snareLimit),
+		/*Pbind(\instrument , \EQHP96, \frq, 120 ,\dur, inf,\in, ~snareEQ, \group, ~eqGrp,\val, 1800, \quant, 8, \gain, (-10), /*\val, 10,*/ \out , ~snareLimit),
 
 	Pbind(\instrument , \limiter,\dur, inf, \in,~snareLimit, \gain, 20,\group, ~limitGrp,\out,~toPan2),
 

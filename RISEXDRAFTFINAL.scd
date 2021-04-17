@@ -1,6 +1,6 @@
 
 
-Ppar([~hitX, ~kb,~base],1).play(t)
+Ppar([~hitX, /*~kb,*/~base],1).play(t)
 
 ~hitX.play(t)
 (
@@ -201,8 +201,6 @@ Pbind(\instrument,\stereo, \dur, 9999, \in, ~stereoBus4   ,\out, ~eqBus210, \gro
 Pbind(\instrument,\stereoS, \dur, 9999, \in, ~flanToStereo  ,\spread,0.2,\out,~again,\tS, 0.39550810372374,\group, ~stereoGrp),
 
 
-
-
 	Pbind(\instrument, \distoS, \dur, inf, \in, ~bigRiToDisto , \out,~bigRiToEnv ,\group, ~distoGrp),
 	Pbind(\instrument,\filterS, \in,~bigRiToEnv ,\out,~bigRiToEq, \group,~filterGrp ,\which, 0, \busMod, ~bus17,\qf,0.67,\dur, inf),
 
@@ -214,9 +212,13 @@ Pbind(\instrument,\stereoS, \dur, 9999, \in, ~flanToStereo  ,\spread,0.2,\out,~a
 
 
 
+
+
 Pbind(\instrument,\stereoS, \dur, 9999, \in, ~bigRiToStereo  ,\spread,1,\out,~again2,\tS, 0.39550810372374,\group, ~stereoGrp,\atkT,1,\decT,0),
 
 
+
+	/*Pbind(\instrument,\stereoS, \dur, Pseq([4/1],inf), \in,  ~no2ToStereo  ,\out,~no2,\center, Pxrand([0.2,(-0.2),(-0.1),(0.1)],inf), \group, ~stereoGrp),*/
 
 
 	Pbind(\instrument,\comp10, \dur,9999,\thr,0.4 ,\sB, 1.04,\sA, 0.2,\atk ,0.0242, \rel ,0.3872
