@@ -349,6 +349,7 @@ s.sync;
 	~limitRnd = Bus.audio(s,2);
 	~limitSquelch = Bus.audio(s,2);
 	~limitMelo = Bus.audio(s,2);
+	~delayEq= Bus.audio(s,2);
 
 
 	~limitRkick = Bus.audio(s,1);

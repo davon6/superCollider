@@ -168,7 +168,7 @@ v.set(\multi, modFreq.round(0.01).postln);
 
 // Ppar([~bassShap,Ppar([Pbindf(~kick,\amp, (-5)),Pbindf(~bass,\amp, (-7) ),],inf)],1).play(t);
 )
-
+FreqScope.new
 ~buf.play
 ~bufSnoopy.play
 (

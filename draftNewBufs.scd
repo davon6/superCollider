@@ -12,7 +12,7 @@
 ~audio.numFrames
 
 
-~audio.play
+~audio2.play
 
 g = Synth(  \playBufX2,[ \impulse, 0.00001,\loo,1,\buf,~audio,\out, 0]);
 
