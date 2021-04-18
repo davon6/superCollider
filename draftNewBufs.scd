@@ -12,6 +12,10 @@
 ~audio.numFrames
 
 
+~vocal  = Buffer.read(s,"/Users/davidmignot/Documents/REAPER Media/03-thEnd-consolidated.wav");
+
+
+~vocal.play
 ~audio2.play
 
 g = Synth(  \playBufX2,[ \impulse, 0.00001,\loo,1,\buf,~audio,\out, 0]);
@@ -29,3 +33,23 @@ Pbind(\instrument, \playBufX,\dur, inf,\impulse, 0.00001,\loo,0,\buf,~audio3,\ou
 
 
 Pbind(\instrument, \playBufX,\dur, Pseq([16/1],inf),\impulse, 0.00001,\loo,0,\buf,~audio3,\out, 0/*~bgFil22*/).play(t)
+
+
+Prand([
+Pbind(\instrument, \playBufX,\dur, Pseq([4/1],1),\impulse, 0.00001,\loo,0,\buf,~vocal,\out, 0,\tS,  0.39550810372374,
+\vl,0.4
+	),
+
+	Pbind(\instrument, \playBufX2,\dur, Pseq([1/1],1),\impulse, 20.6,\loo,0,\buf,~vocal,\out, 0,\tS,  0.39550810372374,\vl,0.4),
+
+Pbind(\instrument, \playBufX2,\dur, Pseq([1/2],2),\impulse, 10.3,\loo,0,\buf,~vocal,\out, 0,\tS,  0.39550810372374,
+		\start,Pfunc({(~vocal.numFrames-7000).rand}),\vl,0.4)
+],inf).play(t)
+
+
+
+	SynthDef(\playBufX ,{|out = 0,start, trig, dur, amp=1,buf, dA=2, loo=0,tS=1,impulse=0.001|Out.ar(out,PlayBuf.ar(1,buf,trigger:
+		Impulse.kr(impulse* (60/~bpm),mul: amp),startPos: start,loop:loo,doneAction: 2));}).add;
+
+
+

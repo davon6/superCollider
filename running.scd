@@ -150,7 +150,7 @@ s.sync;
 	~bufSnoopy2 = Buffer.alloc(s,s.sampleRate*90 );
 
 
-	~remyAudio = Buffer.read(s, "/Users/davidmignot/superCollider-master/remy.wav");
+	// ~remyAudio = Buffer.read(s, "/Users/davidmignot/superCollider-master/remy.wav");
 
 
 	/*	~remyAudio = Buffer.read(s,
@@ -361,6 +361,16 @@ s.sync;
 	~riTriptoComp = Bus.audio(s, 2);
 	~riTriptoLimit = Bus.audio(s, 2);
 	~riTriptoStereo = Bus.audio(s, 2);
+
+	~vocalBus= Bus.audio(s,1);
+	~vocToEq = Bus.audio(s,1);
+	~vocToRev  = Bus.audio(s,1);
+	~vocToFil =  Bus.audio(s,2);
+	~vocToComp =  Bus.audio(s,2);
+	~vocToLimit  =  Bus.audio(s,2);
+	~vocToStereo=  Bus.audio(s,2);
+
+	~vocToDispatch=  Bus.audio(s,10);
 
 
 	~kbus = Bus.audio(s,1);
@@ -614,8 +624,10 @@ s.sync;
 		Impulse.kr(impulse* (60/~bpm),mul: amp),startPos: start,loop:loo,doneAction: 2));}).add;
 
 
-	/*SynthDef(\playBufX2 ,{|out = 0,start, trig, dur, amp=1,buf, dA=2, loo=0,tS=1,impulse=0.001|Out.ar(out,PlayBuf.ar(2,buf,trigger:
-		Impulse.kr(impulse* (60/~bpm),mul: amp),startPos: start,loop:loo,doneAction: 2));}).add;*/
+	SynthDef(\playBufX2 ,{|out = 0,start, trig, dur, amp=1,buf, dA=2, loo=0,tS=1,impulse=0.001,vl=1|Out.ar(out,PlayBuf.ar(1,buf,trigger:
+		Impulse.kr(impulse* (60/~bpm),mul: amp),startPos: start,loop:loo,doneAction: 2)*
+	EnvGen.kr(Env([0,vl,vl,0],[0,dur,0]),timeScale: tS,doneAction: 2));
+	}).add;
 
 
 	/*SynthDef(\playBufX1 ,{|out = 0,start, trig, dur, buf, dA=2, loo=0,tS=1,impulse=0.001|Out.ar(out,PlayBuf.ar(1,buf,trigger:
