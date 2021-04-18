@@ -21,6 +21,8 @@ Ppar([Pbindef(\bass, \out,0),Pbindef(\ki, \out,0)],1).play(t)
 //set no4 src in base for untight fx
 //1/2 hit  hits too much//too stabby
 //plop noise in bass
+//BG SLIDE NOT CHECKED FOR VOLUME YET
+//COMB MODU MUST GO THROUGH BUSSES OR DRIFTING INEVITABLE
 
 s.plotTree
 /* KB AND BASE have unrecordeds    ~bufSnoopy       and     ~bufBg{!=~no4, ~kb, ~rises}   */
@@ -255,6 +257,12 @@ Pxrand([
 		Pbind(\instrument, \lfoSin, \out, ~bus15, \dur, 99999, \group, ~lfoGrp),
 
 
+		Pbind(\instrument, \envSli2, \out, ~bus23, \val1,Pfunc({20.6.rrand(5.15)}), \val2,Pfunc({41.2.rrand(20.6)}),\crv,2,\crv2,3.6, \dur,Pseq([16/1],inf),\tS, 0.39550810372374, \val0, Pfunc({5.15.rrand(0.3)})),
+
+	Pbind(\instrument, \ranModul,\tS, 0.39550810372374, \dur, Pseq([16/1],inf),\out,~mod1,\lS,Pfunc({(-0.00).rrand(-300)}) ,\hS, Pfunc({1200.rrand(0.1)}),\busMod,~bus23 ),
+
+
+
 	Pbind(\instrument, \kick,\dur, Pseq([1/1],inf),\amp,(-10.2),\out,~kbus),
 	Pseq([Pbindf(~hat2,\out,~kickHatEq2)],inf),
 		Pbind(\instrument ,	\EQ2,\dur, inf, \in,~kickHatEq, \out,0,\group, ~eqGrp, \val, 659.255, \quant,1, \gain ,(-30)),
@@ -433,8 +441,8 @@ Pbind(\instrument, \playBuf10NToMixer,  \c8,1,\out, ~toCom,\dur,Pseq([ Pseq([4/1
 ,\tS, 0.39550810372374, \in ,Pxrand([ ~no1, ~no2,~no3],inf),\out,~toCom,\group,~gateGrp5),
 
 
-
-		Pseq([
+//PASSANT DisAABLE FOR RISE INIT
+/*		Pseq([
 
 		Pseq([
 		Pbind( \instrument,\playBuf /*\playBuf1N*/, \impulse, 0.3,\dur,Pseq([6/1],1), \tS,  0.39550810372374,\start,(~audio2.numFrames.rrand(400000)- 400000),\buf,/*Prand([*/~audio2/*,~buf2],inf)*/,\out, ~filterBou,\loopy,0),
@@ -461,7 +469,7 @@ Pbind(\instrument, \playBuf10NToMixer,  \c8,1,\out, ~toCom,\dur,Pseq([ Pseq([4/1
 		Pbind(\instrument,\gateS, \dur,  Pseq([6/1],1),\in,~finGran, \out,~toCom,\group, ~gateGrp5,\tS, 0.39550810372374,),
 		].scramble,2),
 
-].scramble,1),
+].scramble,1),*/
 
 			//for sample select
 
@@ -540,7 +548,7 @@ Pbind(\instrument, \playBuf10N,  \out,~toCom,\dur,Pseq([ Pseq([8/1],1),  Pseq([1
 		\in,  Pxrand([~toGate10,~toGate102], inf)  ,\out ,Pwrand([~eqBus10,
 
 		~delayBus2],[2,1].normalizeSum,inf),  \group, ~gateGrp6,\tS, 0.39550810372374),
-
+	],inf),
 
 
 
@@ -760,6 +768,11 @@ Pbind(\instrument, \limiterS, \dur, inf, \in,~dipatchKB, \gain,83, \group, ~limi
 	//INCORPORAE SLIGHT MOVEMENT
 
 	Pbind(\instrument,\envSli,\out, ~bus21,\dur,Pseq([1/4],inf),\tS, 0.39550810372374,\val1,(-540),\val2,2400,\crv,3.2),
+
+
+
+
+
 
 	Pbind(\instrument, \filter10,\freqFil,600 ,\busMod,~bus21 ,\in,~rythmFil,\which,0,\qf,0.85, \dur, inf, \out,~rythmFilEQ, \group,~filterGrp),
 

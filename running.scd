@@ -461,9 +461,11 @@ s.sync;
 
 
 	~stereoBus14=  Bus.audio(s,2);   ~limitFuzz4=  Bus.audio(s,2);~limitFuzz4=  Bus.audio(s,2);~comFuzz4=  Bus.audio(s,2);~reverbBus4=  Bus.audio(s,1);
-
+~slideBus2=  Bus.audio(s,1);
 	~slideBus=  Bus.audio(s,2);  ~slideBusToLimit=  Bus.audio(s,2);
+	~slideBusToLimit2=  Bus.audio(s,1);
 ~slideEq=  Bus.audio(s,2);
+	~slideEq2=  Bus.audio(s,1);
 ~riFil=  Bus.audio(s,2);
 	~riFil2=  Bus.audio(s,2);
 	 ~riEq=  Bus.audio(s,2);
@@ -545,12 +547,14 @@ s.sync;
 	~bus21 = Bus.control(s,1);
 	~bus22 = Bus.control(s,1);
 
-	/*~mod1= Bus.control(s,1);
+	~bus23 = Bus.control(s,1);
+
+~mod1= Bus.control(s,1);
 	~mod2= Bus.control(s,1);
 	~mod3= Bus.control(s,1);
 	~mod4= Bus.control(s,1);
 	~mod5= Bus.control(s,1);
-
+	/*
 	~mod1x= Bus.control(s,1);
 	~mod2x= Bus.control(s,1);
 	~mod3x= Bus.control(s,1);
@@ -735,6 +739,11 @@ LFNoise0.kr(~hz1beat).range(0.1,0.0)/*,0.02)*/
 
 SynthDef(\envSli, {|out, val1=20, val2=20000,  dur,tS=1, crv =7|Out.kr(out,
 	EnvGen.kr(Env([val1,val2],[dur*0.95,dur*0.05],crv ),timeScale: tS,doneAction: 2)
+)}).add;
+
+
+	SynthDef(\envSli2, {|out,val, val0 ,val1=20, val2=20000,  dur,tS=1, crv =7,crv2|Out.kr(out,
+		EnvGen.kr(Env([ val0 ,val1,val2],[dur*0.9,dur*0.41,dur*0.09],[crv,crv2] ),timeScale: tS,doneAction: 2)
 )}).add;
 
 
@@ -942,7 +951,7 @@ SynthDef(\envSli, {|out, val1=20, val2=20000,  dur,tS=1, crv =7|Out.kr(out,
 	SynthDef(\rise, {
 	arg freq=659.26, mRatio=1, cRatio=1,
 	index=1, iScale=5, ic_atk=4, ic_rel=(-4),
-	amp=2, rel=3, pan=0, f1,f2,f3, vlAtk=0,atk=0, dec=0,atkE=0  ,dur ,out =0 ,tS=1 ;
+	amp=2, rel=3, pan=0, f1,f2,f3, vlAtk=0,atk=0, dec=0,atkE=0  ,dur ,out =0 ,tS=1 ,moduR, fR=0;
 	var car, mod, env, iEnv, mod2;
 	iEnv = EnvGen.kr(
 		Env(
@@ -953,7 +962,11 @@ SynthDef(\envSli, {|out, val1=20, val2=20000,  dur,tS=1, crv =7|Out.kr(out,
 	);
 		env = EnvGen.kr(Env([0,1,1,0],[dur*0.035,dur*0.93,0,dur*0.035]/*[dur*0.01,dur*0.97,0,dur*0.02]*/,[12,0,0-12]),timeScale: tS,doneAction: 2);
 	mod2 = SinOsc.ar(freq/10*f3, mul:freq/10 *iEnv);
-	mod = SinOsc.ar(freq * f2 + mod2, mul:freq * mRatio * iEnv);
+
+	mod = SinOsc.ar(freq * f2 + mod2
+			 + (In.kr(moduR,1)* EnvGen.kr(Env.adsr(sustainLevel: 1,releaseTime: 0.1),fR ))
+			, mul:freq * mRatio * iEnv);
+
 	car = SinOsc.ar(freq * f1 + mod) * env * amp;
 	car = Pan2.ar(car, pan);
 	Out.ar(out, car);
@@ -1824,12 +1837,27 @@ SynthDef(\EQHP10, {|out=0, in, val, quant, gain, val2, quant2, gain2 frq=100, vo
 
 
 
-SynthDef(\sinModul,{|modu, busMod,hS=2200|Out.kr(busMod, SinOsc.kr(modu).range(-40,hS=2200))}).add;
-SynthDef(\sawModul,{|modu, busMod,hS|Out.kr(busMod, Saw.kr(modu).range(-40,hS))}).add;
-SynthDef(\pulModul,{|modu, busMod,hS=1200|Out.kr(busMod, LFTri.kr(modu).range(-40,hS))}).add;
-SynthDef(\ranModul,{|modu, busMod, hS=4200|Out.kr(busMod,LFDNoise0.kr(modu).range(0,hS) )}).add;
-	SynthDef(\squaModul,{|modu, busMod,wdth=0.5,hS=1200,lS=0|Out.kr(busMod,Pulse.kr(modu,wdth).range(lS,hS) )}).add;
+	SynthDef(\sinModul,{|modu, busMod,hS=2200,lS=(-40),dur,tS=1,out|Out.kr(out, SinOsc.kr(modu+ In.kr(busMod)).range(lS,hS)
+		* EnvGen.kr(Env.step([1,1],[dur,0]),timeScale: tS,doneAction: 2))}).add;
 
+SynthDef(\ranModul,{|modu, busMod,lS=0, hS=4200,dur,tS=1,out|Out.kr(out,LFDNoise0.kr(modu+ In.kr(busMod)).range(lS,hS)
+			* EnvGen.kr(Env.step([1,1],[dur,0]),timeScale: tS,doneAction: 2))}).add;
+
+	SynthDef(\triModul,{|modu, busMod,hS=1200,lS=(-40),dur,tS=1,out|Out.kr(out, LFTri.kr(modu+ In.kr(busMod)).range(lS,hS)* EnvGen.kr(Env.step([1,1],[dur,0]),timeScale: tS,doneAction: 2))}).add;
+
+	//SAFETY VERSION WITH NO BUSSES
+SynthDef(\sinModulC,{|modu, busMod,hS=2200,lS=(-40),dur,tS=1,out|Out.kr(out, SinOsc.kr(modu).range(lS,hS)
+		* EnvGen.kr(Env.step([1,1],[dur,0]),timeScale: tS,doneAction: 2))}).add;
+
+SynthDef(\ranModulC,{|modu, busMod,lS=0, hS=4200,dur,tS=1,out|Out.kr(out,LFDNoise0.kr(modu).range(lS,hS)
+			* EnvGen.kr(Env.step([1,1],[dur,0]),timeScale: tS,doneAction: 2))}).add;
+
+	SynthDef(\triModulC,{|modu, busMod,hS=1200,lS=(-40),dur,tS=1,out|Out.kr(out, LFTri.kr(modu).range(lS,hS)* EnvGen.kr(Env.step([1,1],[dur,0]),timeScale: tS,doneAction: 2))}).add;
+
+
+
+	SynthDef(\squaModul,{|modu, busMod,wdth=0.5,hS=1200,lS=0|Out.kr(busMod,Pulse.kr(modu,wdth).range(lS,hS) )}).add;
+SynthDef(\sawModul,{|modu, busMod,hS|Out.kr(busMod, Saw.kr(modu).range(-40,hS))}).add;
 
 SynthDef(\fm, {
 		arg freq= 659.26, freq2=200,freq3=200, mRatio=1, cRatio=1,  amp=1.5, sineRate = 0.0000000095262251,  sineRangeLow=0, pitch = 0, phRise= 0 ,out=0, eFreq =0 , phFm=8, bus2,bus3,bus4,busBP,bus6, bus7, bus8, busSR, busSS, busSP, gra=0.5,lvlDec=1,factor=0, factor2 =0 /*,vlPE =27.1366666667,vlPE2=0.2,dcPE = 0.129066666667*/, rqLPF =0.5, factor3 =1, decE= 0.1936, dur, gain =50/*, crvEP = (-2)*/,gate,pan=0, modu,modu2, multi;

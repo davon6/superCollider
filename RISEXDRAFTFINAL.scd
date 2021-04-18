@@ -1,6 +1,6 @@
 
 
-Ppar([~hitX, /*~kb,*/~base],1).play(t)
+Ppar([~hitX, ~kb,~base],1).play(t)
 
 ~hitX.play(t)
 (
@@ -14,20 +14,19 @@ Ppar([
 		Ppar([
 
 
-Pbind(\instrument,\rise,\dur,Pseq([16/1],inf/*4*/), \vlAtk, Pfunc({4.00.rand}),\f1, Pfunc({1.00.rand}) , \f2, Pfunc({1.00.rand}) , \f3, Pfunc({1.00.rand}),  \ic_atk,Pfunc({10.00.rrand(-5)}),\index,Pfunc({50.00.rrand(1)}),\mRatio,Pfunc({3.rrand(1)}),\out ,~riToDisto,\tS, 0.39550810372374,
+
+
+	Pbind(\instrument,\rise,\dur,Pseq([16/1],inf), \vlAtk, Pfunc({4.00.rand}),\f1, Pfunc({1.00.rand}) , \f2, Pfunc({1.00.rand}) , \f3, Pfunc({1.00.rand}),  \ic_atk,Pfunc({10.00.rrand(-5)}),\index,Pfunc({50.00.rrand(1)}),\mRatio,Pfunc({3.rrand(1)}),\out ,~riToDisto,\tS, 0.39550810372374, \fR,Pfunc({1.00.rand}), \moduR,~mod1,
 
 	\key,Pseq([\dec,\atk ], inf),\value,1, \finish, { ~key.envirPut(~value) }),
 
 
-Pbind(\instrument,\rise,\dur,Pseq([4/1],inf/*16*/), \vlAtk, Pfunc({4.00.rand}),\f1, Pfunc({1.00.rand}) , \f2, Pfunc({1.00.rand}) , \f3, Pfunc({1.00.rand}),  \ic_atk,Pfunc({10.00.rrand(-5)}),\index,Pfunc({50.00.rrand(1)}),\mRatio,Pfunc({3.rrand(1)}),\out ,~riToDisto2,\tS, 0.39550810372374,
+Pbind(\instrument,\rise,\dur,Pseq([4/1],inf/*16*/), \vlAtk, Pfunc({4.00.rand}),\f1, Pfunc({1.00.rand}) , \f2, Pfunc({1.00.rand}) , \f3, Pfunc({1.00.rand}),  \ic_atk,Pfunc({10.00.rrand(-5)}),\index,Pfunc({50.00.rrand(1)}),\mRatio,Pfunc({3.rrand(1)}),\out ,~riToDisto2,\tS, 0.39550810372374, \fR,Pfunc({1.00.rand}), \moduR,~mod1,
 
 	\key,Pseq([\dec,\atk ], inf),\value,1, \finish, { ~key.envirPut(~value) }),
 
 
-Pbind(\instrument,\rise,\dur,Pseq([1/1],inf/*64*/), \vlAtk, Pfunc({4.00.rand}),\f1, Pfunc({1.00.rand}) , \f2, Pfunc({1.00.rand}) , \f3, Pfunc({1.00.rand}),  \ic_atk,Pfunc({10.00.rrand(-5)}),\index,Pfunc({50.00.rrand(1)}),\mRatio,Pfunc({3.rrand(1)}),\out ,~riToDisto3
-
-		/*Pxrand([*/
-				/*~delayBus*//*,~reverbSquelch ,~riToDisto3],inf)*/,\tS, 0.39550810372374,
+Pbind(\instrument,\rise,\dur,Pseq([1/1],inf/*64*/), \vlAtk, Pfunc({4.00.rand}),\f1, Pfunc({1.00.rand}) , \f2, Pfunc({1.00.rand}) , \f3, Pfunc({1.00.rand}),  \ic_atk,Pfunc({10.00.rrand(-5)}),\index,Pfunc({50.00.rrand(1)}),\mRatio,Pfunc({3.rrand(1)}),\out ,~riToDisto3,\tS, 0.39550810372374,
 
 	\key,Pseq([\dec,\atk ], inf),\value,1, \finish, { ~key.envirPut(~value) }),
 
@@ -128,7 +127,7 @@ Pbind(\instrument,\rise,\dur,Pseq([64/1],1),\atk,1, \vlAtk, Pfunc({4.00.rand}),\
 
 
 //ONE day to fixx with BG
-		Pbind(\instrument, \gate, \dur,Pseq([1/1],1),\atkT,1 ,\decT ,0 ,\atkC, 42, \in,  ~bgFil22,\group, ~gateGrp, \type, Prand([\rest, \note],inf),\out,~slideBus,\tS, 0.39550810372374),
+		Pbind(\instrument, \gate, \dur,Pseq([1/1],1),\atkT,1 ,\decT ,0 ,\atkC, 42, \in,  ~bgFil22,\group, ~gateGrp, \type, Prand([\rest, \note],inf),\out,~slideBus2,\tS, 0.39550810372374),
 
 		Pbind(\instrument, \wNoise,\dur, Pseq([ 7/1],1), \type, \rest),
 
@@ -240,8 +239,7 @@ Pbind(\instrument, \distoS, \dur, inf, \in, ~riTriptoDisto , \out,~riTriptoEq ,\
 
 
 
-	Pbind(\instrument,\comp10, \dur,9999,\thr,0.4 ,\sB, 1.04,\sA, 0.2,\atk ,0.0242, \rel ,0.3872
-			,\in,~again   ,\ctrl, ~snBus, \out,~toGate102,\group, ~compGrp2,\tS, 0.39550810372374),
+
 
 
 
@@ -251,5 +249,18 @@ Pbind(\instrument, \distoS, \dur, inf, \in, ~riTriptoDisto , \out,~riTriptoEq ,\
 
 	Pbind(\instrument, \compS, \thr,0.8 ,\sB, 1.015,\sA, 1/2,\atk ,0.0242, \rel ,0.0968,\gain,15,   \dur, inf, \in,~slideEq  , \out,~slideBusToLimit,\ctrl, ~kbus, \group, ~compGrp),
 	Pbind( \instrument, \limiterStoMixer,\c9,1, \dur, inf, \in, ~slideBusToLimit, \gain, 45, \group,~limitGrp),
+
+
+		Pbind(\instrument,\EQHP96, \in, ~slideBus2 , \out, ~slideEq2 ,\frq, 400, \dur,inf, \group, ~eqGrp0, \val,3600, \quant,8, \gain,(-6),\val2,11800,\quant2,4, \gain2,(-4), \vol,1),
+
+	Pbind(\instrument, \comp, \thr,0.8 ,\sB, 1.015,\sA, 1/2,\atk ,0.0242, \rel ,0.0968,\gain,15,   \dur, inf, \in,~slideEq2  , \out,~slideBusToLimit2,\ctrl, ~kbus, \group, ~compGrp),
+
+
+	//BG SLIDE NOT CHECKED FOR VOLUME YET
+	Pbind( \instrument, \limiter, \dur, inf, \in, ~slideBusToLimit2, \gain, 45, \out,~again,\group,~limitGrp),
+
+
+		Pbind(\instrument,\comp10, \dur,9999,\thr,0.4 ,\sB, 1.04,\sA, 0.2,\atk ,0.0242, \rel ,0.3872
+			,\in,~again   ,\ctrl, ~snBus, \out,~toGate102,\group, ~compGrp2,\tS, 0.39550810372374),
 ],1);
 )
