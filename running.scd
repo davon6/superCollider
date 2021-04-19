@@ -973,7 +973,7 @@ SynthDef(\envSli, {|out, val1=20, val2=20000,  dur,tS=1, crv =7|Out.kr(out,
 			[ic_atk, ic_rel]//atkC was 10
 		),timeScale: tS,doneAction:2
 	);
-		env = EnvGen.kr(Env([0,1,1,0],[dur*0.04,dur*0.92,0,dur*0.04]/*[dur*0.01,dur*0.97,0,dur*0.02]*/,[16,0,0-16]),timeScale: tS,doneAction: 2);
+		env = EnvGen.kr(Env([0,1,1,0],[dur*0.038,dur*0.924,0,dur*0.038]/*[dur*0.01,dur*0.97,0,dur*0.02]*/,[16,0,0-16]),timeScale: tS,doneAction: 2);
 	mod2 = SinOsc.ar(freq/10*f3, mul:freq/10 *iEnv);
 
 	mod = SinOsc.ar(freq * f2 + mod2

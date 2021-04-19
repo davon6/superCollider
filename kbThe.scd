@@ -58,8 +58,10 @@ Ppar([
 
 	~bassShap, Ppar([/*~hat2,~kick,*/~bassZ],1),
 
+	Pbind(\instrument,\recLoop,\buf,~b3,\recording,1, \in,0,\group,~recGrp2,\dur,inf)
+
 ],1).play(t);
-x = Synth(\recLoop,[buf:~b3,\recording,1, \in,0/*~toRecord*/],~recGrp2);
+// x = Synth(\recLoop,[buf:~b3,\recording,1, \in,0/*~toRecord*/],~recGrp2);
 )
 ~b3.play
 (

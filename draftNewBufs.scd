@@ -13,8 +13,10 @@
 
 ~audio2 = Buffer.read(s,"/Users/davidmignot/Documents/REAPER Media/consolidated.wav");
 ~vocal  = Buffer.read(s,"/Users/davidmignot/Documents/REAPER Media/03-thEnd-consolidated.wav");
-~audio3 = Buffer.read(s,"/Users/davidmignot/Documents/REAPER Media/02-consolidated.wav");
 
+
+~audio3 = Buffer.read(s,"/Users/davidmignot/Documents/REAPER Media/02-consolidated.wav");
+~audio3 = Buffer.read(s,"/Users/davidmignot/Documents/REAPER Media/02-consolidated-02.wav");
 
 ~vocal.play
 ~audio2.play
