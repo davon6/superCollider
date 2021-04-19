@@ -28,6 +28,8 @@ Ppar([Pbindef(\bass, \out,0),Pbindef(\ki, \out,0)],1).play(t)
 //plop noise in bass
 //BG SLIDE NOT CHECKED FOR VOLUME YET
 //COMB MODU MUST GO THROUGH BUSSES OR DRIFTING INEVITABLE
+//~NO2 gating not really working
+//bass has too much high, blocks leads
 
 s.plotTree
 /* KB AND BASE have unrecordeds    ~bufSnoopy       and     ~bufBg{!=~no4, ~kb, ~rises}   */
@@ -558,7 +560,7 @@ Pbind(\instrument, \playBuf10N,  \out,~toCom,\dur,Pseq([ Pseq([8/1],1),  Pseq([1
 		Pbind(\instrument,\gateS, \dur,Pseq([1/8],8),\type,Pseq([\note, \rest],inf),
 		\in,  Pxrand([~toGate10,~toGate102], inf)  ,\out ,Pwrand([~eqBus10,
 
-		~delayBus2],[2,1].normalizeSum,inf),  \group, ~gateGrp6,\tS, 0.39550810372374),
+		~delayBus2],[4,1].normalizeSum,inf),  \group, ~gateGrp6,\tS, 0.39550810372374),
 	],inf),
 
 
@@ -584,7 +586,7 @@ Pbind(\instrument,\EQHP10, \in, ~eqBus10 ,\out, 0,\frq, 100, \dur,inf,\group, ~e
 
 	Pbind(\instrument, \EQHP10,  \dur, inf, \in, ~eqBg10, \out,~bgLimit2,\group,~shifGrp),
 
-	Pbind(\instrument,  \limiter10toMixer, \dur, inf, \in,~bgLimit2 ,\out,~bgBus2, \gain, 32,\group,~limitGrp2   ),
+	Pbind(\instrument,  \limiter10toMixer, \dur, inf, \in,~bgLimit2 ,\out,~bgBus2, \gain, 27,\group,~limitGrp2   ),
 
 	Pbind(\instrument,\comp10, \dur,9999,\thr,0.9 ,\sB, 1.05,\sA, 1/2,\atk ,0.024, \rel ,0.3872
 		,\gain,1,\in, ~bgBus2 ,\ctrl, ~snBus, \out,0,\group,~compGrp2 )
