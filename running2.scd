@@ -604,15 +604,15 @@ Ppar([
 
 Prand([
 
-	Pbind(\instrument,\gran,\dur,Prand([Pseq([1/16],1), Pseq([1/16],16),Pseq([1/16],4),  Pseq([1/4],1),Pseq([1/4],4),Pseq([1/4],16)  ],1),\amp, 1,\buf, ~k2,\out,~dispatchBus,\pitchRte,(-1),/*\group,~granGrp,*/\duration,Pkey(\dur),\impulse,Pkey(\dur),\pos,0.2),
+	Pbind(\instrument,\gran,\dur,Prand([Pseq([1/16],1), Pseq([1/16],16),Pseq([1/16],4),  Pseq([1/4],1),Pseq([1/4],4),Pseq([1/4],16)  ],1),\amp, 1,\buf, ~k2,\out,~dispatchBus,\pitchRte,(-1),/*\group,~granGrp,*/\duration,Pkey(\dur),\impulse,Pkey(\dur),\pos,0.01),
 
-	Pbind(\instrument,\gran,\dur,Prand([/*Pseq([1/16],1), Pseq([1/16],16),Pseq([1/16],4), */ Pseq([1/4],1),Pseq([1/4],4),Pseq([1/4],16), Pseq([1/3],3), Pseq([1/12],12) ,Pseq([1/1],1), Pseq([1/64],64),Pseq([1/64],256)   ],1),\amp, 1,\buf, ~k2,\out,~dispatchBus,\pitchRte,1,/*\group,~granGrp,*/\duration,Pkey(\dur),\impulse,Pkey(\dur),\pos,0.17),
+	Pbind(\instrument,\gran,\dur,Prand([/*Pseq([1/16],1), Pseq([1/16],16),Pseq([1/16],4), */ Pseq([1/4],1),Pseq([1/4],4),Pseq([1/4],16), Pseq([1/3],3), Pseq([1/12],12) ,Pseq([1/1],1), Pseq([1/64],64),Pseq([1/64],256)   ],1),\amp, 1,\buf, ~k2,\out,~dispatchBus,\pitchRte,1,/*\group,~granGrp,*/\duration,Pkey(\dur),\impulse,Pkey(\dur),/*\pos,0.17*/),
 
 
 	Pbind(\instrument,\gran,\dur,Prand([Pseq([1/1],1),Pseq([1/1],4)   ],1),\amp, 1,\buf, ~k2,\out,~dispatchBus,\pitchRte,(-1),/*\group,~granGrp,*/\duration,Pkey(\dur),\impulse,Pkey(\dur),\pos,0),
 
 
-	Pbind(\instrument,\gran,\dur,Pseq([1/3],3),\amp, 1,\buf, ~k2,\out,~dispatchBus,\pitchRte,(-1),/*\group,~granGrp,*/\duration,Pkey(\dur),\impulse,Pkey(\dur),\pos,0.22)
+	Pbind(\instrument,\gran,\dur,Pseq([1/3],3),\amp, 1,\buf, ~k2,\out,~dispatchBus,\pitchRte,(-1),/*\group,~granGrp,*/\duration,Pkey(\dur),\impulse,Pkey(\dur)/*,\pos,0.22*/)
 
 	],inf),
 
@@ -681,7 +681,7 @@ Pxrand([
 
 	Prand([
 	Pbind(\instrument, \dispatchS10, \dur, Pseq([1/1],1),\in,Prand([ 0, ~rollingK],inf),\out,0,\tS, 0.39550810372374,\group,~dispatchGrp2),
-					Pseq([Pbind(\instrument,\gran,\dur,Pseq([1/2],2),\amp, 1,\buf, ~k2,\out,~toPan3,\pitchRte,(-1),\duration,Pkey(\dur),\impulse,0.0003,\pos,0.017,\type, Pseq([\rest,\note],inf), \tS,  0.39550810372374,)
+					Pseq([Pbind(\instrument,\gran,\dur,Pseq([1/2],2),\amp, 1,\buf, ~k2,\out,~toPan3,\pitchRte,(-1),\duration,Pkey(\dur),\impulse,0.0003,/*\pos,0.17,*/\type, Pseq([\rest,\note],inf), \tS,  0.39550810372374,)
 
 		],1),
 
@@ -690,7 +690,9 @@ Pxrand([
 				\dur,Pseq([1/4],64), \tS,  0.39550810372374,\start,~rythm,\buf,~leTout,\out,  ~rythmFil,\loopy,0	,\type, Pseq([\rest,\rest,\note,\rest],inf))*/ /*],1),*/
 
 
-		   Prand([ Ppar([ ~perc[5]    ,  Pbind( \instrument, \playBuf10, \impulse,0.6 ,
+		   Prand([ Ppar([ /*~perc[5] */
+					Pseq([~perc[6] ,Pbind(\instrument,\gran,\dur,Pseq([1/1],1),\amp, 1,\buf, ~k2,\out,~toPan3,\duration,Pkey(\dur),\impulse,0.0003,/*\pos,0.17,*/ \tS,  0.39550810372374),~perc[2]],1)
+					,  Pbind( \instrument, \playBuf10, \impulse,0.6 ,
 				\dur,Pseq([1/4],64), \tS,  0.39550810372374,\start,~rythm,\buf,~leTout,\out,  ~rythmFil,\loopy,0	,\type, Pseq([\rest,\rest,\note,\rest/*\rest,\rest,\rest,\rest*/],inf)) ],1) ,/* ~bar[6]*/
 
 
@@ -712,7 +714,7 @@ Pxrand([
 					Pbind( \instrument, \playBufMod, \trig, 0.3 ,\dur, Pseq([1/1],4), \tS,  0.39550810372374,\buf,~b3,\out,~toPan3,\loopy,0,\modP, ~bus22),
 
 
-	Pbind(\instrument,\gran,\dur,Pseq([1/4],16),\amp, 1,\buf, ~k2,\out,~toPan3,\pitchRte,1,\duration,Pkey(\dur),\impulse,Pkey(\dur),\pos,0.17,\type, Pseq([\note,\note,\note,\note,\rest,\rest,\rest,\rest].scramble,inf), \tS,  0.39550810372374,)
+	Pbind(\instrument,\gran,\dur,Pseq([1/4],16),\amp, 1,\buf, ~k2,\out,~toPan3,\pitchRte,1,\duration,Pkey(\dur),\impulse,Pkey(\dur)/*,\pos,0.17*/,\type, Pseq([\note,\note,\note,\note,\rest,\rest,\rest,\rest].scramble,inf), \tS,  0.39550810372374,)
 				],1),
 
 ],1)

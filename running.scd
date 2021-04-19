@@ -2276,7 +2276,9 @@ s.sync;
 
 ~bar = [Ppar([~kick,~hat2,~bass],1),Ppar([~kick,~hat2,~bass],4),Ppar([~kick,~hat2,~bass],8),Ppar([~kick,~hat2,~bass],12),Ppar([~kick,~hat2,~bass],14) ,Ppar([~kick,~hat2,~bass],15) ,Ppar([~kick,~hat2,~bass],16)];
 
-	~bar = [Pbindef( \kbRec, \dur,  Pseq([1/1],1)),Pbindef( \kbRec, \dur,  Pseq([1/1],4)),Pbindef( \kbRec, \dur,  Pseq([1/1],8)),Pbindef( \kbRec, \dur,  Pseq([1/1],12)),Pbindef( \kbRec, \dur,  Pseq([1/1],14)),Pbindef( \kbRec, \dur,  Pseq([1/1],15)),Pbindef( \kbRec, \dur,  Pseq([1/1],16))];
+	~bar = [Pbindef( \kbRec, \dur,  Pseq([1/1],1)),Pbindef( \kbRec, \dur,  Pseq([1/1],4)),Pbindef( \kbRec, \dur,  Pseq([1/1],8)),Pbindef( \kbRec, \dur,  Pseq([1/1],12)),Pbindef( \kbRec, \dur,  Pseq([1/1],14)),Pbindef( \kbRec, \dur,  Pseq([1/1],15)),Pbindef( \kbRec, \dur,  Pseq([1/1],16)),
+		Pbindef( \kbRec, \dur,  Pseq([3/1],1))
+	];
 
 
 
@@ -2308,7 +2310,15 @@ s.sync;
 		Pbindf(~snare,\type, Pseq([\rest,\rest ,\note, \rest], 7))],1),
 
 
-	Ppar([~bar[6],~hat,~cymbal/*,~snare*/],1)
+	Ppar([~bar[6],~hat,~cymbal/*,~snare*/],1),
+
+
+		Ppar([~bar[7],Pbindf(~cymbal, \dur,Pseq([1/4],12)),
+		Pbindf(~hat, \dur,Pseq([1/4],12)),
+		Pbindf(~snare,\type, Pseq([\rest,\rest ,\note, \rest], 2))],1),
+
+
+
 ];
 
 
