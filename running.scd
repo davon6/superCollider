@@ -964,7 +964,7 @@ SynthDef(\envSli, {|out, val1=20, val2=20000,  dur,tS=1, crv =7|Out.kr(out,
 	SynthDef(\rise, {
 	arg freq=659.26, mRatio=1, cRatio=1,
 	index=1, iScale=5, ic_atk=4, ic_rel=(-4),
-	amp=2, rel=3, pan=0, f1,f2,f3, vlAtk=0,atk=0, dec=0,atkE=0  ,dur ,out =0 ,tS=1 ,moduR, fR=0;
+	amp=2, rel=3, pan=0, f1,f2,f3, vlAtk=0,atk=0, dec=0,atkE=0  ,dur ,out =0 ,tS=1 ,moduR,moduS,fS=0, fR=0;
 	var car, mod, env, iEnv, mod2;
 	iEnv = EnvGen.kr(
 		Env(
@@ -973,11 +973,12 @@ SynthDef(\envSli, {|out, val1=20, val2=20000,  dur,tS=1, crv =7|Out.kr(out,
 			[ic_atk, ic_rel]//atkC was 10
 		),timeScale: tS,doneAction:2
 	);
-		env = EnvGen.kr(Env([0,1,1,0],[dur*0.035,dur*0.93,0,dur*0.035]/*[dur*0.01,dur*0.97,0,dur*0.02]*/,[12,0,0-12]),timeScale: tS,doneAction: 2);
+		env = EnvGen.kr(Env([0,1,1,0],[dur*0.04,dur*0.92,0,dur*0.04]/*[dur*0.01,dur*0.97,0,dur*0.02]*/,[16,0,0-16]),timeScale: tS,doneAction: 2);
 	mod2 = SinOsc.ar(freq/10*f3, mul:freq/10 *iEnv);
 
 	mod = SinOsc.ar(freq * f2 + mod2
 			 + (In.kr(moduR,1)* EnvGen.kr(Env.adsr(sustainLevel: 1,releaseTime: 0.1),fR ))
+			 + (In.kr(moduS,1)* EnvGen.kr(Env.adsr(sustainLevel: 1,releaseTime: 0.1),fS ))
 			, mul:freq * mRatio * iEnv);
 
 	car = SinOsc.ar(freq * f1 + mod) * env * amp;
