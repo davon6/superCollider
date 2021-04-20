@@ -515,6 +515,8 @@ s.sync;
 	~toPan22= Bus.audio(s,1);
 ~toPan3= Bus.audio(s,1);
 
+	~toShifter= Bus.audio(s,3);
+
 	~toEqFlo= Bus.audio(s,1);
 	~toGateFlo= Bus.audio(s,1);
 	~toReverbFlo= Bus.audio(s,1);
@@ -1202,7 +1204,10 @@ SynthDef(\dispatch2,{|in, out, dur|Out.ar(out, In.ar(in,2)* EnvGen.kr(Env([0,1,1
 
 
 
+SynthDef(\shiftX, {|in, out=0, frq,mult=0|Out.ar(out, FreqShift.ar(In.ar(in, 3),freq:
+		[frq,frq+30,frq-50],mul: [1,mult,mult]
 
+	));}).add;
 
 
 //below dur can be factored to change mod

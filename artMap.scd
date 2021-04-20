@@ -19,7 +19,8 @@ s.meter
 ~dispatchGrp= Group.new;
 ~synthGrp = Group.after(~dispatchGrp);
 ~combGrp = Group.after(~synthGrp);
-~shapGrp= Group.after(~combGrp);
+~shiftGrp = Group.after(~combGrp);
+~shapGrp= Group.after(~shiftGrp);
 ~limitGrp= Group.after(~shapGrp);
 
 ~recGrp= Group.after(~limitGrp);
@@ -28,7 +29,7 @@ s.meter
 
  v = Synth( \fmX, [\dur, inf,\stretch, 3.5,\mRatio, 1,\cRatio, 1,\index, 1,\atkE, 0.1,\amp,4,\out,~outFil,],~synthGrp);
 
-~v =  Synth(\comb1,[ \in, ~outFil,\out,~outDisto,\amp,4.8,\maxDel,0.7744,\decT,-0.2,\busMod,~seqBus],~combGrp);
+~v =  Synth(\comb1,[ \in, ~outFil,\out,0/*~toShifter*/   /*~outDisto*/,\amp,4.8,\maxDel,0.7744,\decT,-0.2,\busMod,~seqBus],~combGrp);
 
 
 	Pbind(\instrument, \sequ,\out, ~seqBus, \value,Pseq([
@@ -43,9 +44,13 @@ Scale.majorPentatonic(\just).degreeToFreq(7.rand, 76.midicps, -20)
 
 ].scramble,inf),\dur,Pxrand([ Pseq([4/1],1),Pseq([1/1],4), Pseq([1/4],16)],inf),\legato, 2,\group,~shapGrp,\tS, 0.39550810372374,).play(t);
 
-h = Synth(\disto,[\in,  ~outDisto , \out,0/*~outTolimit*/],~shapGrp);
 
-l = Synth(\limiter,[\in, ~outTolimit,\out,0, \gain, 140],~limitGrp);
+ ~h1 = Synth(\shiftX,[\in,~toShifter,\out ,0,\freq,0],~shiftGrp);
+
+
+/*h = Synth(\disto,[\in,  ~outDisto , \out,0/*~outTolimit*/],~shapGrp);
+
+// l = Synth(\limiter,[\in, ~outTolimit,\out,0, \gain, 140],~limitGrp);*/
 
 
 
@@ -69,11 +74,22 @@ x = Synth(\recLoop,[buf:~buf,\recording,1, \in,0],~recGrp);
 
 
 
-MIDIdef.cc(\ml, { |value|var modFreq = value.linlin(0, 127, 0, 0.8);
+/*MIDIdef.cc(\ml, { |value|var modFreq = value.linlin(0, 127, 0, 0.8);
 
 	~v.set(\multi, modFreq.round(0.01).postln);
 
+},ccNum: 18 ); //is 10*/
+
+
+
+MIDIdef.cc(\ml2, { |value|var modFreq = value.linlin(0, 127, 0, 0.8);
+
+	~h1.set(\mult, modFreq.round(0.01).postln);
+
 },ccNum: 18 ); //is 10
+
+
+
 
 
 MIDIdef.cc(\mDel, { |value|var modFreq = value.linlin(0, 127, -0.0, -0.5);
@@ -141,9 +157,16 @@ MIDIdef.cc(\fx, { |value|var modFreq = value.linlin(0, 127, 0, 1);
 },ccNum:  72 );//is 16
 
 
-MIDIdef.cc(\rise, { |value|var modFreq = value.linlin(0, 127, 0.001, 1);
+/*MIDIdef.cc(\rise, { |value|var modFreq = value.linlin(0, 127, 0.001, 1);
 
 	v.set(\cRatio, modFreq.round(0.001).postln);
+
+},ccNum: 1 );*/
+
+
+MIDIdef.cc(\riseShift, { |value|var modFreq = value.linlin(0, 127, 0, 5000);
+
+	~h1.set(\frq, modFreq.round(0.1).postln);
 
 },ccNum: 1 );
 
