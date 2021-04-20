@@ -699,8 +699,10 @@ Pxrand([
 				\dur,Pseq([1/4],64), \tS,  0.39550810372374,\start,~rythm,\buf,~leTout,\out,  ~rythmFil,\loopy,0	,\type, Pseq([\rest,\rest,\note,\rest],inf))*/ /*],1),*/
 
 
-		   Prand([ Ppar([ /*~perc[5] */
-					Pseq([~perc[6] ,Pbind(\instrument,\gran,\dur,Pseq([1/1],1),\amp, 1,\buf, ~k2,\out,~toPan3,\duration,Pkey(\dur),\impulse,0.0003,/*\pos,0.17,*/ \tS,  0.39550810372374),~perc[2]],1)
+		   Prand([
+					Pseq([~perc[6] ,Pbind(\instrument,\gran,\dur,Pseq([1/1],1),\amp, 1,\buf, ~k2,\out,~toPan3,\duration,Pkey(\dur),\impulse,0.0003,/*\pos,0.17,*/ \tS,  0.39550810372374),~perc[2]],1),
+
+					Ppar([ ~perc[5]
 					,  Pbind( \instrument, \playBuf10, \impulse,0.6 ,
 				\dur,Pseq([1/4],64), \tS,  0.39550810372374,\start,~rythm,\buf,~leTout,\out,  ~rythmFil,\loopy,0	,\type, Pseq([\rest,\rest,\note,\rest/*\rest,\rest,\rest,\rest*/],inf)) ],1) ,/* ~bar[6]*/
 

@@ -42,7 +42,7 @@ SynthDef(\kick, {
 		\rel2, t.beatDur/4 * 0.0012,
 		\atkcrv, -2,
 		\relcrv, -2,\relcrv2, -4
-		,\amp,(-3)/*(-13)*/,\out,~bassEq
+		,\amp,(-1)/*(-13)*/,\out,~bassEq
 	);
 
 
@@ -151,6 +151,6 @@ x = Synth(\recLoopS,[buf:~kb2,\recording,1, \in,0/*~toRecord*/],~recGrp2);
 
 Ppar([~hat2,~kick,Pbind(\instrument ,	\EQ2,\dur, inf, \in,~kickHatEq, \out,0,\group, ~eqGrp, \val, 659.255, \quant,1, \gain ,(-30))],1).play(t) ;/*Pbindf(~kick,\out,~toRecord).play(t);*/
 ~b3.plot
-~kb2.plot
+~kb2.play
 Compander
 s.meter
