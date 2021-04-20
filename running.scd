@@ -193,6 +193,7 @@ s.sync;
 
 ~percuStereo= Bus.audio(s,2);
 	~gateBus = Bus.audio(s,1);
+	~gateBusB = Bus.audio(s,1);
 	~gateBus2 = Bus.audio(s,1);
 	~gateRnd = Bus.audio(s,1);
 	~gateSquelch = Bus.audio(s,1);
@@ -204,6 +205,8 @@ s.sync;
 	~gateSeqSquelch = Bus.audio(s,1);
 	~gateSeqMelo = Bus.audio(s,1);
 	~delayToLimit= Bus.audio(s,2);
+
+	~delayToEq= Bus.audio(s,2);
 
 	~gate2Bus = Bus.audio(s,1);
 
@@ -840,7 +843,7 @@ SynthDef(\envSli, {|out, val1=20, val2=20000,  dur,tS=1, crv =7|Out.kr(out,
 
 		env =EnvGen.ar(
 	Env([1 , 0.4, 1,    1,1,0],
-		[0.008, 0.08, 0,0.006,0.09],[-2,-30,5,5,-5]),doneAction:2);
+		[0.008, 0.08, 0,0.006,0.09],[-1.8,-30,5,5,-5]),doneAction:2);
 	//EnvGen.ar(Env.perc(0, 0.40),doneAction:2);
 
 
@@ -879,14 +882,16 @@ SynthDef(\envSli, {|out, val1=20, val2=20000,  dur,tS=1, crv =7|Out.kr(out,
 		sig = sig.lincurve(-1,1,-1,1,-7);
 
 
-		sig =  BPeakEQ.ar(
+		sig =
+		LPF.ar(LPF.ar(
+		BPeakEQ.ar(
 			BPeakEQ.ar(
 
-			LPF.ar(LPF.ar(sig.round(2**(-16),lpf - In.ar(bus, 1)),lpf - In.ar(bus, 1))
+			sig
 
-			,2637.02 /*659.255*4*/ ,4, (-4))
-		,164.81375,1, (-20))
-
+			,2637.02 /*659.255*4*/ ,1, (-24))
+		,164.81375,2, (-18)).round(2**(-16)
+,lpf - In.ar(bus, 1)),lpf - In.ar(bus, 1))
 		);
 
 	//sig = LPF.ar(LPF.ar LPF.ar(LPF.ar(sig, lpf - In.ar(bus, 1)).round(2**(-16)
@@ -896,6 +901,8 @@ SynthDef(\envSli, {|out, val1=20, val2=20000,  dur,tS=1, crv =7|Out.kr(out,
 		sig = sig * env;
 
 		Out.ar(out, Pan2.ar(sig));
+
+		Out.ar(0,RMS.ar(sig).ampdb.round(0.1).poll(label:"bass db :")* [0,0,1])
 	}).add;
 
 	s.sync;
