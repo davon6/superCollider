@@ -29,7 +29,7 @@ s.meter
 
  v = Synth( \fmX, [\dur, inf,\stretch, 3.5,\mRatio, 1,\cRatio, 1,\index, 1,\atkE, 0.1,\amp,4,\out,~outFil,],~synthGrp);
 
-~v =  Synth(\comb1,[ \in, ~outFil,\out,0/*~toShifter*/   /*~outDisto*/,\amp,4.8,\maxDel,0.7744,\decT,-0.2,\busMod,~seqBus],~combGrp);
+~v =  Synth(\comb1,[ \in, ~outFil,\out,~toShifter   /*~outDisto*/,\amp,4.8,\maxDel,0.7744,\decT,-0.2,\busMod,~seqBus],~combGrp);
 
 
 	Pbind(\instrument, \sequ,\out, ~seqBus, \value,Pseq([
@@ -45,9 +45,9 @@ Scale.majorPentatonic(\just).degreeToFreq(7.rand, 76.midicps, -20)
 ].scramble,inf),\dur,Pxrand([ Pseq([4/1],1),Pseq([1/1],4), Pseq([1/4],16)],inf),\legato, 2,\group,~shapGrp,\tS, 0.39550810372374,).play(t);
 
 
- ~h1 = Synth(\shiftX,[\in,~toShifter,\out ,0,\freq,0],~shiftGrp);
+ ~h1 = Synth(\shiftX,[\in,~toShifter,\out ,0/*~outTolimit*/,\freq,0],~shiftGrp);
 
-
+// ~l1 = Synth(\lim,[\in, ~outTolimit,\out,0],~limitGrp);
 /*h = Synth(\disto,[\in,  ~outDisto , \out,0/*~outTolimit*/],~shapGrp);
 
 // l = Synth(\limiter,[\in, ~outTolimit,\out,0, \gain, 140],~limitGrp);*/

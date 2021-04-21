@@ -1654,17 +1654,19 @@ SynthDef(\comb, {|out=0, in ,maxDel, delayT,decT=6.1952,amp=0.09|
 
 			/*[delayT+ MouseX.kr(0.024,0),  delayT+ MouseX.kr(0.024,0)+0.00001392889167817/*,    delayT+ MouseX.kr(0.024,0)+0.05*/]*/
 
-			[delayT+ MouseY.kr(0.024,0),  delayT+ MouseY.kr(0.024,0)+0.00001392889167817,    delayT+ MouseX.kr(0.024,0)-0.00001692889167817]
+		delayT+ MouseY.kr(0.024,0)  /*[delayT+ MouseY.kr(0.024,0),  delayT+ MouseY.kr(0.024,0)+0.00001392889167817,    delayT+ MouseX.kr(0.024,0)-0.00001692889167817]*/
 
 			+ (In.kr(busMod,1)*fx)
 
 				+ (SinOsc.kr(modS/*MouseY.kr(20,0)*/,phase: 3,add: 0).range(0.000000001, 0.001)* f1)
 				+ (LFTri.kr(modT).range(0.000000001, 0.001) *f2)
 				+ (Saw.kr(modSa).range(0.000000001, 0.001) * f3)
-				+ (LFDNoise0.kr(modR).range(-0.0008,-0.00008)*fr)
+				+ /*(LFDNoise0.kr(modR).range(0.0008,0.00008)*fr)*/
+			(LFDNoise0.kr(modR).range(0.000000001,0.001)*fr)
+			/*(LFDNoise0.kr(modR).range(-0.0000008,-0.00000008)*fr)*/
 
 
-			,decT ,[amp,multi,multi])!2/** EnvGen.kr(Env.step([1,1],[dur,0]),timeScale: tS,doneAction:2) */)}).add;
+			,decT ,amp/* + MouseY.kr(0.5,0)*/ +MouseX.kr(0,-0.63))   /*[amp,multi,multi])!2*//** EnvGen.kr(Env.step([1,1],[dur,0]),timeScale: tS,doneAction:2) */)}).add;
 
 
 	// BufCombN.ar(b.bufnum, WhiteNoise.ar(0.01), XLine.kr(0.0001, 0.01, 20), -0.2) }.play;
