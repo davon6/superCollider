@@ -48,7 +48,7 @@ Synth(\playBuf2,  [  \buf,/*~bufBg*/ , \out, ~bgFil22    ]);
 	~s3=3400.00.rrand(1300,0.001);~q3=16.rrand(5,1);~g3=(-8).rrand((-2),1);~s3x= 3400.00.rrand(1300,0.001);~q3x= 16.rrand(5,1);~g3x=(-8).rrand((-2),1);
 	~pass1 =(~audio2.numFrames.rrand(400000)- 400000);~pass2=(~audio2.numFrames.rrand(400000)- 400000);~pass3=(~audio2.numFrames.rrand(400000)- 400000);~pass4=(~audio2.numFrames.rrand(400000)- 400000);
 ~mster=(~leTout.numFrames/ 256 * 226.rand);
-~bssFreq1= 120.rand;~bssFreq2= 120.rand;~bssFreq3= 120.rand;
+~bssFreq1= 1200.rrand(-140);~bssFreq2= 1200.rrand(-140);~bssFreq3= 1200.rrand(-140);
 ~r1= 3.rand;~r2= 3.rand;~r3= 3.rand;
 ~modHz=240.00.rand; ~carHz=140.00.rrand(10.00); ~noiLv=1.00.rrand(0.3); ~crv1=(-12.00).rrand(-4.00); ~crv2=(-12.00).rrand(-4.00); ~rel=0.0968.rrand(0.05); ~rel2=0.0968.rrand(0.05); ~modAmp=5000.00.rrand(1.00); ~modAmp2=5000.00.rrand(1.00);
 )
@@ -639,12 +639,14 @@ Pxrand([
 Prand([Pbind(\instrument, \playBuf, \impulse, 0.003 ,\dur,    Pseq([1/1],4), \tS,  0.39550810372374,\buf,~k2,\out, ~kbToPan2,\loopy,0,\start,0,\tS, 0.39550810372374),
 Pseq([
 				Ppar([ ~perc[6]   ,  Pbind( \instrument, \playBuf10, \impulse,0.6 ,
-						\dur,Pseq([1/4],16), \tS,  0.39550810372374,\start,~rythm,\buf,~leTout,\out,  ~rythmFil,\loopy,0	,\type, Pseq([\rest,\rest,\note,\rest],inf))],1),Pbind(\instrument, \playBuf, \impulse, 0.003 ,\dur,    Pseq([1/1],1), \tS,  0.39550810372374,\buf,~k2,\out, ~kbToPan2,\loopy,0,\start,0,\tS, 0.39550810372374)],1),
+						\dur,Pseq([1/4],16), \tS,  0.39550810372374,\start,~rythm,\buf,~leTout,\out,  ~rythmFil,\loopy,0	,\type,/* Pseq([\rest,\rest,\note,\rest],inf)*/ Pseq([\rest,\note,\rest,\rest],inf)
+
+					)],1),Pbind(\instrument, \playBuf, \impulse, 0.003 ,\dur,    Pseq([1/1],1), \tS,  0.39550810372374,\buf,~k2,\out, ~kbToPan2,\loopy,0,\start,0,\tS, 0.39550810372374)],1),
 				],1),
 
 
 				Ppar([ ~perc[0]   ,  Pbind( \instrument, \playBuf10, \impulse,0.6 ,
-	\dur,Pseq([1/4],16), \tS,  0.39550810372374,\start,~rythm,\buf,~leTout,\out,  ~rythmFil,\loopy,0	,\type, Pseq([\rest,\rest,\note,\rest],inf))],1),
+	\dur,Pseq([1/4],16), \tS,  0.39550810372374,\start,~rythm,\buf,~leTout,\out,  ~rythmFil,\loopy,0	,\type, /* Pseq([\rest,\rest,\note,\rest],inf)*/ Pseq([\rest,\note,\rest,\rest],inf))],1),
 
 
 				Prand([
@@ -686,7 +688,9 @@ Pseq([
 
 				Pbind( \instrument, \playBuf10, \impulse,0.6 ,
 	\dur,Pseq([1/4],60), \tS,  0.39550810372374,\start,~rythm,\buf,~leTout,\out,  ~rythmFil,\loopy,0	,/*\type, Pseq([\rest,\note,\rest,\rest,\rest,\note,\rest,\rest,\rest,\note,\rest,\rest,\rest,\note,\rest,\rest,\rest,\rest,\rest,\rest],inf)*/
-						\type,Prand([Pseq([\rest],4), Pseq([\rest,\rest,\note,\rest],1)],inf))],1),
+						\type,Pseq([\rest,\note,\rest,\rest],inf)
+
+				/*Prand([Pseq([\rest],4), Pseq([\rest,\rest,\note,\rest],1)*//*],inf)*/)],1),
 
 			   Ppar([ ~bar[5],Pbindf(~snare,\type, Pseq([\rest,\rest ,\note, \rest], 7),\da1,0)  ],1)],1),
 
@@ -706,7 +710,7 @@ Pseq([
 
 					Ppar([ ~perc[5]
 					,  Pbind( \instrument, \playBuf10, \impulse,0.6 ,
-				\dur,Pseq([1/4],64), \tS,  0.39550810372374,\start,~rythm,\buf,~leTout,\out,  ~rythmFil,\loopy,0	,\type, Pseq([\rest,\rest,\note,\rest/*\rest,\rest,\rest,\rest*/],inf)) ],1) ,/* ~bar[6]*/
+							\dur,Pseq([1/4],64), \tS,  0.39550810372374,\start,~rythm,\buf,~leTout,\out,  ~rythmFil,\loopy,0	,\type,/* Pseq([\rest,\rest,\note,\rest],inf)*/ Pseq([\rest,\note,\rest,\rest],inf))],1) ,/* ~bar[6]*/
 
 
 
@@ -719,7 +723,7 @@ Pseq([
 					Ppar([
 
 						Pbind( \instrument, \playBuf10, \impulse,0.6 ,
-							\dur,Pseq([1/4],8), \tS,  0.39550810372374,\start,~rythm,\buf,~leTout,\out,  ~rythmFil,\loopy,0	,\type, Pseq([\rest,\rest,\note,\rest],inf)),
+							\dur,Pseq([1/4],8), \tS,  0.39550810372374,\start,~rythm,\buf,~leTout,\out,  ~rythmFil,\loopy,0	,\type,/* Pseq([\rest,\rest,\note,\rest],inf)*/ Pseq([\rest,\note,\rest,\rest],inf)),
 						Pbind( \instrument, \playBufS, \trig, 0.3 ,\dur,  Pseq([1/1],4), \tS,  0.39550810372374,\buf,~kb2,\out,~eqBass,\loopy,0),
 						Pbind(\instrument, \shift2, \in,~eqBass,\dur, Pseq([4/1],1), \out,~dipatchKB, \freq,~bssFreq2, \group,~shifGrp,\tS, 0.39550810372374,)
 					],1),
