@@ -1661,8 +1661,8 @@ SynthDef(\comb, {|out=0, in ,maxDel, delayT,decT=6.1952,amp=0.09|
 				+ (SinOsc.kr(modS/*MouseY.kr(20,0)*/,phase: 3,add: 0).range(0.000000001, 0.001)* f1)
 				+ (LFTri.kr(modT).range(0.000000001, 0.001) *f2)
 				+ (Saw.kr(modSa).range(0.000000001, 0.001) * f3)
-				+ /*(LFDNoise0.kr(modR).range(0.0008,0.00008)*fr)*/
-			(LFDNoise0.kr(modR).range(0.000000001,0.001)*fr)
+				+ (LFDNoise0.kr(modR).range(0.0008,0.00008)*fr)
+			// (LFDNoise0.kr(modR).range(0.000000001,0.001)*fr)
 			/*(LFDNoise0.kr(modR).range(-0.0000008,-0.00000008)*fr)*/
 
 
@@ -2231,6 +2231,8 @@ SynthDef(\sequ,{|value, dur, in=0, out=0, vlAtk=0, vlDec=1,vlSub=1,vlSub2=1, vlR
 
 		Out.ar(out,effect * EnvGen.kr(Env.step([1,1],[dur,0]),timeScale: tS,doneAction: 2));
 	}).add;
+
+	SynthDef(\lim,{Out.ar(0,Balance.ar(In.ar(~outTolimit),SinOsc.ar(mul: 0.2)))}).add;
 
 s.sync;
 
