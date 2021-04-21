@@ -46,7 +46,7 @@ Synth(\playBuf2,  [  \buf,/*~bufBg*/ , \out, ~bgFil22    ]);
 ~s1=3400.00.rrand(1300,0.001);~q1=16.rrand(5,1);~g1=(-8).rrand((-2),1);~s1x =  3400.00.rrand(1300,0.001);~q1x= 16.rrand(5,1);~g1x=(-8).rrand((-2),1);
 	~s2= 3400.00.rrand(1300,0.001);	~q2= 16.rrand(5,1);~g2=(-8).rrand((-2),1);~s2x= 3400.00.rrand(1300,0.001);~q2x=16.rrand(5,1);~g2x=(-8).rrand((-2),1);
 	~s3=3400.00.rrand(1300,0.001);~q3=16.rrand(5,1);~g3=(-8).rrand((-2),1);~s3x= 3400.00.rrand(1300,0.001);~q3x= 16.rrand(5,1);~g3x=(-8).rrand((-2),1);
-	~pass1 =(~audio2.numFrames.rrand(400000)- 400000);~pass2=(~audio2.numFrames.rrand(400000)- 400000);~pass3=(~audio2.numFrames.rrand(400000)- 400000);~pass4=(~audio2.numFrames.rrand(400000)- 400000);
+	~pass1 =(~buf.numFrames.rrand(400000)- 400000);~pass2=(~buf.numFrames.rrand(400000)- 400000);~pass3=(~buf.numFrames.rrand(400000)- 400000);~pass4=(~buf.numFrames.rrand(400000)- 400000);
 ~mster=(~leTout.numFrames/ 256 * 226.rand);
 ~bssFreq1= 1200.rrand(-140);~bssFreq2= 1200.rrand(-140);~bssFreq3= 1200.rrand(-140);
 ~r1= 3.rand;~r2= 3.rand;~r3= 3.rand;
@@ -265,28 +265,28 @@ Pxrand([
 
 	Pbind(\instrument, \kick,\dur, Pseq([1/1],inf),\amp,(-10.2),\out,~kbus),
 
-	/*Pbind(\instrument, \playBuf, \impulse, 0.003 ,\dur,    Pseq([1/1],inf), \tS,  0.39550810372374,\buf,~k2,\out, ~kbus,\loopy,0,\start,0,\tS, 0.39550810372374),*/
-
 	Pseq([Pbindf(~hat2,\out,~kickHatEq2)],inf),
-	/*	Pbind(\instrument ,	\EQ2,\dur, inf, \in,~kickHatEq, \out,0,\group, ~eqGrp, \val, 659.255, \quant,1, \gain ,(-30)),*/
+		Pbind(\instrument ,	\EQ2,\dur, inf, \in,~kickHatEq2, \out,~kbus,\group, ~eqGrp, \val, 659.255, \quant,1, \gain ,(-30)),
+
 
 	Pbind(\instrument, \snare,\carHz, 41.2 ,\type, Pseq([\rest ,\rest,\note,\rest], inf),\atk, 0.00502929687,\rel, 0.0968,\rel2, 0.3872,\dur, Pseq([1/2], inf),\amp,(-12), \crv1,(-8),\crv2,(-7)   ,\out,~dumSnaEq),
 	Pbind(\instrument , \EQHP96, \frq, 120 ,\dur, inf,\in, ~dumSnaEq, \group, ~eqGrp,\val, 1800, \quant, 8, \gain, (-10), /*\val, 10,*/ \out , ~dumSnaLimit),
 	Pbind(\instrument , \limiter,\dur, inf, \in,~dumSnaLimit, \gain, 20,\group, ~limitGrp,\out,~snBus),
 
 
+
+	Pbind(\instrument , \EQHP2, \frq, 3000 ,\dur, inf,\in, ~hatEq, \group, ~eqGrp, \out , ~limitHat,\vol,4),
+	Pbind(\instrument , \EQHP2, \frq, 3000 ,\dur, inf,\in, ~cymbalEq, \group, ~eqGrp,\out , ~limitCymb,\vol,4),
+
 	Pbind(\instrument,\compS, \dur,inf,\thr,0.6 ,\sB, 1.2,\sA, 1/4,\atk ,0.0001, \rel ,0.04840
-,\gain,1,\in, ~comBusHat ,\ctrl, ~kbus, \out,~hatEq,\group, ~compGrp),
-	Pbind(\instrument,\compS,\dur,inf,\thr,0.8 ,\sB, 1.05,\sA, 1/2,\atk ,0.001, \rel ,0.04840,\gain,3.5,\in, ~comBusCymb ,\ctrl, ~kbus, \out,~cymbalEq,\group, ~compGrp),
+,\gain,1,\in, ~comBusHat ,\ctrl, ~kbus, \out,~limitHat,\group, ~compGrp),
+	Pbind(\instrument,\compS,\dur,inf,\thr,0.8 ,\sB, 1.05,\sA, 1/2,\atk ,0.001, \rel ,0.04840,\gain,3.5,\in, ~comBusCymb ,\ctrl, ~kbus, \out,~limitCymb,\group, ~compGrp),
 
-
-	Pbind(\instrument , \EQHP2, \frq, 3000 ,\dur, inf,\in, ~hatEq, \group, ~compGrp2, \out , ~comFuzz22,\vol,4),
-	Pbind(\instrument , \EQHP2, \frq, 3000 ,\dur, inf,\in, ~cymbalEq, \group, ~compGrp2,\out , ~comFuzz22,\vol,4),
 
 
 	Pbind(\instrument , \EQHP96, \frq, 120 ,\dur, inf,\in, ~snareEQ, \group, ~eqGrp,\val, 1800, \quant, 8, \gain, (-10), /*\val, 10,*/ \out , ~snareLimit),
 
-	Pbind(\instrument , \limiter,\dur, inf, \in,~snareLimit, \gain, 20,\group, ~limitGrp,\out,~toPan2),
+	/*Pbind(\instrument , \limiter,\dur, inf, \in,~snareLimit, \gain, 20,\group, ~limitGrp,\out,~toPan2),*/
 
 	Pbind(\instrument, \pan2,\in, ~toPan2,\dur, inf,\group, ~limitGrp,\group, ~stereoGrp),
 

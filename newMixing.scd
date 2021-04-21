@@ -34,3 +34,11 @@
 // ~mix21.set(\gain,32)
 ~mix22= Synth(\limiterStoMixer,[\c22,1,\in, ~limitBus2,\gain,31,\out,~sterBus2],~limitGrp);
 // ~mix22.set(\gain,32)
+
+
+~mix23= Synth(\limiterStoMixer,[\c23,1,\in, ~limitCymb,\gain,31,\out,~comFuzz22],~limitGrp);
+
+~mix24= Synth(\limiterStoMixer,[\c24,1,\in, ~limitHat,\gain,31,\out,~comFuzz22],~limitGrp);
+
+
+~mix25= Synth(\limiterToMixer,[\c25,1,\in, ~snareLimit,\gain,20,\out,~toPan2],~limitGrp);
