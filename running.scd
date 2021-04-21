@@ -14,7 +14,7 @@ s.plotTree
 s.meter
 (
 s.options.memSize = 2097152;
-Server.default.options.numOutputBusChannels = 20;
+Server.default.options.numOutputBusChannels = 23;
 Server.default.options.sampleRate =  48000;
 Server.default.options.outDevice_("Audient iD14");
 )
@@ -32,10 +32,6 @@ ServerOptions.outDevices;
 (
  s.waitForBoot({
 
-
-
-
-
 	var numSegs;
 	// ~bpm = 171.703592;
 	~bpm = 151.703592;
@@ -50,7 +46,9 @@ ServerOptions.outDevices;
 	~hz8Oct = ~hz1beat * 2048;
 	~scale = 2.rand;
 
-
+	FreqScope.new;
+	s.meter;
+	s.plotTree;
 
 s.sync;
 	"buff init".postln;
@@ -131,23 +129,21 @@ s.sync;
 	~f2 = Buffer.alloc(s, s.sampleRate *  t.beatDur*4);//  (t.beatDur*4)/*1.5488*/,1);
 	~delay = Buffer.alloc(s, 48000 * 3, 2);
 	~delayX = Buffer.alloc(s, 48000 * 3, 2);
-	~delay2 = Buffer.alloc(s, 48000 * 3, 2);
+	/*~delay2 = Buffer.alloc(s, 48000 * 3, 2);
 	~delay3 = Buffer.alloc(s, 48000 * 3, 2);
 	~delay4 = Buffer.alloc(s, 48000 * 3, 2);
-	~delay5 = Buffer.alloc(s, 48000 * 3, 2);
+	~delay5 = Buffer.alloc(s, 48000 * 3, 2);*/
 	~delay6= Buffer.alloc(s, 48000 * 3, 2);
+
+
 
 	b = Buffer.alloc(s, 44100 * 2, 2);
 	~b2 = Buffer.alloc(s,48000,1);
 
 	~buf = Buffer.alloc(s,s.sampleRate*90 );
 	~bufBg = Buffer.alloc(s,s.sampleRate*60,10 );
-	~bufSnoopy = Buffer.alloc(s,s.sampleRate*90 );
+	~bufSnoopy = Buffer.alloc(s,s.sampleRate*256* t.beatDur );
 	~leTout = Buffer.alloc(s,s.sampleRate* (256* t.beatDur),10);
-
-
-	~buf2 = Buffer.alloc(s,s.sampleRate*90 );
-	~bufSnoopy2 = Buffer.alloc(s,s.sampleRate*90 );
 
 
 	// ~remyAudio = Buffer.read(s, "/Users/davidmignot/superCollider-master/remy.wav");
@@ -175,7 +171,7 @@ s.sync;
 	~church =	Pbind(\instrument,\reverb, \dur,inf,\roomsize, 80, \revtime, 4.85, \damping, 0.41, \inputbw, 0.19, \drylevel, -3, \earlylevel, -9, \taillevel, -11 );
 
 
-
+~revL = [~quickFix, ~rShort, ~rLong];
 
 	~dispatchBus = Bus.audio(s,1);
 
@@ -189,6 +185,15 @@ s.sync;
 	~ptrBus4 = Bus.audio(s,1);
 
 	~distoPercu= Bus.audio(s,1);
+
+	~revBus1= Bus.audio(s,1);
+	~revBus2= Bus.audio(s,1);
+	~comBus1= Bus.audio(s,2);
+	~comBus2= Bus.audio(s,2);
+	~limitBus1= Bus.audio(s,2);
+	~limitBus2= Bus.audio(s,2);
+	~sterBus1= Bus.audio(s,2);
+	~sterBus2= Bus.audio(s,2);
 
 
 ~percuStereo= Bus.audio(s,2);
@@ -1557,7 +1562,7 @@ SynthDef("TriggerBufferGranular", {arg out=0, bufnum=0, in=0, thresh = 0.004, am
 
 	"reverb init".postln;
 
-
+	SynthDef(\del, {|out=0, in, decT=1.5544|AllpassL.ar(In.ar(in,1),decaytime: decT)}).add;
 
 	SynthDef(\pingD, { |out = 0, bufnum = 0, dur, feedback = 0.5, delayTime = 0.3, in /*stereoL =0.00555, stereoR =0, dec=0.5, amp =1*/ |
     var left;
@@ -1756,14 +1761,14 @@ SynthDef(\EQHP10, {|out=0, in, val, quant, gain, val2, quant2, gain2 frq=100, vo
 	// Out.ar(0,RMS.ar(sig).ampdb.round(0.1).poll(label:"bass db :")* [0,0,1])
 
 	SynthDef(\limiterStoMixer, {|in, out = 0,gain=1,vol =1, du =0.01,rel=0.8, atk =0.01 ,thr= 0.001,sB =1,sA= 0.05,
-		c1=0,c2=0,c3=0,c4=0,c5=0,c6 =0,c7 =0,c8 =0,c9 =0,c10 =0,c11 =0,c12 =0,c13 =0,c14 =0,c15 =0,c16=0,c17=0,c18=0,c19=0,c20 =0,c21=0,name|
+		c1=0,c2=0,c3=0,c4=0,c5=0,c6 =0,c7 =0,c8 =0,c9 =0,c10 =0,c11 =0,c12 =0,c13 =0,c14 =0,c15 =0,c16=0,c17=0,c18=0,c19=0,c20 =0,c21=0,c22=0,c23=0,name|
 
 		Out.ar(out , CompanderD.ar( In.ar(in,2),thr, sB ,sA, atk, rel)* gain;);
 
-		Out.ar( 0,  CompanderD.ar( In.ar(in,2),thr, sB ,sA, atk, rel)* gain * [0,0,c2,c3,c4,c5,c6,c7,c8,c9,c10,c11,c12,c13,c14,c15,c16,c17,c18,c19,c20,c21]);
+		Out.ar( 0,  CompanderD.ar( In.ar(in,2),thr, sB ,sA, atk, rel)* gain * [0,0,c2,c3,c4,c5,c6,c7,c8,c9,c10,c11,c12,c13,c14,c15,c16,c17,c18,c19,c20,c21,c22,c23]);
 
 
-		Out.ar(0,RMS.ar(CompanderD.ar( In.ar(in,2),thr, sB ,sA, atk, rel)* gain ).ampdb.round(0.1).poll(label:name.poll)* [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1]);
+	/*	Out.ar(0,RMS.ar(CompanderD.ar( In.ar(in,2),thr, sB ,sA, atk, rel)* gain ).ampdb.round(0.1).poll(label:name.poll)* [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1]);*/
 	}).add;
 
 
@@ -1774,7 +1779,7 @@ SynthDef(\EQHP10, {|out=0, in, val, quant, gain, val2, quant2, gain2 frq=100, vo
 
 		Out.ar( 0,  CompanderD.ar( In.ar(in,10),thr, sB ,sA, atk, rel)* gain * [0,0,c2,c3,c4,c5,c6,c7,c8,c9,c10,c11,c12,c13,c14,c15,c16,c17,c18,c19,c20,c21]);
 
-		Out.ar(0,RMS.ar(CompanderD.ar( In.ar(in,10),thr, sB ,sA, atk, rel)* gain ).ampdb.round(0.1).poll(label:name.poll)* [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1]);
+		/*Out.ar(0,RMS.ar(CompanderD.ar( In.ar(in,10),thr, sB ,sA, atk, rel)* gain ).ampdb.round(0.1).poll(label:name.poll)* [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1]);*/
 	}).add;
 
 
@@ -1788,7 +1793,7 @@ SynthDef(\EQHP10, {|out=0, in, val, quant, gain, val2, quant2, gain2 frq=100, vo
 		trig/*Dust.kr(4.0)*/,startPos: start,loop: loopy/*,doneAction: dA*/)* [0,0,c2,c3,c4,c5,c6,c7,c8,c9,c10,c11,c12,c13,c14,c15,c16,c17,c18,c19,c20,c21]* EnvGen.kr(Env([0,vl,vl,0],[0,dur,0]),timeScale: tS,doneAction: 2));
 
 
-	Out.ar(0,RMS.ar(In.ar( in, 10)).ampdb.round(0.1).poll(label:name.poll )* [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1]);
+/*	Out.ar(0,RMS.ar(In.ar( in, 10)).ampdb.round(0.1).poll(label:name.poll )* [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1]);*/
 	}).add;
 
 
@@ -2252,7 +2257,7 @@ s.sync;
 	);*/
 
 
-	~bass = Pbindef(\bass,
+	/*~bass = Pbindef(\bass,
 		\instrument, \bass,
 		\type, Pseq([\rest, \note, \note, \note], inf),
 		\cho, Pseq([0,0.00378125*4,0.001890625*4,0],inf),
@@ -2264,6 +2269,20 @@ s.sync;
 		\atkcrv, -2,
 		\relcrv, -2,\relcrv2, -4
 		,\amp,(-12.6)/*(-13)*/,\out,~bassEq
+	);*/
+
+
+	~bassZ = Pbind(\instrument, \bass,
+	// \type, Pseq([\note, \note, \note, \note], inf),
+	// \cho, Pseq([0,0.00378125*4,0.001890625*4,0],inf),
+		\dur, Pseq([4/1],1),\lpf,100,
+		\midinote, 28, \bus, ~bassShapB,
+		\atk, 0/*t.beatDur/4 * 0.01*/,
+		\rel, t.beatDur*4 * 0.996,/*\rel, t.beatDur/4 * 0.98,*/
+		\rel2, t.beatDur/4 * 0.0012,
+		\atkcrv, -2,
+		\relcrv, -2,\relcrv2, -4
+		,\amp,(7/*-1*/)/*(-13)*/,\out,~bassEq
 	);
 
 	~hat2 =Pbind(\instrument, \percussion,\rel,0.04840,\rel2,0.02420,\amp, (-28.2), \crv1, (-4), \crv1b, (-5), \modHz, exprand(500,10000), \mulMod, rrand(100, 500), \carHz, exprand(20,10000), \modAmp, 0.82875.rrand(0.4),\dur,Pseq([1/1],1) ,\out, ~kickHatEq);
@@ -2394,6 +2413,67 @@ Pbind( \instrument, \playBuf10, \impulse, 10 ,
 
 
 )
+
+
+~eqGrp=Group.new;
+~stereoGrp=Group.after(~eqGrp);
+~recGrp2=Group.after(~stereoGrp);
+
+
+(
+Ppar([~hat2,~kick,Pbind(\instrument ,	\EQ2,\dur, inf, \in,~kickHatEq, \out,0,\group, ~eqGrp, \val, 659.255, \quant,1, \gain ,(-30)),
+	Pbind(\instrument,\recLoop,\buf,~k2,\recording,1, \in,0,\group,~recGrp2,\dur,inf)
+],1).play(t) ;
+)
+
+
+~k2.plot
+
+
+(//BASS ALONE
+Ppar([
+
+	Pbind(\instrument ,	\EQ2,\dur, inf, \in,~kickHatEq, \out,0,\group, ~eqGrp, \val, 659.255, \quant,1, \gain ,(-30)),
+
+
+
+
+	~bassShap, Ppar([/*~hat2,~kick,*/~bassZ],1),
+
+	Pbind(\instrument ,	\EQHP2,\dur, inf, \in,~bassEq, \out,0,\group, ~eqGrp, \frq, 20.6,\vol,1),
+
+	Pbind(\instrument,\recLoop,\buf,~b3,\recording,1, \in,0,\group,~recGrp2,\dur,inf)
+
+],1).play(t);
+
+)
+
+~b3.plot
+~k2.play
+~kb2.play
+(
+Ppar([
+
+	Pbind(\instrument,\recLoopS,\buf,~kb2,\recording,1, \in,0,\group,~recGrp2,\dur,inf),
+
+	Pbind(\instrument, \playBuf, \impulse, 0.003 ,\dur,    Pseq([1/1],inf), \tS,  0.39550810372374,\buf,~k2,\out, ~kbToPan2,\loopy,0,\start,0,\tS, 0.39550810372374),
+
+Pseq([Pbind(\instrument, \wNoise,\dur,Pseq([1/4],1),\dec ,Pkey(\dur),\amp,(-12),\tS, 0.39550810372374,\type, \rest  ),
+		Pbind( \instrument, \playBuf, \impulse, 0.003 ,\dur,    Pseq([1/4],3), \tS,  0.39550810372374,\buf,~b3,\out, ~kbToPan2,\loopy,0,\start,0,  \decT,0.90,\subsT ,Pseq([0,0.06,0.08],inf))],inf),
+Pbind(\instrument, \pan2, \in,~kbToPan2,\out,0 ,\group,~stereoGrp,\dur, inf),
+
+
+
+
+
+
+],1).play(t);
+
+
+
+)
+
+~daKb =Pbind(\instrument, \playBufS, \dur,  Pseq([1/1],inf), \tS,  0.39550810372374,\buf,~kb2);
 
 
 
