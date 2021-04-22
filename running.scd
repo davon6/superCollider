@@ -13,6 +13,7 @@ s.plotTree
 ~remyAudio.play
 s.meter
 (
+s.latency=0;
 s.options.memSize = 2097152;
 Server.default.options.numOutputBusChannels = 26;
 Server.default.options.sampleRate =  48000;
