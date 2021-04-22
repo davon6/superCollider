@@ -12,7 +12,7 @@ MIDIIn.disconnectAll;
 
 FreqScope.new
 s.meter
-
+~buf.play
 
 
 (
@@ -44,10 +44,13 @@ Scale.majorPentatonic(\just).degreeToFreq(7.rand, 76.midicps, -20)
 ].scramble,inf),\dur,Pxrand([ Pseq([4/1],1),Pseq([1/1],4), Pseq([1/4],16)],inf),\legato, 2,\group,~shapGrp,\tS, 0.39550810372374,).play(t);
 
 
+
  ~h1 = Synth(\shiftX,[\in,~toShifter,\out ,~outTolimit,\freq,0],~shiftGrp);
 
 ~l1 = Synth(\lim,[\in, ~outTolimit,\out,0],~limitGrp);
-h = Synth(\disto,[\in,  ~outDisto , \out,0/*~outTolimit*/],~shapGrp);
+
+
+h = Synth(\disto3,[\in,  ~outDisto , \out,0/*~outTolimit*/],~shapGrp);
 /*
 // l = Synth(\limiter,[\in, ~outTolimit,\out,0, \gain, 140],~limitGrp);*/
 
@@ -88,7 +91,7 @@ MIDIdef.cc(\ml2, { |value|var modFreq = value.linlin(0, 127, 0, 0.8);
 },ccNum: 18 ); //is 10
 
 
-MIDIdef.cc(\mDel, { |value|var modFreq = value.linlin(0, 127, 1, -0.5);
+MIDIdef.cc(\mDel, { |value|var modFreq = value.linlin(0, 127, 0.7, -0.5);
 
 	~v.set(\decT, modFreq.round(0.001).postln);
 
@@ -187,18 +190,21 @@ v.set(\multi, modFreq.round(0.01).postln);
 )
 
 
+
+
+FreqScope.new
+~buf.play
+~bufSnoopy.play
+
+
 (
 ~filterGrp = Group.new;
 ~distoGrp= Group.after(~filterGrp);
 ~recGrp= Group.after(~distoGrp);
 
 // Ppar([~bassShap,Ppar([Pbindf(~kick,\amp, (-5)),Pbindf(~bass,\amp, (-7) ),],inf)],1).play(t);
-)
-FreqScope.new
-~buf.play
-~bufSnoopy.play
-(
-g = Synth(  \playBufX,[ \impulse, 0.00001,\loo,1,\buf,~audio2,\out, ~bgFil]);
+
+g = Synth(  \playBufX,[ \impulse, 0.00001,\loo,1,\buf,~buf,\out, ~bgFil]);
 
 
 

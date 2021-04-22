@@ -142,7 +142,7 @@ s.sync;
 	b = Buffer.alloc(s, 44100 * 2, 2);
 	~b2 = Buffer.alloc(s,48000,1);
 
-	~buf = Buffer.alloc(s,s.sampleRate*90 );
+	~buf = Buffer.alloc(s,s.sampleRate*256* t.beatDur  );
 	~bufBg = Buffer.alloc(s,s.sampleRate*60,10 );
 	~bufSnoopy = Buffer.alloc(s,s.sampleRate*256* t.beatDur );
 	~leTout = Buffer.alloc(s,s.sampleRate* (256* t.beatDur),10);
@@ -196,6 +196,8 @@ s.sync;
 	~limitBus2= Bus.audio(s,2);
 	~sterBus1= Bus.audio(s,2);
 	~sterBus2= Bus.audio(s,2);
+	~toLim = Bus.audio(s,1);
+	~to4bar= Bus.audio(s,2);
 
 
 ~percuStereo= Bus.audio(s,2);
@@ -269,7 +271,7 @@ s.sync;
 	~distoBg = Bus.audio(s,1);
 ~distoBg2= Bus.audio(s,1);
 	~eqBg = Bus.audio(s,1);
-	~outDisto = Bus.audio(s,1);
+	~outDisto = Bus.audio(s,3);
 
 
 	~riToEq= Bus.audio(s,2);
@@ -501,7 +503,7 @@ s.sync;
 	~riLimit=  Bus.audio(s,2);   /* ===>random ~flanger would be awe*/
 ~riStereo=  Bus.audio(s,2);
 
-~outTolimit=  Bus.audio(s,1);
+~outTolimit=  Bus.audio(s,3);
 	~snareEQ=  Bus.audio(s,1);
 	~snareLimit=  Bus.audio(s,1);
 
@@ -527,7 +529,7 @@ s.sync;
 	~toPan22= Bus.audio(s,1);
 ~toPan3= Bus.audio(s,1);
 
-	~toShifter= Bus.audio(s,3);
+	~toShifter= Bus.audio(s,1);
 
 	~toEqFlo= Bus.audio(s,1);
 	~toGateFlo= Bus.audio(s,1);
@@ -856,7 +858,7 @@ SynthDef(\envSli, {|out, val1=20, val2=20000,  dur,tS=1, crv =7|Out.kr(out,
 		);
 
 		env =EnvGen.ar(
-	Env([1 , 0.4, 1,    1,1,0],
+	Env([1 , 0.4, 0.6,    0.6,0.6,0],
 		[0.008, 0.08, 0,0.006,0.09],[-1.8,-30,5,5,-5]),doneAction:2);
 	//EnvGen.ar(Env.perc(0, 0.40),doneAction:2);
 
@@ -879,7 +881,7 @@ SynthDef(\envSli, {|out, val1=20, val2=20000,  dur,tS=1, crv =7|Out.kr(out,
 	SynthDef(\bass,{
 		arg freq=41.2, dure=1, amp=0.5,
 		atkcrv=1, relcrv=5,
-		atk=0, rel=0.1, lpf=100, out = 0, bus, dur,cho=0,rel2,relcrv2;
+		atk=0, rel=0.1, lpf=100, out = 0, bus, dur,cho=0,rel2,relcrv2,envF;
 
 		var sig, env, lvlBa;
 
@@ -887,6 +889,15 @@ SynthDef(\envSli, {|out, val1=20, val2=20000,  dur,tS=1, crv =7|Out.kr(out,
 			Env(
 				[0,1,0.6,0],
 				[atk,rel-cho,rel2],
+				[atkcrv,relcrv,relcrv2]
+			),
+			doneAction:2
+		);
+
+		envF = EnvGen.kr(
+			Env(
+				[0,1080,20,0],
+				[atk,rel/4,rel2],
 				[atkcrv,relcrv,relcrv2]
 			),
 			doneAction:2
@@ -903,9 +914,9 @@ SynthDef(\envSli, {|out, val1=20, val2=20000,  dur,tS=1, crv =7|Out.kr(out,
 
 			sig
 
-			,2637.02 /*659.255*4*/ ,1, (-24))
-		,164.81375,2, (-18)).round(2**(-16)
-,lpf - In.ar(bus, 1)),lpf - In.ar(bus, 1))
+			,2637.02 /*659.255*4*/ ,4, (-20))
+		,164.81375,8, (-14)).round(2**(-16)
+,envF+lpf - In.ar(bus, 1)),envF+lpf - In.ar(bus, 1))
 		);
 
 	//sig = LPF.ar(LPF.ar LPF.ar(LPF.ar(sig, lpf - In.ar(bus, 1)).round(2**(-16)
@@ -1216,10 +1227,10 @@ SynthDef(\dispatch2,{|in, out, dur|Out.ar(out, In.ar(in,2)* EnvGen.kr(Env([0,1,1
 
 
 
-SynthDef(\shiftX, {|in, out=0, frq,mult=0|Out.ar(out, FreqShift.ar(In.ar(in, 3),freq:
-		[frq,frq+30,frq-50],mul: [1,mult,mult]
+SynthDef(\shiftX, {|in, out=0, frq=0,mult=0|Out.ar(out, FreqShift.ar(In.ar(in, 1),freq:
+		[frq,frq+5000,frq-8000],mul: [1,mult,mult]
 
-	));}).add;
+	)!2);}).add;
 
 
 //below dur can be factored to change mod
@@ -1344,6 +1355,8 @@ freq         )* EnvGen.kr(Env([0,1,1,0],[0.055,dur-0.055,0],4),timeScale: tS,don
 
 
 	SynthDef(\distoS, {|out=0,in|Out.ar(out, In.ar(in,2).round(2**(-16)));}).add;
+
+	SynthDef(\disto3, {|out=0,in|Out.ar(out, In.ar(in,3).round(2**(-16)));}).add;
 
 	SynthDef(\gate,{|in, out=0, vlAtk=0, vlDec=1,vlSub=0, vlRel=0, atkT=0, decT=1, subsT=0, relT=0, atckC=0, decC=0, relC=0, bus1, bus2, dur,relSu=0,vlSub2=0,tS =1|
 	var env;
@@ -2249,7 +2262,9 @@ SynthDef(\sequ,{|value, dur, in=0, out=0, vlAtk=0, vlDec=1,vlSub=1,vlSub2=1, vlR
 		Out.ar(out,effect * EnvGen.kr(Env.step([1,1],[dur,0]),timeScale: tS,doneAction: 2));
 	}).add;
 
-	SynthDef(\lim,{Out.ar(0,Balance.ar(In.ar(~outTolimit),SinOsc.ar(mul: 0.2)))}).add;
+	SynthDef(\lim,{|out=0,ml=0.2|Out.ar(out,Balance.ar(In.ar(~outTolimit),SinOsc.ar(mul: ml)))}).add;
+
+	SynthDef(\lim2,{|out=0,ml=0.2,in|Out.ar(out,Balance.ar(In.ar(in,1),SinOsc.ar(mul: ml)))}).add;
 
 s.sync;
 
@@ -2303,7 +2318,7 @@ s.sync;
 		\rel2, t.beatDur/4 * 0.0012,
 		\atkcrv, -2,
 		\relcrv, -2,\relcrv2, -4
-		,\amp,(7/*-1*/)/*(-13)*/,\out,~bassEq
+		,\amp,(4/*-1*/)/*(-13)*/,\out,~bassEq
 	);
 
 	~hat2 =Pbind(\instrument, \percussion,\rel,0.04840,\rel2,0.02420,\amp, (-28.2), \crv1, (-4), \crv1b, (-5), \modHz, exprand(500,10000), \mulMod, rrand(100, 500), \carHz, exprand(20,10000), \modAmp, 0.82875.rrand(0.4),\dur,Pseq([1/1],1) ,\out, ~kickHatEq);
@@ -2475,16 +2490,17 @@ Ppar([
 
 ~b3.plot
 ~k2.play
-~kb2.plot
+~kb2.play
 (
 Ppar([
 
 	Pbind(\instrument,\recLoopS,\buf,~kb2,\recording,1, \in,0,\group,~recGrp2,\dur,inf),
-
-	Pbind(\instrument, \playBuf, \impulse, 0.003 ,\dur,    Pseq([1/1],inf), \tS,  0.39550810372374,\buf,~k2,\out, ~kbToPan2,\loopy,0,\start,0,\tS, 0.39550810372374),
+Pseq([
+	Pbind(\instrument, \playBuf, \impulse, 0.003 ,\dur,    Pseq([1/2],1), \tS,  0.39550810372374,\buf,~k2,\out, ~kbToPan2,\loopy,0,\start,0,\tS, 0.39550810372374),
+		Pbind(\instrument, \wNoise,\dur,Pseq([1/2],1),\dec ,Pkey(\dur),\amp,(-12),\tS, 0.39550810372374,\type, \rest  )],inf),
 
 Pseq([Pbind(\instrument, \wNoise,\dur,Pseq([1/4],1),\dec ,Pkey(\dur),\amp,(-12),\tS, 0.39550810372374,\type, \rest  ),
-		Pbind( \instrument, \playBuf, \impulse, 0.003 ,\dur,    Pseq([1/4],3), \tS,  0.39550810372374,\buf,~b3,\out, ~kbToPan2,\loopy,0,\start,0,  \decT,0.90,\subsT ,Pseq([0,0.06,0.08],inf))],inf),
+		Pbind( \instrument, \playBuf, \impulse, 0.003 ,\dur,    Pseq([1/4],3), \tS,  0.39550810372374,\buf,~b3,\out, ~kbToPan2,\loopy,0,\start,0,  \decT,0.90,\subsT ,Pseq([0,0.01,0.02],inf))],inf),
 Pbind(\instrument, \pan2, \in,~kbToPan2,\out,0 ,\group,~stereoGrp,\dur, inf),
 
 
@@ -2501,5 +2517,10 @@ Pbind(\instrument, \pan2, \in,~kbToPan2,\out,0 ,\group,~stereoGrp,\dur, inf),
 ~daKb =Pbind(\instrument, \playBufS, \dur,  Pseq([1/1],inf), \tS,  0.39550810372374,\buf,~kb2);
 
 
+~vocal  = Buffer.read(s,"/Users/davidmignot/Documents/REAPER Media/03-thEnd-consolidated.wav");
 
+
+~audio3 = Buffer.read(s,"/Users/davidmignot/Documents/REAPER Media/02-consolidated.wav");
+~audio3 = Buffer.read(s,"/Users/davidmignot/Documents/REAPER Media/02-consolidated-02.wav");
+~audio3 = Buffer.read(s,"/Users/davidmignot/Documents/REAPER Media/02-consolidated-03.wav");
 
