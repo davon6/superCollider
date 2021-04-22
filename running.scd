@@ -123,6 +123,8 @@ s.sync;
 	~b3 = Buffer.alloc(s, s.sampleRate *5,1);
 	~kb1 = Buffer.alloc(s, s.sampleRate *1,1);
 	~kb2 = Buffer.alloc(s, s.sampleRate *1,2);
+
+	~kb2Test = Buffer.alloc(s, s.sampleRate *20,2);
 	~e = Buffer.alloc(s, s.sampleRate *   t.beatDur*4 /*0.3872*/,1);
 	~f = Buffer.alloc(s, s.sampleRate *  t.beatDur*4);//  (t.beatDur*4)/*1.5488*/,1);
 	~e2 = Buffer.alloc(s, s.sampleRate *   t.beatDur*4 /*0.3872*/,1);
@@ -212,6 +214,7 @@ s.sync;
 	~delayToLimit= Bus.audio(s,2);
 
 	~delayToEq= Bus.audio(s,2);
+	~toKbGate= Bus.audio(s,2);
 
 	~gate2Bus = Bus.audio(s,1);
 
@@ -445,6 +448,7 @@ s.sync;
 	~no1 = Bus.audio(s,10);
 	~fusible = Bus.audio(s,10);
 	~dipatchKB = Bus.audio(s,2);
+	~dipatchKB2 = Bus.audio(s,2);
 	~stereoK= Bus.audio(s,1);
 	~rollingK = Bus.audio(s,10);
 
@@ -2313,7 +2317,9 @@ s.sync;
 
 ~hat = Pbind(\instrument,\percussion,\dur,Pseq([1/4], 64),\atk, 0,\rel,0.04840,\rel2,0.02420,\amp,Pseq([( -16.2), ( -16.7),( -16.5),( -16.2),( -16.2),( -15.9),( -16.2),( -16.2)],inf), \crv1, (-3), \crv1b, (-5), \modHz, exprand(500,10000).postln, \mulMod, rrand(100, 500).postln, \carHz, exprand(20,10000), \modAmp, 0.12875, \latch, 18500, \stereoR, 0.007,\out,~hatEq);
 
-	~snare = Pbind(\instrument, \snare,\carHz, 41.2 ,\type, Pseq([\rest ,\rest,\note,\rest], 8),\atk, 0.00502929687,\rel, 0.0968,\rel2, 0.3872,\dur, Pseq([1/2], inf),\amp,(-12), \crv1,(-8),\crv2,(-7)   ,\out,~snareEQ, \atk,t.beatDur * 0.02, \atk2,Pkey(\atk),\da1,0);
+
+	//MUST BE RNDMED
+	~snare = Pbind(\instrument, \snare,\carHz, 41.2 ,\type, Pseq([\rest ,\rest,\note,\rest], 8),\atk, 0.00502929687,\rel, 0.0968,\rel2, 0.3872,\dur, Pseq([1/2], inf),\amp,(-12), \crv1,(-8),\crv2,(-7)   ,\out,~snareEQ, \atk,t.beatDur * 0.02, \atk2,Pkey(\atk),\da1,2);
 
 
 	~bell = Pbind(\instrument, \percussion, \dur,Pseq([4/1],1 ),\carHz, Pfunc({1050.12070612224.rrand(150)}),\modHz,Pfunc({9334.3179398.rrand(0.1)}),\modAmp,Pfunc({ 0.00875.rrand(0.0001)}) ,\amp,1,\rel,4.5544,\rel2,4.242,\stereoL, 0.00555, \crv1,  (-7.4), \crv1b,(-42), \mulMod, 901,\out, ~bellFlang,\latch,8900,\atk,0.01,\atk2,Pfunc({0.3.rrand(0.01)}));

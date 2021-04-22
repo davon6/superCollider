@@ -47,8 +47,8 @@ Scale.majorPentatonic(\just).degreeToFreq(7.rand, 76.midicps, -20)
  ~h1 = Synth(\shiftX,[\in,~toShifter,\out ,~outTolimit,\freq,0],~shiftGrp);
 
 ~l1 = Synth(\lim,[\in, ~outTolimit,\out,0],~limitGrp);
-/*h = Synth(\disto,[\in,  ~outDisto , \out,0/*~outTolimit*/],~shapGrp);
-
+h = Synth(\disto,[\in,  ~outDisto , \out,0/*~outTolimit*/],~shapGrp);
+/*
 // l = Synth(\limiter,[\in, ~outTolimit,\out,0, \gain, 140],~limitGrp);*/
 
 
