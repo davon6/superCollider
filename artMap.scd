@@ -208,7 +208,7 @@ g = Synth(  \playBufX,[ \impulse, 0.00001,\loo,1,\buf,~buf,\out, ~bgFil]);
 
 
 
-k = Synth(\filterU, [\out,0/*~distoBg*/,\in, ~bgFil, \lFrq,900,\hFrq,300,\qfH ,0.4, \qlL ,0.3 ], ~filterGrp);
+k = Synth(\filterU, [\out,0/*~distoBg*/,\in, ~bgFil, \lFrq,900,\hFrq,300,\qfH ,0.4, \qlL ,0.3,\qlL2 ,0.35 ], ~filterGrp);
 /*d = Synth(\disto,[\in,~distoBg,\out,0],~distoGrp);*/
 
 

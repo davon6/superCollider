@@ -13,7 +13,7 @@ s.plotTree
 ~remyAudio.play
 s.meter
 (
-s.latency=0;
+// s.latency=0.05;
 s.options.memSize = 2097152;
 Server.default.options.numOutputBusChannels = 26;
 Server.default.options.sampleRate =  48000;
@@ -21,7 +21,7 @@ Server.default.options.outDevice_("Audient iD14");
 )
 
 Server.default.options.outDevice_("External Headphones");
-Server.default.options.outDevice_("Built-in Output");
+Server.default.options.outDevice_("BlackHole 2ch","Built-in Output");
 
 Server.default.options.outDevice_("MacBook Air Speakers");
 
@@ -148,6 +148,8 @@ s.sync;
 	~bufSnoopy = Buffer.alloc(s,s.sampleRate*256* t.beatDur );
 	~leTout = Buffer.alloc(s,s.sampleRate* (256* t.beatDur),10);
 
+	~leTout2 = Buffer.alloc(s,s.sampleRate* (256* t.beatDur),10);
+
 
 	// ~remyAudio = Buffer.read(s, "/Users/davidmignot/superCollider-master/remy.wav");
 
@@ -200,6 +202,7 @@ s.sync;
 	~toLim = Bus.audio(s,1);
 	~to4bar= Bus.audio(s,2);
 
+	~toStereoRise = Bus.audio(s,1);
 
 ~percuStereo= Bus.audio(s,2);
 	~gateBus = Bus.audio(s,1);
@@ -233,6 +236,7 @@ s.sync;
 	~kickHatEq2 = Bus.audio(s,2);
 ~bassEq = Bus.audio(s,2);
 	~phaseBus = Bus.audio(s,1);
+	~delToStereo= Bus.audio(s,2);
 
 	~bgBus = Bus.audio(s,2);
 
@@ -273,6 +277,14 @@ s.sync;
 ~distoBg2= Bus.audio(s,1);
 	~eqBg = Bus.audio(s,1);
 	~outDisto = Bus.audio(s,3);
+
+	~bellFlang2= Bus.audio(s,2);
+	~flanToDisto2= Bus.audio(s,2);
+	~flanToEq2= Bus.audio(s,2);
+	~flanToRev2= Bus.audio(s,2);
+	~flanToComp2= Bus.audio(s,2);
+	~flanToLimit2= Bus.audio(s,2);
+	~flanToStereo2= Bus.audio(s,2);
 
 
 	~riToEq= Bus.audio(s,2);
@@ -606,35 +618,35 @@ s.sync;
 
 
 
-	SynthDef(\playBuf ,{|out = 0,start, trig= 0.002, dur, buf, dA=2,rte=1 , tS=1, loopy=1,	decT=1, subsT=0  |Out.ar(out,PlayBuf.ar(1,buf,rte ,trigger:
+	SynthDef(\playBuf ,{|out = 0,start=0, trig= 0.002, dur, buf, dA=2,rte=1 , tS=1, loopy=1,	decT=1, subsT=0  |Out.ar(out,PlayBuf.ar(1,buf,rte ,trigger:
 		trig/*Dust.kr(4.0)*/,startPos: start,loop: loopy/*,doneAction: dA*/)* /*EnvGen.kr(Env([0,1,1,0],[0,dur,0]),timeScale: tS,doneAction: 2)*/
 	EnvGen.kr(Env([0,1,1,1,0],[0,dur*decT,dur* subsT]),timeScale: tS,doneAction: 2)
 
 	);}).add;
 
 
-	SynthDef(\playBufMod ,{|out = 0,start, trig= 0.002, dur, buf, dA=2,rte=1 , tS=1, loopy=1,	decT=1, subsT=0 ,modP |Out.ar(out,PlayBuf.ar(1,buf,rte+ In.kr(modP) ,trigger:
+	SynthDef(\playBufMod ,{|out = 0,start=0, trig= 0.002, dur, buf, dA=2,rte=1 , tS=1, loopy=1,	decT=1, subsT=0 ,modP |Out.ar(out,PlayBuf.ar(1,buf,rte+ In.kr(modP) ,trigger:
 		trig/*Dust.kr(4.0)*/,startPos: start,loop: loopy/*,doneAction: dA*/)* /*EnvGen.kr(Env([0,1,1,0],[0,dur,0]),timeScale: tS,doneAction: 2)*/
 	EnvGen.kr(Env([0,1,1,1,0],[0,dur*decT,dur* subsT]),timeScale: tS,doneAction: 2)
 
 	);}).add;
 
 
-	SynthDef(\playBufS ,{|out = 0,start, trig= 0.002, dur, buf, dA=2, tS=1, loopy=1,vl=1|Out.ar(out,PlayBuf.ar(2,buf,trigger:
+	SynthDef(\playBufS ,{|out = 0,start=0, trig= 0.002, dur, buf, dA=2, tS=1, loopy=1,vl=1|Out.ar(out,PlayBuf.ar(2,buf,trigger:
 		trig/*Dust.kr(4.0)*/,startPos: start,loop: loopy/*,doneAction: dA*/)* EnvGen.kr(Env([0,vl,vl,0],[0,dur,0]),timeScale: tS,doneAction: 2));}).add;
 
-	SynthDef(\playBuf10 ,{|out = 0,start, trig= 0.002, dur, buf, dA=2, tS=1, loopy=1,vl=1|Out.ar(out,PlayBuf.ar(10,buf,trigger:
+	SynthDef(\playBuf10 ,{|out = 0,start=0, trig= 0.002, dur, buf, dA=2, tS=1, loopy=1,vl=1|Out.ar(out,PlayBuf.ar(10,buf,trigger:
 		trig/*Dust.kr(4.0)*/,startPos: start,loop: loopy/*,doneAction: dA*/)* EnvGen.kr(Env([0,vl,vl,0],[0,dur,0]),timeScale: tS,doneAction: 2));}).add;
 
 
 
-	SynthDef(\playBuf10N ,{|out = 0,start, trig= 0.002, dur, buf, dA=2, tS=1, loopy=1,vl=1,in|Out.ar(~fusible,PlayBuf.ar(10,buf,trigger:
+	SynthDef(\playBuf10N ,{|out = 0,start=0, trig= 0.002, dur, buf, dA=2, tS=1, loopy=1,vl=1,in|Out.ar(~fusible,PlayBuf.ar(10,buf,trigger:
 		trig/*Dust.kr(4.0)*/,startPos: start,loop: loopy/*,doneAction: dA*/)* EnvGen.kr(Env([0,vl,vl,0],[0,dur,0]),timeScale: tS,doneAction: 2));
 
 	Out.ar(out,In.ar( in, 10));}).add;
 
 
-	SynthDef(\playBuf1N ,{|out = 0,start, trig= 0.002, dur, buf, dA=2, tS=1, loopy=1,vl=1,in|Out.ar(~fusible1,PlayBuf.ar(1,buf,trigger:
+	SynthDef(\playBuf1N ,{|out = 0,start=0, trig= 0.002, dur, buf, dA=2, tS=1, loopy=1,vl=1,in|Out.ar(~fusible1,PlayBuf.ar(1,buf,trigger:
 		trig/*Dust.kr(4.0)*/,startPos: start,loop: loopy/*,doneAction: dA*/)* EnvGen.kr(Env([0,vl,vl,0],[0,dur,0]),timeScale: tS,doneAction: 2));
 
 	Out.ar(out,In.ar( in, 10));}).add;
@@ -644,7 +656,7 @@ s.sync;
 		Impulse.kr(impulse* (60/~bpm),mul: amp),startPos: start,loop:loo,doneAction: 2));}).add;
 
 
-	SynthDef(\playBufX2 ,{|out = 0,start, trig, dur, amp=1,buf, dA=2, loo=0,tS=1,impulse=0.001,vl=1|Out.ar(out,PlayBuf.ar(1,buf,trigger:
+	SynthDef(\playBufX2 ,{|out = 0,start=0, trig, dur, amp=1,buf, dA=2, loo=0,tS=1,impulse=0.001,vl=1|Out.ar(out,PlayBuf.ar(1,buf,trigger:
 		Impulse.kr(impulse* (60/~bpm),mul: amp),startPos: start,loop:loo,doneAction: 2)*
 	EnvGen.kr(Env([0,vl,vl,0],[0,dur,0]),timeScale: tS,doneAction: 2));
 	}).add;
@@ -654,7 +666,7 @@ s.sync;
 		Impulse.kr(impulse),startPos: start,loop:loo,doneAction: 2));}).add;*/
 
 
-	SynthDef(\playBuf2 ,{|out = 0,start, trig=0.002, dur, buf, dA=2|Out.ar(out,PlayBuf.ar(2, buf,trigger:
+	SynthDef(\playBuf2 ,{|out = 0,start=0, trig=0.002, dur, buf, dA=2|Out.ar(out,PlayBuf.ar(2, buf,trigger:
 		trig/*Dust.kr(4.0)*/,startPos: start,loop: 1/*,doneAction: dA*/)/** EnvGen.kr(Env([0,1,1,0],[0,dur,0]))*/);}).add;
 
 
@@ -846,20 +858,20 @@ SynthDef(\envSli, {|out, val1=20, val2=20000,  dur,tS=1, crv =7|Out.kr(out,
 		Out.ar(out, sig);
 	}).add;*/
 
-	SynthDef(\kick, {
+		SynthDef(\kick, {
 		arg amp=0.2,out=0;
 		var sig, env, envF;
 
 		envF = EnvGen.ar(
 			Env(
 				[5178.15,1539.47,165,26,0,0],
-				[0.001,0.008,0.1,0,0.08],
+				[0.001,0.008,0.1,0,0.2],
 				\exp
 			)
 		);
 
 		env =EnvGen.ar(
-	Env([1 , 0.4, 0.6,    0.6,0.6,0],
+	Env([1 , 0.2, 0.6,    0.6,0.6,0],
 		[0.008, 0.08, 0,0.006,0.09],[-1.8,-30,5,5,-5]),doneAction:2);
 	//EnvGen.ar(Env.perc(0, 0.40),doneAction:2);
 
@@ -899,7 +911,7 @@ SynthDef(\envSli, {|out, val1=20, val2=20000,  dur,tS=1, crv =7|Out.kr(out,
 			Env(
 				[0,1080,20,0],
 				[atk,rel/4,rel2],
-				[atkcrv,relcrv,relcrv2]
+				[atkcrv,relcrv3,relcrv2]
 			),
 			doneAction:2
 		);
@@ -1797,9 +1809,9 @@ SynthDef(\EQHP10, {|out=0, in, val, quant, gain, val2, quant2, gain2 frq=100, vo
 	SynthDef(\limiterToMixer, {|in, out = 0,gain=1,vol =1, du =0.01,rel=0.8, atk =0.01 ,thr= 0.001,sB =1,sA= 0.05,
 		c1=0,c2=0,c3=0,c4=0,c5=0,c6 =0,c7 =0,c8 =0,c9 =0,c10 =0,c11 =0,c12 =0,c13 =0,c14 =0,c15 =0,c16=0,c17=0,c18=0,c19=0,c20 =0,c21=0,c22=0,c23=0,c24=0,c25=0,c26=0,name|
 
-		Out.ar(out , CompanderD.ar( In.ar(in,2),thr, sB ,sA, atk, rel)* gain;);
+		Out.ar(out , CompanderD.ar( In.ar(in,1),thr, sB ,sA, atk, rel)* gain;);
 
-		Out.ar( 0,  CompanderD.ar( In.ar(in,2),thr, sB ,sA, atk, rel)* gain * [0,0,c2,c3,c4,c5,c6,c7,c8,c9,c10,c11,c12,c13,c14,c15,c16,c17,c18,c19,c20,c21,c22,c23,c24,c25,c26]);
+		Out.ar( 0,  CompanderD.ar( In.ar(in,1),thr, sB ,sA, atk, rel)* gain * [0,0,c2,c3,c4,c5,c6,c7,c8,c9,c10,c11,c12,c13,c14,c15,c16,c17,c18,c19,c20,c21,c22,c23,c24,c25,c26]);
 
 	}).add;
 
@@ -2150,6 +2162,16 @@ SynthDef(\sequ,{|value, dur, in=0, out=0, vlAtk=0, vlDec=1,vlSub=1,vlSub2=1, vlR
 	SynthDef(\filterU, {|out=0,in,  hFrq=900,lFrq=300 ,qfH = 0.822379, qlL = 0.504212|Out.ar(out, BLowPass4.ar(   BHiPass4.ar(  In.ar(in,1) , hFrq , qfH), lFrq
 		/*MouseX.kr(20,22000)*/,qlL )) }).add;
 
+	SynthDef(\filterU, {|out=0,in,  hFrq=900,lFrq=300 ,qfH = 0.822379, qfH2=0.6,qlL = 0.504212,qlL2=0.4|Out.ar(out,
+
+		BLowPass4.ar(   BLowPass4.ar(
+			BHiPass4.ar(  BHiPass4.ar(
+				In.ar(in,1)
+				, hFrq , qfH) 	, hFrq+70 , qfH2)
+			, lFrq,qlL ), lFrq -150,qlL2 )
+
+	) }).add;
+
 
 
 	SynthDef(\recLoop){|buf=0,out=0,recording = 1,in = (~toRecord)|
@@ -2244,6 +2266,35 @@ SynthDef(\sequ,{|value, dur, in=0, out=0, vlAtk=0, vlDec=1,vlSub=1,vlSub2=1, vlR
 	Out.ar(~dead10,play);
 }.add;
 
+		SynthDef(\recLoop102){|buf=0,in=0,out=0,recording = 1|
+	var input = In.ar(in/*~toRecord2*/,10);
+	// Timer measures times between triggers
+	// Changed emits a trigger when recording changes value
+	// Gate updates recEnd only when not recording
+	// BufSampleRate because Timer measures seconds and we need samples instead
+	var recEnd = Gate.kr(
+		Timer.kr(Changed.kr(recording)),
+		1-recording
+	)*BufSampleRate.ir(buf);
+
+	// record buf from start to end
+	// run only when recording
+	// jump to start when recording is started
+    var rec = RecordBuf.ar(input,buf,run:recording,loop:0,trigger:recording);
+
+	var play = LoopBuf.ar(10,buf,1,
+		// when gate is positive: loop,
+		// when gate is negative: play normally
+		// (don't loop when recEnd is still at 0)
+		gate:recEnd>1,
+		startPos:0,
+		startLoop:0,
+		endLoop:recEnd
+	);
+
+}.add;
+
+
 
 
 	SynthDef(\flanger, {arg flangefreq=0.3, fdback=0.3,in,tS=1,dur,out=0;
@@ -2263,9 +2314,11 @@ SynthDef(\sequ,{|value, dur, in=0, out=0, vlAtk=0, vlDec=1,vlSub=1,vlSub2=1, vlR
 		Out.ar(out,effect * EnvGen.kr(Env.step([1,1],[dur,0]),timeScale: tS,doneAction: 2));
 	}).add;
 
-	SynthDef(\lim,{|out=0,ml=0.2|Out.ar(out,Balance.ar(In.ar(~outTolimit),SinOsc.ar(mul: ml)))}).add;
+	SynthDef(\lim,{|out=0,ml=0.3|Out.ar(out,Balance.ar(In.ar(~outTolimit),SinOsc.ar(mul: ml)))}).add;
 
 	SynthDef(\lim2,{|out=0,ml=0.2,in|Out.ar(out,Balance.ar(In.ar(in,1),SinOsc.ar(mul: ml)))}).add;
+
+	SynthDef(\lim10,{|out=0,ml=0.2,in|Out.ar(out,Balance.ar(In.ar(in,10),SinOsc.ar(mul: ml)))}).add;
 
 s.sync;
 
@@ -2274,7 +2327,7 @@ s.sync;
 
 /*Pbindef(\ki,   \out, 0) ;Pbindef(\bass, \out, 0) ;
 	Pbindef(\ki,   \out, 700) ;Pbindef(\bass, \out, 700);*/
-	~kick =	Pbindef(\ki, \instrument, \kick,\dur, Pseq([1/1],1),\amp,(-2.2/*-10.2*/),\out,0);//-3.5 - 10.5
+	~kick =	Pbindef(\ki, \instrument, \kick,\dur, Pseq([1/1],1),\amp,(-4.2/*-10.2*/),\out,0);//-3.5 - 10.5
 
 	~bassShap = Pbind(\instrument, \shap, \dur,Pseq([1/1],1),\dA1,2,\out,~bassShapB, \tS, 0.39550810372374);
 //Problem overlapping
@@ -2340,7 +2393,7 @@ s.sync;
 
 	~bell = Pbind(\instrument, \percussion, \dur,Pseq([4/1],1 ),\carHz, Pfunc({1050.12070612224.rrand(150)}),\modHz,Pfunc({9334.3179398.rrand(0.1)}),\modAmp,Pfunc({ 0.00875.rrand(0.0001)}) ,\amp,1,\rel,4.5544,\rel2,4.242,\stereoL, 0.00555, \crv1,  (-7.4), \crv1b,(-42), \mulMod, 901,\out, ~bellFlang,\latch,8900,\atk,0.01,\atk2,Pfunc({0.3.rrand(0.01)}));
 
-	~noise = Pbind(\instrument, \wNoise,\dur, Pseq([4/1],1),\dec ,Pkey(\dur),\amp,(4),\out,~filterNoise);
+	~noise = Pbind(\instrument, \wNoise,\dur, Pseq([4/1],1),\dec ,Pkey(\dur),\amp,(2),\out,~filterNoise);
 
 	~hit = Pbind(\instrument,\gran,\dur,~short1,\amp, 1,\buf,~bufSnoopy,\out,~eqDs,\gate, 1,\duration,Pkey(\dur),\impulse,0.003,
 				\vlSub, 0.8,\vlSub2,Pkey(\vlSub),\decC,Pfunc({(-10).rrand(2,1)}),\pos,Pfunc({0.90000.rand}));
@@ -2446,7 +2499,7 @@ s.sync;
 
 	~bang = /*Pseq([*/
 Pbind( \instrument, \playBuf10, \impulse, 10 ,
-		\dur,   Pseq([1/2],4) , \tS,  0.39550810372374,\start,(~leTout.numFrames/ 256 * 145.rand),\buf,~leTout,\out, ~again,\loopy,0);/*],4);*/
+		\dur,   Pseq([1/2],4) , \tS,  0.39550810372374,\start,(~leTout.numFrames/ 256 * 145.rand),\buf,~leTout,\out, ~again,\loopy,0,\vl,0.4);/*],4);*/
 
 
 
@@ -2467,8 +2520,8 @@ Ppar([~hat2,~kick,Pbind(\instrument ,	\EQ2,\dur, inf, \in,~kickHatEq, \out,0,\gr
 ],1).play(t) ;
 )
 
-
-~k2.plot
+~kick.play
+~k2.play
 
 
 (//BASS ALONE
@@ -2491,13 +2544,15 @@ Ppar([
 
 ~b3.plot
 ~k2.play
-~kb2.play
+~kb2.plot
 (
 Ppar([
 
 	Pbind(\instrument,\recLoopS,\buf,~kb2,\recording,1, \in,0,\group,~recGrp2,\dur,inf),
 Pseq([
-	Pbind(\instrument, \playBuf, \impulse, 0.003 ,\dur,    Pseq([1/2],1), \tS,  0.39550810372374,\buf,~k2,\out, ~kbToPan2,\loopy,0,\start,0,\tS, 0.39550810372374),
+	/*Pbind(\instrument, \playBuf, \impulse, 0.003 ,\dur,    Pseq([1/2],1), \tS,  0.39550810372374,\buf,~k2,\out, ~kbToPan2,\loopy,0,\start,0,\tS, 0.39550810372374),*/
+
+		Pbindf(~kick ,\dur,    Pseq([1/2],1)),
 		Pbind(\instrument, \wNoise,\dur,Pseq([1/2],1),\dec ,Pkey(\dur),\amp,(-12),\tS, 0.39550810372374,\type, \rest  )],inf),
 
 Pseq([Pbind(\instrument, \wNoise,\dur,Pseq([1/4],1),\dec ,Pkey(\dur),\amp,(-12),\tS, 0.39550810372374,\type, \rest  ),
@@ -2517,6 +2572,7 @@ Pbind(\instrument, \pan2, \in,~kbToPan2,\out,0 ,\group,~stereoGrp,\dur, inf),
 
 ~daKb =Pbind(\instrument, \playBufS, \dur,  Pseq([1/1],inf), \tS,  0.39550810372374,\buf,~kb2);
 
+s.latency=0.2
 
 ~vocal  = Buffer.read(s,"/Users/davidmignot/Documents/REAPER Media/03-thEnd-consolidated.wav");
 
