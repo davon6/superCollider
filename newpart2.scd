@@ -159,7 +159,7 @@ Prand([
 	,  \group, ~gateGrp6,\tS, 0.39550810372374),
 
 
-		Pbind(\instrument,\gateS, \dur,Pseq([1/8],8),\type,Pseq([\note, \rest,\note, \rest,\note, \note,\note,\note],inf),
+		Pbind(\instrument,\gateS, \dur,Pseq([1/8],8),\type,Pseq([\note, \rest,\note, \rest,\note, \note,/*\note,\note*/],inf),
 		\in,  Pxrand([~toGate10,~toGate102], inf)  ,\out ,0/*Pwrand([~eqBus10,
 
 				Pseq([~delayBus2],8)],[4,1].normalizeSum,inf)*/ ,\group, ~gateGrp6,\tS, 0.39550810372374),

@@ -36,8 +36,8 @@
 // ~mix14.set(\gain,40);
 //below temp
 ~mix26= Synth(\limiterToMixer,[\c2,1,\in, ~slideBusToLimit2,\gain,45,\out,~toStereoRise],~limitGrp);
-~mix27= Synth(\limiterStoMixer,[\c3,1,\in, ~flanToLimit2,\gain,30,\out,~flanToStereo2],~limitGrp);
-// ~mix27.set(\gain,30);
+~mix27= Synth(\limiterStoMixer,[\c3,1,\in, ~flanToLimit2,\gain,20,\out,~flanToStereo2],~limitGrp);
+// ~mix27.set(\gain,20);
 
 
 ~mix17= Synth(\limiterStoMixer,[\c17,1,\in, ~bigRiToLimit, \gain,70,\out,~bigRiToStereo],~limitGrp);

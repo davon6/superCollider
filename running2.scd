@@ -661,7 +661,9 @@ Pbind(\instrument, \filter, \dur,inf, \in,~hpK,\which,2,\busMod, ~bus5,\bus7,~bu
 	Pbind(\instrument, \pan2,\in, ~toPan3,\dur, inf,\out,~to4bar,\group, ~limitGrp,\group, ~stereoGrp),
 
 Pbind(\instrument, \snare,\carHz, 41.2 ,\type,Pseq([
-	Pseq([\rest ,\rest,\note,\rest], 96), Pseq([\rest,\rest,\rest,\rest],32)].scramble,inf)
+	/*Pseq([\rest ,\rest,\note,\rest], 96),*/
+Pwrand([    Pseq([\rest ,\rest,\note,\rest] ,1),Pseq([\rest ,\note,\note,\rest],1)],[26,1].normalizeSum , 96),
+		Pseq([\rest,\rest,\rest,\rest],32)].scramble,inf)
 	,\atk, 0.00502929687,\rel, 0.0968,\rel2,
 	Pseq([Pseq([ 0.3872],32), Pseq([ 0.7744],32)],inf),\dur, Pseq([1/2], inf),\amp,1, \crv1,(-8),\crv2,(-7)   ,\out,~snareEQ, \atk,t.beatDur * 0.02, \atk2,Pkey(\atk),
 	\da1,Prand([ Pseq([2],32),Pseq([0],32)],inf)      ),
@@ -1673,7 +1675,7 @@ Pbind(\instrument,\stereoS, \dur, 9999, \in, ~stereoPerch ,\spread,1  ,\center,P
 	/*Pbind(\instrument, \disto, \dur, inf, \in ,~distoBou,\out,~filterBou, \group ,~distoGrp),*/
 
 
-	Pbind(\instrument, \filter,\which,0, \in ,~filterBou, \dur, inf ,\busMod, ~bus3, \qf,0.7, \out, ~gateBou, \group ,~filterGrp),
+	Pbind(\instrument, \filter,\which,0, \in ,~filterBou, \dur, inf ,\busMod, ~bus3,\freqFil,300 \qf,0.7, \out, ~gateBou, \group ,~filterGrp),
 
 
 

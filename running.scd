@@ -966,12 +966,12 @@ SynthDef(\envSli, {|out, val1=20, val2=20000,  dur,tS=1, crv =7|Out.kr(out,
 }).add;
 
 	SynthDef.new(\snare, {
-		arg carHz=500, modHz=100, modAmp=1691, modAmp2=0.321875, atk=0, atk2=0, rel=1, amp=0.2, pan=0,rel2=2,out=0,latch=12000, da1=2, da2=2, crv1=(-3),crv2 = (-2) , noiLv  =0.321875, tS=1;
+		arg carHz=500, modHz=100, modAmp=1691, modAmp2=0.321875, atk=0, atk2=0, rel=1, amp=0.2, pan=0,rel2=2,out=0,latch=12000, da1=2, da2=2, crv1=(-3),crv2 = (-2) , noiLv  =0.321875, tS=1,atkC=0;
 	var car, mod, env, car2, mod2,env2, sig;
 
 	env = EnvGen.kr(Env.perc(atk, rel,curve:crv1), timeScale: tS,doneAction:da1);
 
-	env2 = EnvGen.kr(Env.perc(atk2, rel2, 1, crv2),timeScale: tS, doneAction:da2);
+		env2 = EnvGen.kr(Env.perc(atk2, rel2, 1,[atkC, crv2]),timeScale: tS, doneAction:da2);
 
 	mod = SinOsc.ar(modHz, mul:modAmp);
 	car = SinOsc.ar(carHz + mod) * env * modAmp2;
