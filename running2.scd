@@ -248,7 +248,7 @@ Pxrand([
 	/*Pbind(\instrument, \lfo14, \dur,Pseq([16/1],inf),\val,Prand([0, 12],inf), \out,  ~bus12, \group, ~lfoGrp),*/
 
 	Pbind(\instrument, \lfo13, \val,0.075,\dur,Pseq([64/1],inf),\rL,60,\rH,3600 ,\out,  ~bus11, \group, ~lfoGrp,\tS, 0.39550810372374),
-	Pbind(\instrument, \lfo13, \val,0.075,\dur,Pseq([16/1],inf),\rL,3200,\rH,1320, \ph,1.4,\out,  ~bus3, \group, ~lfoGrp,\tS, 0.39550810372374),
+	Pbind(\instrument, \lfo13, \val,0.075,\dur,Pseq([16/1],inf),\rL,3200,\rH,1720, \ph,1.4,\out,  ~bus3, \group, ~lfoGrp,\tS, 0.39550810372374),
 
 		Pbind(\instrument, \lfo13, \val,0.3,\dur,Pseq([4/1],1),\rL,0,\rH,
 		Pseq([(-0.3),(-0.4),(-0.5),(-0.6)],inf) ,\out,  ~bus22, \group, ~lfoGrp,\tS, 0.39550810372374),
@@ -317,7 +317,7 @@ Pxrand([
 
 	//BG
 
-	/*Pbind(\instrument, \playBufX,\dur, inf,\impulse, 0.00001,\loo,1,\buf,~audio3,\out, ~bgFil22,\vl,0.3),*/
+	Pbind(\instrument, \playBufX,\dur, inf,\impulse, 0.00001,\loo,1,\buf,~audio3,\out, ~bgFil22,\vl,0.3),
 
 	//no2
 
@@ -397,7 +397,7 @@ Pseq([\rest,\rest, \note,\rest,\rest,\rest,\rest, \note,/*\note,\rest,\rest,\not
 
 
 //HERE
-
+/*
 	Pseq([
 
 
@@ -555,9 +555,9 @@ Pbind(\instrument, \playBuf10N,  \out,~toCom,\dur,Pseq([ Pseq([8/1],1),  Pseq([1
 
 
 	Pbind(\instrument,\comp10, \dur,9999,\thr,0.4 ,\sB, 1.04,\sA, 0.2,\atk ,0.0968, \rel ,0.3872
-		,\in, ~toCom  ,\ctrl, ~snBus, \out,/*~eqBus10*/  ~toGate10 ,\group, ~compGrp2,\tS, 0.39550810372374),
+		,\in, ~toCom  ,\ctrl, ~snBus, \out,~eqBus10 /*~toGate10*/ ,\group, ~compGrp2,\tS, 0.39550810372374),
 
-Prand([
+/*Prand([
 
 	Pbind(\instrument,\gateS, \dur, Prand([/* Pseq([4/1],4),Pseq([1/1],4),*/ Pseq([1.5/1],1), Pseq([3/1],1),/*Pseq([1/3],1) ,*/Pseq([1/1],1),
 		/*Pseq([4/1],1)*/],1),
@@ -572,7 +572,7 @@ Prand([
 		\in,  Pxrand([~toGate10,~toGate102], inf)  ,\out ,Pwrand([~eqBus10,
 
 				Pseq([~delayBus2],8)],[4,1].normalizeSum,inf) ,\group, ~gateGrp6,\tS, 0.39550810372374),
-	],inf),
+	],inf),*/
 
 
 
@@ -584,7 +584,7 @@ Pbind(\instrument,\EQHP10, \in, ~eqBus10 ,\out, 0,\frq, 100, \dur,inf,\group, ~e
 
 
 
-
+*/
 
 
 
@@ -867,7 +867,7 @@ Pbind(\instrument, \snare, \type,Pxrand([
 
 ],1))
 
-(~track = Ppar([ ~base,~kb , ~hitX, ],1).play(t,quant:1))
+(~track = Ppar([ ~base,/*~kb ,*/ ~hitX, ],1).play(t,quant:1))
 
 
 ~hitX.stop;
@@ -1071,16 +1071,16 @@ Pbind(\instrument,\rise,\dur,Pseq([16/1],1), \vlAtk, Pfunc({4.00.rand}),\f1, Pfu
 
 		Pbind(\instrument, \distoS, \dur, inf, \in, ~riToDisto , \out,~riToEnv ,\group, ~distoGrp),
 
-	Pbind(\instrument,\filterS, \in,~riToEnv,\out,~riToGate , \group,~filterGrp,\dur, inf,\tS, 0.39550810372374,\busMod,~bus20, \which, 0,\qf,0.4)  ,
+	Pbind(\instrument,\filterS, \in,~riToEnv,\out,~riToGate , \group,~filterGrp,\dur, inf,\tS, 0.39550810372374,\busMod,~bus20, \which, 0,\qf,0.6)  ,
 
 	Pbind(\instrument, \distoS, \dur, inf, \in, ~riToDisto2 , \out,~riToEnv3 ,\group, ~distoGrp),
 
-	Pbind(\instrument,\filterS, \in,~riToEnv3,\out,~riToGate2 , \group,~filterGrp,\dur, inf,\tS, 0.39550810372374,\busMod,~bus19, \which, 0,\qf,0.4)  ,
+	Pbind(\instrument,\filterS, \in,~riToEnv3,\out,~riToGate2 , \group,~filterGrp,\dur, inf,\tS, 0.39550810372374,\busMod,~bus19, \which, 0,\qf,0.5)  ,
 
 
 	Pbind(\instrument, \distoS, \dur, inf, \in, ~riToDisto3 , \out,~riToEnv2 ,\group, ~distoGrp),
 
-	Pbind(\instrument,\filterS, \in,~riToEnv2,\out,~riToGate3 , \group,~filterGrp,\dur, inf,\tS, 0.39550810372374,\busMod,~bus12, \which, 0,\qf,0.4)  ,
+	Pbind(\instrument,\filterS, \in,~riToEnv2,\out,~riToGate3 , \group,~filterGrp,\dur, inf,\tS, 0.39550810372374,\busMod,~bus12, \which, 0,\qf,0.55)  ,
 
 
 
@@ -1100,7 +1100,7 @@ Pbind(\instrument,\rise,\dur,Pseq([16/1],1), \vlAtk, Pfunc({4.00.rand}),\f1, Pfu
 	Pbind(\instrument,\stereoS, \dur, Pseq([16/1],inf), \in, ~riToStereo  ,\spread,Pfunc({1.00.rrand(0.2)}),\out,~risesGate,\tS, 0.39550810372374,\group, ~stereoGrp),
 
 
-		Pbind(\instrument,\EQHP, \in, ~eqNoise , \out, ~noiseRev ,\frq, 100, \dur,inf, \group, ~eqGrp0),
+		Pbind(\instrument,\EQHP, \in, ~eqNoise , \out, ~noiseRev ,\frq, 100, \dur,inf, \group, ~eqGrp0,\val2,14800,\quant2,1, \gain2,(-38).rrand(-8)),
 	Pbindf( Prand([~quickFix, ~rLong,~rShort]),\instrument, \reverbS, \dur,inf, \in,~noiseRev  ,  \out,~again,\group,~revGrp),
 	//TEMP
 	/*Pbind( \instrument, \limiterStoMixer,\c4,1,\name, 4,\in, ~riToLimit, \dur, inf,\gain,43,\group,~limitGrp,\out,~riToStereo),*/
@@ -1182,7 +1182,7 @@ Pbind(\instrument, \distoS, \dur, inf, \in, ~riTriptoDisto , \out,~riTriptoEq ,\
 
 	Pbind(\instrument,\EQHP2, \in, ~slideBus , \out, ~slideEq ,\frq, 400, \dur,inf, \group, ~eqGrp0, \val,3600, \quant,8, \gain,(-6),\val2,14800,\quant2,1, \gain2,(-38).rrand(-8), \vol,1),
 
-	Pbind(\instrument, \compS, \thr,0.8 ,\sB, 1.015,\sA, 1/2,\atk ,0.0242, \rel ,0.0968,\gain,15,   \dur, inf, \in,~slideEq  , \out,~slideBusToLimit,\ctrl, ~kbus, \group, ~compGrp),
+	Pbind(\instrument, \compS, \thr,0.8 ,\sB, 1.015,\sA, 1/2,\atk ,0.0242, \rel ,0.0968,\gain,12,   \dur, inf, \in,~slideEq  , \out,~slideBusToLimit,\ctrl, ~kbus, \group, ~compGrp),
 	/*Pbind( \instrument, \limiterStoMixer,\c14,1,\name, 14, \dur, inf, \in, ~slideBusToLimit, \gain, 45, \group,~limitGrp),*/
 
 
@@ -1799,7 +1799,7 @@ Pbindf( Prand([~quickFix, ~rShort]),\instrument, \reverbS, \dur,inf, \in,~revDel
 Pbindf( ~church,\dur,inf, \in,~reverbSquelch  , \out,~comSquelch ,\group,~extraRev),
 
 	Pbind(\instrument,\comp, \dur,inf,\thr,0.2 ,\sB, 1.2,\sA, 1/4,\atk ,0.0484, \rel ,0.3872
-,\gain, 22,\in, ~comSquelch ,\ctrl, ~kbus, \out,~limitSquelch, \group, ~compGrp4),
+,\gain, 5,\in, ~comSquelch ,\ctrl, ~kbus, \out,~limitSquelch, \group, ~compGrp4),
 
 	/*Pbind(\instrument, \limiterStoMixer,\c19,1,\name, 19,\in, ~limitSquelch, \dur, inf,\gain,20,\group,~limitGrp4,\out,~stereoBus3b),*/
 
@@ -1812,7 +1812,7 @@ Pbindf( ~church,\dur,inf, \in,~reverbSquelch  , \out,~comSquelch ,\group,~extraR
 	,
 
 
-	Pbind(\instrument,\EQHP10, \in, ~eqBus310 ,\out, 0,\frq, 100, \dur,inf,\group, ~eqGrp3/*~eqGrp2*/,\val,11800,\quant,1, \gain,(-8),\val2,2600,\quant2,8, \gain2,(-16),\vol, 1.8),
+	Pbind(\instrument,\EQHP10, \in, ~eqBus310 ,\out, 0,\frq, 100, \dur,inf,\group, ~eqGrp3/*~eqGrp2*/,\val,11800,\quant,1, \gain,(-18),\val2,2600,\quant2,8, \gain2,(-16),\vol, 1.8),
 ],1))
 
 
@@ -1822,7 +1822,7 @@ Pbindf( ~church,\dur,inf, \in,~reverbSquelch  , \out,~comSquelch ,\group,~extraR
 ~base; ~kb; ~no4; ~rises; ~lp;~bp; ~hp;~deNo2; ~mainLead;~percheur;~passant
 ~base.play(t)/*~deNo2, */
 ~rises,
-(~track = Ppar([~fx,~passant,~hitX,~kb,~base,~no4,~mainLead,~percheur,~sequ],1).play(t,quant:1))
+(~track = Ppar([~fx,~passant,/*~hitX,~kb,*/~base,~no4,~mainLead,~percheur,~sequ],1).play(t,quant:1))
 
 Pseq([~kick],inf).play(t, quant:1)
 Ppar([~bassShap,Pseq([~bass],inf)],1).play(t, quant:1)

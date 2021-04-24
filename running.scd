@@ -1919,7 +1919,7 @@ SynthDef(\EQHP10, {|out=0, in, val, quant, gain, val2, quant2, gain2 frq=100, vo
 
 	SynthDef(\comp10, {|in, ctrl, out= 0, dec  , thr  =0.01 ,sB = 1, sA = (1/4), atk = 0.001, rel = 0.04 , gain=1, dur,tS=1|
 
-		Out.ar(out, Compander.ar(In.ar(in,10) , In.ar(ctrl,1)  , thresh: thr, slopeBelow: sB, slopeAbove: sA, clampTime: atk, relaxTime: rel)* gain* EnvGen.kr(Env.step([1,0],[dur,0]),timeScale: tS,doneAction:2))}).add;
+		Out.ar(out, Compander.ar(In.ar(in,10) , In.ar(ctrl,1)  , thresh: thr, slopeBelow: sB, slopeAbove: sA, clampTime: atk, relaxTime: rel)* gain* EnvGen.kr(Env.step([1,1],[dur,0]),timeScale: tS,doneAction:2))}).add;
 
 
 
@@ -2164,13 +2164,13 @@ SynthDef(\sequ,{|value, dur, in=0, out=0, vlAtk=0, vlDec=1,vlSub=1,vlSub2=1, vlR
 	SynthDef(\filterU, {|out=0,in,  hFrq=900,lFrq=300 ,qfH = 0.822379, qlL = 0.504212|Out.ar(out, BLowPass4.ar(   BHiPass4.ar(  In.ar(in,1) , hFrq , qfH), lFrq
 		/*MouseX.kr(20,22000)*/,qlL )) }).add;
 
-	SynthDef(\filterU, {|out=0,in,  hFrq=900,lFrq=300 ,qfH = 0.822379, qfH2=0.6,qlL = 0.504212,qlL2=0.4|Out.ar(out,
+	SynthDef(\filterU, {|out=0,in,  hFrq=900, hFrq2=900,lFrq=300,lFrq2=300 ,qfH = 0.822379, qfH2=0.6,qlL = 0.504212,qlL2=0.4|Out.ar(out,
 
 		BLowPass4.ar(   BLowPass4.ar(
 			BHiPass4.ar(  BHiPass4.ar(
 				In.ar(in,1)
-				, hFrq , qfH) 	, hFrq-70 , qfH2)
-			, lFrq,qlL ), lFrq +150,qlL2 )
+				, hFrq2 , qfH) 	, hFrq , qfH2)
+			, lFrq,qlL ), lFrq2 ,qlL2 )
 
 	) }).add;
 
@@ -2501,7 +2501,7 @@ s.sync;
 
 	~bang = /*Pseq([*/
 Pbind( \instrument, \playBuf10, \impulse, 10 ,
-		\dur,   Pseq([1/2],4) , \tS,  0.39550810372374,\start,(~leTout.numFrames/ 256 * 145.rand),\buf,~leTout,\out, ~again,\loopy,0,\vl,0.55);/*],4);*/
+		\dur,   Pseq([1/2],4) , \tS,  0.39550810372374,\start,(~leTout.numFrames/ 256 * 145.rand),\buf,~leTout,\out, ~again,\loopy,0,\vl,0.25);/*],4);*/
 
 
 
