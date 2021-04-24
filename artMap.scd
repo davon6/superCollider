@@ -91,7 +91,7 @@ MIDIdef.cc(\ml2, { |value|var modFreq = value.linlin(0, 127, 0, 0.8);
 },ccNum: 18 ); //is 10
 
 
-MIDIdef.cc(\mDel, { |value|var modFreq = value.linlin(0, 127, 0.7, -0.5);
+MIDIdef.cc(\mDel, { |value|var modFreq = value.linlin(0, 127, 0.62, -0.5);
 
 	~v.set(\decT, modFreq.round(0.001).postln);
 

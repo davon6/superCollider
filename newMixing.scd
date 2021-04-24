@@ -34,10 +34,23 @@
 // ~mix16.set(\gain,42);
 ~mix14= Synth(\limiterStoMixer,[ \c14,1,\in, ~slideBusToLimit,\out,~again, \gain, 40],~limitGrp);
 // ~mix14.set(\gain,40);
-//below temp
-~mix26= Synth(\limiterToMixer,[\c2,1,\in, ~slideBusToLimit2,\gain,45,\out,~toStereoRise],~limitGrp);
-~mix27= Synth(\limiterStoMixer,[\c3,1,\in, ~flanToLimit2,\gain,20,\out,~flanToStereo2],~limitGrp);
+
+~mix26= Synth(\limiterToMixer,[\c26,1,\in, ~slideBusToLimit2,\gain,45,\out,~toStereoRise],~limitGrp);
+~mix27= Synth(\limiterStoMixer,[\c27,1,\in, ~flanToLimit2,\gain,20,\out,~flanToStereo2],~limitGrp);
 // ~mix27.set(\gain,20);
+
+~mix28= Synth(\limiterToMixer,[\c28,1,\in,~riToLimit2 ,\gain,23,\out,~riToStereo2],~limitGrp);
+~mix29= Synth(\limiterStoMixer,[\c29,1,\in,~riToLimit3 ,\gain,23,\out,~riToStereo3],~limitGrp);
+~mix30= Synth(\limiterToMixer,[\c30,1,\in,~noiseToLimit ,\gain,30,\out,~noiseToStereo],~limitGrp);
+
+
+
+/*
+~mix31= Synth(\limiterStoMixer,[\c31,1,\in, ,\gain,30,\out,],~limitGrp);
+~mix32= Synth(\limiterToMixer,[\c32,1,\in, ,\gain,30,\out,],~limitGrp);
+~mix33= Synth(\limiterStoMixer,[\c33,1,\in, ,\gain,30,\out,],~limitGrp);*/
+
+
 
 
 ~mix17= Synth(\limiterStoMixer,[\c17,1,\in, ~bigRiToLimit, \gain,70,\out,~bigRiToStereo],~limitGrp);

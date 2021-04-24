@@ -4,19 +4,15 @@ Pdef.all.do(_.clear);
 Pbindef.all.do(_.clear);
 Pbind.free;
 Pbindf.free;
-
 ~bass.free;
 Bus.free;
 )
 
-s.plotTree
-~remyAudio.play
-s.meter
+
+
 (
-// s.latency=0.05;
-// s.options.memSize = 2097152;
 s.options.memSize = 2097152 ;
-Server.default.options.numOutputBusChannels = 26;
+Server.default.options.numOutputBusChannels = 36;
 Server.default.options.sampleRate =  48000;
 Server.default.options.outDevice_("Audient iD14");
 )
@@ -27,7 +23,7 @@ Server.default.options.outDevice_("BlackHole 2ch","Built-in Output");
 Server.default.options.outDevice_("MacBook Air Speakers");
 
 
-~kick.play
+
 ServerOptions.outDevices;
 
 
@@ -241,6 +237,22 @@ s.sync;
 
 	~bgBus = Bus.audio(s,2);
 
+
+
+	~riToEq2= Bus.audio(s,2);
+	~riToRev2= Bus.audio(s,2);
+	~riToComp2= Bus.audio(s,2);
+	~riToLimit2= Bus.audio(s,2);
+	~riToStereo2= Bus.audio(s,2);
+	~riToEq3= Bus.audio(s,2);
+	~riToRev3= Bus.audio(s,2);
+	~riToComp3= Bus.audio(s,2);
+	~riToLimit3= Bus.audio(s,2);
+	~riToStereo3= Bus.audio(s,2);
+	~bellFlang3= Bus.audio(s,2);
+	~bellFlang4= Bus.audio(s,2);
+
+
 	~kbToPan2= Bus.audio(s,1);
 	~bgFil = Bus.audio(s,1);
 	~bgFil2= Bus.audio(s,1);
@@ -350,6 +362,7 @@ s.sync;
 	~riToGate= Bus.audio(s,2);
 	~riToGate2= Bus.audio(s,2);
 	~riToGate3= Bus.audio(s,2);
+	~riToGate4= Bus.audio(s,2);
 
 	~stereoBus1 = Bus.audio(s,2);
 	~stereoBus2 = Bus.audio(s,2);
@@ -441,7 +454,7 @@ s.sync;
 	~eqBus2x=  Bus.audio(s,1);
 	~eqBus3=  Bus.audio(s,1);
 	~eqBus4=  Bus.audio(s,1);
-	~eqNoise =  Bus.audio(s,1);
+	~eqNoise =  Bus.audio(s,2);
 	 ~eqDs =  Bus.audio(s,1);
 	~filterNoise  =  Bus.audio(s,1);
 
@@ -449,6 +462,9 @@ s.sync;
 	~toRecord=Bus.audio(s,1);
 	~toRecord2=Bus.audio(s,2);
 	~dead=Bus.audio(s,1);
+	~noiseToComp=Bus.audio(s,2);
+	~noiseToLimit=Bus.audio(s,2);
+	~noiseToStereo=Bus.audio(s,2);
 
 	~deadS=Bus.audio(s,2);
 
@@ -1000,7 +1016,7 @@ SynthDef(\envSli, {|out, val1=20, val2=20000,  dur,tS=1, crv =7|Out.kr(out,
 
 /*sig = Pan2.ar( sig , pan);*///0 was pan
 
-	Out.ar(out,HPF.ar(sig.dup,100)*amp.dbamp;//* env2 //
+	Out.ar(out,Pan2.ar(  sig , pan)   /*.dup*/ *amp.dbamp;//* env2 //
 
     )
 }).add;
@@ -1798,11 +1814,11 @@ SynthDef(\EQHP10, {|out=0, in, val, quant, gain, val2, quant2, gain2 frq=100, vo
 	// Out.ar(0,RMS.ar(sig).ampdb.round(0.1).poll(label:"bass db :")* [0,0,1])
 
 	SynthDef(\limiterStoMixer, {|in, out = 0,gain=1,vol =1, du =0.01,rel=0.8, atk =0.01 ,thr= 0.001,sB =1,sA= 0.05,
-		c1=0,c2=0,c3=0,c4=0,c5=0,c6 =0,c7 =0,c8 =0,c9 =0,c10 =0,c11 =0,c12 =0,c13 =0,c14 =0,c15 =0,c16=0,c17=0,c18=0,c19=0,c20 =0,c21=0,c22=0,c23=0,c24=0,c25=0,c26=0,name|
+		c1=0,c2=0,c3=0,c4=0,c5=0,c6 =0,c7 =0,c8 =0,c9 =0,c10 =0,c11 =0,c12 =0,c13 =0,c14 =0,c15 =0,c16=0,c17=0,c18=0,c19=0,c20 =0,c21=0,c22=0,c23=0,c24=0,c25=0,c26=0,name,c27=0,c28=0,c29=0,c30=0,c31=0,c32=0,c33=0,c34=0,c35=0|
 
 		Out.ar(out , CompanderD.ar( In.ar(in,2),thr, sB ,sA, atk, rel)* gain;);
 
-		Out.ar( 0,  CompanderD.ar( In.ar(in,2),thr, sB ,sA, atk, rel)* gain * [0,0,c2,c3,c4,c5,c6,c7,c8,c9,c10,c11,c12,c13,c14,c15,c16,c17,c18,c19,c20,c21,c22,c23,c24,c25,c26]);
+		Out.ar( 0,  CompanderD.ar( In.ar(in,2),thr, sB ,sA, atk, rel)* gain * [0,0,c2,c3,c4,c5,c6,c7,c8,c9,c10,c11,c12,c13,c14,c15,c16,c17,c18,c19,c20,c21,c22,c23,c24,c25,c26,c27,c28,c29,c30,c31,c32,c33,c34,c35]);
 
 
 	/*	Out.ar(0,RMS.ar(CompanderD.ar( In.ar(in,2),thr, sB ,sA, atk, rel)* gain ).ampdb.round(0.1).poll(label:name.poll)* [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1]);*/
@@ -2410,7 +2426,7 @@ s.sync;
 ~kbassRest =Ppar([~kick, ~bassRest], 1);
 
 
-~bar = [Ppar([~kick,~hat2,~bass],1),Ppar([~kick,~hat2,~bass],4),Ppar([~kick,~hat2,~bass],8),Ppar([~kick,~hat2,~bass],12),Ppar([~kick,~hat2,~bass],14) ,Ppar([~kick,~hat2,~bass],15) ,Ppar([~kick,~hat2,~bass],16)];
+/*~bar = [Ppar([~kick,~hat2,~bass],1),Ppar([~kick,~hat2,~bass],4),Ppar([~kick,~hat2,~bass],8),Ppar([~kick,~hat2,~bass],12),Ppar([~kick,~hat2,~bass],14) ,Ppar([~kick,~hat2,~bass],15) ,Ppar([~kick,~hat2,~bass],16)];
 
 	~bar = [Pbindef( \kbRec, \dur,  Pseq([1/1],1)),Pbindef( \kbRec, \dur,  Pseq([1/1],4)),Pbindef( \kbRec, \dur,  Pseq([1/1],8)),Pbindef( \kbRec, \dur,  Pseq([1/1],12)),Pbindef( \kbRec, \dur,  Pseq([1/1],14)),Pbindef( \kbRec, \dur,  Pseq([1/1],15)),Pbindef( \kbRec, \dur,  Pseq([1/1],16)),
 		Pbindef( \kbRec, \dur,  Pseq([3/1],1))
@@ -2457,7 +2473,7 @@ s.sync;
 
 
 
-];
+];*/
 
 
 	//OFF RN
@@ -2498,7 +2514,7 @@ s.sync;
 
 ],2);*/
 
-
+//mixing from here
 	~bang = /*Pseq([*/
 Pbind( \instrument, \playBuf10, \impulse, 10 ,
 		\dur,   Pseq([1/2],4) , \tS,  0.39550810372374,\start,(~leTout.numFrames/ 256 * 145.rand),\buf,~leTout,\out, ~again,\loopy,0,\vl,0.25);/*],4);*/
