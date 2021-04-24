@@ -229,7 +229,7 @@ MIDIdef.cc(\lpF2x, { |value|var modFreq = value.linlin(0, 127, 800,22000);
 
 
 
-MIDIdef.cc(\hpF, { |value|var modFreq = value.linlin(0, 127, 20, 2000);
+MIDIdef.cc(\hpF, { |value|var modFreq = value.linlin(0, 127, 70, 2000);
 
 k.set(\hFrq, "hp: ".postln;modFreq.round(1).post);},ccNum: 72 );// is 16
 

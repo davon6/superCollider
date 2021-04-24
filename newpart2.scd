@@ -51,14 +51,14 @@ Pbind(\instrument, \filter, \dur, inf,\in,~bgFil22, \busMod,~bus2, \rqLPF, ~bus1
 	Pseq([(~leTout2.numFrames/ 256 * 222.rrand(1))],3),
 	Pseq([ (~leTout2.numFrames/ 256 * 222.rrand(1))],3),
 	Pseq([ (~leTout2.numFrames/ 256 * 222.rrand(1))],3),
-	].scramble,inf)
+	],inf)
 	,\loopy,0,\tS,0.39550810372374,\dur,  Pseq([
 
-		Pseq([4/1],1) ,Pseq([2/1],1)  ,
+			Pseq([ Pseq([4/1],1) ,Pseq([2/1],1) ],1) ,
 
-Pseq([8/1],1) ,Pseq([4/1],1)  ,Pseq([16/1],1) ,Pseq([8/1],1) ,Pseq([32/1],1) ,Pseq([16/1],1)
+Pseq([ Pseq([8/1],1)],1)  ,Pseq([ Pseq([4/1],1)],1)   ,Pseq([Pseq([16/1],1) ,Pseq([8/1],1)],1) ,Pseq([Pseq([32/1],1) ,Pseq([16/1],1)],1)
 
-],inf)),
+].scramble,inf)),
 
 
 	Pbind(\instrument,\rise,\dur,Pseq([64/1],inf), \vlAtk, Pfunc({4.00.rand}),\f1, Pfunc({1.00.rand}) , \f2, Pfunc({1.00.rand}) , \f3, Pfunc({1.00.rand}),  \ic_atk,Pfunc({10.00.rrand(-5)}),\index,Pfunc({50.00.rrand(1)}),\mRatio,Pfunc({3.rrand(1)}),\out , ~bigRiToDisto,\tS, 0.39550810372374,
@@ -86,3 +86,23 @@ s.meter
 s.latency=t.beatDur
 
 ~leTout2.play
+
+
+
+
+Ppar([
+
+Pbind(\instrument,\rise,\dur,Pseq([256/1],inf), \vlAtk, Pfunc({4.00.rand}),\f1, Pfunc({1.00.rand}) , \f2, Pfunc({1.00.rand}) , \f3, Pfunc({1.00.rand}),  \ic_atk,Pfunc({10.00.rrand(-5)}),\index,Pfunc({5.00.rrand(1)}),\mRatio,Pfunc({3.rrand(1)}),\out ,0,\tS, 0.39550810372374, /*\fR,Pfunc({1.00.rand}), */\moduS,~mod2,\fS,Pfunc({1.00.rand}),
+	\key,Pseq([\dec,\atk ], inf),\value,1, \finish, { ~key.envirPut(~value) }),
+
+
+Pbind(\instrument,\EQHP2, \in, ~riToEq , \out, ~riToRev ,\frq, 600, \dur,inf, \group, ~eqGrp0, \val,3600, \quant,8, \gain,(-6),\val2,14800,\quant2,1, \gain2,(-38).rrand(-8)),
+	Pbindf( ~quickFix, \instrument, \reverbS, \dur,inf, \in,~riToRev  , \out,~riToComp,\group,~revGrp),
+		Pbind(\instrument,\compS, \dur,inf,\thr,0.8 ,\sB, 1.015,\sA, 1/2,\atk ,0.0242, \rel ,0.0968,\gain,1,\in, ~riToComp ,\ctrl, ~kbus, \out,~riToLimit, \group, ~compGrp),
+
+	/*Pbind( \instrument, \limiterStoMixer,\c11,1,\name, 11,\in, ~riToLimit, \dur, inf,\gain,43,\group,~limitGrp,\out,~riToStereo),*/
+	Pbind(\instrument,\stereoS, \dur, Pseq([16/1],inf), \in, ~riToStereo  ,\spread,Pfunc({1.00.rrand(0.2)}),\out,~risesGate,\tS, 0.39550810372374,\group, ~stereoGrp),
+
+],1).play(t)
+
+

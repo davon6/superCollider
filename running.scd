@@ -14,7 +14,8 @@ s.plotTree
 s.meter
 (
 // s.latency=0.05;
-s.options.memSize = 2097152;
+// s.options.memSize = 2097152;
+s.options.memSize = 2097152 ;
 Server.default.options.numOutputBusChannels = 26;
 Server.default.options.sampleRate =  48000;
 Server.default.options.outDevice_("Audient iD14");
@@ -123,7 +124,7 @@ s.sync;
 	~k2 = Buffer.alloc(s, s.sampleRate *1,1);
 	~b3 = Buffer.alloc(s, s.sampleRate *5,1);
 	~kb1 = Buffer.alloc(s, s.sampleRate *1,1);
-	~kb2 = Buffer.alloc(s, s.sampleRate *1,2);
+	~kb2 = Buffer.alloc(s, s.sampleRate *t.beatDur,2);
 
 	~kb2Test = Buffer.alloc(s, s.sampleRate *20,2);
 	~e = Buffer.alloc(s, s.sampleRate *   t.beatDur*4 /*0.3872*/,1);
@@ -530,7 +531,7 @@ s.sync;
 	~percuCom=  Bus.audio(s,2);
 	~percuComb=  Bus.audio(s,2);
 
-	~percuCom2=  Bus.audio(s,2);
+	~percuCom2=  Bus.audio(s,10);
 	~percuFil=  Bus.audio(s,1);
 
 	~cymbalEq=  Bus.audio(s,2);
@@ -911,7 +912,7 @@ SynthDef(\envSli, {|out, val1=20, val2=20000,  dur,tS=1, crv =7|Out.kr(out,
 			Env(
 				[0,1080,20,0],
 				[atk,rel/4,rel2],
-				[atkcrv,relcrv3,relcrv2]
+				[atkcrv,relcrv,relcrv2]
 			),
 			doneAction:2
 		);
@@ -1026,7 +1027,8 @@ SynthDef(\envSli, {|out, val1=20, val2=20000,  dur,tS=1, crv =7|Out.kr(out,
 			 + (In.kr(moduS,1)* EnvGen.kr(Env.adsr(sustainLevel: 1,releaseTime: 0.1),fS ))
 			, mul:freq * mRatio * iEnv);
 
-	car = SinOsc.ar(freq * f1 + mod) * env * amp;
+//car = SinOsc.ar(freq * f1 + mod) * env * amp;
+	car  = LeakDC.ar(Shaper.ar(~tfBuf,SinOsc.ar(freq * f1 + mod)))* env * amp;
 	car = Pan2.ar(car, pan);
 	Out.ar(out, car);
 }).add;
@@ -2167,8 +2169,8 @@ SynthDef(\sequ,{|value, dur, in=0, out=0, vlAtk=0, vlDec=1,vlSub=1,vlSub2=1, vlR
 		BLowPass4.ar(   BLowPass4.ar(
 			BHiPass4.ar(  BHiPass4.ar(
 				In.ar(in,1)
-				, hFrq , qfH) 	, hFrq+70 , qfH2)
-			, lFrq,qlL ), lFrq -150,qlL2 )
+				, hFrq , qfH) 	, hFrq-70 , qfH2)
+			, lFrq,qlL ), lFrq +150,qlL2 )
 
 	) }).add;
 
@@ -2327,7 +2329,7 @@ s.sync;
 
 /*Pbindef(\ki,   \out, 0) ;Pbindef(\bass, \out, 0) ;
 	Pbindef(\ki,   \out, 700) ;Pbindef(\bass, \out, 700);*/
-	~kick =	Pbindef(\ki, \instrument, \kick,\dur, Pseq([1/1],1),\amp,(-4.2/*-10.2*/),\out,0);//-3.5 - 10.5
+	~kick =	Pbind(\instrument, \kick,\dur, Pseq([1/1],1),\amp,(-1/*-10.2*/),\out,0);//-3.5 - 10.5
 
 	~bassShap = Pbind(\instrument, \shap, \dur,Pseq([1/1],1),\dA1,2,\out,~bassShapB, \tS, 0.39550810372374);
 //Problem overlapping
@@ -2499,7 +2501,7 @@ s.sync;
 
 	~bang = /*Pseq([*/
 Pbind( \instrument, \playBuf10, \impulse, 10 ,
-		\dur,   Pseq([1/2],4) , \tS,  0.39550810372374,\start,(~leTout.numFrames/ 256 * 145.rand),\buf,~leTout,\out, ~again,\loopy,0,\vl,0.4);/*],4);*/
+		\dur,   Pseq([1/2],4) , \tS,  0.39550810372374,\start,(~leTout.numFrames/ 256 * 145.rand),\buf,~leTout,\out, ~again,\loopy,0,\vl,0.55);/*],4);*/
 
 
 
@@ -2544,15 +2546,15 @@ Ppar([
 
 ~b3.plot
 ~k2.play
-~kb2.plot
+~kb2.play
 (
 Ppar([
 
 	Pbind(\instrument,\recLoopS,\buf,~kb2,\recording,1, \in,0,\group,~recGrp2,\dur,inf),
 Pseq([
-	/*Pbind(\instrument, \playBuf, \impulse, 0.003 ,\dur,    Pseq([1/2],1), \tS,  0.39550810372374,\buf,~k2,\out, ~kbToPan2,\loopy,0,\start,0,\tS, 0.39550810372374),*/
+	Pbind(\instrument, \playBuf, \impulse, 0.003 ,\dur,    Pseq([1/2],1), \tS,  0.39550810372374,\buf,~k2,\out, ~kbToPan2,\loopy,0,\start,0,\tS, 0.39550810372374),
 
-		Pbindf(~kick ,\dur,    Pseq([1/2],1)),
+		/*Pbindf(~kick ,\dur,    Pseq([1/2],1),\out,~kbToPan2),*/
 		Pbind(\instrument, \wNoise,\dur,Pseq([1/2],1),\dec ,Pkey(\dur),\amp,(-12),\tS, 0.39550810372374,\type, \rest  )],inf),
 
 Pseq([Pbind(\instrument, \wNoise,\dur,Pseq([1/4],1),\dec ,Pkey(\dur),\amp,(-12),\tS, 0.39550810372374,\type, \rest  ),
@@ -2571,6 +2573,8 @@ Pbind(\instrument, \pan2, \in,~kbToPan2,\out,0 ,\group,~stereoGrp,\dur, inf),
 )
 
 ~daKb =Pbind(\instrument, \playBufS, \dur,  Pseq([1/1],inf), \tS,  0.39550810372374,\buf,~kb2);
+
+~daKb.play(t)
 
 s.latency=0.2
 
