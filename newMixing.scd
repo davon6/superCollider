@@ -6,8 +6,8 @@
 
 ~mix2= Synth(\limiterStoMixer,[\c2,1,\in, ~limitFuzz, \gain,138,\out,~stereoBus1],~limitGrp);
 // ~mix2.set(\gain,260)
-~mix4= Synth(\limiterStoMixer,[\c4,1,\in, ~toLimitFlo, \gain,15, \out,~toStereoFlo],~limitGrp);
-// ~mix4.set(\gain,15)
+~mix4= Synth(\limiterStoMixer,[\c4,1,\in, ~toLimitFlo, \gain,16, \out,~toStereoFlo],~limitGrp);
+// ~mix4.set(\gain,16)
 //is  21
 
 ~mix5= Synth(\limiterStoMixer,[\c5,1,\in, ~limitFuzz23, \gain,80, \out,~stereoBus23],~limitGrp);
