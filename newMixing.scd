@@ -67,8 +67,8 @@
 
 
 
-~mix9= Synth(\limiterStoMixer,[ \c9,1,\in,~percuLimit, \gain,156,\out,~percuStereo],~limitGrp);
-// ~mix9.set(\gain,156 );
+~mix9= Synth(\limiterStoMixer,[ \c9,1,\in,~percuLimit, \gain,40,\out,~percuStereo],~limitGrp);
+// ~mix9.set(\gain,40 );
 
 ~mix7= Synth(\limiterStoMixer,[\c7,1,\in, ~limitFuzz4, \gain,72, \out,~stereoBus14],~limitGrp);
 // ~mix7.set(\gain,72)

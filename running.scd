@@ -117,6 +117,8 @@ s.sync;
 	~b.loadCollection(~wtx);
 
 	~k = Buffer.alloc(s, s.sampleRate *0.3872,1);
+
+	// ~k = Buffer.alloc(s, s.sampleRate *999,1);
 	~k2 = Buffer.alloc(s, s.sampleRate *1,1);
 	~b3 = Buffer.alloc(s, s.sampleRate *5,1);
 	~kb1 = Buffer.alloc(s, s.sampleRate *1,1);
@@ -492,6 +494,8 @@ s.sync;
 	~outDisto2=Bus.audio(s,2);
 
 	~riToEnv=Bus.audio(s,2);
+	~no4ToGate=Bus.audio(s,1);
+	~no4ToGate2=Bus.audio(s,1);
 
 
 ~new10 =Bus.audio(s,10);
@@ -608,6 +612,9 @@ s.sync;
 	~bus22 = Bus.control(s,1);
 
 	~bus23 = Bus.control(s,1);
+
+	~bus24 = Bus.control(s,1);
+	~bus25 = Bus.control(s,1);
 
 ~mod1= Bus.control(s,1);
 	~mod2= Bus.control(s,1);
@@ -1931,6 +1938,17 @@ SynthDef(\EQHP10, {|out=0, in, val, quant, gain, val2, quant2, gain2 frq=100, vo
 	}).add;
 
 
+	SynthDef(\brokenStereo,{|out=0, in, bus1, bus2,tS,dur,spread=1, center=0|
+
+		Out.ar(out,
+			Splay.arFill(10,
+					{	Mix.ar(In.ar(in, 2))}
+				,spread,1, [center+ In.kr(bus1),  center+ In.kr(bus2)]       )
+			* EnvGen.kr(Env.step([1,1],[dur,0]),timeScale: tS,doneAction: 2)
+			//,doneAction: 2)
+		);
+	}).add;
+
 
 
 	SynthDef(\comp10, {|in, ctrl, out= 0, dec  , thr  =0.01 ,sB = 1, sA = (1/4), atk = 0.001, rel = 0.04 , gain=1, dur,tS=1|
@@ -2595,7 +2613,7 @@ Pbind(\instrument, \pan2, \in,~kbToPan2,\out,0 ,\group,~stereoGrp,\dur, inf),
 s.latency=0.2
 
 ~vocal  = Buffer.read(s,"/Users/davidmignot/Documents/REAPER Media/03-thEnd-consolidated.wav");
-
+~audio3 = Buffer.read(s,"/Users/davidmignot/Documents/REAPER Media/02-consolidated-03.wav");
 
 ~audio3 = Buffer.read(s,"/Users/davidmignot/Documents/REAPER Media/02-consolidated.wav");
 ~audio3 = Buffer.read(s,"/Users/davidmignot/Documents/REAPER Media/02-consolidated-02.wav");
