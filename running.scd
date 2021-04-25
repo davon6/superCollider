@@ -792,7 +792,7 @@ LFNoise0.kr(~hz1beat).range(0.1,0.0)/*,0.02)*/
 
 		/*SinOsc.kr(MouseY.kr(0.3,20.6)).range(0,MouseX.kr(0.2,1) )*/
 
-		Osc.ar(~b.bufnum, LFNoise0.kr(1.2875).range(0.075,0.3) )/*MouseY.kr(0.3,3.23888))*/.range(-0.5,1)
+	Osc.ar(~b.bufnum, LFNoise0.kr(1.2875).range(0.08046875,0.321875) )/*MouseY.kr(0.3,3.23888))*/.range(-0.5,1)
 
 		* EnvGen.kr(Env.step([1,1],[dur,0]),timeScale: tS,doneAction: 2)
 	)}).add;
@@ -2049,9 +2049,9 @@ SynthDef(\fm, {
 
 			 * SinOsc.kr(sineRate,phRise).range([sineRangeLow])+ (In.kr(modux,1)* EnvGen.kr(Env.adsr(sustainLevel: 1,releaseTime: 0.1),factorx ))/*+(In.kr(~seqBusx,1)* factorx2)*/, mul:
 
-			/*(*/      [  MouseY.kr(164.815,  659.26 * mRatio *iEnv) /*In.kr( gra, 1) */
-			,MouseY.kr(164.815,  659.26 * mRatio *iEnv)* multi2
-			,MouseY.kr(164.815,  659.26 * mRatio *iEnv)* multi2  ]
+			/*(*/     /* [ */ MouseY.kr(329.63,  659.26 * mRatio *iEnv) /*In.kr( gra, 1) */
+		/*	,MouseY.kr(164.815,  659.26 * mRatio *iEnv)* multi2
+			,MouseY.kr(164.815,  659.26 * mRatio *iEnv)* multi2  ]*/
 
 
 			/*) *   In.kr( gra, 1)*/
