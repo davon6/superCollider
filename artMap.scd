@@ -22,8 +22,9 @@ s.meter
 ~shiftGrp = Group.after(~combGrp);
 ~shapGrp= Group.after(~shiftGrp);
 ~limitGrp= Group.after(~shapGrp);
+~distoGrp= Group.after(~limitGrp);
 
-~recGrp= Group.after(~limitGrp);
+~recGrp= Group.after(~distoGrp);
 
 
 
@@ -47,10 +48,10 @@ Scale.majorPentatonic(\just).degreeToFreq(7.rand, 76.midicps, -20)
 
  ~h1 = Synth(\shiftX,[\in,~toShifter,\out ,~outTolimit,\freq,0],~shiftGrp);
 
-~l1 = Synth(\lim,[\in, ~outTolimit,\out,0],~limitGrp);
+~l1 = Synth(\lim,[\in, ~outTolimit,\out,~outDisto],~limitGrp);
 
 
-h = Synth(\disto3,[\in,  ~outDisto , \out,0/*~outTolimit*/],~shapGrp);
+h = Synth(\disto3,[\in,  ~outDisto , \out,0/*~outTolimit*/],~distoGrp);
 /*
 // l = Synth(\limiter,[\in, ~outTolimit,\out,0, \gain, 140],~limitGrp);*/
 
@@ -219,7 +220,7 @@ k = Synth(\filterU, [\out,0/*~distoBg*/,\in, ~bgFil, \lFrq,22000, \lFrq2,22000,\
 
 
 
-MIDIdef.cc(\lpF2x, { |value|var modFreq = value.linlin(0, 127, 70/*800*/,18000);
+MIDIdef.cc(\lpF2x, { |value|var modFreq = value.linlin(0, 127, 150/*800*/,18000);
 
 	k.set(\lFrq,"lp: ".postln;modFreq.round(1).post;)
 
@@ -228,7 +229,7 @@ MIDIdef.cc(\lpF2x, { |value|var modFreq = value.linlin(0, 127, 70/*800*/,18000);
 
 
 
-MIDIdef.cc(\lpF2x2, { |value|var modFreq = value.linlin(0, 127, 70/*800*/,12000);
+MIDIdef.cc(\lpF2x2, { |value|var modFreq = value.linlin(0, 127, 150/*800*/,12000);
 
 	k.set(\lFrqs,"lp: ".postln;modFreq.round(1).post;)
 
