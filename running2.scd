@@ -22,6 +22,10 @@
 //arghh percheur sometimes comes mono in limiter
 //chelou low freq noise wander in the project
 //rythm sample 1/2 on kb needs mixing
+//beel variable to save if necessary for mixing
+//AMAZing limiter Synths off for a sequence
+//missing slow motion of filters
+//flanger with negative feedback
 
 s.plotTree
 /* KB AND BASE have unrecordeds    ~bufSnoopy       and     ~bufBg{!=~no4, ~kb, ~rises}   */
@@ -96,6 +100,7 @@ Pbind(\instrument,\gran,\dur,Prand([ Pseq([1/4],24)  ,   Pseq([1/1],24)   ],1)  
 ~pvlAtk7 =0.1.rrand(0.01);
 ~pSub8 =0.5.rrand(0.2,1);~pAtkT8=0.10.rrand(0.01);~pDecT8 =  0.3.rrand(0.8,0.3);~pSubT8 = 0.3.rrand(0.2);~pRelT8=0.22.rrand(0.1,1);~pAtkC8=6.rrand(1,1);~pDecC8=(-4).rrand(-0.1);~pRelC8=(-8).rrand(-2,1);
 ~pvlAtk8 =0.1.rrand(0.01);
+~bangVar = (~leTout.numFrames/ 256 * 145.rand);
 
 ~vocal  = Buffer.read(s,"/Users/davidmignot/Documents/REAPER Media/03-thEnd-consolidated.wav");
 ~audio3 = Buffer.read(s,"/Users/davidmignot/Documents/REAPER Media/02-consolidated-03.wav");
@@ -1002,7 +1007,17 @@ Pseq([
 
 					Ppar([
 
-				Pbindf( Pxrand([ ~bell,~noise],inf) ,\dur, Pseq([8/1],1)),
+				/*Pbindf( Pxrand([ ~bell,~noise],inf) ,\dur, Pseq([8/1],1)),*/
+
+				Pxrand([
+
+							Pbind(\instrument, \wNoise,\dur, Pseq([8/1],1),\dec ,Pkey(\dur),\amp,(2),\out,~filterNoise),
+						Pbind(\instrument, \percussion, \dur,Pseq([8/1],1 ),\carHz, Pfunc({1050.12070612224.rrand(150)}),\modHz,Pfunc({9334.3179398.rrand(0.1)}),\modAmp,Pfunc({ 0.00875.rrand(0.0001)}) ,\amp,1,\rel,4.5544,\rel2,4.242,\stereoL, 0.00555, \crv1,  (-7.4), \crv1b,(-42), \mulMod, 901,\out, ~bellFlang,\latch,8900,\atk,0.01,\atk2,Pfunc({0.3.rrand(0.01)})),
+
+						],1),
+
+
+
 				Pbind(\instrument,\filterX,  \freqFil,Pfunc({3000.rrand(180)}),\in,~filterNoise,\out, ~eqNoise, \group,~filterGrp,\dur, Pseq([8/1],1),\tS, 0.39550810372374)],1),
 
 
@@ -1016,7 +1031,7 @@ Pseq([
 
 
 
-
+//WARNING BANGLIMIT NEEDs ROUTING
 
 
 
@@ -1026,11 +1041,18 @@ Pseq([
 				Pseq([
 					Ppar([
 
-				Pxrand([ ~bang,Pbindf( Pxrand([ ~bell,~noise],inf) ,\dur, Pseq([4/1],1))],1),
-				Pbind(\instrument,\filterX,  \freqFil,Pfunc({3000.rrand(380)}),\in,~filterNoise,\out, ~eqNoise, \group,~filterGrp,\dur, Pseq([4/1],1),\tS, 0.39550810372374)],1),
-				/*Pbind(\instrument, \wNoise,\dur,Pseq([12/1],1),\dec ,Pkey(\dur),\type,\rest,\tS, 0.39550810372374 )*/
+				Pxrand([/* ~bang,Pbindf( Pxrand([ ~bell,~noise],inf) ,\dur, Pseq([3/1],1))*/
 
-					Pbind(\instrument, \gateS, \group, ~gateGrp3,\in,~risesGate, \out, ~again,\dur,Pseq([12/1],1),\tS, 0.39550810372374 )
+							Pbind(\instrument, \wNoise,\dur, Pseq([3/1],1),\dec ,Pkey(\dur),\amp,(2),\out,~filterNoise),
+						Pbind(\instrument, \percussion, \dur,Pseq([3/1],1 ),\carHz, Pfunc({1050.12070612224.rrand(150)}),\modHz,Pfunc({9334.3179398.rrand(0.1)}),\modAmp,Pfunc({ 0.00875.rrand(0.0001)}) ,\amp,1,\rel,4.5544,\rel2,4.242,\stereoL, 0.00555, \crv1,  (-7.4), \crv1b,(-42), \mulMod, 901,\out, ~bellFlang,\latch,8900,\atk,0.01,\atk2,Pfunc({0.3.rrand(0.01)})),
+						Pbind( \instrument, \playBuf10, \impulse, 10 ,
+							\dur,  Pseq([1/1],3) , \tS,  0.39550810372374,\start,~bangVar,\buf,~leTout,\out, ~bangLimit,\loopy,0,\vl,0.25)
+						],1),
+
+				Pbind(\instrument,\filterX,  \freqFil,Pfunc({3000.rrand(380)}),\in,~filterNoise,\out, ~eqNoise, \group,~filterGrp,\dur, Pseq([4/1],1),\tS, 0.39550810372374)],1),
+
+
+					Pbind(\instrument, \gateS, \group, ~gateGrp3,\in,~risesGate, \out, ~again,\dur,Pseq([13/1],1),\tS, 0.39550810372374 )
 				],1),
 
 Pbind(\instrument, \trippyRise, \dur,  Pseq([16/1],1),   \ph, Pfunc({ 6.00.rand}),\tS, 0.39550810372374, \out, ~riTriptoDisto),
@@ -1055,7 +1077,15 @@ Pbind(\instrument, \trippyRise, \dur,  Pseq([16/1],1),   \ph, Pfunc({ 6.00.rand}
 
 
 			Ppar([
-				Pxrand([Pbindf( ~bang ,\dur, Pseq([1/2],2)  ),Pbindf( Pxrand([ ~bell,~noise],inf) ,\dur, Pseq([2/1],1))],1),
+				Pxrand([
+					/*Pbindf( ~bang ,\dur, Pseq([1/2],2)  ),Pbindf( Pxrand([ ~bell,~noise],inf) ,\dur, Pseq([2/1],1))*/
+
+						Pbind(\instrument, \wNoise,\dur, Pseq([2/1],1),\dec ,Pkey(\dur),\amp,(2),\out,~filterNoise),
+						Pbind(\instrument, \percussion, \dur,Pseq([2/1],1 ),\carHz, Pfunc({1050.12070612224.rrand(150)}),\modHz,Pfunc({9334.3179398.rrand(0.1)}),\modAmp,Pfunc({ 0.00875.rrand(0.0001)}) ,\amp,1,\rel,4.5544,\rel2,4.242,\stereoL, 0.00555, \crv1,  (-7.4), \crv1b,(-42), \mulMod, 901,\out, ~bellFlang,\latch,8900,\atk,0.01,\atk2,Pfunc({0.3.rrand(0.01)})),
+						Pbind( \instrument, \playBuf10, \impulse, 10 ,
+							\dur,  Pseq([1/2],4) , \tS,  0.39550810372374,\start,~bangVar,\buf,~leTout,\out, ~bangLimit,\loopy,0,\vl,0.25)
+
+				],1),
 			Pbind(\instrument,\filterX,  \freqFil,Pfunc({3000.rrand(380)}),\in,~filterNoise,\out, ~eqNoise, \group,~filterGrp,\dur,Pseq([2/1],1),\tS, 0.39550810372374,\vol,0.7)],1),
 
 
@@ -1095,7 +1125,14 @@ Ppar([
 			Pseq([
 
 
-			Ppar([Pxrand([Pbindf( ~bang ,\dur, Pseq([1/1],1))  ,Pbindf( Pxrand([ ~bell,~noise, ~hit2],inf) ,\dur, Pseq([1/1],1))],1),
+			Ppar([Pxrand([
+					/*Pbindf( ~bang ,\dur, Pseq([1/1],1))  ,Pbindf( Pxrand([ ~bell,~noise, ~hit2],inf) ,\dur, Pseq([1/1],1))*/
+					~hit2,
+					Pbind(\instrument, \wNoise,\dur, Pseq([1/1],1),\dec ,Pkey(\dur),\amp,(2),\out,~filterNoise),
+						Pbind(\instrument, \percussion, \dur,Pseq([1/1],1 ),\carHz, Pfunc({1050.12070612224.rrand(150)}),\modHz,Pfunc({9334.3179398.rrand(0.1)}),\modAmp,Pfunc({ 0.00875.rrand(0.0001)}) ,\amp,1,\rel,4.5544,\rel2,4.242,\stereoL, 0.00555, \crv1,  (-7.4), \crv1b,(-42), \mulMod, 901,\out, ~bellFlang,\latch,8900,\atk,0.01,\atk2,Pfunc({0.3.rrand(0.01)})),
+						Pbind( \instrument, \playBuf10, \impulse, 10 ,
+							\dur,  Pseq([1/1],1) , \tS,  0.39550810372374,\start,~bangVar,\buf,~leTout,\out, ~bangLimit,\loopy,0,\vl,0.25)
+				],1),
 				Pbind(\instrument,\filterX,  \freqFil,Pfunc({3000.rrand(380)}),\in,~filterNoise,\out, ~eqNoise, \group,~filterGrp,\dur,Pseq([1/1],1),\tS, 0.39550810372374)],1),
 
 /*	Pbind(\instrument, \wNoise,\dur,Pseq([15/1],1),\dec ,Pkey(\dur),\type,\rest,\tS, 0.39550810372374 ),
@@ -1159,7 +1196,8 @@ Pbind(\instrument,\rise,\dur,Pseq([16/1],1), \vlAtk, Pfunc({4.00.rand}),\f1, Pfu
 
 
 
-
+//maybe to throw in the mixer
+	Pbind(\instrument, \limiter10, \in, ~bangLimit, \out, ~again,\group, ~limitGrp,\dur, inf, \gain,50),
 
 
 
@@ -1266,7 +1304,7 @@ Pbind(\instrument,\stereo, \dur, 9999, \in, ~stereoBus4   ,\out, ~again, \group,
 
 
 
-	Pbind(\instrument,\flanger,\dur,Pseq([64/1],inf ), \in,~bellFlang, \out,~flanToDisto, \group,~phaserGrp,\flangefreq,Pfunc({1.2875.rrand(0.075)}),\fdback,Pfunc({1.00.rrand(0.1)}),\tS , 0.39550810372374),
+	Pbind(\instrument,\flanger,\dur,Pseq([64/1],inf ), \in,~bellFlang, \out,~flanToDisto, \group,~phaserGrp,\flangefreq,Pfunc({1.2875.rrand(0.075)}),\fdback,Pfunc({1.00.rrand(-0.2)}),\tS , 0.39550810372374),
 	Pbind(\instrument, \distoS, \dur, inf, \in, ~flanToDisto , \out,~flanToEq ,\group, ~distoGrp),
 	Pbind(\instrument,\EQHP2, \in, ~flanToEq , \out, ~flanToRev ,\frq, 600, \dur,inf, \group, ~eqGrp0, \val,3600, \quant,8, \gain,(-6),\val2,11800,\quant2,1, \gain2,(-18).rrand(-4)),
 	Pbindf( ~rShort, \instrument, \reverbS, \dur,inf, \in,~flanToRev  , \out,~flanToComp,\group,~revGrp),

@@ -159,7 +159,9 @@ Prand([
 	,  \group, ~gateGrp6,\tS, 0.39550810372374),
 
 
-		Pbind(\instrument,\gateS, \dur,Pseq([1/8],8),\type,Pseq([\note, \rest,\note, \rest,\note, \note,/*\note,\note*/],inf),
+		Prand([
+		Pbind(\instrument,\gateS, \dur,Pseq([1/8],8),\type,
+			Pseq([\note, \rest,\note, \rest,\note, \note,/*\note,\note*/],inf),
 		\in,  Pxrand([
 				Pseq([~toGate10],8),
 				Pseq([~toGate102],8)
@@ -167,6 +169,10 @@ Prand([
 			], inf)  ,\out ,0/*Pwrand([~eqBus10,
 
 				Pseq([~delayBus2],8)],[4,1].normalizeSum,inf)*/ ,\group, ~gateGrp6,\tS, 0.39550810372374),
+
+
+			Pbind(\instrument,\gateS, \dur,Pseq([1/1],1),\in,  Pxrand([~toGate10,~toGate102], inf)  ,\out ,0 ,\group, ~gateGrp6,\tS, 0.39550810372374),
+				],1),
 	],inf),
 
 
@@ -201,5 +207,9 @@ Pbind(\instrument,\EQHP2, \in, ~riToEq , \out, ~riToRev ,\frq, 600, \dur,inf, \g
 	Pbind(\instrument,\stereoS, \dur, Pseq([16/1],inf), \in, ~riToStereo  ,\spread,Pfunc({1.00.rrand(0.2)}),\out,~risesGate,\tS, 0.39550810372374,\group, ~stereoGrp),
 
 ],1).play(t)
+
+//may be the one
+Pbind( \instrument, \playBufX, \impulse, 2.575/2,
+	\dur,9999, \tS,  0.39550810372374,\start, ~bufSnoopy.numFrames/256 * 240.rand,\buf,~bufSnoopy,\out, 0,\loopy,1).play(t)
 
 

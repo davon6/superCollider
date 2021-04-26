@@ -236,6 +236,7 @@ s.sync;
 ~bassEq = Bus.audio(s,2);
 	~phaseBus = Bus.audio(s,1);
 	~delToStereo= Bus.audio(s,2);
+	~bangLimit= Bus.audio(s,10);
 
 	~bgBus = Bus.audio(s,2);
 
@@ -2549,10 +2550,12 @@ s.sync;
 
 ],2);*/
 
+	s.sync;
+
 //mixing from here
-	~bang = /*Pseq([*/
+	/*~bang = /*Pseq([*/
 Pbind( \instrument, \playBuf10, \impulse, 10 ,
-		\dur,   Pseq([1/2],4) , \tS,  0.39550810372374,\start,(~leTout.numFrames/ 256 * 145.rand),\buf,~leTout,\out, ~again,\loopy,0,\vl,0.25);/*],4);*/
+		\dur,   Pseq([1/2],4) , \tS,  0.39550810372374,\start,~bangVar,\buf,~leTout,\out, ~again,\loopy,0,\vl,0.25);/*],4);*/*/
 
 
 
