@@ -247,7 +247,7 @@ s.sync;
 	~perchLimiToG5= Bus.audio(s,2);
 	~perchLimiToG6= Bus.audio(s,2);
 	~perchLimiToG7= Bus.audio(s,2);
-	~perchLimiToG= Bus.audio(s,2);
+	~perchLimiToG8= Bus.audio(s,2);
 
 
 	~riToEq2= Bus.audio(s,2);
@@ -302,7 +302,7 @@ s.sync;
 	~eqBg = Bus.audio(s,1);
 	~outDisto = Bus.audio(s,3);
 
-	~phaseBus2= Bus.audio(s,1);~distoPerch= Bus.audio(s,1);2;~eqPerch2= Bus.audio(s,1);~revPerch2= Bus.audio(s,1);~comPerch2= Bus.audio(s,2);~limitPerch2= Bus.audio(s,2);
+	~phaseBus2= Bus.audio(s,1);~distoPerch2= Bus.audio(s,1);2;~eqPerch2= Bus.audio(s,1);~revPerch2= Bus.audio(s,1);~comPerch2= Bus.audio(s,2);~limitPerch2= Bus.audio(s,2);
 	~phaseBus3= Bus.audio(s,1);~distoPerch3= Bus.audio(s,1);~eqPerch3= Bus.audio(s,1);~revPerch3= Bus.audio(s,1);~comPerch3= Bus.audio(s,2);~limitPerch3= Bus.audio(s,2);
 	~phaseBus4= Bus.audio(s,1);~distoPerch4= Bus.audio(s,1);~eqPerch4= Bus.audio(s,1);~revPerch4= Bus.audio(s,1);~comPerch4= Bus.audio(s,2);~limitPerch4= Bus.audio(s,2);
 	~phaseBus5= Bus.audio(s,1);~distoPerch5= Bus.audio(s,1);~eqPerch5= Bus.audio(s,1);~revPerch5= Bus.audio(s,1);~comPerch5= Bus.audio(s,2);~limitPerch5= Bus.audio(s,2);
