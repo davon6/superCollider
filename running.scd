@@ -12,7 +12,7 @@ Bus.free;
 
 (
 s.options.memSize = 2097152 ;
-Server.default.options.numOutputBusChannels = 36;
+Server.default.options.numOutputBusChannels = 40;
 Server.default.options.sampleRate =  48000;
 Server.default.options.outDevice_("Audient iD14");
 )
@@ -239,6 +239,15 @@ s.sync;
 
 	~bgBus = Bus.audio(s,2);
 
+	~main1GToG= Bus.audio(s,1);
+	~perchLimiToG= Bus.audio(s,2);
+	~perchLimiToG2= Bus.audio(s,2);
+	~perchLimiToG3= Bus.audio(s,2);
+	~perchLimiToG4= Bus.audio(s,2);
+	~perchLimiToG5= Bus.audio(s,2);
+	~perchLimiToG6= Bus.audio(s,2);
+	~perchLimiToG7= Bus.audio(s,2);
+	~perchLimiToG= Bus.audio(s,2);
 
 
 	~riToEq2= Bus.audio(s,2);
@@ -292,6 +301,14 @@ s.sync;
 ~distoBg2= Bus.audio(s,1);
 	~eqBg = Bus.audio(s,1);
 	~outDisto = Bus.audio(s,3);
+
+	~phaseBus2= Bus.audio(s,1);~distoPerch= Bus.audio(s,1);2;~eqPerch2= Bus.audio(s,1);~revPerch2= Bus.audio(s,1);~comPerch2= Bus.audio(s,2);~limitPerch2= Bus.audio(s,2);
+	~phaseBus3= Bus.audio(s,1);~distoPerch3= Bus.audio(s,1);~eqPerch3= Bus.audio(s,1);~revPerch3= Bus.audio(s,1);~comPerch3= Bus.audio(s,2);~limitPerch3= Bus.audio(s,2);
+	~phaseBus4= Bus.audio(s,1);~distoPerch4= Bus.audio(s,1);~eqPerch4= Bus.audio(s,1);~revPerch4= Bus.audio(s,1);~comPerch4= Bus.audio(s,2);~limitPerch4= Bus.audio(s,2);
+	~phaseBus5= Bus.audio(s,1);~distoPerch5= Bus.audio(s,1);~eqPerch5= Bus.audio(s,1);~revPerch5= Bus.audio(s,1);~comPerch5= Bus.audio(s,2);~limitPerch5= Bus.audio(s,2);
+	~phaseBus6= Bus.audio(s,1);~distoPerch6= Bus.audio(s,1);~eqPerch6= Bus.audio(s,1);~revPerch6= Bus.audio(s,1);~comPerch6= Bus.audio(s,2);~limitPerch6= Bus.audio(s,2);
+	~phaseBus7= Bus.audio(s,1);~distoPerch7= Bus.audio(s,1);~eqPerch7= Bus.audio(s,1);~revPerch7= Bus.audio(s,1);~comPerch7= Bus.audio(s,2);~limitPerch7= Bus.audio(s,2);
+	~phaseBus8= Bus.audio(s,1);~distoPerch8= Bus.audio(s,1);~eqPerch8= Bus.audio(s,1);~revPerch8= Bus.audio(s,1);~comPerch8= Bus.audio(s,2);~limitPerch8= Bus.audio(s,2);
 
 	~bellFlang2= Bus.audio(s,2);
 	~flanToDisto2= Bus.audio(s,2);
@@ -1821,11 +1838,11 @@ SynthDef(\EQHP10, {|out=0, in, val, quant, gain, val2, quant2, gain2 frq=100, vo
 	// Out.ar(0,RMS.ar(sig).ampdb.round(0.1).poll(label:"bass db :")* [0,0,1])
 
 	SynthDef(\limiterStoMixer, {|in, out = 0,gain=1,vol =1, du =0.01,rel=0.8, atk =0.01 ,thr= 0.001,sB =1,sA= 0.05,
-		c1=0,c2=0,c3=0,c4=0,c5=0,c6 =0,c7 =0,c8 =0,c9 =0,c10 =0,c11 =0,c12 =0,c13 =0,c14 =0,c15 =0,c16=0,c17=0,c18=0,c19=0,c20 =0,c21=0,c22=0,c23=0,c24=0,c25=0,c26=0,name,c27=0,c28=0,c29=0,c30=0,c31=0,c32=0,c33=0,c34=0,c35=0|
+		c1=0,c2=0,c3=0,c4=0,c5=0,c6 =0,c7 =0,c8 =0,c9 =0,c10 =0,c11 =0,c12 =0,c13 =0,c14 =0,c15 =0,c16=0,c17=0,c18=0,c19=0,c20 =0,c21=0,c22=0,c23=0,c24=0,c25=0,c26=0,name,c27=0,c28=0,c29=0,c30=0,c31=0,c32=0,c33=0,c34=0,c35=0,c36=0,c37=0,c38=0,c39=0,c40=0|
 
 		Out.ar(out , CompanderD.ar( In.ar(in,2),thr, sB ,sA, atk, rel)* gain;);
 
-		Out.ar( 0,  CompanderD.ar( In.ar(in,2),thr, sB ,sA, atk, rel)* gain * [0,0,c2,c3,c4,c5,c6,c7,c8,c9,c10,c11,c12,c13,c14,c15,c16,c17,c18,c19,c20,c21,c22,c23,c24,c25,c26,c27,c28,c29,c30,c31,c32,c33,c34,c35]);
+		Out.ar( 0,  CompanderD.ar( In.ar(in,2),thr, sB ,sA, atk, rel)* gain * [0,0,c2,c3,c4,c5,c6,c7,c8,c9,c10,c11,c12,c13,c14,c15,c16,c17,c18,c19,c20,c21,c22,c23,c24,c25,c26,c27,c28,c29,c30,c31,c32,c33,c34,c35,c36,c37,c38,c39,c40]);
 
 
 	/*	Out.ar(0,RMS.ar(CompanderD.ar( In.ar(in,2),thr, sB ,sA, atk, rel)* gain ).ampdb.round(0.1).poll(label:name.poll)* [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1]);*/
@@ -2580,7 +2597,7 @@ Ppar([
 
 ~b3.plot
 ~k2.play
-~kb2.play
+~kb2.plot
 (
 Ppar([
 
