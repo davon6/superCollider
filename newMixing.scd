@@ -59,9 +59,9 @@
 ~mix35= Synth(\limiterToMixer,[\c35,1,\in, ~limitPerch6,\gain,72,\out,~perchLimiToG6],~limitGrp);
 // ~mix35.set(\gain,72)
 //BELOW TEMP
-~mix36= Synth(\limiterStoMixer,[\c2,1,\in,~limitPerch7 ,\gain,100,\out,~perchLimiToG7],~limitGrp);
+~mix36= Synth(\limiterStoMixer,[\c36,1,\in,~limitPerch7 ,\gain,100,\out,~perchLimiToG7],~limitGrp);
 // ~mix36.set(\gain,100)
-~mix37= Synth(\limiterStoMixer,[\c4,1,\in,~limitPerch8 ,\gain,80,\out,~perchLimiToG8],~limitGrp);
+~mix37= Synth(\limiterStoMixer,[\c37,1,\in,~limitPerch8 ,\gain,80,\out,~perchLimiToG8],~limitGrp);
  //~mix37.set(\gain,80)
 
 

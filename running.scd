@@ -12,7 +12,7 @@ Bus.free;
 
 (
 s.options.memSize = 2097152 ;
-Server.default.options.numOutputBusChannels = 40;
+Server.default.options.numOutputBusChannels = 45;
 Server.default.options.sampleRate =  48000;
 Server.default.options.outDevice_("Audient iD14");
 )
