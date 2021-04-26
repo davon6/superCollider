@@ -22,10 +22,11 @@
 //arghh percheur sometimes comes mono in limiter
 //chelou low freq noise wander in the project
 //rythm sample 1/2 on kb needs mixing
-//beel variable to save if necessary for mixing
+//bell variable to save if necessary for mixing
 //AMAZing limiter Synths off for a sequence
 //missing slow motion of filters
 //flanger with negative feedback
+//does starts hits works?
 
 s.plotTree
 /* KB AND BASE have unrecordeds    ~bufSnoopy       and     ~bufBg{!=~no4, ~kb, ~rises}   */

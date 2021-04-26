@@ -161,7 +161,7 @@ Prand([
 
 		Prand([
 		Pbind(\instrument,\gateS, \dur,Pseq([1/8],8),\type,
-			Pseq([\note, \rest,\note, \rest,\note, \note,/*\note,\note*/],inf),
+			Pseq([\note, \rest,\note, \rest,\note, \note,\note,\note],inf),
 		\in,  Pxrand([
 				Pseq([~toGate10],8),
 				Pseq([~toGate102],8)
