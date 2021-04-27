@@ -66,6 +66,7 @@
 
 
 
+
 ~mix17= Synth(\limiterStoMixer,[\c17,1,\in, ~bigRiToLimit, \gain,70,\out,~bigRiToStereo],~limitGrp);
 // ~mix17.set(\gain,70);
 ~mix12= Synth(\limiterStoMixer,[\c12,1,\in, ~riTriptoLimit,\gain,30,\out,~riTriptoStereo],~limitGrp);
@@ -75,8 +76,12 @@
 
 
 
-
-
+~mix38= Synth(\limiterStoMixer,[\c38,1,\in,~part2ToLimit ,\gain,25,\out,~part2ToStereo],~limitGrp);
+ //~mix38.set(\gain,20)
+~mix39= Synth(\limiterStoMixer,[\c39,1,\in,~part2SLimit ,\gain,45,\out,~part2SStereo],~limitGrp);
+ //~mix39.set(\gain,45)
+~mix40= Synth(\limiterStoMixer,[\c40,1,\in,~part2RiLimit ,\gain,5,\out,~part2RiStereo],~limitGrp);
+// ~mix40.set(\gain,5)
 
 
 ~mix9= Synth(\limiterStoMixer,[ \c9,1,\in,~percuLimit, \gain,54,\out,~percuStereo],~limitGrp);
@@ -87,10 +92,10 @@
 ~mix19= Synth(\limiterStoMixer,[\c19,1,\in, ~limitSquelch, \gain,72,\out,~stereoBus3b],~limitGrp4);
 // ~mix19.set(\gain,72)
 
-~mix23= Synth(\limiterStoMixer,[\c23,1,\in, ~limitCymb,\gain,40,\out,~toKbGate/*~comFuzz22*/],~limitGrp);
-// ~mix23.set(\gain,40)
-~mix24= Synth(\limiterStoMixer,[\c24,1,\in, ~limitHat,\gain,34,\out,~toKbGate/*~comFuzz22*/],~limitGrp);
-// ~mix24.set(\gain,34)
+~mix23= Synth(\limiterStoMixer,[\c23,1,\in, ~limitCymb,\gain,80,\out,0/*~toKbGate*//*~comFuzz22*/],~limitGrp);
+// ~mix23.set(\gain,80)
+~mix24= Synth(\limiterStoMixer,[\c24,1,\in, ~limitHat,\gain,68,\out,0/*~toKbGate*//*~comFuzz22*/],~limitGrp);
+// ~mix24.set(\gain,68)
 
 ~mix25= Synth(\limiterToMixer,[\c25,1,\in, ~snareLimit,\gain,55,\out,~toPan2],~limitGrp);
 // ~mix25.set(\gain,55)

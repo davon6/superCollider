@@ -131,9 +131,9 @@ s.sync;
 	~f2 = Buffer.alloc(s, s.sampleRate *  t.beatDur*4);//  (t.beatDur*4)/*1.5488*/,1);
 	~delay = Buffer.alloc(s, 48000 * 3, 2);
 	~delayX = Buffer.alloc(s, 48000 * 3, 2);
-	/*~delay2 = Buffer.alloc(s, 48000 * 3, 2);
+~delay2 = Buffer.alloc(s, 48000 * 3, 2);
 	~delay3 = Buffer.alloc(s, 48000 * 3, 2);
-	~delay4 = Buffer.alloc(s, 48000 * 3, 2);
+		/*~delay4 = Buffer.alloc(s, 48000 * 3, 2);
 	~delay5 = Buffer.alloc(s, 48000 * 3, 2);*/
 	~delay6= Buffer.alloc(s, 48000 * 3, 2);
 
@@ -211,6 +211,15 @@ s.sync;
 	~gateSquelch = Bus.audio(s,1);
 	~gateMelo = Bus.audio(s,1);
 
+	~part2ToPhas = Bus.audio(s,1);
+	~part2ToG= Bus.audio(s,1);
+	~part2ToEq = Bus.audio(s,1);
+	~part2ToRev = Bus.audio(s,1);
+	~part2ToComp= Bus.audio(s,2);
+	~part2ToLimit= Bus.audio(s,2);
+	~part2ToStereo= Bus.audio(s,2);
+	~part2ToComp2= Bus.audio(s,10);
+
 	~gateSeqBus = Bus.audio(s,1);
 	~gateSeqBus2 = Bus.audio(s,1);
 	~gateSeqRnd = Bus.audio(s,1);
@@ -276,6 +285,14 @@ s.sync;
 	~dispatchBg = Bus.audio(s,2);
 	~no2= Bus.audio(s,10);
 
+	~part2Slide= Bus.audio(s,1);
+	~part2SEq= Bus.audio(s,1);
+	~part2SRev= Bus.audio(s,1);
+	~part2SComp = Bus.audio(s,2);
+	~part2SLimit = Bus.audio(s,2);
+	~part2SStereo = Bus.audio(s,2);
+
+
 	~no2ToRev = Bus.audio(s,1);
 	~no2ToCom = Bus.audio(s,2);
 	~no2ToLimit = Bus.audio(s,2);
@@ -303,13 +320,13 @@ s.sync;
 	~eqBg = Bus.audio(s,1);
 	~outDisto = Bus.audio(s,3);
 
-	~phaseBus2= Bus.audio(s,1);~distoPerch2= Bus.audio(s,1);2;~eqPerch2= Bus.audio(s,1);~revPerch2= Bus.audio(s,1);~comPerch2= Bus.audio(s,2);~limitPerch2= Bus.audio(s,2);
-	~phaseBus3= Bus.audio(s,1);~distoPerch3= Bus.audio(s,1);~eqPerch3= Bus.audio(s,1);~revPerch3= Bus.audio(s,1);~comPerch3= Bus.audio(s,2);~limitPerch3= Bus.audio(s,2);
-	~phaseBus4= Bus.audio(s,1);~distoPerch4= Bus.audio(s,1);~eqPerch4= Bus.audio(s,1);~revPerch4= Bus.audio(s,1);~comPerch4= Bus.audio(s,2);~limitPerch4= Bus.audio(s,2);
-	~phaseBus5= Bus.audio(s,1);~distoPerch5= Bus.audio(s,1);~eqPerch5= Bus.audio(s,1);~revPerch5= Bus.audio(s,1);~comPerch5= Bus.audio(s,2);~limitPerch5= Bus.audio(s,2);
-	~phaseBus6= Bus.audio(s,1);~distoPerch6= Bus.audio(s,1);~eqPerch6= Bus.audio(s,1);~revPerch6= Bus.audio(s,1);~comPerch6= Bus.audio(s,2);~limitPerch6= Bus.audio(s,2);
-	~phaseBus7= Bus.audio(s,1);~distoPerch7= Bus.audio(s,1);~eqPerch7= Bus.audio(s,1);~revPerch7= Bus.audio(s,1);~comPerch7= Bus.audio(s,2);~limitPerch7= Bus.audio(s,2);
-	~phaseBus8= Bus.audio(s,1);~distoPerch8= Bus.audio(s,1);~eqPerch8= Bus.audio(s,1);~revPerch8= Bus.audio(s,1);~comPerch8= Bus.audio(s,2);~limitPerch8= Bus.audio(s,2);
+	~phaseBus2= Bus.audio(s,1);/*~distoPerch2= Bus.audio(s,1);*/~eqPerch2= Bus.audio(s,1);~revPerch2= Bus.audio(s,1);~comPerch2= Bus.audio(s,2);~limitPerch2= Bus.audio(s,2);
+	~phaseBus3= Bus.audio(s,1);/*~distoPerch3= Bus.audio(s,1);*/~eqPerch3= Bus.audio(s,1);~revPerch3= Bus.audio(s,1);~comPerch3= Bus.audio(s,2);~limitPerch3= Bus.audio(s,2);
+	~phaseBus4= Bus.audio(s,1);/*~distoPerch4= Bus.audio(s,1);*/~eqPerch4= Bus.audio(s,1);~revPerch4= Bus.audio(s,1);~comPerch4= Bus.audio(s,2);~limitPerch4= Bus.audio(s,2);
+	~phaseBus5= Bus.audio(s,1);/*~distoPerch5= Bus.audio(s,1);*/~eqPerch5= Bus.audio(s,1);~revPerch5= Bus.audio(s,1);~comPerch5= Bus.audio(s,2);~limitPerch5= Bus.audio(s,2);
+	~phaseBus6= Bus.audio(s,1);/*~distoPerch6= Bus.audio(s,1);*/~eqPerch6= Bus.audio(s,1);~revPerch6= Bus.audio(s,1);~comPerch6= Bus.audio(s,2);~limitPerch6= Bus.audio(s,2);
+	~phaseBus7= Bus.audio(s,1);/*~distoPerch7= Bus.audio(s,1);*/~eqPerch7= Bus.audio(s,1);~revPerch7= Bus.audio(s,1);~comPerch7= Bus.audio(s,2);~limitPerch7= Bus.audio(s,2);
+	~phaseBus8= Bus.audio(s,1);/*~distoPerch8= Bus.audio(s,1);*/~eqPerch8= Bus.audio(s,1);~revPerch8= Bus.audio(s,1);~comPerch8= Bus.audio(s,2);~limitPerch8= Bus.audio(s,2);
 
 	~bellFlang2= Bus.audio(s,2);
 	~flanToDisto2= Bus.audio(s,2);
@@ -591,6 +608,15 @@ s.sync;
 	~toStereoFlo=  Bus.audio(s,2);
 	~risesGate=  Bus.audio(s,10);
 
+	~part2RiDisto=  Bus.audio(s,2);
+	~part2RiFilter=  Bus.audio(s,2);
+	~part2RiEq=  Bus.audio(s,2);
+	~part2RiRev=  Bus.audio(s,2);
+	~part2RiComp=  Bus.audio(s,2);
+	~part2RiComp2=  Bus.audio(s,10);
+	~part2RiLimit=  Bus.audio(s,2);
+	~part2RiStereo=  Bus.audio(s,2);
+
 
 	~gateBou=  Bus.audio(s,1);
 	s.sync;
@@ -633,6 +659,7 @@ s.sync;
 
 	~bus24 = Bus.control(s,1);
 	~bus25 = Bus.control(s,1);
+	~bus26 = Bus.control(s,1);
 
 ~mod1= Bus.control(s,1);
 	~mod2= Bus.control(s,1);

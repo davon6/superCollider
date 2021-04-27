@@ -171,7 +171,7 @@ Prand([
 				Pseq([~delayBus2],8)],[4,1].normalizeSum,inf)*/ ,\group, ~gateGrp6,\tS, 0.39550810372374),
 
 
-			Pbind(\instrument,\gateS, \dur,Pseq([1/1],1),\in,  Pxrand([~toGate10,~toGate102], inf)  ,\out ,0 ,\group, ~gateGrp6,\tS, 0.39550810372374),
+			Pbind(\instrument,\gateS, \dur,Pseq([1/2],2),\in,  Pxrand([~toGate10,~toGate102], inf)  ,\out ,0 ,\group, ~gateGrp6,\tS, 0.39550810372374),
 				],1),
 	],inf),
 

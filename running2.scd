@@ -77,7 +77,7 @@ Pbind(\instrument,\gran,\dur,Prand([ Pseq([1/4],24)  ,   Pseq([1/1],24)   ],1)  
 ~perc6 = 0.950.rand;~perc7 = 0.950.rand;~perc8 = 0.950.rand;
 ~no2S = (~bufSnoopy.numFrames.rrand(1400000)- 1400000);
 
-~no4S = ( ~bufSnoopy.numFrames.rrand(1400000)- 1400000)
+~no4S = ( ~bufSnoopy.numFrames.rrand(1400000)- 1400000);
 ~ri1vlAtk=4.00.rand;~ri1f1=1.00.rand;~ri1f2=10.00.rrand(1);~ri1f3= 1.00.rand;~ri1ic_atk=10.00.rrand(-5);~ri1index=5.00.rrand(1);~ri1mRatio=3.rrand(1);~ri1fs=1.00.rand;
 ~ri2vlAtk=4.00.rand;~ri2f1=1.00.rand;~ri2f2=10.00.rrand(1);~ri2f3= 1.00.rand;~ri2ic_atk=10.00.rrand(-5);~ri2index=50.00.rrand(1);~ri2mRatio=3.rrand(1);~ri2fR=1.00.rand;
 ~ri3vlAtk=4.00.rand;~ri3f1=1.00.rand;~ri3f2=10.00.rrand(1);~ri3f3=1.00.rand;~ri3ic_atk=10.00.rrand(-5);~ri3index=50.00.rrand(1);~ri3mRatio=3.rrand(1);/*~ri3fR=1.00.rand*/
@@ -102,6 +102,8 @@ Pbind(\instrument,\gran,\dur,Prand([ Pseq([1/4],24)  ,   Pseq([1/1],24)   ],1)  
 ~pSub8 =0.5.rrand(0.2,1);~pAtkT8=0.10.rrand(0.01);~pDecT8 =  0.3.rrand(0.8,0.3);~pSubT8 = 0.3.rrand(0.2);~pRelT8=0.22.rrand(0.1,1);~pAtkC8=6.rrand(1,1);~pDecC8=(-4).rrand(-0.1);~pRelC8=(-8).rrand(-2,1);
 ~pvlAtk8 =0.1.rrand(0.01);
 ~bangVar = (~leTout.numFrames/ 256 * 145.rand);
+~zigoui= ~bufSnoopy.numFrames/256 * 240.rand;
+~zigoui2= ~bufSnoopy.numFrames/256 * 240.rand;
 
 ~vocal  = Buffer.read(s,"/Users/davidmignot/Documents/REAPER Media/03-thEnd-consolidated.wav");
 ~audio3 = Buffer.read(s,"/Users/davidmignot/Documents/REAPER Media/02-consolidated-03.wav");
@@ -298,12 +300,12 @@ Pxrand([
 //FOR BG
 /*	Pbind(\instrument, \lfo13,\val,(~hzQbeat/4),\out,~bus2 ,\dur,999,\ph,0, \rL,200,\rH,4000, \group, ~lfoGrp,\tS, 0.39550810372374),*/
 
-	Pbind(\instrument, \lfo13,\val,(~hzQbeat/4),\out,~bus10 ,\dur,999,\ph,0, \rL,(-0.38),\rH,0.38, \group, ~lfoGrp,\tS, 0.39550810372374),
+	Pbind(\instrument, \lfo13,\val,(~hzQbeat/4),\out,~bus10 ,\dur,Pseq([16/1],inf),\ph,0, \rL,(-0.38),\rH,0.38, \group, ~lfoGrp,\tS, 0.39550810372374),
 
 
-	Pbind(\instrument, \lfo13,\val,(~hzQbeat),\out,~bus24 ,\dur,999,\ph,Pfunc({1.rand}), \rL,(-0.8),\rH,(-0.08), \group, ~lfoGrp,\tS, 0.39550810372374),
+	Pbind(\instrument, \lfo13,\val,(~hzQbeat),\out,~bus24 ,\dur,Pseq([4/1],inf),\ph,Pfunc({1.rand}), \rL,(-0.8),\rH,(-0.08), \group, ~lfoGrp,\tS, 0.39550810372374),
 
-	Pbind(\instrument, \lfo13,\val,(~hzQbeat),\out,~bus25 ,\dur,999,\ph,Pfunc({1.rand}), \rL,0.8,\rH,0.08, \group, ~lfoGrp,\tS, 0.39550810372374),
+	Pbind(\instrument, \lfo13,\val,(~hzQbeat),\out,~bus25 ,\dur,Pseq([4/1],inf),\ph,Pfunc({1.rand}), \rL,0.8,\rH,0.08, \group, ~lfoGrp,\tS, 0.39550810372374),
 
 
 	Pbind(\instrument, \lfo13,\val,~hzQbeat,\out,~bus16 ,\dur,Pseq([16/1],inf), \rL,(-0.3),\rH,0.3, \group, ~lfoGrp,\tS, 0.39550810372374),
@@ -633,6 +635,9 @@ Pbind(\instrument,\EQHP10, \in, ~eqBus10 ,\out, 0,\frq, 100, \dur,inf,\group, ~e
 
 
 
+
+	Pbind(\instrument,\comp10, \dur,9999,\thr,0.4 ,\sB, 1.04,\sA, 0.2,\atk ,0.0968, \rel ,0.3872
+		,\in, ~part2RiComp2  ,\ctrl, ~snBus, \out,0,\group, ~compGrp2,\tS, 0.39550810372374),
 
 
  //for BG
@@ -1811,50 +1816,50 @@ Pbind(\instrument,\gran,\dur,Pseq([ Pseq([1/4],24)  ,   Pseq([1/2],24)   ].scram
 
 
 
-	Pbind(\instrument, \phaser,\in,~phaseBus,\dur ,9999/*Pseq([24/1],inf)*/,\value, ~pHVal,\amp,1,\decT,~pHdecT,\out,~distoPerch, \group,~phaserGrp,\tS, 0.39550810372374 ,),
-			Pbind(\instrument, \disto, \dur, inf, \in, ~distoPerch , \out,~eqPerch,\group, ~distoGrp),
+	Pbind(\instrument, \phaser,\in,~phaseBus,\dur ,9999/*Pseq([24/1],inf)*/,\value, ~pHVal,\amp,1,\decT,~pHdecT,\out,~eqPerch, \group,~phaserGrp,\tS, 0.39550810372374 ,),
+			/*Pbind(\instrument, \disto, \dur, inf, \in, ~distoPerch , \out,~eqPerch,\group, ~distoGrp),*/
 	Pbind(\instrument,\EQHP, \in, ~eqPerch , \out, ~revPerch ,\frq, 100, \dur,inf, \group, ~eqGrp0),
 	Pbindf( Prand([~quickFix, ~rShort]),\dur,inf, \in,~revPerch  , \out,~comPerch ,\group,~revGrp),
-	Pbind(\instrument,\compS, \dur,inf,\thr,0.2 ,\sB, 1.086,\sA, 1/2,\atk ,0.0121, \rel ,0.04840, \gain,1/*(50)*/	,\in, ~comPerch ,\ctrl, ~kbus, \out,~limitPerch, \group, ~compGrp),
+	Pbind(\instrument,\compS, \dur,inf,\thr,0.85 ,\sB, 1.086,\sA, 1/2,\atk ,0.0121, \rel ,0.04840, \gain,1/*(50)*/	,\in, ~comPerch ,\ctrl, ~kbus, \out,~limitPerch, \group, ~compGrp),
 
 
-	Pbind(\instrument, \phaser,\in,~phaseBus2,\dur ,9999,\value,~pHVal2,\amp,1,\decT,~pHdecT2,\out,~distoPerch2, \group,~phaserGrp,\tS, 0.39550810372374 ,),
-			Pbind(\instrument, \disto, \dur, inf, \in, ~distoPerch2 , \out,~eqPerch2,\group, ~distoGrp),
+	Pbind(\instrument, \phaser,\in,~phaseBus2,\dur ,9999,\value,~pHVal2,\amp,1,\decT,~pHdecT2,\out,~eqPerch2, \group,~phaserGrp,\tS, 0.39550810372374 ,),
+			/*Pbind(\instrument, \disto, \dur, inf, \in, ~distoPerch2 , \out,~eqPerch2,\group, ~distoGrp),*/
 	Pbind(\instrument,\EQHP, \in, ~eqPerch2 , \out, ~revPerch2 ,\frq, 100, \dur,inf, \group, ~eqGrp0),
 	Pbindf( Prand([~quickFix, ~rShort]),\dur,inf, \in,~revPerch2  , \out,~comPerch2 ,\group,~revGrp),
-	Pbind(\instrument,\compS, \dur,inf,\thr,0.2 ,\sB, 1.086,\sA, 1/2,\atk ,0.0121, \rel ,0.04840, \gain,1/*(50)*/	,\in, ~comPerch2 ,\ctrl, ~kbus, \out,~limitPerch2, \group, ~compGrp),
+	Pbind(\instrument,\compS, \dur,inf,\thr,0.85 ,\sB, 1.086,\sA, 1/2,\atk ,0.0121, \rel ,0.04840, \gain,1/*(50)*/	,\in, ~comPerch2 ,\ctrl, ~kbus, \out,~limitPerch2, \group, ~compGrp),
 
 
-	Pbind(\instrument, \phaser,\in,~phaseBus3,\dur ,9999,\value, ~pHVal3,\amp,1,\decT,~pHdecT3,\out,~distoPerch3, \group,~phaserGrp,\tS, 0.39550810372374 ,),
-			Pbind(\instrument, \disto, \dur, inf, \in, ~distoPerch3 , \out,~eqPerch3,\group, ~distoGrp),
+	Pbind(\instrument, \phaser,\in,~phaseBus3,\dur ,9999,\value, ~pHVal3,\amp,1,\decT,~pHdecT3,\out,~eqPerch3, \group,~phaserGrp,\tS, 0.39550810372374 ,),
+			/*Pbind(\instrument, \disto, \dur, inf, \in, ~distoPerch3 , \out,~eqPerch3,\group, ~distoGrp),*/
 	Pbind(\instrument,\EQHP, \in, ~eqPerch3 , \out, ~revPerch3,\frq, 100, \dur,inf, \group, ~eqGrp0),
 	Pbindf( Prand([~quickFix, ~rShort]),\dur,inf, \in,~revPerch3  , \out,~comPerch3 ,\group,~revGrp),
-	Pbind(\instrument,\compS, \dur,inf,\thr,0.2 ,\sB, 1.086,\sA, 1/2,\atk ,0.0121, \rel ,0.04840, \gain,1/*(50)*/	,\in, ~comPerch3 ,\ctrl, ~kbus, \out,~limitPerch3, \group, ~compGrp),
-	Pbind(\instrument, \phaser,\in,~phaseBus4,\dur ,9999,\value, ~pHVal4,\amp,1,\decT,~pHdecT4,\out,~distoPerch4, \group,~phaserGrp,\tS, 0.39550810372374 ,),
-			Pbind(\instrument, \disto, \dur, inf, \in, ~distoPerch4 , \out,~eqPerch4,\group, ~distoGrp),
+	Pbind(\instrument,\compS, \dur,inf,\thr,0.85 ,\sB, 1.086,\sA, 1/2,\atk ,0.0121, \rel ,0.04840, \gain,1/*(50)*/	,\in, ~comPerch3 ,\ctrl, ~kbus, \out,~limitPerch3, \group, ~compGrp),
+	Pbind(\instrument, \phaser,\in,~phaseBus4,\dur ,9999,\value, ~pHVal4,\amp,1,\decT,~pHdecT4,\out,~eqPerch4, \group,~phaserGrp,\tS, 0.39550810372374 ,),
+			/*Pbind(\instrument, \disto, \dur, inf, \in, ~distoPerch4 , \out,~eqPerch4,\group, ~distoGrp),*/
 	Pbind(\instrument,\EQHP, \in, ~eqPerch4 , \out, ~revPerch4 ,\frq, 100, \dur,inf, \group, ~eqGrp0),
 	Pbindf( Prand([~quickFix, ~rShort]),\dur,inf, \in,~revPerch4  , \out,~comPerch4 ,\group,~revGrp),
-	Pbind(\instrument,\compS, \dur,inf,\thr,0.2 ,\sB, 1.086,\sA, 1/2,\atk ,0.0121, \rel ,0.04840, \gain,1/*(50)*/	,\in, ~comPerch4 ,\ctrl, ~kbus, \out,~limitPerch4, \group, ~compGrp),
-	Pbind(\instrument, \phaser,\in,~phaseBus5,\dur ,9999,\value, ~pHVal5,\amp,1,\decT,~pHdecT5,\out,~distoPerch5, \group,~phaserGrp,\tS, 0.39550810372374 ,),
-			Pbind(\instrument, \disto, \dur, inf, \in, ~distoPerch5 , \out,~eqPerch5,\group, ~distoGrp),
+	Pbind(\instrument,\compS, \dur,inf,\thr,0.85 ,\sB, 1.086,\sA, 1/2,\atk ,0.0121, \rel ,0.04840, \gain,1/*(50)*/	,\in, ~comPerch4 ,\ctrl, ~kbus, \out,~limitPerch4, \group, ~compGrp),
+	Pbind(\instrument, \phaser,\in,~phaseBus5,\dur ,9999,\value, ~pHVal5,\amp,1,\decT,~pHdecT5,\out,~eqPerch5, \group,~phaserGrp,\tS, 0.39550810372374 ,),
+			/*Pbind(\instrument, \disto, \dur, inf, \in, ~distoPerch5 , \out,~eqPerch5,\group, ~distoGrp),*/
 	Pbind(\instrument,\EQHP, \in, ~eqPerch5 , \out, ~revPerch5 ,\frq, 100, \dur,inf, \group, ~eqGrp0),
 	Pbindf( Prand([~quickFix, ~rShort]),\dur,inf, \in,~revPerch5  , \out,~comPerch5 ,\group,~revGrp),
-	Pbind(\instrument,\compS, \dur,inf,\thr,0.2 ,\sB, 1.086,\sA, 1/2,\atk ,0.0121, \rel ,0.04840, \gain,1/*(50)*/	,\in, ~comPerch5 ,\ctrl, ~kbus, \out,~limitPerch5, \group, ~compGrp),
-	Pbind(\instrument, \phaser,\in,~phaseBus6,\dur ,9999,\value, ~pHVal6,\amp,1,\decT,~pHdecT6,\out,~distoPerch6, \group,~phaserGrp,\tS, 0.39550810372374 ,),
-			Pbind(\instrument, \disto, \dur, inf, \in, ~distoPerch6 , \out,~eqPerch6,\group, ~distoGrp),
+	Pbind(\instrument,\compS, \dur,inf,\thr,0.85 ,\sB, 1.086,\sA, 1/2,\atk ,0.0121, \rel ,0.04840, \gain,1/*(50)*/	,\in, ~comPerch5 ,\ctrl, ~kbus, \out,~limitPerch5, \group, ~compGrp),
+	Pbind(\instrument, \phaser,\in,~phaseBus6,\dur ,9999,\value, ~pHVal6,\amp,1,\decT,~pHdecT6,\out,~eqPerch6, \group,~phaserGrp,\tS, 0.39550810372374 ,),
+			/*Pbind(\instrument, \disto, \dur, inf, \in, ~distoPerch6 , \out,~eqPerch6,\group, ~distoGrp),*/
 	Pbind(\instrument,\EQHP, \in, ~eqPerch6 , \out, ~revPerch6 ,\frq, 100, \dur,inf, \group, ~eqGrp0),
 	Pbindf( Prand([~quickFix, ~rShort]),\dur,inf, \in,~revPerch6  , \out,~comPerch6 ,\group,~revGrp),
-	Pbind(\instrument,\compS, \dur,inf,\thr,0.2 ,\sB, 1.086,\sA, 1/2,\atk ,0.0121, \rel ,0.04840, \gain,1/*(50)*/	,\in, ~comPerch6 ,\ctrl, ~kbus, \out,~limitPerch6, \group, ~compGrp),
-	Pbind(\instrument, \phaser,\in,~phaseBus7,\dur ,9999,\value, ~pHVal7,\amp,1,\decT,~pHdecT7,\out,~distoPerch7, \group,~phaserGrp,\tS, 0.39550810372374 ,),
-			Pbind(\instrument, \disto, \dur, inf, \in, ~distoPerch7 , \out,~eqPerch7,\group, ~distoGrp),
+	Pbind(\instrument,\compS, \dur,inf,\thr,0.85 ,\sB, 1.086,\sA, 1/2,\atk ,0.0121, \rel ,0.04840, \gain,1/*(50)*/	,\in, ~comPerch6 ,\ctrl, ~kbus, \out,~limitPerch6, \group, ~compGrp),
+	Pbind(\instrument, \phaser,\in,~phaseBus7,\dur ,9999,\value, ~pHVal7,\amp,1,\decT,~pHdecT7,\out,~eqPerch7, \group,~phaserGrp,\tS, 0.39550810372374 ,),
+			/*Pbind(\instrument, \disto, \dur, inf, \in, ~distoPerch7 , \out,~eqPerch7,\group, ~distoGrp),*/
 	Pbind(\instrument,\EQHP, \in, ~eqPerch7 , \out, ~revPerch7 ,\frq, 100, \dur,inf, \group, ~eqGrp0),
 	Pbindf( Prand([~quickFix, ~rShort]),\dur,inf, \in,~revPerch7  , \out,~comPerch7 ,\group,~revGrp),
-	Pbind(\instrument,\compS, \dur,inf,\thr,0.2 ,\sB, 1.086,\sA, 1/2,\atk ,0.0121, \rel ,0.04840, \gain,1/*(50)*/	,\in, ~comPerch7 ,\ctrl, ~kbus, \out,~limitPerch7, \group, ~compGrp),
-	Pbind(\instrument, \phaser,\in,~phaseBus8,\dur ,9999,\value, ~pHVal8,\amp,1,\decT,~pHdecT8,\out,~distoPerch8, \group,~phaserGrp,\tS, 0.39550810372374 ,),
-			Pbind(\instrument, \disto, \dur, inf, \in, ~distoPerch8 , \out,~eqPerch8,\group, ~distoGrp),
+	Pbind(\instrument,\compS, \dur,inf,\thr,0.85 ,\sB, 1.086,\sA, 1/2,\atk ,0.0121, \rel ,0.04840, \gain,1/*(50)*/	,\in, ~comPerch7 ,\ctrl, ~kbus, \out,~limitPerch7, \group, ~compGrp),
+	Pbind(\instrument, \phaser,\in,~phaseBus8,\dur ,9999,\value, ~pHVal8,\amp,1,\decT,~pHdecT8,\out,~eqPerch8, \group,~phaserGrp,\tS, 0.39550810372374 ,),
+			/*Pbind(\instrument, \disto, \dur, inf, \in, ~distoPerch8 , \out,~eqPerch8,\group, ~distoGrp),*/
 	Pbind(\instrument,\EQHP, \in, ~eqPerch8 , \out, ~revPerch8 ,\frq, 100, \dur,inf, \group, ~eqGrp0),
 	Pbindf( Prand([~quickFix, ~rShort]),\dur,inf, \in,~revPerch8  , \out,~comPerch8 ,\group,~revGrp),
-	Pbind(\instrument,\compS, \dur,inf,\thr,0.2 ,\sB, 1.086,\sA, 1/2,\atk ,0.0121, \rel ,0.04840, \gain,1/*(50)*/	,\in, ~comPerch8 ,\ctrl, ~kbus, \out,~limitPerch8, \group, ~compGrp),
+	Pbind(\instrument,\compS, \dur,inf,\thr,0.85 ,\sB, 1.086,\sA, 1/2,\atk ,0.0121, \rel ,0.04840, \gain,1/*(50)*/	,\in, ~comPerch8 ,\ctrl, ~kbus, \out,~limitPerch8, \group, ~compGrp),
 
 	/*	Pbind(\instrument, \limiterStoMixer,\c3,1,\name, 3,\in, ~limitPerch, \dur, inf,\gain,50,\group,~limitGrp,\out,~stereoPerch),*/
 /*	Pbind(\instrument, \limiterStoMixer,\c31,1,\in, ~limitPerch2, \dur, inf,\gain,50,\group,~limitGrp,\out,~stereoPerch),*/
