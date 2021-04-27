@@ -219,6 +219,7 @@ s.sync;
 	~part2ToLimit= Bus.audio(s,2);
 	~part2ToStereo= Bus.audio(s,2);
 	~part2ToComp2= Bus.audio(s,10);
+	~part2ToFilter= Bus.audio(s,1);
 
 	~gateSeqBus = Bus.audio(s,1);
 	~gateSeqBus2 = Bus.audio(s,1);
@@ -248,6 +249,12 @@ s.sync;
 	~bangLimit= Bus.audio(s,10);
 
 	~bgBus = Bus.audio(s,2);
+	~part2Slide2= Bus.audio(s,1);
+	~part2SEq2= Bus.audio(s,1);
+	~part2SRev2= Bus.audio(s,1);
+	~part2SComp2= Bus.audio(s,2);
+	~part2SLimit2= Bus.audio(s,2);
+	~part2SStereo2= Bus.audio(s,2);
 
 	~main1GToG= Bus.audio(s,1);
 	~perchLimiToG= Bus.audio(s,2);

@@ -104,6 +104,7 @@ Pbind(\instrument,\gran,\dur,Prand([ Pseq([1/4],24)  ,   Pseq([1/1],24)   ],1)  
 ~bangVar = (~leTout.numFrames/ 256 * 145.rand);
 ~zigoui= ~bufSnoopy.numFrames/256 * 240.rand;
 ~zigoui2= ~bufSnoopy.numFrames/256 * 240.rand;
+~zigoui3= ~bufSnoopy.numFrames/256 * 240.rand;
 
 ~vocal  = Buffer.read(s,"/Users/davidmignot/Documents/REAPER Media/03-thEnd-consolidated.wav");
 ~audio3 = Buffer.read(s,"/Users/davidmignot/Documents/REAPER Media/02-consolidated-03.wav");

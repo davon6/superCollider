@@ -82,6 +82,7 @@
  //~mix39.set(\gain,45)
 ~mix40= Synth(\limiterStoMixer,[\c40,1,\in,~part2RiLimit ,\gain,5,\out,~part2RiStereo],~limitGrp);
 // ~mix40.set(\gain,5)
+~mix41= Synth(\limiterStoMixer,[\c41,1,\in,~part2SLimit2 ,\gain,45,\out,~part2SStereo2],~limitGrp);
 
 
 ~mix9= Synth(\limiterStoMixer,[ \c9,1,\in,~percuLimit, \gain,54,\out,~percuStereo],~limitGrp);
