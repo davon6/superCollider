@@ -181,11 +181,11 @@ s.sync;
 
 	~micBus = Bus.audio(s,1);
 	~ptrBus = Bus.audio(s,1);
-	/*~micBus2 = Bus.audio(s,1);
+	/*~micBus2 = Bus.audio(s,1);*/
 	~ptrBus2 = Bus.audio(s,1);
-	~micBus3 = Bus.audio(s,1);
+	/*~micBus3 = Bus.audio(s,1);*/
 	~ptrBus3 = Bus.audio(s,1);
-	~micBus4 = Bus.audio(s,1);
+	/*~micBus4 = Bus.audio(s,1);
 	~ptrBus4 = Bus.audio(s,1);*/
 
 	~distoPercu= Bus.audio(s,1);
@@ -350,6 +350,17 @@ s.sync;
 	~flanToComp2= Bus.audio(s,2);
 	~flanToLimit2= Bus.audio(s,2);
 	~flanToStereo2= Bus.audio(s,2);
+
+	~part2G = Bus.audio(s,1);
+	~part2G2 = Bus.audio(s,1);
+	~part2G3 = Bus.audio(s,1);
+
+	~part2Limit= Bus.audio(s,2);
+	~part2Limit2= Bus.audio(s,2);
+	~part2Limit3= Bus.audio(s,2);
+
+	~absoFinalGate= Bus.audio(s,10);
+	~absoFinalGate2= Bus.audio(s,10);
 
 
 	~riToEq= Bus.audio(s,2);
@@ -751,6 +762,17 @@ s.sync;
 			[atckC,decC,0,relC]),timeScale: tS, doneAction:2)
 
 	);}).add;
+
+
+/*	SynthDef(\playBufXG10 ,{|out = 0,start, trig, dur, amp=1,buf, dA=2, loo=0,tS=1,impulse=0.001,
+		vlAtk =0,vlDec=1 ,vlSub=1 ,vlSub2=1,vlRel=0,atkT=0,decT=1,subsT=0,relT=0,atckC=0,decC=0,relC=0|Out.ar(out,PlayBuf.ar(10,buf,trigger:
+		Impulse.kr(impulse* (60/~bpm),mul: amp),startPos: start,loop:loo,doneAction: 2)
+
+		* EnvGen.kr(Env([vlAtk,vlDec,vlSub,vlSub2,vlRel],
+			[dur * atkT,dur* decT,dur * subsT,dur *relT],
+			[atckC,decC,0,relC]),timeScale: tS, doneAction:2)
+
+	);}).add;*/
 
 
 

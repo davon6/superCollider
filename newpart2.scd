@@ -99,7 +99,7 @@ Pbind(\instrument, \filter, \dur, inf,\in,~bgFil22, \busMod,~bus2, \rqLPF, ~bus1
 		,\gain,1,\in, ~bgBus2 ,\ctrl, ~snBus, \out,0,\group,~compGrp2 ),
 
 
-	~kb, ~hitX,
+	~kb, ~hitX,~pedonk,
 
 
 
@@ -152,7 +152,7 @@ Prand([
 
 	Pbind(\instrument,\gateS, \dur, Prand([/* Pseq([4/1],4),Pseq([1/1],4),*/ Pseq([1.5/1],1), Pseq([3/1],1),/*Pseq([1/3],1) ,*/Pseq([1/1],1),
 		/*Pseq([4/1],1)*/],1),
-		\in,  Prand([~toGate10,~toGate102], inf)  ,\out ,0/*Pwrand([~eqBus10,
+		\in,  Prand([~toGate10,~toGate102], inf)  ,\out ,~absoFinalGate2/*Pwrand([~eqBus10,
 
 		~delayBus2,~reverbSquelch],[16,1,1].normalizeSum,inf)*/
 
@@ -166,18 +166,18 @@ Prand([
 				Pseq([~toGate10],8),
 				Pseq([~toGate102],8)
 
-			], inf)  ,\out ,0/*Pwrand([~eqBus10,
+			], inf)  ,\out ,~absoFinalGate2/*Pwrand([~eqBus10,
 
 				Pseq([~delayBus2],8)],[4,1].normalizeSum,inf)*/ ,\group, ~gateGrp6,\tS, 0.39550810372374),
 
 
-			Pbind(\instrument,\gateS, \dur,Pseq([1/2],2),\in,  Pxrand([~toGate10,~toGate102], inf)  ,\out ,0 ,\group, ~gateGrp6,\tS, 0.39550810372374),
+			Pbind(\instrument,\gateS, \dur,Pseq([1/2],2),\in,  Pxrand([~toGate10,~toGate102], inf)  ,\out ,~absoFinalGate2 ,\group, ~gateGrp6,\tS, 0.39550810372374),
 				],1),
 	],inf),
 
 
 
-
+Pbind(\instrument,\gateS, \dur,Pseq([256/1],inf),\in,  Pseq([ ~absoFinalGate2,~absoFinalGate ].scramble, inf)  ,\out ,0 ,\group, ~gateGrp7,\tS, 0.39550810372374),
 
 
 	],1).play(t)
