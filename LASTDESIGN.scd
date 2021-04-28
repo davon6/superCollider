@@ -101,15 +101,16 @@ Pbind(\instrument,\playBufXG,\dur,Pseq([ Pwrand([  Pseq([1/4],9),  Pseq([Pseq([1
 
 
 
-	Pseq([
+	//Pseq([
+	Pwrand([
 	Pbind(\instrument,\gate, \vlSub,  1 , \vlSub2,Pkey(\vlSub), \dur, Prand([ Pseq([1.5/1],1)  ,Pseq([1.25/1],1)],1), \in,~part2G,\tS, 0.39550810372374,\group, ~gateGrp,\out,~eqBus1),
 
 	Pbind(\instrument,\gate, \vlSub,  1 , \vlSub2,Pkey(\vlSub), \dur, Prand([ Pseq([0.5/1],1)  ,Pseq([1.25/1],1)],1), \in, ~part2G2,\tS, 0.39550810372374,\group, ~gateGrp,\out,~eqBus2x),
 
 
 	Pbind(\instrument,\gate, \vlSub,  1 , \vlSub2,Pkey(\vlSub), \dur, Prand([ Pseq([1.5/1],1)  ,Pseq([1.25/1],1)],1), \in, ~part2G3,\tS, 0.39550810372374,\group, ~gateGrp,\out,~toEq)
-
-	].scramble,inf),
+	],[8,2,4].normalizeSum,inf),
+	//].scramble,inf),
 
 
 		Pbind(\instrument,\EQHP, \in, ~eqBus1 , \out,~reverbBus,
