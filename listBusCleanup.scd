@@ -6,8 +6,10 @@
 	~ptrBus3 = Bus.audio(s,1);
 	~micBus4 = Bus.audio(s,1);
 	~ptrBus4 = Bus.audio(s,1);
+
 ~gateSquelch = Bus.audio(s,1);
 ~gateMelo = Bus.audio(s,1);
+
 ~gateSeqBus2 = Bus.audio(s,1);
 	~gateSeqSquelch = Bus.audio(s,1);
 ~gateSeqMelo = Bus.audio(s,1);
@@ -16,6 +18,7 @@
 ~eqBus210= Bus.audio(s,10);
 ~bgDelay= Bus.audio(s,1);
 	~bgDelay2= Bus.audio(s,1);
+
 ~dispatchBg = Bus.audio(s,2);
 ~distoBg = Bus.audio(s,1);
 ~distoBg2= Bus.audio(s,1);
@@ -29,40 +32,49 @@
 ~stereoCymb = Bus.audio(s,1);
 	~stereoHat = Bus.audio(s,1);
 	~stereoRkick = Bus.audio(s,1);
+
 ~comRnd = Bus.audio(s,2);
 	~comMelo = Bus.audio(s,2);
 ~limitMelo = Bus.audio(s,2);
 ~gateShap = Bus.audio(s, 2);
 ~noiseStereo2 =  Bus.audio(s,1);
+
 ~lpSide=  Bus.audio(s,1);
 	~gateSide=  Bus.audio(s,1);
 ~revSide=  Bus.audio(s,1);
 ~comSide =  Bus.audio(s,2);
 	~limitSide =  Bus.audio(s,2);
 	~stereoSide =  Bus.audio(s,2);
+
 ~distoPerch =  Bus.audio(s,1);
 	~eqBus4=  Bus.audio(s,1);
 ~outDisto2=Bus.audio(s,2);
 	~outFil2=Bus.audio(s,2);
+
 	~distoBou=Bus.audio(s,1);
 	~stereoRkick2=  Bus.audio(s,1);
 ~revSide2=  Bus.audio(s,1);
 	~eqNoise2==  Bus.audio(s,1);
 	~comSide2=  Bus.audio(s,2);
 ~stereoSide2=  Bus.audio(s,2);
+
 ~eqNoise2=  Bus.audio(s,1);
 ~noiseRev2=  Bus.audio(s,2);
 ~reverbBus32=  Bus.audio(s,1);
 ~limitFuzz32=  Bus.audio(s,2);
+
 ~comFuzz32=  Bus.audio(s,2);
 ~limitSide2=  Bus.audio(s,2);
 ~stereoBus42=  Bus.audio(s,1);
+
 ~distoBus12=  Bus.audio(s,1);
 ~distoBus12=  Bus.audio(s,1);
+
 ~eqDs2=  Bus.audio(s,1);
 ~filterBus12=  Bus.audio(s,1);
 ~reverbBus12=  Bus.audio(s,1);
 ~limitFuzz12=  Bus.audio(s,2);
+
 ~eqBus12=  Bus.audio(s,1);
 ~comFuzz12=  Bus.audio(s,2);
 ~stereoBus12=  Bus.audio(s,2);
@@ -71,14 +83,18 @@
 ~reverbBus22=  Bus.audio(s,1);
 ~stereoBus22=  Bus.audio(s,2);
  ~limitFuzz4=  Bus.audio(s,2);//doublon, keep one
+
+
 ~riFil=  Bus.audio(s,2);
 	~riFil2=  Bus.audio(s,2);
+
  ~riEq=  Bus.audio(s,2);
 	~riDisto=  Bus.audio(s,2);
 	~riRev=  Bus.audio(s,2);
 	~riComp=  Bus.audio(s,2);
 	~riLimit=  Bus.audio(s,2);
 ~riStereo=  Bus.audio(s,2);
+
 ~percuDelay=  Bus.audio(s,2);
 ~no2Delay = Bus.audio(s,1);
 ~toPan22= Bus.audio(s,1);

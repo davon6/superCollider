@@ -50,19 +50,26 @@
 // ~mix3.set(\gain,55)
 ~mix31= Synth(\limiterStoMixer,[\c31,1,\in,~limitPerch2 ,\gain,65,\out,~perchLimiToG2],~limitGrp);
 // ~mix31.set(\gain,65)
-~mix32= Synth(\limiterToMixer,[\c32,1,\in, ~limitPerch3,\gain,65,\out,~perchLimiToG3],~limitGrp);
+~mix32= Synth(\limiterStoMixer,[\c32,1,\in, ~limitPerch3,\gain,65,\out,~perchLimiToG3],~limitGrp);
 // ~mix32.set(\gain,65)
 ~mix33= Synth(\limiterStoMixer,[\c33,1,\in,~limitPerch4 ,\gain,50,\out,~perchLimiToG4],~limitGrp);
 //~mix33.set(\gain,55)
 ~mix34= Synth(\limiterStoMixer,[\c34,1,\in,~limitPerch5 ,\gain,60,\out,~perchLimiToG5],~limitGrp);
 // ~mix33.set(\gain,60)
-~mix35= Synth(\limiterToMixer,[\c35,1,\in, ~limitPerch6,\gain,72,\out,~perchLimiToG6],~limitGrp);
+~mix35= Synth(\limiterStoMixer,[\c35,1,\in, ~limitPerch6,\gain,72,\out,~perchLimiToG6],~limitGrp);
 // ~mix35.set(\gain,72)
-//BELOW TEMP
 ~mix36= Synth(\limiterStoMixer,[\c36,1,\in,~limitPerch7 ,\gain,100,\out,~perchLimiToG7],~limitGrp);
 // ~mix36.set(\gain,100)
 ~mix37= Synth(\limiterStoMixer,[\c37,1,\in,~limitPerch8 ,\gain,80,\out,~perchLimiToG8],~limitGrp);
  //~mix37.set(\gain,80)
+
+~mix42= Synth(\limiterStoMixer,[\c42,1,\in, ~limitPerch9, \gain,55, \out,~perchLimiToG9],~limitGrp);
+// ~mix3.set(\gain,55)
+~mix43= Synth(\limiterStoMixer,[\c43,1,\in,~limitPerch10 ,\gain,65,\out,~perchLimiToG10],~limitGrp);
+// ~mix31.set(\gain,65)
+~mix44= Synth(\limiterStoMixer,[\c44,1,\in, ~limitPerch11,\gain,65,\out,~perchLimiToG11],~limitGrp);
+// ~mix32.set(\gain,65)
+~mix45= Synth(\limiterStoMixer,[\45,1,\in,~limitPerch12 ,\gain,50,\out,~perchLimiToG12],~limitGrp);
 
 
 
@@ -83,7 +90,7 @@
 ~mix40= Synth(\limiterStoMixer,[\c40,1,\in,~part2RiLimit ,\gain,5,\out,~part2RiStereo],~limitGrp);
 // ~mix40.set(\gain,5)
 ~mix41= Synth(\limiterStoMixer,[\c41,1,\in,~part2SLimit2 ,\gain,45,\out,~part2SStereo2],~limitGrp);
-
+// ~mix41.set(\gain,105)
 
 ~mix9= Synth(\limiterStoMixer,[ \c9,1,\in,~percuLimit, \gain,54,\out,~percuStereo],~limitGrp);
 // ~mix9.set(\gain,54 );

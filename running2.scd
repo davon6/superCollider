@@ -73,8 +73,11 @@ Pbind(\instrument,\gran,\dur,Prand([ Pseq([1/4],24)  ,   Pseq([1/1],24)   ],1)  
 ~modHz=240.00.rand; ~carHz=140.00.rrand(10.00); ~noiLv=1.00.rrand(0.3); ~crv1=(-12.00).rrand(-4.00); ~crv2=(-12.00).rrand(-4.00); ~rel=0.0968.rrand(0.05); ~rel2=0.0968.rrand(0.05); ~modAmp=5000.00.rrand(1.00); ~modAmp2=5000.00.rrand(1.00);
 ~rythm1=[\rest,\rest,\rest,\rest ,\rest,\rest ,\note, \rest].scramble; ~rythm2=[\rest,\rest,\rest,\rest ,\rest,\note ,\note, \rest].scramble; ~rythm3=[\rest,\rest,\rest,\rest ,\rest,\rest ,\note, \rest].scramble; ~rythm4=[\rest,\rest,\rest,\note ,\note,\note ,\note, \rest].scramble;
 	~rythmL = [\rest,\rest,\note,\note ,\rest,\note ,\note, \rest].scramble;
- ~perc1 = 0.950.rand;~perc2 = 0.950.rand;~perc3 = 0.950.rand;~perc4 = 0.950.rand;~perc5 = 0.950.rand;
-~perc6 = 0.950.rand;~perc7 = 0.950.rand;~perc8 = 0.950.rand;
+/* ~perc1 = 0.950.rand;~perc2 = 0.950.rand;~perc3 = 0.950.rand;~perc4 = 0.950.rand;~perc5 = 0.950.rand;
+~perc6 = 0.950.rand;~perc7 = 0.950.rand;~perc8 = 0.950.rand;*/
+
+~perc1 = (~buf.numFrames.rrand(1400000)- 1400000);~perc2 = (~buf.numFrames.rrand(1400000)- 1400000);~perc3 = (~buf.numFrames.rrand(1400000)- 1400000);~perc4 = (~buf.numFrames.rrand(1400000)- 1400000);~perc5 = (~buf.numFrames.rrand(1400000)- 1400000);~perc6 = (~buf.numFrames.rrand(1400000)- 1400000);~perc7 = (~buf.numFrames.rrand(1400000)- 1400000);~perc8 = (~buf.numFrames.rrand(1400000)- 1400000);
+
 ~no2S = (~bufSnoopy.numFrames.rrand(1400000)- 1400000);
 
 ~no4S = ( ~bufSnoopy.numFrames.rrand(1400000)- 1400000);
@@ -102,9 +105,9 @@ Pbind(\instrument,\gran,\dur,Prand([ Pseq([1/4],24)  ,   Pseq([1/1],24)   ],1)  
 ~pSub8 =0.5.rrand(0.2,1);~pAtkT8=0.10.rrand(0.01);~pDecT8 =  0.3.rrand(0.8,0.3);~pSubT8 = 0.3.rrand(0.2);~pRelT8=0.22.rrand(0.1,1);~pAtkC8=6.rrand(1,1);~pDecC8=(-4).rrand(-0.1);~pRelC8=(-8).rrand(-2,1);
 ~pvlAtk8 =0.1.rrand(0.01);
 ~bangVar = (~leTout.numFrames/ 256 * 145.rand);
-~zigoui= ~bufSnoopy.numFrames/256 * 240.rand;
+/*~zigoui= ~bufSnoopy.numFrames/256 * 240.rand;
 ~zigoui2= ~bufSnoopy.numFrames/256 * 240.rand;
-~zigoui3= ~bufSnoopy.numFrames/256 * 240.rand;
+~zigoui3= ~bufSnoopy.numFrames/256 * 240.rand;*/
 
 ~vocal  = Buffer.read(s,"/Users/davidmignot/Documents/REAPER Media/03-thEnd-consolidated.wav");
 ~audio3 = Buffer.read(s,"/Users/davidmignot/Documents/REAPER Media/02-consolidated-03.wav");
@@ -150,7 +153,9 @@ Pbind(\instrument,\gran,\dur,Prand([ Pseq([1/4],24)  ,   Pseq([1/1],24)   ],1)  
 ~delayGrp2 = Group.after(~compGrp);
 ~combGrp = Group.after(~delayGrp2);
 ~limitGrp = Group.after(~combGrp);
-~stereoGrp = Group.after(~limitGrp);
+~gateGrp8= Group.after(~limitGrp);
+~gateGrp9= Group.after(~gateGrp8);
+~stereoGrp = Group.after(~gateGrp9);
 ~dispatchGrp2 = Group.after(~stereoGrp);
 
 ~gateGrp3 = Group.after(~dispatchGrp2);
@@ -1788,32 +1793,63 @@ Ppar([
 
 
 
-	Pbind(\instrument,\gran,\dur,Pseq([ Pseq([1/4],24)  ,   Pseq([1/2],24)   ].scramble,inf)  ,\amp, 1,\buf,~buf,\out,~phaseBus,\gate, 1,\duration,Pkey(\dur),\impulse,0.003,\pos, ~perc1, \tS, 0.39550810372374 ,
-\vlSub,  ~pSub , \vlSub2,Pkey(\vlSub), \atkT,~pAtkT,\decT, ~pDecT ,	\subsT, ~pSubT , \relT,~pRelT,\atckC,~pAtkC,\decC,~pDecC,\relC,~pRelC,\vlAtk , ~pvlAtk ,  \vlRel,  Pkey(\vlAtk)),
-
-Pbind(\instrument,\gran,\dur,Pseq([ Pseq([1/4],24)  ,   Pseq([1/2],24)   ].scramble,inf)  ,\amp, 1,\buf,~buf,\out,~phaseBus2,\gate, 1,\duration,Pkey(\dur),\impulse,0.003,\pos, ~perc2, \tS, 0.39550810372374 ,
-\vlSub,  ~pSub2 , \vlSub2,Pkey(\vlSub), \atkT,~pAtkT2,/*\decT, ~pDecT2 ,*/	\subsT, ~pSubT2 , \relT,~pRelT2,\atckC,~pAtkC2,\decC,~pDecC2,\relC,~pRelC2,\vlAtk , ~pvlAtk2 ,  \vlRel,  Pkey(\vlAtk)),
-
-Pbind(\instrument,\gran,\dur,Pseq([ Pseq([1/4],24)  ,   Pseq([1/2],24)   ].scramble,inf)  ,\amp, 1,\buf,~buf,\out,~phaseBus3,\gate, 1,\duration,Pkey(\dur),\impulse,0.003,\pos, ~perc3, \tS, 0.39550810372374 ,
-\vlSub,  ~pSub3 , \vlSub2,Pkey(\vlSub), \atkT,~pAtkT3,/*\decT, ~pDecT3 ,*/	\subsT, ~pSubT3 , \relT,~pRelT3,\atckC,~pAtkC3,\decC,~pDecC3,\relC,~pRelC3,\vlAtk , ~pvlAtk3 ,  \vlRel,  Pkey(\vlAtk)),
-
-Pbind(\instrument,\gran,\dur,Pseq([ Pseq([1/4],24)  ,   Pseq([1/2],24)   ].scramble,inf)  ,\amp, 1,\buf,~buf,\out,~phaseBus4,\gate, 1,\duration,Pkey(\dur),\impulse,0.003,\pos, ~perc4, \tS, 0.39550810372374 ,
-\vlSub,  ~pSub4 , \vlSub2,Pkey(\vlSub), \atkT,~pAtkT4,/*\decT, ~pDecT4 ,*/	\subsT, ~pSubT4 , \relT,~pRelT4,\atckC,~pAtkC4,\decC,~pDecC4,\relC,~pRelC4,\vlAtk , ~pvlAtk4 ,  \vlRel,  Pkey(\vlAtk)),
-
-Pbind(\instrument,\gran,\dur,Pseq([ Pseq([1/4],24)  ,   Pseq([1/2],24)   ].scramble,inf)  ,\amp, 1,\buf,~buf,\out,~phaseBus5,\gate, 1,\duration,Pkey(\dur),\impulse,0.003,\pos, ~perc5, \tS, 0.39550810372374 ,
-\vlSub,  ~pSub5 , \vlSub2,Pkey(\vlSub), \atkT,~pAtkT5,/*\decT, ~pDecT5 ,*/	\subsT, ~pSubT5 , \relT,~pRelT5,\atckC,~pAtkC5,\decC,~pDecC5,\relC,~pRelC5,\vlAtk , ~pvlAtk5,  \vlRel,  Pkey(\vlAtk)),
-
-Pbind(\instrument,\gran,\dur,Pseq([ Pseq([1/4],24)  ,   Pseq([1/2],24)   ].scramble,inf)  ,\amp, 1,\buf,~buf,\out,~phaseBus6,\gate, 1,\duration,Pkey(\dur),\impulse,0.003,\pos, ~perc6, \tS, 0.39550810372374 ,
-\vlSub,  ~pSub6 , \vlSub2,Pkey(\vlSub), \atkT,~pAtkT6,/*\decT, ~pDecT6 ,*/	\subsT, ~pSubT6 , \relT,~pRelT6,\atckC,~pAtkC6,\decC,~pDecC6,\relC,~pRelC6,\vlAtk , ~pvlAtk6 ,  \vlRel,  Pkey(\vlAtk)),
-
-Pbind(\instrument,\gran,\dur,Pseq([ Pseq([1/4],24)  ,   Pseq([1/2],24)   ].scramble,inf)  ,\amp, 1,\buf,~buf,\out,~phaseBus7,\gate, 1,\duration,Pkey(\dur),\impulse,0.003,\pos, ~perc7, \tS, 0.39550810372374 ,
-\vlSub,  ~pSub7 , \vlSub2,Pkey(\vlSub), \atkT,~pAtkT7,/*\decT, ~pDecT7 ,*/	\subsT, ~pSubT7 , \relT,~pRelT7,\atckC,~pAtkC7,\decC,~pDecC7,\relC,~pRelC7,\vlAtk , ~pvlAtk7 ,  \vlRel,  Pkey(\vlAtk)),
-
-Pbind(\instrument,\gran,\dur,Pseq([ Pseq([1/4],24)  ,   Pseq([1/2],24)   ].scramble,inf)  ,\amp, 1,\buf,~buf,\out,~phaseBus8,\gate, 1,\duration,Pkey(\dur),\impulse,0.003,\pos, ~perc8, \tS, 0.39550810372374 ,
-\vlSub,  ~pSub8 , \vlSub2,Pkey(\vlSub), \atkT,~pAtkT8,/*\decT, ~pDecT8 ,*/	\subsT, ~pSubT8 , \relT,~pRelT8,\atckC,~pAtkC8,\decC,~pDecC8,\relC,~pRelC8,\vlAtk , ~pvlAtk8 ,  \vlRel,  Pkey(\vlAtk)),
+	/*Pbind(\instrument,\gran,\dur,Pseq([ Pseq([1/4],24)  ,   Pseq([1/2],24)   ].scramble,inf)  ,\amp, 1,\buf,~buf,\out,~phaseBus,\gate, 1,\duration,Pkey(\dur),\impulse,0.003,\pos, ~perc1, \tS, 0.39550810372374 ,
+\vlSub,  ~pSub , \vlSub2,Pkey(\vlSub), \atkT,~pAtkT,\decT, ~pDecT ,	\subsT, ~pSubT , \relT,~pRelT,\atckC,~pAtkC,\decC,~pDecC,\relC,~pRelC,\vlAtk , ~pvlAtk ,  \vlRel,  Pkey(\vlAtk)),*/
 
 
+Pbind(\instrument,\playBufXG,\dur,Pseq([ Pseq([1/4],24)  ,   Pseq([1/2],24)   ].scramble,inf)  ,\amp, 1,\buf,~buf,\out,~phaseBus,\gate, 1,\duration,Pkey(\dur),\impulse,0.003,\start, ~perc1, \tS, 0.39550810372374 ,
+	\vlSub,  ~pSub , \vlSub2,Pkey(\vlSub), \atkT,~pAtkT,\decT, ~pDecT ,	\subsT, ~pSubT , \relT,~pRelT,\atckC,~pAtkC,\decC,~pDecC,\relC,~pRelC,\vlAtk , ~pvlAtk ,  \vlRel,  Pkey(\vlAtk),\loopy,0),
 
+
+/*Pbind(\instrument,\gran,\dur,Pseq([ Pseq([1/4],24)  ,   Pseq([1/2],24)   ].scramble,inf)  ,\amp, 1,\buf,~buf,\out,~phaseBus2,\gate, 1,\duration,Pkey(\dur),\impulse,0.003,\pos, ~perc2, \tS, 0.39550810372374 ,
+\vlSub,  ~pSub2 , \vlSub2,Pkey(\vlSub), \atkT,~pAtkT2,/*\decT, ~pDecT2 ,*/	\subsT, ~pSubT2 , \relT,~pRelT2,\atckC,~pAtkC2,\decC,~pDecC2,\relC,~pRelC2,\vlAtk , ~pvlAtk2 ,  \vlRel,  Pkey(\vlAtk)),*/
+
+
+Pbind(\instrument,\playBufXG,\dur,Pseq([ Pseq([1/4],24)  ,   Pseq([1/2],24)   ].scramble,inf)  ,\amp, 1,\buf,~buf,\out,~phaseBus2,\gate, 1,\duration,Pkey(\dur),\impulse,0.003,\start, ~perc2, \tS, 0.39550810372374 ,
+	\vlSub,  ~pSub , \vlSub2,Pkey(\vlSub), \atkT,~pAtkT,\decT, ~pDecT ,	\subsT, ~pSubT , \relT,~pRelT,\atckC,~pAtkC,\decC,~pDecC,\relC,~pRelC,\vlAtk , ~pvlAtk ,  \vlRel,  Pkey(\vlAtk),\loopy,0),
+
+
+/*Pbind(\instrument,\gran,\dur,Pseq([ Pseq([1/4],24)  ,   Pseq([1/2],24)   ].scramble,inf)  ,\amp, 1,\buf,~buf,\out,~phaseBus3,\gate, 1,\duration,Pkey(\dur),\impulse,0.003,\pos, ~perc3, \tS, 0.39550810372374 ,
+\vlSub,  ~pSub3 , \vlSub2,Pkey(\vlSub), \atkT,~pAtkT3,/*\decT, ~pDecT3 ,*/	\subsT, ~pSubT3 , \relT,~pRelT3,\atckC,~pAtkC3,\decC,~pDecC3,\relC,~pRelC3,\vlAtk , ~pvlAtk3 ,  \vlRel,  Pkey(\vlAtk)),*/
+
+
+Pbind(\instrument,\playBufXG,\dur,Pseq([ Pseq([1/4],24)  ,   Pseq([1/2],24)   ].scramble,inf)  ,\amp, 1,\buf,~buf,\out,~phaseBus3,\gate, 1,\duration,Pkey(\dur),\impulse,0.003,\start, ~perc3, \tS, 0.39550810372374 ,
+	\vlSub,  ~pSub , \vlSub2,Pkey(\vlSub), \atkT,~pAtkT,\decT, ~pDecT ,	\subsT, ~pSubT , \relT,~pRelT,\atckC,~pAtkC,\decC,~pDecC,\relC,~pRelC,\vlAtk , ~pvlAtk ,  \vlRel,  Pkey(\vlAtk),\loopy,0),
+
+/*Pbind(\instrument,\gran,\dur,Pseq([ Pseq([1/4],24)  ,   Pseq([1/2],24)   ].scramble,inf)  ,\amp, 1,\buf,~buf,\out,~phaseBus4,\gate, 1,\duration,Pkey(\dur),\impulse,0.003,\pos, ~perc4, \tS, 0.39550810372374 ,
+\vlSub,  ~pSub4 , \vlSub2,Pkey(\vlSub), \atkT,~pAtkT4,/*\decT, ~pDecT4 ,*/	\subsT, ~pSubT4 , \relT,~pRelT4,\atckC,~pAtkC4,\decC,~pDecC4,\relC,~pRelC4,\vlAtk , ~pvlAtk4 ,  \vlRel,  Pkey(\vlAtk)),*/
+
+
+Pbind(\instrument,\playBufXG,\dur,Pseq([ Pseq([1/4],24)  ,   Pseq([1/2],24)   ].scramble,inf)  ,\amp, 1,\buf,~buf,\out,~phaseBus4,\gate, 1,\duration,Pkey(\dur),\impulse,0.003,\start, ~perc4, \tS, 0.39550810372374 ,
+	\vlSub,  ~pSub , \vlSub2,Pkey(\vlSub), \atkT,~pAtkT,\decT, ~pDecT ,	\subsT, ~pSubT , \relT,~pRelT,\atckC,~pAtkC,\decC,~pDecC,\relC,~pRelC,\vlAtk , ~pvlAtk ,  \vlRel,  Pkey(\vlAtk),\loopy,0),
+
+/*Pbind(\instrument,\gran,\dur,Pseq([ Pseq([1/4],24)  ,   Pseq([1/2],24)   ].scramble,inf)  ,\amp, 1,\buf,~buf,\out,~phaseBus5,\gate, 1,\duration,Pkey(\dur),\impulse,0.003,\pos, ~perc5, \tS, 0.39550810372374 ,
+\vlSub,  ~pSub5 , \vlSub2,Pkey(\vlSub), \atkT,~pAtkT5,/*\decT, ~pDecT5 ,*/	\subsT, ~pSubT5 , \relT,~pRelT5,\atckC,~pAtkC5,\decC,~pDecC5,\relC,~pRelC5,\vlAtk , ~pvlAtk5,  \vlRel,  Pkey(\vlAtk)),*/
+
+
+Pbind(\instrument,\playBufXG,\dur,Pseq([ Pseq([1/4],24)  ,   Pseq([1/2],24)   ].scramble,inf)  ,\amp, 1,\buf,~buf,\out,~phaseBus5,\gate, 1,\duration,Pkey(\dur),\impulse,0.003,\start, ~perc5, \tS, 0.39550810372374 ,
+	\vlSub,  ~pSub , \vlSub2,Pkey(\vlSub), \atkT,~pAtkT,\decT, ~pDecT ,	\subsT, ~pSubT , \relT,~pRelT,\atckC,~pAtkC,\decC,~pDecC,\relC,~pRelC,\vlAtk , ~pvlAtk ,  \vlRel,  Pkey(\vlAtk),\loopy,0),
+
+/*Pbind(\instrument,\gran,\dur,Pseq([ Pseq([1/4],24)  ,   Pseq([1/2],24)   ].scramble,inf)  ,\amp, 1,\buf,~buf,\out,~phaseBus6,\gate, 1,\duration,Pkey(\dur),\impulse,0.003,\pos, ~perc6, \tS, 0.39550810372374 ,
+\vlSub,  ~pSub6 , \vlSub2,Pkey(\vlSub), \atkT,~pAtkT6,/*\decT, ~pDecT6 ,*/	\subsT, ~pSubT6 , \relT,~pRelT6,\atckC,~pAtkC6,\decC,~pDecC6,\relC,~pRelC6,\vlAtk , ~pvlAtk6 ,  \vlRel,  Pkey(\vlAtk)),*/
+
+
+Pbind(\instrument,\playBufXG,\dur,Pseq([ Pseq([1/4],24)  ,   Pseq([1/2],24)   ].scramble,inf)  ,\amp, 1,\buf,~buf,\out,~phaseBus6,\gate, 1,\duration,Pkey(\dur),\impulse,0.003,\start, ~perc6, \tS, 0.39550810372374 ,
+	\vlSub,  ~pSub , \vlSub2,Pkey(\vlSub), \atkT,~pAtkT,\decT, ~pDecT ,	\subsT, ~pSubT , \relT,~pRelT,\atckC,~pAtkC,\decC,~pDecC,\relC,~pRelC,\vlAtk , ~pvlAtk ,  \vlRel,  Pkey(\vlAtk),\loopy,0),
+
+/*Pbind(\instrument,\gran,\dur,Pseq([ Pseq([1/4],24)  ,   Pseq([1/2],24)   ].scramble,inf)  ,\amp, 1,\buf,~buf,\out,~phaseBus7,\gate, 1,\duration,Pkey(\dur),\impulse,0.003,\pos, ~perc7, \tS, 0.39550810372374 ,
+\vlSub,  ~pSub7 , \vlSub2,Pkey(\vlSub), \atkT,~pAtkT7,/*\decT, ~pDecT7 ,*/	\subsT, ~pSubT7 , \relT,~pRelT7,\atckC,~pAtkC7,\decC,~pDecC7,\relC,~pRelC7,\vlAtk , ~pvlAtk7 ,  \vlRel,  Pkey(\vlAtk)),*/
+
+
+Pbind(\instrument,\playBufXG,\dur,Pseq([ Pseq([1/4],24)  ,   Pseq([1/2],24)   ].scramble,inf)  ,\amp, 1,\buf,~buf,\out,~phaseBus7,\gate, 1,\duration,Pkey(\dur),\impulse,0.003,\start, ~perc7, \tS, 0.39550810372374 ,
+	\vlSub,  ~pSub , \vlSub2,Pkey(\vlSub), \atkT,~pAtkT,\decT, ~pDecT ,	\subsT, ~pSubT , \relT,~pRelT,\atckC,~pAtkC,\decC,~pDecC,\relC,~pRelC,\vlAtk , ~pvlAtk ,  \vlRel,  Pkey(\vlAtk),\loopy,0),
+
+/*Pbind(\instrument,\gran,\dur,Pseq([ Pseq([1/4],24)  ,   Pseq([1/2],24)   ].scramble,inf)  ,\amp, 1,\buf,~buf,\out,~phaseBus8,\gate, 1,\duration,Pkey(\dur),\impulse,0.003,\pos, ~perc8, \tS, 0.39550810372374 ,
+\vlSub,  ~pSub8 , \vlSub2,Pkey(\vlSub), \atkT,~pAtkT8,/*\decT, ~pDecT8 ,*/	\subsT, ~pSubT8 , \relT,~pRelT8,\atckC,~pAtkC8,\decC,~pDecC8,\relC,~pRelC8,\vlAtk , ~pvlAtk8 ,  \vlRel,  Pkey(\vlAtk)),*/
+
+
+Pbind(\instrument,\playBufXG,\dur,Pseq([ Pseq([1/4],24)  ,   Pseq([1/2],24)   ].scramble,inf)  ,\amp, 1,\buf,~buf,\out,~phaseBus8,\gate, 1,\duration,Pkey(\dur),\impulse,0.003,\start, ~perc8, \tS, 0.39550810372374 ,
+	\vlSub,  ~pSub , \vlSub2,Pkey(\vlSub), \atkT,~pAtkT,\decT, ~pDecT ,	\subsT, ~pSubT , \relT,~pRelT,\atckC,~pAtkC,\decC,~pDecC,\relC,~pRelC,\vlAtk , ~pvlAtk ,  \vlRel,  Pkey(\vlAtk),\loopy,0),
 
 
 

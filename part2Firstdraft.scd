@@ -39,10 +39,13 @@ Pbind(\instrument,\percussion,\dur,Pseq([1/4], inf),\type,Pseq([ Pseq([ \rest  ]
 
 
 
-Pbind(\instrument, \lfo13,\val,(~hzQbeat/128),\out,~bus24 ,\dur,Pseq([256/1],inf),\ph,4.7, \rL,100,\rH,1200, \group, ~lfoGrp,\tS, 0.39550810372374),
 
-Pbind( \instrument, \playBufX, \impulse, 2.575/2,
-	\dur,9999, \tS,  0.39550810372374,\start,~zigoui2,\buf,~bufSnoopy,\out, ~part2ToPhas,\loopy,1),
+
+
+~taZar,
+	//maybe change below to buf ~buf to get coreeltion with part2
+/*Pbind( \instrument, \playBufX, \impulse, 2.575/2,
+	\dur,9999, \tS,  0.39550810372374,\start,/*~zigoui2*/,\buf,~bufSnoopy,\out, ~part2ToPhas,\loopy,1),
 
 	Pbind(\instrument, \phaser,\in,~part2ToPhas,\dur ,9999,\value, 0.0804,\amp,1,\decT,(-0.2),\out,~part2ToG, \group,~phaserGrp,\tS, 0.39550810372374 ,),
 
@@ -60,7 +63,7 @@ Pbind( \instrument, \playBufX, \impulse, 2.575/2,
 	Pbindf( Prand([~quickFix, ~rShort]),\dur,inf, \in,~part2ToRev  , \out,~part2ToComp ,\group,~revGrp),
 	Pbind(\instrument,\compS, \dur,inf,\thr,0.85 ,\sB, 1.086,\sA, 1/2,\atk ,0.0121, \rel ,0.04840, \gain,1/*(50)*/	,\in, ~part2ToComp ,\ctrl, ~kbus, \out,~part2ToLimit, \group, ~compGrp),
 
-		Pbind(\instrument,\stereoS, \dur,9999, \in,  ~part2ToStereo  ,\out,~part2ToComp2,\center, 0,\spread,1, \group, ~stereoGrp),
+		Pbind(\instrument,\stereoS, \dur,9999, \in,  ~part2ToStereo  ,\out,~part2ToComp2,\center, 0,\spread,1, \group, ~stereoGrp),*/
 
 
 		Pbind(\instrument, \lfo13, \val,1.2875,\dur,Pseq([2/1],inf),\rL,40,\rH,7600 ,\out,  ~bus20, \group, ~lfoGrp,\tS, 0.39550810372374,\ph,1.5),
@@ -68,28 +71,33 @@ Pbind( \instrument, \playBufX, \impulse, 2.575/2,
 Pbind(\instrument, \lfo13, \val,0.321875,\dur,Pseq([4/1],inf),\rL,440,\rH,7600 ,\out,  ~bus19, \group, ~lfoGrp,\tS, 0.39550810372374,\ph,1.5),
 
 
-Pbind( \instrument, \playBuf, \impulse, 2.575,
-		\dur,Pseq([1/1],inf), \tS,  0.39550810372374,\start,~zigoui, \buf,~bufSnoopy,\out, ~part2Slide,\loopy,0,\type, Pseq([\note,\rest,\rest,\rest,\rest,\rest,\rest,\rest,\rest,\rest,\rest,\rest,\rest,\rest,\rest,\rest].scramble,inf)),
+/*Pbind( \instrument, \playBuf, \impulse, 2.575,
+		\dur,Pseq([1/1],inf), \tS,  0.39550810372374,\start,/*~zigoui*/, \buf,~bufSnoopy,\out, ~part2Slide,\loopy,0,\type, Pseq([\note,\rest,\rest,\rest,\rest,\rest,\rest,\rest,\rest,\rest,\rest,\rest,\rest,\rest,\rest,\rest].scramble,inf)),*/
 
 
-		Pbind(\instrument,\filter, \in,~part2Slide,\out,~part2SEq  , \group,~filterGrp,\dur, inf,\tS, 0.39550810372374,\busMod,~bus20, \which, 0,\qf,0.6),
+		/*	DRAFT OF DREAM
+
+	Pbind(\instrument,\filter, \in,~part2Slide,\out,~part2SEq  , \group,~filterGrp,\dur, inf,\tS, 0.39550810372374,\busMod,~bus20, \which, 0,\qf,0.6),
 		Pbind(\instrument,\EQHP, \in, ~part2SEq , \out, ~part2SRev ,\frq, 100, \dur,inf, \group, ~eqGrp0),
 	Pbindf( Prand([~quickFix, ~rShort]),\dur,inf, \in,~part2SRev  , \out,~part2SComp ,\group,~revGrp),
 	Pbind(\instrument,\compS, \dur,inf,\thr,0.85 ,\sB, 1.086,\sA, 1/2,\atk ,0.0121, \rel ,0.04840, \gain,1/*(50)*/	,\in, ~part2SComp ,\ctrl, ~kbus, \out,~part2SLimit, \group, ~compGrp),
 
 	Pbind(\instrument,\stereoS, \dur,9999, \in, ~part2SStereo   ,\out,~part2ToComp2,\spread,0.5,\center, Prand([Pfunc({0.4.rrand(0.2)}),Pfunc({(-0.4).rrand(-0.2)})],inf), \group, ~stereoGrp),
+*/
 
 
+
+/*	DRAFT OF DREAM
 
 	Pbind( \instrument, \playBuf, \impulse, 0.3,
-		\dur,Pseq([4/1],inf), \tS,  0.39550810372374,\start,~zigoui3, \buf,~bufSnoopy,\out, ~part2Slide2,\loopy,0,\type, Pseq([\note,\rest,\rest,\rest,\rest,\rest,\rest,\rest,\rest,\rest,\rest,\rest,\rest,\rest,\rest,\rest].scramble,inf)),
+		\dur,Pseq([4/1],inf), \tS,  0.39550810372374,\start,/*~zigoui3*/, \buf,~bufSnoopy,\out, ~part2Slide2,\loopy,0,\type, Pseq([\note,\rest,\rest,\rest,\rest,\rest,\rest,\rest,\rest,\rest,\rest,\rest,\rest,\rest,\rest,\rest].scramble,inf)),
 
 	Pbind(\instrument,\filter, \in,~part2Slide2,\out,~part2SEq2  , \group,~filterGrp,\dur, inf,\tS, 0.39550810372374,\busMod,~bus19, \which, 0,\qf,0.62),
 		Pbind(\instrument,\EQHP, \in, ~part2SEq2 , \out, ~part2SRev2 ,\frq, 100, \dur,inf, \group, ~eqGrp0),
 	Pbindf( Prand([~quickFix, ~rShort]),\dur,inf, \in,~part2SRev2  , \out,~part2SComp2 ,\group,~revGrp),
 	Pbind(\instrument,\compS, \dur,inf,\thr,0.85 ,\sB, 1.086,\sA, 1/2,\atk ,0.0121, \rel ,0.04840, \gain,1/*(50)*/	,\in, ~part2SComp2 ,\ctrl, ~kbus, \out,~part2SLimit2, \group, ~compGrp),
 
-	Pbind(\instrument,\stereoS, \dur,9999, \in, ~part2SStereo2   ,\out,~part2ToComp2,\spread,0.5,\center, Prand([Pfunc({0.4.rrand(0.2)}),Pfunc({(-0.4).rrand(-0.2)})],inf), \group, ~stereoGrp),
+	Pbind(\instrument,\stereoS, \dur,9999, \in, ~part2SStereo2   ,\out,~part2ToComp2,\spread,0.5,\center, Prand([Pfunc({0.4.rrand(0.2)}),Pfunc({(-0.4).rrand(-0.2)})],inf), \group, ~stereoGrp),*/
 
 
 
@@ -98,8 +106,8 @@ Pbind( \instrument, \playBuf, \impulse, 2.575,
 
 
 
-	Pbind(\instrument,\comp10, \dur,9999,\thr,0.8 ,\sB, 1.04,\sA, 1/2,\atk ,0.0968, \rel ,0.3872
-		,\in, ~part2ToComp2  ,\ctrl, ~snBus, \out,0,\group, ~compGrp2,\tS, 0.39550810372374),
+	/*Pbind(\instrument,\comp10, \dur,9999,\thr,0.8 ,\sB, 1.04,\sA, 1/2,\atk ,0.0968, \rel ,0.3872
+		,\in, ~part2ToComp2  ,\ctrl, ~snBus, \out,0,\group, ~compGrp2,\tS, 0.39550810372374),*/
 
 
 
