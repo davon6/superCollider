@@ -108,10 +108,10 @@ Pbind(\instrument,\playBufXG,\dur,Pseq([ Pwrand([  Pseq([1/4],9),  Pseq([Pseq([1
 			Pseq([1/2],1) ,
 			Pseq([1.5/1],1)  ,Pseq([1.25/1],1)],1), \in,~part2G,\tS, 0.39550810372374,\group, ~gateGrp,\out,~eqBus1),
 
-	Pbind(\instrument,\gate, \vlSub,  1 , \vlSub2,Pkey(\vlSub), \dur, Prand([ Pseq([1/2],1) ,Pseq([2.5/1],1)  ,Pseq([1.25/1],1)],1), \in, ~part2G2,\tS, 0.39550810372374,\group, ~gateGrp,\out,~eqBus2x),
+	Pbind(\instrument,\gate, \vlSub,  1 , \vlSub2,Pkey(\vlSub), \dur, Prand([Pseq([2.5/1],1)  ,Pseq([1.25/1],1)],1), \in, ~part2G2,\tS, 0.39550810372374,\group, ~gateGrp,\out,~eqBus2x),
 
 
-	Pbind(\instrument,\gate, \vlSub,  1 , \vlSub2,Pkey(\vlSub), \dur, Prand([ Pseq([1/2],1) ,Pseq([1.5/1],1)  ,Pseq([1.25/1],1)],1), \in, ~part2G3,\tS, 0.39550810372374,\group, ~gateGrp,\out,~toEq)
+	Pbind(\instrument,\gate, \vlSub,  1 , \vlSub2,Pkey(\vlSub), \dur, Prand([ Pseq([1.5/1],1)  ,Pseq([1.25/1],1)],1), \in, ~part2G3,\tS, 0.39550810372374,\group, ~gateGrp,\out,~toEq)
 	],[8,2,4].normalizeSum,inf),
 	//].scramble,inf),
 

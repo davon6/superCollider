@@ -375,7 +375,7 @@ Pxrand([
 	Pbind(\instrument, \playBufX,\dur, inf,\impulse, 0.00001,\loo,1,\buf,~audio3,\out, ~bgFil22,\vl,0.3),
 
 
-
+/*
 
 
 //main dispatch
@@ -414,7 +414,7 @@ Pseq([ ~stetoSnaCom12,~no1,~no1,~no1,~no1,~no1,~no1,~no1 ].scramble,256 ),
 
 	],inf),
 
-
+*/
 
 
 /*	NOT SURE YET
@@ -441,8 +441,8 @@ Pseq([\rest,\rest, \note,\rest,\rest,\rest,\rest, \note,/*\note,\rest,\rest,\not
 	Pseq([
 
 
-	Pbind(\instrument,\gateS, \dur, Pxrand([ /*Pseq([4/1],16), Pseq([8/1],8) */ Pseq([4/1],3)  ],1)
-		,\in,Pseq([ /*~newCOn,*/~new10 ],inf), \out,~finGran,\group, ~gateGrp4,\tS, 0.39550810372374,),
+	Pbind(\instrument,\gateS, \dur, Pxrand([ /*Pseq([4/1],16), Pseq([8/1],8) */ Pseq([12/1],1)  ],1)
+		,\in,Pseq([ /*~newCOn,*//*~new10*/~no1 ],inf), \out,~finGran,\group, ~gateGrp4,\tS, 0.39550810372374,),
 
 Pxrand([
 
@@ -456,9 +456,9 @@ Pxrand([
 
 				Pbind(\instrument,\gateS, \dur,Pseq([4/1],1),\in, ~no3  , \out,~finGran,\group, ~gateGrp4,\tS, 0.39550810372374,),
 
-		Pbind(\instrument,\gateS, \dur,Pseq([2/1],1),\in, ~new10/*~newCOn*/  ,\out,~finGran,\group, ~gateGrp4,\tS, 0.39550810372374,),
+		Pbind(\instrument,\gateS, \dur,Pseq([6/1],1),\in,~no1 /*~new10*//*~newCOn*/  ,\out,~finGran,\group, ~gateGrp4,\tS, 0.39550810372374,),
 
-		Pbind(\instrument,\gateS, \dur,Pseq([2/1],1),\in,~new10 /*~newCOn*/  , \out,~finGran,\group, ~gateGrp4,\tS, 0.39550810372374),].scramble,1)
+		Pbind(\instrument,\gateS, \dur,Pseq([2/1],1),\in,~no1/*~new10*/ /*~newCOn*/  , \out,~finGran,\group, ~gateGrp4,\tS, 0.39550810372374),].scramble,1)
 		],1),
 
 
@@ -475,12 +475,12 @@ Pxrand([
 
 
 	//for record
-Pbind(\instrument, \gateS, \dur,   Pseq([262/1],1) , \tS, 0.39550810372374,
-	\in, ~finGran,\group, ~gateGrp5, \out, ~toCom),
+/*Pbind(\instrument, \gateS, \dur,   Pseq([262/1],1) , \tS, 0.39550810372374,
+	\in, ~finGran,\group, ~gateGrp5, \out, ~toCom),*/
 
 
 
-/*
+
 	Pseq([
 
 		Pseq([
@@ -590,15 +590,15 @@ Pbind(\instrument, \playBuf10N,  \out,~toCom,\dur,Pseq([ Pseq([8/1],1),  Pseq([1
 
 
 
-*/
+
 
 
 
 
 	Pbind(\instrument,\comp10, \dur,9999,\thr,0.4 ,\sB, 1.04,\sA, 0.2,\atk ,0.0968, \rel ,0.3872
-		,\in, ~toCom  ,\ctrl, ~snBus, \out,~eqBus10 /*~toGate10*/,\group, ~compGrp2,\tS, 0.39550810372374),
+		,\in, ~toCom  ,\ctrl, ~snBus, \out,/*~eqBus10*/ ~toGate10,\group, ~compGrp2,\tS, 0.39550810372374),
 
-/*Prand([
+Prand([
 
 	//here
 
@@ -615,7 +615,7 @@ Pbind(\instrument, \playBuf10N,  \out,~toCom,\dur,Pseq([ Pseq([8/1],1),  Pseq([1
 		\in,  Pxrand([~toGate10,~toGate102], inf)  ,\out ,Pwrand([~eqBus10,
 
 				Pseq([~delayBus2],8)],[4,1].normalizeSum,inf) ,\group, ~gateGrp6,\tS, 0.39550810372374),
-	],inf),*/
+	],inf),
 
 
 
@@ -2159,7 +2159,7 @@ Pbindf( ~church,\dur,inf, \in,~reverbSquelch  , \out,~comSquelch ,\group,~extraR
 ~base; ~kb; ~no4; ~rises; ~lp;~bp; ~hp;~deNo2; ~mainLead;~percheur;~passant
 ~base.play(t)/*~deNo2, */
 ~rises,
-(~track = Ppar([/*~hitX,~fx,~passant,*/~kb,~base,~no4,~mainLead,~percheur,~sequ],1).play(t,quant:1))
+(~track = Ppar([/*~hitX,~kb,*/~fx,~passant,~base,~no4,~mainLead,/*~percheur,*/~sequ],1).play(t,quant:1))
 
 Pseq([~kick],inf).play(t, quant:1)
 Ppar([~bassShap,Pseq([~bass],inf)],1).play(t, quant:1)
