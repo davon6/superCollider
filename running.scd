@@ -190,6 +190,9 @@ s.sync;
 
 	~distoPercu= Bus.audio(s,1);
 
+	~part2Fuzz= Bus.audio(s,10);
+	~part2Fuzz2= Bus.audio(s,10);
+
 	~revBus1= Bus.audio(s,1);
 	~revBus2= Bus.audio(s,1);
 	~comBus1= Bus.audio(s,2);
@@ -210,6 +213,13 @@ s.sync;
 	~gateRnd = Bus.audio(s,1);
 	/*~gateSquelch = Bus.audio(s,1);
 	~gateMelo = Bus.audio(s,1);*/
+
+
+	~revBus4 = Bus.audio(s,1);
+	~comBus4= Bus.audio(s,2);
+	~part2Limit4= Bus.audio(s,2);
+	~sterBus4= Bus.audio(s,2);
+	~eqBus4 = Bus.audio(s,1);
 
 	~part2ToPhas = Bus.audio(s,1);
 	~part2ToG= Bus.audio(s,2);
@@ -753,8 +763,8 @@ s.sync;
 
 
 
-	SynthDef(\playBufXG ,{|out = 0,start, trig, dur, amp=1,buf, dA=2, loo=0,tS=1,impulse=0.001,
-		vlAtk =0,vlDec=1 ,vlSub=1 ,vlSub2=1,vlRel=0,atkT=0,decT=1,subsT=0,relT=0,atckC=0,decC=0,relC=0|Out.ar(out,PlayBuf.ar(1,buf,trigger:
+	SynthDef(\playBufXG ,{|out = 0,start, trig, dur, amp=1,buf, dA=2, loo=0,tS=1,impulse=0.001,rte=1
+		vlAtk =0,vlDec=1 ,vlSub=1 ,vlSub2=1,vlRel=0,atkT=0,decT=1,subsT=0,relT=0,atckC=0,decC=0,relC=0|Out.ar(out,PlayBuf.ar(1,buf,rte,trigger:
 		Impulse.kr(impulse* (60/~bpm),mul: amp),startPos: start,loop:loo,doneAction: 2)
 
 		* EnvGen.kr(Env([vlAtk,vlDec,vlSub,vlSub2,vlRel],
@@ -1429,6 +1439,23 @@ freq         )* EnvGen.kr(Env([0,1,1,0],[0.055,dur-0.055,0],4),timeScale: tS,don
 		Out.ar(out, sig);
 	}).add;
 
+
+	SynthDef(\filterG,{|out=0, in, busMod, bus7, which, factor3=1, rqLPF=0.5 freqFil=0, qf =0, qf2=0|
+
+		var lp, bp, hp, sig;
+
+		sig = In.ar(in,1);
+
+		lp = BLowPass4.ar(sig , freqFil+ In.kr(busMod, 1)+ MouseX.kr(40,22000) ,qf +In.kr(rqLPF));
+
+		bp = BPF.ar(sig,freqFil+ In.kr(busMod, 1) *factor3  ,qf2 +0.26);
+
+		hp = BHiPass4.ar(sig, freqFil+ In.kr(busMod, 1),/*0.6 */ qf2 +In.kr(bus7, 1));
+
+		sig = SelectX.ar(which, [lp, bp,hp,sig]);
+
+		Out.ar(out, sig);
+	}).add;
 
 	SynthDef(\filterX,{|out=0, in, busMod, bus7, which, factor3=1, rqLPF=0.5 freqFil=0, qf =0, qf2=0,tS=1,dur|
 
