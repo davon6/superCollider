@@ -113,9 +113,9 @@
 
 
 
-~mix46= Synth(\limiterStoMixer,[\c46,1,\in, ~part2Limit, \gain,65,\out,~stereoBus1],~limitGrp);
+~mix46= Synth(\limiterStoMixer,[\c46,1,\in, ~part2Limit, \gain,63,\out,~stereoBus1],~limitGrp);
 // ~mix46.set(\gain,65)
-~mix47= Synth(\limiterStoMixer,[\c47,1,\in,~part2Limit2 , \gain,22,\out,~sterBus2],~limitGrp);
+~mix47= Synth(\limiterStoMixer,[\c47,1,\in,~part2Limit2 , \gain,20,\out,~sterBus2],~limitGrp);
 // ~mix47.set(\gain,22)
-~mix48= Synth(\limiterStoMixer,[\c48,1,\in,~part2Limit3 , \gain,20,\out,~sterBus1],~limitGrp);
+~mix48= Synth(\limiterStoMixer,[\c48,1,\in,~part2Limit3 , \gain,18,\out,~sterBus1],~limitGrp);
 // ~mix48.set(\gain,20)
