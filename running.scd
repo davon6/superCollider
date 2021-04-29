@@ -1695,7 +1695,7 @@ SynthDef("TriggerBufferGranular", {arg out=0, bufnum=0, in=0, thresh = 0.004, am
 
 		input
 			,
-      1294.5373184/*659.25*/     *   [8,16,32],
+      1294.5373184/*659.25*/     *  [1, 2, 4, 8]   /*[8,16,32]*/,
 
 			wet
 		).sum * 10;

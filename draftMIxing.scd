@@ -1,6 +1,6 @@
 ~mixa = Synth(\gate2, [\in,  ~perchLimiToG,\dur, 9999] ,~limitGrp4);
 
-~mixa = Synth(\gateS, [\in, ~toGate102,\dur, 9999] ,~limitGrp4);
+~mixa = Synth(\gateS, [\in, ~absoFinalGate,\dur, 9999] ,~limitGrp4);
 
 
 ~mixa = Synth(\gate, [\in, ~distoPercu,\dur, 9999] ,~limitGrp4);

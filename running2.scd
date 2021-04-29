@@ -63,9 +63,9 @@ Pbind(\instrument,\gran,\dur,Prand([ Pseq([1/4],24)  ,   Pseq([1/1],24)   ],1)  
 ~main1= (~bufSnoopy.numFrames.rrand(1400000)- 1400000)   /*1200000*/;
 ~main2 =   ( ~bufSnoopy.numFrames.rrand(1400000)- 1400000)   /*0*/;
 ~main3= (~bufSnoopy.numFrames.rrand(1400000)- 1400000) /*3500000*/;
-~s1=3400.00.rrand(1300,0.001);~q1=16.rrand(5,1);~g1=(-8).rrand((-2),1);~s1x =  3400.00.rrand(1300,0.001);~q1x= 16.rrand(5,1);~g1x=(-8).rrand((-2),1);
-	~s2= 3400.00.rrand(1300,0.001);	~q2= 16.rrand(5,1);~g2=(-8).rrand((-2),1);~s2x= 3400.00.rrand(1300,0.001);~q2x=16.rrand(5,1);~g2x=(-8).rrand((-2),1);
-	~s3=3400.00.rrand(1300,0.001);~q3=16.rrand(5,1);~g3=(-8).rrand((-2),1);~s3x= 3400.00.rrand(1300,0.001);~q3x= 16.rrand(5,1);~g3x=(-8).rrand((-2),1);
+~s1=5400.00.rrand(1300,0.001);~q1=16.rrand(5,1);~g1=(-8).rrand((-2),1);~s1x =  5400.00.rrand(1300,0.001);~q1x= 16.rrand(5,1);~g1x=(-8).rrand((-2),1);
+	~s2= 5400.00.rrand(1300,0.001);	~q2= 16.rrand(5,1);~g2=(-8).rrand((-2),1);~s2x= 5400.00.rrand(1300,0.001);~q2x=16.rrand(5,1);~g2x=(-8).rrand((-2),1);
+	~s3=3400.00.rrand(1300,0.001);~q3=16.rrand(5,1);~g3=(-8).rrand((-2),1);~s3x= 5400.00.rrand(1300,0.001);~q3x= 16.rrand(5,1);~g3x=(-8).rrand((-2),1);
 	~pass1 =(~buf.numFrames.rrand(400000)- 400000);~pass2=(~buf.numFrames.rrand(400000)- 400000);~pass3=(~buf.numFrames.rrand(400000)- 400000);~pass4=(~buf.numFrames.rrand(400000)- 400000);
 ~mster=(~leTout.numFrames/ 256 * 226.rand);
 ~bssFreq1= 1200.rrand(-140);~bssFreq2= 1200.rrand(-140);~bssFreq3= 1200.rrand(-140);
