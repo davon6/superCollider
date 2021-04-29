@@ -224,12 +224,15 @@ s.sync;
 	~part2ToPhas = Bus.audio(s,1);
 	~part2ToG= Bus.audio(s,2);
 	~part2ToEq = Bus.audio(s,1);
-	~part2ToRev = Bus.audio(s,1);
+
+	//WATCH OUT MIGHT BE NEEDED
+
+	/*~part2ToRev = Bus.audio(s,1);
 	~part2ToComp= Bus.audio(s,2);
 	~part2ToLimit= Bus.audio(s,2);
 	~part2ToStereo= Bus.audio(s,2);
 	~part2ToComp2= Bus.audio(s,10);
-	~part2ToFilter= Bus.audio(s,1);
+	~part2ToFilter= Bus.audio(s,1);*/
 
 	~gateSeqBus = Bus.audio(s,1);
 	/*~gateSeqBus2 = Bus.audio(s,1);*/
