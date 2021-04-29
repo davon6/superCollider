@@ -1681,7 +1681,7 @@ SynthDef("TriggerBufferGranular", {arg out=0, bufnum=0, in=0, thresh = 0.004, am
 
 
 
-	//GVerb + Splay in one synth
+	//GVerb
 
 	SynthDef(\reverb, {
 		|out=0, roomsize, revtime, damping, inputbw, spread = 15, drylevel, earlylevel,
@@ -1693,11 +1693,13 @@ SynthDef("TriggerBufferGranular", {arg out=0, bufnum=0, in=0, thresh = 0.004, am
 
 		a = Resonz.ar(
 
-		input
-			,
-      1294.5373184/*659.25*/     *  [1, 2, 4, 8]   /*[8,16,32]*/,
+		//input
 
-			wet
+			Array.fill(4, input),
+
+    1294.5373184/*659.25*//*1760*/     * /* [1, 2, 4, 8] */  [8,16,32],
+
+		/*	wet*/0.01
 		).sum * 10;
 
 
@@ -1712,8 +1714,8 @@ SynthDef("TriggerBufferGranular", {arg out=0, bufnum=0, in=0, thresh = 0.004, am
             drylevel.dbamp,
             earlylevel.dbamp,
             taillevel.dbamp,
-				roomsize+1,0.32)
-		+ a	)
+				roomsize,0.3)
+		+ input	)
 
 	}).add;
 
@@ -2463,7 +2465,7 @@ s.sync;
 
 /*Pbindef(\ki,   \out, 0) ;Pbindef(\bass, \out, 0) ;
 	Pbindef(\ki,   \out, 700) ;Pbindef(\bass, \out, 700);*/
-	~kick =	Pbind(\instrument, \kick,\dur, Pseq([1/1],1),\amp,(-1/*-10.2*/),\out,0);//-3.5 - 10.5
+	~kick =	Pbind(\instrument, \kick,\dur, Pseq([1/1],1),\amp,(-5/*-10.2*/),\out,0);//-3.5 - 10.5
 
 	~bassShap = Pbind(\instrument, \shap, \dur,Pseq([1/1],1),\dA1,2,\out,~bassShapB, \tS, 0.39550810372374);
 //Problem overlapping
@@ -2508,7 +2510,7 @@ s.sync;
 		\rel2, t.beatDur/4 * 0.0012,
 		\atkcrv, -2,
 		\relcrv, -2,\relcrv2, -4
-		,\amp,(4/*-1*/)/*(-13)*/,\out,~bassEq
+		,\amp,(-1/*-1*/)/*(-13)*/,\out,~bassEq
 	);
 
 	~hat2 =Pbind(\instrument, \percussion,\rel,0.04840,\rel2,0.02420,\amp, (-28.2), \crv1, (-4), \crv1b, (-5), \modHz, exprand(500,10000), \mulMod, rrand(100, 500), \carHz, exprand(20,10000), \modAmp, 0.82875.rrand(0.4),\dur,Pseq([1/1],1) ,\out, ~kickHatEq);

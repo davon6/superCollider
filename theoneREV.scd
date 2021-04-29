@@ -31,7 +31,7 @@ SynthDef(\test, { |out, roomsize, revtime, damping, inputbw, spread = 15, drylev
     )
 }).add
 )
-​
+
 ​
 s.scope(2);
 ​
