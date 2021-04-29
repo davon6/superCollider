@@ -84,10 +84,10 @@ Pbind(\instrument,\gran,\dur,Prand([ Pseq([1/4],24)  ,   Pseq([1/1],24)   ],1)  
 ~ri1vlAtk=4.00.rand;~ri1f1=1.00.rand;~ri1f2=10.00.rrand(1);~ri1f3= 1.00.rand;~ri1ic_atk=10.00.rrand(-5);~ri1index=5.00.rrand(1);~ri1mRatio=3.rrand(1);~ri1fs=1.00.rand;
 ~ri2vlAtk=4.00.rand;~ri2f1=1.00.rand;~ri2f2=10.00.rrand(1);~ri2f3= 1.00.rand;~ri2ic_atk=10.00.rrand(-5);~ri2index=50.00.rrand(1);~ri2mRatio=3.rrand(1);~ri2fR=1.00.rand;
 ~ri3vlAtk=4.00.rand;~ri3f1=1.00.rand;~ri3f2=10.00.rrand(1);~ri3f3=1.00.rand;~ri3ic_atk=10.00.rrand(-5);~ri3index=50.00.rrand(1);~ri3mRatio=3.rrand(1);/*~ri3fR=1.00.rand*/
-~pHVal=1.2875.exprand(0.075); ~pHdecT=0.5.rrand((-0.5));~pHVal2=1.2875.exprand(0.075);~pHdecT2=0.5.rrand((-0.5));
-~pHVal3=1.2875.exprand(0.075); ~pHdecT3=0.5.rrand((-0.5));~pHVal4=1.2875.exprand(0.075);~pHdecT4=0.5.rrand((-0.5));
-~pHVal5=1.2875.exprand(0.075); ~pHdecT5=0.5.rrand((-0.5));~pHVal6=1.2875.exprand(0.075);~pHdecT6=0.5.rrand((-0.5));
-~pHVal7=1.2875.exprand(0.075); ~pHdecT7=0.5.rrand((-0.5));~pHVal8=1.2875.exprand(0.075);~pHdecT8=0.5.rrand((-0.5));
+~pHVal=1.2875.exprand(0.075); ~pHdecT=0.3872.rrand((-0.3872));~pHVal2=1.2875.exprand(0.075);~pHdecT2=0.3872.rrand((-0.3872));
+~pHVal3=1.2875.exprand(0.075); ~pHdecT3=0.3872.rrand((-0.3872));~pHVal4=1.2875.exprand(0.075);~pHdecT4=0.3872.rrand((-0.3872));
+~pHVal5=1.2875.exprand(0.075); ~pHdecT5=0.3872.rrand((-0.3872));~pHVal6=1.2875.exprand(0.075);~pHdecT6=0.3872.rrand((-0.3872));
+~pHVal7=1.2875.exprand(0.075); ~pHdecT7=0.3872.rrand((-0.3872));~pHVal8=1.2875.exprand(0.075);~pHdecT8=0.3872.rrand((-0.3872));
 ~pSub =0.5.rrand(0.2,1);~pAtkT=0.10.rrand(0.01);~pDecT =  0.3.rrand(0.8,0.3);~pSubT = 0.3.rrand(0.2);~pRelT=0.22.rrand(0.1,1);~pAtkC=6.rrand(1,1);~pDecC=(-4).rrand(-0.1);~pRelC=(-8).rrand(-2,1);
 ~pvlAtk =0.1.rrand(0.01);
 ~pSub2 =0.5.rrand(0.2,1);~pAtkT2=0.10.rrand(0.01);~pDecT2 =  0.3.rrand(0.8,0.3);~pSubT2 = 0.3.rrand(0.2);~pRelT2=0.22.rrand(0.1,1);~pAtkC2=6.rrand(1,1);~pDecC2=(-4).rrand(-0.1);~pRelC2=(-8).rrand(-2,1);
@@ -1015,6 +1015,7 @@ Pbind(\instrument, \snare, \type,Pxrand([
 ],1))
 
 (~track = Ppar([ ~base,/*~kb ,*/ ~hitX, ],1).play(t,quant:1))
+
 
 
 ~hitX.stop;

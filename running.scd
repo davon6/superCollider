@@ -571,7 +571,7 @@ s.sync;
 	~newCOn=Bus.audio(s,10);
 	~newCOn2=Bus.audio(s,10);
 
-	~comBusHat2=  Bus.audio(s,2);~comBusCymb2=  Bus.audio(s,2);~limitRkick2=  Bus.audio(s,1);/*~stereoRkick2=  Bus.audio(s,1);*//*~revSide2=  Bus.audio(s,1);*//*~eqNoise2==  Bus.audio(s,1);*//*~eqDs2=  Bus.audio(s,1);*//*~comSide2=  Bus.audio(s,2);*//*~limitSide2=  Bus.audio(s,2);*//*~stereoSide2=  Bus.audio(s,2);*//*~eqNoise2=  Bus.audio(s,1);*//*~noiseRev2=  Bus.audio(s,2);*//*~reverbBus32=  Bus.audio(s,1);*//*~comFuzz32=  Bus.audio(s,2);*//*~limitFuzz32=  Bus.audio(s,2);*//*~stereoBus42=  Bus.audio(s,1);*/~stetoSnaCom12=  Bus.audio(s,10);/*~distoBus12=  Bus.audio(s,1);*/ ~distoBus42=  Bus.audio(s,1); /*~distoBus12=  Bus.audio(s,1);*/ /*~filterBus12=  Bus.audio(s,1);*//*~eqBus12=  Bus.audio(s,1);*//*~reverbBus12=  Bus.audio(s,1);*//*~comFuzz12=  Bus.audio(s,2);*//*~limitFuzz12=  Bus.audio(s,2);*//*~stereoBus12=  Bus.audio(s,2);*//*~filterBus22=  Bus.audio(s,1);~reverbBus22=  Bus.audio(s,1);*/~comFuzz22=  Bus.audio(s,2);/*~limitFuzz22=  Bus.audio(s,2);*//*~stereoBus22=  Bus.audio(s,2);*/~eqBus102=  Bus.audio(s,10);
+	~comBusHat2=  Bus.audio(s,2);~comBusCymb2=  Bus.audio(s,2);~limitRkick2=  Bus.audio(s,1);/*~stereoRkick2=  Bus.audio(s,1);*//*~revSide2=  Bus.audio(s,1);*//*~eqNoise2==  Bus.audio(s,1);*//*~eqDs2=  Bus.audio(s,1);*//*~comSide2=  Bus.audio(s,2);*//*~limitSide2=  Bus.audio(s,2);*//*~stereoSide2=  Bus.audio(s,2);*//*~eqNoise2=  Bus.audio(s,1);*//*~noiseRev2=  Bus.audio(s,2);*//*~reverbBus32=  Bus.audio(s,1);*//*~comFuzz32=  Bus.audio(s,2);*//*~limitFuzz32=  Bus.audio(s,2);*//*~stereoBus42=  Bus.audio(s,1);*/~stetoSnaCom12=  Bus.audio(s,10);/*~distoBus12=  Bus.audio(s,1);*/ /*~distoBus42=  Bus.audio(s,1);*/ /*~distoBus12=  Bus.audio(s,1);*/ /*~filterBus12=  Bus.audio(s,1);*//*~eqBus12=  Bus.audio(s,1);*//*~reverbBus12=  Bus.audio(s,1);*//*~comFuzz12=  Bus.audio(s,2);*//*~limitFuzz12=  Bus.audio(s,2);*//*~stereoBus12=  Bus.audio(s,2);*//*~filterBus22=  Bus.audio(s,1);~reverbBus22=  Bus.audio(s,1);*/~comFuzz22=  Bus.audio(s,2);/*~limitFuzz22=  Bus.audio(s,2);*//*~stereoBus22=  Bus.audio(s,2);*/~eqBus102=  Bus.audio(s,10);
 ~toLimitlast = Bus.audio(s,10);
 
 
@@ -1181,7 +1181,7 @@ SynthDef(\envSli, {|out, val1=20, val2=20000,  dur,tS=1, crv =7|Out.kr(out,
 SynthDef(\trippyRise, {|out=0, ph=0,dur,tS=1|
 	var r = /*  MouseX.kr(0, 20.6); */  SinOsc.ar(0.075,ph).range(0, 20.6);
 	// stereo expansion
-	var phi = LFSaw.ar([42.1, 42.2], -1).range(0, 2pi);
+	var phi = LFSaw.ar([44.1, 42.2], -1).range(0, 2pi);
 	var x = r * cos(phi);
 	var y = r * sin(phi);
 		Out.ar(out,Limiter.ar(~fPo.(x, y), 0.2)*  EnvGen.kr(Env([0,1,1,0],[dur*0.05 ,dur*0.90,0,dur*0.05],[9,0,0-9]),timeScale: tS,doneAction: 2))

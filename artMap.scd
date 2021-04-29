@@ -30,7 +30,7 @@ s.meter
 
  v = Synth( \fmX, [\dur, inf,\stretch, 3.5,\mRatio, 1,\cRatio, 1,\index, 1,\atkE, 0.1,\amp,1,\out,~outFil,],~synthGrp);
 
-~v =  Synth(\comb1,[ \in, ~outFil,\out,~toShifter   /*~outDisto*/,\amp,1,\maxDel,0.7744,\decT,-0.2,\busMod,~seqBus],~combGrp);
+~v =  Synth(\comb1,[ \in, ~outFil,\out,~toShifter   /*~outDisto*/,\amp,1,\maxDel,0.7744,\decT,-0,\busMod,~seqBus],~combGrp);
 
 	Pbind(\instrument, \sequ,\out, ~seqBus, \value,Pseq([
 Scale.majorPentatonic(\just).degreeToFreq(7.rand, 76.midicps, -22),
@@ -92,7 +92,15 @@ MIDIdef.cc(\ml2, { |value|var modFreq = value.linlin(0, 127, 0, 0.8);
 },ccNum: 18 ); //is 10
 
 
-MIDIdef.cc(\mDel, { |value|var modFreq = value.linlin(0, 127, 0.42, -0.2);
+/*MIDIdef.cc(\mDel, { |value|var modFreq = value.linlin(0, 127, 0.42, -0.2);
+
+	~v.set(\decT, modFreq.round(0.001).postln);
+
+},ccNum: 71 );  //is 3*/
+
+
+
+MIDIdef.cc(\mDel, { |value|var modFreq = value.linlin(0, 127, 0.3872, -0.0968);
 
 	~v.set(\decT, modFreq.round(0.001).postln);
 
@@ -118,7 +126,7 @@ MIDIdef.cc(\fr, { |value|var modFreq = value.linlin(0, 127, 0, 1);
 },ccNum:   16); //is 12
 
 
-MIDIdef.cc(\frCtrl, { |value|var modFreq = value.linlin(0, 127, 0.0075, 20.6);
+MIDIdef.cc(\frCtrl, { |value|var modFreq = value.linlin(0, 127, 0.075, 20.6);
 
 	~v.set(\modR, modFreq.round(0.001).postln);
 },ccNum:   76); //is 12
@@ -128,7 +136,7 @@ MIDIdef.cc(\f1, { |value|var modFreq = value.linlin(0, 127, 0, 1);
 	~v.set(\f1, modFreq.round(0.001).postln);
 },ccNum:   17); //is 13
 
-MIDIdef.cc(\f1Ctrl, { |value|var modFreq = value.linlin(0, 127, 0.0075, 20.6);
+MIDIdef.cc(\f1Ctrl, { |value|var modFreq = value.linlin(0, 127, 0.075, 20.6);
 
 	~v.set(\modS, modFreq.round(0.001).postln);
 },ccNum:   77); //is 5
@@ -139,7 +147,7 @@ MIDIdef.cc(\f2, { |value|var modFreq = value.linlin(0, 127, 0, 1);
 	~v.set(\f2, modFreq.round(0.001).postln);
 },ccNum:        91 );//is 14
 
-MIDIdef.cc(\f2Ctrl, { |value|var modFreq = value.linlin(0, 127, 0.0075, 20.6);
+MIDIdef.cc(\f2Ctrl, { |value|var modFreq = value.linlin(0, 127, 0.075, 20.6);
 
 	~v.set(\modT, modFreq.round(0.001).postln);
 },ccNum:        93 );//is 6
@@ -151,7 +159,7 @@ MIDIdef.cc(\f3, { |value|var modFreq = value.linlin(0, 127, 0, 1);
 },ccNum: 79);//is 15
 
 
-MIDIdef.cc(\f3Ctrl, { |value|var modFreq = value.linlin(0,127, 0.0075, 20.6);
+MIDIdef.cc(\f3Ctrl, { |value|var modFreq = value.linlin(0,127, 0.075, 20.6);
 
 	~v.set(\modSa, modFreq.round(0.001).postln);
 },ccNum: 73);//is 7
@@ -179,14 +187,12 @@ MIDIdef.cc(\riseShift, { |value|var modFreq = value.linlin(0, 127, 0, 5000);
 
 
 
-MIDIdef.cc(\mVo, { |value|var modFreq = value.linlin(0, 127, 0, 1);
-
-
+/*MIDIdef.cc(\mVo, { |value|var modFreq = value.linlin(0, 127, 0, 1);
 
 v.set(\multi, modFreq.round(0.01).postln);
 	/*d.set(\multi, modFreq.round(0.01));*/
 
-},ccNum: 75 ); //is 11
+},ccNum: 75 ); //is 11*/
 
 )
 
