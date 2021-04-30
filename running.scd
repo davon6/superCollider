@@ -1381,8 +1381,8 @@ SynthDef(\dispatch2,{|in, out, dur|Out.ar(out, In.ar(in,2)* EnvGen.kr(Env([0,1,1
 
 
 
-SynthDef(\shiftX, {|in, out=0, frq=0,mult=0|Out.ar(out, FreqShift.ar(In.ar(in, 1),freq:
-		[frq,frq+5000,frq-8000],mul: [1,mult,mult]
+SynthDef(\shiftX, {|in, out=0, frq=0,mult=0,rte=1|Out.ar(out, FreqShift.ar(In.ar(in, 1),freq:
+		[frq,frq+5000*rte,frq-8000*rte],mul: [1,mult,mult]
 
 	)!2);}).add;
 
@@ -1527,7 +1527,7 @@ freq         )* EnvGen.kr(Env([0,1,1,0],[0.055,dur-0.055,0],4),timeScale: tS,don
 
 	SynthDef(\distoS, {|out=0,in|Out.ar(out, In.ar(in,2).round(2**(-16)));}).add;
 
-	SynthDef(\disto3, {|out=0,in|Out.ar(out, In.ar(in,3).round(2**(-16)));}).add;
+	SynthDef(\disto3, {|out=0,in, gain=1|Out.ar(out, In.ar(in,3).round(2**(-16))*gain);}).add;
 
 	SynthDef(\gate,{|in, out=0, vlAtk=0, vlDec=1,vlSub=0, vlRel=0, atkT=0, decT=1, subsT=0, relT=0, atckC=0, decC=0, relC=0, bus1, bus2, dur,relSu=0,vlSub2=0,tS =1|
 	var env;
@@ -2174,11 +2174,11 @@ SynthDef(\fm, {
 }).add;
 
 	SynthDef(\fmX, {
-		arg freq= 659.26, freq2=200,freq3=200, mRatio=1, cRatio=1,  amp=1.5, sineRate = 0.0000000095262251,  sineRangeLow=0, pitch = 0, phRise= 0 ,out=0, eFreq =0 , phFm=8, bus2,bus3,bus4,busBP,bus6, bus7, bus8, busSR, busSS, busSP, gra=0.5,lvlDec=1,factor=0, factor2 =0 ,factorx=0, factorx2 =0,factorxx=0, factorxx2 =0  /*,vlPE =27.1366666667,vlPE2=0.2,dcPE = 0.129066666667*/, rqLPF =0.5, factor3 =1, decE= 0.1936, dur, gain =50/*, crvEP = (-2)*/,gate,pan=0, modu,modu2, multi=0, multi2=0,modux=0,moduxx=0;
+		arg freq= 659.26, freq2=200,freq3=200, mRatio=1, cRatio=0,  amp=1.5, sineRate = 0.0000000095262251,  sineRangeLow=0, pitch = 0, phRise= 0 ,out=0, eFreq =0 , phFm=8, bus2,bus3,bus4,busBP,bus6, bus7, bus8, busSR, busSS, busSP, gra=0.5,lvlDec=1,factor=0, factor2 =0 ,factorx=0, factorx2 =0,factorxx=0, factorxx2 =0  /*,vlPE =27.1366666667,vlPE2=0.2,dcPE = 0.129066666667*/, rqLPF =0.5, factor3 =1, decE= 0.1936, dur, gain =50/*, crvEP = (-2)*/,gate=1,pan=0, modu,modu2, multi=0, multi2=0,modux=0,moduxx=0,fmCtrl=1;
 
-	var car, mod, mod2, iEnv, sig, filRte;
+	var car, mod, mod2, iEnv, sig, filRte,env;
 
-
+		env = EnvGen.kr(Env.adsr,gate,doneAction: 2);
 
 	iEnv = EnvGen.kr(
 			Env.new(
@@ -2189,21 +2189,21 @@ SynthDef(\fm, {
 		));
 
 	//second level of modulation
-	mod2 = SinOsc.ar(659.26/10+ (In.kr(moduxx,1)* EnvGen.kr(Env.adsr(sustainLevel: 1,releaseTime: 0.1),factorxx ))+(In.kr(~seqBus,1)* factorxx2), mul:659.26/10 *iEnv /*In.kr( gra, 1)*/ );
+	mod2 = SinOsc.ar(freq/10+ (In.kr(moduxx,1)* EnvGen.kr(Env.adsr(sustainLevel: 1,releaseTime: 0.1),factorxx ))+(In.kr(~seqBus,1)* factorxx2), mul:freq/10 *iEnv /*In.kr( gra, 1)*/ );
 
 	//first level of modulation
 
 		// mod = SinOsc.ar(MouseX.kr(0,freq * mRatio + mod2), mul:freq * mRatio * iEnv);
 
-		mod = SinOsc.ar( [MouseX.kr( 659.26 * mRatio + mod2 ),
-	 MouseX.kr( 659.26 * mRatio + mod2 )-30,
-		MouseX.kr( 659.26 * mRatio + mod2 )+50 ]
+		mod = SinOsc.ar( [MouseX.kr( freq * mRatio + mod2 ),
+	 MouseX.kr( freq * mRatio + mod2 )-30,
+		MouseX.kr( freq * mRatio + mod2 )+50 ]
 
 		/*	SinOsc.kr(In.kr(~bus2, 1),In.kr(~bus3, 1)).range([In.kr(~bus11, 1)]), mul:*/
 
 			 * SinOsc.kr(sineRate,phRise).range([sineRangeLow])+ (In.kr(modux,1)* EnvGen.kr(Env.adsr(sustainLevel: 1,releaseTime: 0.1),factorx ))/*+(In.kr(~seqBusx,1)* factorx2)*/, mul:
 
-			/*(*/     /* [ */ MouseY.kr(329.63,  659.26 * mRatio *iEnv) /*In.kr( gra, 1) */
+			/*(*/     /* [ */ MouseY.kr(freq/2,  freq * mRatio *iEnv) /*In.kr( gra, 1) */
 		/*	,MouseY.kr(164.815,  659.26 * mRatio *iEnv)* multi2
 			,MouseY.kr(164.815,  659.26 * mRatio *iEnv)* multi2  ]*/
 
@@ -2214,15 +2214,18 @@ SynthDef(\fm, {
 
 	//my carrier is a mess but bring interesting outputs
 
-		car =SinOsc.ar( ( /*+*/
+		car =SinOsc.ar(/* ( +*/
 
 			(In.kr(modu,1)* EnvGen.kr(Env.adsr(sustainLevel: 1,releaseTime: 0.1),factor ))+(In.kr(~seqBus,1)* factor2)+
 
 			//remove this line as shwon to decrease sound quality so I left it / HERE CHNAGE THE SOUND
 			/*SelectX.ar(SinOsc.kr(0.0020,phFm).range(0,1),[SinOsc.ar(0),mod])*/
-			SelectX.ar(SinOsc.kr((0.00502929687/2/2),phFm).range(0,1),[SinOsc.ar(0),mod!2])+
-			[0.00502929687, 0.00502929687-30, 0.00502929687 +50]
-		)* cRatio
+		SelectX.ar(fmCtrl   /*SinOsc.kr((0.00502929687/2/2),phFm).range(0,1)*/,[In.ar(~phaseBus,1)/*SinOsc.ar(0)*/,mod])           /*    +*/
+			/*[0.00502929687, 0.00502929687-30, 0.00502929687 +50]*/
+
+
+			/*freq*/
+			/*)*/ +( freq * cRatio )+ 0.00502929687
 
 			//pitch envelope
 			/*+  (EnvGen.kr(Env([vlPE,vlPE2],[dcPE,0],crvEP))*factor2)*/
@@ -2231,6 +2234,15 @@ SynthDef(\fm, {
 			multi
 			,multi  ]   );
 
+
+	/*	car2 =SinOsc.ar((In.kr(modu,1)* EnvGen.kr(Env.adsr(sustainLevel: 1,releaseTime: 0.1),factor ))+(In.kr(~seqBus,1)* factor2)+
+		SelectX.ar(fmCtrl   ,[In.ar(~phaseBus,1)/*SinOsc.ar(0)*/,mod])            +( freq2 * cRatio )+ 0.00502929687
+    ,mul: 1   );
+
+		car3 =SinOsc.ar((In.kr(modu,1)* EnvGen.kr(Env.adsr(sustainLevel: 1,releaseTime: 0.1),factor ))+(In.kr(~seqBus,1)* factor2)+
+		SelectX.ar(fmCtrl   ,[In.ar(~phaseBus,1)/*SinOsc.ar(0)*/,mod])            +( freq3 * cRatio )+ 0.00502929687
+    ,mul: 1   );*/
+
 	//transform signal through the shaper
 
 	sig = Shaper.ar(~tfBuf,   car);
@@ -2238,7 +2250,7 @@ SynthDef(\fm, {
 	sig  = LeakDC.ar(sig);
 
 	// sig = Splay.arFill(2,sig,spread: 0);
-	Out.ar(out, sig!2 /* !*/   * amp/** EnvGen.kr(Env.adsr(0.1), gate)*/);
+	Out.ar(out, sig /* !2*/   * amp     *env/** EnvGen.kr(Env.adsr(0.1), gate)*/);
 }).add;
 
 
@@ -2336,11 +2348,11 @@ SynthDef(\sequ,{|value, dur, in=0, out=0, vlAtk=0, vlDec=1,vlSub=1,vlSub2=1, vlR
 
 	SynthDef(\filterU, {|out=0,in,  hFrq=900, hFrq2=900,lFrq=300,lFrq2=300 ,qfH = 0.822379, qfH2=0.6,qlL = 0.504212,qlL2=0.4|Out.ar(out,
 
-		BLowPass4.ar(   BLowPass4.ar(
+	/*BLowPass4.ar(   BLowPass4.ar( */BLowPass.ar(
 			BHiPass4.ar(  BHiPass4.ar(
 				In.ar(in,1)
 				, hFrq2 , qfH) 	, hFrq , qfH2)
-			, lFrq,qlL ), lFrq2 ,qlL2 )
+/*	, lFrq,qlL ) */,lFrq2 ,qlL2 )
 
 	) }).add;
 
@@ -2486,7 +2498,7 @@ SynthDef(\sequ,{|value, dur, in=0, out=0, vlAtk=0, vlDec=1,vlSub=1,vlSub2=1, vlR
 		Out.ar(out,effect * EnvGen.kr(Env.step([1,1],[dur,0]),timeScale: tS,doneAction: 2));
 	}).add;
 
-	SynthDef(\lim,{|out=0,ml=0.3|Out.ar(out,Balance.ar(In.ar(~outTolimit),SinOsc.ar(mul: ml)))}).add;
+	SynthDef(\lim,{|out=0,ml=0.1|Out.ar(out,Balance.ar(In.ar(~outTolimit),SinOsc.ar(mul: ml)))}).add;
 
 	SynthDef(\lim2,{|out=0,ml=0.2,in|Out.ar(out,Balance.ar(In.ar(in,1),SinOsc.ar(mul: ml)))}).add;
 

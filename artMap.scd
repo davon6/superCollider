@@ -28,7 +28,7 @@ s.meter
 
 
 
- v = Synth( \fmX, [\dur, inf,\stretch, 3.5,\mRatio, 1,\cRatio, 1,\index, 1,\atkE, 0.1,\amp,1,\out,~outFil,],~synthGrp);
+v = Synth( \fmX, [\dur, inf,\stretch, 3.5,\mRatio, 1,\cRatio, 1,\index, 1,\atkE, 0.1,\amp,1,\out,~outFil,],~synthGrp);
 
 ~v =  Synth(\comb1,[ \in, ~outFil,\out,~toShifter   /*~outDisto*/,\amp,1,\maxDel,0.7744,\decT,-0,\busMod,~seqBus],~combGrp);
 
@@ -51,10 +51,47 @@ Scale.majorPentatonic(\just).degreeToFreq(7.rand, 76.midicps, -20)
 ~l1 = Synth(\lim,[\in, ~outTolimit,\out,~outDisto],~limitGrp);
 
 
-h = Synth(\disto3,[\in,  ~outDisto , \out,0/*~outTolimit*/],~distoGrp);
+h = Synth(\disto3,[\in,  ~outDisto , \out,0/*~outTolimit*/,\gain,1],~distoGrp);
 /*
 // l = Synth(\limiter,[\in, ~outTolimit,\out,0, \gain, 140],~limitGrp);*/
 
+
+
+
+MIDIdef.noteOn(\piana,{arg vel, nn;
+	[ nn].postln;
+	~notes[nn] =  Synth( \fmX, [\freq, nn.midicps,\dur, inf,\stretch, 3.5,\mRatio, 1,\cRatio, 1,\index, 1,\atkE, 0.1,\amp,1,\out,0/*~outFil*/
+		,\amp, vel.linexp(1,127,0.12,0.14,\freq, nn.midicps)
+	],~synthGrp);
+});
+
+
+MIDIdef.noteOff(\offPiana, {arg vel, nn;nn.postln;
+	~notes[nn].set(\gate,0);
+	~notes[nn] = nil;
+});
+
+
+MIDIdef.cc(\fmCt ,{ |value|var modFreq = value.linlin(61, 67,0, 0.8);
+
+	~notes.do{arg synth; synth.set(/*\fmCtrl*/\cRatio, modFreq.round(0.01))};
+v.set(\cRatio, modFreq.round(0.01).postln);
+},ccNum: 114 ); //is 8=9
+
+
+
+MIDIdef.cc(\fmCt2 ,{ |value|var modFreq = value.linlin(61, 67, 0.8, 0);
+
+	v.set(\fmCtrl, modFreq.round(0.01).postln);
+	~notes.do{arg synth; synth.set(\fmCtrl, modFreq.round(0.01))};
+
+},ccNum: 114 ); //is 9.
+
+MIDIdef.cc(\rteShit, { |value|var modFreq = value.linlin(0, 127, 1, 0);
+
+	~h1.set(\rte, modFreq.round(0.01).postln);
+
+},ccNum: 75 ); //is 8
 
 
 
@@ -235,9 +272,17 @@ MIDIdef.cc(\lpF2x, { |value|var modFreq = value.linlin(0, 127, 710/*800*/,18000)
 
 
 
-MIDIdef.cc(\lpF2x2, { |value|var modFreq = value.linlin(0, 127, 710/*800*/,12000);
+/*MIDIdef.cc(\lpF2x2, { |value|var modFreq = value.linlin(0, 127, 710/*800*/,12000);
 
-	k.set(\lFrqs,"lp: ".postln;modFreq.round(1).post;)
+	k.set(\lFrq2,"lp: ".postln;modFreq.round(1).post;)
+
+
+},ccNum: 1 );*/
+
+
+MIDIdef.cc(\lpF2x2, { |value|var modFreq = value.linlin(0, 127, 310/*800*/,12000);
+
+	k.set(\lFrq2,"lp: ".postln;modFreq.round(1).post;)
 
 
 },ccNum: 1 );
