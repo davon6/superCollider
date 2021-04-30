@@ -1417,6 +1417,20 @@ SynthDef(\shiftX, {|in, out=0, frq=0,mult=0,rte=1|Out.ar(out, FreqShift.ar(In.ar
 	}).add;
 
 
+		SynthDef(\shiftEx, {|in, out, freq,boo, freq2, factor =1, factor2, factor3, vlPE =27.1366666667,vlPE2=0.2, crvEP = (-2), dcPE = 0.129066666667, dur,
+		vlPE3,vlPE33,crvEP2, dA=0, dA2=0, dA3=0|
+
+
+		Out.ar(out, FreqShift.ar(In.ar(in, 1)/*.sign*/,
+
+			/*freq:  freq2+    In.kr( boo, 1)  +   (EnvGen.kr(Env([vlPE,vlPE2],[dur/*dcPE*/,0],crvEP),doneAction: dA)*factor2)
+*/
+			freq:SinOsc.ar(1.2875/2.5).range(-1000,1000)
+   ));
+	}).add;
+
+
+
 
 
 		/*SynthDef(\shift2, {|in, out, freq, dur, tS=1
