@@ -219,7 +219,7 @@ Ppar([
 Pseq([
 
 
-	Pbind(\instrument, \playBuf10, \buf ,~leTout2,\out,0, \start, ~leTout2.numFrames/ 256 * 222.rrand(1)
+	Pbind(\instrument, \playBuf10, \buf ,~leTout2,\out,0, \start,~first=  ~leTout2.numFrames/ 256 * 222.rrand(1)
 	,\loopy,0,\tS,0.39550810372374,\dur,Pseq([2.75/1],1)  ),
 
 Pbind(\instrument,\gateS, \group,~dispatchGrp2,\dur, Pseq([1/4],1),\tS, 0.39550810372374  ),
@@ -230,7 +230,7 @@ Pbind(\instrument, \playBuf10, \buf ,~leTout2,\out,0, \start, ~leTout2.numFrames
 	Pbind(\instrument,\gateS, \group,~dispatchGrp2,\dur, Pseq([1/4],5),\tS, 0.39550810372374  ),
 
 
-		Pbind(\instrument, \playBuf10, \buf ,~leTout2,\out,0, \start, ~leTout2.numFrames/ 256 * 222.rrand(1)
+		Pbind(\instrument, \playBuf10, \buf ,~leTout2,\out,0, \start, ~first
 	,\loopy,0,\tS,0.39550810372374,\dur,Pseq([2.75/1],1)  ),
 
 Pbind(\instrument,\gateS, \group,~dispatchGrp2,\dur, Pseq([1/4],1),\tS, 0.39550810372374  ),
@@ -241,7 +241,7 @@ Pbind(\instrument, \playBuf10, \buf ,~leTout2,\out,0, \start, ~leTout2.numFrames
 		Pbind(\instrument, \playBuf10, \buf ,~leTout2,\out,0, \start, ~leTout2.numFrames/ 256 * 222.rrand(1)
 	,\loopy,0,\tS,0.39550810372374,\dur,Pseq([5/4],1)  ),
 
-			Pbind(\instrument, \playBuf10, \buf ,~leTout2,\out,0, \start, ~leTout2.numFrames/ 256 * 222.rrand(1)
+			Pbind(\instrument, \playBuf10, \buf ,~leTout2,\out,0, \start, ~first
 	,\loopy,0,\tS,0.39550810372374,\dur,Pseq([2.75/1],1)  ),
 
 Pbind(\instrument,\gateS, \group,~dispatchGrp2,\dur, Pseq([1/4],1),\tS, 0.39550810372374  ),
@@ -252,7 +252,7 @@ Pbind(\instrument, \playBuf10, \buf ,~leTout2,\out,0, \start, ~leTout2.numFrames
 		Pbind(\instrument, \playBuf10, \buf ,~leTout2,\out,0, \start, ~leTout2.numFrames/ 256 * 222.rrand(1)
 	,\loopy,0,\tS,0.39550810372374,\dur,Pseq([5/4],1)  ),
 
-			Pbind(\instrument, \playBuf10, \buf ,~leTout2,\out,0, \start, ~leTout2.numFrames/ 256 * 222.rrand(1)
+			Pbind(\instrument, \playBuf10, \buf ,~leTout2,\out,0, \start,~first
 	,\loopy,0,\tS,0.39550810372374,\dur,Pseq([2.75/1],1)  ),
 
 Pbind(\instrument,\gateS, \group,~dispatchGrp2,\dur, Pseq([1/4],1),\tS, 0.39550810372374  ),
