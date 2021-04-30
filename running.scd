@@ -124,6 +124,9 @@ s.sync;
 	~kb1 = Buffer.alloc(s, s.sampleRate *1,1);
 	~kb2 = Buffer.alloc(s, s.sampleRate *t.beatDur,2);
 
+
+	~lpPrec = Buffer.alloc(s, s.sampleRate *t.beatDur*64,1);
+
 	~kb2Test = Buffer.alloc(s, s.sampleRate *20,2);
 	~e = Buffer.alloc(s, s.sampleRate *   t.beatDur*4 /*0.3872*/,1);
 	~f = Buffer.alloc(s, s.sampleRate *  t.beatDur*4);//  (t.beatDur*4)/*1.5488*/,1);
