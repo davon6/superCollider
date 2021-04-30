@@ -1,15 +1,15 @@
 ~mix10= Synth(\limiterStoMixer,[\c10,1,\in, ~no2ToLimit,\gain,12,\out,~no2ToStereo],~limitGrp);
-// ~mix10.set(\gain,12 );
+// ~mix10.set(\gain,2 );
 ~mix18= Synth(\limiterStoMixer,[\c18,1,\in,~limitDelay,\gain,45,\out ,~stereoBus3],~limitGrp);
 // ~mix18.set(\gain,45 );
-~mix9= Synth(\limiterStoMixer,[ \c9,1,\in,~percuLimit, \gain,47,\out,~percuStereo],~limitGrp);
-// ~mix9.set(\gain,47 );
+~mix9= Synth(\limiterStoMixer,[ \c9,1,\in,~percuLimit, \gain,70,\out,~percuStereo],~limitGrp);
+// ~mix9.set(\gain,70 );
 
 
 ~mix2= Synth(\limiterStoMixer,[\c2,1,\in, ~limitFuzz, \gain,90,\out,~stereoBus1],~limitGrp);
 // ~mix2.set(\gain,90)
-~mix4= Synth(\limiterStoMixer,[\c4,1,\in, ~toLimitFlo, \gain,18, \out,~toStereoFlo],~limitGrp);
-// ~mix4.set(\gain,18)
+~mix4= Synth(\limiterStoMixer,[\c4,1,\in, ~toLimitFlo, \gain,28, \out,~toStereoFlo],~limitGrp);
+// ~mix4.set(\gain,28)
 //is  21
 
 ~mix5= Synth(\limiterStoMixer,[\c5,1,\in, ~limitFuzz23, \gain,55, \out,~stereoBus23],~limitGrp);
@@ -34,14 +34,14 @@
 
 ~mix15= Synth(\limiterStoMixer,[\c15,1,\in, ~limitFuzz3,\gain,70,\out,~stereoBus4],~limitGrp);
 // ~mix15.set(\gain,70)  //noise start
-~mix16= Synth(\limiterStoMixer,[\c16,1,\in, ~flanToLimit,\gain,8,\out,~flanToStereo],~limitGrp);
-// ~mix16.set(\gain,8);
+~mix16= Synth(\limiterStoMixer,[\c16,1,\in, ~flanToLimit,\gain,15,\out,~flanToStereo],~limitGrp);
+// ~mix16.set(\gain,15);
 ~mix14= Synth(\limiterStoMixer,[ \c14,1,\in, ~slideBusToLimit,\out,~again, \gain, 30],~limitGrp);
 // ~mix14.set(\gain,30);
 
 ~mix26= Synth(\limiterToMixer,[\c26,1,\in, ~slideBusToLimit2,\gain,45,\out,~toStereoRise],~limitGrp);
-~mix27= Synth(\limiterStoMixer,[\c27,1,\in, ~flanToLimit2,\gain,7,\out,~flanToStereo2],~limitGrp);
-// ~mix27.set(\gain,7);
+~mix27= Synth(\limiterStoMixer,[\c27,1,\in, ~flanToLimit2,\gain,17,\out,~flanToStereo2],~limitGrp);
+// ~mix27.set(\gain,17);
 
 ~mix28= Synth(\limiterToMixer,[\c28,1,\in,~riToLimit2 ,\gain,13,\out,~riToStereo2],~limitGrp);
 // ~mix28.set(\gain,13);
@@ -50,8 +50,8 @@
 ~mix30= Synth(\limiterToMixer,[\c30,1,\in,~noiseToLimit ,\gain,25,\out,~noiseToStereo],~limitGrp);
 // ~mix30.set(\gain,25);
 
-~mix3= Synth(\limiterStoMixer,[\c3,1,\in, ~limitPerch, \gain,75, \out,~perchLimiToG],~limitGrp);
-// ~mix3.set(\gain,75)
+~mix3= Synth(\limiterStoMixer,[\c3,1,\in, ~limitPerch, \gain,18, \out,~stereoPerch/*~perchLimiToG*/],~limitGrp);
+// ~mix3.set(\gain,18)
 ~mix31= Synth(\limiterStoMixer,[\c31,1,\in,~limitPerch2 ,\gain,90,\out,~perchLimiToG2],~limitGrp);
 // ~mix31.set(\gain,90)
 ~mix32= Synth(\limiterStoMixer,[\c32,1,\in, ~limitPerch3,\gain,88,\out,~perchLimiToG3],~limitGrp);
@@ -98,14 +98,14 @@
 
 
 //passant
-~mix7= Synth(\limiterStoMixer,[\c7,1,\in, ~limitFuzz4, \gain,68, \out,~stereoBus14],~limitGrp);
-// ~mix7.set(\gain,68)
-~mix50= Synth(\limiterStoMixer,[\c50,1,\in, ~limitPass1, \gain,72, \out,~stereoPass1],~limitGrp);
-// ~mix50.set(\gain,72)
-~mix51= Synth(\limiterStoMixer,[\c51,1,\in, ~limitPass2, \gain,72, \out,~stereoPass2],~limitGrp);
-// ~mix51.set(\gain,72)
-~mix52= Synth(\limiterStoMixer,[\c52,1,\in, ~limitPass3, \gain,90, \out,~stereoPass3],~limitGrp);
-// ~mix52.set(\gain,90)
+~mix7= Synth(\limiterStoMixer,[\c7,1,\in, ~limitFuzz4, \gain,78, \out,~stereoBus14],~limitGrp);
+// ~mix7.set(\gain,78)
+~mix50= Synth(\limiterStoMixer,[\c50,1,\in, ~limitPass1, \gain,82, \out,~stereoPass1],~limitGrp);
+// ~mix50.set(\gain,82)
+~mix51= Synth(\limiterStoMixer,[\c51,1,\in, ~limitPass2, \gain,82, \out,~stereoPass2],~limitGrp);
+// ~mix51.set(\gain,82)
+~mix52= Synth(\limiterStoMixer,[\c52,1,\in, ~limitPass3, \gain,100, \out,~stereoPass3],~limitGrp);
+// ~mix52.set(\gain,100)
 
 
 
@@ -128,9 +128,9 @@
 
 ~mix46= Synth(\limiterStoMixer,[\c46,1,\in, ~part2Limit, \gain,40,\out,~stereoBus1],~limitGrp);
 // ~mix46.set(\gain,50)
-~mix47= Synth(\limiterStoMixer,[\c47,1,\in,~part2Limit2 , \gain,20,\out,~sterBus2],~limitGrp);
-// ~mix47.set(\gain,22)
+~mix47= Synth(\limiterStoMixer,[\c47,1,\in,~part2Limit2 , \gain,17.2,\out,~sterBus2],~limitGrp);
+// ~mix47.set(\gain,17.2)
 ~mix48= Synth(\limiterStoMixer,[\c48,1,\in,~part2Limit3 , \gain,25,\out,~sterBus1],~limitGrp);
-// ~mix48.set(\gain,40)
+// ~mix48.set(\gain,30)
 ~mix49= Synth(\limiterStoMixer,[\c49,1,\in,~part2Limit4 , \gain,20,\out,~sterBus4],~limitGrp);
-// ~mix49.set(\gain,22)
+// ~mix49.set(\gain,25)

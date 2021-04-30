@@ -126,6 +126,9 @@ s.sync;
 
 
 	~lpPrec = Buffer.alloc(s, s.sampleRate *t.beatDur*64,1);
+	~lpPrec = Buffer.alloc(s, s.sampleRate *t.beatDur*64,2);
+	~lpPrec = Buffer.alloc(s, s.sampleRate *t.beatDur*64,10);
+
 
 	~kb2Test = Buffer.alloc(s, s.sampleRate *20,2);
 	~e = Buffer.alloc(s, s.sampleRate *   t.beatDur*4 /*0.3872*/,1);
@@ -1014,8 +1017,8 @@ SynthDef(\envSli, {|out, val1=20, val2=20000,  dur,tS=1, crv =7|Out.kr(out,
 		);
 
 		env =EnvGen.ar(
-	Env([1 , 0.2, 0.6,    0.6,0.6,0],
-		[0.008, 0.08, 0,0.006,0.09],[-1.8,-30,5,5,-5]),doneAction:2);
+	Env([0.8 , 0.2, 0.6,    0.6,0.6,0],
+		[0.008, 0.08, 0,0.006,0.9],[-1.8,-50,5,5,-5]),doneAction:2);
 	//EnvGen.ar(Env.perc(0, 0.40),doneAction:2);
 
 
@@ -1034,10 +1037,11 @@ SynthDef(\envSli, {|out, val1=20, val2=20000,  dur,tS=1, crv =7|Out.kr(out,
 	}).add;
 
 
+
 	SynthDef(\bass,{
 		arg freq=41.2, dure=1, amp=0.5,
 		atkcrv=1, relcrv=5,
-		atk=0, rel=0.1, lpf=100, out = 0, bus, dur,cho=0,rel2,relcrv2,envF;
+		atk=0, rel=0.1, lpf=100, out = 0, bus, dur,cho=0,rel2,relcrv2,envF,relcrv3;
 
 		var sig, env, lvlBa;
 
@@ -1054,7 +1058,7 @@ SynthDef(\envSli, {|out, val1=20, val2=20000,  dur,tS=1, crv =7|Out.kr(out,
 			Env(
 				[0,1080,20,0],
 				[atk,rel/4,rel2],
-				[atkcrv,relcrv,relcrv2]
+				[atkcrv,relcrv3,relcrv2]
 			),
 			doneAction:2
 		);
@@ -2514,7 +2518,7 @@ s.sync;
 
 /*Pbindef(\ki,   \out, 0) ;Pbindef(\bass, \out, 0) ;
 	Pbindef(\ki,   \out, 700) ;Pbindef(\bass, \out, 700);*/
-	~kick =	Pbind(\instrument, \kick,\dur, Pseq([1/1],1),\amp,(-5/*-10.2*/),\out,0);//-3.5 - 10.5
+	~kick =	Pbind(\instrument, \kick,\dur, Pseq([1/1],1),\amp,(-3/*-10.2*/),\out,0);//-3.5 - 10.5
 
 	~bassShap = Pbind(\instrument, \shap, \dur,Pseq([1/1],1),\dA1,2,\out,~bassShapB, \tS, 0.39550810372374);
 //Problem overlapping
@@ -2558,8 +2562,8 @@ s.sync;
 		\rel, t.beatDur*4 * 0.996,/*\rel, t.beatDur/4 * 0.98,*/
 		\rel2, t.beatDur/4 * 0.0012,
 		\atkcrv, -2,
-		\relcrv, -2,\relcrv2, -4
-		,\amp,(-1/*-1*/)/*(-13)*/,\out,~bassEq
+		\relcrv, -2,\relcrv2, -4, \relcrv3, -6
+		,\amp,(-1.5/*-1*/)/*(-13)*/,\out,~bassEq
 	);
 
 	~hat2 =Pbind(\instrument, \percussion,\rel,0.04840,\rel2,0.02420,\amp, (-28.2), \crv1, (-4), \crv1b, (-5), \modHz, exprand(500,10000), \mulMod, rrand(100, 500), \carHz, exprand(20,10000), \modAmp, 0.82875.rrand(0.4),\dur,Pseq([1/1],1) ,\out, ~kickHatEq);
@@ -2704,7 +2708,7 @@ Pbind( \instrument, \playBuf10, \impulse, 10 ,
 )
 
 (
-Ppar([~hat2,~kick,Pbind(\instrument ,	\EQ2,\dur, inf, \in,~kickHatEq, \out,0,\group, ~eqGrp, \val, 659.255, \quant,1, \gain ,(-30)),
+Ppar([~hat2,~kick,Pbind(\instrument ,	\EQ2,\dur, inf, \in,~kickHatEq, \out,0,\group, ~eqGrp, \val, 659.255/2, \quant,1, \gain ,(-30)),
 	Pbind(\instrument,\recLoop,\buf,~k2,\recording,1, \in,0,\group,~recGrp2,\dur,inf)
 ],1).play(t) ;
 )
@@ -2733,7 +2737,10 @@ Ppar([
 
 ~b3.plot
 ~k2.play
-~kb2.plot
+Pbind(\instrument, \playBuf, \impulse, 0.003 ,\dur,    Pseq([1/1],inf), \tS,  0.39550810372374,\buf,~k2,\out, 0,\loopy,0,\start,0,\tS, 0.39550810372374).play(t)
+Pbind(\instrument, \playBuf, \impulse, 0.003 ,\dur,    Pseq([1/1],inf), \tS,  0.39550810372374,\buf,~b3,\out, 0,\loopy,0,\start,0,\tS, 0.39550810372374).play(t)
+
+~kb2.play
 (
 Ppar([
 
