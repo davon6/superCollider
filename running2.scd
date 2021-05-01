@@ -712,7 +712,12 @@ Pbind(\instrument, \filter, \dur,inf, \in,~hpK,\which,2,\busMod, ~bus5,\bus7,~bu
 
 	Pbind(\instrument, \pan2,\in, ~toPan3,\dur, inf,\out,~to4bar,\group, ~limitGrp,\group, ~stereoGrp),
 
-	Pbind(\instrument, \playBuf,  \tS,  0.39550810372374,\buf,~snare,\rte,Pwrand([1,(-1.5)],[16,1].normalizeSum,inf),
+
+	Pbind(\instrument, \playBuf,  \tS,  0.39550810372374, \rte,(-1.5),	\type,
+		Pwrand([Pseq([\rest ,\note,\rest,\rest] ,1),Pseq([\rest ,\rest,\rest,\rest],1)],[32,1],inf),\dur, Pseq([1/2], inf),\out,~snareEQ),
+
+
+	Pbind(\instrument, \playBuf,  \tS,  0.39550810372374,\buf,~snare,
 		\type,
 		Pseq([
 		Pseq([
@@ -730,8 +735,7 @@ Pwrand([    Pseq([\rest ,\rest,\note,\rest] ,1),Pseq([\rest ,\note,\note,\rest],
 						\rest ,\note,\note,\rest,\rest,\rest,\rest,\rest,
 						\rest,\rest,\rest,\rest,\rest,\rest,\note,\rest
 					],1),    Pseq([\rest,\rest,\rest,\rest ],120)],inf)//l embrouille
-	,\atk, 0.00502929687,\rel, 0.0968,\rel2,
-	Pseq([Pseq([ 0.3872],32), Pseq([ 0.7744],32)],inf),\dur, Pseq([1/2], inf),\amp,1, \crv1,(-8),\crv2,(-7)   ,\out,~snareEQ, \atk,t.beatDur * 0.02, \atk2,Pkey(\atk),
+	,\dur, Pseq([1/2], inf) ,\out,~snareEQ,
 	\dA,Prand([ /*Pseq([2],32),Pseq([0],32)*/  Pseq([1],32), Pseq([0.5],32),Pseq([0.25],32)],inf)      ),
 
 Pbind(\instrument, \playBufS,  \tS,  0.39550810372374,\buf,~cymb,\type,Pseq([Pseq([Pseq(~rythm1,1),Pseq(~rythm2,1),],4),Pseq([Pseq(~rythm3,1),Pseq(~rythm4,1),],4),Pseq(~rythmL, 224 /*32*/),Pseq(~rythmL, 256) ],inf),\dur,Pseq([1/4],inf ),\stereoL, 0.00555,\out,   ~comBusCymb),
