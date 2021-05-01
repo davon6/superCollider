@@ -252,7 +252,7 @@ g = Synth(  \playBufX,[ \impulse, 0.00001,\loo,1,\buf,~buf,\out, ~bgFil]);
 
 
 
-k = Synth(\filterU, [\out,0/*~distoBg*/,\in, ~bgFil, \lFrq,22000, \lFrq2,22000,\hFrq,50,\hFrq2,50,\qfH ,0.7, \qfH2, 0.9,\qlL ,0.6 ,\qlL2 ,0.55 ], ~filterGrp);
+k = Synth(\filterU, [\out,0/*~distoBg*/,\in, ~bgFil, \lFrq,22000, \lFrq2,22000,\hFrq,50,\hFrq2,50,\qfH ,0.7, \qfH2, 0.1,\qlL ,0.6 ,\qlL2 ,0.55 ], ~filterGrp);
 /*d = Synth(\disto,[\in,~distoBg,\out,0],~distoGrp);*/
 
 

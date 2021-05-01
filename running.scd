@@ -9,7 +9,6 @@ Bus.free;
 )
 
 
-
 (
 s.options.memSize = 2097152 ;
 Server.default.options.numOutputBusChannels = 60;
@@ -123,11 +122,16 @@ s.sync;
 	~b3 = Buffer.alloc(s, s.sampleRate *5,1);
 	~kb1 = Buffer.alloc(s, s.sampleRate *1,1);
 	~kb2 = Buffer.alloc(s, s.sampleRate *t.beatDur,2);
+	~cymb = Buffer.alloc(s, s.sampleRate *1,2);
+	~hat = Buffer.alloc(s, s.sampleRate *1,2);
+	~snare = Buffer.alloc(s, s.sampleRate *1,1);
+
+		~fkAr = Buffer.alloc(s, s.sampleRate *t.beatDur*64,2);
 
 
 	~lpPrec = Buffer.alloc(s, s.sampleRate *t.beatDur*64,1);
-	~lpPrec = Buffer.alloc(s, s.sampleRate *t.beatDur*64,2);
-	~lpPrec = Buffer.alloc(s, s.sampleRate *t.beatDur*64,10);
+	/*~lpPrec = Buffer.alloc(s, s.sampleRate *t.beatDur*64,2);
+	~lpPrec = Buffer.alloc(s, s.sampleRate *t.beatDur*64,10);*/
 
 
 	~kb2Test = Buffer.alloc(s, s.sampleRate *20,2);
@@ -738,9 +742,9 @@ s.sync;
 
 
 
-	SynthDef(\playBuf ,{|out = 0,start=0, trig= 0.002, dur, buf, dA=2,rte=1 , tS=1, loopy=1,	decT=1, subsT=0  |Out.ar(out,PlayBuf.ar(1,buf,rte ,trigger:
-		trig/*Dust.kr(4.0)*/,startPos: start,loop: loopy/*,doneAction: dA*/)* /*EnvGen.kr(Env([0,1,1,0],[0,dur,0]),timeScale: tS,doneAction: 2)*/
-	EnvGen.kr(Env([0,1,1,1,0],[0,dur*decT,dur* subsT]),timeScale: tS,doneAction: 2)
+	SynthDef(\playBuf ,{|out = 0,start=0, trig= 0.002, dur, buf,rte=1 , tS=1, loopy=1,	decT=1, subsT=0,vl=1 ,dA=1 |Out.ar(out,PlayBuf.ar(1,buf,rte ,trigger:
+		trig/*Dust.kr(4.0)*/,startPos: start,loop: loopy)*
+	EnvGen.kr(Env([0,vl,vl,vl,0],[0,dur*decT*dA,dur* subsT]),timeScale: tS,doneAction: 2)
 
 	);}).add;
 
@@ -752,7 +756,7 @@ s.sync;
 	);}).add;
 
 
-	SynthDef(\playBufS ,{|out = 0,start=0, trig= 0.002, dur, buf, dA=2, tS=1, loopy=1,vl=1|Out.ar(out,PlayBuf.ar(2,buf,trigger:
+	SynthDef(\playBufS ,{|out = 0,start=0,rte=1, trig= 0.002, dur, buf, dA=2, tS=1, loopy=1,vl=1|Out.ar(out,PlayBuf.ar(2,buf,rte,trigger:
 		trig/*Dust.kr(4.0)*/,startPos: start,loop: loopy/*,doneAction: dA*/)* EnvGen.kr(Env([0,vl,vl,0],[0,dur,0]),timeScale: tS,doneAction: 2));}).add;
 
 	SynthDef(\playBuf10 ,{|out = 0,start=0, trig= 0.002, dur, buf, dA=2, tS=1, loopy=1,vl=1|Out.ar(out,PlayBuf.ar(10,buf,trigger:
@@ -1110,8 +1114,12 @@ SynthDef(\envSli, {|out, val1=20, val2=20000,  dur,tS=1, crv =7|Out.kr(out,
 		sig =  Latch.ar(tanh(car+car2),Impulse.ar(latch));
 
 		Out.ar(out, sig/*.dup * amp.dbamp*/
-		* [amp.dbamp+stereoL,amp.dbamp+stereoR]);
+	* [amp.dbamp+stereoL,amp.dbamp+stereoR]);
 }).add;
+
+
+	/*SynthDef(\homeStereo,{|in, out=0,stereoL=0, stereoR=0,amp|Out.ar(out, In.ar(in)
+		* [amp.dbamp+stereoL,amp.dbamp+stereoR]);}).add;*/
 
 	SynthDef.new(\snare, {
 		arg carHz=500, modHz=100, modAmp=1691, modAmp2=0.321875, atk=0, atk2=0, rel=1, amp=0.2, pan=0,rel2=2,out=0,latch=12000, da1=2, da2=2, crv1=(-3),crv2 = (-2) , noiLv  =0.321875, tS=1,atkC=0;
@@ -1423,11 +1431,11 @@ SynthDef(\shiftX, {|in, out=0, frq=0,mult=0,rte=1|Out.ar(out, FreqShift.ar(In.ar
 		vlPE3,vlPE33,crvEP2, dA=0, dA2=0, dA3=0|
 
 
-		Out.ar(out, FreqShift.ar(In.ar(in, 1)/*.sign*/,
+		Out.ar(out, FreqShift.ar(In.ar(in, 2)/*.sign*/,
 
 			/*freq:  freq2+    In.kr( boo, 1)  +   (EnvGen.kr(Env([vlPE,vlPE2],[dur/*dcPE*/,0],crvEP),doneAction: dA)*factor2)
 */
-			freq:SinOsc.ar(1.2875/2.5).range(-1000,1000)
+			freq:LFTri.ar(1.2875/16).range(-400,400)
    ));
 	}).add;
 
@@ -1481,6 +1489,24 @@ freq         )* EnvGen.kr(Env([0,1,1,0],[0.055,dur-0.055,0],4),timeScale: tS,don
 		bp = BPF.ar(sig,freqFil+ In.kr(busMod, 1) *factor3  ,qf2 +0.26);
 
 		hp = BHiPass4.ar(sig, freqFil+ In.kr(busMod, 1),/*0.6 */ qf2 +In.kr(bus7, 1));
+
+		sig = SelectX.ar(which, [lp, bp,hp,sig]);
+
+		Out.ar(out, sig);
+	}).add;
+
+
+	SynthDef(\filterGS,{|out=0, in, busMod, bus7, which, factor3=1, rqLPF=0.5 freqFil=0, qf =0, qf2=0|
+
+		var lp, bp, hp, sig;
+
+		sig = In.ar(in,1);
+
+		lp = BLowPass4.ar(sig , freqFil+ In.kr(busMod, 1)+ MouseX.kr(40,22000) ,qf +In.kr(rqLPF));
+
+		bp = BBandPass.ar(sig,freqFil+ In.kr(busMod, 1) *factor3 + MouseX.kr(40,12000) ,qf2 );
+
+		hp = BHiPass4.ar(sig, freqFil+ In.kr(busMod, 1)+ MouseX.kr(40,22000),/*0.6 */ qf2 +In.kr(bus7, 1));
 
 		sig = SelectX.ar(which, [lp, bp,hp,sig]);
 
@@ -1840,7 +1866,11 @@ SynthDef("TriggerBufferGranular", {arg out=0, bufnum=0, in=0, thresh = 0.004, am
 		Out.ar(out, CombN.ar(In.ar(in,1),maxDel, delayT,decT))}).add;*/
 
 SynthDef(\comb, {|out=0, in ,maxDel, delayT,decT=6.1952,amp=0.09|
-		Out.ar(out, CombN.ar(In.ar(in,1),0.7744/*MouseX.kr(0.01,2)*/,MouseY.kr(0.001,0.6), decT ,amp))}).add;
+		Out.ar(out, /*CombN.ar(In.ar(in,1),0.7744/*MouseX.kr(0.01,2)*/,MouseY.kr(0.001,0.6), decT ,amp)*/
+			CombN.ar(In.ar(in,2),delaytime:
+	LFNoise1.kr(2.575).range(0.001,2)
+			/*	MouseY.kr(0.001,0.6)*/,decaytime:-0.2)
+			)}).add;
 
 
 	SynthDef(\comb2, {|out=0, in ,maxDel=0.7744, delayT,decT=6.1952,amp=0.09| // reverse for fun was 0.001,0.6)
@@ -2560,7 +2590,7 @@ s.sync;
 
 /*Pbindef(\ki,   \out, 0) ;Pbindef(\bass, \out, 0) ;
 	Pbindef(\ki,   \out, 700) ;Pbindef(\bass, \out, 700);*/
-	~kick =	Pbind(\instrument, \kick,\dur, Pseq([1/1],1),\amp,(-3/*-10.2*/),\out,0);//-3.5 - 10.5
+	~kick =	Pbind(\instrument, \kick,\dur, Pseq([1/1],1),\amp,(-3/*-10.2*/),\out,0/*~main1GToG*/);//-3.5 - 10.5
 
 	~bassShap = Pbind(\instrument, \shap, \dur,Pseq([1/1],1),\dA1,2,\out,~bassShapB, \tS, 0.39550810372374);
 //Problem overlapping
@@ -2613,7 +2643,7 @@ s.sync;
 	//HARD WIRED
 	/*~cymbal = Pbind(\instrument, \percussion,\type, Pseq([\rest,\rest,\note,\note ,\rest,\note ,\note, \rest].scramble,inf),\dur,Pseq([1/4],64 ),\carHz, 525.12070612224,\modHz,1899.3343179398,\modAmp, 0.12875 ,\amp,(-17.5),\rel,Pseq([1/16],inf),\rel2,Pseq([1/16],inf),\latch,8000,\stereoL, 0.00555, \crv1,  (-4.4), \crv1b,(-4), \mulMod, 1691,\out, ~comBusCymb);*/
 
-	~cymbal = Pbind(\instrument, \percussion,\type, Pseq([\rest,\rest,\note,\note ,\rest,\note ,\note, \rest].scramble,inf),\dur,Pseq([1/4],64 ),\carHz, 525.12070612224.rrand(0.01),\modHz,11899.3343179398.rrand(0.001),\modAmp, 0.12875.rrand(0.000001).postln ,\amp,(-19),\rel,Pseq([1/4],inf),\rel2,Pseq([1/16],inf),\latch,8000,\stereoL, 0.00555, \crv1,  (-14.4).rrand(-1), \crv1b,(-4), \mulMod, 1691,\out, ~cymbalEq);
+/*	~cymbal = Pbind(\instrument, \percussion,\type, Pseq([\rest,\rest,\note,\note ,\rest,\note ,\note, \rest].scramble,inf),\dur,Pseq([1/4],64 ),\carHz, 525.12070612224.rrand(0.01),\modHz,11899.3343179398.rrand(0.001),\modAmp, 0.12875.rrand(0.000001).postln ,\amp,(-19),\rel,Pseq([1/4],inf),\rel2,Pseq([1/16],inf),\latch,8000,\stereoL, 0.00555, \crv1,  (-14.4).rrand(-1), \crv1b,(-4), \mulMod, 1691,\out, ~cymbalEq);
 
 
 
@@ -2621,7 +2651,7 @@ s.sync;
 
 
 	//MUST BE RNDMED
-	~snare = Pbind(\instrument, \snare,\carHz, 41.2 ,\type, Pseq([\rest ,\rest,\note,\rest], 8),\atk, 0.00502929687,\rel, 0.0968,\rel2, 0.3872,\dur, Pseq([1/2], inf),\amp,(-12), \crv1,(-8),\crv2,(-7)   ,\out,~snareEQ, \atk,t.beatDur * 0.02, \atk2,Pkey(\atk),\da1,2);
+	~snare = Pbind(\instrument, \snare,\carHz, 41.2 ,\type, Pseq([\rest ,\rest,\note,\rest], 8),\atk, 0.00502929687,\rel, 0.0968,\rel2, 0.3872,\dur, Pseq([1/2], inf),\amp,(-12), \crv1,(-8),\crv2,(-7)   ,\out,~snareEQ, \atk,t.beatDur * 0.02, \atk2,Pkey(\atk),\da1,2);*/
 
 
 	~bell = Pbind(\instrument, \percussion, \dur,Pseq([4/1],1 ),\carHz, Pfunc({1050.12070612224.rrand(150)}),\modHz,Pfunc({9334.3179398.rrand(0.1)}),\modAmp,Pfunc({ 0.00875.rrand(0.0001)}) ,\amp,1,\rel,4.5544,\rel2,4.242,\stereoL, 0.00555, \crv1,  (-7.4), \crv1b,(-42), \mulMod, 901,\out, ~bellFlang,\latch,8900,\atk,0.01,\atk2,Pfunc({0.3.rrand(0.01)}));
@@ -2738,7 +2768,45 @@ Pbind( \instrument, \playBuf10, \impulse, 10 ,
 
 
 
+
+
+
+
+~eqGrp=Group.new;
+~stereoGrp=Group.after(~eqGrp);
+~recGrp2=Group.after(~stereoGrp);
+s.sync;
+
+Ppar([
+
+	/*	~bassShap,~bassZ  ,
+
+	Pbind(\instrument ,	\EQHP2,\dur, inf, \in,~bassEq, \out,0,\group, ~eqGrp, \frq, 20.6,\vol,1),
+
+	~hat2,~kick,Pbind(\instrument ,	\EQ2,\dur, inf, \in,~kickHatEq, \out,~main1GToG,\group, ~eqGrp, \val, 659.255/2, \quant,1, \gain ,(-30)),
+*/
+
+Pbind(\instrument, \snare,\carHz, 41.2 ,\atk, 0.00502929687,\rel, 0.0968,\rel2, 0.7744,\dur, Pseq([1/2], 1),\amp,1, \crv1,(-8),\crv2,(-7)   ,\out,~snareEQ, \atk,t.beatDur * 0.02, \atk2,Pkey(\atk),  \da1,0    ),
+
+
+	Pbind(\instrument, \percussion ,\dur,Pseq([1/4],1 ),\carHz, 525.12070612224.rrand(0.01),\modHz,11899.3343179398.rrand(0.001),\modAmp, 0.12875.rrand(0.000001).postln ,\amp,1,\rel,Pseq([1/4],inf),\rel2,Pseq([1/16],inf),\latch,8000,\stereoL, 0.00555, \crv1,  (-14.4).rrand(-1), \crv1b,(-4), \mulMod, 1691,\out,   ~comBusCymb).play(t),
+
+
+Pbind(\instrument,\percussion,\dur,Pseq([1/4], 1),\atk, 0,\rel,0.04840,\rel2,0.02420,\amp,1, \crv1, (-3), \crv1b, (-5), \modHz, exprand(500,10000).postln, \mulMod, rrand(100, 500).postln, \carHz, exprand(20,10000), \modAmp, 0.12875, \latch, 18500, \stereoR, 0.007,\out,~comBusHat),
+
+
+
+Pbind(\instrument,\recLoopS,\buf,~cymb,\recording,1, \in,~comBusCymb,\group,~recGrp2,\dur,inf),
+Pbind(\instrument,\recLoopS,\buf,~hat,\recording,1, \in,~comBusHat,\group,~recGrp2,\dur,inf),
+Pbind(\instrument,\recLoop,\buf,~snare,\recording,1, \in,~snareEQ,\group,~recGrp2,\dur,inf),
+/*Pbind(\instrument,\recLoop,\buf,~k2,\recording,1, \in,~main1GToG,\group,~recGrp2,\dur,inf),
+		Pbind(\instrument,\recLoop,\buf,~b3,\recording,1, \in,~bgFil,\group,~recGrp2,\dur,inf),*/
+],1).play(t);
+
+
+
 });
+
 
 
 )
@@ -2756,8 +2824,9 @@ Ppar([~hat2,~kick,Pbind(\instrument ,	\EQ2,\dur, inf, \in,~kickHatEq, \out,0,\gr
 )
 
 ~kick.play
-~k2.play
-
+~k2.plot
+~b3.play
+~hat.plot
 
 (//BASS ALONE
 Ppar([
@@ -2767,7 +2836,7 @@ Ppar([
 
 
 
-	~bassShap, Ppar([/*~hat2,~kick,*/~bassZ],1),
+	~bassShap,           Ppar([/*~hat2,~kick,*/~bassZ],1),
 
 	Pbind(\instrument ,	\EQHP2,\dur, inf, \in,~bassEq, \out,0,\group, ~eqGrp, \frq, 20.6,\vol,1),
 
@@ -2783,6 +2852,8 @@ Pbind(\instrument, \playBuf, \impulse, 0.003 ,\dur,    Pseq([1/1],inf), \tS,  0.
 Pbind(\instrument, \playBuf, \impulse, 0.003 ,\dur,    Pseq([1/1],inf), \tS,  0.39550810372374,\buf,~b3,\out, 0,\loopy,0,\start,0,\tS, 0.39550810372374).play(t)
 
 ~kb2.play
+
+
 (
 Ppar([
 
@@ -2807,6 +2878,10 @@ Pbind(\instrument, \pan2, \in,~kbToPan2,\out,0 ,\group,~stereoGrp,\dur, inf),
 
 
 )
+
+({SinOsc.ar}.play)
+
+
 
 ~daKb =Pbind(\instrument, \playBufS, \dur,  Pseq([1/1],inf), \tS,  0.39550810372374,\buf,~kb2);
 
