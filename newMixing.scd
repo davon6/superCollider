@@ -115,9 +115,9 @@
 ~mix19= Synth(\limiterStoMixer,[\c19,1,\in, ~limitSquelch, \gain,44,\out,~stereoBus3b],~limitGrp4);
 // ~mix19.set(\gain,44)
 
-~mix23= Synth(\limiterStoMixer,[\c23,1,\in, ~limitCymb,\gain,54,\out,~toKbGate/*~comFuzz22*/],~limitGrp);
+~mix23= Synth(\limiterStoMixer,[\c23,1,\in, ~limitCymb,\gain,54,\out,~comFuzz22],~limitGrp);
 // ~mix23.set(\gain,74)
-~mix24= Synth(\limiterStoMixer,[\c24,1,\in, ~limitHat,\gain,45,\out,~toKbGate/*~comFuzz22*/],~limitGrp);
+~mix24= Synth(\limiterStoMixer,[\c24,1,\in, ~limitHat,\gain,45,\out,~comFuzz22],~limitGrp);
 // ~mix24.set(\gain,68)
 
 ~mix25= Synth(\limiterToMixer,[\c25,1,\in, ~snareLimit,\gain,35,\out,~toPan2],~limitGrp);

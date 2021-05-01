@@ -666,6 +666,8 @@ s.sync;
 	~part2RiLimit=  Bus.audio(s,2);
 	~part2RiStereo=  Bus.audio(s,2);
 
+	~fusible10=  Bus.audio(s,10);
+
 
 	~gateBou=  Bus.audio(s,1);
 	s.sync;
@@ -1589,6 +1591,22 @@ timeScale: tS,	doneAction:2);
 }).add;
 
 
+	SynthDef(\gateSD,{|in, out=0,out2, vlAtk=0, vlDec=1,vlSub=1,vlSub2=1 vlRel=0, atkT=0, decT=1, subsT=0, relT=0, atckC=0, decC=0, relC=0, bus1, bus2, dur,relSu=0,tS =1|
+	var env;
+
+	env =   In.ar(in, 10) *    EnvGen.kr(Env(
+			[vlAtk,vlDec                  ,vlSub ,vlSub2,vlRel,0],
+			[dur * atkT ,dur * decT  -relSu  , dur * subsT-relSu,dur* relT],
+			[atckC,decC ,0     ,relC]),
+
+timeScale: tS,	doneAction:2);
+
+		Out.ar(out, env);
+
+		Out.ar(out2, env);
+}).add;
+
+
 	SynthDef(\gate2,{|in, out=0, vlAtk=0, vlDec=1,vlSub=1,vlSub2=1 vlRel=0, atkT=0, decT=1, subsT=0, relT=0, atckC=0, decC=0, relC=0, bus1, bus2, dur,relSu=0,tS =1|
 	var env;
 
@@ -1940,6 +1958,15 @@ SynthDef(\comb, {|out=0, in ,maxDel, delayT,decT=6.1952,amp=0.09|
 		frq),frq),frq),frq),frq),frq),frq),frq)* vol)};).add;
 
 
+		SynthDef(\EQHP2Dyna, {|out=0, in, val, quant, gain,frq=100, vol =0.05, val2,quant2, gain2,valD,quantD,ctrl| Out.ar(out,
+
+		HPF.ar(HPF.ar(HPF.ar(HPF.ar(HPF.ar(HPF.ar(HPF.ar(HPF.ar(
+			BPeakEQ.ar(
+		BPeakEQ.ar(	BPeakEQ.ar(In.ar(in, 2),val,quant, gain),val2,quant2, gain2)
+,valD,quantD, Amplitude.ar(In.ar(ctrl)).range(-2,-18)/*.poll*/),
+		frq),frq),frq),frq),frq),frq),frq),frq)* vol)};).add;
+
+
 SynthDef(\EQHP96, {|out=0, in, val, quant, gain,frq=100, vol =0.05, val2,quant2, gain2,val3,shelf, gain3| Out.ar(out,
 
 		HPF.ar(HPF.ar(HPF.ar(HPF.ar(HPF.ar(HPF.ar(HPF.ar(HPF.ar(BHiShelf.ar(
@@ -2010,7 +2037,9 @@ SynthDef(\EQHP10, {|out=0, in, val, quant, gain, val2, quant2, gain2 frq=100, vo
 	}).add;
 
 
-	SynthDef(\playBuf10NToMixer ,{|out = 0,start, trig= 0.002, dur, buf, dA=2, tS=1, loopy=1,vl=1,in,c1=0,c2=0,c3=0,c4=0,c5=0,c6 =0,c7 =0,c8 =0,c9 =0,c10 =0,c11 =0,c12 =0,c13 =0,c14 =0,c15 =0,c16=0,c17=0,c18=0,c19=0,c20 =0,c21=0 ,name|Out.ar(~fusible,PlayBuf.ar(10,buf,trigger:
+	SynthDef(\playBuf10NToMixer ,{|out = 0,start, trig= 0.002, dur, buf, dA=2, tS=1, loopy=1,vl=1,in,c1=0,c2=0,c3=0,c4=0,c5=0,c6 =0,c7 =0,c8 =0,c9 =0,c10 =0,c11 =0,c12 =0,c13 =0,c14 =0,c15 =0,c16=0,c17=0,c18=0,c19=0,c20 =0,c21=0 ,name|
+
+		Out.ar(~fusible,PlayBuf.ar(10,buf,trigger:
 		trig/*Dust.kr(4.0)*/,startPos: start,loop: loopy/*,doneAction: dA*/)* EnvGen.kr(Env([0,vl,vl,0],[0,dur,0]),timeScale: tS,doneAction: 2));
 
 	Out.ar(out,In.ar( in, 10));
@@ -2018,7 +2047,6 @@ SynthDef(\EQHP10, {|out=0, in, val, quant, gain, val2, quant2, gain2 frq=100, vo
 
 	Out.ar(0,PlayBuf.ar(10,buf,trigger:
 		trig/*Dust.kr(4.0)*/,startPos: start,loop: loopy/*,doneAction: dA*/)* [0,0,c2,c3,c4,c5,c6,c7,c8,c9,c10,c11,c12,c13,c14,c15,c16,c17,c18,c19,c20,c21]* EnvGen.kr(Env([0,vl,vl,0],[0,dur,0]),timeScale: tS,doneAction: 2));
-
 
 /*	Out.ar(0,RMS.ar(In.ar( in, 10)).ampdb.round(0.1).poll(label:name.poll )* [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1]);*/
 	}).add;

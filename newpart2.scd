@@ -150,17 +150,17 @@ Pseq([ Pseq([8/1],1)],1)  ,Pseq([ Pseq([4/1],1)],1)   ,Pseq([Pseq([16/1],1) ,Pse
 
 Prand([
 
-	Pbind(\instrument,\gateS, \dur, Prand([/* Pseq([4/1],4),Pseq([1/1],4),*/ Pseq([1.5/1],1), Pseq([3/1],1),/*Pseq([1/3],1) ,*/Pseq([1/1],1),
+	Pbind(\instrument,\gateSD, \dur, Prand([/* Pseq([4/1],4),Pseq([1/1],4),*/ Pseq([1.5/1],1), Pseq([3/1],1),/*Pseq([1/3],1) ,*/Pseq([1/1],1),
 		/*Pseq([4/1],1)*/],1),
 		\in,  Prand([~toGate10,~toGate102], inf)  ,\out ,~absoFinalGate2/*Pwrand([~eqBus10,
 
 		~delayBus2,~reverbSquelch],[16,1,1].normalizeSum,inf)*/
 
-	,  \group, ~gateGrp6,\tS, 0.39550810372374),
+	,  \group, ~gateGrp6,\tS, 0.39550810372374,\out2, ~fusible10),
 
 
 		Prand([
-		Pbind(\instrument,\gateS, \dur,Pseq([1/8],8),\type,
+		Pbind(\instrument,\gateSD, \dur,Pseq([1/8],8),\type,
 			Pseq([\note, \rest,\note, \rest,\note, \note,\note,\note],inf),
 		\in,  Pxrand([
 				Pseq([~toGate10],8),
@@ -168,16 +168,16 @@ Prand([
 
 			], inf)  ,\out ,~absoFinalGate2/*Pwrand([~eqBus10,
 
-				Pseq([~delayBus2],8)],[4,1].normalizeSum,inf)*/ ,\group, ~gateGrp6,\tS, 0.39550810372374),
+				Pseq([~delayBus2],8)],[4,1].normalizeSum,inf)*/ ,\group, ~gateGrp6,\tS, 0.39550810372374,\out2, ~fusible10),
 
 
-			Pbind(\instrument,\gateS, \dur,Pseq([1/2],2),\in,  Pxrand([~toGate10,~toGate102], inf)  ,\out ,~absoFinalGate2 ,\group, ~gateGrp6,\tS, 0.39550810372374),
+			Pbind(\instrument,\gateSD, \dur,Pseq([1/2],2),\in,  Pxrand([~toGate10,~toGate102], inf)  ,\out ,~absoFinalGate2 ,\group, ~gateGrp6,\tS, 0.39550810372374,\out2, ~fusible10),
 				],1),
 	],inf),
 
 
 
-Pbind(\instrument,\gateS, \dur,Pseq([256/1],inf),\in,  Pseq([ ~absoFinalGate2,~absoFinalGate ].scramble, inf)  ,\out ,0 ,\group, ~gateGrp7,\tS, 0.39550810372374),
+Pbind(\instrument,\gateS, \dur,Pseq([256/1],inf),\in,  Pseq([ ~absoFinalGate2,~absoFinalGate ].scramble, inf)  ,\out ,0 ,\group, ~gateGrp7,\tS, 0.39550810372374,\out2, ~fusible10),
 
 
 	],1).play(t)
