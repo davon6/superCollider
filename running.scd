@@ -130,6 +130,8 @@ s.sync;
 
 
 	~lpPrec = Buffer.alloc(s, s.sampleRate *t.beatDur*64,1);
+
+	~lpPrec2 = Buffer.alloc(s, s.sampleRate *t.beatDur*64,1);
 	/*~lpPrec = Buffer.alloc(s, s.sampleRate *t.beatDur*64,2);
 	~lpPrec = Buffer.alloc(s, s.sampleRate *t.beatDur*64,10);*/
 
@@ -234,6 +236,8 @@ s.sync;
 	~part2ToPhas = Bus.audio(s,1);
 	~part2ToG= Bus.audio(s,2);
 	~part2ToEq = Bus.audio(s,1);
+
+	~snareComp= Bus.audio(s,1);
 
 	//WATCH OUT MIGHT BE NEEDED
 
@@ -354,7 +358,7 @@ s.sync;
 	~eqBg = Bus.audio(s,1);
 	~outDisto = Bus.audio(s,3);
 
-	~phaseBus2= Bus.audio(s,1);/*~distoPerch2= Bus.audio(s,1);*/~eqPerch2= Bus.audio(s,1);~revPerch2= Bus.audio(s,1);~comPerch2= Bus.audio(s,2);~limitPerch2= Bus.audio(s,2);
+	/*~phaseBus2= Bus.audio(s,1);/*~distoPerch2= Bus.audio(s,1);*/~eqPerch2= Bus.audio(s,1);~revPerch2= Bus.audio(s,1);~comPerch2= Bus.audio(s,2);~limitPerch2= Bus.audio(s,2);
 	~phaseBus3= Bus.audio(s,1);/*~distoPerch3= Bus.audio(s,1);*/~eqPerch3= Bus.audio(s,1);~revPerch3= Bus.audio(s,1);~comPerch3= Bus.audio(s,2);~limitPerch3= Bus.audio(s,2);
 	~phaseBus4= Bus.audio(s,1);/*~distoPerch4= Bus.audio(s,1);*/~eqPerch4= Bus.audio(s,1);~revPerch4= Bus.audio(s,1);~comPerch4= Bus.audio(s,2);~limitPerch4= Bus.audio(s,2);
 	~phaseBus5= Bus.audio(s,1);/*~distoPerch5= Bus.audio(s,1);*/~eqPerch5= Bus.audio(s,1);~revPerch5= Bus.audio(s,1);~comPerch5= Bus.audio(s,2);~limitPerch5= Bus.audio(s,2);
@@ -364,7 +368,7 @@ s.sync;
 ~limitPerch9= Bus.audio(s,2);
 ~limitPerch10= Bus.audio(s,2);
 ~limitPerch11= Bus.audio(s,2);
-~limitPerch12= Bus.audio(s,2);
+~limitPerch12= Bus.audio(s,2);*/
 
 	~bellFlang2= Bus.audio(s,2);
 	~flanToDisto2= Bus.audio(s,2);
@@ -384,6 +388,7 @@ s.sync;
 
 	~absoFinalGate= Bus.audio(s,10);
 	~absoFinalGate2= Bus.audio(s,10);
+	~absoFinalGate3= Bus.audio(s,10);
 
 
 	~riToEq= Bus.audio(s,2);
@@ -1488,7 +1493,7 @@ freq         )* EnvGen.kr(Env([0,1,1,0],[0.055,dur-0.055,0],4),timeScale: tS,don
 
 		bp = BPF.ar(sig,freqFil+ In.kr(busMod, 1) *factor3  ,qf2 +0.26);
 
-		hp = BHiPass4.ar(sig, freqFil+ In.kr(busMod, 1),/*0.6 */ qf2 +In.kr(bus7, 1));
+		hp = BHiPass4.ar(sig, freqFil+ In.kr(busMod, 1)+ MouseX.kr(40,22000),/*0.6 */ qf2 +In.kr(bus7, 1));
 
 		sig = SelectX.ar(which, [lp, bp,hp,sig]);
 

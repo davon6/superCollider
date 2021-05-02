@@ -63,13 +63,18 @@ Ppar([
 	/*Pbind(\instrument,\gran,\dur,Pseq([ Pseq([1/4],24)  ,   Pseq([1/2],24)   ].scramble,inf)  ,\amp, 1,\buf,~buf,\out,~phaseBus,\gate, 1,\duration,Pkey(\dur),\impulse,0.003,\pos, ~perc1, \tS, 0.39550810372374 ,
 \vlSub,  ~pSub , \vlSub2,Pkey(\vlSub), \atkT,~pAtkT,\decT, ~pDecT ,	\subsT, ~pSubT , \relT,~pRelT,\atckC,~pAtkC,\decC,~pDecC,\relC,~pRelC,\vlAtk , ~pvlAtk ,  \vlRel,  Pkey(\vlAtk)),*/
 
-	Pbind(\instrument,\playBufXG,\dur,      Pseq([    Pseq([1/16],224) ,    Pseq([2/1],1),
+	Pbind(\instrument,\playBufXG,\dur,    Pseq([   /*   Pseq([1/16],224) ,    Pseq([2/1],1),
 
-		 Pseq([1/16],896) ,    Pseq([8/1],1)
+		 Pseq([1/16],896) ,    Pseq([8/1],1)*/
 
-
-	],inf)          /*Pseq([ Pseq([1/4],24)  ,   Pseq([1/2],24)   ].scramble,inf) */ ,\amp, 1,\buf,~bufSnoopy,\out,~phaseBus,\gate, 1,\duration,Pkey(\dur),\impulse,0.003,\start,~main1 /*~perc1*/, \tS, 0.39550810372374 ,
+/* Pseq([1/4],24) ,*//*Pseq([3/1],1) */Pseq([4.75],1)
+	],inf)          /*Pseq([ Pseq([1/4],24)  ,   Pseq([1/2],24)   ].scramble,inf) */ ,\amp, 1,\buf,~buf,\out,~gateMelo/*~phaseBus*/,\gate, 1,\duration,Pkey(\dur),\impulse,0.003,\start,~main1 /*~perc1*/, \tS, 0.39550810372374 ,
 	\vlSub,  ~pSub , \vlSub2,Pkey(\vlSub), \atkT,~pAtkT,\decT, ~pDecT ,	\subsT, ~pSubT , \relT,~pRelT,\atckC,~pAtkC,\decC,~pDecC,\relC,~pRelC,\vlAtk , ~pvlAtk ,  \vlRel,  Pkey(\vlAtk),\loopy,0),
+
+
+
+
+
 
 
 /*Pbind(\instrument,\gran,\dur,Pseq([ Pseq([1/4],24)  ,   Pseq([1/2],24)   ].scramble,inf)  ,\amp, 1,\buf,~buf,\out,~phaseBus2,\gate, 1,\duration,Pkey(\dur),\impulse,0.003,\pos, ~perc2, \tS, 0.39550810372374 ,
@@ -77,7 +82,7 @@ Ppar([
 
 
 Pbind(\instrument,\playBufXG,\dur,Pseq([ Pseq([1/4],24)  ,   Pseq([1/2],24)   ].scramble,inf)  ,\amp, 1,\buf,~buf,\out,~phaseBus2,\gate, 1,\duration,Pkey(\dur),\impulse,0.003,\start, ~perc2, \tS, 0.39550810372374 ,
-	\vlSub,  ~pSub , \vlSub2,Pkey(\vlSub), \atkT,~pAtkT,\decT, ~pDecT ,	\subsT, ~pSubT , \relT,~pRelT,\atckC,~pAtkC,\decC,~pDecC,\relC,~pRelC,\vlAtk , ~pvlAtk ,  \vlRel,  Pkey(\vlAtk),\loopy,0),
+	\vlSub,  ~pSub*3.4 , \vlSub2,Pkey(\vlSub), \atkT,0/*~pAtkT/16*/,\decT, ~pDecT ,	\subsT, ~pSubT , \relT,~pRelT,\atckC,~pAtkC,\decC,~pDecC,\relC,~pRelC,\vlAtk , ~pvlAtk ,  \vlRel,  Pkey(\vlAtk),\loopy,0),
 
 
 /*Pbind(\instrument,\gran,\dur,Pseq([ Pseq([1/4],24)  ,   Pseq([1/2],24)   ].scramble,inf)  ,\amp, 1,\buf,~buf,\out,~phaseBus3,\gate, 1,\duration,Pkey(\dur),\impulse,0.003,\pos, ~perc3, \tS, 0.39550810372374 ,
@@ -126,7 +131,16 @@ Pbind(\instrument,\playBufXG,\dur,Pseq([ Pseq([1/4],24)  ,   Pseq([1/2],24)   ].
 
 	Pbind(\instrument, \phaser,\in,~phaseBus,\dur ,9999/*Pseq([24/1],inf)*/,\value, ~pHVal,\amp,1,\decT,~pHdecT,\out,~gateMelo, \group,~phaserGrp,\tS, 0.39550810372374 ,),
 
-	Pbind(\instrument, \filterG, \dur, inf,\in,~gateMelo, \which,0,\out,0/*~eqPerch*/,\group,~distoGrp),
+
+	/*Pbind(\instrument, \phaser,\in,~phaseBus,\dur ,9999,\value,~pHVal2,\amp,1,\decT,~pHdecT2,\out,~gateMelo, \group,~phaserGrp,\tS, 0.39550810372374 ,),*/
+
+
+	Pbind(\instrument, \filterG, \dur, inf,\in,~gateMelo, \which,0,\out,0/*~eqPerch*/,\group,~distoGrp
+		,\qf ,0.5, \qf2,0.2
+	),
+
+
+
 			/*Pbind(\instrument, \disto, \dur, inf, \in, ~distoPerch , \out,~eqPerch,\group, ~distoGrp),*/
 	Pbind(\instrument,\EQHP, \in, ~eqPerch , \out, ~revPerch ,\frq, 100, \dur,inf, \group, ~eqGrp0),
 	Pbindf( Prand([~quickFix, ~rShort]),\dur,inf, \in,~revPerch  , \out,~comPerch ,\group,~revGrp),
@@ -204,4 +218,4 @@ Pbind(\instrument,\playBufXG,\dur,Pseq([ Pseq([1/4],24)  ,   Pseq([1/2],24)   ].
 ],1) )
 ~lpPrec.play
 
-x = Synth(\recLoop,[buf:~lpPrec,\recording,1, \in,0],~recGrp);
+x = Synth(\recLoop,[buf:~lpPrec2,\recording,1, \in,0],~recGrp);
