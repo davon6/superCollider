@@ -16,6 +16,7 @@ s.meter
 
 
 (
+~notes = Array.newClear(128);
 ~dispatchGrp= Group.new;
 ~synthGrp = Group.after(~dispatchGrp);
 ~combGrp = Group.after(~synthGrp);

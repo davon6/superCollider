@@ -56,7 +56,7 @@ Ppar([
 ~combGrp= Group.new
 (
 Ppar([
-Pbind(\instrument, \playBufS,\dur  ,Pseq([2/1],inf),\buf,~fkAr,\tS,  0.39550810372374,\start, ~fkAr.numFrames.rrand(140000)-14000,\out, ~limitBus1),
+	Pbind(\instrument, \playBufS,\dur  ,Pseq([2/1],inf),\buf,~fkAr,\tS,  0.39550810372374,\start,( ~fkAr.numFrames.rrand(140000)-14000).postln,\out, ~limitBus1),
 
 	~daKb,
 

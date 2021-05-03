@@ -358,7 +358,9 @@ s.sync;
 	~eqBg = Bus.audio(s,1);
 	~outDisto = Bus.audio(s,3);
 
-	/*~phaseBus2= Bus.audio(s,1);/*~distoPerch2= Bus.audio(s,1);*/~eqPerch2= Bus.audio(s,1);~revPerch2= Bus.audio(s,1);~comPerch2= Bus.audio(s,2);~limitPerch2= Bus.audio(s,2);
+	~distoPerch2= Bus.audio(s,2);~eqPerch2= Bus.audio(s,2);~revPerch2= Bus.audio(s,2);~comPerch2= Bus.audio(s,2);~limitPerch2= Bus.audio(s,2);
+
+	/*~phaseBus2= Bus.audio(s,1);/*
 	~phaseBus3= Bus.audio(s,1);/*~distoPerch3= Bus.audio(s,1);*/~eqPerch3= Bus.audio(s,1);~revPerch3= Bus.audio(s,1);~comPerch3= Bus.audio(s,2);~limitPerch3= Bus.audio(s,2);
 	~phaseBus4= Bus.audio(s,1);/*~distoPerch4= Bus.audio(s,1);*/~eqPerch4= Bus.audio(s,1);~revPerch4= Bus.audio(s,1);~comPerch4= Bus.audio(s,2);~limitPerch4= Bus.audio(s,2);
 	~phaseBus5= Bus.audio(s,1);/*~distoPerch5= Bus.audio(s,1);*/~eqPerch5= Bus.audio(s,1);~revPerch5= Bus.audio(s,1);~comPerch5= Bus.audio(s,2);~limitPerch5= Bus.audio(s,2);
@@ -368,7 +370,7 @@ s.sync;
 ~limitPerch9= Bus.audio(s,2);
 ~limitPerch10= Bus.audio(s,2);
 ~limitPerch11= Bus.audio(s,2);
-~limitPerch12= Bus.audio(s,2);*/
+~limitPerch12= Bus.audio(s,2);*/*/
 
 	~bellFlang2= Bus.audio(s,2);
 	~flanToDisto2= Bus.audio(s,2);
@@ -1067,8 +1069,8 @@ SynthDef(\envSli, {|out, val1=20, val2=20000,  dur,tS=1, crv =7|Out.kr(out,
 
 		envF = EnvGen.kr(
 			Env(
-				[0,1080,20,0],
-				[atk,rel/4,rel2],
+				[0,1280,20,0],
+				[atk,rel/2/*/4*/,rel2],
 				[atkcrv,relcrv3,relcrv2]
 			),
 			doneAction:2
@@ -1998,7 +2000,7 @@ SynthDef(\comb, {|out=0, in ,maxDel, delayT,decT=6.1952,amp=0.09|
 		HPF.ar(HPF.ar(HPF.ar(HPF.ar(HPF.ar(HPF.ar(HPF.ar(HPF.ar(
 			BPeakEQ.ar(
 		BPeakEQ.ar(	BPeakEQ.ar(In.ar(in, 2),val,quant, gain),val2,quant2, gain2)
-,valD,quantD, Amplitude.ar(In.ar(ctrl)).range(-2,-18)/*.poll*/),
+,valD,quantD, Amplitude.ar(In.ar(ctrl,10)).range(-2,-18)/*.poll*/),
 		frq),frq),frq),frq),frq),frq),frq),frq)* vol)};).add;
 
 
@@ -2102,6 +2104,17 @@ SynthDef(\EQHP10, {|out=0, in, val, quant, gain, val2, quant2, gain2 frq=100, vo
 		Out.ar(out,
 			Splay.arFill(10,
 				{ In.ar(in, 1)}
+				,spread,level,center)* EnvGen.kr(Env([0,1,1,0],[atkT,dur,0],[crvA,0]),timeScale: tS,doneAction: 2)
+			//EnvGen.kr(Env.step([1],[dur]),doneAction: 2)
+		);
+	}).add;
+
+
+	SynthDef(\stereoW,{|out=0, in, spread=0, level=1, center=0.0,dur,atkT=0,crvA=0,tS=1|
+
+		Out.ar(out,
+			Splay.arFill(2,
+				{ In.ar(in, 2)}
 				,spread,level,center)* EnvGen.kr(Env([0,1,1,0],[atkT,dur,0],[crvA,0]),timeScale: tS,doneAction: 2)
 			//EnvGen.kr(Env.step([1],[dur]),doneAction: 2)
 		);
@@ -2856,7 +2869,7 @@ Ppar([
 Pbind(\instrument, \playBuf, \impulse, 0.003 ,\dur,    Pseq([1/1],inf), \tS,  0.39550810372374,\buf,~k2,\out, 0,\loopy,0,\start,0,\tS, 0.39550810372374).play(t)
 Pbind(\instrument, \playBuf, \impulse, 0.003 ,\dur,    Pseq([1/1],inf), \tS,  0.39550810372374,\buf,~b3,\out, 0,\loopy,0,\start,0,\tS, 0.39550810372374).play(t)
 
-~kb2.play
+~kb2.plot
 
 
 (
