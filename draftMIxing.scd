@@ -1,4 +1,4 @@
-~mixa = Synth(\gate2, [\in,  ~toKbGate,\dur, 9999] ,~limitGrp4);
+~mixa = Synth(\gate2, [\in,  ~stereoBus23,\dur, 9999] ,~limitGrp4);
 
 ~mixa = Synth(\gateS, [\in, ~absoFinalGate,\dur, 9999] ,~limitGrp4);
 
@@ -10,7 +10,8 @@
 
 ~mixa.set(\in,~finGran);
 
-
+~kb=Pbind(\instrument, \playBufS, \dur,  Pseq([1/1],inf), \tS,  0.39550810372374,\buf,~kb2).play(t)
+~kb.stop
 
 
 (
