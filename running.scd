@@ -209,6 +209,8 @@ s.sync;
 	~revBus2= Bus.audio(s,1);
 	~comBus1= Bus.audio(s,2);
 	~comBus2= Bus.audio(s,2);
+	~comBus3= Bus.audio(s,2);
+	~comBus5= Bus.audio(s,2);
 	~limitBus1= Bus.audio(s,2);
 	~limitBus2= Bus.audio(s,2);
 	~sterBus1= Bus.audio(s,2);
@@ -274,6 +276,7 @@ s.sync;
 	~phaseBus = Bus.audio(s,1);
 	~delToStereo= Bus.audio(s,2);
 	~bangLimit= Bus.audio(s,10);
+	~slideBusToStereo= Bus.audio(s,2);
 
 	~bgBus = Bus.audio(s,2);
 	~part2Slide2= Bus.audio(s,1);
@@ -934,7 +937,7 @@ LFNoise0.kr(~hz1beat).range(0.1,0.0)/*,0.02)*/
 
 		/*SinOsc.kr(MouseY.kr(0.3,20.6)).range(0,MouseX.kr(0.2,1) )*/
 
-	Osc.ar(~b.bufnum, LFNoise0.kr(1.2875).range(0.08046875,0.321875) )/*MouseY.kr(0.3,3.23888))*/.range(-0.5,1)
+	Osc.ar(~b.bufnum, LFNoise0.kr(1.2875).range(0.08046875,2.575) )/*MouseY.kr(0.3,3.23888))*/.range(0.6,1)
 
 		* EnvGen.kr(Env.step([1,1],[dur,0]),timeScale: tS,doneAction: 2)
 	)}).add;
