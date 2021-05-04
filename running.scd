@@ -187,6 +187,13 @@ s.sync;
 	~church =	Pbind(\instrument,\reverb, \dur,inf,\roomsize, 80, \revtime, 4.85, \damping, 0.41, \inputbw, 0.19, \drylevel, -3, \earlylevel, -9, \taillevel, -11 );
 
 
+
+	~quickFi =[\roomsize, 40, \revtime, 4, \damping, 0.9, \inputbw, 0.75, \drylevel, -0, \earlylevel, -22, \taillevel, -28];
+	~rShor = [\roomsize, 41, \revtime, Pseq([1/4],inf), \damping, 0.81, \inputbw, 0.7, \drylevel, -0, \earlylevel, -15, \taillevel, -12];
+	~rLon =	[\roomsize, 41, \revtime, Pseq([1/1],inf), \damping, 0.31, \inputbw, 0.7, \drylevel, -0, \earlylevel, -15, \taillevel, -9];
+	~churc =[\roomsize, 80, \revtime, 4.85, \damping, 0.41, \inputbw, 0.19, \drylevel, -3, \earlylevel, -9, \taillevel, -11 ];
+
+	~revRnd = [~quickFi,~rShor,~rLon];
 ~revL = [~quickFix, ~rShort, ~rLong];
 
 	~dispatchBus = Bus.audio(s,1);
@@ -215,7 +222,7 @@ s.sync;
 	~limitBus2= Bus.audio(s,2);
 	~sterBus1= Bus.audio(s,2);
 	~sterBus2= Bus.audio(s,2);
-	~toLim = Bus.audio(s,1);
+	~toLim = Bus.audio(s,2);
 	~to4bar= Bus.audio(s,2);
 
 	~toStereoRise = Bus.audio(s,1);
@@ -2600,7 +2607,7 @@ SynthDef(\sequ,{|value, dur, in=0, out=0, vlAtk=0, vlDec=1,vlSub=1,vlSub2=1, vlR
 
 	SynthDef(\lim,{|out=0,ml=0.1|Out.ar(out,Balance.ar(In.ar(~outTolimit),SinOsc.ar(mul: ml)))}).add;
 
-	SynthDef(\lim2,{|out=0,ml=0.2,in|Out.ar(out,Balance.ar(In.ar(in,1),SinOsc.ar(mul: ml)))}).add;
+	SynthDef(\lim2,{|out=0,ml=0.2,in|Out.ar(out,Balance.ar(In.ar(in,2),SinOsc.ar(mul: ml)))}).add;
 
 	SynthDef(\lim10,{|out=0,ml=0.2,in|Out.ar(out,Balance.ar(In.ar(in,10),SinOsc.ar(mul: ml)))}).add;
 
