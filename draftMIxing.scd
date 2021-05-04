@@ -1,4 +1,4 @@
-~mixa = Synth(\gate2, [\in,  ~stereoBus23,\dur, 9999] ,~limitGrp4);
+~mixa = Synth(\gate2, [\in,  ~no2ToStereo,\dur, 9999] ,~limitGrp4);
 
 ~mixa = Synth(\gateS, [\in, ~absoFinalGate,\dur, 9999] ,~limitGrp4);
 

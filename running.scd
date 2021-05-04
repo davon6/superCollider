@@ -222,6 +222,8 @@ s.sync;
 	~limitBus2= Bus.audio(s,2);
 	~sterBus1= Bus.audio(s,2);
 	~sterBus2= Bus.audio(s,2);
+	~sterBus5= Bus.audio(s,2);
+	~sterBus6= Bus.audio(s,2);
 	~toLim = Bus.audio(s,2);
 	~to4bar= Bus.audio(s,2);
 
@@ -332,6 +334,7 @@ s.sync;
 	~bgStereo = Bus.audio(s,1);
 	/*~dispatchBg = Bus.audio(s,2);*/
 	~no2= Bus.audio(s,10);
+	~no2Eq= Bus.audio(s,1);
 
 	~part2Slide= Bus.audio(s,1);
 	~part2SEq= Bus.audio(s,1);
@@ -474,7 +477,7 @@ s.sync;
 	~stereoBus1 = Bus.audio(s,2);
 	~stereoBus2 = Bus.audio(s,2);
 	~stereoBus3 = Bus.audio(s,2);
-	~stereoBus4 = Bus.audio(s,1);
+	~stereoBus4 = Bus.audio(s,2);
 
 	/*~stereoCymb = Bus.audio(s,1);
 	~stereoHat = Bus.audio(s,1);
@@ -511,6 +514,12 @@ s.sync;
 	~riTriptoComp = Bus.audio(s, 2);
 	~riTriptoLimit = Bus.audio(s, 2);
 	~riTriptoStereo = Bus.audio(s, 2);
+
+
+	~noiseToMixA= Bus.audio(s, 2);
+	~noiseToMixB= Bus.audio(s, 2);
+	~noiseToMixC= Bus.audio(s, 2);
+	~noiseToMixD= Bus.audio(s, 2);
 
 	~vocalBus= Bus.audio(s,1);
 	~vocToEq = Bus.audio(s,1);
@@ -551,6 +560,7 @@ s.sync;
 	~comPerch=  Bus.audio(s,2);
 	~limitPerch=  Bus.audio(s,2);
 	~stereoPerch=  Bus.audio(s,2);
+	~stereoPerch2=  Bus.audio(s,2);
 
 	~toGate10 =  Bus.audio(s,10);
 	~toGate102  =  Bus.audio(s,10);
@@ -1534,7 +1544,7 @@ freq         )* EnvGen.kr(Env([0,1,1,0],[0.055,dur-0.055,0],4),timeScale: tS,don
 
 		var lp, bp, hp, sig;
 
-		sig = In.ar(in,1);
+		sig = In.ar(in,2);
 
 		lp = BLowPass4.ar(sig , freqFil+ In.kr(busMod, 1) ,qf +In.kr(rqLPF));
 
@@ -1997,10 +2007,10 @@ SynthDef(\comb, {|out=0, in ,maxDel, delayT,decT=6.1952,amp=0.09|
 
 
 
-	SynthDef(\EQHP2, {|out=0, in, val, quant, gain,frq=100, vol =0.05, val2,quant2, gain2| Out.ar(out,
+	SynthDef(\EQHP2, {|out=0, in, val, quant, gain,frq=100, vol =0.05, val2,quant2, gain2,val3,shelf, gain3| Out.ar(out,
 
-		HPF.ar(HPF.ar(HPF.ar(HPF.ar(HPF.ar(HPF.ar(HPF.ar(HPF.ar(
-		BPeakEQ.ar(	BPeakEQ.ar(In.ar(in, 2),val,quant, gain),val2,quant2, gain2),
+		HPF.ar(HPF.ar(HPF.ar(HPF.ar(HPF.ar(HPF.ar(HPF.ar(HPF.ar(BHiShelf.ar(
+		BPeakEQ.ar(	BPeakEQ.ar(In.ar(in, 2),val,quant, gain),val2,quant2, gain2),val3,shelf, gain3),
 
 		frq),frq),frq),frq),frq),frq),frq),frq)* vol)};).add;
 
@@ -2014,10 +2024,10 @@ SynthDef(\comb, {|out=0, in ,maxDel, delayT,decT=6.1952,amp=0.09|
 		frq),frq),frq),frq),frq),frq),frq),frq)* vol)};).add;
 
 
-SynthDef(\EQHP96, {|out=0, in, val, quant, gain,frq=100, vol =0.05, val2,quant2, gain2,val3,shelf, gain3| Out.ar(out,
+SynthDef(\EQHP96, {|out=0, in, val, quant, gain,frq=100, vol =0.05, val2,quant2, gain2,val3,shelf, gain3,val4,quant4, gain4| Out.ar(out,
 
-		HPF.ar(HPF.ar(HPF.ar(HPF.ar(HPF.ar(HPF.ar(HPF.ar(HPF.ar(BHiShelf.ar(
-			BPeakEQ.ar(	BPeakEQ.ar(In.ar(in, 1),val,quant, gain),val2,quant2, gain2),val3,shelf, gain3),
+		HPF.ar(HPF.ar(HPF.ar(HPF.ar(HPF.ar(HPF.ar(HPF.ar(HPF.ar(	BPeakEQ.ar(	BHiShelf.ar(
+			BPeakEQ.ar(	BPeakEQ.ar(In.ar(in, 1),val,quant, gain),val2,quant2, gain2),val3,shelf, gain3),val4,quant4, gain4),
 
 		frq),frq),frq),frq),frq),frq),frq),frq)* vol)};).add;
 
@@ -2196,7 +2206,7 @@ SynthDef(\EQHP10, {|out=0, in, val, quant, gain, val2, quant2, gain2 frq=100, vo
 
 	SynthDef(\comp10, {|in, ctrl, out= 0, dec  , thr  =0.01 ,sB = 1, sA = (1/4), atk = 0.001, rel = 0.04 , gain=1, dur,tS=1|
 
-		Out.ar(out, Compander.ar(In.ar(in,10) , In.ar(ctrl,1)  , thresh: thr, slopeBelow: sB, slopeAbove: sA, clampTime: atk, relaxTime: rel)* gain* EnvGen.kr(Env.step([1,1],[dur,0]),timeScale: tS,doneAction:2))}).add;
+		Out.ar(out, Compander.ar(In.ar(in,10) , In.ar(ctrl,1)  , thresh: thr, slopeBelow: sB, slopeAbove: sA, clampTime: atk, relaxTime: rel)* gain/** EnvGen.kr(Env.step([1,1],[dur,0]),timeScale: tS,doneAction:2)*/)}).add;
 
 
 
@@ -2602,7 +2612,7 @@ SynthDef(\sequ,{|value, dur, in=0, out=0, vlAtk=0, vlDec=1,vlSub=1,vlSub2=1, vlR
 
 		//LocalOut.ar(fdback*BPF.ar(effect,MouseX.kr(1000,10000),0.1)); //alternative with filter in the feedback loop
 
-		Out.ar(out,effect * EnvGen.kr(Env.step([1,1],[dur,0]),timeScale: tS,doneAction: 2));
+		Out.ar(out,effect /** EnvGen.kr(Env.step([1,1],[dur,0]),timeScale: tS,doneAction: 2)*/);
 	}).add;
 
 	SynthDef(\lim,{|out=0,ml=0.1|Out.ar(out,Balance.ar(In.ar(~outTolimit),SinOsc.ar(mul: ml)))}).add;
@@ -2686,6 +2696,8 @@ s.sync;
 
 	~noise = Pbind(\instrument, \wNoise,\dur, Pseq([4/1],1),\dec ,Pkey(\dur),\amp,(2),\out,~filterNoise);
 
+
+	//SO WRONG NO VOL ctrl at all
 	~hit = Pbind(\instrument,\gran,\dur,~short1,\amp, 1,\buf,~bufSnoopy,\out,~eqDs,\gate, 1,\duration,Pkey(\dur),\impulse,0.003,
 				\vlSub, 0.8,\vlSub2,Pkey(\vlSub),\decC,Pfunc({(-10).rrand(2,1)}),\pos,Pfunc({0.90000.rand}));
 
