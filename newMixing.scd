@@ -1,13 +1,16 @@
-
+//~eq1.set(\val, 0,\quant, 0, \gain,0,\val2,0,\quant2,0, \gain2,0 ,\in, ~eqBus1 , \out,~gateBus ),
 
 ~mixingUlti = Synth(\EQHP10, [\in, ~eqBus10, \frq, 100,\vol, 2.2], ~eqGrp2/*\val,13000,\quant,4, \gain,(-16),\val2,3600,\quant2,16, \gain2,(-8),*/);
  ~mixingUlti.set(\vol, 0.2);
 
+
+~eq1=Synth(\EQHP, [\frq, 100],~eqGrp0);
+~eq1.set(\val, 550,\quant, 15, \gain,(-20),\val2,2600,\quant2,6, \gain2,(-12) ,\in, ~eqBus1 , \out,~gateBus,\val4,3800,\shelf,1.1, \gain4,(-25), \val3,6600,\quant3,4, \gain3,(-16) , );
 ~comp2=Synth(\compS, [\ctrl, ~kbus ],~compGrp);
-~comp2.set(\thr,0.82 ,\sB, 1.16,\sA, 1/2,\atk ,0.0242, \rel ,0.3872, \gain,1,\in, ~comFuzz,\out,~limitFuzz);
-~mix2= Synth(\limiterStoMixer,[\c2,1,\in, ~limitFuzz, \gain,25,\out,~stereoBus1],~limitGrp);
+~comp2.set(\thr,0.92 ,\sB, 1.16,\sA, 1/2,\atk ,0.0242, \rel ,0.968, \gain,25,\in, ~comFuzz,\out,~limitFuzz);
+~mix2= Synth(\limiterStoMixer,[\c2,1,\in, ~limitFuzz, \gain,20,\out,~stereoBus1],~limitGrp);
 // ~mixa.set(\in,~stereoBus1);
-~mix2.set(\gain,55);
+~mix2.set(\gain,90);
 
 ~comp3=Synth(\compS, [\ctrl, ~kbus ],~compGrp);
 ~comp3.set(\thr,0.82 ,\sB, 1.086,\sA, 1/2,\atk ,0.0121, \rel ,0.3872, \gain,1,\in, ~comBus1, \out,~limitBus1);

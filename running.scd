@@ -2015,11 +2015,11 @@ SynthDef(\EQHP96, {|out=0, in, val, quant, gain,frq=100, vol =0.05, val2,quant2,
 		frq),frq),frq),frq),frq),frq),frq),frq)* vol)};).add;
 
 
-	SynthDef(\EQHP, {|out=0, in, val, quant, gain,frq=100, vol =0.05, val2,quant2, gain2| Out.ar(out,
+	SynthDef(\EQHP, {|out=0, in, val, quant, gain,frq=100, vol =0.05, val2,quant2, gain2,val3,quant3,gain3, gain4,val4,shelf| Out.ar(out,
 
-		HPF.ar(HPF.ar(HPF.ar(HPF.ar(HPF.ar(HPF.ar(
+		HPF.ar(HPF.ar(HPF.ar(HPF.ar(HPF.ar(HPF.ar(BPeakEQ.ar(	BHiShelf.ar(
 			BPeakEQ.ar(	BPeakEQ.ar(Mix.ar(In.ar(in, 1)),val,quant, gain),val2,quant2, gain2)
-
+,val3,quant3, gain3),val4,shelf, gain4)
 			,frq),frq),frq),frq),frq),frq)* vol)};).add;
 
 

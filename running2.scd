@@ -478,7 +478,7 @@ Pxrand([
 
 		//to chnage for final
 		Pbind(\instrument,\gateS, \dur,Pseq([4/1],16)
-			,\in,Pseq([~percuCom2 ,~vocToDispatch,~percuCom2,~comSnaGrpBus2,~rndBus,~rndBus,~no2,~no2/*,~no2,~no2*/
+			,\in,Pseq([~percuCom2 ,~vocToDispatch,~percuCom2,~comSnaGrpBus2,/*~rndBus,~rndBus,*/~no2,~no2,~no2,~no2
 		].scramble,inf), \out,~finGran,\group, ~gateGrp4,\tS, 0.39550810372374,)
 
 
@@ -496,7 +496,7 @@ Pxrand([
 
 
 	Pseq([
-
+/*
 		Pseq([
 				Pbind(\instrument, \gateS, \dur,   Pseq([32/1],1) , \tS, 0.39550810372374,
 	\in, ~finGran,\group, ~gateGrp5, \out, ~toCom),
@@ -513,7 +513,7 @@ Pbind(\instrument, \playBuf10NToMixer,  \c22,1,\name,22,\out, ~toCom,\dur,Pseq([
 
 		Pbind(\instrument, \gateS ,\dur, Pxrand([Pseq([4/1],4), Pseq([1/1],16) ],4)
 ,\tS, 0.39550810372374, \in ,Pxrand([ ~no1, ~no2,~no3],inf),\out,~toCom,\group,~gateGrp5),
-
+*/
 
 //PASSANT DisAABLE FOR RISE INIT
 		Pseq([
@@ -609,8 +609,8 @@ Pbind(\instrument, \playBuf10N,  \out,~toCom,\dur,Pseq([ Pseq([8/1],1),  Pseq([1
 
 
 
-	Pbind(\instrument,\comp10, \dur,9999,\thr,0.8 ,\sB, 1.04,\sA, 1/2,\atk ,0.0968, \rel ,0.3872
-		,\in, ~toCom  ,\ctrl, ~snBus, \out,/*~eqBus10*/~toGate10,\group, ~compGrp2,\tS, 0.39550810372374),
+	/*Pbind(\instrument,\comp10, \dur,9999,\thr,0.8 ,\sB, 1.04,\sA, 1/2,\atk ,0.0968, \rel ,0.3872
+		,\in, ~toCom  ,\ctrl, ~snBus, \out,/*~eqBus10*/~toGate10,\group, ~compGrp2,\tS, 0.39550810372374),*/
 
 Prand([
 
@@ -831,7 +831,7 @@ Pseq([
 
 		Pseq([
 
-			Pbind(\instrument,\gate2, \group, ~gateGrp7, \tS,  0.39550810372374,
+			Pbind(\instrument,\gate2, \group, ~gateGrp7, \tS,  0.39550810372374,\in,~rollingK,
 		\dur, Pseq([31/1],1)),
 			Pbind(\instrument,\gate2, \in ,Prand([~dipatchKB2,~rollingK,~to4bar],inf), \group, ~gateGrp7, \tS,  0.39550810372374,
 			\dur, Pseq([4/1],1)),
@@ -1543,10 +1543,10 @@ Pbind( \instrument, \playBuf, \impulse, 0.3 ,
 //PETIT ROMAN < WONT TAKE LONG RECORD LP ON MAIN1 for this one
 
 
-		Pbind(\instrument,\EQHP, \in, ~eqBus1 , \out,~gateBus,
+		/*Pbind(\instrument,\EQHP, \in, ~eqBus1 , \out,~gateBus,
 		\val, ~s1,\quant, ~q1, \gain,~g1,
 		\val2,~s1x,\quant2,~q1x, \gain2,~g1x
-		,\frq, 100, \dur,inf, \group, ~eqGrp0),
+		,\frq, 100, \dur,inf, \group, ~eqGrp0),*/
 
 
 
@@ -2132,7 +2132,7 @@ Pbind(\instrument,\playBufXG,\dur,Pseq([ Pseq([1/4],24)  ,   Pseq([1/2],24)   ].
 		,\in, ~newCOn  ,\ctrl, ~snBus, \out,~comp10Pass,\group, ~compGrp2,\tS, 0.39550810372374),
 
 
-Pbind(\instrument,\EQHP10, \in, ~comp10Pass ,\out, 0,\frq, 100, \dur,inf,\group, ~eqGrp2,/*\val,13000,\quant,2, \gain,(-12),\val2,3100,\quant2,8, \gain2,(-8),*/\vol, 1.2),
+/*Pbind(\instrument,\EQHP10, \in, ~comp10Pass ,\out, 0,\frq, 100, \dur,inf,\group, ~eqGrp2,/*\val,13000,\quant,2, \gain,(-12),\val2,3100,\quant2,8, \gain2,(-8),*/\vol, 1.2),*/
 
 
 
@@ -2262,7 +2262,7 @@ Pbindf( ~church,\dur,inf, \in,~reverbSquelch  , \out,~comSquelch ,\group,~extraR
 ~base; ~kb; ~no4; ~rises; ~lp;~bp; ~hp;~deNo2; ~mainLead;~percheur;~passant
 ~base.play(t)/*~deNo2, */
 ~rises,
-(~track = Ppar([/*~hitX,~kb,*/~fx,~passant,~base,~no4,~mainLead,~sequ],1).play(t,quant:1))
+(~track = Ppar([~hitX,/*~kb,~fx,*/~passant,~base,~no4,~mainLead,~sequ],1).play(t,quant:1))
 
 Pseq([~kick],inf).play(t, quant:1)
 Ppar([~bassShap,Pseq([~bass],inf)],1).play(t, quant:1)
