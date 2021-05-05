@@ -75,3 +75,5 @@ Pbind(\instrument, \playBuf,\dur,1/16, \rte,1, \tS,  0.39550810372374,\buf,~snar
 		],inf)
 ).play(t)
 
+
+~fkAr.play

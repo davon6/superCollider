@@ -439,9 +439,4 @@
 // ~mixa.set(\in,~sterBus4);
  ~mix49.set(\gain,12);
 
-/*Vocals to set
-
-Pbind(\instrument,\compS, \dur,inf,\thr,0.95 ,\sB, 1.050,\sA, 1/2,\atk ,0.02, \rel ,0.3872
-		,\gain,1,\in, ~vocToComp ,\ctrl, ~kbus, \out, ~vocToLimit, \group,~compGrp ),
-	Pbind(\instrument,\limiterS,\in,~vocToLimit,\out, ~vocToStereo,\group,~limitGrp,\dur,inf,\gain, 11),*/
 
