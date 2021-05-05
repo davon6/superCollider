@@ -14,6 +14,7 @@ s.options.memSize = 2097152 ;
 Server.default.options.numOutputBusChannels = 60;
 Server.default.options.sampleRate =  48000;
 Server.default.options.outDevice_("Audient iD14");
+s.options.numAudioBusChannels=3000;
 )
 
 Server.default.options.outDevice_("External Headphones");
@@ -820,6 +821,17 @@ s.sync;
 	);}).add;
 
 
+	SynthDef(\playBufXGMod ,{|out = 0,start, trig, dur, amp=1,buf, dA=2, loo=0,tS=1,impulse=0.001,rte=1
+		vlAtk =0,vlDec=1 ,vlSub=1 ,vlSub2=1,vlRel=0,atkT=0,decT=1,subsT=0,relT=0,atckC=0,decC=0,relC=0,busMod|Out.ar(out,PlayBuf.ar(1,buf,rte+ In.kr(busMod),trigger:
+		Impulse.kr(impulse* (60/~bpm),mul: amp),startPos: start,loop:loo,doneAction: 2)
+
+		* EnvGen.kr(Env([vlAtk,vlDec,vlSub,vlSub2,vlRel],
+			[dur * atkT,dur* decT,dur * subsT,dur *relT],
+			[atckC,decC,0,relC]),timeScale: tS, doneAction:2)
+
+	);}).add;
+
+
 /*	SynthDef(\playBufXG10 ,{|out = 0,start, trig, dur, amp=1,buf, dA=2, loo=0,tS=1,impulse=0.001,
 		vlAtk =0,vlDec=1 ,vlSub=1 ,vlSub2=1,vlRel=0,atkT=0,decT=1,subsT=0,relT=0,atckC=0,decC=0,relC=0|Out.ar(out,PlayBuf.ar(10,buf,trigger:
 		Impulse.kr(impulse* (60/~bpm),mul: amp),startPos: start,loop:loo,doneAction: 2)
@@ -954,7 +966,7 @@ LFNoise0.kr(~hz1beat).range(0.1,0.0)/*,0.02)*/
 
 		/*SinOsc.kr(MouseY.kr(0.3,20.6)).range(0,MouseX.kr(0.2,1) )*/
 
-	Osc.ar(~b.bufnum, LFNoise0.kr(1.2875).range(0.08046875,2.575) )/*MouseY.kr(0.3,3.23888))*/.range(0.6,1)
+	Osc.ar(~b.bufnum, LFNoise0.kr(1.2875).range(0.08046875,1.2875) )/*MouseY.kr(0.3,3.23888))*/.range(0.6,1)
 
 		* EnvGen.kr(Env.step([1,1],[dur,0]),timeScale: tS,doneAction: 2)
 	)}).add;
@@ -1593,7 +1605,7 @@ freq         )* EnvGen.kr(Env([0,1,1,0],[0.055,dur-0.055,0],4),timeScale: tS,don
 	}).add;
 
 
-	SynthDef(\phaser,{|in, out, rate, value, dur maxDlT =0.0968,decT=1,amp=0.4,tS=1| Out.ar(out, In.ar(in,1)+ AllpassN.ar(In.ar(in,1) ,maxDlT,SinOsc.kr(value,0,0.01,0.01),decT)*amp* EnvGen.kr(Env.step([1,0],[dur,0]),timeScale: tS,doneAction: 2)   );}).add;
+	SynthDef(\phaser,{|in, out, rate, value, dur maxDlT =0.0968,decT=1,amp=0.4,tS=1,ph=0| Out.ar(out, In.ar(in,1)+ AllpassN.ar(In.ar(in,1) ,maxDlT,SinOsc.kr(value,ph,0.01,0.01),decT)*amp* EnvGen.kr(Env.step([1,0],[dur,0]),timeScale: tS,doneAction: 2)   );}).add;
 
 
 	SynthDef(\disto, {|out=0,in, hpf= 81.41|Out.ar(out, In.ar(in,1).round(2**(-16)));}).add;
@@ -2034,7 +2046,7 @@ SynthDef(\EQHP96, {|out=0, in, val, quant, gain,frq=100, vol =0.05, val2,quant2,
 
 	SynthDef(\EQHP, {|out=0, in, val, quant, gain,frq=100, vol =0.05, val2,quant2, gain2,val3,quant3,gain3, gain4,val4,shelf| Out.ar(out,
 
-		HPF.ar(HPF.ar(HPF.ar(HPF.ar(HPF.ar(HPF.ar(BPeakEQ.ar(	BHiShelf.ar(
+		HPF.ar(HPF.ar(HPF.ar(HPF.ar(HPF.ar(HPF.ar(BHiShelf.ar(BPeakEQ.ar(
 			BPeakEQ.ar(	BPeakEQ.ar(Mix.ar(In.ar(in, 1)),val,quant, gain),val2,quant2, gain2)
 ,val3,quant3, gain3),val4,shelf, gain4)
 			,frq),frq),frq),frq),frq),frq)* vol)};).add;

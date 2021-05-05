@@ -56,11 +56,12 @@ Pbind(\instrument,\gran,\dur,Prand([ Pseq([1/4],24)  ,   Pseq([1/1],24)   ],1)  
 \amp, 1,\buf,~buf,\out,~phaseBus,\gate, 1,\duration,Pkey(\dur)/*Pseq([1/1],inf)*/,\impulse,0.003,\pos,)*/
 
 
+
 (//MUST RUN  ( ~buf.numFrames.rrand(320000)- 320000)
 ~rythm=( ~leTout.numFrames.rrand(320000)- 320000);
-~main1= (~bufSnoopy.numFrames.rrand(1400000)- 1400000)   /*1200000*/;
-~main2 =   ( ~bufSnoopy.numFrames.rrand(1400000)- 1400000)   /*0*/;
-~main3= (~bufSnoopy.numFrames.rrand(1400000)- 1400000) /*3500000*/;
+~main1= (~bufSnoopy.numFrames.rrand(s.sampleRate*16*t.beatDur)- s.sampleRate*16*t.beatDur)  ;
+~main2 =   ( ~bufSnoopy.numFrames.rrand(s.sampleRate*16*t.beatDur)- s.sampleRate*16*t.beatDur)   /*0*/;
+~main3= ((~bufSnoopy.numFrames.rrand(s.sampleRate*16*t.beatDur))- s.sampleRate*16*t.beatDur)  ;
 ~s1=5400.00.rrand(1300,0.001);~q1=16.rrand(8,1);~g1=(-8).rrand((-2),1);~s1x =  5400.00.rrand(1300,0.001);~q1x= 16.rrand(8,1);~g1x=(-8).rrand((-2),1);
 	~s2= 5400.00.rrand(1300,0.001);	~q2= 16.rrand(8,1);~g2=(-8).rrand((-2),1);~s2x= 5400.00.rrand(1300,0.001);~q2x=16.rrand(8,1);~g2x=(-8).rrand((-2),1);
 	~s3=3400.00.rrand(1300,0.001);~q3=16.rrand(8,1);~g3=(-8).rrand((-2),1);~s3x= 5400.00.rrand(1300,0.001);~q3x= 16.rrand(8,1);~g3x=(-8).rrand((-2),1);
@@ -499,7 +500,7 @@ Pxrand([
 
 	Pseq([
 
-		Pseq([
+/*		Pseq([
 				Pbind(\instrument, \gateS, \dur,   Pseq([32/1],1) , \tS, 0.39550810372374,
 	\in, ~finGran,\group, ~gateGrp5, \out, ~toCom),
 		Pseq([
@@ -514,7 +515,7 @@ Pbind(\instrument, \playBuf10NToMixer,  \c22,1,\name,22,\out, ~toCom,\dur,Pseq([
 
 
 		Pbind(\instrument, \gateS ,\dur, Pxrand([Pseq([4/1],4), Pseq([1/1],16) ],4)
-,\tS, 0.39550810372374, \in ,Pxrand([ ~no1, ~no2,~no3],inf),\out,~toCom,\group,~gateGrp5),
+,\tS, 0.39550810372374, \in ,Pxrand([ ~no1, ~no2,~no3],inf),\out,~toCom,\group,~gateGrp5),*/
 
 
 //PASSANT DisAABLE FOR RISE INIT
@@ -635,7 +636,6 @@ Prand([
 
 
 
-Pbind(\instrument,\EQHP10, \in, ~eqBus10 ,\out, 0,\frq, 100, \dur,inf,\group, ~eqGrp2,/*\val,13000,\quant,4, \gain,(-16),\val2,3600,\quant2,16, \gain2,(-8),*/\vol, 2.2),
 
 
 
@@ -1693,8 +1693,8 @@ Ppar([
 		/*Pbind( \instrument, \playBufX, \impulse,0.3218750 ,/*Pseq([ Pseq([1/16],64),Pseq([1/4],16),Pseq([1/1],4),Pseq([4/1],1) ].scramble,1)*/
 		\dur,inf, \tS,  0.39550810372374,\start,0,\buf,~lpPrec,\out, ~toGateFlo,\loo,1),*/
 
-	Pbind(\instrument,\playBufXG,\dur, Prand([Pseq([1/8],2),Pseq([1/2],1), Pseq([1/4],1),Pseq([1.25/1], 1 ) /*,Pseq([2/1],1), */].scramble,inf),\amp, 1,\buf,~bufSnoopy,\out,~toEqFlo,\gate, 1,\duration,Pkey(\dur),\impulse,0.003,\start,~main3, \tS, 0.39550810372374 ,
-\vlSub,  0.9 , \vlSub2,Pkey(\vlSub), \atkT,0.001/*~pAtkT*/,\decT, ~pDecT ,	\subsT,~pSubT , \relT,~pRelT,\atckC,~pAtkC,\decC,~pDecC,\relC,~pRelC,\vlAtk , ~pvlAtk ,  \vlRel,  Pkey(\vlAtk),\loopy,0),
+	/*Pbind(\instrument,\playBufXG,\dur, Prand([Pseq([1/8],2),Pseq([1/2],1), Pseq([1/4],1),Pseq([1.25/1], 1 ) /*,Pseq([2/1],1), */].scramble,inf),\amp, 1,\buf,~bufSnoopy,\out,~toEqFlo,\gate, 1,\duration,Pkey(\dur),\impulse,0.003,\start,~main3, \tS, 0.39550810372374 ,
+\vlSub,  0.9 , \vlSub2,Pkey(\vlSub), \atkT,0.001/*~pAtkT*/,\decT, ~pDecT ,	\subsT,~pSubT , \relT,~pRelT,\atckC,~pAtkC,\decC,~pDecC,\relC,~pRelC,\vlAtk , ~pvlAtk ,  \vlRel,  Pkey(\vlAtk),\loopy,0)*/
 
 
 	/*Pbind(\instrument, \gate,\dur,Pseq([64/1],inf) ,\in,Pseq([ ~reverbRnd,~filterRnd].scramble,inf),\out,~eqBus23/*~distoBus43*/,\group, ~lfoGrp,\tS, 0.39550810372374,\vlSub,1,\vlSub2,Pkey(\vlSub)),*/
@@ -2131,7 +2131,7 @@ Pbind(\instrument,\playBufXG,\dur,Pseq([ Pseq([1/4],24)  ,   Pseq([1/2],24)   ].
 		,\in, ~newCOn  ,\ctrl, ~snBus, \out,~comp10Pass,\group, ~compGrp2,\tS, 0.39550810372374),
 
 
-/*Pbind(\instrument,\EQHP10, \in, ~comp10Pass ,\out, 0,\frq, 100, \dur,inf,\group, ~eqGrp2,/*\val,13000,\quant,2, \gain,(-12),\val2,3100,\quant2,8, \gain2,(-8),*/\vol, 1.2),*/
+Pbind(\instrument,\EQHP10, \in, ~comp10Pass ,\out, 0,\frq, 100, \dur,inf,\group, ~eqGrp2,/*\val,13000,\quant,2, \gain,(-12),\val2,3100,\quant2,8, \gain2,(-8),*/\vol, 1.2),
 
 
 
