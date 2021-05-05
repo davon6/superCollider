@@ -805,7 +805,7 @@ s.sync;
 
 
 	SynthDef(\playBufX ,{|out = 0,start, trig, dur, amp=1,buf, dA=2, loo=0,tS=1,impulse=0.001|Out.ar(out,PlayBuf.ar(1,buf,trigger:
-		Impulse.kr(impulse* (60/~bpm),mul: amp),startPos: start,loop:loo,doneAction: 2));}).add;
+		Impulse.kr(impulse* (60/~bpm),mul: amp),startPos: start,loop:loo,doneAction: dA));}).add;
 
 
 
@@ -1063,7 +1063,7 @@ SynthDef(\envSli, {|out, val1=20, val2=20000,  dur,tS=1, crv =7|Out.kr(out,
 
 		env =EnvGen.ar(
 	Env([0.8 , 0.2, 0.6,    0.6,0.6,0],
-		[0.008, 0.08, 0,0.006,0.9],[-1.8,-50,5,5,-5]),doneAction:2);
+		[0.008, 0.08, 0,0.006,0.22],[-1.8,-50,5,5,-5]),doneAction:2);
 	//EnvGen.ar(Env.perc(0, 0.40),doneAction:2);
 
 

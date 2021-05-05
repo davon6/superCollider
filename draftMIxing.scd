@@ -13,7 +13,14 @@
 ~kb=Pbind(\instrument, \playBufS, \dur,  Pseq([1/1],inf), \tS,  0.39550810372374,\buf,~kb2).play(t)
 ~kb.stop
 
+Pbind( \instrument,\playBuf /*\playBuf1N*/, \impulse, 0.3,\dur,Pseq([3/1],1), \tS,  0.39550810372374,\start, ~pass3,\buf,~bufSnoopy,\out, 0,\loopy,0).play(t)
 
+~pass1=
+Pbind( \instrument,\playBuf /*\playBuf1N*/, \impulse, 0.3,\dur,Pseq([3/1],1), \tS,  0.39550810372374,\start, ~pass4,\buf,~bufSnoopy,\out, 0,\loopy,0).play(t)
+
+
+
+~pass1 =(~buf.numFrames.rrand(400000)- 400000);~pass2=(~buf.numFrames.rrand(400000)- 400000);~pass3=(~buf.numFrames.rrand(400000)- 400000);~pass4=(~buf.numFrames.rrand(400000)- 400000);
 (
 
 Ppar([~base, /*~kb, *//*~hitX*//*~kb,*//*~passant  ,  ~fx  ,*/  ~no4,~sequ,/*~percheur*/~mainLead ,
