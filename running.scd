@@ -192,7 +192,17 @@ s.sync;
 	~quickFi =[\roomsize, 40, \revtime, 4, \damping, 0.9, \inputbw, 0.75, \drylevel, -0, \earlylevel, -22, \taillevel, -28];
 	~rShor = [\roomsize, 41, \revtime, Pseq([1/4],inf), \damping, 0.81, \inputbw, 0.7, \drylevel, -0, \earlylevel, -15, \taillevel, -12];
 	~rLon =	[\roomsize, 41, \revtime, Pseq([1/1],inf), \damping, 0.31, \inputbw, 0.7, \drylevel, -0, \earlylevel, -15, \taillevel, -9];
-	~churc =[\roomsize, 80, \revtime, 4.85, \damping, 0.41, \inputbw, 0.19, \drylevel, -3, \earlylevel, -9, \taillevel, -11 ];
+	~churcx =[\roomsize, 80, \revtime, 4.85, \damping, 0.41, \inputbw, 0.19, \drylevel, -3, \earlylevel, -9, \taillevel, -11 ];
+
+
+
+	~quickFi =[\room, 0.4, \damp, 0.3, \mix,0.3];
+	~rShor = [\room, 0.6, \damp, 0.81,  \mix,0.5];
+	~rLon =	[\room, 0.8, \damp, 0.31, \mix,0.8];
+	~churc =[\room, 1,  \damp, 0.41, \mix,1];
+
+
+
 
 	~revRnd = [~quickFi,~rShor,~rLon];
 ~revL = [~quickFix, ~rShort, ~rLong];
@@ -1822,7 +1832,7 @@ SynthDef("TriggerBufferGranular", {arg out=0, bufnum=0, in=0, thresh = 0.004, am
 	//GVerb
 
 	SynthDef(\reverb, {
-		|out=0, roomsize, revtime, damping, inputbw, spread = 15, drylevel, earlylevel,
+		|out=0, roomsize, revtime, damping, inputbw, spread = 15, drylevel, earlylevel,damp,room,mix
     taillevel, amp=0.3,maxRoomsize,wet=0.4,in =0,wF =0, spread2=0, level=1, center=0.0, multi = 2, mod|
 
 	var a ,input;
@@ -1841,8 +1851,9 @@ SynthDef("TriggerBufferGranular", {arg out=0, bufnum=0, in=0, thresh = 0.004, am
 		).sum * 10;
 
 
+
     Out.ar(    out,
-            GVerb.ar(
+           /* GVerb.ar(
             a,
             roomsize,
 				revtime /*+ In.kr(mod)*/,
@@ -1853,7 +1864,61 @@ SynthDef("TriggerBufferGranular", {arg out=0, bufnum=0, in=0, thresh = 0.004, am
             earlylevel.dbamp,
             taillevel.dbamp,
 				roomsize,0.3)
-		+ input	)
+		+ input	*/
+
+		 FreeVerb.ar(
+
+
+         In.ar(in,1),
+            mix, // mix 0-1
+            room, // room 0-1
+            damp // damp 0-1 duh
+        )
+
+
+
+		)
+
+	}).add;
+
+
+		SynthDef(\reverbMad, {
+		|out=0, roomsize, revtime, damping, inputbw, spread = 15, drylevel, earlylevel,damp,room,mix
+    taillevel, amp=0.3,maxRoomsize,wet=0.4,in =0,wF =0, spread2=0, level=1, center=0.0, multi = 2, mod|
+
+	var a ,input;
+
+		input =In.ar(in,1);
+
+		a = Resonz.ar(
+
+		//input
+
+			Array.fill(4, input),
+
+    1294.5373184/*659.25*//*1760*/     *  /*[1, 2, 4, 8] */ [8,16,32],
+
+		/*	wet*/0.01
+		).sum * 10;
+
+
+
+    Out.ar(    out,
+          GVerb.ar(
+            a,
+            roomsize,
+				revtime /*+ In.kr(mod)*/,
+            damping,
+            inputbw,
+            spread,
+            drylevel.dbamp,
+            earlylevel.dbamp,
+            taillevel.dbamp,
+				roomsize,0.3)
+		+ input
+
+
+		)
 
 	}).add;
 
@@ -1982,13 +2047,20 @@ SynthDef(\comb, {|out=0, in ,maxDel, delayT,decT=6.1952,amp=0.09|
 
 	SynthDef(\reverbS, {
 		|out=0, roomsize, revtime, damping, inputbw, spread = 15, drylevel, earlylevel,
-    taillevel,maxRoomsize,wet=0.4,in =0,wF =0, spread2=0, level=1, center=0.0, multi = 2|
+    taillevel,maxRoomsize,wet=0.4,in =0,wF =0, spread2=0, level=1, center=0.0, multi = 2,mix,room,damp|
 
 	var a ,input;
 		input =In.ar(in,2);
 
 		a = Resonz.ar(		Array.fill(4, input), 1294.5373184 *   [8,16,32],0.01/*wet*/).sum * 10;
-    Out.ar(    out, GVerb.ar( a,roomsize,revtime,damping,inputbw, spread,drylevel.dbamp,earlylevel.dbamp,taillevel.dbamp,roomsize+1,0.3)+a)
+    Out.ar(    out, /*GVerb.ar( a,roomsize,revtime,damping,inputbw, spread,drylevel.dbamp,earlylevel.dbamp,taillevel.dbamp,roomsize+1,0.3)+a)*/
+
+			  In.ar(in,1),
+            mix, // mix 0-1
+            room, // room 0-1
+            damp // damp 0-1 duh
+        )
+
 }).add;
 
 	"reverb init".postln;
