@@ -170,7 +170,8 @@ Pbind(\instrument,\gran,\dur,Prand([ Pseq([1/4],24)  ,   Pseq([1/1],24)   ],1)  
 ~gateGrp4 = Group.after(~limitGrp2);
 ~gateGrp5 = Group.after(~gateGrp4);
 ~compGrp2 = Group.after(~gateGrp5);
-~gateGrp6 = Group.after(~compGrp2);
+~gateGrp10 = Group.after(~compGrp2);
+~gateGrp6 = Group.after(~gateGrp10);
 ~eqGrp2 = Group.after(~gateGrp6);
 ~recGrp2= Group.after(~eqGrp2);
 ~gateGrp7 = Group.after(~recGrp2);
@@ -754,7 +755,7 @@ Pwrand([    Pseq([\rest ,\rest,\note,\rest] ,1),Pseq([\rest ,\note,\note,\rest],
 						\rest,\rest,\rest,\rest,\rest,\rest,\rest,\rest,
 						\rest ,\note,\note,\rest,\rest,\rest,\rest,\rest,
 						\rest,\rest,\rest,\rest,\rest,\rest,\note,\rest
-					],1), */   Pseq([\rest,\rest,\rest,\rest ],120)],inf)//l embrouille
+					],1), */   Pseq([\rest,\rest,\note,\rest ],128)],inf)//l embrouille
 	,\dur, Pseq([1/2], inf) ,\out,~snareEQ,
 	\dA,Prand([ /*Pseq([2],32),Pseq([0],32)*/  Pseq([1],32), Pseq([0.5],32),Pseq([0.25],32)],inf)      ),
 
@@ -1479,6 +1480,18 @@ Pbind(\instrument, \distoS, \dur, inf, \in, ~riTriptoDisto , \out,~riTriptoEq ,\
 	Pbind(\instrument,\stereo, \dur, 9999, \in, ~toStereoRise  ,\spread,0.1,\out,~again,\tS, 0.39550810372374,\group, ~stereoGrp),
 
 
+
+
+		Prand([
+		Pbind(\instrument,\gateS, \dur,Pseq([1/8],8),\type,
+			Pseq([\note, \rest,\note, \rest,\note, \note,\note,\note],inf),
+		\in,  ~gateRise ,\out , ~toGate102,\group, ~gateGrp10,\tS, 0.39550810372374),
+
+
+		Pbind(\instrument,\gateSD, \dur,Pseq([3/1],1),\in, ~gateRise  ,\out ,~toGate102 ,\group, ~gateGrp10,\tS, 0.39550810372374),
+				],inf)
+
+
 //maybe to throw in the mixer
 	/*Pbind(\instrument, \limiter10, \in, ~bangLimit, \out, ~again,\group, ~limitGrp,\dur, inf, \gain,50),
 
@@ -2051,7 +2064,8 @@ Pbind(\instrument,\playBufXG,\dur,Pseq([ Pseq([1/4],24)  ,   Pseq([1/2],24)   ].
 ],1) )
 
 ~t = Ppar([~passant, ~base,/*~kb*/],1).play(t,quant:1);
-~passant.stop;
+~passant.play(t);
+.stop
 (~passant=
 
 	//passant

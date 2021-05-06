@@ -278,6 +278,8 @@ s.sync;
 	~gateSeqMelo = Bus.audio(s,1);*/
 	~delayToLimit= Bus.audio(s,2);
 
+	~gateRise = Bus.audio(s,10);
+
 	~delayToEq= Bus.audio(s,2);
 	~toKbGate= Bus.audio(s,2);
 
@@ -1066,7 +1068,7 @@ SynthDef(\envSli, {|out, val1=20, val2=20000,  dur,tS=1, crv =7|Out.kr(out,
 		Out.ar(out, sig);
 	}).add;*/
 
-		SynthDef(\kick, {
+	SynthDef(\kick, {
 		arg amp=0.2,out=0;
 		var sig, env, envF;
 
@@ -1074,7 +1076,7 @@ SynthDef(\envSli, {|out, val1=20, val2=20000,  dur,tS=1, crv =7|Out.kr(out,
 			Env(
 				[5178.15,1539.47,165,26,0,0],
 				[0.001,0.008,0.1,0,0.2],
-				\exp
+					[-4,-4]
 			)
 		);
 
@@ -1133,9 +1135,10 @@ SynthDef(\envSli, {|out, val1=20, val2=20000,  dur,tS=1, crv =7|Out.kr(out,
 		LPF.ar(LPF.ar(
 		BPeakEQ.ar(
 			BPeakEQ.ar(
+					BPeakEQ.ar(
 
 			sig
-
+						,2637.02/2,1.2,(-10))
 			,2637.02 /*659.255*4*/ ,4, (-20))
 		,164.81375,8, (-14)).round(2**(-16)
 ,envF+lpf - In.ar(bus, 1)),envF+lpf - In.ar(bus, 1))
@@ -2719,7 +2722,7 @@ s.sync;
 
 /*Pbindef(\ki,   \out, 0) ;Pbindef(\bass, \out, 0) ;
 	Pbindef(\ki,   \out, 700) ;Pbindef(\bass, \out, 700);*/
-	~kick =	Pbind(\instrument, \kick,\dur, Pseq([1/1],1),\amp,(-3/*-10.2*/),\out,0/*~main1GToG*/);//-3.5 - 10.5
+	~kick =	Pbind(\instrument, \kick,\dur, Pseq([1/1],1),\amp,(-2.8/*-10.2*/),\out,0/*~main1GToG*/);//-3.5 - 10.5
 
 	~bassShap = Pbind(\instrument, \shap, \dur,Pseq([1/1],1),\dA1,2,\out,~bassShapB, \tS, 0.39550810372374);
 //Problem overlapping
@@ -2764,7 +2767,7 @@ s.sync;
 		\rel2, t.beatDur/4 * 0.0012,
 		\atkcrv, -2,
 		\relcrv, -2,\relcrv2, -4, \relcrv3, -6
-		,\amp,(-1.5/*-1*/)/*(-13)*/,\out,~bassEq
+		,\amp,(-1.2/*-1*/)/*(-13)*/,\out,~bassEq
 	);
 
 	~hat2 =Pbind(\instrument, \percussion,\rel,0.04840,\rel2,0.02420,\amp, (-28.2), \crv1, (-4), \crv1b, (-5), \modHz, exprand(500,10000), \mulMod, rrand(100, 500), \carHz, exprand(20,10000), \modAmp, 0.82875.rrand(0.4),\dur,Pseq([1/1],1) ,\out, ~kickHatEq);
@@ -2977,7 +2980,7 @@ Ppar([
 
 )
 
-~b3.plot
+~b3.play
 ~k2.play
 Pbind(\instrument, \playBuf, \impulse, 0.003 ,\dur,    Pseq([1/1],inf), \tS,  0.39550810372374,\buf,~k2,\out, 0,\loopy,0,\start,0,\tS, 0.39550810372374).play(t)
 Pbind(\instrument, \playBuf, \impulse, 0.003 ,\dur,    Pseq([1/1],inf), \tS,  0.39550810372374,\buf,~b3,\out, 0,\loopy,0,\start,0,\tS, 0.39550810372374).play(t)
