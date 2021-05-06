@@ -196,9 +196,9 @@ s.sync;
 
 
 
-	~quickFi =[\room, 0.4, \damp, 0.3, \mix,0.3];
-	~rShor = [\room, 0.6, \damp, 0.81,  \mix,0.5];
-	~rLon =	[\room, 0.8, \damp, 0.31, \mix,0.8];
+	~quickFi =[\room, 0.2, \mix,0.115, \damp, 0.41];
+	~rShor = [\room, 0.25, \mix,0.4, \damp, 0.1];
+	~rLon =	[\room, 0.6, \mix,0.4, \damp, 0.1];
 	~churc =[\room, 1,  \damp, 0.41, \mix,1];
 
 
@@ -237,6 +237,7 @@ s.sync;
 	~sterBus6= Bus.audio(s,2);
 	~toLim = Bus.audio(s,2);
 	~to4bar= Bus.audio(s,2);
+	~bgSfil= Bus.audio(s,1);
 
 	~toStereoRise = Bus.audio(s,1);
 

@@ -59,7 +59,7 @@ h = Synth(\disto3,[\in,  ~outDisto , \out,0/*~outTolimit*/,\gain,1],~distoGrp);
 
 
 
-MIDIdef.noteOn(\piana,{arg vel, nn;
+/*MIDIdef.noteOn(\piana,{arg vel, nn;
 	[ nn].postln;
 	~notes[nn] =  Synth( \fmX, [\freq, nn.midicps,\dur, inf,\stretch, 3.5,\mRatio, 1,\cRatio, 1,\index, 1,\atkE, 0.1,\amp,1,\out,0/*~outFil*/
 		,\amp, vel.linexp(1,127,0.12,0.14,\freq, nn.midicps)
@@ -70,12 +70,12 @@ MIDIdef.noteOn(\piana,{arg vel, nn;
 MIDIdef.noteOff(\offPiana, {arg vel, nn;nn.postln;
 	~notes[nn].set(\gate,0);
 	~notes[nn] = nil;
-});
+});*/
 
 
-MIDIdef.cc(\fmCt ,{ |value|var modFreq = value.linlin(61, 67,0, 0.8);
+MIDIdef.cc(\fmCt ,{ |value|var modFreq = value.linlin(61, 67,0.01, 0.8);
 
-	~notes.do{arg synth; synth.set(/*\fmCtrl*/\cRatio, modFreq.round(0.01))};
+	// ~notes.do{arg synth; synth.set(/*\fmCtrl*/\cRatio, modFreq.round(0.01))};
 v.set(\cRatio, modFreq.round(0.01).postln);
 },ccNum: 114 ); //is 8=9
 
