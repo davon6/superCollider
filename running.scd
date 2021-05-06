@@ -307,6 +307,10 @@ s.sync;
 	~part2SLimit2= Bus.audio(s,2);
 	~part2SStereo2= Bus.audio(s,2);
 
+	~halfAbso21  = Bus.audio(s,10);
+	~halfAbso22  = Bus.audio(s,10);
+
+
 	~main1GToG= Bus.audio(s,1);
 	~perchLimiToG= Bus.audio(s,2);
 	~perchLimiToG2= Bus.audio(s,2);
@@ -801,6 +805,8 @@ s.sync;
 	SynthDef(\playBuf10 ,{|out = 0,start=0, trig= 0.002, dur, buf, dA=2, tS=1, loopy=1,vl=1|Out.ar(out,PlayBuf.ar(10,buf,trigger:
 		trig/*Dust.kr(4.0)*/,startPos: start,loop: loopy/*,doneAction: dA*/)* EnvGen.kr(Env([0,vl,vl,0],[0,dur,0]),timeScale: tS,doneAction: 2));}).add;
 
+		SynthDef(\playB10 ,{|out = 0,start=0, trig= 0.002, dur, buf, dA=2, tS=1, loopy=1,vl=1|Out.ar(out,PlayBuf.ar(10,buf,trigger:
+		trig/*Dust.kr(4.0)*/,startPos: start,loop: loopy/*,doneAction: dA*/))}).add;
 
 
 	SynthDef(\playBuf10N ,{|out = 0,start=0, trig= 0.002, dur, buf, dA=2, tS=1, loopy=1,vl=1,in|Out.ar(~fusible,PlayBuf.ar(10,buf,trigger:
