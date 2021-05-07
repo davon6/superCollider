@@ -119,7 +119,10 @@ s.sync;
 	~kb2 = Buffer.alloc(s, s.sampleRate *t.beatDur,2);
 	~cymb = Buffer.alloc(s, s.sampleRate *1,2);
 	~hat = Buffer.alloc(s, s.sampleRate *1,2);
-	~snare = Buffer.alloc(s, s.sampleRate *1,1);
+	~snare = Buffer.alloc(s, s.sampleRate *1,2);
+	~bell1 = Buffer.alloc(s, s.sampleRate *1,2);
+	~bell2 = Buffer.alloc(s, s.sampleRate *5,2);
+	~bell3 = Buffer.alloc(s, s.sampleRate *1,2);
 
 	~fkAr = Buffer.alloc(s, s.sampleRate *t.beatDur*64,2);
 
@@ -685,6 +688,9 @@ LFNoise0.kr(~hz1beat).range(0.1,0.0)/*,0.02)*/
 	SynthDef(\lfo13, {|out, dur,ph, val = (~hzQbeat), rL=1,rH=0.4,tS=1 | Out.kr(out,SinOsc.ar(val,ph).range(rL,rH)
 *EnvGen.kr(Env.step([1,0],[dur,0]),timeScale: tS,doneAction: 2))}).add;
 
+	SynthDef(\lfo13T, {|out, dur,ph, val = (~hzQbeat), rL=1,rH=0.4,tS=1 | Out.kr(out,LFTri.ar(val,ph).range(rL,rH)
+*EnvGen.kr(Env.step([1,0],[dur,0]),timeScale: tS,doneAction: 2))}).add;
+
 	SynthDef(\lfo14, {|out, val, dur,tS=1| Out.kr(out, EnvGen.kr(Env.step([val,0],[dur,0]),timeScale: tS,doneAction: 2))}).add;
 
 	SynthDef(\lfo15, {|out, val, dur,tS=1|Out.kr(out,  SinOsc.kr( ~hz1beat/4).range(~hz1beat*64, ~hz1beat*1024)
@@ -910,42 +916,19 @@ LFNoise0.kr(~hz1beat).range(0.1,0.0)/*,0.02)*/
 			[ic_atk, ic_rel]//atkC was 10
 		),timeScale: tS,doneAction:2
 	);
-		env = EnvGen.kr(Env([0,1,1,0],[dur*0.038,dur*0.924,0,dur*0.038]/*[dur*0.01,dur*0.97,0,dur*0.02]*/,[16,0,0-16]),timeScale: tS,doneAction: 2);
+		env = EnvGen.kr(Env([0,1,1,0],[dur*0.018,dur*0.964,0,dur*0.018]/*[dur*0.01,dur*0.97,0,dur*0.02]*/,[16,0,0-16]),timeScale: tS,doneAction: 2);
 	mod2 = SinOsc.ar(freq/10*f3, mul:freq/10 *iEnv);
 
 	mod = SinOsc.ar(freq * f2 + mod2
 			 + (In.kr(moduR,1)* EnvGen.kr(Env.adsr(sustainLevel: 1,releaseTime: 0.1),fR ))
-			 + (In.kr(moduS,1)* EnvGen.kr(Env.adsr(sustainLevel: 1,releaseTime: 0.1),fS ))
+
 			, mul:freq * mRatio * iEnv);
 
 //car = SinOsc.ar(freq * f1 + mod) * env * amp;
-	car  = LeakDC.ar(Shaper.ar(~tfBuf,SinOsc.ar(freq * f1 + mod)))* env * amp;
+	car  = LeakDC.ar(Shaper.ar(~tfBuf,SinOsc.ar(freq * f1 + mod + (In.kr(moduS,1)* EnvGen.kr(Env.adsr(sustainLevel: 1,releaseTime: 0.1),fS )))))* env * amp;
 	car = Pan2.ar(car, pan);
 	Out.ar(out, car);
 }).add;
-
-
-		SynthDef(\rise2, {
-	arg freq=659.26, mRatio=1, cRatio=1,
-	index=1, iScale=5, ic_atk=4, ic_rel=(-4),
-	amp=2, rel=3, pan=0, f1,f2,f3, vlAtk=0,atk=0, dec=0,atkE=0  ,dur ,out =0 ,tS=1 ,iEnv,busMod,triMod=0.075;
-	var car, mod, env, mod2;
-
-
-
-		mod2 = SinOsc.ar(freq/10*f3, mul:freq/10 * In.kr(iEnv,1));
-		mod = SinOsc.ar(freq * f2 + mod2, mul:freq * mRatio * In.kr(iEnv));
-		car = SinOsc.ar((freq * f1 + mod)*
-			/*In.kr(busMod)) */LFTri.kr(triMod))
-
-		/** env */* amp;
-	car = Pan2.ar(car, pan);
-	Out.ar(out, car*EnvGen.kr(Env([0,1,1,0],[dur*0.01,dur*0.97,0,dur*0.02],[6,0,0-6]),timeScale: tS,doneAction: 2));
-}).add;
-
-
-
-
 
 SynthDef(\trippyRise, {|out=0, ph=0,dur,tS=1|
 	var r = /*  MouseX.kr(0, 20.6); */  SinOsc.ar(0.075,ph).range(0, 20.6);
@@ -992,11 +975,11 @@ SynthDef(\shiftX, {|in, out=0, frq=0,mult=0,rte=1|Out.ar(out, FreqShift.ar(In.ar
 
 
 	SynthDef(\shift2, {|in, out, freq, dur, tS=1
-		vlPE3,vlPE33,crvEP2, dA=0, dA2=0, dA3=0|
+		vlPE3,vlPE33,crvEP2, dA=0, dA2=0, dA3=0,vl=1|
 
 
 		Out.ar(out, FreqShift.ar(In.ar(in, 2)/*.sign*/,
-freq         )* EnvGen.kr(Env([0,1,1,0],[0.055,dur-0.055,0],4),timeScale: tS,doneAction:2))}).add;
+freq         )* EnvGen.kr(Env([0,vl,vl,0],[0.055,dur-0.055,0],4),timeScale: tS,doneAction:2))}).add;
 
 
 
@@ -1431,10 +1414,10 @@ SynthDef(\comb, {|out=0, in ,maxDel, delayT,decT=6.1952,amp=0.09|
 
 
 
-	SynthDef(\EQHP2, {|out=0, in, val, quant, gain,frq=100, vol =0.05, val2,quant2, gain2,val3,shelf, gain3| Out.ar(out,
+	SynthDef(\EQHP2, {|out=0, in, val, quant, gain,frq=100, vol =0.05, val2,quant2, gain2,val3,shelf, gain3,val4, gain4, quant3| Out.ar(out,
 
-		HPF.ar(HPF.ar(HPF.ar(HPF.ar(HPF.ar(HPF.ar(HPF.ar(HPF.ar(BHiShelf.ar(
-		BPeakEQ.ar(	BPeakEQ.ar(In.ar(in, 2),val,quant, gain),val2,quant2, gain2),val3,shelf, gain3),
+		HPF.ar(HPF.ar(HPF.ar(HPF.ar(HPF.ar(HPF.ar(HPF.ar(HPF.ar(BHiShelf.ar(BPeakEQ.ar(
+			BPeakEQ.ar(	BPeakEQ.ar(In.ar(in, 2),val,quant, gain),val2,quant2, gain2),val3,quant3, gain3),val4,shelf, gain4),
 
 		frq),frq),frq),frq),frq),frq),frq),frq)* vol)};).add;
 
@@ -2012,6 +1995,10 @@ Ppar([
 	~hat2,~kick,Pbind(\instrument ,	\EQ2,\dur, inf, \in,~kickHatEq, \out,~main1GToG,\group, ~eqGrp, \val, 659.255/2, \quant,1, \gain ,(-30)),
 */
 
+		Pbind(\instrument, \percussion, \dur,Pseq([8/1],1 ),\carHz, Pfunc({1050.12070612224.rrand(150)}),\modHz,Pfunc({9334.3179398.rrand(0.1)}),\modAmp,Pfunc({ 0.00875.rrand(0.0001)}) ,\amp,1,\rel,4.5544,\rel2,4.242,\stereoL, 0.00555, \crv1,  (-7.4), \crv1b,(-42), \mulMod, 901,\out,~bellFlang,\latch,8900,\atk,0.01,\atk2,Pfunc({0.3.rrand(0.01)}),\tS, 0.39550810372374),
+
+	Pbind(\instrument, \percussion, \dur,Pseq([3/1],1 ),\carHz, Pfunc({1050.12070612224.rrand(150)}),\modHz,Pfunc({9334.3179398.rrand(0.1)}),\modAmp,Pfunc({ 0.00875.rrand(0.0001)}) ,\amp,1,\rel,4.5544,\rel2,4.242,\stereoL, 0.00555, \crv1,  (-7.4), \crv1b,(-42), \mulMod, 901,\out,~flanToDisto,\latch,8900,\atk,0.01,\atk2,Pfunc({0.3.rrand(0.01)})),
+
 Pbind(\instrument, \snare,\carHz, 41.2 ,\atk, 0.00502929687,\rel, 0.0968,\rel2, 0.7744,\dur, Pseq([1/2], 1),\amp,1, \crv1,(-8),\crv2,(-7)   ,\out,~snareEQ, \atk,t.beatDur * 0.02, \atk2,Pkey(\atk),  \da1,0    ),
 
 
@@ -2021,6 +2008,10 @@ Pbind(\instrument, \snare,\carHz, 41.2 ,\atk, 0.00502929687,\rel, 0.0968,\rel2, 
 Pbind(\instrument,\percussion,\dur,Pseq([1/4], 1),\atk, 0,\rel,0.04840,\rel2,0.02420,\amp,1, \crv1, (-3), \crv1b, (-5), \modHz, exprand(500,10000).postln, \mulMod, rrand(100, 500).postln, \carHz, exprand(20,10000), \modAmp, 0.12875, \latch, 18500, \stereoR, 0.007,\out,~comBusHat),
 
 
+
+	Pbind(\instrument,\recLoopS,\buf,~bell1,\recording,1, \in,~bellFlang,\group,~recGrp2,\dur,inf),
+
+	Pbind(\instrument,\recLoopS,\buf,~bell2,\recording,1, \in,~flanToDisto,\group,~recGrp2,\dur,inf),
 
 Pbind(\instrument,\recLoopS,\buf,~cymb,\recording,1, \in,~comBusCymb,\group,~recGrp2,\dur,inf),
 Pbind(\instrument,\recLoopS,\buf,~hat,\recording,1, \in,~comBusHat,\group,~recGrp2,\dur,inf),
