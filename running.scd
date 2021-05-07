@@ -1379,7 +1379,7 @@ SynthDef(\comb, {|out=0, in ,maxDel, delayT,decT=6.1952,amp=0.09|
 		a = Resonz.ar(		Array.fill(4, input), 1294.5373184 *   [8,16,32],0.01/*wet*/).sum * 10;
     Out.ar(    out, /*GVerb.ar( a,roomsize,revtime,damping,inputbw, spread,drylevel.dbamp,earlylevel.dbamp,taillevel.dbamp,roomsize+1,0.3)+a)*/
 
-			  In.ar(in,1),
+			  In.ar(in,2),
             mix, // mix 0-1
             room, // room 0-1
             damp // damp 0-1 duh

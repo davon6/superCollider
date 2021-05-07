@@ -3031,6 +3031,8 @@ s.latency=0.2
 ~audio3 = Buffer.read(s,"/Users/davidmignot/Documents/REAPER Media/02-consolidated-03.wav");
 
 
+~audio3.play
+
 
 
 //percu cutting the 1/2 for progression
