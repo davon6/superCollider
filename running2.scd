@@ -625,7 +625,36 @@ Pseq([
 
 
 
-		].scramble,4)
+
+				Pbind(\instrument,\gate2, \in ,~toKbGate, \group, ~gateGrp7, \tS,  0.39550810372374,
+		\dur, Pseq([16/1],1)),
+
+			Pbind(\instrument,\gate2, \in ,~to4bar, \group, ~gateGrp7, \tS,  0.39550810372374,
+		\dur, Pseq([1/1],1)),
+
+
+					Pbind(\instrument,\gate2, \in ,~toKbGate, \group, ~gateGrp7, \tS,  0.39550810372374,
+		\dur, Pseq([16/1],1)),
+
+			Pbind(\instrument,\gate2, \in ,~rollingK, \group, ~gateGrp7, \tS,  0.39550810372374,
+		\dur, Pseq([1/1],1)),
+
+
+					Pbind(\instrument,\gate2, \in ,~toKbGate, \group, ~gateGrp7, \tS,  0.39550810372374,
+		\dur, Pseq([16/1],1)),
+
+			Pbind(\instrument,\gate2, \in ,~dipatchKB2, \group, ~gateGrp7, \tS,  0.39550810372374,
+		\dur, Pseq([1/1],1)),
+
+					Pbind(\instrument,\gate2, \in ,~toKbGate, \group, ~gateGrp7, \tS,  0.39550810372374,
+		\dur, Pseq([16/1],1)),
+
+			Pbind(\instrument,\gate2, \in ,~dipatchKB2, \group, ~gateGrp7, \tS,  0.39550810372374,
+		\dur, Pseq([1/1],1)),
+
+
+
+		].scramble,2)
 
 	],inf),
 

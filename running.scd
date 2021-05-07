@@ -759,21 +759,21 @@ LFNoise0.kr(~hz1beat).range(0.1,0.0)/*,0.02)*/
 
 	}).add;
 
-	SynthDef(\kick, {
+SynthDef(\kick, {
 		arg amp=0.2,out=0;
 		var sig, env, envF;
 
 		envF = EnvGen.ar(
 			Env(
 				[5178.15,1539.47,165,26,0,0],
-				[0.001,0.008,0.1,0,0.2],
-					[-4,-4]
+				[0.00188,0.0002,0.1,0,0.2],
+					[-6,-6,-4]
 			)
 		);
 
 		env =EnvGen.ar(
-	Env([0.8 , 0.2, 0.6,    0.6,0.6,0],
-		[0.008, 0.08, 0,0.006,0.22],[-1.8,-50,5,5,-5]),doneAction:2);
+	Env([0.8 , 0.1, 0.6,    0.6,0.6,0],
+		[0.0087, 0.08, 0,0.006,0.22],[-12.2,-50,5,5,-5]),doneAction:2);
 
 
 
@@ -819,9 +819,10 @@ LFNoise0.kr(~hz1beat).range(0.1,0.0)/*,0.02)*/
 		LPF.ar(LPF.ar(
 		BPeakEQ.ar(
 			BPeakEQ.ar(
-					BPeakEQ.ar(
+					BPeakEQ.ar(	BPeakEQ.ar(
 
 			sig
+						,2637.02/4,1.5,(-23))
 						,2637.02/2,1.2,(-10))
 			,2637.02 /*659.255*4*/ ,4, (-20))
 		,164.81375,8, (-14)).round(2**(-16)
@@ -1936,7 +1937,7 @@ SynthDef(\sequ,{|value, dur, in=0, out=0, vlAtk=0, vlDec=1,vlSub=1,vlSub2=1, vlR
 
 s.sync;
 
-	~kick =	Pbind(\instrument, \kick,\dur, Pseq([1/1],1),\amp,(-2.8/*-10.2*/),\out,0);
+	~kick =	Pbind(\instrument, \kick,\dur, Pseq([1/1],1),\amp,(-2.6/*-10.2*/),\out,0);
 
 	~bassShap = Pbind(\instrument, \shap, \dur,Pseq([1/1],1),\dA1,2,\out,~bassShapB, \tS, 0.39550810372374);
 
@@ -1950,10 +1951,10 @@ s.sync;
 		\rel2, t.beatDur/4 * 0.0012,
 		\atkcrv, -2,
 		\relcrv, -2,\relcrv2, -4, \relcrv3, -6
-		,\amp,(-1.2/*-1*/)/*(-13)*/,\out,~bassEq
+		,\amp,(7.2/*-1*/)/*(-13)*/,\out,~bassEq
 	);
 
-	~hat2 =Pbind(\instrument, \percussion,\rel,0.04840,\rel2,0.02420,\amp, (-28.2), \crv1, (-4), \crv1b, (-5), \modHz, exprand(500,10000), \mulMod, rrand(100, 500), \carHz, exprand(20,10000), \modAmp, 0.82875.rrand(0.4),\dur,Pseq([1/1],1) ,\out, ~kickHatEq);
+	~hat2 =Pbind(\instrument, \percussion,\rel,0.04840,\rel2,0.02420,\amp, (-28.2), \crv1, (-4), \crv1b, (-5), \modHz, exprand(500,10000), \mulMod, rrand(100, 500), \carHz, exprand(20,10000), \modAmp, 1.10875.rrand(0.8) /*0.82875.rrand(0.4)*/,\dur,Pseq([1/1],1) ,\out, ~kickHatEq);
 
 	//SO WRONG NO VOL ctrl at all
 	~hit = Pbind(\instrument,\gran,\dur,~short1,\amp, 1,\buf,~bufSnoopy,\out,~eqDs,\gate, 1,\duration,Pkey(\dur),\impulse,0.003,
@@ -2041,7 +2042,7 @@ Ppar([~hat2,~kick,Pbind(\instrument ,	\EQ2,\dur, inf, \in,~kickHatEq, \out,0,\gr
 )
 
 ~kick.play
-~k2.plot
+~k2.play
 ~b3.play
 ~hat.plot
 
@@ -2068,7 +2069,7 @@ Ppar([
 Pbind(\instrument, \playBuf, \impulse, 0.003 ,\dur,    Pseq([1/1],inf), \tS,  0.39550810372374,\buf,~k2,\out, 0,\loopy,0,\start,0,\tS, 0.39550810372374).play(t)
 Pbind(\instrument, \playBuf, \impulse, 0.003 ,\dur,    Pseq([1/1],inf), \tS,  0.39550810372374,\buf,~b3,\out, 0,\loopy,0,\start,0,\tS, 0.39550810372374).play(t)
 
-~kb2.plot
+~kb2.play
 
 
 (
