@@ -8,7 +8,6 @@ Pbindf.free;
 Bus.free;
 )
 
-
 (
 s.options.memSize = 2097152 ;
 Server.default.options.numOutputBusChannels = 60;
@@ -119,7 +118,7 @@ s.sync;
 	~kb2 = Buffer.alloc(s, s.sampleRate *t.beatDur,2);
 	~cymb = Buffer.alloc(s, s.sampleRate *1,2);
 	~hat = Buffer.alloc(s, s.sampleRate *1,2);
-	~snare = Buffer.alloc(s, s.sampleRate *1,2);
+	~snare = Buffer.alloc(s, s.sampleRate *1,1);
 	~bell1 = Buffer.alloc(s, s.sampleRate *1,2);
 	~bell2 = Buffer.alloc(s, s.sampleRate *5,2);
 	~bell3 = Buffer.alloc(s, s.sampleRate *1,2);
@@ -129,6 +128,8 @@ s.sync;
 
 	~lpPrec = Buffer.alloc(s, s.sampleRate *t.beatDur*64,1);
 	~lpPrec2 = Buffer.alloc(s, s.sampleRate *t.beatDur*64,1);
+
+	~lpPrec3 = Buffer.alloc(s, s.sampleRate *t.beatDur*64,1);
 
 	~kb2Test = Buffer.alloc(s, s.sampleRate *20,2);
 	~e = Buffer.alloc(s, s.sampleRate *   t.beatDur*4 ,1);
@@ -170,13 +171,13 @@ s.sync;
 
 	~church =	Pbind(\instrument,\reverb, \dur,inf,\roomsize, 80, \revtime, 4.85, \damping, 0.41, \inputbw, 0.19, \drylevel, -3, \earlylevel, -9, \taillevel, -11 );
 
-	~churcx =[\roomsize, 80, \revtime, 4.85, \damping, 0.41, \inputbw, 0.19, \drylevel, -3, \earlylevel, -9, \taillevel, -11 ];
+	~churcx =[\roomsize, 80, \revtime, 4.85, \damping, 0.41, \inputbw, 0.19, \drylevel, -3, \earlylevel, -9, \taillevel, -2 ];
 
 
 
 	~quickFi =[\room, 0.2, \mix,0.115, \damp, 0.41];
 	~rShor = [\room, 0.25, \mix,0.4, \damp, 0.1];
-	~rLon =	[\room, 0.6, \mix,0.4, \damp, 0.1];
+	~rLon =	[\room, 0.5, \mix,0.3, \damp, 0.1];
 
 
 	~revRnd = [~quickFi,~rShor,~rLon];
@@ -565,6 +566,12 @@ s.sync;
 
 	);}).add;
 
+	SynthDef(\playBufS2 ,{|out = 0,start=0, trig= 0.002, dur, buf,rte=1 , tS=1, loopy=1,	decT=1, subsT=0,vl=1 ,dA=1 |Out.ar(out,PlayBuf.ar(2,buf,rte ,trigger:
+		trig/*Dust.kr(4.0)*/,startPos: start,loop: loopy)*
+	EnvGen.kr(Env([0,vl,vl,vl,0],[0,dur*decT*dA,dur* subsT]),timeScale: tS,doneAction: 2)
+
+	);}).add;
+
 
 	SynthDef(\playBufMod ,{|out = 0,start=0, trig= 0.002, dur, buf, dA=2,rte=1 , tS=1, loopy=1,	decT=1, subsT=0 ,modP |Out.ar(out,PlayBuf.ar(1,buf,rte+ In.kr(modP) ,trigger:
 		trig/*Dust.kr(4.0)*/,startPos: start,loop: loopy/*,doneAction: dA*/)* /*EnvGen.kr(Env([0,1,1,0],[0,dur,0]),timeScale: tS,doneAction: 2)*/
@@ -766,14 +773,14 @@ SynthDef(\kick, {
 		envF = EnvGen.ar(
 			Env(
 				[5178.15,1539.47,165,26,0,0],
-				[0.00188,0.0002,0.1,0,0.2],
-					[-6,-6,-4]
+				[0.00188,0.008,0.08,0,0.2],
+					[-3,-6,-2]
 			)
 		);
 
 		env =EnvGen.ar(
-	Env([0.8 , 0.1, 0.6,    0.6,0.6,0],
-		[0.0087, 0.08, 0,0.006,0.22],[-12.2,-50,5,5,-5]),doneAction:2);
+	Env([0.8 , 0.4, 0.6,    0.6,0.6,0],
+		[0.0087, 0.08, 0,0.6,0.22],[-12.2,-50,5,5,-5]),doneAction:2);
 
 
 
@@ -805,7 +812,7 @@ SynthDef(\kick, {
 		envF = EnvGen.kr(
 			Env(
 				[0,1280,20,0],
-				[atk,rel/2/*/4*/,rel2],
+				[atk,rel/*/4*/,rel2],
 				[atkcrv,relcrv3,relcrv2]
 			),
 			doneAction:2
@@ -822,9 +829,9 @@ SynthDef(\kick, {
 					BPeakEQ.ar(	BPeakEQ.ar(
 
 			sig
-						,2637.02/4,1.5,(-23))
-						,2637.02/2,1.2,(-10))
-			,2637.02 /*659.255*4*/ ,4, (-20))
+						,659.255,0.8,(-35))
+						, 1318.51,1.2,(-20))
+			,2637.02 /*659.255*4*/ ,1, (-25))
 		,164.81375,8, (-14)).round(2**(-16)
 ,envF+lpf - In.ar(bus, 1)),envF+lpf - In.ar(bus, 1))
 		);
@@ -992,7 +999,7 @@ freq         )* EnvGen.kr(Env([0,vl,vl,0],[0.055,dur-0.055,0],4),timeScale: tS,d
 
 		lp = BLowPass4.ar(sig , freqFil+ In.kr(busMod, 1) ,qf +In.kr(rqLPF));
 
-		bp = BPF.ar(sig,freqFil+ In.kr(busMod, 1) *factor3  ,qf2 +0.26);
+		bp = BBandPass.ar(sig,freqFil+ In.kr(busMod, 1) *factor3  ,qf2 +0.26);
 
 		hp = BHiPass4.ar(sig, freqFil+ In.kr(busMod, 1),/*0.6 */ qf2 +In.kr(bus7, 1));
 
@@ -1010,7 +1017,7 @@ freq         )* EnvGen.kr(Env([0,vl,vl,0],[0.055,dur-0.055,0],4),timeScale: tS,d
 
 		lp = BLowPass4.ar(sig , freqFil+ In.kr(busMod, 1)+ MouseX.kr(40,22000) ,qf +In.kr(rqLPF));
 
-		bp = BPF.ar(sig,freqFil+ In.kr(busMod, 1) *factor3  ,qf2 +0.26);
+		bp = BBandPass.ar(sig,freqFil+ In.kr(busMod, 1) *factor3+ MouseX.kr(40,22000)  ,qf2 +0.26);
 
 		hp = BHiPass4.ar(sig, freqFil+ In.kr(busMod, 1)+ MouseX.kr(40,22000),/*0.6 */ qf2 +In.kr(bus7, 1));
 
@@ -1378,12 +1385,12 @@ SynthDef(\comb, {|out=0, in ,maxDel, delayT,decT=6.1952,amp=0.09|
 
 		a = Resonz.ar(		Array.fill(4, input), 1294.5373184 *   [8,16,32],0.01/*wet*/).sum * 10;
     Out.ar(    out, /*GVerb.ar( a,roomsize,revtime,damping,inputbw, spread,drylevel.dbamp,earlylevel.dbamp,taillevel.dbamp,roomsize+1,0.3)+a)*/
-
+FreeVerb.ar(
 			  In.ar(in,2),
             mix, // mix 0-1
             room, // room 0-1
             damp // damp 0-1 duh
-        )
+		))
 
 }).add;
 
@@ -2017,6 +2024,8 @@ Pbind(\instrument,\percussion,\dur,Pseq([1/4], 1),\atk, 0,\rel,0.04840,\rel2,0.0
 Pbind(\instrument,\recLoopS,\buf,~cymb,\recording,1, \in,~comBusCymb,\group,~recGrp2,\dur,inf),
 Pbind(\instrument,\recLoopS,\buf,~hat,\recording,1, \in,~comBusHat,\group,~recGrp2,\dur,inf),
 Pbind(\instrument,\recLoop,\buf,~snare,\recording,1, \in,~snareEQ,\group,~recGrp2,\dur,inf),
+
+
 /*Pbind(\instrument,\recLoop,\buf,~k2,\recording,1, \in,~main1GToG,\group,~recGrp2,\dur,inf),
 		Pbind(\instrument,\recLoop,\buf,~b3,\recording,1, \in,~bgFil,\group,~recGrp2,\dur,inf),*/
 ],1).play(t);
@@ -2036,7 +2045,7 @@ Pbind(\instrument,\recLoop,\buf,~snare,\recording,1, \in,~snareEQ,\group,~recGrp
 )
 
 (
-Ppar([~hat2,~kick,Pbind(\instrument ,	\EQ2,\dur, inf, \in,~kickHatEq, \out,0,\group, ~eqGrp, \val, 659.255/2, \quant,1, \gain ,(-30)),
+Ppar([~hat2,~kick,Pbind(\instrument ,	\EQ2,\dur, inf, \in,~kickHatEq, \out,0,\group, ~eqGrp, \val, 659.255, \quant,1, \gain ,(-24)),
 	Pbind(\instrument,\recLoop,\buf,~k2,\recording,1, \in,0,\group,~recGrp2,\dur,inf)
 ],1).play(t) ;
 )
@@ -2083,7 +2092,7 @@ Pseq([
 		Pbind(\instrument, \wNoise,\dur,Pseq([1/2],1),\dec ,Pkey(\dur),\amp,(-12),\tS, 0.39550810372374,\type, \rest  )],inf),
 
 Pseq([Pbind(\instrument, \wNoise,\dur,Pseq([1/4],1),\dec ,Pkey(\dur),\amp,(-12),\tS, 0.39550810372374,\type, \rest  ),
-		Pbind( \instrument, \playBuf, \impulse, 0.003 ,\dur,    Pseq([1/4],3), \tS,  0.39550810372374,\buf,~b3,\out, ~kbToPan2,\loopy,0,\start,0,  \decT,0.90,\subsT ,Pseq([0,0.01,0.02],inf))],inf),
+		Pbind( \instrument, \playBuf, \impulse, 0.003 ,\dur,    Pseq([1/4],3), \tS,  0.39550810372374,\buf,~b3,\out, ~kbToPan2,\loopy,0,\start,0,  \decT,0.90,\subsT ,Pseq([0,0.016,0.032],inf))],inf),
 Pbind(\instrument, \pan2, \in,~kbToPan2,\out,0 ,\group,~stereoGrp,\dur, inf),
 
 
@@ -2096,4 +2105,5 @@ Pbind(\instrument, \pan2, \in,~kbToPan2,\out,0 ,\group,~stereoGrp,\dur, inf),
 
 
 )
+
 

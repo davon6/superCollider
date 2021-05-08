@@ -106,10 +106,15 @@ Pbind(\instrument, \filter, \dur, inf,\in,~bgFil22, \busMod,~bus2, \rqLPF, ~bus1
 		,\gain,1,\in, ~bgBus2 ,\ctrl, ~snBus, \out,0,\group,~compGrp2 ),
 
 
+	//for day rise , do this one
+
+	Pbind(\instrument,\rise,\dur,Pseq([64/1],inf), \vlAtk, Pfunc({4.00.rand}),\f1, Pfunc({1.00.rand}) , \f2, Pfunc({1.00.rand}) , \f3, Pfunc({1.00.rand}),  \ic_atk,Pfunc({10.00.rrand(-5)}),\index,Pfunc({50.00.rrand(1)}),\mRatio,Pfunc({3.rrand(1)}),\out , ~bigRiToDisto,\tS, 0.39550810372374,
+			\key,Pseq([\dec,\atk ], inf),\value,1, \finish, { ~key.envirPut(~value) })
+	,
+			Pbind(\instrument,\envSli,\out, ~bus17,\dur,Pseq([64/1],inf),\tS, 0.39550810372374,\val1,350,\crv,3.2),
+
+
 	~kb,~hitX,~pedonk,~part3,
-
-
-
 
 
 	Pbind(\instrument, \playBuf10, \buf ,~leTout,\out,~toGate10, \start,
@@ -161,26 +166,9 @@ Pseq([ Pseq([8/1],1)],1)  ,Pseq([ Pseq([4/1],1)],1)   ,Pseq([Pseq([16/1],1) ,Pse
 
 
 
-	Pbind(\instrument,\rise,\dur,Pseq([64/1],inf), \vlAtk, Pfunc({4.00.rand}),\f1, Pfunc({1.00.rand}) , \f2, Pfunc({1.00.rand}) , \f3, Pfunc({1.00.rand}),  \ic_atk,Pfunc({10.00.rrand(-5)}),\index,Pfunc({50.00.rrand(1)}),\mRatio,Pfunc({3.rrand(1)}),\out , ~bigRiToDisto,\tS, 0.39550810372374,
-			\key,Pseq([\dec,\atk ], inf),\value,1, \finish, { ~key.envirPut(~value) })
-	,
-			Pbind(\instrument,\envSli,\out, ~bus17,\dur,Pseq([64/1],inf),\tS, 0.39550810372374,\val1,350,\crv,3.2),
-
-
-		Pbind(\instrument, \distoS, \dur, inf, \in, ~bigRiToDisto , \out,~bigRiToEnv ,\group, ~distoGrp),
-	Pbind(\instrument,\filterS, \in,~bigRiToEnv ,\out,~bigRiToEq, \group,~filterGrp ,\which, 0, \busMod, ~bus17,\qf,0.67,\dur, inf),
-
-	Pbind(\instrument,\EQHP2, \in, ~bigRiToEq , \out, ~bigRiToRev ,\frq, 300, \dur,inf, \group, ~eqGrp0, \val,3600, \quant,8, \gain,(-6),\val2,14800,\quant2,1, \gain2,(-38).rrand(-8)),
-	Pbindf( ~rShort, \instrument, \reverbS, \dur,inf, \in,~bigRiToRev  , \out,~bigRiToComp,\group,~revGrp),
-		Pbind(\instrument,\compS, \dur,inf,\thr,0.8 ,\sB, 1.015,\sA, 1/2,\atk ,0.0242, \rel ,0.0968,\gain,20,\in, ~bigRiToComp ,\ctrl, ~kbus, \out,~bigRiToLimit, \group, ~compGrp),
-
-	Pbind(\instrument,\stereoS, \dur, 9999, \in, ~bigRiToStereo  ,\spread,1,\out,0,\tS, 0.39550810372374,\group, ~stereoGrp,\atkT,1,\decT,0),
-
-	// Pbind(\instrument,	\lim10, \ml,0.2, \in, ~new10, \group, ~limitGrp,\dur,inf)
 
 
 
-/*Prand([*/
 
 	Pbind(\instrument,\gateSD, \dur, Prand([ Pseq([1.5/1],1), Pseq([3/1],1),Pseq([1/1],1),],inf),
 		\in,  Prand([~toGate10,~toGate102], inf)  ,\out ,~halfAbso22
@@ -189,7 +177,7 @@ Pseq([ Pseq([8/1],1)],1)  ,Pseq([ Pseq([4/1],1)],1)   ,Pseq([Pseq([16/1],1) ,Pse
 
 
 
-	/*],inf),*/
+
 
 
 	Pbind(\instrument, \gateS, \dur, Pseq([128/1],inf), \in,Pseq([~halfAbso21,~halfAbso22],inf), \out,~absoFinalGate2, \group,~eqGrp2,\tS, 0.39550810372374),
@@ -337,7 +325,7 @@ Pbind(\instrument, \shiftEx, \dur, inf, \in,~limitBus1,\group ,~distoGrp0,\out, 
 	Pbind(\instrument,\compS, \dur,inf,\thr,0.85 ,\sB, 1.086,\sA, 1/2,\atk ,0.0121, \rel ,0.04840, \gain,1/*(50)*/	,\in, ~comPerch2 ,\ctrl, ~kbus, \out,~limitPerch2, \group, ~compGrp),
 
 
-		Pbind(\instrument,\stereoS, \dur, Pseq([16/1],inf), \in, ~stereoPerch ,\spread,0.6  ,\center, 0, \out,~absoFinalGate3, \group, ~dispatchGrp2 ,\tS, 0.39550810372374),
+		Pbind(\instrument,\stereoS, \dur, Pseq([16/1],inf), \in, ~stereoPerch ,\spread,1  ,\center, 0, \out,~absoFinalGate3, \group, ~dispatchGrp2 ,\tS, 0.39550810372374),
 
 
 	// Pbind(\instrument, \playBufS, \dur,  Pseq([1/1],inf), \tS,  0.39550810372374,\buf,~kb2)
@@ -348,12 +336,14 @@ Pbind(\instrument, \playBufS, \dur,  Pseq([1/1],inf), \tS,  0.39550810372374,\bu
 
 
 
-~dispatchGrp2=Group.new
+~dispatchGrp2=Group.new;
 ~revGrp=Group.new
 (
 Ppar([
-Pbind(\instrument, \playBuf10, \buf ,~leTout2,\out,~revBus1, \start, ~leTout2.numFrames/ 256 * 222.rrand(1)
-		,\loopy,0,\tS,0.39550810372374,\dur,Pseq([2.25/1],inf)),
+/*Pbind(\instrument, \playBuf10, \buf ,~leTout2,\out,~revBus1, \start, ~leTout2.numFrames/ 256 * 222.rrand(1)
+		,\loopy,0,\tS,0.39550810372374,\dur,Pseq([2.25/1],inf)),*/
+
+	Pbind(\instrument, \playBufS,\dur  ,Pseq([2/1],64),\buf,~fkAr,\tS,  0.39550810372374,\start,612277.44552995,\out, ~revBus1),
 
 	Pbind(\instrument, \shiftEx, \in, ~revBus1,\group, ~revGrp,\dur ,inf),
 	 Pbind(\instrument, \playBufS, \dur,  Pseq([1/1],inf), \tS,  0.39550810372374,\buf,~kb2,\out, 0)

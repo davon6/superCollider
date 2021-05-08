@@ -15,13 +15,13 @@
 (
 
 ~bou= Pseq([
-	Pbind(\instrument, \playBuf10, \buf ,~leTout2,\out,~absoFinalGate3, \start, ~leTout2.numFrames/ 256 * 50
+	Pbind(\instrument, \playBuf10, \buf ,~leTout2,\out,~absoFinalGate3, \start, ~leTout2.numFrames/ 256 * 78
 		,\loopy,0,\tS,0.39550810372374,\dur,Pseq([5/4],1) ,),
 
 
 
 
-		Pbind(\instrument, \playBuf10, \buf ,~leTout2,\out,~absoFinalGate3, \start, ~leTout2.numFrames/ 256 * 84
+		Pbind(\instrument, \playBuf10, \buf ,~leTout2,\out,~absoFinalGate3, \start, ~leTout2.numFrames/ 256 * 33
 		,\loopy,0,\tS,0.39550810372374,\dur,Pseq([5/4],1) ,),
 
 
@@ -47,13 +47,13 @@ Pbind(\instrument, \playBuf10, \buf ,~leTout2,\out,0, \start, ~leTout2.numFrames
 (
 
 ~bou2= Pseq([
-	Pbind(\instrument, \playBuf10, \buf ,~leTout2,\out,~absoFinalGate3, \start, ~leTout2.numFrames/ 256 * 50
+	Pbind(\instrument, \playBuf10, \buf ,~leTout2,\out,~absoFinalGate3, \start, ~leTout2.numFrames/ 256 * 78
 		,\loopy,0,\tS,0.39550810372374,\dur,Pseq([6/4],1) ,),
 
 
 
 
-		Pbind(\instrument, \playBuf10, \buf ,~leTout2,\out,~absoFinalGate3, \start, ~leTout2.numFrames/ 256 * 84
+		Pbind(\instrument, \playBuf10, \buf ,~leTout2,\out,~absoFinalGate3, \start, ~leTout2.numFrames/ 256 * 33
 		,\loopy,0,\tS,0.39550810372374,\dur,Pseq([6/4],1) ,),
 
 
@@ -84,6 +84,9 @@ Pbind(\instrument, \playBuf10, \buf ,~leTout2,\out,0, \start, ~leTout2.numFrames
 (
 
 ~part3 =
+
+Ppar([
+
 Pseq([
 Pseq([ ~bou, Pbind(\instrument,\gateS, \dur, Pseq([1/4],6),\tS, 0.39550810372374  ),~bou,Pbind(\instrument,\gateS, \dur, Pseq([1/4],6),\tS, 0.39550810372374  ),~bou,	Pbind(\instrument, \playBuf10, \buf ,~leTout2,\out,~absoFinalGate3, \start, ~leTout2.numFrames/ 256 * 43
 	,\loopy,0,\tS,0.39550810372374,\dur,Pseq([5/4],1) ),
@@ -109,6 +112,14 @@ Pbind(\instrument, \playBuf10, \buf ,~leTout2,\out,~absoFinalGate3, \start, ~leT
 		,\loopy,0,\tS,0.39550810372374,\dur,Pseq([2/4],1) ),*/
 
 ],2),
-],inf);)
+
+		],inf),
+		Pbind(\instrument, \playBufS,\dur  ,Pseq([2/1],inf),\buf,~fkAr,\tS,  0.39550810372374,\start,~fkAr.numFrames.rand,\out, ~limitBus1),
+
+
+
+
+],1)
+;)
 
 

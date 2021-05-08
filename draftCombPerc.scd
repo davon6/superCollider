@@ -40,7 +40,7 @@ Ppar([
 		],inf)
 	)
 	,
-	Pbind(\instrument, \filterGS,\which,1, \in,~percuStereo ,\out,~part2SRev, \group, ~filterGrp,\qf2,0.08,\dur ,inf),
+	Pbind(\instrument, \filterGS,\which,1, \in,~percuStereo ,\out,0, \group, ~filterGrp,\qf2,0.08,\dur ,inf),
 
 
 	Pbind(\instrument,\pingD, \in,~part2SRev,  \bufnum,~delay, \feedback,0.45 ,\group, ~delGrp,\dur, inf,\out,~limitBus1),
@@ -50,6 +50,8 @@ Ppar([
 
 ],1).play(t)
 )
+
+
 
 ~fkAr.play
 
