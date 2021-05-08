@@ -3,28 +3,21 @@
 //new env shape for percu in env file
 //replace all TS by t.beatDur in running.scd
 //free delay (too choped/gated)
-//share variable in between mainlead and seque (same sound)
+
 //IMPORTSNT ~toLimitlast might only block left and UNWANTED feedback with right !!!!
 // Percu Dynamic EQ not quiet right
 //RISE add more filtering
 //comp10 might be overlapping
-//set no4 src in base for untight fx
-//1/2 hit  hits too much//too stabby
 //plop noise in bass
-//BG SLIDE NOT CHECKED FOR VOLUME YET
-//COMB MODU MUST GO THROUGH BUSSES OR DRIFTING INEVITABLE
-//~NO2 gating not really working
 //bass has too much high, blocks leads
 //start noise reverb volume breaks somestimes good sometimes buzzkill
 //unsync stereo no4
-//arghh percheur sometimes comes mono in limiter
+
 //chelou low freq noise wander in the project
-//rythm sample 1/2 on kb needs mixing
-//bell variable to save if necessary for mixing
-//AMAZing limiter Synths off for a sequence
-//missing slow motion of filters
-//flanger with negative feedback
-//does starts hits works?
+
+
+//final delay browken
+
 
 
 ~hat2.play
@@ -162,10 +155,10 @@
 ~compGrp4 = Group.after(~extraRev);
 ~limitGrp4 = Group.after(~compGrp4);
 ~stereoGrp4 = Group.after(~limitGrp4);
-~eqGrp3=Group.after(~stereoGrp4);
+~compGrp5 = Group.after(~stereoGrp4);
+~eqGrp3=Group.after(~compGrp5);
 ~stereoGrp5 = Group.after(~eqGrp3);
-~compGrp5 = Group.after(~stereoGrp5);
-~recGrp3= Group.after(~compGrp5);
+~recGrp3= Group.after(~stereoGrp5);
 
 
 
@@ -1287,7 +1280,4 @@ Pseq([1.5/1],1)  ,Pseq([1.25/1],1)],1), \in,~gateBus,\tS, 0.39550810372374,\grou
 ~bufSnoopy.play
 ~leTout2.play
 
-
-
-Pbind(\instrument,\playBufXG, \dur,Pseq([3.75/1],inf),\amp, 1,\buf,~lpPrec,\out,~eqBus4,\impulse,0.003,\start,~st2 ,\tS, 0.39550810372374,\vlDec,~pSub ,\vlSub,  ~pSub,\vlSub2,Pkey(\vlSub), \atkT,~pAtkT,\decT, ~pDecT+0.14 ,	\subsT, ~pSubT+0.1 , \relT,~pRelT,\atckC,~pAtkC,\decC,~pDecC,\relC,~pRelC,\vlAtk , ~pvlAtk ,  \vlRel,  Pkey(\vlAtk),\loopy,0).play(t)
 
