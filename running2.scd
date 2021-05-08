@@ -162,10 +162,10 @@
 ~compGrp4 = Group.after(~extraRev);
 ~limitGrp4 = Group.after(~compGrp4);
 ~stereoGrp4 = Group.after(~limitGrp4);
-~compGrp5 = Group.after(~stereoGrp4);
-~eqGrp3=Group.after(~compGrp5);
+~eqGrp3=Group.after(~stereoGrp4);
 ~stereoGrp5 = Group.after(~eqGrp3);
-~recGrp3= Group.after(~stereoGrp5);
+~compGrp5 = Group.after(~stereoGrp5);
+~recGrp3= Group.after(~compGrp5);
 
 
 
@@ -1087,7 +1087,7 @@ Ppar([
 
 
 	Pbind(\instrument,\playBufXG,\dur,Pseq([16/1],inf),\amp, 1,\buf,~lpPrec3,\out,
-	~gateRnd,\impulse,0.003,\start, 600000,\tS, 0.39550810372374 ,\vlSub,  1 , \vlSub2,Pkey(\vlSub), \atkT,~pAtkT,\decT, ~pDecT ,	\subsT, 1-~pDecT , \relT,0,\atckC,~pAtkC,\decC,~pDecC,\relC,~pRelC,\vlAtk , ~pvlAtk ,  \vlRel,  Pkey(\vlAtk),\loo,1),
+	~filterRnd,\impulse,0.003,\start, 600000,\tS, 0.39550810372374 ,\vlSub,  1 , \vlSub2,Pkey(\vlSub), \atkT,~pAtkT,\decT, ~pDecT ,	\subsT, 1-~pDecT , \relT,0,\atckC,~pAtkC,\decC,~pDecC,\relC,~pRelC,\vlAtk , ~pvlAtk ,  \vlRel,  Pkey(\vlAtk),\loo,1),
 
 
 
@@ -1208,7 +1208,7 @@ Ppar([~base,~fx],1).play(t)
 
 	Pbind(\instrument ,	\EQHP2,\dur, inf, \in,~delayEq, \out,~delToStereo,\group, ~eqGrp3, \frq, 300,\vol,0.4),
 
-	Pbind(\instrument,\stereoS, \dur,Pseq([8/1],inf), \in, ~delToStereo   ,\out,0,\spread,1, \center, Pfunc({0.8.rrand(-0.8)}),\group,~stereoGrp5),
+	Pbind(\instrument,\stereoS, \dur,Pseq([8/1],inf), \in, ~delToStereo   ,\out,0,\spread,1, \center, Pfunc({0.8.rrand(-0.8)}),\group,~stereoGrp5,\tS, 0.39550810372374),
 
 
 	Pbind(\instrument,\stereoS, \dur, 9999, \in, ~stereoBus3b   ,\out,~newCOn2,\spread,1, \group, ~stereoGrp4),

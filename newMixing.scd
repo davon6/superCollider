@@ -55,8 +55,7 @@
 
 // ~main1= (~bufSnoopy.numFrames.rrand(s.sampleRate*16*t.beatDur)- s.sampleRate*16*t.beatDur)  ;
 //~eq5.free
-~playM=Synth( \playBufX, [\impulse, 0.321875, \start,~main1,\buf,~bufSnoopy,\out, ~filterRnd,\loo,1]);
-~playM.set( \start,~main1);
+
 ~eq5=Synth(\EQHP, [\frq, 100, \out, ~reverbBus23],~eqGrp0);
 ~eq5.set(\in, ~filterRnd,\out,~gateBus23,\val, 0,\quant, 0, \gain,0,\val2,0,\quant2,0, \gain2,0, \val3,0,\quant3,0, \gain3,0,\val4,0,\shelf,0, \gain4,0);
 ~rev5=Synth( \reverb ,~revRnd[~r1],~revGrp); ~rev5.set(\in,~reverbBus23  , \out,~comFuzz23);
@@ -78,6 +77,9 @@
 ~mix6.set(\gain,60);*/
 
 
+
+~playM=Synth( \playBufX, [\impulse, 0.321875, \start,~main1,\buf,~bufSnoopy,\out, ~gateRnd,\loo,1]);
+~playM.set( \start,~main1);
 // ~main3= (~bufSnoopy.numFrames.rrand(s.sampleRate*16*t.beatDur)- s.sampleRate*16*t.beatDur)  ;
 // ~eq7.free
 // ~playM3=Synth(  \playBufX,[ \impulse, 0.321875, \start,~main3,\buf,~bufSnoopy,\out,   ~gateRnd,\loo,1]);
