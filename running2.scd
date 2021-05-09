@@ -508,7 +508,7 @@ Pbind(\instrument, \filter, \dur,inf, \in,~hpK,\which,2,\busMod, ~bus5,\bus7,~bu
 Pwrand([    Pseq([\rest ,\rest,\note,\rest] ,1),Pseq([\rest ,\note,\note,\rest],1),
 
 		],[26,1].normalizeSum , 88),//was 96
-				Pseq([\rest,\rest,\rest,\rest],32)].scramble,1),    Pseq([\rest,\rest,\note,\rest ],128), /*Pseq([\rest ,\note,\note,\rest,\rest,\rest,\rest,\rest,
+				Pseq([\rest,\rest,\note,\rest],32)].scramble,1),    Pseq([\rest,\rest,\note,\rest ],128), /*Pseq([\rest ,\note,\note,\rest,\rest,\rest,\rest,\rest,
 						\rest,\rest,\rest,\rest,\rest,\rest,\rest,\rest,
 						\rest ,\note,\note,\rest,\rest,\rest,\rest,\rest,
 						\rest,\rest,\rest,\rest,\rest,\rest,\note,\rest
@@ -528,28 +528,31 @@ Pbind(\instrument, \playBufS, \dur,  Pseq([1/1],inf), \tS,  0.39550810372374,\bu
 
 
 	Pbind( \instrument, \playBuf10, \impulse,0.6 ,
-		\dur,Pseq([1/4],inf), \tS,  0.39550810372374,\start,~rythm,\buf,~leTout,\out,  ~rythmFil,\loopy,0	,\type,Pseq([
+		\dur,Pseq([1/2],inf), \tS,  0.39550810372374,\start,~rythm,\buf,~leTout,\out,  ~rythmFil,\loopy,0	,\type,Pseq([
 			/*Pseq([
 			Pseq([\rest,\rest,\note,\rest,\rest,\rest,\rest,\rest].scramble,1),
 			Pseq([\rest,\rest,\rest,\note,\rest,\rest,\rest,\rest].scramble,1),
 			],4),*/
 
 			Pseq([
-			Pseq([\rest,\rest,\note,\rest].scramble,1),
-			Pseq([\rest,\rest,\rest,\note].scramble,1),
+			Pseq([\rest,\rest,\note,\rest,\rest,\rest,\rest,\note].scramble,1),
+
 			],32),
 			Pseq([\rest],32)
 
 	],inf)          ),
 
 
+	Pbind(\instrument,\envSli,\out, ~bus21,\dur,Pseq([1/2],inf),\tS, 0.39550810372374,\val1,(-540),\val2,1600,\crv,3.2),
+
+
 	Pbind(\instrument, \filter10,\freqFil,600 ,\busMod,~bus21 ,\in,~rythmFil,\which,0,\qf,0.75, \dur, inf, \out,~rythmFilEQ, \group,~filterGrp),
 
-	Pbind(\instrument, \EQHP10, \in,~rythmFilEQ,\dur, inf, \out,~rythmLimit, \group,~eqGrp,\vol,10,\val,120,\quant,4, \gain,(-12)),
+	Pbind(\instrument, \EQHP10, \in,~rythmFilEQ,\dur, inf, \out,~rythmLimit, \group,~eqGrp,\vol,4,\val,420,\quant,4, \gain,(-16)),
 
 /*	Pbind(\instrument, \limiter10toMixer,\c20,1,\name,30, \dur, inf, \in,~rythmLimit,\out,~rythmComp, \gain,40, \group, ~limitGrp),*/
 
-	Pbind(\instrument,\comp10, \dur,inf,\thr,0.9 ,\sB, 1.2,\sA, 1/2,\atk ,0.001, \rel ,0.3872,\dur,99999
+	Pbind(\instrument,\comp10, \dur,inf,\thr,0.9 ,\sB, 1.08,\sA, 1/2,\atk ,0.001, \rel ,0.3872,\dur,99999
 		,\gain,1,\in,~rythmComp  ,\ctrl, ~kbus, \out, ~toKbGate,\group, ~compGrp2 ,\tS, 0.39550810372374),
 
 
@@ -671,11 +674,6 @@ Pseq([
 
 
 
-
-
-	//INCORPORAE SLIGHT MOVEMENT
-
-	Pbind(\instrument,\envSli,\out, ~bus21,\dur,Pseq([1/2],inf),\tS, 0.39550810372374,\val1,(-540),\val2,1200,\crv,3.2),
 
 
 

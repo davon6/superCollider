@@ -469,20 +469,20 @@ Synth(\playB10,[\buf, ~leTout,\out,~finGran ]   );
 
 
 
-~mix32=	Synth( \limiter10toMixer,[\c32,1,\dur, inf, \in,~rythmLimit,\out,~rythmComp, \gain,60,], ~limitGrp);
-//~mix20.set(\gain,60)
+~mix32=	Synth( \limiter10toMixer,[\c32,1,\dur, inf, \in,~rythmLimit,\out,~rythmComp, \gain,22,], ~limitGrp);
+//~mix32.set(\gain,20)
 
 
 
 ~mix31= Synth(\limiterStoMixer,[\c31,1,\in, ~limitCymb,\gain,20,\out,~comFuzz22],~limitGrp);
 // ~mixa.set(\in,~comFuzz22);
- ~mix31.set(\gain,12);
+ ~mix31.set(\gain,10);
 ~mix33= Synth(\limiterStoMixer,[\c33,1,\in, ~limitHat,\gain,16,\out,~comFuzz22],~limitGrp);
 // ~mixa.set(\in,~comFuzz22);
- ~mix33.set(\gain,14);
+ ~mix33.set(\gain,25);
 
 ~mix34= Synth(\limiterToMixer,[\c34,1,\in, ~snareLimit,\gain,40,\out,~toPan2],~limitGrp);
- ~mix34.set(\gain,40);
+ ~mix34.set(\gain,36);
 
 
 
