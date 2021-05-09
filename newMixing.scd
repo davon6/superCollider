@@ -7,7 +7,7 @@
 ~compUlti= Synth(\comp10,[\ctrl, ~snBus,],~compGrp2);
 ~compUlti.set(\thr,0.86 ,\sB, 1.1,\sA, 1/2,\atk ,0.0968, \rel ,0.3872 ,\in, ~toCom, \out,/*~eqBus10*/  ~toGate10,\group, ~compGrp2);
 
-~compUlti.set(\out,~toGate10)
+/*~compUlti.set(\out,~toGate10)*/
 
 ~mixingUlti = Synth(\EQHP10, [\in, ~eqBus10, \frq, 100,\vol, 2.2], ~eqGrp2);
  ~mixingUlti.set(\vol, 0.87);//0.22
@@ -17,35 +17,35 @@
 /*~playS= Synth(\playBufX, [\impulse, 0.3 ,\start,0,\buf,~lpPrec2,\out,~eqBus1 ,\loopy,0]);
 ~playS.set(\start,0);*/
 ~eq2=Synth(\EQHP, [\frq, 100,\out, ~reverbBus],~eqGrp0);
-~eq2.set(\val, 0,\quant, 0, \gain,0,\val2,0,\quant2,0, \gain2,0, \val3,0,\quant3,0, \gain3,0,\val4,0,\shelf,0, \gain4,0,\in, ~eqBus1 , \out,~gateBus);
+~eq2.set(\val, 1800,\quant, 2, \gain,(-14),\val2,200,\quant2,1, \gain2,(-22), \val3,0,\quant3,0, \gain3,0,\val4,0,\shelf,0, \gain4,0,\in, ~eqBus1 , \out,~gateBus);
 ~rev2=Synth( \reverb ,~revRnd[2],~revGrp);~rev2.set( \in, ~reverbBus , \out, ~comFuzz);
 ~comp2=Synth(\compS, [\ctrl, ~kbus ],~compGrp);
 ~comp2.set(\thr,0.92 ,\sB, 1.16,\sA, 1/2,\atk ,0.0242, \rel ,0.968, \gain,25,\in, ~comFuzz,\out,~limitFuzz);
 ~mix2= Synth(\limiterStoMixer,[\c2,1,\in, ~limitFuzz, \gain,20,\out,~stereoBus1],~limitGrp);
 // ~mixa.set(\in,~stereoBus1);
-~mix2.set(\gain,38);
+~mix2.set(\gain,24);
 ~stereo2= Synth(\stereoS,[ \dur, 9999, \in, ~stereoBus1   ,\out,~no1,],~stereoGrp);
 
 // ~eq3.free
 ~eq3=Synth(\EQHP, [\frq, 100, \out, ~revBus1],~eqGrp0);
-~eq3.set(\in, ~toEq , \out,~gateBus3,\val, ~val=0,\quant, ~quant=0, \gain,~gain=0,\val2,~val2=0,\quant2,~quant2=0, \gain2,~gain2=0,\val3,~val3=0,\quant3,~quant3=0, \gain3,~gain3= 0,\val4,~val4=0,\shelf,~shelf=0, \gain4,~gain4=0);
+~eq3.set(\in, ~toEq , \out,~gateBus3,\val, ~val=1900,\quant, ~quant=2, \gain,~gain=(-14),\val2,~val2=4500,\quant2,~quant2=0.4, \gain2,~gain2=(-12.4),\val3,~val3=0,\quant3,~quant3=0, \gain3,~gain3= 0,\val4,~val4=6000,\shelf,~shelf=1.26, \gain4,~gain4=(-17));
 ~rev3=Synth( \reverb ,~revRnd[~r2],~revGrp); ~rev3.set(\in, ~revBus1 , \out, ~comBus1);
 ~comp3=Synth(\compS, [\ctrl, ~kbus ],~compGrp);
 ~comp3.set(\thr,0.88 ,\sB, 1.086,\sA, 1/2,\atk ,0.0121, \rel ,0.3872, \gain,10,\in, ~comBus1, \out,~limitBus1);
 ~mix3= Synth(\limiterStoMixer,[\c3,1,\in, ~limitBus1,\gain,10,\out,~sterBus1],~limitGrp);
 // ~mixa.set(\in,~sterBus1);
- ~mix3.set(\gain,~gainMix=40);
+ ~mix3.set(\gain,~gainMix=21);
 ~stereo3= Synth(\stereoS,[ \dur, 9999, \in, ~sterBus1   ,\out,~no1, ], ~stereoGrp);
 
 //~eq4.free
 ~eq4=Synth(\EQHP, [\frq, 100, \out, ~revBus2],~eqGrp0);
-~eq4.set(\in, ~eqBus2x , \out,~gateBusB,\val, 0,\quant, 0, \gain,0,\val2,0,\quant2,0, \gain2,0, \val3,0,\quant3,0, \gain3,0,\val4,0,\shelf,0, \gain4,0);
-~rev4=Synth( \reverb ,~revRnd[~r3],~revGrp); ~rev4.set(\in, ~revBus2 , \out, ~comBus2);
+~eq4.set(\in, ~eqBus2x , \out,~gateBusB,\val, 2000,\quant, 2, \gain,(-12),\val2,300,\quant2,1.2, \gain2,(-13), \val3,1200,\quant3,4, \gain3,(-4),\val4,200,\shelf,1, \gain4,(-20));
+~rev4=Synth( \reverb ,~revRnd[0],~revGrp); ~rev4.set(\in, ~revBus2 , \out, ~comBus2);
 ~comp4=Synth(\compS, [\ctrl, ~kbus ],~compGrp);
-~comp4.set(\thr,0.88 ,\sB, 1.086,\sA, 1/2,\atk ,0.0121, \rel ,0.3872, \gain,6,\in, ~comBus2, \out,~limitBus2);
-~mix4= Synth(\limiterStoMixer,[\c4,1,\in, ~limitBus2,\gain,10,\out,~sterBus2],~limitGrp);
+~comp4.set(\thr,0.88 ,\sB, 1.086,\sA, 1/2,\atk ,0.0121, \rel ,0.0968, \gain,8,\in, ~comBus2, \out,~limitBus2);
+~mix4= Synth(\limiterStoMixer,[\c4,1,\in, ~limitBus2,\gain,1,\out,~sterBus2],~limitGrp);
 // ~mixa.set(\in,~sterBus2);
-~mix4.set(\gain,40);
+~mix4.set(\gain,180);
 ~stereo4= Synth(\stereoS,[  \dur, 9999, \in, ~sterBus2, \out,~no1], ~stereoGrp);
 //main2
 
@@ -57,13 +57,14 @@
 //~eq5.free
 
 ~eq5=Synth(\EQHP, [\frq, 100, \out, ~reverbBus23],~eqGrp0);
-~eq5.set(\in, ~filterRnd,\out,~gateBus23,\val, 0,\quant, 0, \gain,0,\val2,0,\quant2,0, \gain2,0, \val3,0,\quant3,0, \gain3,0,\val4,0,\shelf,0, \gain4,0);
-~rev5=Synth( \reverb ,~revRnd[~r1],~revGrp); ~rev5.set(\in,~reverbBus23  , \out,~comFuzz23);
+~eq5.set(\in, ~filterRnd,\out,~gateBus23,\val, 2000,\quant, 2, \gain,(-15),\val2,300,\quant2,1.2, \gain2,(-13), \val3,1200,\quant3,4, \gain3,(-4),\val4,200,\shelf,1, \gain4,(-20));
+~rev5=Synth( \reverb ,~revRnd[0],~revGrp); ~rev5.set(\in,~reverbBus23  , \out,~comFuzz23);
 ~comp5=Synth(\compS, [\ctrl, ~kbus ],~compGrp);
 ~comp5.set(\thr,0.9 ,\sB, 1.005,\sA, 1/2,\atk ,0.0121, \rel ,0.0968,\gain,10,\in, ~comFuzz23, \out,~limitFuzz23);
 ~mix5= Synth(\limiterStoMixer,[\c5,1,\in, ~limitFuzz23, \gain,4.8, \out,~stereoBus23],~limitGrp);
 // ~mixa.set(\in,~stereoBus23);
-~mix5.set(\gain,38);
+~mix5.set(\gain,120);
+
 
 /*~playM2=Synth( \playBufX, [\impulse, 0.321875/4, \start,~main3,\buf,~bufSnoopy,\out,  ~toEqFlo,\loo,1]);
 ~eq6= Synth(\EQHP, [\frq, 100],~eqGrp0);
@@ -76,7 +77,7 @@
 // ~mixa.set(\in,~toStereoFlo);
 ~mix6.set(\gain,60);*/
 
-
+// 1101232.9643174
 
 ~playM=Synth( \playBufX, [\impulse, 0.321875, \start,~main1,\buf,~bufSnoopy,\out, ~gateRnd,\loo,1]);
 ~playM.set( \start,~main1);
@@ -85,14 +86,13 @@
 // ~playM3=Synth(  \playBufX,[ \impulse, 0.321875, \start,~main3,\buf,~bufSnoopy,\out,   ~gateRnd,\loo,1]);
 // ~playM3.set(  \start,~main3);
 ~eq7=Synth(\EQHP, [\frq, 100, \out, ~outFil],~eqGrp0);
-~eq7.set(\in, ~gateRnd, \out, ~reverbMelo,\val, 0,\quant, 0, \gain,0,\val2,0,\quant2,0, \gain2,0, \val3,0,\quant3,0, \gain3,0,\val4,0,\shelf,0, \gain4,0);
+~eq7.set(\in, ~gateRnd,\out, ~reverbMelo,\val, 3000,\quant, 2, \gain,(-18),\val2,268,\quant2,0.6, \gain2,(-18), \val3,0,\quant3,0, \gain3,0,\val4,0,\shelf,0, \gain4,0);
 ~rev7=Synth( \reverb ,~revRnd[~r3],~revGrp); ~rev7.set(\in, ~outFil , \out,~comBusHat2);
 ~comp7=Synth(\compS, [\ctrl, ~kbus ],~compGrp);
 ~comp7.set(\thr,0.8 ,\sB, 1.015,\sA, 1/2,\atk ,0.0242, \rel ,0.0968,\gain,1,\in, ~comBusHat2 , \out,~comBusCymb2);
 ~mix7= Synth(\limiterStoMixer,[\c7,1,\in, ~comBusCymb2, \gain,20, \out,~limitRkick2],~limitGrp);
 // ~mixa.set(\in,~limitRkick2);
-~mix7.set(\gain,32);
-
+~mix7.set(\gain,20);
 
 
 
@@ -101,27 +101,28 @@
 ~playNo2= Synth(\playBufX, [\impulse, 1.2875, \start, ~no2S,\buf,~bufSnoopy,\out, ~toGateX2,\loopy,1]);
 ~playNo2.set(\start, ~no2S,\impulse, 1.2875);
 ~eq8=Synth(\EQHP, [\frq, 100],~eqGrp0);
-~eq8.set(\in, ~no2Eq, \out,~no2ToRev,\val, 0,\quant, 0, \gain,0,\val2,0,\quant2,0, \gain2,0, \val3,0,\quant3,0, \gain3,0,\val4,0,\shelf,0, \gain4,0);
-~rev8=Synth( \reverb ,~revRnd[2.rand],~revGrp); ~rev8.set(\in, ~no2ToRev , \out, ~no2ToCom,\group,~revGrp);
+~eq8.set(\in, ~no2Eq, \out,~no2ToRev,\val, 2200,\quant, 1, \gain,(-8),\val2,700,\quant2,4, \gain2,(-6), \val3,6700,\quant3,1, \gain3,(-12),\val4,0,\shelf,0, \gain4,0);
+~rev8=Synth( \reverb ,~revRnd[1],~revGrp); ~rev8.set(\in, ~no2ToRev , \out, ~no2ToCom,\group,~revGrp);
 ~comp8=Synth(\compS, [\ctrl, ~kbus ],~compGrp);
 ~comp8.set(\thr,0.8 ,\sB, 1.05,\sA, 1/2,\atk ,0.0484, \rel ,0.3872,\in,~no2ToCom ,\out,~no2ToLimit);
 ~mix8= Synth(\limiterStoMixer,[\c8,1,\in, ~no2ToLimit,\gain,5.2,\out,~no2ToStereo],~limitGrp);
 // ~mixa.set(\in,~no2ToStereo);
-~mix8.set(\gain,18 );
+~mix8.set(\gain,20 );
 
 //~no4S = (~bufSnoopy.numFrames.rrand(80000)- 80000);
 // ~eq9.free
 ~play4= Synth(\playBufX, [\impulse, 0.321875 ,\start, ~no4S,\buf,~bufSnoopy,\out, ~delayBus,\loopy,1]);
-~play4.set(\start, ~no4S);
+~play4.set(\start, ~no4S);     /*~no4S=  ~no4S -80000   584874.34558758*/
 ~del1=Synth( \pingD, [\in, ~delayBus ,\bufnum,~delay, \feedback,0.38 ,\out,~delayToEq],~revGrp);
 ~eq9=Synth(\EQHP2, [\frq, 100],~eqGrpplus);
-~eq9.set(\in, ~delayToEq, \out, ~revDelay,\val, 0,\quant, 0, \gain,0,\val2,0,\quant2,0, \gain2,0, \val3,0,\quant3,0, \gain3,0,\val4,0,\shelf,0, \gain4,0);
+~eq9.set(\in, ~delayToEq, \out, ~revDelay,\val, 4200,\quant, 4, \gain,(-12),\val2,2200,\quant2,3, \gain2,(-4), \val3,130,\quant3,1, \gain3,(-14),\val4,0,\shelf,0, \gain4,0);
 ~rev9=Synth(  \reverbS, ~revRnd[1.rrand(2)],~delayGrp); ~rev9.set(\in,~revDelay, \out,~comDelay);
 ~comp9=Synth(\compS, [\ctrl, ~kbus ],~compGrp);
 ~comp9.set(\thr,0.9 ,\sB, 1.10,\sA, 1/4,\atk ,0.0484, \rel ,0.3872 ,\gain, 1,\in, ~comDelay, \out,~limitDelay);
 ~mix9= Synth(\limiterStoMixer,[\c9,1,\in,~limitDelay,\gain,12,\out ,~stereoBus3],~limitGrp);
 // ~mixa.set(\in,~stereoBus3);
-~mix9.set(\gain,14);
+~mix9.set(\gain,13);
+
 
 //~eq10.free
 ~dist1= Synth(\disto,[\in,~vocalBus,\out,~vocToEq],~phaserGrp);
@@ -146,7 +147,7 @@
 ~comp11.set(\thr,0.8 ,\sB, 1.05,\sA, 1/2,\atk ,0.0484, \rel ,0.0968,\gain,1,\in, ~percuCom, \out,~percuLimit);
 ~mix11= Synth(\limiterStoMixer,[ \c11,1,\in,~percuLimit, \gain,46,\out,~percuStereo],~limitGrp);
 // ~mixa.set(\in,~percuCom2);
-~mix11.set(\gain,82 );
+~mix11.set(\gain,80 );
 
 
 
@@ -155,15 +156,15 @@
 // ~test1=Synth(\playBufX ,[ \impulse, 5.15/6/*\dur,Pseq([6/1],1),*/,\start,~pass1 ,\buf,~bufSnoopy,\out,~filterBou,\loopy,1,\dA,0]);
 //~test1.set(\start,~pass1 )
 // ~eq24.free
-~fil6 =Synth(\filter,[\which,0, \in ,~filterBou, \busMod, ~bus3,\freqFil,300, \qf,0.7, \out, ~gateBou],~filterGrp);
+~fil6 =Synth(\filter,[\which,0, \in ,~filterBou, \busMod, ~bus3,\freqFil,4900, \qf,0.7, \out, ~gateBou],~filterGrp); /*~fil6.set(\freqFil,4900,)*/
 ~eq24=Synth(\EQHP, [\frq, 100 ],~gateGrp2);
-~eq24.set(\in, ~gateBou, \out , ~reverbBus4,\val, 0,\quant, 0, \gain,0,\val2,0,\quant2,0, \gain2,0, \val3,0,\quant3,0, \gain3,0,\val4,0,\shelf,0, \gain4,0);
+~eq24.set(\in, ~gateBou, \out , ~reverbBus4,\val, 2400,\quant, 3, \gain,(-6),\val2,0,\quant2,0, \gain2,0, \val3,0,\quant3,0, \gain3,0,\val4,0,\shelf,0, \gain4,0);
 ~rev24=Synth(\reverb,~quickFi,~revGrp);~rev24.set(\in,~reverbBus4, \out,~comFuzz4);
 ~comp24=Synth(\compS,[\ctrl, ~kbus],~compGrp);
 ~comp24.set(\thr,0.9 ,\sB, 1.026,\sA, 1/2,\atk ,0.0121, \rel ,0.0968, \gain,10,\in, ~comFuzz4, \out,~limitFuzz4);
 ~mix24= Synth(\limiterStoMixer,[\c24,1,\in, ~limitFuzz4, \gain,30, \out,~stereoBus14],~limitGrp);
 // ~mixa.set(\in,~stereoBus14);
-~mix24.set(\gain,30);
+~mix24.set(\gain,84);
 ~stereo24=Synth(\stereoS,[ \dur, 9999, \in, ~stereoBus14  ,\spread,0.2 ,\out,~newCOn], ~stereoGrp);
 
 
@@ -172,31 +173,32 @@
 //~pass2 =(~buf.numFrames.rrand(400000)- 400000);
 // ~test2=Synth(\playBufX ,[ \impulse, 5.15/3/*\dur,Pseq([3/1],1),*/,\start,~pass2,\buf,~bufSnoopy,\out, ~filterPass1,\loopy,1])
 // ~test2.set(\start,~pass2);
-~fil7 =Synth(\filter,[\which,0, \in ,~filterPass1, \busMod, ~bus3,\freqFil,700, \qf,0.7, \out, ~eqPass1],~filterGrp);
+~fil7 =Synth(\filter,[\which,0, \in ,~filterPass1, \busMod, ~bus3,\freqFil,1700, \qf,0.7, \out, ~eqPass1],~filterGrp); /*  ~fil7.set(\freqFil,1700,)*/
 //~fil7.set(\freqFil,700)
 ~eq25=Synth(\EQHP, [\frq, 100 ],~gateGrp2);
-~eq25.set(\in, ~eqPass1,\out, ~revPass1,\val, 0,\quant, 0, \gain,0,\val2,0,\quant2,0, \gain2,0, \val3,0,\quant3,0, \gain3,0,\val4,0,\shelf,0, \gain4,0);
+~eq25.set(\in, ~eqPass1,\out, ~revPass1,\val, 200,\quant, 4, \gain,(-14),\val2,3600,\quant2,4, \gain2,(-8), \val3,0,\quant3,0, \gain3,0,\val4,0,\shelf,0, \gain4,0);
 ~rev25=Synth(\reverb,~quickFi,~revGrp);~rev25.set(\in,~revPass1, \out,~compPass1);
 ~comp25=Synth(\compS,[\ctrl, ~kbus],~compGrp);
 ~comp25.set(\thr,0.9 ,\sB, 1.026,\sA, 1/2,\atk ,0.0121, \rel ,0.0968, \gain,1,\in, ~compPass1, \out,~limitPass1);
 ~mix25= Synth(\limiterStoMixer,[\c58,1,\in, ~limitPass1, \gain,24, \out,~stereoPass1],~limitGrp);
 // ~mixa.set(\in,~stereoPass1);
-~mix25.set(\gain,60);
+~mix25.set(\gain,95);
 ~stereo25=Synth(\stereoS,[\dur, 9999, \in, ~stereoPass1  ,\spread,0.2 ,\out,~newCOn], ~stereoGrp);
 
 
 // ~eq26.free
-//~pass2 =(~buf.numFrames.rrand(400000)- 400000);
+//~pass3 =(~buf.numFrames.rrand(400000)- 400000);
 //~test3=Synth(\playBufX ,[ \impulse, 5.15/*\dur,Pseq([1/1],1),*/,\start,~pass3,\buf,~bufSnoopy,\out, ~filterPass2,\loopy,1])
+// ~test3.set(\start,~pass3);
 ~fil8 =Synth(\filter,[\which,0, \in ,~filterPass2, \busMod, ~bus3,\freqFil,300, \qf,0.7, \out, ~eqPass2],~filterGrp);
 ~eq26=Synth(\EQHP, [\frq, 100 ],~gateGrp2);
-~eq26.set(\in, ~eqPass2,\out, ~revPass2,\val, 0,\quant, 0, \gain,0,\val2,0,\quant2,0, \gain2,0, \val3,0,\quant3,0, \gain3,0,\val4,0,\shelf,0, \gain4,0);
+~eq26.set(\in, ~eqPass2,\out, ~revPass2,\val, 2200,\quant, 1.4, \gain,(-8),\val2,460,\quant2,4, \gain2,(-10), \val3,0,\quant3,0, \gain3,0,\val4,0,\shelf,0, \gain4,0);
 ~rev26=Synth(\reverb,~quickFi,~revGrp);~rev26.set(\in,~revPass2, \out,~compPass2);
 ~comp26=Synth(\compS,[\ctrl, ~kbus],~compGrp);
-~comp26.set(\thr,0.9 ,\sB, 1.026,\sA, 1/2,\atk ,0.0121, \rel ,0.0968, \gain,6,\in, ~compPass2, \out,~limitPass2);
+~comp26.set(\thr,0.9 ,\sB, 1.026,\sA, 1/2,\atk ,0.0242, \rel ,0.0968, \gain,6,\in, ~compPass2, \out,~limitPass2);
 ~mix26= Synth(\limiterStoMixer,[\c26,1,\in, ~limitPass2, \gain,30, \out,~stereoPass2],~limitGrp);
 // ~mixa.set(\in,~stereoPass2);
- ~mix26.set(\gain,65,\out,~stereoPass2);
+ ~mix26.set(\gain,69,\out,~stereoPass2);
 ~stereo26=Synth(\stereoS,[\dur, 9999, \in, ~stereoPass2  ,\spread,0.2 ,\out,~newCOn], ~stereoGrp);
 
 
@@ -205,15 +207,15 @@
 // ~pass4=(~buf.numFrames.rrand(400000)- 400000)
 // ~test4=Synth(\playBufX ,[ \impulse, 2.575/*\dur,Pseq([2/1],1),*/,\start,~pass4,\buf,~bufSnoopy,\out, ~filterPass3,\loopy,1])
 //~test4.set(\start,~pass4)
-~fil9 =Synth(\filter,[\which,0, \in ,~filterPass3, \busMod, ~bus3,\freqFil,500, \qf,0.7, \out, ~eqPass3],~filterGrp);
+~fil9 =Synth(\filter,[\which,0, \in ,~filterPass3, \busMod, ~bus3,\freqFil,2500, \qf,0.7, \out, ~eqPass3],~filterGrp);/*~fil9.set(\freqFil,2200)*/
 ~eq27=Synth(\EQHP, [\frq, 100 ],~gateGrp2);
-~eq27.set(\in, ~eqPass3,\out, ~revPass3,\val, 0,\quant, 0, \gain,0,\val2,0,\quant2,0, \gain2,0, \val3,0,\quant3,0, \gain3,0,\val4,0,\shelf,0, \gain4,0);
+~eq27.set(\in, ~eqPass3,\out, ~revPass3,\val, 420,\quant, 2, \gain,(-15),\val2,4300,\quant2,1, \gain2,(-15), \val3,0,\quant3,0, \gain3,0,\val4,0,\shelf,0, \gain4,0);
 ~rev27=Synth(\reverb,~quickFi,~revGrp);~rev27.set(\in,~revPass3, \out,~compPass3);
 ~comp27=Synth(\compS,[\ctrl, ~kbus],~compGrp);
-~comp27.set(\thr,0.6 ,\sB, 1.026,\sA, 1/2,\atk ,0.0121, \rel ,0.0968, \gain,10,\in, ~compPass3, \out,~limitPass3);
+~comp27.set(\thr,0.8 ,\sB, 1.026,\sA, 1/2,\atk ,0.0242, \rel ,0.0968, \gain,10,\in, ~compPass3, \out,~limitPass3);
 ~mix27= Synth(\limiterStoMixer,[\c56,1,\in, ~limitPass3, \gain,35, \out,~stereoPass3],~limitGrp);
 // ~mixa.set(\in,~stereoPass3);
-~mix27.set(\gain,70,\out,~stereoPass3, \c56,1);
+~mix27.set(\gain,66,\out,~stereoPass3, \c56,1);
 ~stereo27=Synth(\stereoS,[ \dur, 9999, \in, ~stereoPass3  ,\spread,0.2 ,\out,~newCOn], ~stereoGrp);
 
 
@@ -235,7 +237,7 @@
 
 
 ~delayFx =  Synth(\limiterS, [\in,~delayToLimit, \gain,40,\out , ~delayEq],~limitGrp4);
-~delayFx.set(\gain,50);
+~delayFx.set(\gain,40);
 
 
 
@@ -364,7 +366,7 @@
 //~mixa.set(\in,~toStereoRise);
 
 ~mix22= Synth(\limiter10,[\in, ~bangLimit, \out, ~again, \gain,50], ~limitGrp);
-~mix22.set(\gain,30)
+~mix22.set(\gain,30);
 
 ~mix23=	Synth(\comp10, [\ctrl, ~snBus],~compGrp2);
 ~mix23.set(\thr,0.9 ,\sB, 1.04,\sA, 1/2,\atk ,0.0242, \rel ,0.3872 ,\in,~again,\gain,0.6, \out,~gateRise);
@@ -412,9 +414,9 @@ Synth(\playB10,[\buf, ~leTout,\out,~finGran ]   );
 ~eq35= Synth(\EQHP2, [\in, ~eqPerch2, \out, ~revPerch2 ], ~eqGrp0);
 ~rev35=Synth(\reverbS, ~quickFi ,~revGrp);~rev35.set(\in,~revPerch2, \out,~comPerch2 );
 ~comp35=Synth(\compS, [\ctrl, ~kbus],~compGrp);
-~comp35.set(\thr,0.85 ,\sB, 1.086,\sA, 1/2,\atk ,0.0121, \rel ,0.04840, \gain,1,\in, ~comPerch2, \out,~limitPerch2, );
+~comp35.set(\thr,0.85 ,\sB, 1.136,\sA, 1/2,\atk ,0.0121, \rel ,0.04840, \gain,1,\in, ~comPerch2, \out,~limitPerch2, );
 ~mix35= Synth(\limiterStoMixer,[\c31,1,\in,~limitPerch2 ,\gain,6,\out,~stereoPerch],~limitGrp);
-~mix35.set(\gain,6);
+~mix35.set(\gain,30);
 ~stereo35=Synth(\stereoS,[ \dur, 9999, \in, ~stereoPerch ,\spread,1 , \out,~absoFinalGate3], ~dispatchGrp2 );
 
 
@@ -449,7 +451,7 @@ Synth(\playB10,[\buf, ~leTout,\out,~finGran ]   );
 ~fil11= Synth( \filterS,[ \in,~bigRiToEnv ,\out,~bigRiToEq,\which, 0, \busMod, ~bus17,\qf,0.67],~filterGrp );
 ~eq43= Synth( \EQHP2, [\frq, 300],~eqGrp0);
 ~eq43.set(\in, ~bigRiToEq, \out, ~bigRiToRev,\val,0, \quant,0, \gain,0,\val2,0,\quant2,0, \gain2,0);
-~rev43= Synth( \reverbS, ~rShor, \instrument, \reverbS, \dur,inf, \in,~bigRiToRev  , \out,~bigRiToComp,\group,~revGrp),
+~rev43= Synth( \reverbS, ~rShor, ~revGrp);~rev43.set(\in,~bigRiToRev  , \out,~bigRiToComp);
 ~comp43= Synth(\compS, [\ctrl, ~kbus],~compGrp);
 ~comp43.set(\thr,0.8 ,\sB, 1.015,\sA, 1/2,\atk ,0.0242, \rel ,0.0968,\gain,20,\in, ~bigRiToComp , \out,~bigRiToLimit);
 ~mix43= Synth(\limiterStoMixer,[\c43,1,\in, ~bigRiToLimit, \gain,40,\out,~bigRiToStereo],~limitGrp);
@@ -478,7 +480,7 @@ Synth(\playB10,[\buf, ~leTout,\out,~finGran ]   );
 
 
 ~eq49=Synth(\EQHP,[\frq, 100],~eqGrp0);
-~eq3.set(\in, ~toEq , \out,~gateBus3,\val, ~val=0,\quant, ~quant=0, \gain,~gain=0,\val2,~val2=0,\quant2,~quant2=0, \gain2,~gain2=0,\val3,~val3=0,\quant3,~quant3=0, \gain3,~gain3= 0,\val4,~val4=0,\shelf,~shelf=0, \gain4,~gain4=0);
+~eq49.set(\in, ~toEq , \out,~gateBus3,\val, ~val=0,\quant, ~quant=0, \gain,~gain=0,\val2,~val2=0,\quant2,~quant2=0, \gain2,~gain2=0,\val3,~val3=0,\quant3,~quant3=0, \gain3,~gain3= 0,\val4,~val4=0,\shelf,~shelf=0, \gain4,~gain4=0);
 ~rev49=Synth( \reverb ,~revRnd[~r2],~revGrp);~rev49.set(\in, ~revBus4 , \out, ~comBus4);
 ~comp49=Synth(\compS, [\ctrl, ~kbus ],~compGrp);
 ~comp49.set(\thr,0.92 ,\sB, 1.026,\sA, 1/2,\atk ,0.0121, \rel ,0.0968, \gain,80,\in, ~comBus4,\out,~part2Limit4);

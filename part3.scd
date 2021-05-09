@@ -15,13 +15,13 @@
 (
 
 ~bou= Pseq([
-	Pbind(\instrument, \playBuf10, \buf ,~leTout2,\out,~absoFinalGate3, \start, ~leTout2.numFrames/ 256 * 78
+	Pbind(\instrument, \playBuf10, \buf ,~leTout2,\out,~absoFinalGate3, \start, ~leTout2.numFrames/ 256 * 104
 		,\loopy,0,\tS,0.39550810372374,\dur,Pseq([5/4],1) ,),
 
 
 
 
-		Pbind(\instrument, \playBuf10, \buf ,~leTout2,\out,~absoFinalGate3, \start, ~leTout2.numFrames/ 256 * 33
+		Pbind(\instrument, \playBuf10, \buf ,~leTout2,\out,~absoFinalGate3, \start, ~leTout2.numFrames/ 256 * 121
 		,\loopy,0,\tS,0.39550810372374,\dur,Pseq([5/4],1) ,),
 
 
@@ -47,13 +47,13 @@ Pbind(\instrument, \playBuf10, \buf ,~leTout2,\out,0, \start, ~leTout2.numFrames
 (
 
 ~bou2= Pseq([
-	Pbind(\instrument, \playBuf10, \buf ,~leTout2,\out,~absoFinalGate3, \start, ~leTout2.numFrames/ 256 * 78
+	Pbind(\instrument, \playBuf10, \buf ,~leTout2,\out,~absoFinalGate3, \start, ~leTout2.numFrames/ 256 * 104
 		,\loopy,0,\tS,0.39550810372374,\dur,Pseq([6/4],1) ,),
 
 
 
 
-		Pbind(\instrument, \playBuf10, \buf ,~leTout2,\out,~absoFinalGate3, \start, ~leTout2.numFrames/ 256 * 33
+		Pbind(\instrument, \playBuf10, \buf ,~leTout2,\out,~absoFinalGate3, \start, ~leTout2.numFrames/ 256 * 121
 		,\loopy,0,\tS,0.39550810372374,\dur,Pseq([6/4],1) ,),
 
 
@@ -114,8 +114,9 @@ Pbind(\instrument, \playBuf10, \buf ,~leTout2,\out,~absoFinalGate3, \start, ~leT
 ],2),
 
 		],inf),
-		Pbind(\instrument, \playBufS,\dur  ,Pseq([2/1],inf),\buf,~fkAr,\tS,  0.39550810372374,\start,~fkAr.numFrames.rand,\out, ~limitBus1),
 
+
+		Pbind(\instrument, \playBufS,\dur  ,Pseq([2/1],inf),\buf,~fkAr,\tS,  0.39550810372374,\start,/*~fkAr.numFrames.rand.postln*/1020551.1121401,\out, ~limitBus1),
 
 
 

@@ -1,14 +1,14 @@
 ~mixa = Synth(\gate2, [\in,  ~no2ToStereo,\dur, 9999] ,~limitGrp4);
 
-~mixa = Synth(\gateS, [\in, ~absoFinalGate3,\dur, 9999] ,~limitGrp4);
+~mixa = Synth(\gateS, [\in, ~absoFinalGate3/*~no1*//*~comSnaGrpBus2*/,\dur, 9999] ,~limitGrp4);
 
 
 ~mixa = Synth(\gate, [\in, ~distoPercu,\dur, 9999] ,~limitGrp4);
 
 ~mixa.stop
 
-
-~mixa.set(\in,~percuCom2);
+~absoFinalGate3
+~mixa.set(\in,~comSnaGrpBus2/*~percuCom2*/);
 
 ~kb=Pbind(\instrument, \playBufS, \dur,  Pseq([1/1],inf), \tS,  0.39550810372374,\buf,~kb2).play(t)
 
@@ -37,7 +37,7 @@ Pbind( \instrument,\playBuf /*\playBuf1N*/, \impulse, 0.3,\dur,Pseq([3/1],1), \t
 ~pass1 =(~buf.numFrames.rrand(400000)- 400000);~pass2=(~buf.numFrames.rrand(400000)- 400000);~pass3=(~buf.numFrames.rrand(400000)- 400000);~pass4=(~buf.numFrames.rrand(400000)- 400000);
 (
 
-Ppar([~base, /*~kb, *//*~hitX*//*~kb,*/          ~passant  ,  ~fx  ,  ~no4,~sequ,~mainLead ,
+Ppar([~base, /*~kb, *//*~hitX*//*~kb,*/      ~fx  ,  ~no4,~sequ,~mainLead ,
 
 
 	// Pbind(\instrument, \playBufS, \dur,  Pseq([1/1],inf), \tS,  0.39550810372374,\buf,~kb2)
