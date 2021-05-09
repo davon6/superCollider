@@ -154,6 +154,9 @@ s.sync;
 
 	~leTout2 = Buffer.alloc(s,s.sampleRate* (256* t.beatDur),10);
 
+	~temp= Buffer.alloc(s,s.sampleRate*2,1);
+
+
 	"Shaper init".postln;
 
 	s.sync;
@@ -193,21 +196,21 @@ s.sync;
 	~part2Fuzz2= Bus.audio(s,10);
 	~revBus1= Bus.audio(s,1);
 	~revBus2= Bus.audio(s,1);
-	~comBus1= Bus.audio(s,2);
-	~comBus2= Bus.audio(s,2);
+	~comBus1= Bus.audio(s,1);
+	~comBus2= Bus.audio(s,1);
 	~comBus3= Bus.audio(s,2);
 	~comBus5= Bus.audio(s,2);
-	~limitBus1= Bus.audio(s,2);
-	~limitBus2= Bus.audio(s,2);
-	~sterBus1= Bus.audio(s,2);
-	~sterBus2= Bus.audio(s,2);
+	~limitBus1= Bus.audio(s,1);
+	~limitBus2= Bus.audio(s,1);
+	~sterBus1= Bus.audio(s,1);
+	~sterBus2= Bus.audio(s,1);
 	~sterBus5= Bus.audio(s,2);
 	~sterBus6= Bus.audio(s,2);
 	~toLim = Bus.audio(s,2);
 	~to4bar= Bus.audio(s,2);
 	~bgSfil= Bus.audio(s,1);
 	~toStereoRise = Bus.audio(s,1);
-	~percuStereo= Bus.audio(s,2);
+	~percuStereo= Bus.audio(s,1);
 	~gateBus = Bus.audio(s,1);
 	~gateBusB = Bus.audio(s,1);
 	~gateBus2 = Bus.audio(s,1);
@@ -302,9 +305,9 @@ s.sync;
 	~part2SLimit = Bus.audio(s,2);
 	~part2SStereo = Bus.audio(s,2);
 	~no2ToRev = Bus.audio(s,1);
-	~no2ToCom = Bus.audio(s,2);
-	~no2ToLimit = Bus.audio(s,2);
-	~no2ToStereo = Bus.audio(s,2);
+	~no2ToCom = Bus.audio(s,1);
+	~no2ToLimit = Bus.audio(s,1);
+	~no2ToStereo = Bus.audio(s,1);
 	~toEq = Bus.audio(s,1);
 	~bellFlang= Bus.audio(s,2);
 	~bgFil22= Bus.audio(s,1);
@@ -384,20 +387,20 @@ s.sync;
 	~riToGate= Bus.audio(s,2);
 	~riToGate2= Bus.audio(s,2);
 	~riToGate3= Bus.audio(s,2);
-	~stereoBus1 = Bus.audio(s,2);
+	~stereoBus1 = Bus.audio(s,1);
 	~stereoBus2 = Bus.audio(s,2);
 	~stereoBus3 = Bus.audio(s,2);
 	~stereoBus4 = Bus.audio(s,2);
 	~stereoBus3b= Bus.audio(s,2);
 	~comSquelch = Bus.audio(s,2);
-	~comFuzz = Bus.audio(s,2);
+	~comFuzz = Bus.audio(s,1);
 	~comFuzz2 = Bus.audio(s,2);
 	~comFuzz3 = Bus.audio(s,2);
 	~comBusHat = Bus.audio(s,2);
 	~comBusCymb = Bus.audio(s,2);
 	~comSnaGrpBus = Bus.audio(s,2);
 	~comSnaGrpBus2 = Bus.audio(s,10);
-	~limitFuzz = Bus.audio(s,2);
+	~limitFuzz = Bus.audio(s,1);
 	~limitFuzz2 = Bus.audio(s,2);
 	~limitFuzz3 = Bus.audio(s,2);
 	~limitRnd = Bus.audio(s,2);
@@ -417,10 +420,10 @@ s.sync;
 	~vocalBus= Bus.audio(s,1);
 	~vocToEq = Bus.audio(s,1);
 	~vocToRev  = Bus.audio(s,1);
-	~vocToFil =  Bus.audio(s,2);
-	~vocToComp =  Bus.audio(s,2);
-	~vocToLimit  =  Bus.audio(s,2);
-	~vocToStereo=  Bus.audio(s,2);
+	~vocToFil =  Bus.audio(s,1);
+	~vocToComp =  Bus.audio(s,1);
+	~vocToLimit  =  Bus.audio(s,1);
+	~vocToStereo=  Bus.audio(s,1);
 	~vocToDispatch=  Bus.audio(s,10);
 	~kbus = Bus.audio(s,1);
 	~snBus = Bus.audio(s,1);
@@ -480,10 +483,10 @@ s.sync;
 	~filterBou=Bus.audio(s,1);
 	~newCOn=Bus.audio(s,10);
 	~newCOn2=Bus.audio(s,10);
-	~comBusHat2=  Bus.audio(s,2);~comBusCymb2=  Bus.audio(s,2);~limitRkick2=  Bus.audio(s,1);~stetoSnaCom12=  Bus.audio(s,10);~comFuzz22=  Bus.audio(s,2);~eqBus102=  Bus.audio(s,10);
+	~comBusHat2=  Bus.audio(s,1);~comBusCymb2=  Bus.audio(s,1);~limitRkick2=  Bus.audio(s,1);~stetoSnaCom12=  Bus.audio(s,10);~comFuzz22=  Bus.audio(s,2);~eqBus102=  Bus.audio(s,10);
 ~toLimitlast = Bus.audio(s,10);
-	~distoBus43 =  Bus.audio(s,1);~filterBus23=  Bus.audio(s,1);  ~eqBus23=  Bus.audio(s,1); ~gateBus23=  Bus.audio(s,1); ~reverbBus23=  Bus.audio(s,1); ~micBus23=  Bus.audio(s,1); ~micBus33=  Bus.audio(s,1);  ~comFuzz23=  Bus.audio(s,2);
-	~limitFuzz23=  Bus.audio(s,2); ~stereoBus23=  Bus.audio(s,2); ~no3=  Bus.audio(s,10);
+	~distoBus43 =  Bus.audio(s,1);~filterBus23=  Bus.audio(s,1);  ~eqBus23=  Bus.audio(s,1); ~gateBus23=  Bus.audio(s,1); ~reverbBus23=  Bus.audio(s,1); ~micBus23=  Bus.audio(s,1); ~micBus33=  Bus.audio(s,1);  ~comFuzz23=  Bus.audio(s,1);
+	~limitFuzz23=  Bus.audio(s,1); ~stereoBus23=  Bus.audio(s,1); ~no3=  Bus.audio(s,10);
 	~ptrBus23=Bus.audio(s,1); ~ptrBus33=Bus.audio(s,1);
 	~stereoBus14=  Bus.audio(s,2);  ~limitFuzz4=  Bus.audio(s,2);~comFuzz4=  Bus.audio(s,2);~reverbBus4=  Bus.audio(s,1);
 	~slideBus2=  Bus.audio(s,1);
@@ -496,8 +499,8 @@ s.sync;
 	~snareLimit=  Bus.audio(s,1);
 	~percuEq=  Bus.audio(s,1);
 	~percuRev=  Bus.audio(s,1);
-	~percuLimit=  Bus.audio(s,2);
-	~percuCom=  Bus.audio(s,2);
+	~percuLimit=  Bus.audio(s,1);
+	~percuCom=  Bus.audio(s,1);
 	~percuComb=  Bus.audio(s,2);
 	~percuCom2=  Bus.audio(s,10);
 	~percuFil=  Bus.audio(s,1);
@@ -772,15 +775,15 @@ SynthDef(\kick, {
 
 		envF = EnvGen.ar(
 			Env(
-				[5178.15,1539.47,165,26,0,0],
-				[0.00188,0.008,0.08,0,0.2],
+				[5178.15,1539.47,114,26,0,0],
+				[0.00188,0.008,0.132,0,0.4],
 					[-3,-6,-2]
 			)
 		);
 
 		env =EnvGen.ar(
-	Env([0.8 , 0.4, 0.6,    0.6,0.6,0],
-		[0.0087, 0.08, 0,0.6,0.22],[-12.2,-50,5,5,-5]),doneAction:2);
+	Env([0.8 , 0.2, 0.4,    0.4,0.4,0],
+		[0.0087, 0.01, 0,0.1,0.02],[-6,-20,5,5,-1]),doneAction:2);
 
 
 
@@ -790,7 +793,6 @@ SynthDef(\kick, {
 		sig = Pan2.ar(sig);
 		Out.ar(out, sig);
 	}).add;
-
 
 
 	SynthDef(\bass,{
@@ -867,8 +869,9 @@ SynthDef(\kick, {
 }).add;
 
 
-	/*SynthDef(\homeStereo,{|in, out=0,stereoL=0, stereoR=0,amp|Out.ar(out, In.ar(in)
-		* [amp.dbamp+stereoL,amp.dbamp+stereoR]);}).add;*/
+	SynthDef(\homeStereo,{|in, out=0,stereoL=0, stereoR=0,amp|Out.ar(out, In.ar(in)
+		* [amp.dbamp+stereoL,amp.dbamp+stereoR]);}).add;
+
 
 	SynthDef.new(\snare, {
 		arg carHz=500, modHz=100, modAmp=1691, modAmp2=0.321875, atk=0, atk2=0, rel=1, amp=0.2, pan=0,rel2=2,out=0,latch=12000, da1=2, da2=2, crv1=(-3),crv2 = (-2) , noiLv  =0.321875, tS=1,atkC=0;
@@ -1017,7 +1020,7 @@ freq         )* EnvGen.kr(Env([0,vl,vl,0],[0.055,dur-0.055,0],4),timeScale: tS,d
 
 		lp = BLowPass4.ar(sig , freqFil+ In.kr(busMod, 1)+ MouseX.kr(40,22000) ,qf +In.kr(rqLPF));
 
-		bp = BBandPass.ar(sig,freqFil+ In.kr(busMod, 1) *factor3+ MouseX.kr(40,22000)  ,qf2 +0.26);
+		bp = BBandPass.ar(sig,freqFil+ In.kr(busMod, 1) *factor3+ MouseX.kr(40,10000)  ,qf2 +0.26);
 
 		hp = BHiPass4.ar(sig, freqFil+ In.kr(busMod, 1)+ MouseX.kr(40,22000),/*0.6 */ qf2 +In.kr(bus7, 1));
 
@@ -1487,14 +1490,18 @@ SynthDef(\EQHP10, {|out=0, in, val, quant, gain, val2, quant2, gain2 frq=100, vo
 	/*	Out.ar(0,RMS.ar(CompanderD.ar( In.ar(in,2),thr, sB ,sA, atk, rel)* gain ).ampdb.round(0.1).poll(label:name.poll)* [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1]);*/
 	}).add;
 
-	SynthDef(\limiterToMixer, {|in, out = 0,gain=1,vol =1, du =0.01,rel=0.8, atk =0.01 ,thr= 0.001,sB =1,sA= 0.05,
-		c1=0,c2=0,c3=0,c4=0,c5=0,c6 =0,c7 =0,c8 =0,c9 =0,c10 =0,c11 =0,c12 =0,c13 =0,c14 =0,c15 =0,c16=0,c17=0,c18=0,c19=0,c20 =0,c21=0,c22=0,c23=0,c24=0,c25=0,c26=0,name|
 
-		Out.ar(out , CompanderD.ar( In.ar(in,1),thr, sB ,sA, atk, rel)* gain;);
+	SynthDef(\limitertoMixer, {|in, out = 0,gain=1,vol =1, du =0.01,rel=0.8, atk =0.01 ,thr= 0.001,sB =1,sA= 0.05,
+		c1=0,c2=0,c3=0,c4=0,c5=0,c6 =0,c7 =0,c8 =0,c9 =0,c10 =0,c11 =0,c12 =0,c13 =0,c14 =0,c15 =0,c16=0,c17=0,c18=0,c19=0,c20 =0,c21=0,c22=0,c23=0,c24=0,c25=0,c26=0,name,c27=0,c28=0,c29=0,c30=0,c31=0,c32=0,c33=0,c34=0,c35=0,c36=0,c37=0,c38=0,c39=0,c40=0,
+		c41=0,c42=0,c43=0,c44=0,c45=0,c46=0,c47=0,c48=0,c49=0,c50=0,c51=0,c52=0,c53=0,c54=0,c55=0,c56=0,c57=0,c58=0,c59=0,c60=0|
 
-		Out.ar( 0,  CompanderD.ar( In.ar(in,1),thr, sB ,sA, atk, rel)* gain * [0,0,c2,c3,c4,c5,c6,c7,c8,c9,c10,c11,c12,c13,c14,c15,c16,c17,c18,c19,c20,c21,c22,c23,c24,c25,c26]);
+		Out.ar(out , CompanderD.ar( In.ar(in,2),thr, sB ,sA, atk, rel)* gain;);
+
+		Out.ar( 0,  CompanderD.ar( In.ar(in,2),thr, sB ,sA, atk, rel)* gain * [0,0,c2,c3,c4,c5,c6,c7,c8,c9,c10,c11,c12,c13,c14,c15,c16,c17,c18,c19,c20,c21,c22,c23,c24,c25,c26,c27,c28,c29,c30,c31,c32,c33,c34,c35,c36,c37,c38,c39,c40,c41,c42,c43,c44,c45,c46,c47,c48,c49,c50,c51,c52,c53,c54,c55,c56,c57,c58,c59,c60]);
 
 	}).add;
+
+
 
 
 
@@ -1538,11 +1545,29 @@ SynthDef(\EQHP10, {|out=0, in, val, quant, gain, val2, quant2, gain2 frq=100, vo
 
 		Out.ar(out,
 			Splay.arFill(10,
-				{ In.ar(in, 1)}
+				{In.ar(in, 1)}
+			/*	{(In.ar(in, 10).flop) }*/
 				,spread,level,center)* EnvGen.kr(Env([0,1,1,0],[atkT,dur,0],[crvA,0]),timeScale: tS,doneAction: 2)
 			//EnvGen.kr(Env.step([1],[dur]),doneAction: 2)
 		);
 	}).add;
+
+
+
+		SynthDef(\stereoO,{|out=0, in, spread=0, level=1, center=0.0|
+
+		Out.ar(out,Splay.ar({In.ar(in, 1)},spread,level,center))}).add;
+
+
+/*	SynthDef(\stereo10,{|out=0, in, spread=0, level=1, center=0.0,dur,atkT=0,crvA=0,tS=1|
+
+		Out.ar(out,
+			Splay.arFill(10,
+				{ In.ar(in, 2)}
+				,spread,level,center)* EnvGen.kr(Env([0,1,1,0],[atkT,dur,0],[crvA,0]),timeScale: tS,doneAction: 2)
+			//EnvGen.kr(Env.step([1],[dur]),doneAction: 2)
+		);
+	}).add;*/
 
 
 	SynthDef(\stereoW,{|out=0, in, spread=0, level=1, center=0.0,dur,atkT=0,crvA=0,tS=1|

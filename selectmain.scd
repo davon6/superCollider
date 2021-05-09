@@ -62,7 +62,7 @@ x = Synth(\recLoop,[buf:~lpPrec2,\recording,1, \in,0],~recGrp);
 ~recGrp= Group.after(~filterGrp)
 
 
-Pbind(\instrument,\playBufXG,\dur,Pseq([3/1],inf),\amp, 1,\buf,~buf ,\out,~eqBus2x,\impulse,0.003,\start,1057935.7336388,\tS, 0.39550810372374 ,\vlSub,  ~pSub , \vlSub2,Pkey(\vlSub), \atkT,~pAtkT,\decT, 1 ,	\subsT, 0 , \relT,~pRelT,\atckC,~pAtkC,\decC,~pDecC,\relC,~pRelC,\vlAtk , ~pvlAtk ,  \vlRel,  Pkey(\vlAtk),\loopy,0).play(t)
+Pbind(\instrument,\playBufXG,\dur,Pseq([3/1],inf),\amp, 1,\buf,~buf ,\out,~eqBus2x,\impulse,0.003,\start,2852251.8856811,\tS, 0.39550810372374 ,\vlSub,  ~pSub , \vlSub2,Pkey(\vlSub), \atkT,~pAtkT,\decT, 1 ,	\subsT, 0 , \relT,~pRelT,\atckC,~pAtkC,\decC,~pDecC,\relC,~pRelC,\vlAtk , ~pvlAtk ,  \vlRel,  Pkey(\vlAtk),\loopy,0).play(t)
 
 
 

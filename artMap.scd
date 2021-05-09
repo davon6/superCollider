@@ -264,7 +264,7 @@ k = Synth(\filterU, [\out,0/*~distoBg*/,\in, ~bgFil, \lFrq,22000, \lFrq2,22000,\
 
 
 
-MIDIdef.cc(\lpF2x, { |value|var modFreq = value.linlin(0, 127, 710/*800*/,22000/*18000*/);
+MIDIdef.cc(\lpF2x, { |value|var modFreq = value.linlin(0, 127, 710/*800*/,24000/*18000*/);
 
 	k.set(\lFrq,"lp: ".postln;modFreq.round(1).post;)
 
@@ -281,7 +281,7 @@ MIDIdef.cc(\lpF2x, { |value|var modFreq = value.linlin(0, 127, 710/*800*/,22000/
 },ccNum: 1 );*/
 
 
-MIDIdef.cc(\lpF2x2, { |value|var modFreq = value.linlin(0, 127, 310/*800*/,12000);
+MIDIdef.cc(\lpF2x2, { |value|var modFreq = value.linlin(0, 127, 310/*800*/,24000);
 
 	k.set(\lFrq2,"lp: ".postln;modFreq.round(1).post;)
 
