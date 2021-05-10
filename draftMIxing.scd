@@ -1,6 +1,6 @@
-~mixa = Synth(\gate2, [\in,  ~toKbGate,\dur, 9999] ,~eqGrp3);
+~mixa = Synth(\gate2, [\in,  ~no1,\dur, 9999] ,~eqGrp3);
 
-~mixa = Synth(\gateS, [\in, ~absoFinalGate3/*~no1*//*~comSnaGrpBus2*/,\dur, 9999] ,~limitGrp4);
+~mixa = Synth(\gateS, [\in, ~no1/*~absoFinalGate3*//*~comSnaGrpBus2*/,\dur, 9999] ,~limitGrp4);
 
 
 ~mixa = Synth(\gate, [\in, ~distoPercu,\dur, 9999] ,~limitGrp4);

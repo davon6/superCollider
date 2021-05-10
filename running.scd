@@ -1617,9 +1617,14 @@ SynthDef(\EQHP10, {|out=0, in, val, quant, gain, val2, quant2, gain2 frq=100, vo
 
 
 
-		SynthDef(\stereoO,{|out=0, in, spread=0, level=1, center=0.0|
+		SynthDef(\stereoO,{|out=0, in, spread=0, level=1, center=0.0,dlt1=0.3,dlt2=0.4,decT=2, mxDel=1|
 
-		Out.ar(out,Splay.ar({In.ar(in, 1)},spread,level,center))}).add;
+		Out.ar(out,Splay.ar({
+
+			CombN.ar(
+				In.ar(in, 1), mxDel, [dlt1,dlt2], decT)
+
+	},spread,level,center))}).add;
 
 
 /*	SynthDef(\stereo10,{|out=0, in, spread=0, level=1, center=0.0,dur,atkT=0,crvA=0,tS=1|
