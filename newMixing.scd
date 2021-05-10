@@ -535,16 +535,16 @@ Synth(\playB10,[\buf, ~leTout,\out,~finGran ]   );
 
 
 ~eq49=Synth(\EQHP,[\frq, 100],~eqGrp0);
-~eq49.set(\in, ~toEq , \out,~gateBus3,\val, ~val,\quant, ~quant, \gain,~gain,\val2,~val2,\quant2,~quant2, \gain2,~gain2,\val3,~val3,\quant3,~quant3, \gain3,~gain3,\val4,~val4,\shelf,~shelf, \gain4,~gain4);
+~eq49.set(\in, ~eqBus4 , \out,~revBus4,\val, ~val,\quant, ~quant, \gain,~gain,\val2,~val2,\quant2,~quant2, \gain2,~gain2,\val3,~val3,\quant3,~quant3, \gain3,~gain3,\val4,~val4,\shelf,~shelf, \gain4,~gain4);
 ~rev49=Synth( \reverb ,~revRnd[~r2],~revGrp);~rev49.set(\in, ~revBus4 , \out, ~comBus4);
-~comp49=Synth(\compS, [\ctrl, ~kbus ],~compGrp);
+~comp49=Synth(\comp, [\ctrl, ~kbus ],~compGrp);
 ~comp49.set(\thr,0.92 ,\sB, 1.026,\sA, 1/2,\atk ,0.0121, \rel ,0.0968, \gain,80,\in, ~comBus4,\out,~part2Limit4);
-~mix49= Synth(\limiterStoMixer,[\c49,1,\in,~part2Limit4 , \gain,8,\out,~sterBus4],~limitGrp);
+~mix49= Synth(\limitertoMixer,[\c49,1,\in,~part2Limit4 , \gain,8,\out,~sterBus4],~limitGrp);
 // ~mixa.set(\in,~sterBus4);
  ~mix49.set(\gain,~gainMix);
+~stereo49=Synth(\stereo,[ \dur,9999, \in, ~sterBus4   ,\out,~toCom ],~stereoGrp);
 
 
-~stereo49=Synth(\stereoS,[ \dur,9999, \in, ~sterBus4   ,\out,~toCom ],~stereoGrp);
 ~compAbso1 = Synth(\comp10, [\ctrl, ~snBus], ~compGrp2);
 ~compAbso1.set(\thr,0.94 ,\sB, 1.04,\sA, 1/2,\atk ,0.0968, \rel ,0.3872 ,\in, ~toCom, \out,~absoFinalGate);
 

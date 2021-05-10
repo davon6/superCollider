@@ -1296,7 +1296,7 @@ Ppar([~base,~fx],1).play(t)
 Pwrand([
 		Pbind(\instrument,\gate, \vlSub,  1 , \vlSub2,Pkey(\vlSub), \dur, Prand([Pseq([2.5/1],1)  ,Pseq([1.25/1],1)],1), \in,~gateBusB,\tS, 0.39550810372374,\group, ~gateGrp,\out, ~revBus2),
 
-	Pwrand([
+	Prand([
 
 			Prand([
 	Pbind(\instrument,\gate, \vlSub,  1 , \vlSub2,Pkey(\vlSub), \dur, Prand([
@@ -1309,22 +1309,34 @@ Pseq([1.5/1],1)  ,Pseq([1.25/1],1)],1), \in,~gateBus,\tS, 0.39550810372374,\grou
 
 			Pbind(\instrument,\gate, \vlSub,  1 , \vlSub2,Pkey(\vlSub), \dur, Prand([  Pseq([1/2],1) ,Pseq([1.5/1],1)  ,Pseq([1.25/1],1)],1), \in,~gateBus3,\tS, 0.39550810372374,\group, ~gateGrp,\out,~revBus1)],
 
-		[1.75,2].normalizeSum,5),
+	5)
 
 	],[2,8].normalizeSum,inf),
 
 	Pwrand([
 	Pbind(\instrument,\gateS, \in,~deadS, \out,0, \group,~dispatchGrp2,\dur, Pseq([1/4],1),\tS, 0.39550810372374  ),
-		Pbind(\instrument,\gateS, \in,~part2Fuzz, \out,~no1, \group,~dispatchGrp2,\dur,Pseq([7.75/1],1),\tS, 0.39550810372374  ),
+		Pbind(\instrument,\gateS, \in,~no1, \out,  ~part2Fuzz, \group,~dispatchGrp2,\dur,Pseq([7.75/1],1),\tS, 0.39550810372374  ),
 
 	],[1,16].normalizeSum,inf),
 
 
 	Pseq([
 
+		Prand([
 		Pbind(\instrument,\playBufXG, \dur,Pseq([3.75/1],1),\amp, 1,\buf,~lpPrec,\out,~eqBus4,\impulse,0.003,\start,~st2 ,\tS, 0.39550810372374,\vlDec,~pSub ,\vlSub,  ~pSub,\vlSub2,Pkey(\vlSub), \atkT,~pAtkT,\decT, ~pDecT+0.14 ,	\subsT, ~pSubT+0.1 , \relT,~pRelT,\atckC,~pAtkC,\decC,~pDecC,\relC,~pRelC,\vlAtk , ~pvlAtk ,  \vlRel,  Pkey(\vlAtk),\loopy,0),
 
-				Pbind(\instrument,\gateS, \in,~no1, \out,~toCom, \group,~gateGrp3,\dur, Pseq([60.25/1],1),\tS, 0.39550810372374  ),
+
+
+		Pbind(\instrument, \playBuf10, \buf ,~leTout2,\out,0, \start,Pfunc({ ~leTout2.numFrames/ 256 * 220.rand}),\loopy,0,\tS,0.39550810372374,\dur,Pseq([3.75/1],1) )
+
+
+		],inf),
+
+				Pbind(\instrument,\gateS, \in,~part2Fuzz, \out,~toCom, \group,~gateGrp3,\dur, Pseq([56.5/1],1),\tS, 0.39550810372374  ),    // was 60.25 -3.75
+
+
+
+		Pbind(\instrument, \playBuf10, \buf ,~leTout2,\out,0, \start,Pfunc({ ~leTout2.numFrames/ 256 * 220.rand}),\loopy,0,\tS,0.39550810372374,\dur,Pseq([3.75/1],1) )
 
 		],inf)
 ],1))
