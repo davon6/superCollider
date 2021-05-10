@@ -408,7 +408,7 @@ Pbind(\instrument, \playBuf10N,  \out,~toCom,\dur,Pseq([ Pseq([8/1],1),  Pseq([1
 
 	//here
 
-	Pbind(\instrument,\gateS, \dur, Prand([/* Pseq([4/1],4),Pseq([1/1],4),*/ Pseq([1.5/1],1), Pseq([3/1],1),/*Pseq([1/3],1) ,*/Pseq([1/1],1),
+Pbind(\instrument,\gateS, \dur, Prand([/* Pseq([4/1],4),Pseq([1/1],4),*/ Pseq([1.5/1],1), Pseq([3/1],1),/*Pseq([1/3],1) ,*/Pseq([1/1],1),
 		/*Pseq([4/1],1)*/],1),
 		\in, ~toGate10   ,\out ,Pwrand([~eqBus10,
 
@@ -424,7 +424,7 @@ Pseq([
 			Pbind(\instrument,\gateS, \dur, Pseq([2/1],1),\tS, 0.39550810372374,\type,\rest)
 
 			],1)
-		],[16,1].normalizeSum,  inf),
+	],[16,1].normalizeSum,  inf),
 
 ],1))
 
@@ -499,6 +499,12 @@ Pbind(\instrument, \filter, \dur,inf, \in,~hpK,\which,2,\busMod, ~bus5,\bus7,~bu
 	Pbind(\instrument, \playBuf,  \tS,  0.39550810372374,\buf,~snare,
 		\type,
 		Pseq([
+
+
+				Pseq([\rest ,\rest,\note,\rest,\rest,\note,\rest,\rest,
+						\rest,\rest,\note,\rest,\rest,\rest,\rest,\rest,
+
+					],4),
 		Pseq([
 				Pseq([\rest ,\rest,\note,\rest,\rest,\rest,\rest,\rest,
 						\rest,\rest,\rest,\rest,\rest,\rest,\rest,\rest,
@@ -1251,7 +1257,9 @@ Ppar([~base,~fx],1).play(t)
 (~fx=Ppar([
 
 //maybe add a limiter
-		Pbind(\instrument, \pingD, \in, ~delayBus2 ,\bufnum, ~delayX, \feedback,0.43 ,\dur, inf,\out,~delayToLimit,\group,~extraDelay),
+	/*	Pbind(\instrument, \pingD, \in, ~delayBus2 ,\bufnum, ~delayX, \feedback,0.43 ,\dur, inf,\out,~delayToLimit,\group,~extraDelay),*/
+
+		Pbind(\instrument, \del ,\in, ~delayBus2 ,\dur, inf,\out,~delayToLimit,\group,~extraDelay),
 
 
 

@@ -170,10 +170,10 @@ Pseq([ Pseq([8/1],1)],1)  ,Pseq([ Pseq([4/1],1)],1)   ,Pseq([Pseq([16/1],1) ,Pse
 
 
 
-	Pbind(\instrument, \gateS, \dur, Pseq([128/1],inf), \in,Pseq([/*~halfAbso21,*/~halfAbso22],inf), \out,~absoFinalGate2, \group,~eqGrp2,\tS, 0.39550810372374),
+	Pbind(\instrument, \gateS, \dur, Pseq([128/1],inf), \in,Pseq([~halfAbso21,~halfAbso22],inf), \out,~absoFinalGate2, \group,~eqGrp2,\tS, 0.39550810372374),
 
 
-Pbind(\instrument,\gateSD, \dur,Pseq([256/1],inf),\in,  Pseq([ /*~absoFinalGate,~absoFinalGate3,*/~absoFinalGate2 ].scramble, inf)  ,\out ,0 ,\group, ~gateGrp7,\tS, 0.39550810372374,\out2, ~fusible10),
+Pbind(\instrument,\gateSD, \dur,Pseq([256/1],inf),\in,  Pseq([/* ~absoFinalGate,~absoFinalGate3,*/~absoFinalGate2 ].scramble, inf)  ,\out ,0 ,\group, ~gateGrp7,\tS, 0.39550810372374,\out2, ~fusible10),
 
 
 	],1).play(t)

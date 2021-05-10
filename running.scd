@@ -1330,7 +1330,7 @@ timeScale: tS,	doneAction:2);
 
 	"reverb init".postln;
 
-	SynthDef(\del, {|out=0, in, decT=1.5544|AllpassL.ar(In.ar(in,1),decaytime: decT)}).add;
+SynthDef(\del, {|out=0, in, decT=1.5544|Out.ar(out,AllpassL.ar(In.ar(in,1),decaytime: decT))}).add;
 
 	SynthDef(\pingD, { |out = 0, bufnum = 0, dur, feedback = 0.5, delayTime = 0.3, in /*stereoL =0.00555, stereoR =0, dec=0.5, amp =1*/ |
     var left;
@@ -1501,8 +1501,10 @@ FreeVerb.ar(
 		HPF.ar(HPF.ar(HPF.ar(HPF.ar(HPF.ar(HPF.ar(HPF.ar(HPF.ar(
 			BPeakEQ.ar(
 		BPeakEQ.ar(	BPeakEQ.ar(In.ar(in, 2),val,quant, gain),val2,quant2, gain2)
-,valD,quantD, Amplitude.ar(In.ar(ctrl,10)).range(-2,-18)/*.poll*/),
+				,valD,quantD, Amplitude.ar(In.ar(ctrl,10)).linlin(10, 10.1583, -2, -18).poll),
 		frq),frq),frq),frq),frq),frq),frq),frq)* vol)};).add;
+
+	// .range(-2,-18)
 
 
 SynthDef(\EQHP96, {|out=0, in, val, quant, gain,frq=100, vol =0.05, val2,quant2, gain2,val3,shelf, gain3,val4,quant4, gain4| Out.ar(out,
