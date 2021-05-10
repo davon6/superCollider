@@ -2208,7 +2208,7 @@ Pseq([Pbind(\instrument, \wNoise,\dur,Pseq([1/4],1),\dec ,Pkey(\dur),\amp,(-12),
 
 		Pbind( \instrument, \playBufXG, \impulse, 0.003 ,\dur,    Pseq([1/4],3), \tS,  0.39550810372374,
 	\start,100,
-			\buf,~b3,\out, ~kbToPan2,\loopy,0, \decT,0.6,
+			\buf,~b3,\out, ~kbToPan2,\loopy,0, \decT,0.7,
 			\subsT ,Pseq([0,0.14,0.24],inf)
 	)
 ],inf),

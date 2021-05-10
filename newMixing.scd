@@ -484,40 +484,38 @@ Synth(\playB10,[\buf, ~leTout,\out,~finGran ]   );
 
 
 
+//PERCUSSIONS
 
-
-
-
-// ~mix31.free
+~eq31=Synth(\EQHP2, [\frq, 3000, \in, ~cymbalEq,\out , ~comBusCymb, \vol,4],~eqGrp);
+~eq31.set(\val, 0,\quant, 0, \gain,0,\val2,0,\quant2,0, \gain2,0, \val3,0,\quant3,0, \gain3,0,\val4,0,\shelf,0, \gain4,0);
+~comp31=Synth(\compS,[\ctrl, ~kbus,],~compGrp);
+~comp31.set(\thr,0.9 ,\sB, 1.05,\sA, 1/2,\atk ,0.0121, \rel ,0.0968,\gain,3.5,\in, ~comBusCymb , \out,~limitCymb);
 ~mix31= Synth(\limiterStoMixer,[\c31,1,\in, ~limitCymb,\gain,20,\out,~comFuzz22],~limitGrp);
 // ~mixa.set(\in,~comFuzz22);
- ~mix31.set(\gain,10);
+ ~mix31.set(\gain,30);
 
-
-
-
-	Pbind(\instrument,\compS, \dur,inf,\thr,0.6 ,\sB, 1.2,\sA, 1/4,\atk ,0.0001, \rel ,0.04840
-,\gain,1,\in, ~comBusHat ,\ctrl, ~kbus, \out,~limitHat,\group, ~compGrp),
-	Pbind(\instrument,\compS,\dur,inf,\thr,0.8 ,\sB, 1.05,\sA, 1/2,\atk ,0.001, \rel ,0.04840,\gain,3.5,\in, ~comBusCymb ,\ctrl, ~kbus, \out,~limitCymb,\group, ~compGrp),
-
-	Pbind(\instrument ,\EQHP2Dyna, \frq, 3000 ,\dur, inf,\in, ~hatEq, \group, ~delayGrp2, \out,~limitHat    ,\vol,4,\ctrl,~fusible10 ,\valD,3100, \quantD,4),
-	Pbind(\instrument , \EQHP2, \frq, 3000 ,\dur, inf,\in, ~cymbalEq, \group, ~delayGrp2,\out , ~limitCymb    ,\vol,4),
-
-
-Pbind(\instrument,\compS, \dur,inf,\thr,0.8 ,\sB, 1.04,\sA, 1/
-		2,\atk ,0.0242, \rel ,0.3872,\ctrl,~snBus ,   \in, ~comFuzz22 ,\out,~toKbGate,\group,~eqGrp2),
-
-
-
-
-
-
-~mix33= Synth(\limiterStoMixer,[\c33,1,\in, ~limitHat,\gain,16,\out,~comFuzz22],~limitGrp);
+~eq33=Synth(\EQHP2Dyna, [\frq, 3000 ,\in, ~hatEq,  \out,~limitHat,\vol,4,\ctrl,~fusible10 ,\valD,3100, \quantD,4],~extraRev);
+~eq33.set(\val, 6000,\quant, 4, \gain,(-12),\val2,0,\quant2,0, \gain2,0, \val3,0,\quant3,0, \gain3,0);
+~comp33=Synth(\compS, [\ctrl, ~kbus],~compGrp4);
+~comp33.set(\thr,0.8 ,\sB, 1.2,\sA, 1/4,\atk ,0.0121, \rel ,0.04840,\gain,1,\in, ~comBusHat, \out,~limitHat );
+~mix33= Synth(\limiterStoMixer,[\c33,1,\in, ~limitHat,\gain,16,\out,~comFuzz22],~limitGrp4);
 // ~mixa.set(\in,~comFuzz22);
- ~mix33.set(\gain,15);
+ ~mix33.set(\gain,33);
 
+
+~percuComp =Synth(\compS, [\ctrl,~snBus ,   \in, ~comFuzz22 ,\out,~toKbGate],~compGrp5);
+~percuComp.set(\thr,0.8 ,\sB, 1.04,\sA, 1/2,\atk ,0.0242, \rel ,0.3872);
+
+
+
+//~eq34.free
+~eq34= Synth(\EQHP96, [\frq, 220 ],~eqGrp);
+~eq34.set(\in, ~snareEQ, \val, 400, \quant, 8, \gain, (-10), \out , ~snareComp,\frq, 220);
+~comp34=Synth(\comp, [\ctrl,~kbus ],~compGrp);
+~comp34.set(\thr,0.92 ,\sB, 1.04,\sA, 1/2,\atk ,0.0242, \rel ,0.3872, \in, ~snareComp ,\out,~snareLimit);
 ~mix34= Synth(\limitertoMixer,[\c34,1,\in, ~snareLimit,\gain,40,\out,~toPan2],~limitGrp);
- ~mix34.set(\gain,36);
+~mix34.set(\gain,50);
+~pan34=Synth( \pan2,[\in, ~toPan2,\out, ~toKbGate], ~stereoGrp);
 
 
 

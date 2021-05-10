@@ -291,12 +291,12 @@ Pbind(\instrument,\compS, \dur,inf,\thr,0.8 ,\sB, 1.04,\sA, 1/
 
 
 
-	Pbind(\instrument , \EQHP96, \frq, 120 ,\dur, inf,\in, ~snareEQ, \group, ~eqGrp,\val, 1800, \quant, 8, \gain, (-10), \out , ~snareComp),
+	/*Pbind(\instrument , \EQHP96, \frq, 120 ,\dur, inf,\in, ~snareEQ, \group, ~eqGrp,\val, 1800, \quant, 8, \gain, (-10), \out , ~snareComp),
 
 	Pbind(\instrument,\comp, \dur,inf,\thr,0.92 ,\sB, 1.04,\sA, 1/
 		2,\atk ,0.0242, \rel ,0.12,\ctrl,~snBus ,   \in, ~snareComp ,\out,~snareLimit,\group,~compGrp),
 
-	Pbind(\instrument, \pan2,\in, ~toPan2,\dur, inf,\group, ~limitGrp,\out, ~toKbGate,\group, ~stereoGrp),
+	Pbind(\instrument, \pan2,\in, ~toPan2,\dur, inf,\group, ~limitGrp,\out, ~toKbGate,\group, ~stereoGrp),*/
 
 //HERE
 
@@ -486,9 +486,15 @@ Pbind(\instrument, \filter, \dur,inf, \in,~hpK,\which,2,\busMod, ~bus5,\bus7,~bu
 	Pbind(\instrument, \pan2,\in, ~toPan3,\dur, inf,\out,~to4bar,\group, ~limitGrp,\group, ~stereoGrp),
 
 
-	Pbind(\instrument, \playBuf,  \tS,  0.39550810372374, \rte, (-4.4),	\buf,~snare,\type,
-		Prand([Pseq([\note ,\rest,\rest,\rest] ,1),Pseq([\rest ,\note,\rest,\rest] ,1),Pseq([\rest ,\rest,\rest,\rest] ,1)],inf),\dur, Pseq([1/2], inf),\out,~snareEQ),
+		Pbind(\instrument, \playBuf,  \tS,  0.39550810372374, \rte, (-4.4),	\buf,~snare,\type,
+		Pwrand([Pseq([\note ,\rest,\rest,\rest] ,1),Pseq([\rest ,\note,\rest,\rest] ,1),
 
+			Pseq([\rest ,\rest,\rest,\rest] ,1)
+
+	],[1,1,64].normalizeSum,inf),\dur, Pseq([1/2], inf),\out,~snareEQ),
+
+	Pbind(\instrument, \playBuf,  \tS,  0.39550810372374,	\buf,~snare,\type,
+		Pwrand([Pseq([\rest ,\note,\rest,\rest],1), Pseq([\rest ,\rest,\rest,\rest],1) ],[1,32].normalizeSum,inf)  ,\dA,Pseq([0.25],inf),\dur, Pseq([1/2], inf),\out,~snareEQ),
 
 	Pbind(\instrument, \playBuf,  \tS,  0.39550810372374,\buf,~snare,
 		\type,
@@ -499,29 +505,22 @@ Pbind(\instrument, \filter, \dur,inf, \in,~hpK,\which,2,\busMod, ~bus5,\bus7,~bu
 						\rest ,\note,\note,\rest,\rest,\rest,\rest,\rest,
 						\rest,\rest,\rest,\rest,\rest,\rest,\note,\rest
 					],1),
-	/*Pseq([\rest ,\rest,\note,\rest], 96),*/
-Pwrand([    Pseq([\rest ,\rest,\note,\rest] ,1),Pseq([\rest ,\note,\note,\rest],1),
-
-		],[26,1].normalizeSum , 88),//was 96
-				Pseq([\rest,\rest,\note,\rest],32)].scramble,1),    Pseq([\rest,\rest,\note,\rest ],128), /*Pseq([\rest ,\note,\note,\rest,\rest,\rest,\rest,\rest,
-						\rest,\rest,\rest,\rest,\rest,\rest,\rest,\rest,
-						\rest ,\note,\note,\rest,\rest,\rest,\rest,\rest,
-						\rest,\rest,\rest,\rest,\rest,\rest,\note,\rest
-					],1), */   Pseq([\rest,\rest,\note,\rest ],128)],inf)//l embrouille
+   Pseq([\rest ,\rest,\note,\rest] , 88),//was 96
+				Pseq([\rest,\rest,\rest,\rest],32)].scramble,1),    Pseq([\rest,\rest,\note,\rest ],128),    Pseq([\rest,\rest,\note,\rest ],128)],inf)//l embrouille
 	,\dur, Pseq([1/2], inf) ,\out,~snareEQ,
-	\dA,Pseq([ /*Pseq([2],32),Pseq([0],32)*/  Pseq([1],32), Pseq([0.5],32),Pseq([0.25],32)],inf)      ),
+	\dA,Pseq([  Pseq([1],32), Pseq([0.5],32)],inf)),
 
 
 //for future
-/*	Pbind(\instrument, \playBufS,  \tS,  0.39550810372374,\buf,~cymb,\type,Pseq([Pseq([Pseq(~rythm1,1),Pseq(~rythm2,1),],4),Pseq([Pseq(~rythm3,1),Pseq(~rythm4,1),],4),Pseq(~rythmL, 224 /*32*/),Pseq(~rythmL, 256),Pseq([\rest],128) ],inf),\dur,Pseq([1/4],inf ),\stereoL, 0.00555,\out,   ~comBusCymb),*/
+	Pbind(\instrument, \playBufS,  \tS,  0.39550810372374,\buf,~cymb,\type,Pseq([Pseq([Pseq(~rythm1,1),Pseq(~rythm2,1),],4),Pseq([Pseq(~rythm3,1),Pseq(~rythm4,1),],4),Pseq(~rythmL, 224 /*32*/),Pseq(~rythmL, 256),Pseq([\rest],128) ],inf),\dur,Pseq([1/4],inf ),\stereoL, 0.00555,\out,    ~cymbalEq),
 
 
-	/*Pbind(\instrument, \playBufS,  \tS,  0.39550810372374,\buf,~hat,\dur,Pseq([1/4], inf),\rel2,0.02420,\vl,Pseq([( -17.2), ( -17.7),( -17.5),( -17.2),( -17.2),( -16.9),( -17.2),( -17.2)],inf), \stereoR, 0.007,\out,~comBusHat,\type, Pseq([ Pseq([ \note],512),Pseq([\rest],128)],inf)),*/
+	Pbind(\instrument, \playBufS,  \tS,  0.39550810372374,\buf,~hat,\dur,Pseq([1/4], inf),\rel2,0.02420,\vl,Pseq([( -17.2), ( -17.7),( -17.5),( -17.2),( -17.2),( -16.9),( -17.2),( -17.2)],inf), \stereoR, 0.007,\out,~hatEq,\type, Pseq([ Pseq([ \note],512),Pseq([\rest],128)],inf)),
 
 
 
 
-		Pbind(\instrument, \percussion ,\dur,Pseq([1/4],inf ),
+	/*	Pbind(\instrument, \percussion ,\dur,Pseq([1/4],inf ),
 		\carHz, 525.12070612224.rrand(0.01),
 		\modHz,11899.3343179398.rrand(0.001),
 		\modAmp, 0.12875.rrand(0.000001).postln ,
@@ -531,7 +530,7 @@ Pwrand([    Pseq([\rest ,\rest,\note,\rest] ,1),Pseq([\rest ,\note,\note,\rest],
 
 		\amp,1,\rel,Pseq([1/4],inf),\rel2,Pseq([1/16],inf),
 		\latch,8000,
-		\stereoL, 0.00555,\out,   ~comBusCymb,\type,Pseq([Pseq([Pseq(~rythm1,1),Pseq(~rythm2,1),],4),Pseq([Pseq(~rythm3,1),Pseq(~rythm4,1),],4),Pseq(~rythmL, 224 /*32*/),Pseq(~rythmL, 256),Pseq([\rest],128) ],inf)),
+		\stereoL, 0.00555,\out,   ~cymbalEq,\type,Pseq([Pseq([Pseq(~rythm1,1),Pseq(~rythm2,1),],4),Pseq([Pseq(~rythm3,1),Pseq(~rythm4,1),],4),Pseq(~rythmL, 224 /*32*/),Pseq(~rythmL, 256),Pseq([\rest],128) ],inf)),
 
 
 
@@ -540,9 +539,9 @@ Pbind(\instrument,\percussion,\dur,Pseq([1/4], inf),\atk, 0,\rel,0.04840,\rel2,0
 		\modHz, exprand(500,10000).postln,
 		\mulMod, rrand(100, 500).postln,
 		\carHz, exprand(20,10000),
-		\modAmp, 0.12875, \latch, 18500, \stereoR, 0.007,\out,~comBusHat,
+		\modAmp, 0.12875, \latch, 18500, \stereoR, 0.007,\out,   ~hatEq,
 		\amp,Pseq([( -17.2), ( -17.7),( -17.5),( -17.2),( -17.2),( -16.9),( -17.2),( -17.2)],inf)
-	),
+	),*/
 
 
 
@@ -590,21 +589,21 @@ Pbind(\instrument, \playBufS, \dur,  Pseq([1/1],inf), \tS,  0.39550810372374,\bu
 	Pseq([
 	Pseq([
 Pseq([
-	Pbind(\instrument,\gate2, \in ,~toKbGate, \group, ~gateGrp7, \tS,  0.39550810372374,
+	Pbind(\instrument,\gate2, \in ,~toKbGate, \group, ~eqGrp3, \tS,  0.39550810372374,
 		\dur, Pseq([15/1],1)),
 
-	Pbind(\instrument,\gate2, \in ,~rollingK, \group, ~gateGrp7, \tS,  0.39550810372374,
+	Pbind(\instrument,\gate2, \in ,~rollingK, \group, ~eqGrp3, \tS,  0.39550810372374,
 			\dur, Pseq([1/1],1))].scramble,1),
 
 	Pseq([
-	Pbind(\instrument,\gate2, \in ,~toKbGate, \group, ~gateGrp7, \tS,  0.39550810372374,
+	Pbind(\instrument,\gate2, \in ,~toKbGate, \group, ~eqGrp3/*~gateGrp7*/, \tS,  0.39550810372374,
 		\dur, Pseq([14/1],1)),
 
-			Pbind(\instrument,\gate2, \in ,Prand([~dipatchKB2,~rollingK,~to4bar],inf), \group, ~gateGrp7, \tS,  0.39550810372374,
+			Pbind(\instrument,\gate2, \in ,Prand([~dipatchKB2,~rollingK,~to4bar],inf), \group, ~eqGrp3, \tS,  0.39550810372374,
 			\dur, Pseq([2/1],1))].scramble,1),
 
 		Pseq([
-	Pbind(\instrument,\gate2, \in ,~toKbGate, \group, ~gateGrp7, \tS,  0.39550810372374,
+	Pbind(\instrument,\gate2, \in ,~toKbGate, \group, ~eqGrp3, \tS,  0.39550810372374,
 		\dur, Pseq([12/1],1)),
 
 	Prand([
@@ -613,10 +612,10 @@ Pseq([
 			\dur, Pseq([4/1],1)) ],1),  ].scramble,1),
 
 		Pseq([
-	Pbind(\instrument,\gate2, \in ,~toKbGate, \group, ~gateGrp7, \tS,  0.39550810372374,
+	Pbind(\instrument,\gate2, \in ,~toKbGate, \group, ~eqGrp3, \tS,  0.39550810372374,
 		\dur, Pseq([8/1],1)),
 
-	Pbind(\instrument,\gate2, \in ,~rollingK, \group, ~gateGrp7, \tS,  0.39550810372374,
+	Pbind(\instrument,\gate2, \in ,~rollingK, \group, ~eqGrp3, \tS,  0.39550810372374,
 			\dur, Pseq([8/1],1))].scramble,1)
 
 		].scramble,4),
@@ -624,18 +623,18 @@ Pseq([
 
 		//all new perspective
 		Pseq([
-		Pbind(\instrument,\gate2, \in ,~toKbGate, \group, ~gateGrp7, \tS,  0.39550810372374,
+		Pbind(\instrument,\gate2, \in ,~toKbGate, \group, ~eqGrp3, \tS,  0.39550810372374,
 		\dur, Pseq([31/1],1)),
 			Pbind(\instrument,\gate2, \in ,Prand([~dipatchKB2,~rollingK,~to4bar],inf), \group, ~gateGrp7, \tS,  0.39550810372374,
 			\dur, Pseq([4/1],1)),
 
-		Pbind(\instrument,\gate2, \in ,~toKbGate, \group, ~gateGrp7, \tS,  0.39550810372374,
+		Pbind(\instrument,\gate2, \in ,~toKbGate, \group, ~eqGrp3, \tS,  0.39550810372374,
 		\dur, Pseq([12/1],1)),
 
-			Pbind(\instrument,\gate2, \in ,~toKbGate, \group, ~gateGrp7, \tS,  0.39550810372374,
+			Pbind(\instrument,\gate2, \in ,~toKbGate, \group, ~eqGrp3, \tS,  0.39550810372374,
 		\dur, Pseq([16/1],1)),
 
-			Pbind(\instrument,\gate2, \in ,~rollingK, \group, ~gateGrp7, \tS,  0.39550810372374,
+			Pbind(\instrument,\gate2, \in ,~rollingK, \group, ~eqGrp3, \tS,  0.39550810372374,
 		\dur, Pseq([1/1],1)),
 
 
@@ -645,48 +644,48 @@ Pseq([
 
 		Pseq([
 
-			Pbind(\instrument,\gate2, \group, ~gateGrp7, \tS,  0.39550810372374,\in,~rollingK,
+			Pbind(\instrument,\gate2, \group, ~eqGrp3, \tS,  0.39550810372374,\in,~rollingK,
 		\dur, Pseq([31/1],1)),
 			Pbind(\instrument,\gate2, \in ,Prand([~dipatchKB2,~rollingK,~to4bar],inf), \group, ~gateGrp7, \tS,  0.39550810372374,
 			\dur, Pseq([4/1],1)),
 
-		Pbind(\instrument,\gate2, \in ,~toKbGate, \group, ~gateGrp7, \tS,  0.39550810372374,
+		Pbind(\instrument,\gate2, \in ,~toKbGate, \group, ~eqGrp3, \tS,  0.39550810372374,
 		\dur, Pseq([12/1],1)),
 
-			Pbind(\instrument,\gate2, \in ,~toKbGate, \group, ~gateGrp7, \tS,  0.39550810372374,
+			Pbind(\instrument,\gate2, \in ,~toKbGate, \group, ~eqGrp3, \tS,  0.39550810372374,
 		\dur, Pseq([16/1],1)),
 
-			Pbind(\instrument,\gate2, \in ,~rollingK, \group, ~gateGrp7, \tS,  0.39550810372374,
+			Pbind(\instrument,\gate2, \in ,~rollingK, \group, ~eqGrp3, \tS,  0.39550810372374,
 		\dur, Pseq([1/1],1)),
 
 
 
 
 
-				Pbind(\instrument,\gate2, \in ,~toKbGate, \group, ~gateGrp7, \tS,  0.39550810372374,
+				Pbind(\instrument,\gate2, \in ,~toKbGate, \group, ~eqGrp3, \tS,  0.39550810372374,
 		\dur, Pseq([16/1],1)),
 
-			Pbind(\instrument,\gate2, \in ,~to4bar, \group, ~gateGrp7, \tS,  0.39550810372374,
+			Pbind(\instrument,\gate2, \in ,~to4bar, \group, ~eqGrp3, \tS,  0.39550810372374,
 		\dur, Pseq([1/1],1)),
 
 
-					Pbind(\instrument,\gate2, \in ,~toKbGate, \group, ~gateGrp7, \tS,  0.39550810372374,
+					Pbind(\instrument,\gate2, \in ,~toKbGate, \group, ~eqGrp3, \tS,  0.39550810372374,
 		\dur, Pseq([16/1],1)),
 
-			Pbind(\instrument,\gate2, \in ,~rollingK, \group, ~gateGrp7, \tS,  0.39550810372374,
+			Pbind(\instrument,\gate2, \in ,~rollingK, \group, ~eqGrp3, \tS,  0.39550810372374,
 		\dur, Pseq([1/1],1)),
 
 
-					Pbind(\instrument,\gate2, \in ,~toKbGate, \group, ~gateGrp7, \tS,  0.39550810372374,
+					Pbind(\instrument,\gate2, \in ,~toKbGate, \group, ~eqGrp3, \tS,  0.39550810372374,
 		\dur, Pseq([16/1],1)),
 
-			Pbind(\instrument,\gate2, \in ,~dipatchKB2, \group, ~gateGrp7, \tS,  0.39550810372374,
+			Pbind(\instrument,\gate2, \in ,~dipatchKB2, \group, ~eqGrp3, \tS,  0.39550810372374,
 		\dur, Pseq([1/1],1)),
 
-					Pbind(\instrument,\gate2, \in ,~toKbGate, \group, ~gateGrp7, \tS,  0.39550810372374,
+					Pbind(\instrument,\gate2, \in ,~toKbGate, \group, ~eqGrp3, \tS,  0.39550810372374,
 		\dur, Pseq([16/1],1)),
 
-			Pbind(\instrument,\gate2, \in ,~dipatchKB2, \group, ~gateGrp7, \tS,  0.39550810372374,
+			Pbind(\instrument,\gate2, \in ,~dipatchKB2, \group, ~eqGrp3, \tS,  0.39550810372374,
 		\dur, Pseq([1/1],1)),
 
 
