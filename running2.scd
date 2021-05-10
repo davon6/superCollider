@@ -1054,8 +1054,11 @@ Pbind(\instrument,\stereoS, \dur, 9999, \in, ~flanToStereo  ,\spread,0.2,\out,~a
 	Pbind(\instrument,\stereo, \dur, 9999, \in, ~toStereoRise  ,\spread,0.1,\out,~again,\tS, 0.39550810372374,\group, ~stereoGrp),
 
 		Prand([
-		Pbind(\instrument,\gateS, \dur,Pseq([1/8],8),\type,
-			Pseq([\note, \rest,\note, \rest,\note, \note,\note,\note],inf),
+		Pbind(\instrument,\gateS, \dur,Pseq([1/8],16),\type,
+			Pseq([\note, \rest,\note, \rest,\note, \rest,\note,\note
+
+				\note,\note,\rest,\rest,\note,\note,\note,\rest
+			],inf),
 		\in,  ~gateRise ,\out , ~toGate102,\group, ~gateGrp10,\tS, 0.39550810372374),
 
 
