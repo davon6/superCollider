@@ -495,7 +495,7 @@ Synth(\playB10,[\buf, ~leTout,\out,~finGran ]   );
  ~mix31.set(\gain,30);
 
 ~eq33=Synth(\EQHP2Dyna, [\frq, 3000 ,\in, ~hatEq,  \out,~limitHat,\vol,4,\ctrl,~fusible10 ,\valD,3100, \quantD,4],~extraRev);
-~eq33.set(\val, 6000,\quant, 4, \gain,(-12),\val2,0,\quant2,0, \gain2,0, \val3,0,\quant3,0, \gain3,0);
+~eq33.set(\val, 6500,\quant, 4, \gain,(-12),\val2,22000,\quant2,4, \gain2,(-12), \val3,0,\quant3,0, \gain3,0);
 ~comp33=Synth(\compS, [\ctrl, ~kbus],~compGrp4);
 ~comp33.set(\thr,0.8 ,\sB, 1.2,\sA, 1/4,\atk ,0.0121, \rel ,0.04840,\gain,1,\in, ~comBusHat, \out,~limitHat );
 ~mix33= Synth(\limiterStoMixer,[\c33,1,\in, ~limitHat,\gain,16,\out,~comFuzz22],~limitGrp4);
