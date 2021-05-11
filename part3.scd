@@ -116,7 +116,14 @@ Pbind(\instrument, \playBuf10, \buf ,~leTout2,\out,~absoFinalGate3, \start, ~leT
 		],inf),
 
 
-	Pbind(\instrument, \playBufS,\dur  ,Pseq([2/1],inf),\buf,~fkAr,\tS,  0.39550810372374,\start,/*~fkAr.numFrames.rand.postln*/1020551.1121401,\out, ~limitBus1),
+/*	Pbind(\instrument, \playBufS,\dur  ,Pseq([2/1],inf),\buf,~fkAr,\tS,  0.39550810372374,\start,/*~fkAr.numFrames.rand.postln*/1020551.1121401,\out, ~limitBus1),
+	*/
+
+
+		Pbind(\instrument, \playBuf,\dur  ,Pseq([2/1],inf),\buf,~kb2Test,\tS,  0.39550810372374,\start,
+/*	~kb2Test.numFrames.rand.postln*/107116.69921875,\out, ~buildUpG),
+
+	Pbind(\instrument,\gate,\in,~buildUpG,\out,~limitBus1, \vlSub,1,\vlSub2,Pkey(\vlSub),\tS,  0.39550810372374,\group,~lfoGrp,\type,Pseq([\note,\note,\note,\note,\rest,\rest,\rest,\rest].scramble,inf),\dur  ,Pseq([1/1],inf))
 
 
 

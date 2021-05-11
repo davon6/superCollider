@@ -132,7 +132,7 @@ s.sync;
 
 	~lpPrec3 = Buffer.alloc(s, s.sampleRate *t.beatDur*64,1);
 
-	~kb2Test = Buffer.alloc(s, s.sampleRate *20,2);
+	~kb2Test = Buffer.alloc(s, s.sampleRate *10,1);
 	~e = Buffer.alloc(s, s.sampleRate *   t.beatDur*4 ,1);
 	~f = Buffer.alloc(s, s.sampleRate *  t.beatDur*4);
 	~e2 = Buffer.alloc(s, s.sampleRate *   t.beatDur*4,1);
@@ -142,6 +142,9 @@ s.sync;
 	~delay2 = Buffer.alloc(s, 48000 * 3, 2);
 	~delay3 = Buffer.alloc(s, 48000 * 3, 2);
 	~delay6= Buffer.alloc(s, 48000 * 3, 2);
+
+	~conga = Buffer.alloc(s, s.sampleRate *8,2);
+	~funkPerc  = Buffer.alloc(s, s.sampleRate * t.beatDur*8,2);
 
 
 
@@ -226,6 +229,7 @@ s.sync;
 	~part2ToG= Bus.audio(s,2);
 	~part2ToEq = Bus.audio(s,1);
 	~snareComp= Bus.audio(s,1);
+	~buildUpG=Bus.audio(s,1);
 
 	//WATCH OUT MIGHT BE NEEDED
 
