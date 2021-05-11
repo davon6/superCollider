@@ -400,3 +400,143 @@ x = Synth(\recLoop,[buf:~lpPrec3,\recording,1, \in,0],~recGrp);
 //choose here
 (Pbind(\instrument,\playBufXG,\dur,  Pseq([4.75],1) /*Pseq([1/4],24)*/,\amp, 1,\buf,~lpPrec,\out,0,\gate, 1,\duration,Pkey(\dur),\impulse,0.003,\start,~st2 = 650438.18770068 /*(~lpPrec.numFrames.rrand(5000)-5000).postln*/ ,\tS, 0.39550810372374 ,
 	\vlSub,  ~pSub , \vlSub2,Pkey(\vlSub), \atkT,0.001/*~pAtkT*/,\decT, 0.6/*~pDecT*/ ,	\subsT,0.399 /*~pSubT*/ , \relT,0.01/*~pRelT*/,\atckC,~pAtkC,\decC,~pDecC,\relC,~pRelC,\vlAtk , ~pvlAtk ,  \vlRel,  Pkey(\vlAtk),\loopy,0).play(t))
+
+
+(
+~filterGrp = Group.new;
+~delGrp =Group.after(~filterGrp);
+~combGrp=Group.after(~delGrp);
+~recGrp2=Group.after(~combGrp);)
+(
+Ppar([
+
+	Pbind(\instrument, \playBuf,\dur,1/16, \rte,Pfunc({4.rrand(0.1)}), \tS,  0.39550810372374,\buf,~snare,\out,~percuStereo,\dA,0.1,
+		\type, Pseq([\note,\note,\note,\note,\rest,\rest,\rest,\rest,
+			\note,\note,\note,\note,\rest,\rest,\rest,\rest,
+			\note,\note,\note,\note,
+			\rest,\rest,\rest,\rest,\rest,\rest,\rest,\rest,
+			\note,\note,\note,\note,
+			\rest,\rest,\rest,\rest,\rest,\rest,\rest,\rest,
+					\note,\note,\note,\note,\rest,\rest,\rest,\rest,
+		],inf)
+	)
+	,
+	Pbind(\instrument, \filterGS,\which,1, \in,~percuStereo ,\out,0, \group, ~filterGrp,\qf2,0.08,\dur ,inf),
+
+
+	Pbind(\instrument,\pingD, \in,~part2SRev,  \bufnum,~delay, \feedback,0.45 ,\group, ~delGrp,\dur, inf,\out,~limitBus1),
+	Pbind(\instrument, \comb,\which,1, \in,~limitBus1,\group, ~combGrp,\qf2,0.1,\dur ,inf),
+
+	Pbind(\instrument,\recLoopS,\buf,~fkAr,\recording,1, \in,0,\group,~recGrp2,\dur,inf),
+
+],1).play(t)
+)
+
+//idea
+({CombN.ar(Saw.ar(/*LFNoise.kr(1.2875).range(0.3,432)*/216/*MouseY.kr(100,432)*/),delaytime:
+	LFNoise1.kr(2.575).range(0.00001,0.01)
+
+	/*MouseX.kr(0.01,0.2)*/ ,decaytime: /*LFNoise0.kr(5.2875).range(-0.1,0.4)*/-0.2)}.play)
+
+
+~extraDelay = Group.new;
+~revGrp = Group.after(~extraDelay);
+~recGrp2= Group.after(~revGrp);
+
+
+(
+SynthDef(\chord,{
+
+	Out.ar(~delayToLimit,
+		BHiPass4.ar((Saw.ar(64.midicps+EnvGen.kr(Env([50,0],[20],-5)))+
+		Saw.ar(67.midicps+EnvGen.kr(Env([50,0],[20],-5)))+
+			Saw.ar(63.midicps+EnvGen.kr(Env([50,0],[20],-5)))),MouseY.kr(100,12000),0.8)*0.06)
+}).play)
+
+
+
+
+Pbind(\instrument, \pingD, \in,~delayToLimit  ,\bufnum, ~delay6, \feedback,0.33 ,\dur, inf,\out,~delayBus2,\group,  ~extraDelay).play(t)
+
+
+
+
+~rev2= Synth( \reverbMad,~churcx,    ~revGrp );
+~rev2.set( \in,~delayBus2  , \out, 0,\taillevel,2,\revtime, 10.85, \damping, 0.1,\roomsize, 16,\inputbw,0.8)
+
+
+
+a= Synth( \reverbMad,~churcx,    ~extraDelay );
+a.set( \in,~delayToLimit  , \out,0 /*~delayBus2*/,\taillevel,2,\revtime, 10.85, \damping, 0.1,\roomsize, 16,\inputbw,0.8)
+
+
+Pbind(\instrument,\recLoopS,\buf,~pad,\recording,1, \in,0,\group,~recGrp2,\dur,inf).play(t)
+~pad.play
+
+(
+c = {
+	var sig = In.ar(0, 12);
+	var mid = sig[0] + sig[1];
+	var side = sig[1] - sig[0];
+	[side, mid] * 0.5
+}.play(~rev2, outbus: 0, addAction: \addAfter);
+)
+
+z = s.scope(2, index: 0).style_(2).yZoom_(16);
+
+//sick pad
+Pbind(\instrument, \percussion, \dur,Pseq([1/4],inf),\carHz, Pfunc({1050.12070612224.rrand(150)}),\modHz,Pfunc({9334.3179398.rrand(0.1)}),\modAmp,Pfunc({ 0.00875.rrand(0.0001)}) ,\amp,1,\rel,4.5544,\rel2,4.242,\stereoL, 0.00555, \crv1,  (-7.4), \crv1b,(-42), \mulMod, 901,\out,0,\latch,8900,\atk,0.01,\atk2,Pfunc({0.3.rrand(0.01)})).play(t)
+
+
+//new percu dance
+
+
+
+
+(a=Prand([
+
+Pbind(\instrument, \percussion ,\dur,Pseq([1/4],4 ),\carHz, Pfunc({525.12070612224.rrand(0.01)}),\modHz,Pfunc({11899.3343179398.rrand(0.001)}),\modAmp, Pfunc({0.12875.rrand(0.000001)}) ,\amp,-3,\rel,Pseq([1/4],inf),\rel2,Pseq([1/16],inf),\latch,8000,\stereoL, 0.00555, \crv1, Pfunc({ (-14.4).rrand(-1)}), \crv1b,(-4).rand, \mulMod, 1691,\out,   0),
+
+Pbind(\instrument, \playBufS,\dur, Pseq([1/4],1),\buf,~conga,\tS,0.39550810372374,\rte,    Pfunc({3.6.rrand(1)}),\start,110000),
+
+
+Pbind(\instrument,\percussion,\dur,Pseq([1/4], 2),\atk, 0,\rel,0.04840,\rel2,0.02420,\amp,-3, \crv1, Pfunc({(-3).rand}), \crv1b,Pfunc({ (-5).rand}), \modHz, Pfunc({exprand(500,10000)}), \mulMod, Pfunc({rrand(100, 500)}), \carHz, Pfunc({exprand(20,10000)}), \modAmp, Pfunc({0.12875.rand}), \latch, 18500, \stereoR, 0.007,\out,0)
+],inf).play(t))
+
+
+
+
+
+Pbind(\instrument,\percussion,\dur,Pseq([1/4], 2),\atk, 0,\rel,0.04840,\rel2,0.02420,\amp,-12, \crv1, Pfunc({(-3).rand}), \crv1b,Pfunc({ (-5).rand}), \modHz, Pfunc({exprand(500,10000)}), \mulMod, Pfunc({rrand(100, 500)}), \carHz, Pfunc({exprand(20,10000)}), \modAmp, Pfunc({0.12875.rand}), \latch, 18500, \stereoR, 0.007,\out,0).play(t)
+
+
+(
+c = {
+	var sig = In.ar(0, 2);
+	var mid = sig[0] + sig[1];
+	var side = sig[1] - sig[0];
+	[side, mid] * 0.5
+}.play(a, outbus: b, addAction: \addAfter);
+)
+
+
+
+(
+
+
+{SinOsc.ar(110,mul: EnvGen.kr(Env.perc(releaseTime: 0.2,curve: -3)))!2}.play;
+
+
+{BLowPass4.ar(PinkNoise.ar(0.6),EnvGen.kr(Env([1400,500,120],[0.1,0.4,1],[-30,-4,1]),doneAction: 2),Line.kr(0.6,1,1))!2}.play;
+
+
+Pbind(\instrument,\recLoopS,\buf,~conga,\recording,1, \in,0,\group,~recGrp2,\dur,inf).play(t)
+
+
+~conga.numFrames
+Pbind(\instrument, \playBufS,\dur, Pseq([1/4],inf),\buf,~conga,\tS,0.39550810372374,\rte,    Pfunc({2.6.rrand(0)}),\start,110000).play(t)
+~conga.plot
+~conga = Buffer.alloc(s, s.sampleRate *8,2);
+
+~recGrp2=Group.new;
+

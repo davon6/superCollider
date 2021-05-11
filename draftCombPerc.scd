@@ -51,6 +51,14 @@ Ppar([
 ],1).play(t)
 )
 
+//idea
+({CombN.ar(Saw.ar(/*LFNoise.kr(1.2875).range(0.3,432)*/216/*MouseY.kr(100,432)*/),delaytime:
+	LFNoise1.kr(2.575).range(0.00001,0.01)
+
+	/*MouseX.kr(0.01,0.2)*/ ,decaytime: /*LFNoise0.kr(5.2875).range(-0.1,0.4)*/-0.2)}.play)
+
+
+
 
 
 ~fkAr.play

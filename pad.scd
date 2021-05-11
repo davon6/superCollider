@@ -2,6 +2,7 @@
 
 ~extraDelay = Group.new;
 ~revGrp = Group.after(~extraDelay);
+~recGrp2= Group.after(~revGrp);
 
 
 (
@@ -16,17 +17,35 @@ SynthDef(\chord,{
 
 
 
-Pbind(\instrument, \pingD, \in, ~delayBus2 ,\bufnum, ~delay6, \feedback,0.33 ,\dur, inf,\out,0,\group,~revGrp).play(t)
+Pbind(\instrument, \pingD, \in,~delayToLimit  ,\bufnum, ~delay6, \feedback,0.33 ,\dur, inf,\out,~delayBus2,\group,  ~extraDelay).play(t)
 
 
 
 
-~rev2= Synth( \reverbMad,~churcx,    ~extraDelay );
-~rev2.set( \in,~delayToLimit  , \out, ~delayBus2,\taillevel,8,\revtime, 30.85, \damping, 0.1,\roomsize, 16,\inputbw,0.8)
+~rev2= Synth( \reverbMad,~churcx,    ~revGrp );
+~rev2.set( \in,~delayBus2  , \out, 0,\taillevel,2,\revtime, 10.85, \damping, 0.1,\roomsize, 16,\inputbw,0.8)
 
 
 
+a= Synth( \reverbMad,~churcx,    ~extraDelay );
+a.set( \in,~delayToLimit  , \out,0 /*~delayBus2*/,\taillevel,2,\revtime, 10.85, \damping, 0.1,\roomsize, 16,\inputbw,0.8)
 
+
+Pbind(\instrument,\recLoopS,\buf,~pad,\recording,1, \in,0,\group,~recGrp2,\dur,inf).play(t)
+~pad.play
+
+(
+c = {
+	var sig = In.ar(0, 12);
+	var mid = sig[0] + sig[1];
+	var side = sig[1] - sig[0];
+	[side, mid] * 0.5
+}.play(~rev2, outbus: 0, addAction: \addAfter);
+)
+
+z = s.scope(2, index: 0).style_(2).yZoom_(16);
+
+SinOsc
 
 ~rev2=Synth( \reverbS ,~revRnd[2],~revGrp);
 

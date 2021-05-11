@@ -124,6 +124,7 @@ s.sync;
 	~bell3 = Buffer.alloc(s, s.sampleRate *1,2);
 
 	~fkAr = Buffer.alloc(s, s.sampleRate *t.beatDur*64,2);
+	~pad =  Buffer.alloc(s, s.sampleRate *t.beatDur*64,2);
 
 
 	~lpPrec = Buffer.alloc(s, s.sampleRate *t.beatDur*64,1);
@@ -1501,7 +1502,7 @@ FreeVerb.ar(
 		HPF.ar(HPF.ar(HPF.ar(HPF.ar(HPF.ar(HPF.ar(HPF.ar(HPF.ar(
 			BPeakEQ.ar(
 		BPeakEQ.ar(	BPeakEQ.ar(In.ar(in, 2),val,quant, gain),val2,quant2, gain2)
-				,valD,quantD, Amplitude.ar(In.ar(ctrl,10)).linlin(10, 10.1583, -2, -18).poll),
+				,valD,quantD, Amplitude.ar(In.ar(ctrl,10)).linlin(10, 10.1583, -2, -18)/*.poll*/),
 		frq),frq),frq),frq),frq),frq),frq),frq)* vol)};).add;
 
 	// .range(-2,-18)
