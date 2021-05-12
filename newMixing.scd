@@ -517,15 +517,21 @@ Synth(\playB10,[\buf, ~leTout,\out,~finGran ]   );
 ~sterCymb.set(\spread,1,\center,1,\dlt1,0,\dlt2,0.02,\decT,0.0242, \mxDel,1);
 
 //group name chelou for dynaEq
-~eq33=Synth(\EQHP2Dyna, [\frq, 3000 ,\in, ~hatEq,  \out,~comBusHat,\vol,4,\ctrl,~fusible10 ,\valD,3100, \quantD,4],~extraRev);
-~eq33.set(\val, 6500,\quant, 4, \gain,(-12),\val2,22000,\quant2,4, \gain2,(-12), \val3,0,\quant3,0, \gain3,0,\out , ~comBusHat);
-~comp33=Synth(\compS, [\ctrl, ~kbus],~compGrp4);
-~comp33.set(\thr,0.8 ,\sB, 1.2,\sA, 1/4,\atk ,0.0121, \rel ,0.04840,\gain,1,\in, ~comBusHat, \out,~limitHat );
-~mix33= Synth(\limiterStoMixer,[\c33,1,\in, ~limitHat,\gain,16,\out,~stereoHat ],~limitGrp4);
-~mix33.set(\gain,33);
-~sterHat=Synth(\stereoO,[\in,~stereoHat,\out,~comFuzz22],~stereoGrp);
-~sterHat.set(\spread,1,\center,1,\dlt1,0.05,\dlt2,0,\decT,0.0242, \mxDel,1);
 
+~eq33=Synth(\EQHP96/*2Dyna*/, [\frq, 3000 ,\in, ~hatEq,  \out,0/*~comBusHat*/,\vol,0.5,\ctrl,~fusible10 ,\valD,3100, \quantD,4],~extraRev);
+
+
+
+~eq33.set(\val, 6500,\quant, 4, \gain,(-12),\val2,22000,\quant2,4, \gain2,(-12), \val3,0,\quant3,0, \gain3,0,\out , ~comBusHat,\vol,0.5);
+
+
+~comp33=Synth(\compS, [\ctrl, ~kbus],~compGrp4);
+~comp33.set(\thr,0.9 ,\sB, 1.1,\sA, 1/4,\atk ,0.0121, \rel ,0.04840,\gain,1,\in, ~comBusHat, \out,~limitHat );
+
+~mix33= Synth(\limitertoMixer,[\c33,1,\in, ~limitHat,\gain,16,\out,~stereoHat ],~limitGrp4);
+~mix33.set(\gain,23);
+~sterHat=Synth(\stereoO,[\in,~stereoHat,\out,~comFuzz22],~stereoGrp4);
+~sterHat.set(\spread,0,\center,0,\dlt1,0.01,\dlt2,000.6,\decT,0.0121, \mxDel,1,\out,~comFuzz22);
 
 
 ~percuComp =Synth(\comp10, [\ctrl,~snBus ,   \in, ~comFuzz22 ,\out,~toKbGate],~compGrp5);

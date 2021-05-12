@@ -2,7 +2,7 @@
 
 (Pseq([
 
-	/*
+
 	Ppar([
 
 	Pbind(\instrument, \playBuf10, \buf ,~leTout2,\out,0, \start, ~leTout2.numFrames/ 256 * 41
@@ -28,7 +28,7 @@ Pbind(\instrument, \playBuf10, \buf ,~leTout2,\out,0, \start, ~leTout2.numFrames
 
 
 	Pbind(\instrument, \playBufS,\dur  ,Pseq([2/1],8),\buf,~fkAr,\tS,  0.39550810372374,\start,1015435.8192815,\out, ~limitBus1),
-	*/
+
 
 	Ppar([
 
