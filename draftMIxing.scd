@@ -1,6 +1,6 @@
 ~mixa = Synth(\gate2, [\in,  ~no1,\dur, 9999] ,~eqGrp3);
 
-~mixa = Synth(\gateS, [\in,~no3/*~comFuzz22*/ /*~absoFinalGate3*//*~comSnaGrpBus2*/,\dur, 9999] ,~limitGrp4);
+~mixa = Synth(\gateS, [\in,/*~comFuzz22*/ ~absoFinalGate3/*~comSnaGrpBus2*/,\dur, 9999] ,~limitGrp4);
 
 
 ~mixa = Synth(\gate, [\in, ~distoPercu,\dur, 9999] ,~limitGrp4);
@@ -16,9 +16,9 @@
 
 (Ppar([
 
-	Pbind(\instrument, \lfo13, \val,0.075,\dur,Pseq([64/1],inf),\rL,3200,\rH,1720, \ph,4.2,\out,  ~bus3, \group, ~lfoGrp,\tS, 0.39550810372374),
+	/*Pbind(\instrument, \lfo13, \val,0.075,\dur,Pseq([64/1],inf),\rL,3200,\rH,1720, \ph,4.2,\out,  ~bus3, \group, ~lfoGrp,\tS, 0.39550810372374),
 
-		Pbind(\instrument, \lfo13,\val,(1.2875),\out,~bus10 ,\dur,Pseq([16/1],inf),\ph,1.4, \rL,500,\rH,2900, \group, ~lfoGrp,\tS, 0.39550810372374),
+		Pbind(\instrument, \lfo13,\val,(1.2875),\out,~bus10 ,\dur,Pseq([16/1],inf),\ph,1.4, \rL,500,\rH,2900, \group, ~lfoGrp,\tS, 0.39550810372374),*/
 
 
 	Pbind(\instrument, \kick,\dur, Pseq([1/1],inf),\amp,(-10.2),\out,~kbus),

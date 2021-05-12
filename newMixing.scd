@@ -454,7 +454,7 @@ Synth(\playB10,[\buf, ~leTout,\out,~finGran ]   );
 ~comp35=Synth(\compS, [\ctrl, ~kbus],~compGrp);
 ~comp35.set(\thr,0.85 ,\sB, 1.136,\sA, 1/2,\atk ,0.0121, \rel ,0.04840, \gain,1,\in, ~comPerch2, \out,~limitPerch2, );
 ~mix35= Synth(\limiterStoMixer,[\c31,1,\in,~limitPerch2 ,\gain,6,\out,~stereoPerch],~limitGrp);
-~mix35.set(\gain,10);
+~mix35.set(\gain,60);
 ~stereo35=Synth(\stereoS,[ \dur, 9999, \in, ~stereoPerch ,\spread,1 , \out,~absoFinalGate3], ~dispatchGrp2 );
 
 
@@ -528,7 +528,7 @@ Synth(\playB10,[\buf, ~leTout,\out,~finGran ]   );
 
 
 
-~percuComp =Synth(\compS, [\ctrl,~snBus ,   \in, ~comFuzz22 ,\out,~toKbGate],~compGrp5);
+~percuComp =Synth(\comp10, [\ctrl,~snBus ,   \in, ~comFuzz22 ,\out,~toKbGate],~compGrp5);
 ~percuComp.set(\thr,0.8 ,\sB, 1.04,\sA, 1/2,\atk ,0.0242, \rel ,0.3872);
 
 
