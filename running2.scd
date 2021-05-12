@@ -349,7 +349,7 @@ Pbind(\instrument,\gateS, \dur,Pseq([4/1],1)
 	Pseq([
 
 		Pbind(\instrument, \gateS ,\dur, Pxrand([Pseq([4/1],4), Pseq([1/1],16) ],4)
-,\tS, 0.39550810372374, \in ,Pxrand([ ~no1, ~no2,~no3],inf),\out,~toGate10,\group,~gateGrp5),
+,\tS, 0.39550810372374, \in ,Pxrand([ ~no1, ~no2,~no3],inf),\out,/*~toGate10*/0,\group,~gateGrp5),
 
 
 //PASSANT DisAABLE FOR RISE INIT
@@ -358,26 +358,26 @@ Pbind(\instrument,\gateS, \dur,Pseq([4/1],1)
 		Pseq([
 		Pbind( \instrument,\playBuf /*\playBuf1N*/, \impulse, 0.3,\dur,Pseq([6/1],1), \tS,  0.39550810372374,\start,~pass1 ,\buf,~bufSnoopy,\out, ~filterBou,\loopy,0),
 
-		Pbind(\instrument,\gateS, \dur,  Pseq([10/1],1),\in,~finGran, \out,~toGate10,\group, ~gateGrp5,\tS, 0.39550810372374,),
+		Pbind(\instrument,\gateS, \dur,  Pseq([10/1],1),\in,~finGran, \out,0/*~toGate10*/,\group, ~gateGrp5,\tS, 0.39550810372374,),
 		],1),
 
 			Pseq([
 		Pbind( \instrument,\playBuf /*\playBuf1N*/, \impulse, 0.3,\dur,Pseq([3/1],1), \tS,  0.39550810372374,\start, ~pass2,\buf,~bufSnoopy,\out, ~filterPass1,\loopy,0),
 
-		Pbind(\instrument,\gateS, \dur,  Pseq([5/1],1),\in,~finGran, \out,~toGate10,\group, ~gateGrp5,\tS, 0.39550810372374,),
+		Pbind(\instrument,\gateS, \dur,  Pseq([5/1],1),\in,~finGran, \out,0/*~toGate10*/,\group, ~gateGrp5,\tS, 0.39550810372374,),
 		].scramble,2),
 
 
 			Pseq([
 		Pbind( \instrument,\playBuf /*\playBuf1N*/, \impulse, 0.3,\dur,Pseq([1/1],1), \tS,  0.39550810372374,\start,~pass3,\buf,~bufSnoopy,\out, ~filterPass2,\loopy,0),
 
-		Pbind(\instrument,\gateS, \dur,  Pseq([7/1],1),\in,~finGran, \out,~toGate10,\group, ~gateGrp5,\tS, 0.39550810372374,),
+		Pbind(\instrument,\gateS, \dur,  Pseq([7/1],1),\in,~finGran, \out,0/*~toGate10*/,\group, ~gateGrp5,\tS, 0.39550810372374,),
 		].scramble,2),
 
 			Pseq([
 		Pbind( \instrument,\playBuf /*\playBuf1N*/, \impulse, 0.3,\dur,Pseq([2/1],1), \tS,  0.39550810372374,\start,~pass4,\buf,~bufSnoopy,\out, ~filterPass3,\loopy,0),
 
-		Pbind(\instrument,\gateS, \dur,  Pseq([6/1],1),\in,~finGran, \out,~toGate10,\group, ~gateGrp5,\tS, 0.39550810372374,),
+		Pbind(\instrument,\gateS, \dur,  Pseq([6/1],1),\in,~finGran, \out,0/*~toGate10*/,\group, ~gateGrp5,\tS, 0.39550810372374,),
 		].scramble,2),
 
 ].scramble,1),
@@ -1264,11 +1264,11 @@ Ppar([~base,~fx],1).play(t)
 //maybe add a limiter
 	/*	Pbind(\instrument, \pingD, \in, ~delayBus2 ,\bufnum, ~delayX, \feedback,0.43 ,\dur, inf,\out,~delayToLimit,\group,~extraDelay),*/
 
-		Pbind(\instrument, \del ,\in, ~delayBus2 ,\dur, inf,\out,~delayToLimit,\group,~extraDelay),
+		/*Pbind(\instrument, \del ,\in, ~delayBus2 ,\dur, inf,\out,~delayToLimit,\group,~extraDelay),
 
 
 
-	Pbind(\instrument ,	\EQHP2,\dur, inf, \in,~delayEq, \out,~delToStereo,\group, ~eqGrp3, \frq, 300,\vol,0.4),
+	Pbind(\instrument ,	\EQHP2,\dur, inf, \in,~delayEq, \out,~delToStereo,\group, ~eqGrp3, \frq, 300,\vol,0.4),*/
 
 	Pbind(\instrument,\stereoS, \dur,Pseq([8/1],inf), \in, ~delToStereo   ,\out,0,\spread,1, \center, Pfunc({0.8.rrand(-0.8)}),\group,~stereoGrp5,\tS, 0.39550810372374),
 

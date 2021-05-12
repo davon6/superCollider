@@ -252,8 +252,11 @@
  ~mix30.set(\gain,36);
 
 
+
+~finaldelay=Synth(\del , [\in, ~delayBus2,\out,~delayToLimit],~extraDelay),
 ~delayFx =  Synth(\limiterS, [\in,~delayToLimit, \gain,40,\out , ~delayEq],~limitGrp4);
 ~delayFx.set(\gain,40);
+~eqDelay=Synth(\EQHP2,[\in,~delayEq, \out,~delToStereo, \frq, 300,\vol,0.4], ~eqGrp3);
 
 
 
@@ -496,20 +499,24 @@ Synth(\playB10,[\buf, ~leTout,\out,~finGran ]   );
 //PERCUSSIONS
 
 ~eq31=Synth(\EQHP2, [\frq, 3000, \in, ~cymbalEq,\out , ~comBusCymb, \vol,4],~eqGrp);
-~eq31.set(\val, 0,\quant, 0, \gain,0,\val2,0,\quant2,0, \gain2,0, \val3,0,\quant3,0, \gain3,0,\val4,0,\shelf,0, \gain4,0);
+~eq31.set(\val, 0,\quant, 0, \gain,0,\val2,0,\quant2,0, \gain2,0, \val3,0,\quant3,0, \gain3,0,\val4,0,\shelf,0, \gain4,0,\out , ~comBusCymb);
 ~comp31=Synth(\compS,[\ctrl, ~kbus,],~compGrp);
 ~comp31.set(\thr,0.9 ,\sB, 1.05,\sA, 1/2,\atk ,0.0121, \rel ,0.0968,\gain,3.5,\in, ~comBusCymb , \out,~limitCymb);
-~mix31= Synth(\limiterStoMixer,[\c31,1,\in, ~limitCymb,\gain,20,\out,~comFuzz22],~limitGrp);
-// ~mixa.set(\in,~comFuzz22);
+~mix31= Synth(\limiterStoMixer,[\c31,1,\in, ~limitCymb,\gain,20,\out,~stereoCymb],~limitGrp);
  ~mix31.set(\gain,30);
+~sterCymb=Synth(\stereoO,[\in,~stereoCymb,\out,~comFuzz22],~stereoGrp);
+~sterCymb.set(\spread,1,\center,1,\dlt1,0,\dlt2,0.02,\decT,0.0242, \mxDel,1);
 
-~eq33=Synth(\EQHP2Dyna, [\frq, 3000 ,\in, ~hatEq,  \out,~limitHat,\vol,4,\ctrl,~fusible10 ,\valD,3100, \quantD,4],~extraRev);
-~eq33.set(\val, 6500,\quant, 4, \gain,(-12),\val2,22000,\quant2,4, \gain2,(-12), \val3,0,\quant3,0, \gain3,0);
+//group name chelou for dynaEq
+~eq33=Synth(\EQHP2Dyna, [\frq, 3000 ,\in, ~hatEq,  \out,~comBusHat,\vol,4,\ctrl,~fusible10 ,\valD,3100, \quantD,4],~extraRev);
+~eq33.set(\val, 6500,\quant, 4, \gain,(-12),\val2,22000,\quant2,4, \gain2,(-12), \val3,0,\quant3,0, \gain3,0,\out , ~comBusHat);
 ~comp33=Synth(\compS, [\ctrl, ~kbus],~compGrp4);
 ~comp33.set(\thr,0.8 ,\sB, 1.2,\sA, 1/4,\atk ,0.0121, \rel ,0.04840,\gain,1,\in, ~comBusHat, \out,~limitHat );
-~mix33= Synth(\limiterStoMixer,[\c33,1,\in, ~limitHat,\gain,16,\out,~comFuzz22],~limitGrp4);
-// ~mixa.set(\in,~comFuzz22);
- ~mix33.set(\gain,33);
+~mix33= Synth(\limiterStoMixer,[\c33,1,\in, ~limitHat,\gain,16,\out,~stereoHat ],~limitGrp4);
+~mix33.set(\gain,33);
+~sterHat=Synth(\stereoO,[\in,~stereoHat,\out,~comFuzz22],~stereoGrp);
+~sterHat.set(\spread,1,\center,1,\dlt1,0.05,\dlt2,0,\decT,0.0242, \mxDel,1);
+
 
 
 ~percuComp =Synth(\compS, [\ctrl,~snBus ,   \in, ~comFuzz22 ,\out,~toKbGate],~compGrp5);
