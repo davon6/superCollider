@@ -1296,7 +1296,7 @@ Ppar([~base,~fx],1).play(t)
 	,\in, ~newCOn2  ,\ctrl, ~snBus, \out,~eqBus310,\group,~compGrp5,\tS, 0.39550810372374)*/
 
 ],1))
-
+Ppar([~kb,~pedonk],1).play(t)
 ~pedonk.play(t)
 .stop
 (~pedonk =Ppar([
@@ -1347,7 +1347,7 @@ Pseq([1.5/1],1)  ,Pseq([1.25/1],1)],1), \in,~gateBus,\tS, 0.39550810372374,\grou
 
 
 
-		Pbind(\instrument, \playBuf10, \buf ,~leTout2,\out,0, \start,Pfunc({ ~leTout2.numFrames/ 256 * 220.rand}),\loopy,0,\tS,0.39550810372374,\dur,Pseq([3.75/1],1) )
+		Pbind(\instrument, \playBuf10, \buf ,~leTout2,\out,~absoFinalGate, \start,Pfunc({ ~leTout2.numFrames/ 256 * 220.rand}),\loopy,0,\tS,0.39550810372374,\dur,Pseq([3.75/1],1) )
 
 
 		],inf),
@@ -1356,7 +1356,7 @@ Pseq([1.5/1],1)  ,Pseq([1.25/1],1)],1), \in,~gateBus,\tS, 0.39550810372374,\grou
 
 
 
-		Pbind(\instrument, \playBuf10, \buf ,~leTout2,\out,0, \start,Pfunc({ ~leTout2.numFrames/ 256 * 220.rand}),\loopy,0,\tS,0.39550810372374,\dur,Pseq([3.75/1],1) )
+		Pbind(\instrument, \playBuf10, \buf ,~leTout2,\out,~absoFinalGate, \start,Pfunc({ ~leTout2.numFrames/ 256 * 220.rand}),\loopy,0,\tS,0.39550810372374,\dur,Pseq([3.75/1],1) )
 
 		],inf)
 ],1))

@@ -1,6 +1,6 @@
 ~mixa = Synth(\gate2, [\in,  ~no1,\dur, 9999] ,~eqGrp3);
 
-~mixa = Synth(\gateS, [\in,~toKbGate /*~absoFinalGate3*//*~comSnaGrpBus2*/,\dur, 9999] ,~limitGrp4);
+~mixa = Synth(\gateS, [\in,~absoFinalGate3 /**//*~comSnaGrpBus2*/,\dur, 9999] ,~recGrp3);
 
 
 ~mixa = Synth(\gate, [\in, ~distoPercu,\dur, 9999] ,~limitGrp4);
@@ -11,10 +11,10 @@
 ~mixa.set(\in,~comSnaGrpBus2/*~percuCom2*/);
 
 ~kb=Pbind(\instrument, \playBufS, \dur,  Pseq([1/1],inf), \tS,  0.39550810372374,\buf,~kb2).play(t)
-
+~leTout2.play
 ~kb.stop
-
-(Ppar([
+~boost.play(t)
+(~boost=Ppar([
 
 	/*Pbind(\instrument, \lfo13, \val,0.075,\dur,Pseq([64/1],inf),\rL,3200,\rH,1720, \ph,4.2,\out,  ~bus3, \group, ~lfoGrp,\tS, 0.39550810372374),
 
@@ -27,7 +27,7 @@
 	Pbind(\instrument, \snare,\carHz, 41.2 ,\type, Pseq([\rest ,\rest,\note,\rest], inf),\atk, 0.00502929687,\rel, 0.0968,\rel2, 0.3872,\dur, Pseq([1/2], inf),\amp,(-12), \crv1,(-8),\crv2,(-7)   ,\out,~dumSnaEq),
 	Pbind(\instrument , \EQHP96, \frq, 120 ,\dur, inf,\in, ~dumSnaEq, \group, ~eqGrp,\val, 1800, \quant, 8, \gain, (-10), /*\val, 10,*/ \out , ~dumSnaLimit),
 	Pbind(\instrument , \limiter,\dur, inf, \in,~dumSnaLimit, \gain, 20,\group, ~limitGrp,\out,~snBus),
-],1).play(t))
+],1)/*.play(t)*/)
 
 
 

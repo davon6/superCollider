@@ -337,7 +337,7 @@ s.sync;
 
 	~stereoHat= Bus.audio(s,1);
 	~stereoCymb= Bus.audio(s,1);
-	~limitCymb= Bus.audio(s,1);
+	~limitC= Bus.audio(s,1);
 	~limitHat= Bus.audio(s,1);
 	~eqBg = Bus.audio(s,1);
 	~outDisto = Bus.audio(s,3);
@@ -2256,8 +2256,8 @@ Pseq([Pbind(\instrument, \wNoise,\dur,Pseq([1/4],1),\dec ,Pkey(\dur),\amp,(-12),
 
 		Pbind( \instrument, \playBufXG, \impulse, 0.003 ,\dur,    Pseq([1/4],3), \tS,  0.39550810372374,
 	\start,100,
-			\buf,~b3,\out, ~kbToPan2,\loopy,0, \decT,0.7,
-			\subsT ,Pseq([0,0.14,0.24],inf)
+			\buf,~b3,\out, ~kbToPan2,\loopy,0, \decT,0.8,
+			\subsT ,Pseq([0,0.09,0.18],inf)
 	)
 ],inf),
 Pbind(\instrument, \pan2, \in,~kbToPan2,\out,0 ,\group,~stereoGrp,\dur, inf),
