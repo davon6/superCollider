@@ -116,8 +116,13 @@ s.sync;
 	~b3 = Buffer.alloc(s, s.sampleRate *5,1);
 	~kb1 = Buffer.alloc(s, s.sampleRate *1,2);
 	~kb2 = Buffer.alloc(s, s.sampleRate *t.beatDur,2);
-	~cymb = Buffer.alloc(s, s.sampleRate *1,2);
-	~hat = Buffer.alloc(s, s.sampleRate *1,2);
+	~cymb = Buffer.alloc(s, s.sampleRate *1,1);
+	~hat = Buffer.alloc(s, s.sampleRate *1,1);
+
+
+	/*~cymbT = Buffer.alloc(s, s.sampleRate *1,1);
+	~hatT = Buffer.alloc(s, s.sampleRate *1,1);*/
+
 	~snare = Buffer.alloc(s, s.sampleRate *1,1);
 	~bell1 = Buffer.alloc(s, s.sampleRate *1,2);
 	~bell2 = Buffer.alloc(s, s.sampleRate *5,2);
@@ -268,6 +273,12 @@ s.sync;
 	~halfAbso22  = Bus.audio(s,10);
 	~main1GToG= Bus.audio(s,1);
 
+	~tam= Bus.audio(s,2);
+	~tamFil= Bus.audio(s,2);
+	~tamEq= Bus.audio(s,2);
+	~tamComp= Bus.audio(s,2);
+	~tamLimit= Bus.audio(s,2);
+
 	//????
 	~perchLimiToG= Bus.audio(s,2);
 	~perchLimiToG2= Bus.audio(s,2);
@@ -324,8 +335,10 @@ s.sync;
 	~eqBg10 = Bus.audio(s,10);
 	~finGran = Bus.audio(s,10);
 
-	~limitCymb= Bus.audio(s,2);
-	~limitHat= Bus.audio(s,2);
+	~stereoHat= Bus.audio(s,1);
+	~stereoCymb= Bus.audio(s,1);
+	~limitCymb= Bus.audio(s,1);
+	~limitHat= Bus.audio(s,1);
 	~eqBg = Bus.audio(s,1);
 	~outDisto = Bus.audio(s,3);
 	~distoPerch2= Bus.audio(s,2);~eqPerch2= Bus.audio(s,2);~revPerch2= Bus.audio(s,2);~comPerch2= Bus.audio(s,2);~limitPerch2= Bus.audio(s,2);
@@ -401,8 +414,8 @@ s.sync;
 	~comFuzz = Bus.audio(s,1);
 	~comFuzz2 = Bus.audio(s,2);
 	~comFuzz3 = Bus.audio(s,2);
-	~comBusHat = Bus.audio(s,2);
-	~comBusCymb = Bus.audio(s,2);
+	~comBusHat = Bus.audio(s,1);
+	~comBusCymb = Bus.audio(s,1);
 	~comSnaGrpBus = Bus.audio(s,2);
 	~comSnaGrpBus2 = Bus.audio(s,10);
 	~limitFuzz = Bus.audio(s,1);
@@ -488,7 +501,7 @@ s.sync;
 	~filterBou=Bus.audio(s,1);
 	~newCOn=Bus.audio(s,10);
 	~newCOn2=Bus.audio(s,10);
-	~comBusHat2=  Bus.audio(s,1);~comBusCymb2=  Bus.audio(s,1);~limitRkick2=  Bus.audio(s,1);~stetoSnaCom12=  Bus.audio(s,10);~comFuzz22=  Bus.audio(s,2);~eqBus102=  Bus.audio(s,10);
+	~comBusHat2=  Bus.audio(s,1);~comBusCymb2=  Bus.audio(s,1);~limitRkick2=  Bus.audio(s,1);~stetoSnaCom12=  Bus.audio(s,10);~comFuzz22=  Bus.audio(s,10);~eqBus102=  Bus.audio(s,10);
 ~toLimitlast = Bus.audio(s,10);
 	~distoBus43 =  Bus.audio(s,1);~filterBus23=  Bus.audio(s,1);  ~eqBus23=  Bus.audio(s,1); ~gateBus23=  Bus.audio(s,1); ~reverbBus23=  Bus.audio(s,1); ~micBus23=  Bus.audio(s,1); ~micBus33=  Bus.audio(s,1);  ~comFuzz23=  Bus.audio(s,1);
 	~limitFuzz23=  Bus.audio(s,1); ~stereoBus23=  Bus.audio(s,1); ~no3=  Bus.audio(s,10);
@@ -509,8 +522,8 @@ s.sync;
 	~percuComb=  Bus.audio(s,2);
 	~percuCom2=  Bus.audio(s,10);
 	~percuFil=  Bus.audio(s,1);
-	~cymbalEq=  Bus.audio(s,2);
-	~hatEq=  Bus.audio(s,2);
+	~cymbalEq=  Bus.audio(s,1);
+	~hatEq=  Bus.audio(s,1);
 	~toPan2= Bus.audio(s,1);
 	~toPan3= Bus.audio(s,1);
 	~toShifter= Bus.audio(s,1);
@@ -935,6 +948,26 @@ SynthDef(\kick, {
 		Out.ar(out, sig/*.dup * amp.dbamp*/
 	* [amp.dbamp+stereoL,amp.dbamp+stereoR]);
 }).add;
+
+
+	SynthDef.new(\percussion2, {
+	arg carHz=500, modHz=1899.3343179398, modAmp=0, atk=0, rel=1, amp=0.2, pan=0,rel2=1,out=0, latch = 6000, crv1, crv1b, mulMod, stereoL=0, stereoR=0, dA1=2, dA2=2,atk2=0,tS=1;
+	var car, mod, env, car2, mod2,env2,sig;
+
+	env = EnvGen.kr(Env.perc(atk, rel,1,crv1),timeScale: tS, doneAction:dA1);
+
+	env2 = EnvGen.kr(Env.perc(atk, rel2, 1, crv1b),timeScale: tS, doneAction:dA2);
+
+	mod = SinOsc.ar(modHz, mul:mulMod);
+	car = SinOsc.ar(carHz + mod) * env * 0.05;
+
+	car2 = WhiteNoise.ar(modAmp) * env2 ;
+
+		sig =  Latch.ar(tanh(car+car2),Impulse.ar(latch));
+
+		Out.ar(out, sig);
+}).add;
+
 
 
 	SynthDef(\homeStereo,{|in, out=0,stereoL=0, stereoR=0,amp|Out.ar(out, In.ar(in)
@@ -1505,7 +1538,7 @@ FreeVerb.ar(
 
 		HPF.ar(HPF.ar(HPF.ar(HPF.ar(HPF.ar(HPF.ar(HPF.ar(HPF.ar(
 			BPeakEQ.ar(
-		BPeakEQ.ar(	BPeakEQ.ar(In.ar(in, 2),val,quant, gain),val2,quant2, gain2)
+		BPeakEQ.ar(	BPeakEQ.ar(In.ar(in, 1),val,quant, gain),val2,quant2, gain2)
 				,valD,quantD, Amplitude.ar(In.ar(ctrl,10)).linlin(10, 10.1583, -2, -18)/*.poll*/),
 		frq),frq),frq),frq),frq),frq),frq),frq)* vol)};).add;
 
@@ -2126,10 +2159,10 @@ Ppar([
 Pbind(\instrument, \snare,\carHz, 41.2 ,\atk, 0.00502929687,\rel, 0.0968,\rel2, 0.7744,\dur, Pseq([1/2], 1),\amp,1, \crv1,(-8),\crv2,(-7)   ,\out,~snareEQ, \atk,t.beatDur * 0.02, \atk2,Pkey(\atk),  \da1,0    ),
 
 
-	Pbind(\instrument, \percussion ,\dur,Pseq([1/4],1 ),\carHz, 525.12070612224.rrand(0.01),\modHz,11899.3343179398.rrand(0.001),\modAmp, 0.12875.rrand(0.000001).postln ,\amp,1,\rel,Pseq([1/4],inf),\rel2,Pseq([1/16],inf),\latch,8000,\stereoL, 0.00555, \crv1,  (-14.4).rrand(-1), \crv1b,(-4), \mulMod, 1691,\out,   ~comBusCymb),
+	Pbind(\instrument, \percussion2 ,\dur,Pseq([1/4],1 ),\carHz, 525.12070612224.rrand(0.01),\modHz,11899.3343179398.rrand(0.001),\modAmp, 0.12875.rrand(0.000001).postln ,\amp,1,\rel,Pseq([1/4],inf),\rel2,Pseq([1/16],inf),\latch,8000,\stereoL, 0.00555, \crv1,  (-14.4).rrand(-1), \crv1b,(-4), \mulMod, 1691,\out,   ~comBusCymb),
 
 
-Pbind(\instrument,\percussion,\dur,Pseq([1/4], 1),\atk, 0,\rel,0.04840,\rel2,0.02420,\amp,1, \crv1, (-3), \crv1b, (-5), \modHz, exprand(500,10000).postln, \mulMod, rrand(100, 500).postln, \carHz, exprand(20,10000), \modAmp, 0.12875, \latch, 18500, \stereoR, 0.007,\out,~comBusHat),
+Pbind(\instrument,\percussion2,\dur,Pseq([1/4], 1),\atk, 0,\rel,0.04840,\rel2,0.02420,\amp,1, \crv1, (-3), \crv1b, (-5), \modHz, exprand(500,10000).postln, \mulMod, rrand(100, 500).postln, \carHz, exprand(20,10000), \modAmp, 0.12875, \latch, 18500, \stereoR, 0.007,\out,~comBusHat),
 
 
 
@@ -2137,8 +2170,8 @@ Pbind(\instrument,\percussion,\dur,Pseq([1/4], 1),\atk, 0,\rel,0.04840,\rel2,0.0
 
 	Pbind(\instrument,\recLoopS,\buf,~bell2,\recording,1, \in,~flanToDisto,\group,~recGrp2,\dur,inf),
 
-Pbind(\instrument,\recLoopS,\buf,~cymb,\recording,1, \in,~comBusCymb,\group,~recGrp2,\dur,inf),
-Pbind(\instrument,\recLoopS,\buf,~hat,\recording,1, \in,~comBusHat,\group,~recGrp2,\dur,inf),
+Pbind(\instrument,\recLoop,\buf,~cymb,\recording,1, \in,~comBusCymb,\group,~recGrp2,\dur,inf),
+Pbind(\instrument,\recLoop,\buf,~hat,\recording,1, \in,~comBusHat,\group,~recGrp2,\dur,inf),
 Pbind(\instrument,\recLoop,\buf,~snare,\recording,1, \in,~snareEQ,\group,~recGrp2,\dur,inf),
 
 
