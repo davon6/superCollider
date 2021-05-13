@@ -164,18 +164,31 @@ Pbind(\instrument,\gateSD, \dur,Pseq([64/1],inf),\in,  Pseq([ /*~absoFinalGate4,
 	],1).play(t)
 )
 
-
+~granuGrp=Group.new;
+~revGrp=Group.after(~granuGrp);
 (
 Ppar([
 
-	Pbind(\instrument,\triModul, \lS, 1100, \hS,  600, \modu,0.08/16,  \out, ~bus11,\ph,4.25 ,\dur,Pseq([64/1],inf), \tS, 0.39550810372374,),
+	/*Pbind(\instrument,\triModul, \lS, 1100, \hS,  600, \modu,0.08/16,  \out, ~bus11,\ph,4.25 ,\dur,Pseq([64/1],inf), \tS, 0.39550810372374,),*/
 
-	Pbind(\instrument,\rise,\dur,Pseq([64/1],inf), \vlAtk, 0,\f1, 0.3 , \f2, 0.4 , \f3, 0.1,  \ic_atk,3,\index,1,\mRatio,1,\out , 0,\tS, 0.39550810372374,\atk,1,\moduS,~bus11,\fS, 0.01,
-		\freq, [659.255/8,639.255/8,619.255/8]
-)],1).play(t)
+	Pbind(\instrument,\rise,\dur,Pseq([64/1],inf), \vlAtk, 0,\f1, 0.3 , \f2, 0.4 , \f3, 0.1,  \ic_atk,3,\index,1,\mRatio,1,\out , ~downSG,\tS, 0.39550810372374,\atk,1,\moduS,~bus11,\fS, 0.01,
+		\freq, [659.255/8,639.255/8,619.255/8]),
 
 
-)
+	Pbind(\instrument,\gate3,\tS, 0.39550810372374,\dur,Pseq([1/4],inf),\in, ~downSG,
+		\type,Pseq([\note,\note, \note,\note, \note,\rest,\note,\rest],inf),\out,~downdel,\group,~granuGrp)
+
+
+	/*Pbind(\instrument,\pingD, \in, \out,\group,)*/
+
+
+],1).play(t))
+
+
+~part6=Synth( \pingD, [\in, ~downdel ,\bufnum,~delay2, \feedback,0.63 ,\out,0],~revGrp);
+
+
+
 
 
 //YES

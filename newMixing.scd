@@ -511,6 +511,7 @@ Synth(\playB10,[\buf, ~leTout,\out,~finGran ]);
 ~mix43= Synth(\limiterStoMixer,[\c43,1,\in, ~bigRiToLimit, \gain,40,\out,~bigRiToStereo],~limitGrp);
 ~mix43.set( \gain,40);
 ~stereo43= Synth(\stereoS, [\dur, 9999, \in, ~bigRiToStereo  ,\spread,1,\out,0,\atkT,1,\decT,0], ~stereoGrp);
+//missing snare compression
 
 
 

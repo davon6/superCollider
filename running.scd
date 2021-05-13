@@ -288,6 +288,9 @@ s.sync;
 	~tamComp= Bus.audio(s,2);
 	~tamLimit= Bus.audio(s,2);
 
+	~downSG= Bus.audio(s,3);
+	~downdel= Bus.audio(s,1);
+
 	//????
 	~perchLimiToG= Bus.audio(s,2);
 	~perchLimiToG2= Bus.audio(s,2);
@@ -1239,6 +1242,20 @@ env =   In.ar(in, 1) *    EnvGen.kr(Env(
 timeScale: tS,	doneAction:2);
 		Out.ar(out, env);
 }).add;
+
+	SynthDef(\gate3,{|in, out=0, vlAtk=0, vlDec=1,vlSub=1,vlSub2=1 vlRel=0, atkT=0, decT=1, subsT=0, relT=0, atckC=0, decC=0, relC=0, bus1, bus2, dur,relSu=0,tS =1|
+	var env;
+
+	env =   In.ar(in, 3) *    EnvGen.kr(Env(
+			[vlAtk,vlDec                  ,vlSub ,vlSub2,vlRel,0],
+			[dur * atkT ,dur * decT  -relSu  , dur * subsT-relSu,dur* relT],
+			[atckC,decC ,0     ,relC]),
+
+timeScale: tS,	doneAction:2);
+
+		Out.ar(out, env);
+}).add;
+
 
 	SynthDef(\gateS,{|in, out=0, vlAtk=0, vlDec=1,vlSub=1,vlSub2=1 vlRel=0, atkT=0, decT=1, subsT=0, relT=0, atckC=0, decC=0, relC=0, bus1, bus2, dur,relSu=0,tS =1|
 	var env;
