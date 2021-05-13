@@ -32,8 +32,8 @@
 ~main3= (~bufSnoopy.numFrames.rrand(303750.22365983)- 303750.22365983)  ;
 
 	~pass1 =(~buf.numFrames.rrand(400000)- 400000);~pass2=(~buf.numFrames.rrand(400000)- 400000);~pass3=(~buf.numFrames.rrand(400000)- 400000);~pass4=(~buf.numFrames.rrand(400000)- 400000);
-~mster= (~leTout.numFrames/ 256 * 226.rand);
-~mster2= (~leTout.numFrames/ 256 * 226.rand);
+/*~mster= (~leTout.numFrames/ 256 * 226.rand);
+~mster2= (~leTout.numFrames/ 256 * 226.rand);*/
 ~mster3= (~leTout.numFrames/ 256 * 226.rand);
 ~mster3=  (~leTout.numFrames/ 256 * 226.rand);
 ~bssFreq1= 1200.rrand(-140);~bssFreq2= 1200.rrand(-140);~bssFreq3= 1200.rrand(-140);
@@ -1372,7 +1372,7 @@ Pseq([1.5/1],1)  ,Pseq([1.25/1],1)],1), \in,~gateBus,\tS, 0.39550810372374,\grou
 
 (Pbind(\instrument, \recLoop102,\buf,~leTout,\recording,1, \in,0,\group, ~recGrp3,\dur,inf).play(t, quant:1))
 
-(Pbind(\instrument, \recLoop102,\buf,~leTout2,\recording,1, \in,0,\group, ~recGrp3,\dur,inf).play(t, quant:1))
+(Pbind(\instrument, \recLoop102,\buf,~leTout2,\recording,1, \in,~absoFinalGate2,\group, ~recGrp3,\dur,inf).play(t, quant:1))
 
 
 ~leTout.free

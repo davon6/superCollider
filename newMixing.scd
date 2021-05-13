@@ -443,7 +443,7 @@
 
 
 
-Synth(\playB10,[\buf, ~leTout,\out,~finGran ]   );
+Synth(\playB10,[\buf, ~leTout,\out,~finGran ]);
 
 // PART 3 BELOW
 

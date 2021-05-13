@@ -93,7 +93,7 @@ Pbind(\instrument, \lfo13,\val,(~hzQbeat/4),\out,~bus2 ,\dur,999,\ph,0, \rL,200,
 			Pbind(\instrument,\envSli,\out, ~bus17,\dur,Pseq([64/1],inf),\tS, 0.39550810372374,\val1,350,\crv,3.2),
 
 
-	/*~kb,*/~hitX,/*~pedonk,~part3,*/
+	/*~kb,*/~hitX,/*~pedonk,~part3a,~part3b,~part3c,~part3d,*/
 
 
 	Pbind(\instrument, \playBuf10, \buf ,~leTout,\out,~toGate10, \start,
@@ -119,28 +119,6 @@ Pbind(\instrument, \lfo13,\val,(~hzQbeat/4),\out,~bus2 ,\dur,999,\ph,0, \rL,200,
 Pseq([ Pseq([8/1],1)],1)  ,Pseq([ Pseq([4/1],1)],1)   ,Pseq([Pseq([16/1],1) ,Pseq([8/1],1)],1) ,Pseq([Pseq([32/1],1) ,Pseq([16/1],1)],1)
 
 ].scramble,inf)),
-
-
-	Pseq([
-	Pbind(\instrument, \playBuf10NToMixer, /* \c22,1,\name,22,*/\out, ~absoFinalGate3,\dur,Pseq([ Pseq([4/1],2),  Pseq([2/1],3),Pseq([1/1],2)
-].scramble,1),\in,Pseq([~fusible, ~fusible,~fusible, ~fusible,~finGran, ~finGran,~finGran,~finGran].scramble,inf)
-	,\impulse,0.075,\tS, 0.39550810372374,\loopy,0,\buf, ~leTout,\start,~mster,\group, ~granuGrp),
-
-	Pbind(\instrument, \playBuf10, \dur, Pseq([48/1],1),\tS, 0.39550810372374,\buf, ~leTout,\start,~mster2,\out,~absoFinalGate3),
-
-	Pbind(\instrument, \playBuf10NToMixer, /* \c22,1,\name,22,*/\out, ~absoFinalGate3,\dur,Pseq([ Pseq([4/1],2),  Pseq([2/1],3),Pseq([1/1],2)
-].scramble,1),\in,Pseq([~fusible, ~fusible,~fusible, ~fusible,~finGran, ~finGran,~finGran,~finGran].scramble,inf)
-	,\impulse,0.075,\tS, 0.39550810372374,\loopy,0,\buf, ~leTout,\start,~mster2,\group, ~granuGrp),
-
-
-	Pbind(\instrument, \playBuf10, \dur, Pseq([48/1],1),\tS, 0.39550810372374,\buf, ~leTout,\start,~mster2,\out,~absoFinalGate3),
-
-
-	],inf),
-
-
-
-
 
 
 

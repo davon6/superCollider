@@ -15,7 +15,7 @@
 Pseq([
 Pseq([
 
-Pbind(\instrument, \playBuf10, \buf ,~leTout2,\out,~absoFinalGate6, \start,~fra
+			Pbind(\instrument, \playBuf10, \buf ,~leTout2,\out,~absoFinalGate6, \start,Pfunc({~fra})
 	,\loopy,0,\tS,0.39550810372374,\dur,Pseq([4/1],2)),
 
 	Pbind(\instrument, \playBuf10, \buf ,~leTout2,\out,~absoFinalGate6, \start, ~leTout2.numFrames/ 256 *
@@ -25,7 +25,7 @@ Pbind(\instrument, \playBuf10, \buf ,~leTout2,\out,~absoFinalGate6, \start,~fra
 
 	Pseq([
 
-Pbind(\instrument, \playBuf10, \buf ,~leTout2,\out,~absoFinalGate6, \start, ~fra2
+			Pbind(\instrument, \playBuf10, \buf ,~leTout2,\out,~absoFinalGate6, \start,Pfunc({ ~fra2})
 	,\loopy,0,\tS,0.39550810372374,\dur,Pseq([4/1],2)),
 
 	Pbind(\instrument, \playBuf10, \buf ,~leTout2,\out,~absoFinalGate6, \start, ~leTout2.numFrames/ 256 *
@@ -35,7 +35,7 @@ Pbind(\instrument, \playBuf10, \buf ,~leTout2,\out,~absoFinalGate6, \start, ~fra
 
 	Pseq([
 
-Pbind(\instrument, \playBuf10, \buf ,~leTout2,\out,~absoFinalGate6, \start,~fra3
+			Pbind(\instrument, \playBuf10, \buf ,~leTout2,\out,~absoFinalGate6, \start,Pfunc({~fra3})
 	,\loopy,0,\tS,0.39550810372374,\dur,Pseq([4/1],2)),
 
 	Pbind(\instrument, \playBuf10, \buf ,~leTout2,\out,~absoFinalGate6, \start, ~leTout2.numFrames/ 256 *
@@ -45,7 +45,7 @@ Pbind(\instrument, \playBuf10, \buf ,~leTout2,\out,~absoFinalGate6, \start,~fra3
 
 	Pseq([
 
-Pbind(\instrument, \playBuf10, \buf ,~leTout2,\out,~absoFinalGate6, \start, ~fra4
+			Pbind(\instrument, \playBuf10, \buf ,~leTout2,\out,~absoFinalGate6, \start,Pfunc({ ~fra4})
 	,\loopy,0,\tS,0.39550810372374,\dur,Pseq([4/1],2)),
 
 	Pbind(\instrument, \playBuf10, \buf ,~leTout2,\out,~absoFinalGate6, \start, ~leTout2.numFrames/ 256 *
@@ -58,8 +58,6 @@ Pbind(\instrument, \playBuf10, \buf ,~leTout2,\out,~absoFinalGate6, \start, ~fra
 
 
 
-//must run first
-~troi= ~leTout2.numFrames/ 256 * 240.rand
 
 
 (~part3b=
@@ -73,15 +71,15 @@ Ppar([
 Pseq([
 	Ppar([
 
-	Pbind(\instrument, \playBuf10, \buf ,~leTout2,\out,~absoFinalGate7, \start,~one
+			Pbind(\instrument, \playBuf10, \buf ,~leTout2,\out,~absoFinalGate7, \start,Pfunc({~one})
 	,\loopy,0,\tS,0.39550810372374,\dur,Pseq([4/1],8) ,\type,Pseq([\note,\rest,\note,\rest],inf)),
 
 
 Pseq([
 
-Pbind(\instrument, \playBuf10, \buf ,~leTout2,\out,~absoFinalGate7, \start, ~two,\loopy,0,\tS,0.39550810372374,\dur,Pseq([4/1],4) ,\type,Pseq([\rest,\rest,\rest,\note],inf)),
+				Pbind(\instrument, \playBuf10, \buf ,~leTout2,\out,~absoFinalGate7, \start,Pfunc({ ~two}),\loopy,0,\tS,0.39550810372374,\dur,Pseq([4/1],4) ,\type,Pseq([\rest,\rest,\rest,\note],inf)),
 
-		Pbind(\instrument, \playBuf10, \buf ,~leTout2,\out,~absoFinalGate7, \start, ~troi
+				Pbind(\instrument, \playBuf10, \buf ,~leTout2,\out,~absoFinalGate7, \start,Pfunc({ ~troi})
 	,\loopy,0,\tS,0.39550810372374,\dur,Pseq([4/1],3) ,\type,Pseq([\rest,\note,\rest,\rest],inf)),
 
 
@@ -95,25 +93,25 @@ Pbind(\instrument, \playBuf10, \buf ,~leTout2,\out,~absoFinalGate7, \start, ~two
 
 
 	Pbind(\instrument, \playBufS,\dur  ,Pseq([2/1],8),\buf,~fkAr,\tS,  0.39550810372374,\start,
-		~start  ,\out, ~limitBus1),
+			Pfunc({~start}) ,\out, ~limitBus1),
 
 
 	Ppar([
 
-	Pbind(\instrument, \playBuf10, \buf ,~leTout2,\out,~absoFinalGate7, \start, ~one
+			Pbind(\instrument, \playBuf10, \buf ,~leTout2,\out,~absoFinalGate7, \start, Pfunc({~one})
 	,\loopy,0,\tS,0.39550810372374,\dur,Pseq([4/1],8) ,\type,Pseq([\note,\rest,\note,\rest],inf)),
 
-			Pbind(\instrument, \playBufS,\dur  ,Pseq([2/1],16),\buf,~fkAr,\tS,  0.39550810372374,\start,~start,\out, ~limitBus1,\type,Pseq([\rest,\rest,\note,\note,
+			Pbind(\instrument, \playBufS,\dur  ,Pseq([2/1],16),\buf,~fkAr,\tS,  0.39550810372374,\start,Pfunc({~start}),\out, ~limitBus1,\type,Pseq([\rest,\rest,\note,\note,
 			\rest,\rest,	\rest,\rest,       \rest,\rest, \rest,\rest,\rest,\rest,\rest,\rest
 		],inf)),
 
 
 Pseq([
 
-Pbind(\instrument, \playBuf10, \buf ,~leTout2,\out,~absoFinalGate7, \start, ~two
+				Pbind(\instrument, \playBuf10, \buf ,~leTout2,\out,~absoFinalGate7, \start,Pfunc({ ~two})
 				,\loopy,0,\tS,0.39550810372374,\dur,Pseq([4/1],4) ,\type,Pseq([\rest,\rest,\rest,\note],inf)),
 
-		Pbind(\instrument, \playBuf10, \buf ,~leTout2,\out,~absoFinalGate7, \start, ~troi + ~leTout2.numFrames/ 256
+				Pbind(\instrument, \playBuf10, \buf ,~leTout2,\out,~absoFinalGate7, \start,Pfunc({ ~troi + ~leTout2.numFrames/ 256})
 	,\loopy,0,\tS,0.39550810372374,\dur,Pseq([4/1],3) ,\type,Pseq([
 					/*\rest,\rest,\rest,\rest,*/
 					\rest,\note,\rest,\rest],inf)),
@@ -167,3 +165,34 @@ Ppar([
 
 
 ],1))
+
+
+
+
+(~part3d=Ppar([
+
+	Pfunc({~mster= (~leTout.numFrames/ 256 * 226.rand)}),
+	Pfunc({~mster2= (~leTout.numFrames/ 256 * 226.rand)}),
+
+
+	Pseq([
+	Pbind(\instrument, \playBuf10NToMixer, \out, ~absoFinalGate3,\dur,Pseq([ Pseq([4/1],2),  Pseq([2/1],3),Pseq([1/1],2)
+].scramble,1),\in,Pseq([~fusible, ~fusible,~fusible, ~fusible,~finGran, ~finGran,~finGran,~finGran].scramble,inf)
+		,\impulse,0.075,\tS, 0.39550810372374,\loopy,0,\buf, ~leTout,\start,Pfunc({~mster}),\group, ~granuGrp),
+
+	/*Pbind(\instrument, \playBuf10, \dur, Pseq([48/1],1),\tS, 0.39550810372374,\buf, ~leTout,\start,~mster2,\out,~absoFinalGate3),*/
+
+	Pbind(\instrument, \gateS, \dur, Pseq([16/1],1),\tS, 0.39550810372374,\in,~finGran,\out,~absoFinalGate3,\group, ~granuGrp),
+
+	Pbind(\instrument, \playBuf10NToMixer, \out, ~absoFinalGate3,\dur,Pseq([ Pseq([4/1],2),  Pseq([2/1],3),Pseq([1/1],2)
+].scramble,1),\in,Pseq([~fusible, ~fusible,~fusible, ~fusible,~finGran, ~finGran,~finGran,~finGran].scramble,inf)
+		,\impulse,0.075,\tS, 0.39550810372374,\loopy,0,\buf, ~leTout,\start,Pfunc({~mster2}),\group, ~granuGrp),
+
+
+/*	Pbind(\instrument, \playBuf10, \dur, Pseq([48/1],1),\tS, 0.39550810372374,\buf, ~leTout,\start,~mster2,\out,~absoFinalGate3),*/
+
+		Pbind(\instrument, \gateS, \dur, Pseq([16/1],1),\tS, 0.39550810372374,\in,~finGran,\out,~absoFinalGate3,\group, ~granuGrp),
+
+
+
+],inf)],1))
