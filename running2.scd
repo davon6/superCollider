@@ -698,6 +698,63 @@ Pseq([
 
 
 
+		].scramble,2),
+
+
+		Pseq([
+
+			Pseq([
+			Pbind(\instrument,\gate2, \in ,~toKbGate, \group, ~eqGrp3, \tS,  0.39550810372374,
+		\dur, Pseq([2/1],1)),
+
+					Pbind(\instrument,\gate2, \in ,~rollingK, \group, ~eqGrp3, \tS,  0.39550810372374,
+		\dur, Pseq([1/1],1))
+
+			].scramble,1),
+
+				Pseq([
+			Pbind(\instrument,\gate2, \in ,~toKbGate, \group, ~eqGrp3, \tS,  0.39550810372374,
+		\dur, Pseq([2/1],1)),
+
+					Pbind(\instrument,\gate2, \in ,~rollingK, \group, ~eqGrp3, \tS,  0.39550810372374,
+		\dur, Pseq([1/1],1)),
+
+			].scramble,1),
+
+				Pseq([
+			Pbind(\instrument,\gate2, \in ,~toKbGate, \group, ~eqGrp3, \tS,  0.39550810372374,
+		\dur, Pseq([7/1],1)),
+
+					Pbind(\instrument,\gate2, \in ,~rollingK, \group, ~eqGrp3, \tS,  0.39550810372374,
+		\dur, Pseq([1/1],1))
+
+			].scramble,1),
+
+			Pbind(\instrument,\gate2, \in ,~toKbGate, \group, ~eqGrp3, \tS,  0.39550810372374,
+		\dur, Pseq([2/1],1)),
+
+				Pseq([
+			Pbind(\instrument,\gate2, \in ,~toKbGate, \group, ~eqGrp3, \tS,  0.39550810372374,
+		\dur, Pseq([6/1],1)),
+
+					Pbind(\instrument,\gate2, \in ,~rollingK, \group, ~eqGrp3, \tS,  0.39550810372374,
+		\dur, Pseq([2/1],1))
+
+			].scramble,1),
+
+				Pseq([
+			Pbind(\instrument,\gate2, \in ,~toKbGate, \group, ~eqGrp3, \tS,  0.39550810372374,
+		\dur, Pseq([4/1],1)),
+
+				Pbind(\instrument,\gate2, \in ,Prand([~to4bar,~rollingK],inf), \group, ~eqGrp3, \tS,  0.39550810372374,
+		\dur, Pseq([2/1],1)),
+
+				Pbind(\instrument,\gate2, \in ,~toKbGate, \group, ~eqGrp3, \tS,  0.39550810372374,
+		\dur, Pseq([2/1],1))
+
+			].scramble,1),
+
+
 		].scramble,2)
 
 	],inf),

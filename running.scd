@@ -131,6 +131,8 @@ s.sync;
 	~fkAr = Buffer.alloc(s, s.sampleRate *t.beatDur*64,2);
 	~pad =  Buffer.alloc(s, s.sampleRate *t.beatDur*64,2);
 
+	~ambPerc =  Buffer.alloc(s, s.sampleRate *t.beatDur*32,1);
+
 
 	~lpPrec = Buffer.alloc(s, s.sampleRate *t.beatDur*64,1);
 	~lpPrec2 = Buffer.alloc(s, s.sampleRate *t.beatDur*64,1);
@@ -304,6 +306,13 @@ s.sync;
 	~perchLimiToG10= Bus.audio(s,2);
 	~perchLimiToG11= Bus.audio(s,2);
 	~perchLimiToG12= Bus.audio(s,2);
+
+	~eqPercBg= Bus.audio(s,1);
+	~distoPercBg= Bus.audio(s,1);
+	~reverbPercBg= Bus.audio(s,1);
+	~compPercBg= Bus.audio(s,1);
+	~limitPercBg= Bus.audio(s,1);
+	~stereoPercBg= Bus.audio(s,1);
 
 
 	~riToEq2= Bus.audio(s,2);
@@ -608,6 +617,12 @@ s.sync;
 		trig/*Dust.kr(4.0)*/,startPos: start,loop: loopy)*
 	EnvGen.kr(Env([0,vl,vl,vl,0],[0,dur*decT*dA,dur* subsT]),timeScale: tS,doneAction: 2)
 
+	);}).add;
+
+	/*SynthDef(\playBufLive,{|out = 0,start=0, trig= 0.002, dur, buf,rte=1 , tS=1, loopy=1,	decT=1, subsT=0,vl=1 ,dA=1 |Out.ar(out,PlayBuf.ar(1,buf,MouseX.kr(-1,10) ,trigger:
+		Impus,startPos: start,loop: loopy)*
+	EnvGen.kr(Env([0,vl,vl,vl,0],[0,dur*decT*dA,dur* subsT]),timeScale: tS,doneAction: 2)
+*/
 	);}).add;
 
 	SynthDef(\playBufS2 ,{|out = 0,start=0, trig= 0.002, dur, buf,rte=1 , tS=1, loopy=1,	decT=1, subsT=0,vl=1 ,dA=1 |Out.ar(out,PlayBuf.ar(2,buf,rte ,trigger:
@@ -1321,7 +1336,7 @@ timeScale: tS,	doneAction:2);
 		BufWr.ar(sig, buf, ptr);
 	}).add;
 
-	SynthDef.new(\gran, {
+	/*SynthDef.new(\gran, {
 		arg amp=1, buf =0, out=0, atk=1, rel=1, gate=1, sync=1, dens=40, baseDur=0.05, durRand=1, rate=1, rateRand=1, pan =0, panRand=0, grainEnv=(-1), ptrBus =0, ptrSampleDelay=20000, ptrRandSamples= 5000, minPtrDelay=1000,pitchRte=1,duration=8,impulse = 1.2875,pos=0,roomsize, revtime, damping, inputbw, spread = 15, drylevel, earlylevel, dur,
 		taillevel,maxRoomsize,wet=0.4, crv= 12,vlAtk =0,vlDec=1 ,vlSub=1 ,vlSub2=1,vlRel=0,atkT=0,decT=1,subsT=0,relT=0,atckC=0,decC=0,relC=0,tS=1;
 
@@ -1345,6 +1360,24 @@ timeScale: tS,	doneAction:2);
 		sig = sig * env /** amp*/;
 
 		Out.ar(out, sig);
+	}).add;*/
+
+
+		SynthDef.new(\gran, {
+		arg amp=1, buf =0, out=0,pitchRte=1,duration=8,impulse = 1.2875,pos=0, dur,vlAtk =0,vlDec=1 ,vlSub=1 ,vlSub2=1,vlRel=0,atkT=0,decT=1,subsT=0,relT=0,atckC=0,decC=0,relC=0,tS=1;
+
+		var env = EnvGen.kr(Env([vlAtk,vlDec,vlSub,vlSub2,vlRel],
+			[dur * atkT,dur* decT,dur * subsT,dur *relT],
+			[atckC,decC,0,relC]),timeScale: tS, doneAction:2);
+
+		Out.ar(out, GrainBuf.ar(1,Impulse.ar(impulse),duration,buf,pitchRte,pos,mul: amp)* env );
+	}).add;
+
+
+	SynthDef.new(\granLive, {
+		arg amp=1, buf =0, out=0,pitchRte=1,duration=8,impulse = 1.2875,pos=0, dur,vlAtk =0,vlDec=1 ,vlSub=1 ,vlSub2=1,vlRel=0,atkT=0,decT=1,subsT=0,relT=0,atckC=0,decC=0,relC=0,tS=1;
+
+	Out.ar(out, GrainBuf.ar(1,Impulse.ar(MouseX.kr(20.6,0.08)),duration,buf,MouseX.kr(0.01,10),pos,mul: amp) );
 	}).add;
 
 	SynthDef(\reverb, {
