@@ -245,6 +245,15 @@ s.sync;
 	~part2ToComp2= Bus.audio(s,10);
 	~part2ToFilter= Bus.audio(s,1);*/
 
+
+	~shiftLimit= Bus.audio(s,2);
+	~shiftDisto= Bus.audio(s,2);
+	~shiftEq= Bus.audio(s,2);
+	~shiftRev= Bus.audio(s,2);
+	~shiftComp= Bus.audio(s,2);
+	~shiftLimit= Bus.audio(s,2);
+	~shiftStereo= Bus.audio(s,2);
+
 	~gateSeqBus = Bus.audio(s,1);
 	~gateSeqRnd = Bus.audio(s,1);
 	~delayToLimit= Bus.audio(s,2);
@@ -254,7 +263,7 @@ s.sync;
 	~gateBus3= Bus.audio(s,1);
 	~stetoSnaCom1 = Bus.audio(s,10);
 	~eqBus10= Bus.audio(s,10);
-	~eqBus310= Bus.audio(s,10);
+	~eqBus310= Bus.audio(s,2);
 	~kickHatEq = Bus.audio(s,2);
 	~kickHatEq2 = Bus.audio(s,2);
 	~bassEq = Bus.audio(s,2);
@@ -332,7 +341,7 @@ s.sync;
 	~bgBus2= Bus.audio(s,10);
 	~bgStereo2 = Bus.audio(s,1);
 	~bgStereo2 = Bus.audio(s,2);
-	~eqBg10 = Bus.audio(s,10);
+	~eqBg10 = Bus.audio(s,1);
 	~finGran = Bus.audio(s,10);
 
 	~stereoHat= Bus.audio(s,1);
@@ -358,6 +367,11 @@ s.sync;
 	~absoFinalGate= Bus.audio(s,10);
 	~absoFinalGate2= Bus.audio(s,10);
 	~absoFinalGate3= Bus.audio(s,10);
+	~absoFinalGate4= Bus.audio(s,10);
+	~absoFinalGate5= Bus.audio(s,10);
+	~absoFinalGate6= Bus.audio(s,10);
+	~absoFinalGate7= Bus.audio(s,10);
+	~absoFinalGate8= Bus.audio(s,10);
 	~riToEq= Bus.audio(s,1);
 	~riToComp= Bus.audio(s,1);
 	~riToDisto= Bus.audio(s,2);
@@ -630,7 +644,7 @@ s.sync;
 
 
 	SynthDef(\playBufX ,{|out = 0,start, trig, dur, amp=1,buf, dA=2, loo=0,tS=1,impulse=0.001|Out.ar(out,PlayBuf.ar(1,buf,trigger:
-		Impulse.kr(impulse* (60/~bpm),mul: amp),startPos: start,loop:loo,doneAction: dA));}).add;
+		Impulse.kr(impulse* (60/~bpm),mul: amp),startPos: start,loop:loo,doneAction: dA)*amp);}).add;
 
 
 
@@ -1768,7 +1782,7 @@ SynthDef(\EQHP10, {|out=0, in, val, quant, gain, val2, quant2, gain2 frq=100, vo
 SynthDef(\ranModul,{|modu, busMod,lS=0, hS=4200,dur,tS=1,out|Out.kr(out,LFDNoise0.kr(modu+ In.kr(busMod)).range(lS,hS)
 			* EnvGen.kr(Env.step([1,1],[dur,0]),timeScale: tS,doneAction: 2))}).add;
 
-	SynthDef(\triModul,{|modu, busMod,hS=1200,lS=(-40),dur,tS=1,out|Out.kr(out, LFTri.kr(modu+ In.kr(busMod)).range(lS,hS)* EnvGen.kr(Env.step([1,1],[dur,0]),timeScale: tS,doneAction: 2))}).add;
+	SynthDef(\triModul,{|ph=0,modu, busMod,hS=1200,lS=(-40),dur,tS=1,out|Out.kr(out, LFTri.kr(modu+ In.kr(busMod),ph).range(lS,hS)* EnvGen.kr(Env.step([1,1],[dur,0]),timeScale: tS,doneAction: 2))}).add;
 
 	//SAFETY VERSION WITH NO BUSSES
 SynthDef(\sinModulC,{|modu, busMod,hS=2200,lS=(-40),dur,tS=1,out|Out.kr(out, SinOsc.kr(modu).range(lS,hS)

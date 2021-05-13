@@ -15,6 +15,7 @@
 
 //chelou low freq noise wander in the project
 
+//where to add the delay/reverb +
 
 //final delay browken
 
@@ -153,7 +154,8 @@
 ~extraDelay= Group.after(~gateGrp7);
 ~extraRev= Group.after(~extraDelay);
 ~compGrp4 = Group.after(~extraRev);
-~limitGrp4 = Group.after(~compGrp4);
+~eqGrp4 = Group.after(~compGrp4);
+~limitGrp4 = Group.after(~eqGrp4);
 ~stereoGrp4 = Group.after(~limitGrp4);
 ~compGrp5 = Group.after(~stereoGrp4);
 ~eqGrp3=Group.after(~compGrp5);
@@ -179,6 +181,7 @@ o = {
 
 	Out.kr(~bus14,SinOsc.ar(0.6).range(1.5,0.27));
 
+	//super important for gran modu
 	Out.kr(~bus18, /* Lag.kr(*/LFNoise0.kr(1.2875).range(0.15,0.0)/*,0.05)*/
 	+SinOsc.kr(SelectX.kr(LFNoise0.kr(5.15).range(0,2).round(1),[1.2875,5.15,20.6])).range(0,4))
 
@@ -221,7 +224,7 @@ o = {
 
 
 //??
-	Pbind(\instrument, \lfo13, \val,0.075,\dur,Pseq([64/1],inf),\rL,60,\rH,3600 ,\out,  ~bus11, \group, ~lfoGrp,\tS, 0.39550810372374),
+/*	Pbind(\instrument, \lfo13, \val,0.075,\dur,Pseq([64/1],inf),\rL,60,\rH,3600 ,\out,  ~bus11, \group, ~lfoGrp,\tS, 0.39550810372374),*/
 
 
 	Pbind(\instrument, \lfo13, \val,0.075,\dur,Pseq([64/1],inf),\rL,3200,\rH,1720, \ph,4.2,\out,  ~bus3, \group, ~lfoGrp,\tS, 0.39550810372374),
@@ -393,7 +396,7 @@ Pbind(\instrument, \playBuf10N,  \out,~toCom,\dur,Pseq([ Pseq([8/1],1),  Pseq([1
 ].scramble,inf),
 
 
-	Pwrand([
+	/*Pwrand([
 
 	//here
 
@@ -413,7 +416,7 @@ Pseq([
 			Pbind(\instrument,\gateS, \dur, Pseq([2/1],1),\tS, 0.39550810372374,\type,\rest)
 
 			],1)
-	],[16,1].normalizeSum,  inf),
+	],[16,1].normalizeSum,  inf),*/
 
 ],1))
 
@@ -723,7 +726,9 @@ Ppar([~base,~no4],1).play(t, quant:1)
 ~no4.stop;
 (~no4 = Ppar([
 
-	Pbind(\instrument, \lfo13,\val,(1.2875),\out,~bus10 ,\dur,Pseq([16/1],inf),\ph,1.4, \rL,500,\rH,2900, \group, ~lfoGrp,\tS, 0.39550810372374),
+	Pbind(\instrument, \lfo13,\val,(~hzQbeat),\out,~bus2 ,\dur,999,\ph,0, \rL,1200,\rH,3000, \group, ~lfoGrp,\tS, 0.39550810372374)
+
+	/*Pbind(\instrument, \lfo13,\val,(1.2875),\out,~bus10 ,\dur,Pseq([16/1],inf),\ph,1.4, \rL,500,\rH,2900, \group, ~lfoGrp,\tS, 0.39550810372374),*/
 
 
 	Pbind(\instrument, \lfoPulse, \out, ~bus13, \dur,Pseq([3/1],inf),\group,~lfoGrp ,\frq,Pfunc({5.15.rrand(0.321875)}),\wdth,~bus14 ,\tS, 0.39550810372374),
@@ -829,7 +834,7 @@ Ppar([
 		Pbind(\instrument, \envSli, \val1,50, \val2, 5600, \dur, Pseq([1/1],inf),\out, ~bus8,\tS, 0.39550810372374),
 
 
-	Pbind(\instrument, \lfo13,\tS, 0.39550810372374, \dur, Pseq([64/1],inf),\out,~mod2,\rL,0 ,\rH,3200,\modu,
+	Pbind(\instrument, \lfo13,\tS, 0.39550810372374, \dur, Pseq([64/1],inf),\out,~mod2,\rL,0 ,\rH,500,\modu,
 
 		0.001875/**4*/,\ph,1.42),
 
@@ -851,7 +856,10 @@ Ppar([
 
 			/*Pbind(\instrument,\rise,\dur,Pseq([64/1],inf), \vlAtk,~ri1vlAtk ,\f1, ~ri1f1 , \f2, ~ri1f2 , \f3,~ri1f3,  \ic_atk,~ri1ic_atk,\index,~ri1index,\mRatio,~ri1mRatio,\out ,~bellFlang2,\tS, 0.39550810372374, /*\fR,Pfunc({1.00.rand}), */\moduS,~mod2,\atk,1, \fS,~ri1fs),*/
 
-		Pbind(\instrument,\rise,\dur,Pseq([64/1],inf), \vlAtk,1,\f1, 1 , \f2,2, \f3,0,  \ic_atk,-3,\index,5,\mRatio,5,\out ,~flanToDisto2,\tS, 0.39550810372374,\atk,1,\moduS,~mod2, \fS,1 ),
+
+
+
+		Pbind(\instrument,\rise,\dur,Pseq([16/1],inf), \vlAtk,0,\f1, 0.004 , \f2,0.001, \f3,0.00001,  \ic_atk,-3,\index,151,\mRatio,5,\out ,~flanToDisto2,\tS, 0.39550810372374,\atk,1,\moduS,~mod2, \fS,1 ),
 
 		/*Pbind(\instrument,\rise,\dur,Pseq([4/1],inf), \vlAtk, ~ri2vlAtk,\f1, ~ri2f1 , \f2, ~ri2f2 , \f3, ~ri2f3,  \ic_atk,~ri2ic_atk,\index,~ri2index,\mRatio,~ri2mRatio,\out ,Prand([~bellFlang4, ~riToDisto2],inf),\tS, 0.39550810372374, \fR,~ri2fR, \moduR,~mod1,
 	\key,Pseq([\dec,\atk ], inf),\value,1, \finish, { ~key.envirPut(~value) }),*/
@@ -1285,10 +1293,10 @@ Ppar([~base,~fx],1).play(t)
 
 	Pbind(\instrument ,	\EQHP2,\dur, inf, \in,~delayEq, \out,~delToStereo,\group, ~eqGrp3, \frq, 300,\vol,0.4),*/
 
-	Pbind(\instrument,\stereoS, \dur,Pseq([8/1],inf), \in, ~delToStereo   ,\out,0,\spread,1, \center, Pfunc({0.8.rrand(-0.8)}),\group,~stereoGrp5,\tS, 0.39550810372374),
+	Pbind(\instrument,\stereoS, \dur,Pseq([8/1],inf), \in, ~delToStereo   ,\out,~toCom,\spread,1, \center, Pfunc({0.8.rrand(-0.8)}),\group,~stereoGrp5,\tS, 0.39550810372374),
 
 
-	Pbind(\instrument,\stereoS, \dur, 9999, \in, ~stereoBus3b   ,\out,0/*~newCOn2*/,\spread,1, \group, ~stereoGrp4),
+	Pbind(\instrument,\stereoS, \dur, 9999, \in, ~stereoBus3b   ,\out,~toCom/*~newCOn2*/,\spread,1, \group, ~stereoGrp4),
 
 
 

@@ -1,17 +1,17 @@
 ~mixa = Synth(\gate2, [\in,  ~no1,\dur, 9999] ,~eqGrp3);
 
-~mixa = Synth(\gateS, [\in,~absoFinalGate3 /**//*~comSnaGrpBus2*/,\dur, 9999] ,~recGrp3);
+~mixa = Synth(\gateS, [\in,~absoFinalGate8 /*~toGate102*//*~comSnaGrpBus2*/,\dur, 9999] ,~recGrp3);
 
 
 ~mixa = Synth(\gate, [\in, ~distoPercu,\dur, 9999] ,~limitGrp4);
 
 ~mixa.stop
-
+~leTout2.play
 ~absoFinalGate3
 ~mixa.set(\in,~comSnaGrpBus2/*~percuCom2*/);
 
 ~kb=Pbind(\instrument, \playBufS, \dur,  Pseq([1/1],inf), \tS,  0.39550810372374,\buf,~kb2).play(t)
-~leTout2.play
+
 ~kb.stop
 ~boost.play(t)
 (~boost=Ppar([
