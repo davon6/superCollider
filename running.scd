@@ -649,7 +649,7 @@ s.sync;
 
 
 	SynthDef(\playBufS ,{|out = 0,start=0,rte=1, trig= 0.002, dur, buf, dA=2, tS=1, loopy=1,vl=1|Out.ar(out,PlayBuf.ar(2,buf,rte,trigger:
-		trig/*Dust.kr(4.0)*/,startPos: start,loop: loopy/*,doneAction: dA*/)* EnvGen.kr(Env([0,vl,vl,0],[0,dur,0]),timeScale: tS,doneAction: 2));}).add;
+		trig/*Dust.kr(4.0)*/,startPos: start,loop: loopy,doneAction: dA)* EnvGen.kr(Env([0,vl,vl,0],[0,dur,0]),timeScale: tS,doneAction: 2));}).add;
 
 	SynthDef(\playBuf10 ,{|out = 0,start=0, trig= 0.002, dur, buf, dA=2, tS=1, loopy=1,vl=1|Out.ar(out,PlayBuf.ar(10,buf,trigger:
 		trig/*Dust.kr(4.0)*/,startPos: start,loop: loopy/*,doneAction: dA*/)* EnvGen.kr(Env([0,vl,vl,0],[0,dur,0]),timeScale: tS,doneAction: 2));}).add;
@@ -2314,7 +2314,7 @@ Ppar([
 			\val3,2637.02, \quant3,1, \gain3,(-30),
 
 
-		/*\val5,164.81375, \quant5,1, \gain5,(-34)*/
+		\val5,164.81375, \quant5,1, \gain5,(-12)
 
 
 	),

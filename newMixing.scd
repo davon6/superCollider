@@ -681,6 +681,6 @@ Synth(\playB10,[\buf, ~leTout,\out,~finGran ]);
 /*~compUlti.set(\out,~eqBus10)*/
 
 ~mixingUlti = Synth(\EQHP10, [\in, ~eqBus10, \frq, 100,\vol, 2.2], ~eqGrp3);
- ~mixingUlti.set(\vol, 1.224);//0.22
+ ~mixingUlti.set(\vol, 1.084);//0.22
 
 				// ~mixingUlti.free
