@@ -248,7 +248,7 @@ s.sync;
 	~part2ToFilter= Bus.audio(s,1);*/
 
 
-	~shiftLimit= Bus.audio(s,2);
+	~shiftPlay= Bus.audio(s,2);
 	~shiftDisto= Bus.audio(s,2);
 	~shiftEq= Bus.audio(s,2);
 	~shiftRev= Bus.audio(s,2);
@@ -284,6 +284,7 @@ s.sync;
 	~halfAbso22  = Bus.audio(s,10);
 	~toExtraFx=Bus.audio(s,10);
 	~main1GToG= Bus.audio(s,1);
+	~percGate=Bus.audio(s,10);
 
 	~tam= Bus.audio(s,2);
 	~tamFil= Bus.audio(s,2);
@@ -293,6 +294,11 @@ s.sync;
 
 	~downSG= Bus.audio(s,3);
 	~downdel= Bus.audio(s,1);
+	~downDisto= Bus.audio(s,1);
+~downEq= Bus.audio(s,2);
+~downRev= Bus.audio(s,2);
+~downComp= Bus.audio(s,2);
+~downLimit= Bus.audio(s,2);
 
 	//????
 	~perchLimiToG= Bus.audio(s,2);
