@@ -1,14 +1,14 @@
 ~mixa = Synth(\gate2, [\in,  ~no1,\dur, 9999] ,~eqGrp3);
 
-~mixa = Synth(\gateS, [\in,~absoFinalGate8 /*~toGate102*//*~comSnaGrpBus2*/,\dur, 9999] ,~recGrp3);
+~mixa = Synth(\gateS, [\in,~absoFinalGate6 /*~toGate102*//*~comSnaGrpBus2*/,\dur, 9999] ,~recGrp3);
 
 
 ~mixa = Synth(\gate, [\in, ~distoPercu,\dur, 9999] ,~limitGrp4);
 
-~mixa.stop
+~mixa.free
 ~leTout2.play
 ~absoFinalGate3
-~mixa.set(\in,~comSnaGrpBus2/*~percuCom2*/);
+~mixa.set(\in,~absoFinalGate7/*~percuCom2*/);
 
 ~kb=Pbind(\instrument, \playBufS, \dur,  Pseq([1/1],inf), \tS,  0.39550810372374,\buf,~kb2).play(t)
 
@@ -16,9 +16,9 @@
 ~boost.play(t)
 (~boost=Ppar([
 
-	/*Pbind(\instrument, \lfo13, \val,0.075,\dur,Pseq([64/1],inf),\rL,3200,\rH,1720, \ph,4.2,\out,  ~bus3, \group, ~lfoGrp,\tS, 0.39550810372374),
+	Pbind(\instrument, \lfo13, \val,0.075,\dur,Pseq([64/1],inf),\rL,3200,\rH,1720, \ph,4.2,\out,  ~bus3, \group, ~lfoGrp,\tS, 0.39550810372374),
 
-		Pbind(\instrument, \lfo13,\val,(1.2875),\out,~bus10 ,\dur,Pseq([16/1],inf),\ph,1.4, \rL,500,\rH,2900, \group, ~lfoGrp,\tS, 0.39550810372374),*/
+		/*Pbind(\instrument, \lfo13,\val,(1.2875),\out,~bus10 ,\dur,Pseq([16/1],inf),\ph,1.4, \rL,500,\rH,2900, \group, ~lfoGrp,\tS, 0.39550810372374),*/
 
 
 	Pbind(\instrument, \kick,\dur, Pseq([1/1],inf),\amp,(-10.2),\out,~kbus),
@@ -42,7 +42,7 @@ Pbind( \instrument,\playBuf /*\playBuf1N*/, \impulse, 0.3,\dur,Pseq([3/1],1), \t
 ~pass1 =(~buf.numFrames.rrand(400000)- 400000);~pass2=(~buf.numFrames.rrand(400000)- 400000);~pass3=(~buf.numFrames.rrand(400000)- 400000);~pass4=(~buf.numFrames.rrand(400000)- 400000);
 (
 
-Ppar([~base, /*~kb, *//*~hitX*//*~kb,    ~fx, */    ~no4,~sequ,~mainLead ,
+Ppar([~base,   /*   ~fx, */    ~no4,~sequ,~mainLead ,
 
 
 	// Pbind(\instrument, \playBufS, \dur,  Pseq([1/1],inf), \tS,  0.39550810372374,\buf,~kb2)

@@ -3,7 +3,7 @@
 ~kb=Pbind(\instrument, \playBufS, \dur,  Pseq([1/1],inf), \tS,  0.39550810372374,\buf,~kb2).play(t)
 
 ~kb.stop
-
+~part3a.play(t)
 (~part3a=Ppar([
 
 
@@ -54,12 +54,12 @@ Pseq([
 	],2),
 
 
-],inf)],1).play(t))
+],1)],1))
 
 
+~fkAr.play
 
-
-
+~part3b.play(t)
 (~part3b=
 Ppar([
 	Pfunc({~one = ~leTout2.numFrames/ 256 * 240.rand}),
@@ -125,7 +125,7 @@ Pseq([
 
 	],1)
 
-],inf)],1).play(t))
+],1)],1))
 
 
 
@@ -156,7 +156,7 @@ Pbind(\instrument, \lfo13,\val,(~hzQbeat/16),\out,~bus24 ,\dur,999,\ph,0, \rL,40
 
 Ppar([
 
-		Pbind(\instrument, \playBufS,\dur  ,Pseq([2/1],inf),\buf,~pad/*~kb2Test*/,\tS,  0.39550810372374,\start,
+		Pbind(\instrument, \playBufS,\dur  ,Pseq([2/1],32),\buf,~pad/*~kb2Test*/,\tS,  0.39550810372374,\start,
 /*	~kb2Test.numFrames.rand.postln*/107116.69921875,\out, ~buildUpG,\vl,0.1),
 
 	Pbind(\instrument,\gate,\in,~buildUpG,\out,~shiftLimit, \vlSub,1,\vlSub2,Pkey(\vlSub),\tS,  0.39550810372374,\group,~lfoGrp,\type,Pseq([\note,\note,\note,\note,\rest,\rest,\rest,\rest].scramble,inf),\dur  ,Pseq([1/1],inf))
@@ -195,4 +195,4 @@ Ppar([
 
 
 
-],inf)],1))
+],1)],1))

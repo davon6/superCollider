@@ -13,7 +13,7 @@ MIDIIn.disconnectAll;
 FreqScope.new
 s.meter
 ~buf.play
-
+~buf=Buffer.read(s,"/Users/davidmignot/Music/SuperCollider Recordings/E/SC_210514_091332.aiff")
 
 (
 ~notes = Array.newClear(128);
@@ -119,7 +119,8 @@ MIDIdef.noteOn(\start, {|vel, nn, chan, src|
 MIDIdef.noteOn(\rcord, {|vel, nn, chan, src|
 	[nn].postln;
 
-x = Synth(\recLoop,[buf:~buf,\recording,1, \in,0],~recGrp);
+	x = Synth(\recLoop,[buf:~buf,\recording,1, \in,0],~recGrp);
+	// s.record;
 
 },noteNum: 43);//is 8
 
@@ -342,11 +343,8 @@ MIDIdef.cc(\filRez, { |value|var modFreq = value.linlin(0, 127, 0.3, 8);
 //select
 (Ppar([
 
-Pbind(\instrument,\playBufXG,\rte,0.125,\dur,Prand([
-
-		Pseq([1/16],inf)
-	/*	Pseq([3/1],1)*/
-	/*Pseq([1/8],2),Pseq([1/2],1), Pseq([1/4],1),Pseq([1.25/1], 1 )*/].scramble,inf) ,\amp, 1,\buf,~buf,\out,0,\impulse,0.003,\start,2799323.1948647
+Pbind(\instrument,\playBufXG,\rte,4,\dur,Pseq([1/16],inf)
+,\amp, 1,\buf,~buf,\out,0,\impulse,0.003,\start,2201750.7150731
 ,\tS, 0.39550810372374 ,\vlSub,  0.61 , \vlSub2,Pkey(\vlSub), \atkT,~pAtkT,\decT, ~pDecT ,	\subsT, ~pSubT , \atckC,~pAtkC,\decC,~pDecC,\vlAtk , ~pvlAtk)
 
 
@@ -354,7 +352,7 @@ Pbind(\instrument,\playBufXG,\rte,0.125,\dur,Prand([
 
 ],1).play(t))
 
-~st=2799323.1948647
+~st=2201750.7150731
 
 (~buf.numFrames.rrand(1400000)- 1400000).postln
 
@@ -378,15 +376,15 @@ Pbind(\instrument,\playBufXG,\rte,0.125,\dur,Prand([
 (
 Ppar([
 	// \playBufXGMod
-	Pbind(\instrument,\playBufXGMod,\rte,8,\dur, Pseq([1/16],inf),\amp, 1,\buf,~buf,\out,~gateMelo,\gate, 0.5,\duration,Pkey(\dur),\impulse,0.003,\start,~st, \tS, 0.39550810372374 ,
-	\vlSub, 0.7 /*0.01*/, \vlSub2,Pkey(\vlSub), \atkT,0.001/*~pAtkT*/,\decT, 0.05,	\subsT,0.05 /*~pSubT*/ , \relT,0.01/*~pRelT*/,\atckC,0,\decC,-1,\relC,0,\vlAtk , 0 ,  \vlRel,  Pkey(\vlAtk),\loopy,0,\busMod,~bus1,),
+	Pbind(\instrument,\playBufXGMod,\rte,2,\dur, Pseq([1/16],inf),\amp, 1,\buf,~buf,\out,~gateMelo,\gate, 0.5,\duration,Pkey(\dur),\impulse,0.003,\start,~st, \tS, 0.39550810372374 ,
+	\vlSub, 1 /*0.01*/, \vlSub2,Pkey(\vlSub), \atkT,0.001/*~pAtkT*/,\decT, 1,	\subsT,0.05 /*~pSubT*/ , \relT,0.01/*~pRelT*/,\atckC,0,\decC,-1,\relC,0,\vlAtk , 0 ,  \vlRel,  Pkey(\vlAtk),\loopy,0,\busMod,~bus1,),
 
 
-	Pbind(\instrument, \phaser,\in,~phaseBus,\dur ,9999,\value, 0.64375,\amp,1,\decT,(0.2),\ph,4.4,\out,~gateMelo, \group,~phaserGrp),
+	Pbind(\instrument, \phaser,\in,~phaseBus,\dur ,9999,\value, 0.64375,\amp,1,\decT,(0.02),\ph,4.4,\out,~gateMelo, \group,~phaserGrp),
 
 	// 0.64375
 Pbind(\instrument, \filterG, \dur, inf,\in,~gateMelo, \which,2,\out,0/*~eqPerch*/,\group,~distoGrp
-		,\qf ,0.5, \qf2,0.4,\freqFil,15
+		,\qf ,0.5, \qf2,0.8,\freqFil,15
 	),
 
 ],1).play(t))
@@ -401,11 +399,13 @@ x = Synth(\recLoop,[buf:~lpPrec,\recording,1, \in,0],~recGrp);
 ~filterGrp= Group.new   ;
 ~recGrp= Group.after(~filterGrp);
 
-Pbind(\instrument,\playBufXG,\dur,Pseq([1/1],inf),\amp, 1,\buf,~buf ,\out,~eqBus2x,\impulse,0.003,\start,636658.85969102,\tS, 0.39550810372374 ,\vlSub,  ~pSub , \vlSub2,Pkey(\vlSub), \atkT,~pAtkT,\decT, 1 ,	\subsT, 0 , \relT,~pRelT,\atckC,~pAtkC,\decC,~pDecC,\relC,~pRelC,\vlAtk , ~pvlAtk ,  \vlRel,  Pkey(\vlAtk),\loopy,0).play(t);
+Pbind(\instrument,\playBufXG,\dur,Pseq([3/1],inf),\amp, 1,\buf,~buf ,\out,~eqBus2x,\impulse,0.003,\start,
+1436045.303247
+,\tS, 0.39550810372374 ,\vlSub,  ~pSub , \vlSub2,Pkey(\vlSub), \atkT,~pAtkT,\decT, 1 ,	\subsT, 0 , \relT,~pRelT,\atckC,~pAtkC,\decC,~pDecC,\relC,~pRelC,\vlAtk , ~pvlAtk ,  \vlRel,  Pkey(\vlAtk),\loopy,0).play(t);
 
+// 636658.85969102
 
-
-Synth(\filterG, [\in,~eqBus2x , \which,1,\qf2,0.4],~filterGrp))
+Synth(\filterG, [\in,~eqBus2x , \which,1,\qf2,0.2],~filterGrp))
 
 x = Synth(\recLoop,[buf:~lpPrec3,\recording,1, \in,0],~recGrp);
 
@@ -415,7 +415,7 @@ x = Synth(\recLoop,[buf:~lpPrec3,\recording,1, \in,0],~recGrp);
 
 642438.18770068
 //choose here
-(Pbind(\instrument,\playBufXG,\dur,  Pseq([4.75],1) /*Pseq([1/4],24)*/,\amp, 1,\buf,~lpPrec,\out,0,\gate, 1,\duration,Pkey(\dur),\impulse,0.003,\start,~st2 = 654438.18770068 /*(~lpPrec.numFrames.rrand(5000)-5000).postln*/ ,\tS, 0.39550810372374 ,
+(Pbind(\instrument,\playBufXG,\dur,  Pseq([4.75],1) /*Pseq([1/4],24)*/,\amp, 1,\buf,~lpPrec,\out,0,\gate, 1,\duration,Pkey(\dur),\impulse,0.003,\start,~st2 = 634438.18770068 /*(~lpPrec.numFrames.rrand(5000)-5000).postln*/ ,\tS, 0.39550810372374 ,
 	\vlSub,  ~pSub , \vlSub2,Pkey(\vlSub), \atkT,0.001/*~pAtkT*/,\decT, 0.6/*~pDecT*/ ,	\subsT,0.399 /*~pSubT*/ , \relT,0.01/*~pRelT*/,\atckC,~pAtkC,\decC,~pDecC,\relC,~pRelC,\vlAtk , ~pvlAtk ,  \vlRel,  Pkey(\vlAtk),\loopy,0).play(t))
 
 
@@ -503,7 +503,7 @@ c = {
 	var mid = sig[0] + sig[1];
 	var side = sig[1] - sig[0];
 	[side, mid] * 0.5
-}.play(~rev2, outbus: 0, addAction: \addAfter);
+}.play(0, outbus: 0, addAction: \addAfter);
 )
 
 z = s.scope(2, index: 0).style_(2).yZoom_(16);
@@ -584,7 +584,7 @@ Pbind(\instrument,\recLoopS,\buf,~conga,\recording,1, \in,0,\group,~recGrp2,\dur
 
 
 ~conga.play
-Pbind(\instrument, \playBufS,\dur, Pseq([1/1],inf),\buf,~conga,\tS,0.39550810372374,\rte,    Pfunc({2.6.rrand(0)}),\start,66600).play(t)
+Pbind(\instrument, \playBufS,\dur, Pseq([1/4],inf),\buf,~conga,\tS,0.39550810372374,\rte,    Pfunc({2.6.rrand(0)}),\start,66600).play(t)
 ~conga.plot
 
 

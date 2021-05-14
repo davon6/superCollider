@@ -142,17 +142,17 @@ Pbind(\instrument,\gateSD, \dur,Pseq([64/1],inf),\in,  Pseq([ /*~absoFinalGate4,
 
 
 
-	].scramble, inf)  ,\out , ~toCom,\group, ~recGrp2,\tS, 0.39550810372374,\out2, ~fusible10),
+	].scramble, inf)  ,\out , ~toExtraFx,\group, ~recGrp2,\tS, 0.39550810372374,\out2, ~fusible10),
 
 
 
 	Pwrand([
 
 		Pbind(\instrument,\gateS, \dur, Prand([Pseq([1.5/1],1), Pseq([3/1],1),Pseq([1/1],1),],1),
-			\in,    ,\out ,Pwrand([~toCom,~reverbSquelch],[16,1].normalizeSum,inf), \group, ~gateGrp7,\tS, 0.39550810372374),
+			\in,  ~toExtraFx  ,\out ,Pwrand([~toCom,~reverbSquelch],[16,1].normalizeSum,inf), \group, ~gateGrp7,\tS, 0.39550810372374),
 
 		Pseq([
-			Pbind(\instrument,\gateS, \dur,Pseq([1/8],16),\type,Pseq([\note, \rest,\note, \rest,\note, \rest,\note,\rest],inf),\in,  ,\out ,~delayBus2 ,\group, ~gateGrp7,\tS, 0.39550810372374),
+			Pbind(\instrument,\gateS, \dur,Pseq([1/8],16),\type,Pseq([\note, \rest,\note, \rest,\note, \rest,\note,\rest],inf),\in,~toExtraFx  ,\out ,~delayBus2 ,\group, ~gateGrp7,\tS, 0.39550810372374),
 
 			Pbind(\instrument,\gateS, \dur, Pseq([2/1],1),\tS, 0.39550810372374,\type,\rest)
 
