@@ -336,6 +336,7 @@ s.sync;
 	~bellFlang3= Bus.audio(s,1);
 	~bellFlang4= Bus.audio(s,2);
 	~kbToPan2= Bus.audio(s,1);
+	~kToPan= Bus.audio(s,1);
 	~bgFil = Bus.audio(s,1);
 	~bgFil2= Bus.audio(s,1);
 	~bgCom = Bus.audio(s,1);
@@ -924,7 +925,7 @@ SynthDef(\kick, {
 	SynthDef(\bass,{
 		arg freq=41.2, dure=1, amp=0.5,
 		atkcrv=1, relcrv=5,
-		atk=0, rel=0.1, lpf=100, out = 0, bus, dur,cho=0,rel2,relcrv2,envF,relcrv3,vlDec=0.6 ;
+		atk=0, rel=0.1, lpf=100, out = 0, bus, dur,cho=0,rel2,relcrv2,envF,relcrv3,vlDec=0.6,vlDecF=0 ;
 
 		var sig, env, lvlBa;
 
@@ -939,7 +940,7 @@ SynthDef(\kick, {
 
 		envF = EnvGen.kr(
 			Env(
-				[0,1080,0,0],
+				[0,1080,vlDecF,0],
 				[atk,rel/*/4*/,rel2],
 				[atkcrv,relcrv3,relcrv2]
 			),
@@ -2182,7 +2183,7 @@ s.sync;
 		\rel2, t.beatDur/4 * 0.0012,
 		\atkcrv, -2,
 		\relcrv, -2,\relcrv2, -4, \relcrv3, -6
-		,\amp,(-10.2/*-1*/)/*(-13)*/,\out,~bassEq
+		,\amp,(-7/*-1*/)/*(-13)*/,\out,~bassEq
 	);
 
 		~bassC = Pbind(\instrument, \bass,
@@ -2194,9 +2195,11 @@ s.sync;
 		\rel, t.beatDur*4 * 0.996,/*\rel, t.beatDur/4 * 0.98,*/
 		\rel2, t.beatDur/4 * 0.0012,
 		\vlDec,0.96,
+
+		\vlDecF,400,
 		\atkcrv, -2,
 		\relcrv, -2,\relcrv2, -4, \relcrv3, -6
-		,\amp,(-10.2/*-1*/)/*(-13)*/,\out,~bassEq
+		,\amp,(-8.2/*-1*/)/*(-13)*/,\out,~bassEq
 	);
 
 	~hat2 =Pbind(\instrument, \percussion,\rel,0.04840,\rel2,0.02420,\amp, (-28.2), \crv1, (-4), \crv1b, (-5), \modHz, exprand(500,10000), \mulMod, rrand(100, 500), \carHz, exprand(20,10000), \modAmp, 1.10875.rrand(0.8) /*0.82875.rrand(0.4)*/,\dur,Pseq([1/1],1) ,\out, ~kickHatEq);
@@ -2278,7 +2281,9 @@ Pbind(\instrument,\recLoop,\buf,~snare,\recording,1, \in,~snareEQ,\group,~recGrp
 
 (
 ~eqGrp=Group.new;
-~stereoGrp=Group.after(~eqGrp);
+~compGrp=Group.after(~eqGrp);
+~stereoGrp=Group.after(~compGrp);
+
 ~recGrp2=Group.after(~stereoGrp);
 )
 
@@ -2335,8 +2340,9 @@ Ppar([
 			\val3,2637.02, \quant3,1, \gain3,(-30),
 
 
-		/*\val5,164.81375, \quant5,1, \gain5,(-34)*/
 
+
+	\val5,164.81375, \quant5,1, \gain5,(-12)
 
 	),
 
@@ -2345,7 +2351,7 @@ Ppar([
 ],1).play(t);
 
 )
-~b3.play
+~bass.play
 ~k2.play
 Pbind(\instrument, \playBuf, \impulse, 0.003 ,\dur,    Pseq([1/1],inf), \tS,  0.39550810372374,\buf,~k2,\out, 0,\loopy,0,\start,0,\tS, 0.39550810372374).play(t)
 Pbind(\instrument, \playBuf, \impulse, 0.003 ,\dur,    Pseq([1/1],inf), \tS,  0.39550810372374,\buf,~b3,\out, 0,\loopy,0,\start,0,\tS, 0.39550810372374).play(t)
@@ -2384,14 +2390,27 @@ Pbind(\instrument, \pan2, \in,~kbToPan2,\out,0 ,\group,~stereoGrp,\dur, inf),
 
 
 )
+~kb1.plot
 
+	~comp=Synth(\comp, [\ctrl, ~kbus ],~compGrp);
+~comp.set(\thr,0.92 ,\sB, 1.16,\sA, 1/4,\atk ,0.0484, \rel ,0.3872, \gain,1,\in, ~comFuzz,\out,~kbToPan2);
 
 (
 Ppar([
 
+
+	Pbind(\instrument, \kick,\dur, Pseq([1/1],inf),\amp,(-10.2),\out,~kbus),
+
+	Pseq([Pbindf(~hat2,\out,~kickHatEq2)],inf),
+		Pbind(\instrument ,	\EQ2,\dur, inf, \in,~kickHatEq2, \out,~kbus,\group, ~eqGrp, \val, 659.255, \quant,1, \gain ,(-30)),
+
+
+
+
+
 	Pbind(\instrument,\recLoopS,\buf,~kb2,\recording,1, \in,0,\group,~recGrp2,\dur,inf),
 Pseq([
-	Pbind(\instrument, \playBuf, \impulse, 0.003 ,\dur,    Pseq([1/2],1), \tS,  0.39550810372374,\buf,~k2,\out, ~kbToPan2,\loopy,0,\start,0,\tS, 0.39550810372374),
+	Pbind(\instrument, \playBuf, \impulse, 0.003 ,\dur,    Pseq([1/2],1), \tS,  0.39550810372374,\buf,~k2,\out, ~kToPan,\loopy,0,\start,0,\tS, 0.39550810372374),
 
 		/*Pbindf(~kick ,\dur,    Pseq([1/2],1),\out,~kbToPan2),*/
 		Pbind(\instrument, \wNoise,\dur,Pseq([1/2],1),\dec ,Pkey(\dur),\amp,(-12),\tS, 0.39550810372374,\type, \rest  )],inf),
@@ -2400,11 +2419,19 @@ Pseq([Pbind(\instrument, \wNoise,\dur,Pseq([1/4],1),\dec ,Pkey(\dur),\amp,(-12),
 
 		Pbind( \instrument, \playBufXG, \impulse, 0.003 ,\dur,    Pseq([1/4],3), \tS,  0.39550810372374,
 	\start,100,
-			\buf,~b3,\out, ~kbToPan2,\loopy,0, \decT,0.8,
+			\buf,~b3,\out,~comFuzz ,\loopy,0, \decT,0.8,
 			\subsT ,Pseq([0,0.09,0.18],inf)
 	)
 ],inf),
+
+
+
+
+
+
 Pbind(\instrument, \pan2, \in,~kbToPan2,\out,0 ,\group,~stereoGrp,\dur, inf),
+
+	Pbind(\instrument, \pan2, \in,~kToPan,\out,0 ,\group,~stereoGrp,\dur, inf),
 
 
 

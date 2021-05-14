@@ -27,7 +27,7 @@
 ~eq2.set(\val, 300,\quant, 1, \gain,(-20),\val2,0,\quant2,0, \gain2,0, \val3,0,\quant3,0, \gain3,0,\val4,0,\shelf,0, \gain4,0,\in, ~eqBus1 , \out,~gateBus);
 ~rev2=Synth( \reverb ,~revRnd[2],~revGrp);~rev2.set( \in, ~reverbBus , \out, ~comFuzz);
 ~comp2=Synth(\comp, [\ctrl, ~kbus ],~compGrp);
-~comp2.set(\thr,0.92 ,\sB, 1.16,\sA, 1/2,\atk ,0.0242, \rel ,0.968, \gain,25,\in, ~comFuzz,\out,~limitFuzz);
+~comp2.set(\thr,0.92 ,\sB, 1.16,\sA, 1/2,\atk ,0.0242, \rel ,0.0968, \gain,25,\in, ~comFuzz,\out,~limitFuzz);
 ~mix2= Synth(\limitertoMixer,[\c2,1,\in, ~limitFuzz, \gain,20,\out,~stereoBus1],~limitGrp);
 ~mix2.set(\gain,30);
 ~stereo2= Synth(\stereoO,[\in, ~stereoBus1   ,\out,~no1,],~stereoGrp);
@@ -579,7 +579,7 @@ Synth(\playB10,[\buf, ~leTout,\out,~finGran ]);
 ~comp31=Synth(\comp,[\ctrl, ~kbus,],~compGrp);
 ~comp31.set(\thr,0.9 ,\sB, 1.05,\sA, 1/2,\atk ,0.0121, \rel ,0.0968,\gain,3.5,\in, ~comBusCymb , \out,~limitC);
 ~mix31= Synth(\limitertoMixer,[\c31,1,\in, ~limitC,\gain,20,\out,~stereoCymb],~limitGrp);
- ~mix31.set(\gain,12,\in, ~limitC,\out,~stereoCymb);
+ ~mix31.set(\gain,6,\in, ~limitC,\out,~stereoCymb);
 ~sterCymb=Synth(\stereoO,[\in,~stereoCymb,\out,~comFuzz22],~stereoGrp);
 ~sterCymb.set(\spread,1,\center,1,\dlt1,0,\dlt2,0.002,\decT,0.0242, \mxDel,1);
 
@@ -591,7 +591,7 @@ Synth(\playB10,[\buf, ~leTout,\out,~finGran ]);
 ~comp33.set(\thr,0.9 ,\sB, 1.1,\sA, 1/4,\atk ,0.0121, \rel ,0.04840,\gain,1,\in, ~comBusHat, \out,~limitHat );
 
 ~mix33= Synth(\limitertoMixer,[\c33,1,\in, ~limitHat,\gain,36,\out,~stereoHat ],~limitGrp4);
-~mix33.set(\gain,20,\out,~stereoHat);
+~mix33.set(\gain,10,\out,~stereoHat);
 
 ~sterHat=Synth(\stereoO,[\in,~stereoHat,\out,~comFuzz22],~stereoGrp4);
 ~sterHat.set(\spread,0,\center,0,\dlt1,0.01,\dlt2,0.07,\decT,0.0121, \mxDel,1,\out,~comFuzz22);
@@ -607,7 +607,7 @@ Synth(\playB10,[\buf, ~leTout,\out,~finGran ]);
 ~comp34=Synth(\comp, [\ctrl,~kbus ],~compGrp);
 ~comp34.set(\thr,0.92 ,\sB, 1.04,\sA, 1/2,\atk ,0.0242, \rel ,0.3872, \in, ~snareComp ,\out,~snareLimit);
 ~mix34= Synth(\limitertoMixer,[\c34,1,\in, ~snareLimit,\gain,40,\out,~toPan2],~limitGrp);
-~mix34.set(\gain,46);
+~mix34.set(\gain,42);
 ~pan34=Synth( \pan2,[\in, ~toPan2,\out, ~toKbGate], ~stereoGrp);
 
 
@@ -658,18 +658,18 @@ Synth(\playB10,[\buf, ~leTout,\out,~finGran ]);
 
 ~reverb =  Synth(\reverbMad, [\roomsize, 80, \revtime, 4.85, \damping, 0.41, \inputbw, 0.19, \drylevel, -3, \earlylevel, -9, \taillevel, -11 , \in,~reverbSquelch  , \out,~comSquelch],~extraRev);
 ~compReverb= Synth(\compS, [\ctrl, ~kbus],~compGrp4);
-~compReverb.set(\thr,0.2 ,\sB, 1.2,\sA, 1/4,\atk ,0.0484, \rel ,0.3872 ,\gain, 5,\in, ~comSquelch , \out,~eqBus310);
+~compReverb.set(\thr,0.8 ,\sB, 1.2,\sA, 1/4,\atk ,0.0484, \rel ,0.3872 ,\gain, 5,\in, ~comSquelch , \out,~eqBus310);
 ~reverbEq=Synth( \EQHP2, [\in, ~eqBus310 ,\out, ~limitSquelch,], ~eqGrp4);
 ~reverbEq.set(\frq, 500/*,\val,11800,\quant,1, \gain,(-18),\val2,2600,\quant2,8, \gain2,(-16)*/,\vol, 0.2);
 ~mix30= Synth(\limiterStoMixer,[\c30,1,\in, ~limitSquelch, \gain,44,\out,~stereoBus3b],~limitGrp4);
 // ~mixa.set(\in,~limitSquelch);
- ~mix30.set(\gain,24);
+ ~mix30.set(\gain,18);
 
 
 ~finaldelay=Synth(\del , [\in, ~delayBus2,\out,~delayToLimit],~extraDelay);
 ~delayFx =  Synth(\limiterS, [\in,~delayToLimit, \gain,40,\out , ~delayEq],~compGrp4);
 ~delayFx.set(\gain,40);
-~eqDelay=Synth(\EQHP2,[\in,~delayEq, \out,~delToStereo, \frq, 300,\vol,0.4], ~limitGrp4);
+~eqDelay=Synth(\EQHP2,[\in,~delayEq, \out,~delToStereo, \frq, 500,\vol,0.4], ~limitGrp4);
 
 
 
@@ -681,6 +681,6 @@ Synth(\playB10,[\buf, ~leTout,\out,~finGran ]);
 /*~compUlti.set(\out,~eqBus10)*/
 
 ~mixingUlti = Synth(\EQHP10, [\in, ~eqBus10, \frq, 100,\vol, 2.2], ~eqGrp3);
- ~mixingUlti.set(\vol, 1.114);//0.22
+ ~mixingUlti.set(\vol, 1.224);//0.22
 
 				// ~mixingUlti.free
