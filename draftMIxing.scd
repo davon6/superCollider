@@ -11,7 +11,7 @@
 ~mixa.set(\in,~absoFinalGate7/*~percuCom2*/);
 
 ~kb=Pbind(\instrument, \playBufS, \dur,  Pseq([1/1],inf), \tS,  0.39550810372374,\buf,~kb2).play(t)
-
+~kb=Pbind(\instrument, \playBufS, \dur,  Pseq([1/1],inf), \tS,  0.39550810372374,\buf,~kb1).play(t)
 ~kb.stop
 ~boost.play(t)
 (~boost=Ppar([

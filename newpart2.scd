@@ -157,7 +157,7 @@ Pseq([ Pseq([8/1],1)],1)  ,Pseq([ Pseq([4/1],1)],1)   ,Pseq([Pseq([16/1],1) ,Pse
 
 
 	Pseq([
-		~part3a,~part3b,~part3c,~part3d,~part5,~part3a,~part3b,~part3c,~part3d,~part3e,~part3e
+		~part3a,~part3b,/*~part3c,*/~part3d,~part5,~part3a,~part3b,~part3c,~part3d,~part3e,~part3e,
 
 		//have one ris
 

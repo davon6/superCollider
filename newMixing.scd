@@ -675,7 +675,7 @@ Synth(\playB10,[\buf, ~leTout,\out,~finGran ]);
 
 
 ~compUlti= Synth(\comp10,[\ctrl, ~snBus,],~compGrp5);
-~compUlti.set(\thr,0.86 ,\sB, 1.1,\sA, 1/2,\atk ,0.0968, \rel ,0.3872 ,\in, ~toCom, \out,~eqBus10);
+~compUlti.set(\thr,0.84 ,\sB, 1.1,\sA, 1/2,\atk ,0.0242, \rel ,0.3872 ,\in, ~toCom, \out,~eqBus10);
 
 
 /*~compUlti.set(\out,~eqBus10)*/

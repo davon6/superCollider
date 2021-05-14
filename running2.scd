@@ -556,8 +556,9 @@ Pbind(\instrument, \playBufS, \dur,  Pseq([1/1],inf), \tS,  0.39550810372372,\bu
 			],4),*/
 
 			Pseq([
-			Pseq([\rest,\rest,\note,\rest,\rest,\rest,\rest,\note].scramble,1),
+		/*	Pseq([\rest,\rest,\note,\rest,\note,\rest,\rest,\note].scramble,1),*/
 
+				Pseq([\note,\rest,\rest,\rest],1)
 			],32),
 			Pseq([\rest],32)
 
