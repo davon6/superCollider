@@ -109,7 +109,7 @@ Pbind(\instrument, \lfo13,\val,(~hzQbeat/4),\out,~bus2 ,\dur,999,\ph,0, \rL,200,
 	Pbind(\instrument,\envSli,\out, ~bus18,\dur,Pseq([128/1],inf),\tS, 0.39550810372374,\val1,350,\crv,3.2),
 
 
-	/*~kb,~hitX,~pedonk,~fx,*/~justHit,
+~kb,~hitX,~pedonk,~fx,~justHit,
 
 
 	Pbind(\instrument, \playBuf10, \buf ,~leTout,\out,~toGate10, \start,
@@ -162,14 +162,15 @@ Pseq([ Pseq([8/1],1)],1)  ,Pseq([ Pseq([4/1],1)],1)   ,Pseq([Pseq([16/1],1) ,Pse
 /*~part3d*/
 
 	Pseq([
-		/*~part3a,    ~part3b ,   ~part3c,  ~part3e,*/
+		Pseq([~part3a,~part3a,~part3a,Pbind(\instrument,\gateS, \dur,Pseq([64/1],inf),\in,~absoFinalGate2 ,\out , ~toExtraFx,\group, ~recGrp2,\tS, 0.39550810372374)],1)
+
 
 		//have one ris
 
+		,   	Pseq([ ~part3b ,   ~part3c,  ~part3e,
+			Pbind(\instrument,\gateS, \dur,Pseq([64/1],inf),\in,~absoFinalGate,\out , ~toExtraFx,\group, ~recGrp2,\tS, 0.39550810372374),].scramble,1)
 
-	Pbind(\instrument,\gateS, \dur,Pseq([64/1],inf),\in,~absoFinalGate1 ,\out , ~toExtraFx,\group, ~recGrp2,\tS, 0.39550810372374),
-		/*
-		Pbind(\instrument,\gateS, \dur,Pseq([64/1],inf),\in,~absoFinalGate2 ,\out , ~toExtraFx,\group, ~recGrp2,\tS, 0.39550810372374),*/
+
 
 	].scramble,inf),
 
