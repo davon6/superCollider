@@ -1411,7 +1411,8 @@ timeScale: tS,	doneAction:2);
 
 		//input
 
-			Array.fill(4, input),
+			input
+		/*	Array.fill(4, input)*/,
 
     1294.5373184/*659.25*//*1760*/     *  /*[1, 2, 4, 8] */ [8,16,32],
 
@@ -1639,7 +1640,7 @@ SynthDef(\EQHP96, {|out=0, in, val, quant, gain,frq=100, vol =0.05, val2,quant2,
 
 SynthDef(\EQHP10, {|out=0, in, val, quant, gain, val2, quant2, gain2 frq=100, vol =1| Out.ar(out,
 
-		HPF.ar(HPF.ar(HPF.ar(HPF.ar(HPF.ar(HPF.ar(HPF.ar(HPF.ar(BPeakEQ.ar(BPeakEQ.ar(In.ar(in, 10),val2,quant2, gain2)    ,val,quant, gain)   ,frq),frq),frq),frq),frq),frq),frq),frq)* vol)};).add;
+		HPF.ar(HPF.ar(HPF.ar(HPF.ar(HPF.ar(HPF.ar(HPF.ar(HPF.ar(HPF.ar(HPF.ar(/*BPeakEQ.ar(BPeakEQ.ar(*/In.ar(in, 10)/*,val2,quant2, gain2)    ,val,quant, gain) */  ,frq),frq),frq),frq),frq),frq),frq),frq),frq),frq)* vol)};).add;
 
 	"compression init".postln;
 
@@ -2251,10 +2252,12 @@ Ppar([
 Pbind(\instrument, \snare,\carHz, 41.2 ,\atk, 0.00502929687,\rel, 0.0968,\rel2, 0.7744,\dur, Pseq([1/2], 1),\amp,1, \crv1,(-8),\crv2,(-7)   ,\out,~snareEQ, \atk,t.beatDur * 0.02, \atk2,Pkey(\atk),  \da1,0    ),
 
 
-	Pbind(\instrument, \percussion2 ,\dur,Pseq([1/4],1 ),\carHz, 525.12070612224.rrand(0.01),\modHz,11899.3343179398.rrand(0.001),\modAmp, 0.12875.rrand(0.000001).postln ,\amp,1,\rel,Pseq([1/4],inf),\rel2,Pseq([1/16],inf),\latch,8000,\stereoL, 0.00555, \crv1,  (-14.4).rrand(-1), \crv1b,(-4), \mulMod, 1691,\out,   ~comBusCymb),
+		Pbind(\instrument, \percussion2 ,\dur,Pseq([1/4],1 ),\carHz, 525.12070612224.rrand(0.01),\modHz,11899.3343179398.rrand(0.001),\modAmp, 0.12875.rrand(0.000001).postln ,\amp,1,\rel,0.3872/*Pseq([1/4],inf)*/,\rel2,0.0968
+			/*Pseq([1/16],inf)*/,\latch,8000,\stereoL, 0.00555, \crv1,  (-14.4).rrand(-1), \crv1b,(-4), \mulMod, 1691,\dA1,0, \dA2,0,
+			\out, ~comBusCymb),
 
 
-Pbind(\instrument,\percussion2,\dur,Pseq([1/4], 1),\atk, 0,\rel,0.04840,\rel2,0.02420,\amp,1, \crv1, (-3), \crv1b, (-5), \modHz, exprand(500,10000).postln, \mulMod, rrand(100, 500).postln, \carHz, exprand(20,10000), \modAmp, 0.12875, \latch, 18500, \stereoR, 0.007,\out,~comBusHat),
+		Pbind(\instrument,\percussion2,\dur,Pseq([1/4], 1),\atk, 0,\rel,0.0968,\rel2,0.02420,\amp,1, \crv1, (-3), \crv1b, (-5), \modHz, exprand(500,10000).postln, \mulMod, rrand(100, 500).postln, \carHz, exprand(20,10000), \modAmp, 0.12875, \latch, 18500, \stereoR, 0.007,\dA1,2, \dA2,0,\out,~comBusHat),
 
 
 
@@ -2279,6 +2282,8 @@ Pbind(\instrument,\recLoop,\buf,~snare,\recording,1, \in,~snareEQ,\group,~recGrp
 
 )
 
+
+
 (
 ~eqGrp=Group.new;
 ~compGrp=Group.after(~eqGrp);
@@ -2288,7 +2293,7 @@ Pbind(\instrument,\recLoop,\buf,~snare,\recording,1, \in,~snareEQ,\group,~recGrp
 )
 
 (
-Ppar([~hat2,~kick,Pbind(\instrument ,	\EQ2,\dur, inf, \in,~kickHatEq, \out,0,\group, ~eqGrp, \val, 659.255, \quant,0.8, \gain ,(-27)),
+Ppar([/*~hat2,*/~kick,Pbind(\instrument ,	\EQ2,\dur, inf, \in,~kickHatEq, \out,0,\group, ~eqGrp, \val, 659.255, \quant,0.8, \gain ,(-27)),
 	Pbind(\instrument,\recLoop,\buf,~k2,\recording,1, \in,0,\group,~recGrp2,\dur,inf)
 ],1).play(t) ;
 )
@@ -2393,7 +2398,7 @@ Pbind(\instrument, \pan2, \in,~kbToPan2,\out,0 ,\group,~stereoGrp,\dur, inf),
 ~kb1.plot
 
 	~comp=Synth(\comp, [\ctrl, ~kbus ],~compGrp);
-~comp.set(\thr,0.92 ,\sB, 1.16,\sA, 1/4,\atk ,0.0484, \rel ,0.3872, \gain,1,\in, ~comFuzz,\out,~kbToPan2);
+~comp.set(\thr,0.12 ,\sB, 1.016,\sA, 1/4,\atk ,0.0242, \rel ,0.0968, \gain,1,\in, ~comFuzz,\out,~kbToPan2);
 
 (
 Ppar([
@@ -2418,7 +2423,7 @@ Pseq([
 Pseq([Pbind(\instrument, \wNoise,\dur,Pseq([1/4],1),\dec ,Pkey(\dur),\amp,(-12),\tS, 0.39550810372374,\type, \rest  ),
 
 		Pbind( \instrument, \playBufXG, \impulse, 0.003 ,\dur,    Pseq([1/4],3), \tS,  0.39550810372374,
-	\start,100,
+	\start,120,
 			\buf,~b3,\out,~comFuzz ,\loopy,0, \decT,0.8,
 			\subsT ,Pseq([0,0.09,0.18],inf)
 	)

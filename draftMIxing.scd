@@ -14,6 +14,8 @@
 ~kb=Pbind(\instrument, \playBufS, \dur,  Pseq([1/1],inf), \tS,  0.39550810372374,\buf,~kb1).play(t)
 ~kb.stop
 ~boost.play(t)
+
+Ppar([~boost,~kb],1).play(t)
 (~boost=Ppar([
 
 	//pasrt3d

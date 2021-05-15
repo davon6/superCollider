@@ -565,12 +565,10 @@ Synth(\playB10,[\buf, ~leTout,\out,~finGran ]);
 
 
 
-
+// ~mix32.free
 
 ~mix32=	Synth( \limiter10toMixer,[\c32,1,\dur, inf, \in,~rythmLimit,\out,~rythmComp, \gain,22,], ~limitGrp);
-~mix32.set(\gain,17);
-
-
+~mix32.set(\gain,10);
 
 //PERCUSSIONS
 // ~eq31.free
@@ -609,6 +607,15 @@ Synth(\playB10,[\buf, ~leTout,\out,~finGran ]);
 ~mix34= Synth(\limitertoMixer,[\c34,1,\in, ~snareLimit,\gain,40,\out,~toPan2],~limitGrp);
 ~mix34.set(\gain,42);
 ~pan34=Synth( \pan2,[\in, ~toPan2,\out, ~toKbGate], ~stereoGrp);
+
+
+
+
+
+
+
+
+
 
 
 
@@ -675,12 +682,12 @@ Synth(\playB10,[\buf, ~leTout,\out,~finGran ]);
 
 
 ~compUlti= Synth(\comp10,[\ctrl, ~snBus,],~compGrp5);
-~compUlti.set(\thr,0.84 ,\sB, 1.1,\sA, 1/2,\atk ,0.0242, \rel ,0.3872 ,\in, ~toCom, \out,~eqBus10);
-
+~compUlti.set(\thr,0.84 ,\sB, 1.1,\sA, 1/2,\atk ,0.0484, \rel ,0.3872 ,\in, ~toCom, \out,~eqBus10);
+// ~compUlti.set(\out,0)
 
 /*~compUlti.set(\out,~eqBus10)*/
 
 ~mixingUlti = Synth(\EQHP10, [\in, ~eqBus10, \frq, 100,\vol, 2.2], ~eqGrp3);
- ~mixingUlti.set(\vol, 1.084);//0.22
+ ~mixingUlti.set(\vol, 1.114);//0.22
 
 				// ~mixingUlti.free
