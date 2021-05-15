@@ -239,6 +239,8 @@ s.sync;
 	~snareComp= Bus.audio(s,1);
 	~buildUpG=Bus.audio(s,1);
 
+	~flopped=Bus.audio(s,10);
+
 	//WATCH OUT MIGHT BE NEEDED
 
 	/*~part2ToRev = Bus.audio(s,1);
@@ -273,7 +275,7 @@ s.sync;
 	~phaseBus = Bus.audio(s,1);
 	~delToStereo= Bus.audio(s,2);
 	~bangLimit= Bus.audio(s,10);
-	~slideBusToStereo= Bus.audio(s,2);
+	~slideBusToStereo= Bus.audio(s,1);
 	~bgBus = Bus.audio(s,2);
 	~part2Slide2= Bus.audio(s,1);
 	~part2SEq2= Bus.audio(s,1);
@@ -286,6 +288,15 @@ s.sync;
 	~toExtraFx=Bus.audio(s,10);
 	~main1GToG= Bus.audio(s,1);
 	~percGate=Bus.audio(s,10);
+
+
+	~hitEq= Bus.audio(s,1);
+	~hitRev= Bus.audio(s,1);
+	~hitComp= Bus.audio(s,1);
+	~hitLimit= Bus.audio(s,1);
+	~hitStereo= Bus.audio(s,1);
+
+	~tofinalRythm= Bus.audio(s,10);
 
 	~tam= Bus.audio(s,2);
 	~tamFil= Bus.audio(s,2);
@@ -543,9 +554,9 @@ s.sync;
 	~ptrBus23=Bus.audio(s,1); ~ptrBus33=Bus.audio(s,1);
 	~stereoBus14=  Bus.audio(s,2);  ~limitFuzz4=  Bus.audio(s,2);~comFuzz4=  Bus.audio(s,2);~reverbBus4=  Bus.audio(s,1);
 	~slideBus2=  Bus.audio(s,1);
-	~slideBus=  Bus.audio(s,2);  ~slideBusToLimit=  Bus.audio(s,2);
+	~slideBus=  Bus.audio(s,1);  ~slideBusToLimit=  Bus.audio(s,1);
 	~slideBusToLimit2=  Bus.audio(s,1);
-	~slideEq=  Bus.audio(s,2);
+	~slideEq=  Bus.audio(s,1);
 	~slideEq2=  Bus.audio(s,1);
 	~outTolimit=  Bus.audio(s,3);
 	~snareEQ=  Bus.audio(s,1);
@@ -847,8 +858,8 @@ SynthDef(\kick, {
 		);
 
 		env =EnvGen.ar(
-	Env([0.8 , 0.2, 0.4,    0.4,0.4,0],
-		[0.0087, 0.01, 0,0.06,0.02],[-6,-20,5,5,-1]),doneAction:2);
+	Env([0.1 , 0.1, 0.4,    0.4,0.4,0],
+		[0.0087, 0.01, 0,0.06,0.02],[-15,-20,5,5,-1]),doneAction:2);
 
 
 
@@ -858,6 +869,7 @@ SynthDef(\kick, {
 		sig = Pan2.ar(sig);
 		Out.ar(out, sig);
 	}).add;
+
 
 
 
@@ -1038,22 +1050,25 @@ SynthDef(\kick, {
 
 	SynthDef(\wNoise, {
 
-		arg in=0, mix=0.2, amp = (-20), dec =0,sub2 =3, valStart= 10000,valEnd =100, wFil=1, pan =0, durF =3,out =0,atk=0, tS=1;
+		arg in=0, mix=0.2, amp = (-20), dec =0,sub2 =3, valStart= 10000,valEnd =100, wFil=1, pan =0, durF =3,out =0,atk=0, tS=1,dA=0;
 	var env,dry, wet, sig,env2, ori;
 
 		env = EnvGen.kr(Env([0,amp.dbamp,0],[atk,dec,0],[3,-2]),timeScale: tS,doneAction:2);
 
 	sig =  SelectX.ar(wFil,[
-			LPF.ar(WhiteNoise.ar(env),XLine.kr(valStart,valEnd,durF)),
+			LPF.ar(WhiteNoise.ar(env),XLine.kr(valStart,valEnd,durF,doneAction: dA)),
 
 			HPF.ar(WhiteNoise.ar(env),XLine.kr(valStart,valEnd,durF))]);
 
 /*sig = Pan2.ar( sig , pan);*///0 was pan
 
-	Out.ar(out,Pan2.ar(  sig , pan)   /*.dup*/ *amp.dbamp;//* env2 //
+	Out.ar(out, sig   /*.dup*/ *amp.dbamp;//* env2 //
 
     )
 }).add;
+
+
+
 "side events init".postln;
 
 
@@ -1744,6 +1759,18 @@ SynthDef(\EQHP10, {|out=0, in, val, quant, gain, val2, quant2, gain2 frq=100, vo
 	},spread,level,center))}).add;
 
 
+	SynthDef(\stereoO10,{|out=0, in, spread=0, level=1, center=0.0,dlt1=0.3,dlt2=0.4,decT=2, mxDel=1|
+
+		Out.ar(out,Splay.ar({
+
+			CombN.ar(
+				Mix.ar(In.ar(in, 10).flop)
+
+				, mxDel, [dlt1,dlt2], decT)
+
+	},spread,level,center))}).add;
+
+
 /*	SynthDef(\stereo10,{|out=0, in, spread=0, level=1, center=0.0,dur,atkT=0,crvA=0,tS=1|
 
 		Out.ar(out,
@@ -2184,7 +2211,7 @@ s.sync;
 		\rel2, t.beatDur/4 * 0.0012,
 		\atkcrv, -2,
 		\relcrv, -2,\relcrv2, -4, \relcrv3, -6
-		,\amp,(-7/*-1*/)/*(-13)*/,\out,~bassEq
+		,\amp,(-6/*-1*/)/*(-13)*/,\out,~bassEq
 	);
 
 		~bassC = Pbind(\instrument, \bass,
@@ -2472,4 +2499,12 @@ Pbind( \instrument, \gran, \impulse, 0.003 ,\dur, Pseq([1/4],3), \tS,  0.3955081
 			,\subsT ,Pseq([0,0.2,0.4],inf)
 	/* \decT,0.8,\subsT ,Pseq([0,0.05,0.1],inf)*/).play(t)
 Pbind(\instrument, \pan2, \in,~kbToPan2,\out,0 ,\group,~stereoGrp,\dur, inf)
+
+
+
+Synth(\playBuf2,[\buf,~elect,\start,4000000])
+Synth(\playBuf2,[\buf,~elect,\start,5000000])
+
+Synth(\playBuf2,[\buf,~elect,\start,10000000])
+~elect= Buffer.read(s,"/Users/davidmignot/Downloads/10-Electrypnose_-_Give_Me_Some_Fun.wav");
 

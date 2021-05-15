@@ -117,7 +117,7 @@ Ppar([
 	Pbind(\instrument, \playBufS, \dur,  Pseq([1/1],64), \tS,  0.39550810372374,\buf,~kb2),
 	~part3c],1),Pbind(\instrument, \playBufS, \dur,  Pseq([1/1],8), \tS,  0.39550810372374,\buf,~kb2)],1).play(t)*/
 
-
+//maybe peu partially merge with  ~part3d
 (
 ~part3c=Ppar([
 
@@ -212,7 +212,7 @@ Ppar([
 ],1));
 
 (
-~part3e= Ppar([
+~part3e=Pseq([ Ppar([
 
 
 
@@ -237,11 +237,44 @@ Pbind(\instrument, \playBuf10, \buf ,~leTout2,\out,~toExtraFx, \start,Pfunc({~le
 	,\loopy,0,\tS,0.39550810372374,\dur,Pseq([1/1],2)),
 
 Pbind(\instrument, \playBuf10, \buf ,~leTout2,\out,~toExtraFx, \start,Pfunc({~leTout2.numFrames/256* (220.rand)})
-	,\loopy,0,\tS,0.39550810372374,\dur,Pseq([1/1],2),\type,\rest),
+	,\loopy,0,\tS,0.39550810372374,\dur,Pseq([2/1],1)),
 
 Pbind(\instrument, \playBuf10, \buf ,~leTout2,\out,~toExtraFx, \start,Pfunc({~leTout2.numFrames/256* (220.rand)})
 	,\loopy,0,\tS,0.39550810372374,\dur,Pseq([1/2],8))
 
 
-],1)],4));
+],3),],1),
+
+Ppar([
+
+
+
+
+	Pbind(\instrument, \gate,\type,\rest,     \dur,  Pseq([5/1],1),\tS,  0.39550810372374
+		,\buf, Pfunc({~ouai=~leTout2.numFrames/256* (220.rand)})),
+
+
+
+Pseq([
+		Pbind(\instrument, \playBuf10, \buf ,~leTout2,\out,~toExtraFx, \start,Pfunc({~ouai})
+	,\loopy,0,\tS,0.39550810372374,\dur,Pseq([1/1],2)),
+
+Pbind(\instrument, \playBuf10, \buf ,~leTout2,\out,~toExtraFx, \start,Pfunc({~leTout2.numFrames/256* (220.rand)})
+	,\loopy,0,\tS,0.39550810372374,\dur,Pseq([1/1],2),\type,\rest),
+
+Pbind(\instrument, \playBuf10, \buf ,~leTout2,\out,~toExtraFx, \start,Pfunc({~leTout2.numFrames/256* (220.rand)})
+	,\loopy,0,\tS,0.39550810372374,\dur,Pseq([1/2],8)),
+
+
+		Pbind(\instrument, \playBuf10, \buf ,~leTout2,\out,~toExtraFx, \start,Pfunc({~ouai})
+	,\loopy,0,\tS,0.39550810372374,\dur,Pseq([1/1],2)),
+
+Pbind(\instrument, \playBuf10, \buf ,~leTout2,\out,~toExtraFx, \start,Pfunc({~leTout2.numFrames/256* (220.rand)})
+	,\loopy,0,\tS,0.39550810372374,\dur,Pseq([2/1],1)),
+
+Pbind(\instrument, \playBuf10, \buf ,~leTout2,\out,~toExtraFx, \start,Pfunc({~leTout2.numFrames/256* (220.rand)})
+	,\loopy,0,\tS,0.39550810372374,\dur,Pseq([1/2],8))
+
+
+],1),],1)],1));
 
