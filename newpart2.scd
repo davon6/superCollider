@@ -56,9 +56,9 @@ Ppar([
 
 	Pbind(\instrument, \kick,\dur, Pseq([1/1],inf),\amp,(-10.2),\out,~kbus),
 
-	Pseq([Pbindf(~hat2,\out,~kickHatEq2)],inf),
+	/*Pseq([Pbindf(~hat2,\out,~kickHatEq2)],inf),
 		Pbind(\instrument ,	\EQ2,\dur, inf, \in,~kickHatEq2, \out,~kbus,\group, ~eqGrp, \val, 659.255, \quant,1, \gain ,(-30)),
-
+*/
 
 /*	Pbind(\instrument, \snare,\carHz, 41.2 ,\type, Pseq([\rest ,\rest,\note,\rest], inf),\atk, 0.00502929687,\rel, 0.0968,\rel2, 0.3872,\dur, Pseq([1/2], inf),\amp,(-15), \crv1,(-8),\crv2,(-7)   ,\out,~dumSnaEq),*/
 
@@ -111,6 +111,7 @@ Pbind(\instrument, \lfo13,\val,(~hzQbeat/4),\out,~bus2 ,\dur,999,\ph,0, \rL,200,
 
 ~kb,~hitX,~pedonk,~fx,~justHit,
 
+	//if below repeat maybe change to Pfunc
 
 	Pbind(\instrument, \playBuf10, \buf ,~leTout,\out,~toGate10, \start,
 

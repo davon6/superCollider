@@ -743,7 +743,7 @@ s.sync;
 
 	halfBeat = t.beatDur * 0.5;
 
-		shap = EnvGen.ar(Env([vl1,vl2],[halfBeat,halfBeat],6),timeScale: tS,doneAction:dA1);
+		shap = EnvGen.ar(Env([vl1,vl2],[halfBeat,halfBeat],4),timeScale: tS,doneAction:dA1);
 
 	Out.ar(out, shap);
 
@@ -853,13 +853,13 @@ SynthDef(\kick, {
 			Env(
 				[5178.15,1539.47,114,26,0,0],
 				[0.00188,0.008,0.132,0,0.4],
-					[-3,-6,-2]
+					[-7,-6,-2]
 			)
 		);
 
 		env =EnvGen.ar(
-	Env([0.1 , 0.1, 0.4,    0.4,0.4,0],
-		[0.0087, 0.01, 0,0.06,0.02],[-15,-20,5,5,-1]),doneAction:2);
+	Env([ 0.089 , 0.1, 0.36,    0.36,0.36,0],
+		[  0.0087, 0.01, 0,0.05,0.02],[-15,-20,5,5,-1]),doneAction:2);
 
 
 
@@ -869,9 +869,6 @@ SynthDef(\kick, {
 		sig = Pan2.ar(sig);
 		Out.ar(out, sig);
 	}).add;
-
-
-
 
 	/*SynthDef(\bass,{
 		arg freq=41.2, dure=1, amp=0.5,
@@ -937,7 +934,7 @@ SynthDef(\kick, {
 	SynthDef(\bass,{
 		arg freq=41.2, dure=1, amp=0.5,
 		atkcrv=1, relcrv=5,
-		atk=0, rel=0.1, lpf=100, out = 0, bus, dur,cho=0,rel2,relcrv2,envF,relcrv3,vlDec=0.6,vlDecF=0 ;
+		atk=0, rel=0.1, lpf=100, out = 0, bus, dur,cho=0,rel2,relcrv2,envF,relcrv3,vlDec=0.6,vlDecF=0,vlDecFx=1080 ;
 
 		var sig, env, lvlBa;
 
@@ -952,7 +949,7 @@ SynthDef(\kick, {
 
 		envF = EnvGen.kr(
 			Env(
-				[0,1080,vlDecF,0],
+				[0,vlDecFx,vlDecF,0],
 				[atk,rel/*/4*/,rel2],
 				[atkcrv,relcrv3,relcrv2]
 			),
@@ -960,7 +957,7 @@ SynthDef(\kick, {
 		);
 
 
-		sig =VarSaw.ar(41.2,mul: -1,add: -0.4).lincurve(-1,1,-1,1,-7);
+		sig =Saw.ar(41.2,mul: -1,add: -0.4).lincurve(-1,1,-1,1,-7);
 
 
 		sig =
@@ -2197,7 +2194,7 @@ SynthDef(\sequ,{|value, dur, in=0, out=0, vlAtk=0, vlDec=1,vlSub=1,vlSub2=1, vlR
 
 s.sync;
 
-	~kick =	Pbind(\instrument, \kick,\dur, Pseq([1/1],1),\amp,(1/*-10.2*/),\out,0);
+	~kick =	Pbind(\instrument, \kick,\dur, Pseq([1/1],1),\amp,(2/*-10.2*/),\out,0);
 
 	~bassShap = Pbind(\instrument, \shap, \dur,Pseq([1/1],1),\dA1,2,\out,~bassShapB, \tS, 0.39550810372374);
 
@@ -2209,9 +2206,11 @@ s.sync;
 		\atk, 0/*t.beatDur/4 * 0.01*/,
 		\rel, t.beatDur*4 * 0.996,/*\rel, t.beatDur/4 * 0.98,*/
 		\rel2, t.beatDur/4 * 0.0012,
+
+		/*\vlDecFx,2000,\vlDecF,400,*/
 		\atkcrv, -2,
 		\relcrv, -2,\relcrv2, -4, \relcrv3, -6
-		,\amp,(-6/*-1*/)/*(-13)*/,\out,~bassEq
+		,\amp,(-2/*-1*/)/*(-13)*/,\out,~bassEq
 	);
 
 		~bassC = Pbind(\instrument, \bass,
@@ -2341,9 +2340,16 @@ Ppar([
 	~bassShap,       ~bassZ,
 
 	Pbind(\instrument ,	\EQHP2,\dur, inf, \in,~bassEq, \out,0,\group, ~eqGrp, \frq, 20.6,\vol,1,
-		\val,659.255, \quant,0.8, \gain,(-35),
+	/*	\val,659.255, \quant,0.8, \gain,(-35),
 \val2,1318.51, \quant2,1.2, \gain2,(-20),
 			\val3,2637.02, \quant3,1, \gain3,(-30),
+
+
+		\val5,164.81375, \quant5,1, \gain5,(-12)*/
+
+			\val,659.255, \quant,0.8, \gain,(-32),
+\val2,1318.51, \quant2,1.2, \gain2,(-20),
+			\val3,2637.02, \quant3,1, \gain3,(-10),
 
 
 		\val5,164.81375, \quant5,1, \gain5,(-12)
@@ -2392,8 +2398,14 @@ Pbind(\instrument, \playBuf, \impulse, 0.003 ,\dur,    Pseq([1/1],inf), \tS,  0.
 
 ~kb1.play
 
+~comp=Synth(\comp, [\ctrl, ~kbus ],~compGrp);
+~comp.set(\thr,0.42 ,\sB, 1.03,\sA, 1/8,\atk ,0.0242, \rel ,0.0968, \gain,1,\in, ~comFuzz,\out,~kbToPan2);
+
+
 (
 Ppar([
+
+	Pbind(\instrument, \kick,\dur, Pseq([1/1],inf),\amp,(-10.2),\out,~kbus),
 
 	Pbind(\instrument,\recLoopS,\buf,~kb1,\recording,1, \in,0,\group,~recGrp2,\dur,inf),
 Pseq([
@@ -2406,7 +2418,7 @@ Pseq([Pbind(\instrument, \wNoise,\dur,Pseq([1/4],1),\dec ,Pkey(\dur),\amp,(-12),
 
 		Pbind( \instrument, \playBufXG, \impulse, 0.003 ,\dur,    Pseq([1/4],3), \tS,  0.39550810372374,
 	\start,100,
-			\buf,~bass,\out, ~kbToPan2,\loopy,0, \decT,0.8,
+			\buf,~bass,\out, ~comFuzz,\loopy,0, \decT,0.8,
 			\subsT ,Pseq([0,0.09,0.18],inf)
 	)
 ],inf),
@@ -2425,7 +2437,7 @@ Pbind(\instrument, \pan2, \in,~kbToPan2,\out,0 ,\group,~stereoGrp,\dur, inf),
 ~kb1.plot
 
 	~comp=Synth(\comp, [\ctrl, ~kbus ],~compGrp);
-~comp.set(\thr,0.12 ,\sB, 1.016,\sA, 1/4,\atk ,0.0242, \rel ,0.0968, \gain,1,\in, ~comFuzz,\out,~kbToPan2);
+~comp.set(\thr,0.42 ,\sB, 1.03,\sA, 1/8,\atk ,0.0242, \rel ,0.0968, \gain,1,\in, ~comFuzz,\out,~kbToPan2);
 
 (
 Ppar([
@@ -2433,26 +2445,26 @@ Ppar([
 
 	Pbind(\instrument, \kick,\dur, Pseq([1/1],inf),\amp,(-10.2),\out,~kbus),
 
-	Pseq([Pbindf(~hat2,\out,~kickHatEq2)],inf),
-		Pbind(\instrument ,	\EQ2,\dur, inf, \in,~kickHatEq2, \out,~kbus,\group, ~eqGrp, \val, 659.255, \quant,1, \gain ,(-30)),
+	/*Pseq([Pbindf(~hat2,\out,~kickHatEq2)],inf),
+		Pbind(\instrument ,	\EQ2,\dur, inf, \in,~kickHatEq2, \out,~kbus,\group, ~eqGrp, \val, 659.255, \quant,1, \gain ,(-30)),*/
 
-
+	  Pseq([~kick],inf),
 
 
 
 	Pbind(\instrument,\recLoopS,\buf,~kb2,\recording,1, \in,0,\group,~recGrp2,\dur,inf),
-Pseq([
+/*Pseq([
 	Pbind(\instrument, \playBuf, \impulse, 0.003 ,\dur,    Pseq([1/2],1), \tS,  0.39550810372374,\buf,~k2,\out, ~kToPan,\loopy,0,\start,0,\tS, 0.39550810372374),
 
 		/*Pbindf(~kick ,\dur,    Pseq([1/2],1),\out,~kbToPan2),*/
-		Pbind(\instrument, \wNoise,\dur,Pseq([1/2],1),\dec ,Pkey(\dur),\amp,(-12),\tS, 0.39550810372374,\type, \rest  )],inf),
+		Pbind(\instrument, \wNoise,\dur,Pseq([1/2],1),\dec ,Pkey(\dur),\amp,(-12),\tS, 0.39550810372374,\type, \rest  )],inf),*/
 
 Pseq([Pbind(\instrument, \wNoise,\dur,Pseq([1/4],1),\dec ,Pkey(\dur),\amp,(-12),\tS, 0.39550810372374,\type, \rest  ),
 
 		Pbind( \instrument, \playBufXG, \impulse, 0.003 ,\dur,    Pseq([1/4],3), \tS,  0.39550810372374,
 	\start,120,
-			\buf,~b3,\out,~comFuzz ,\loopy,0, \decT,0.8,
-			\subsT ,Pseq([0,0.09,0.18],inf)
+			\buf,~b3,\out,~comFuzz ,\loopy,0, \decT,0.7,
+			\subsT ,Pseq([0.075,0.15,0.3],inf)
 	)
 ],inf),
 
