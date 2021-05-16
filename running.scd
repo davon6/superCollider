@@ -591,7 +591,7 @@ s.sync;
 	~part2RiComp2=  Bus.audio(s,10);
 	~part2RiLimit=  Bus.audio(s,2);
 	~part2RiStereo=  Bus.audio(s,2);
-	~fusible2=  Bus.audio(s,2);
+	~fusible2=  Bus.audio(s,1);
 	~gateBou=  Bus.audio(s,1);
 	~flanToFilter2=  Bus.audio(s,1);
 	s.sync;
@@ -1641,7 +1641,7 @@ FreeVerb.ar(
 			BPeakEQ.ar(
 		BPeakEQ.ar(	BPeakEQ.ar(In.ar(in, 1),val,quant, gain),val2,quant2, gain2)
 				,valD,quantD,
-				Amplitude.ar(In.ar(ctrl,2).linlin(0, 0.008, 0, -8)))
+				Amplitude.ar(In.ar(ctrl,1).linlin(0, 0.005, 0, -8)))
 
 			,
 		frq),frq),frq),frq),frq),frq),frq),frq)* vol)};).add;
@@ -2384,7 +2384,7 @@ Ppar([
 
 			\val,659.255, \quant,1.1, \gain,(-15),
 \val2,1318.51, \quant2,2, \gain2,(-18),
-		\val3,2637.02, \quant3,1, \gain3,(-25),
+		\val3,2637.02, \quant3,1, \gain3,(-17),
 
 
 
@@ -2475,7 +2475,7 @@ Pbind(\instrument, \pan2, \in,~kbToPan2,\out,0 ,\group,~stereoGrp,\dur, inf),
 Pseq([~kick],10).play(t)
 
 	~comp=Synth(\comp, [\ctrl, ~kbus ],~compGrp);
-~comp.set(\thr,0.82 ,\sB, 1.025,\sA, 1/8,\atk ,0.0242, \rel ,0.0968, \gain,1,\in, ~comFuzz,\out,~kbToPan2);
+~comp.set(\thr,0.61 ,\sB, 1.026,\sA, 1/2,\atk ,0.0242, \rel ,0.0968, \gain,1,\in, ~comFuzz,\out,~kbToPan2);
 
 (
 Ppar([
@@ -2501,8 +2501,8 @@ Pseq([Pbind(\instrument, \wNoise,\dur,Pseq([1/4],1),\dec ,Pkey(\dur),\amp,(-12),
 
 		Pbind( \instrument, \playBufXG, \impulse, 0.003 ,\dur,    Pseq([1/4],3), \tS,  0.39550810372374,
 	\start,120,
-			\buf,~b3,\out,~comFuzz ,\loopy,0, \decT,0.7,
-			\subsT ,Pseq([0.07,0.14,0.28],inf)
+			\buf,~b3,\out,~comFuzz ,\loopy,0, \decT,0.6,
+			\subsT ,Pseq([0.1,0.3,0.4],inf)
 	)
 ],inf),
 
