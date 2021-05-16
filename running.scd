@@ -856,7 +856,7 @@ SynthDef(\kick, {
 			Env(
 				[5178.15,1539.47,114,26,0,0],
 				[0.00188,0.008,0.132,0,0.4],
-					[-7.7,-6,-2]
+					[-6.8,-6,-2]
 			)
 		);
 
@@ -1641,7 +1641,7 @@ FreeVerb.ar(
 			BPeakEQ.ar(
 		BPeakEQ.ar(	BPeakEQ.ar(In.ar(in, 1),val,quant, gain),val2,quant2, gain2)
 				,valD,quantD,
-				Amplitude.ar(In.ar(ctrl,2).linlin(0, 0.008, 0, -8)).poll)
+				Amplitude.ar(In.ar(ctrl,2).linlin(0, 0.008, 0, -8)))
 
 			,
 		frq),frq),frq),frq),frq),frq),frq),frq)* vol)};).add;
@@ -2219,10 +2219,11 @@ SynthDef(\sequ,{|value, dur, in=0, out=0, vlAtk=0, vlDec=1,vlSub=1,vlSub2=1, vlR
 
 s.sync;
 
-	~kick =	Pbind(\instrument, \kick,\dur, Pseq([1/1],1),\amp,(1.9/*-10.2*/),\out,0);
+	~kick =	Pbind(\instrument, \kick,\dur, Pseq([1/1],1),\amp,(2/*-10.2*/),\out,0);
 
 	~bassShap = Pbind(\instrument, \shap, \dur,Pseq([1/1],1),\dA1,2,\out,~bassShapB, \tS, 0.39550810372374);
 
+	~bassShap2 = Pbind(\instrument, \shap, \dur,Pseq([1/1],inf),\dA1,2,\out,~bassShapB, \tS, 0.39550810372374);
 	~bassZ = Pbind(\instrument, \bass,
 	// \type, Pseq([\note, \note, \note, \note], inf),
 	// \cho, Pseq([0,0.00378125*4,0.001890625*4,0],inf),
@@ -2375,19 +2376,19 @@ Ppar([
 		/*\vlDecFx,2000,\vlDecF,400,*/
 		\atkcrv, -2,
 		\relcrv, -2,\relcrv2, -4, \relcrv3, -6
-		,\amp,(1/*-1*/)/*(-13)*/,\out,~bassEq
+		,\amp,(-5/*-1*/)/*(-13)*/,\out,~bassEq
 	),
 
 	Pbind(\instrument ,\EQHP2/*	\EQHP2*/,\dur, inf, \in,~bassEq, \out,0,\group, ~eqGrp, \frq, 20.6,\vol,1,
 
 
-			\val,659.255, \quant,0.8, \gain,(-32),
-\val2,1318.51, \quant2,1.2, \gain2,(-20),
-		\val3,2637.02, \quant3,1, \gain3,(-10),
+			\val,659.255, \quant,1.1, \gain,(-15),
+\val2,1318.51, \quant2,2, \gain2,(-18),
+		\val3,2637.02, \quant3,1, \gain3,(-25),
 
 
 
-		\val5,164.81375, \quant5,1, \gain5,(-20)
+		\val5,164.81375, \quant5,1, \gain5,(-14)
 
 
 	),
@@ -2415,7 +2416,7 @@ Ppar([
 
 
 
-	\val5,164.81375, \quant5,1, \gain5,(-12)
+	\val5,164.81375, \quant5,1, \gain5,(-8)
 
 	),
 
@@ -2474,18 +2475,18 @@ Pbind(\instrument, \pan2, \in,~kbToPan2,\out,0 ,\group,~stereoGrp,\dur, inf),
 Pseq([~kick],10).play(t)
 
 	~comp=Synth(\comp, [\ctrl, ~kbus ],~compGrp);
-~comp.set(\thr,0.42 ,\sB, 1.03,\sA, 1/8,\atk ,0.0242, \rel ,0.0968, \gain,1,\in, ~comFuzz,\out,~kbToPan2);
+~comp.set(\thr,0.82 ,\sB, 1.025,\sA, 1/8,\atk ,0.0242, \rel ,0.0968, \gain,1,\in, ~comFuzz,\out,~kbToPan2);
 
 (
 Ppar([
 
 
-	Pbind(\instrument, \kick,\dur, Pseq([1/1],inf),\amp,(-10.2),\out,~kbus),
+	Pbind(\instrument, \kick,\dur, Pseq([1/1],inf),\amp,(-5.2),\out,~kbus),
 
 	/*Pseq([Pbindf(~hat2,\out,~kickHatEq2)],inf),
 		Pbind(\instrument ,	\EQ2,\dur, inf, \in,~kickHatEq2, \out,~kbus,\group, ~eqGrp, \val, 659.255, \quant,1, \gain ,(-30)),*/
 
- Pseq([~kick],inf),
+	Pseq([~kick],inf),
 
 
 
@@ -2501,7 +2502,7 @@ Pseq([Pbind(\instrument, \wNoise,\dur,Pseq([1/4],1),\dec ,Pkey(\dur),\amp,(-12),
 		Pbind( \instrument, \playBufXG, \impulse, 0.003 ,\dur,    Pseq([1/4],3), \tS,  0.39550810372374,
 	\start,120,
 			\buf,~b3,\out,~comFuzz ,\loopy,0, \decT,0.7,
-			\subsT ,Pseq([0.075,0.15,0.3],inf)
+			\subsT ,Pseq([0.07,0.14,0.28],inf)
 	)
 ],inf),
 
@@ -2556,4 +2557,48 @@ Synth(\playBuf2,[\buf,~elect,\start,5000000])
 
 Synth(\playBuf2,[\buf,~elect,\start,10000000])
 ~elect= Buffer.read(s,"/Users/davidmignot/Downloads/10-Electrypnose_-_Give_Me_Some_Fun.wav");
+
+
+
+
+(
+~eqGrp= Group.new;
+~compGrp= Group.after(~eqGrp);
+~stereoGrp= Group.after(~compGrp);
+
+
+~eq=Synth(\EQHP2, [\frq, 10.3,\vol,1, \in,~bassEq, \out,~comFuzz,],~eqGrp);
+
+
+~eq.set(\val,659.255, \quant,1.1, \gain,(-10),
+	\val2,1318.51, \quant2,2, \gain2,(-10),
+	\val3,2637.02, \quant3,1, \gain3,(-25),
+	\val5,164.81375, \quant5,1.5, \gain5,(-8));
+
+~comp=Synth(\comp, [\ctrl, ~kbus ],~compGrp);
+~comp.set(\thr,0.42 ,\sB, 1.03,\sA, 1/8,\atk ,0.0242, \rel ,0.0968, \gain,1,\in, ~comFuzz,\out,~kbToPan2);
+
+
+
+(Ppar([
+
+
+	Pbind(\instrument, \kick,\dur, Pseq([1/1],inf),\amp,(-5.2),\out,~kbus),
+
+	Pseq([~kick],inf),
+
+~bassShap2,
+	Pbind(\instrument, \bass,\type, Pseq([\note, \note, \note, \note], inf),\dur,Pseq([1/4],inf), /* Pseq([4/1],1),*/\lpf,100,
+\midinote, 28, \bus, ~bassShapB,\atk, 0/*t.beatDur/4 * 0.01*/,\rel, t.beatDur/4/**4* 0.996*/ , \rel2, t.beatDur/4 * 0.0012,\atkcrv, -2,\relcrv, -2,\relcrv2, -4, \relcrv3, -6,\amp,(-3/*-1*/)/*(-13)*/,\out,~bassEq),
+
+
+		/*Pbind(\instrument ,\EQHP2/*	\EQHP2*/,\dur, inf, \in,~bassEq, \out,~comFuzz,\group, ~eqGrp, \frq, 10.3,\vol,1,
+\val,659.255, \quant,1.1, \gain,(-15),\val2,1318.51, \quant2,2, \gain2,(-18),\val3,2637.02, \quant3,1, \gain3,(-20), \val5,164.81375, \quant5,1.5, \gain5,(-18)),*/
+
+
+Pbind(\instrument, \pan2, \in,~kbToPan2,\out,0 ,\group,~stereoGrp,\dur, inf),
+
+],1).play(t))
+
+)
 

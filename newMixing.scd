@@ -651,9 +651,9 @@ Synth(\playB10,[\buf, ~leTout,\out,~finGran ]);
 ~comp43= Synth(\comp, [\ctrl, ~kbus],~compGrp);
 ~comp43.set(\thr,0.8 ,\sB, 1.015,\sA, 1/2,\atk ,0.0242, \rel ,0.0968,\gain,120,\in, ~bigRiToComp , \out,~bigRiToLimit);
 ~mix43= Synth(\limitertoMixer,[\c43,1,\in, ~bigRiToLimit, \gain,40,\out,~bigRiToStereo],~limitGrp);
-~mix43.set( \gain,23);
+~mix43.set( \gain,19);
 ~stereo43= Synth(\stereoO,[  \in, ~bigRiToStereo   ,\out,~bigRiToRevXten, ], ~stereoGrp);
-~stereo43.set(\spread,1,\center,0.4,\dlt1,0.2,\dlt2,0.7,\decT,0.3872, \mxDel,1);
+~stereo43.set(\spread,1,\center,0.4,\dlt1,0.2,\dlt2,0.35,\decT,0.3872, \mxDel,1);
 ~stereo43.set(\out,0);
 /*~revB43= Synth( \reverbMad2, ~rLong, ~dispatchGrp2);~revB43.set(\in,~bigRiToRevXten  , \out,0);*/
 
@@ -700,19 +700,19 @@ Synth(\playB10,[\buf, ~leTout,\out,~finGran ]);
 */
 
 
-~reverb =  Synth(\reverbMad, [\roomsize, 80, \revtime, 4.85, \damping, 0.41, \inputbw, 0.19, \drylevel, -8, \earlylevel, -9, \taillevel, -11 , \in,~reverbSquelch  , \out,~comSquelch],~extraRev);
+~reverb =  Synth(\reverbMad, [\roomsize, 80, \revtime, 4.85, \damping, 0.41, \inputbw, 0.19, \drylevel, -8, \earlylevel, -9, \taillevel, -3 , \in,~reverbSquelch  , \out,~comSquelch],~extraRev);
 ~compReverb= Synth(\compS, [\ctrl, ~kbus],~compGrp4);
 ~compReverb.set(\thr,0.8 ,\sB, 1.05,\sA, 1/4,\atk ,0.0484, \rel ,0.3872 ,\gain, 5,\in, ~comSquelch , \out,~eqBus310);
 ~reverbEq=Synth( \EQHP2, [\in, ~eqBus310 ,\out, ~limitSquelch,], ~eqGrp4);
 ~reverbEq.set(\frq, 500/*,\val,11800,\quant,1, \gain,(-18),\val2,2600,\quant2,8, \gain2,(-16)*/,\vol, 0.2);
 ~mix30= Synth(\limiterStoMixer,[\c30,1,\in, ~limitSquelch, \gain,44,\out,~stereoBus3b],~limitGrp4);
 // ~mixa.set(\in,~limitSquelch);
- ~mix30.set(\gain,18);
+ ~mix30.set(\gain,12);
 
 
 ~finaldelay=Synth(\del , [\in, ~delayBus2,\out,~delayToLimit],~extraDelay);
 ~delayFx =  Synth(\limiterS, [\in,~delayToLimit, \gain,40,\out , ~delayEq],~compGrp4);
-~delayFx.set(\gain,40);
+~delayFx.set(\gain,50);
 ~eqDelay=Synth(\EQHP2,[\in,~delayEq, \out,~delToStereo, \frq, 500,\vol,0.4], ~limitGrp4);
 
 
