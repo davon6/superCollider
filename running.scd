@@ -188,6 +188,7 @@ s.sync;
 
 	~churcx =[\roomsize, 80, \revtime, 4.85, \damping, 0.41, \inputbw, 0.19, \drylevel, -3, \earlylevel, -9, \taillevel, -2 ];
 
+	~rLong =	[\roomsize, 41, \revtime, Pseq([1/1],inf), \damping, 0.31, \inputbw, 0.7, \drylevel, -0, \earlylevel, -15, \taillevel, -9];
 
 
 	~quickFi =[\room, 0.2, \mix,0.115, \damp, 0.41];
@@ -420,13 +421,15 @@ s.sync;
 	~flanToLimit= Bus.audio(s,2);
 	~flanToRev  = Bus.audio(s,2);
 	~flanToStereo  = Bus.audio(s,2);
-	~bigRiToEnv= Bus.audio(s,2);
-	~bigRiToEq= Bus.audio(s,2);
-	~bigRiToComp= Bus.audio(s,2);
-	~bigRiToDisto= Bus.audio(s,2);
-	~bigRiToLimit= Bus.audio(s,2);
-	~bigRiToRev  = Bus.audio(s,2);
-	~bigRiToStereo  = Bus.audio(s,2);
+	~bigRiToEnv= Bus.audio(s,1);
+	~bigRiToEq= Bus.audio(s,1);
+	~bigRiToComp= Bus.audio(s,1);
+	~bigRiToDisto= Bus.audio(s,1);
+	~bigRiToLimit= Bus.audio(s,1);
+	~bigRiToRev  = Bus.audio(s,1);
+	~bigRiToStereo  = Bus.audio(s,1);
+	~bigRiToRevXten = Bus.audio(s,2);
+
 	~filterBus = Bus.audio(s,1);
 	~filterBus2 = Bus.audio(s,1);
 	~filterRnd = Bus.audio(s,1);
@@ -1451,6 +1454,18 @@ timeScale: tS,	doneAction:2);
 		)
 
 	}).add;
+
+
+	SynthDef(\reverbMad2, {
+		|out=0,in,  roomsize, revtime, damping, inputbw, drylevel, earlylevel,damp,room,taillevel,spread=15|
+
+	var a ,input;
+
+		input =In.ar(in,2);
+
+		a = Resonz.ar(input, 1294.5373184 *   [8,16,32],0.01).sum * 10;
+
+    Out.ar(    out,GVerb.ar(a, roomsize,revtime , damping,inputbw,spread,drylevel.dbamp, earlylevel.dbamp,taillevel.dbamp,roomsize,0.3)+ input)}).add;
 
 	"reverb init".postln;
 

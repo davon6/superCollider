@@ -98,15 +98,15 @@ Pbind(\instrument, \lfo13,\val,(~hzQbeat/4),\out,~bus2 ,\dur,999,\ph,0, \rL,200,
 
 	//will need setup variables
 
-	Pseq([
-		Pbind(\instrument,\rise,\dur,Pseq([64/1],2), \vlAtk, Pfunc({4.00.rand}),\f1, Pfunc({1.00.rand}) , \f2, Pfunc({1.00.rand}) , \f3, Pfunc({1.00.rand}),  \ic_atk,Pfunc({10.00.rrand(-5)}),\index,Pfunc({50.00.rrand(1)}),\mRatio,Pfunc({3.rrand(1)}),\out , ~bigRiToDisto,\tS, 0.39550810372374,\atk,1,\type,Pseq([\rest,\note],inf)),
+/*	Pseq([
+	Pbind(\instrument,\rise,\dur,Pseq([64/1],4 ), \vlAtk,0,\f1,0.8 , \f2, 0.4 , \f3,0,  \ic_atk,7.2,\index,13,\mRatio,1,\out , ~bigRiToDisto,\tS, 0.39550810372374,\atk,1,\type,Pseq([\rest,\rest\rest,\note],inf),\freq,[659.26,639.29,672.34]),
 
 		Pbind(\instrument,\rise,\dur,Pseq([128/1],1), \vlAtk, Pfunc({4.00.rand}),\f1, Pfunc({1.00.rand}) , \f2, Pfunc({1.00.rand}) , \f3, Pfunc({1.00.rand}),  \ic_atk,Pfunc({10.00.rrand(-5)}),\index,Pfunc({50.00.rrand(1)}),\mRatio,Pfunc({3.rrand(1)}),\out , ~bigRiToDisto,\tS, 0.39550810372374,\atk,1),
 	],1),
 
 			Pbind(\instrument,\envSli,\out, ~bus17,\dur,Pseq([64/1],inf),\tS, 0.39550810372374,\val1,350,\crv,3.2),
 
-	Pbind(\instrument,\envSli,\out, ~bus18,\dur,Pseq([128/1],inf),\tS, 0.39550810372374,\val1,350,\crv,3.2),
+	Pbind(\instrument,\envSli,\out, ~bus18,\dur,Pseq([128/1],inf),\tS, 0.39550810372374,\val1,350,\crv,3.2),*/
 
 
 ~kb,~hitX,~pedonk,~fx,~justHit,

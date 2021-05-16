@@ -162,7 +162,8 @@
 ~compGrp5 = Group.after(~gateGrp11);
 ~eqGrp3=Group.after(~compGrp5);
 ~stereoGrp5 = Group.after(~eqGrp3);
-~recGrp3= Group.after(~stereoGrp5);
+~kbGate= Group.after(~stereoGrp5);
+~recGrp3= Group.after(~kbGate);
 
 
 

@@ -15,8 +15,9 @@
 ~kb.stop
 ~boost.play(t)
 
-Ppar([~boost,~kb],1).play(t)
+Ppar([~boost,~justHit],1).play(t)
 (~boost=Ppar([
+
 
 	//pasrt3d
 	Pbind(\instrument, \lfo13,\val,(~hzQbeat/16),\out,~bus24 ,\dur,999,\ph,0, \rL,4000,\rH,6000, \group, ~lfoGrp,\tS, 0.39550810372374),

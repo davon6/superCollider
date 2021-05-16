@@ -43,7 +43,7 @@
 ~comp3.set(\thr,0.88 ,\sB, 1.086,\sA, 1/2,\atk ,0.0121, \rel ,0.3872, \gain,10,\in, ~comBus1, \out,~limitBus1);
 ~mix3= Synth(\limitertoMixer,[\c3,1,\in, ~limitBus1,\gain,10,\out,~sterBus1],~limitGrp);
  ~mix3.set(\gain,~gainMix=40);
-~stereo3= Synth(\stereoO,[ \dur, 9999, \in, ~sterBus1   ,\out,~no1, ], ~stereoGrp);
+~stereo3= Synth(\stereoO,[  \in, ~sterBus1   ,\out,~no1, ], ~stereoGrp);
 ~stereo3.set(\spread,0,\center,0.4,\dlt1,0,\dlt2,0,\decT,0.0968, \mxDel,1);
 
 //herebelow
@@ -55,7 +55,7 @@
 ~comp4.set(\thr,0.88 ,\sB, 1.086,\sA, 1/2,\atk ,0.0121, \rel ,0.0968, \gain,4,\in, ~comBus2, \out,~limitBus2);
 ~mix4= Synth(\limitertoMixer,[\c4,1,\in, ~limitBus2,\gain,2,\out,~sterBus2],~limitGrp);
 ~mix4.set(\gain,60);
-~stereo4= Synth(\stereoO,[  \dur, 9999, \in, ~sterBus2, \out,~no1], ~stereoGrp);
+~stereo4= Synth(\stereoO,[  \in, ~sterBus2, \out,~no1], ~stereoGrp);
 //main2
 ~stereo4.set(\spread,0,\center,0.46,\dlt1,0.01,\dlt2,0,\decT,0.0121, \mxDel,1);
 
@@ -558,18 +558,6 @@ Synth(\playB10,[\buf, ~leTout,\out,~finGran ]);
 
 
 
-~disto43=Synth( \distoS,[ \in, ~bigRiToDisto , \out,~bigRiToEnv ], ~distoGrp);
-~fil11= Synth( \filterS,[ \in,~bigRiToEnv ,\out,~bigRiToEq,\which, 0, \busMod, ~bus17,\qf,0.67],~filterGrp );
-~eq43= Synth( \EQHP2, [\frq, 300],~eqGrp0);
-~eq43.set(\in, ~bigRiToEq, \out, ~bigRiToRev,\val,0, \quant,0, \gain,0,\val2,0,\quant2,0, \gain2,0);
-~rev43= Synth( \reverbS, ~rShor, ~revGrp);~rev43.set(\in,~bigRiToRev  , \out,~bigRiToComp);
-~comp43= Synth(\compS, [\ctrl, ~kbus],~compGrp);
-~comp43.set(\thr,0.8 ,\sB, 1.015,\sA, 1/2,\atk ,0.0242, \rel ,0.0968,\gain,20,\in, ~bigRiToComp , \out,~bigRiToLimit);
-~mix43= Synth(\limiterStoMixer,[\c43,1,\in, ~bigRiToLimit, \gain,40,\out,~bigRiToStereo],~limitGrp);
-~mix43.set( \gain,70);
-~stereo43= Synth(\stereoS, [\dur, 9999, \in, ~bigRiToStereo  ,\spread,1,\out,0,\atkT,1,\decT,0], ~stereoGrp);
-//missing snare compression
-
 
 
 // ~mix32.free
@@ -625,9 +613,9 @@ Synth(\playB10,[\buf, ~leTout,\out,~finGran ]);
 // ~eqHit.free
 ~eqHit = Synth(\EQHP96, [\frq, 200 ],~eqGrp0);
 ~eqHit.set(\in,~hitEq,\out,~hitRev,\val,260,\quant,1,\gain,(-20));
-~revHit= Synth( \reverb ,~revRnd[1],~revGrp);~revHit.set(\in,~hitRev, \out,~hitComp);
+~revHit= Synth( \reverb ,~revRnd[0],~revGrp);~revHit.set(\in,~hitRev, \out,~hitComp);
 ~compHit=Synth(\comp, [\ctrl, ~kbus,\in,~hitComp,\out, ~hitLimit ],~compGrp);
-~compHit.set(\thr,0.92 ,\sB, 1.026,\sA, 1/2,\atk ,0.0121, \rel ,0.0968, );
+~compHit.set(\thr,0.99 ,\sB, 1.006,\sA, 1/2,\atk ,0.0242, \rel ,0.0968, );
 ~limitHit =Synth(\limitertoMixer,[ \in,~hitLimit,\out,~hitStereo],~limitGrp);
 ~limitHit.set(\gain,42);
 
@@ -647,7 +635,36 @@ Synth(\playB10,[\buf, ~leTout,\out,~finGran ]);
 ~mix49= Synth(\limitertoMixer,[\c49,1,\in,~part2Limit4 , \gain,8,\out,~sterBus4],~limitGrp);
 // ~mixa.set(\in,~sterBus4);
  ~mix49.set(\gain,~gainMix);
-~stereo49=Synth(\stereo,[ \dur,9999, \in, ~sterBus4   ,\out,~absoFinalGate ],~stereoGrp);
+~stereo49= Synth(\stereoO,[  \in, ~sterBus4   ,\out,~absoFinalGate, ], ~stereoGrp);
+~stereo49.set(\spread,0,\center,0.4,\dlt1,0,\dlt2,0,\decT,0.0968, \mxDel,1);
+
+//stereoAbove not sync
+
+
+
+
+~disto43=Synth( \distoS,[ \in, ~bigRiToDisto , \out,~bigRiToEnv ], ~distoGrp);
+~fil11= Synth( \filter,[ \in,~bigRiToEnv ,\out,~bigRiToEq,\which, 0, \busMod, ~bus17,\qf,0.67],~filterGrp );
+~eq43= Synth( \EQHP96, [\frq, 100],~eqGrp0);
+~eq43.set(\in, ~bigRiToEq, \out, ~bigRiToRev,\val,0, \quant,0, \gain,0,\val2,0,\quant2,0, \gain2,0);
+~rev43= Synth( \reverb, ~rShor, ~revGrp);~rev43.set(\in,~bigRiToRev  , \out,~bigRiToComp);
+~comp43= Synth(\comp, [\ctrl, ~kbus],~compGrp);
+~comp43.set(\thr,0.8 ,\sB, 1.015,\sA, 1/2,\atk ,0.0242, \rel ,0.0968,\gain,120,\in, ~bigRiToComp , \out,~bigRiToLimit);
+~mix43= Synth(\limitertoMixer,[\c43,1,\in, ~bigRiToLimit, \gain,40,\out,~bigRiToStereo],~limitGrp);
+~mix43.set( \gain,50);
+~stereo43= Synth(\stereoO,[  \in, ~bigRiToStereo   ,\out,~bigRiToRevXten, ], ~stereoGrp);
+~stereo43.set(\spread,1,\center,0.4,\dlt1,0.2,\dlt2,0.7,\decT,0.3872, \mxDel,1);
+~stereo43.set(\out,0);
+/*~revB43= Synth( \reverbMad2, ~rLong, ~dispatchGrp2);~revB43.set(\in,~bigRiToRevXten  , \out,0);*/
+
+
+
+//missing snare compression
+
+
+
+
+
 
 
 
