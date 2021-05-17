@@ -275,6 +275,9 @@ s.sync;
 	~kickHatEq2 = Bus.audio(s,2);
 	~bassEq = Bus.audio(s,1);
 	~phaseBus = Bus.audio(s,1);
+
+	~kickRv = Bus.audio(s,1);
+
 	~delToStereo= Bus.audio(s,2);
 	~bangLimit= Bus.audio(s,10);
 	~slideBusToStereo= Bus.audio(s,1);
@@ -1141,15 +1144,28 @@ SynthDef(\shiftX, {|in, out=0, frq=0,mult=0,rte=1|Out.ar(out, FreqShift.ar(In.ar
 
 
 		SynthDef(\shiftEx, {|in, out, freq,boo, freq2, factor =1, factor2, factor3, vlPE =27.1366666667,vlPE2=0.2, crvEP = (-2), dcPE = 0.129066666667, dur,
-		vlPE3,vlPE33,crvEP2, dA=0, dA2=0, dA3=0|
+		vlPE3,vlPE33,crvEP2, dA=0, dA2=0, dA3=0, triMod=0.08046875  |
 
 
 		Out.ar(out, FreqShift.ar(In.ar(in, 2)/*.sign*/,
 
 			/*freq:  freq2+    In.kr( boo, 1)  +   (EnvGen.kr(Env([vlPE,vlPE2],[dur/*dcPE*/,0],crvEP),doneAction: dA)*factor2)
 */
-			freq:LFTri.ar(1.2875/16).range(-400,400)
+			freq:LFTri.ar(triMod/*1.2875/16*/).range(-400,400)
    ));
+	}).add;
+
+
+		SynthDef(\shiftExG, {|in, out, freq,boo, freq2, factor =1, factor2, factor3, vlPE =27.1366666667,vlPE2=0.2, crvEP = (-2), dcPE = 0.129066666667, dur,
+		vlPE3,vlPE33,crvEP2, dA=0, dA2=0, dA3=0, triMod=0.08046875,vl=1,tS=1  |
+
+
+		Out.ar(out, FreqShift.ar(In.ar(in, 2)/*.sign*/,
+
+			/*freq:  freq2+    In.kr( boo, 1)  +   (EnvGen.kr(Env([vlPE,vlPE2],[dur/*dcPE*/,0],crvEP),doneAction: dA)*factor2)
+*/
+			freq:LFTri.ar(triMod/*1.2875/16*/).range(-400,400)
+   )* EnvGen.kr(Env([0,vl,vl,0],[0,dur,0],4),timeScale: tS,doneAction:2));
 	}).add;
 
 
@@ -2392,7 +2408,7 @@ Ppar([
 		\dur, Pseq([4/1],1),\lpf,100,
 		\midinote, 28, \bus, ~bassShapB,
 		\atk, 0/*t.beatDur/4 * 0.01*/,
-		\rel, t.beatDur*4 * 0.996,/*\rel, t.beatDur/4 * 0.98,*/
+		\rel, t.beatDur/**4*/* 0.996,/*\rel, t.beatDur/4 * 0.98,*/
 		\rel2, t.beatDur/4 * 0.0012,
 
 		/*\vlDecFx,2000,\vlDecF,400,*/
@@ -2497,7 +2513,7 @@ Pbind(\instrument, \pan2, \in,~kbToPan2,\out,0 ,\group,~stereoGrp,\dur, inf),
 Pseq([~kick],10).play(t)
 
 	~comp=Synth(\comp, [\ctrl, ~kbus ],~compGrp);
-~comp.set(\thr,0.21 ,\sB, 1.036,\sA, 1/2,\atk ,0.0242, \rel ,0.0968, \gain,1,\in, ~comFuzz,\out,~kbToPan2);
+~comp.set(\thr,0.4 ,\sB, 1.034,\sA, 1/2,\atk ,0.0242, \rel ,0.0968, \gain,1,\in, ~comFuzz,\out,~kbToPan2);
 
 (
 Ppar([
@@ -2524,7 +2540,7 @@ Pseq([Pbind(\instrument, \wNoise,\dur,Pseq([1/4],1),\dec ,Pkey(\dur),\amp,(-12),
 		Pbind( \instrument, \playBufXG, \impulse, 0.003 ,\dur,    Pseq([1/4],3), \tS,  0.39550810372374,
 	\start,120,
 			\buf,~b3,\out,~comFuzz ,\loopy,0, \decT,0.6,
-			\subsT ,Pseq([0.075,0.15,0.3],inf)
+			\subsT ,Pseq([0.077,0.14,0.28],inf)
 	)
 ],inf),
 

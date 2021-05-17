@@ -31,7 +31,9 @@ Ppar([~boost,~justHit],1).play(t)
 		/*Pbind(\instrument, \lfo13,\val,(1.2875),\out,~bus10 ,\dur,Pseq([16/1],inf),\ph,1.4, \rL,500,\rH,2900, \group, ~lfoGrp,\tS, 0.39550810372374),*/
 
 
-	Pbind(\instrument, \kick,\dur, Pseq([1/1],inf),\amp,(-5.2),\out,~kbus),
+	// Pbind(\instrument, \kick,\dur, Pseq([1/1],inf),\amp,(-5.2),\out,~kbus),
+
+	Pseq([Pbindf(~kick,\out,~kbus)],inf),
 		/*Pseq([Pbindf(~hat2,\out,~kickHatEq2)],inf),
 	Pbind(\instrument ,	\EQ2,\dur, inf, \in,~kickHatEq2, \out,~kbus,\group, ~eqGrp, \val, 659.255, \quant,1, \gain ,(-30)),
 

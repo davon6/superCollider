@@ -54,7 +54,9 @@ Ppar([
 
 	/*	Pbind(\instrument, \sinModul,\tS, 0.39550810372374, \dur, Pseq([64/1],inf),\out,~mod2,\lS,0 ,\hS,1200,\modu, 0.001875*2 ,\ph,1.4),*/
 
-	Pbind(\instrument, \kick,\dur, Pseq([1/1],inf),\amp,(-5),\out,~kbus),
+	// Pbind(\instrument, \kick,\dur, Pseq([1/1],inf),\amp,(-5),\out,~kbus),
+
+	Pseq([Pbindf(~kick,\out,~kbus)],inf),
 
 	/*Pseq([Pbindf(~hat2,\out,~kickHatEq2)],inf),
 		Pbind(\instrument ,	\EQ2,\dur, inf, \in,~kickHatEq2, \out,~kbus,\group, ~eqGrp, \val, 659.255, \quant,1, \gain ,(-30)),
