@@ -444,27 +444,31 @@
 
 // PART 5
 
-//not working
+//not working, plop noise
+
+
 ~part5Dis= Synth(\disto,[\in,~downDisto,\out,~downSG],~distoGrp);
 
+/*~part5Dis.set(\out,~downSG)*/
 
+// ~part5=Synth( \pingD, [\in, ~downdel ,\bufnum,~delay2, \feedback,0.63 ,\out,~downEq],~filterGrp);
 
-~part5=Synth( \pingD, [\in, ~downdel ,\bufnum,~delay2, \feedback,0.63 ,\out,~downEq],~filterGrp);
+~part5Eq=Synth(\EQHP96, [\in,~downEq,\out,~downRev],~eqGrp0);
 
-~part5Eq=Synth(\EQHP2, [\in,~downEq,\out,~downRev],~eqGrp0);
-		// ~part5Eq.set();
-
-
-	~part5Rev=Synth(\reverbS, ~rShor,~revGrp);   ~part5Rev.set(\in,~downRev,\out,~downComp);
-~part5Comp=Synth( \compS, [\ctrl, ~kbus,\in,~downComp,\out,~downLimit],~compGrp);
+	~part5Rev=Synth(\reverb, ~rShor,~revGrp);   ~part5Rev.set(\in,~downRev,\out,~downComp);
+~part5Comp=Synth( \comp, [\ctrl, ~kbus,\in,~downComp,\out,~downLimit],~compGrp);
 ~part5Comp.set(\thr,0.9 ,\sB, 1.050,\sA, 1/2,\atk ,0.0242, \rel ,0.0968);
-~part5Limit=Synth( \limiterStoMixer,[\in,~downLimit,\out,~toExtraFx],~limitGrp);
-~part5Limit.set(\gain,60);
+~part5Limit=Synth( \limitertoMixer,[\in,~downLimit,\out,~downStereo],~limitGrp);
+~part5Limit.set(\gain,70,\out,~downStereo);
+~part5Stereo= Synth(\stereoO,[\in, ~downStereo,\out,~toCom], ~stereoGrp);
+~part5Stereo.set(\spread,1,\center,0.8,\dlt1,0,\dlt2,0,\decT,0, \mxDel,1);
 
 
 
 
-Synth(\playB10,[\buf, ~leTout,\out,~finGran ]);
+
+
+// Synth(\playB10,[\buf, ~leTout,\out,~finGran ]);
 
 // PART 3 BELOW
 
@@ -480,7 +484,7 @@ Synth(\playB10,[\buf, ~leTout,\out,~finGran ]);
 ~comp35=Synth(\compS, [\ctrl, ~kbus],~compGrp);
 ~comp35.set(\thr,0.85 ,\sB, 1.136,\sA, 1/2,\atk ,0.0121, \rel ,0.04840, \gain,1,\in, ~comPerch2, \out,~limitPerch2);
 ~mix35= Synth(\limiterStoMixer,[\c31,1,\in,~limitPerch2 ,\gain,6,\out,~stereoPerch],~limitGrp);
-~mix35.set(\gain,60);
+~mix35.set(\gain,55);
 ~stereo35=Synth(\stereoS,[ \dur, 9999, \in, ~stereoPerch ,\spread,1 , \out,~toCom/*~toExtraFx*/], ~stereoGrp );
 
 
@@ -489,13 +493,28 @@ Synth(\playB10,[\buf, ~leTout,\out,~finGran ]);
 
 ~shift2 =  Synth(\shiftEx,[\in,~shiftPlay,\out,  ~shiftDisto ],~filterGrp);
 ~disto36=Synth(\distoS, [\in, ~shiftDisto , \out,~shiftEq], ~distoGrp0);
-~eq36= Synth(\EQHP2, [\in, ~shiftEq, \out, ~buildUpG ], ~eqGrp0);
-~rev36=Synth(\reverbS, ~rLon ,~revGrp);~rev36.set(\in,~shiftRev, \out,~shiftComp );
+~eq36= Synth(\EQHP2, [\in, ~shiftEq, \out, ~shiftRev/*~buildUpG*/ ], ~eqGrp0);
+~eq36.set(\out,~shiftRev/*~buildUpG*/);
+~rev36=Synth(\reverbS, ~quickFi ,~revGrp);
+~rev36.set(\in,~shiftRev, \out,~shiftComp);
 ~comp36=Synth(\compS, [\ctrl, ~kbus],~compGrp);
 ~comp36.set(\thr,0.85 ,\sB, 1.136,\sA, 1/2,\atk ,0.0121, \rel ,0.04840, \gain,1,\in, ~shiftComp, \out,~shiftLimit );
 ~mix36= Synth(\limiterStoMixer,[\c31,1,\in,~shiftLimit ,\gain,6,\out,~shiftStereo],~limitGrp);
 ~mix36.set(\gain,70);
-~stereo36=Synth(\stereoS,[ \dur, 9999, \in, ~shiftStereo ,\spread,1 , \out,~toExtraFx], ~stereoGrp );
+~stereo36=Synth(\stereoS,[ \dur, 9999, \in, ~shiftStereo ,\spread,1 , \out,~toCom], ~stereoGrp );
+
+
+
+
+~shift3 =  Synth(\shiftEx,[\in,~shiftPlay2,\out,  ~shiftDisto2 ],~filterGrp);
+~disto36=Synth(\distoS, [\in, ~shiftDisto2 , \out,~shiftEq2], ~distoGrp0);
+~eq37= Synth(\EQHP2, [\in, ~shiftEq2, \out, ~shiftRev2 ], ~eqGrp0);
+~rev37=Synth(\reverbS, ~quickFi ,~revGrp);~rev37.set(\in,~shiftRev2, \out,~shiftComp2 );
+~comp37=Synth(\compS, [\ctrl, ~kbus],~compGrp);
+~comp37.set(\thr,0.85 ,\sB, 1.106,\sA, 1/2,\atk ,0.0121, \rel ,0.04840, \gain,1,\in, ~shiftComp2, \out,~shiftLimit2 );
+~mix37= Synth(\limiterStoMixer,[\c31,1,\in,~shiftLimit2 ,\gain,6,\out,~shiftStereo2],~limitGrp);
+~mix37.set(\gain,20);
+~stereo37=Synth(\stereoS,[ \dur, 9999, \in, ~shiftStereo2 ,\spread,1 , \out,~toCom], ~stereoGrp );
 
 
 
@@ -582,7 +601,7 @@ Synth(\playB10,[\buf, ~leTout,\out,~finGran ]);
 ~comp33.set(\thr,0.9 ,\sB, 1.1,\sA, 1/4,\atk ,0.0121, \rel ,0.04840,\gain,1,\in, ~comBusHat, \out,~limitHat );
 
 ~mix33= Synth(\limitertoMixer,[\c52,1,\in, ~limitHat,\gain,36,\out,~hatEq ],~limitGrp4);
-~mix33.set(\gain,12,\out,~stereoHat);
+~mix33.set(\gain,6,\out,~stereoHat);
 ~eq33=Synth(\EQHPDyna, [\frq, 3000 ,\in, ~hatEq,  \out,~stereoHat,\vol,0.5,\ctrl,~fusible2 ,\valD,3100, \quantD,8],~dynaEq);
 ~eq33.set(\val, 6500,\quant, 4, \gain,(-12),\val2,22000,\quant2,4, \gain2,(-12), \val3,0,\quant3,0, \gain3,0,\out , ~stereoHat,\vol,0.5);
 ~sterHat=Synth(\stereoO,[\in,~stereoHat,\out,~comFuzz22],~stereoGrp5);

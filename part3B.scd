@@ -160,7 +160,7 @@ Ppar([
 	~part3d],1),Pbind(\instrument, \playBufS, \dur,  Pseq([1/1],8), \tS,  0.39550810372374,\buf,~kb2)],1).play(t)*/
 
 
-(~part3d=Ppar([
+/*(~part3d=Ppar([
 
 
 
@@ -189,7 +189,7 @@ Ppar([
 
 
 
-],1)],1));
+],1)],1));*/
 
 
 (
