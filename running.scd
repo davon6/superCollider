@@ -260,6 +260,7 @@ s.sync;
 	~shiftComp= Bus.audio(s,2);
 	~shiftLimit= Bus.audio(s,2);
 	~shiftStereo= Bus.audio(s,2);
+	~shiftGate= Bus.audio(s,2);
 
 	~gateSeqBus = Bus.audio(s,1);
 	~gateSeqRnd = Bus.audio(s,1);
@@ -309,8 +310,22 @@ s.sync;
 	~tamComp= Bus.audio(s,2);
 	~tamLimit= Bus.audio(s,2);
 
-	~downSG= Bus.audio(s,2);
+
+	~downSG2= Bus.audio(s,1);
 	~downdel= Bus.audio(s,1);
+	~downDisto2= Bus.audio(s,1);
+~downEq2= Bus.audio(s,1);
+~downRev2= Bus.audio(s,1);
+~downComp2= Bus.audio(s,1);
+~downLimit2= Bus.audio(s,1);
+	~downStereo2= Bus.audio(s,1);
+
+
+
+
+
+
+	~downSG= Bus.audio(s,2);
 	~downDisto= Bus.audio(s,1);
 ~downEq= Bus.audio(s,1);
 ~downRev= Bus.audio(s,1);
@@ -638,6 +653,8 @@ s.sync;
 	~bus25 = Bus.control(s,1);
 	~bus26 = Bus.control(s,1);
 	~bus27 = Bus.control(s,1);
+	~bus28= Bus.control(s,1);
+
 	~mod1= Bus.control(s,1);
 	~mod2= Bus.control(s,1);
 	~mod3= Bus.control(s,1);
@@ -813,6 +830,12 @@ LFNoise0.kr(~hz1beat).range(0.1,0.0)/*,0.02)*/
 			LFNoise0.kr(1.2875).range(0.0001,20.6)
 
 			/*MouseY.kr(0.001,32) */ ,width:In.kr(wdth,1)/*MouseX.kr(0.4,1).poll */)* EnvGen.kr(Env.step([1,0],[dur,0]),timeScale: tS,doneAction: 2)
+	)}).add;
+
+
+	SynthDef(\lfoStep, {|out, val, dur,tS=1,ph =0,gte=(-4),frq=1,wdth=0.5,lS,hS|Out.kr(out,
+
+		/*LFPulse.kr(val).range(lS,hS)**/ EnvGen.kr(Env.step([val],[dur]),timeScale: tS,doneAction: 2)
 	)}).add;
 
 
@@ -1635,9 +1658,9 @@ FreeVerb.ar(
 		Out.ar(out, Compander.ar(In.ar(in,1) , In.ar(ctrl,1)  , thresh: thr, slopeBelow: sB, slopeAbove: sA, clampTime: atk, relaxTime: rel)* gain );
 	}).add;
 
-	SynthDef(\compS, {|in, ctrl, out= 0, dec  , thr  =0.01 ,sB = 1, sA = (1/4), atk = 0.001, rel = 0.04 , gain=1|
+	SynthDef(\compS, {|in, ctrl, out= 0, dec  , thr  =0.01 ,sB = 1, sA = (1/4), atk = 0.001, rel = 0.04 , gain=1,relMod|
 
-		Out.ar(out, Compander.ar(In.ar(in,2) , In.ar(ctrl,1)  , thresh: thr, slopeBelow: sB, slopeAbove: sA, clampTime: atk, relaxTime: rel)* gain );
+		Out.ar(out, Compander.ar(In.ar(in,2) , In.ar(ctrl,1)  , thresh: thr, slopeBelow: sB, slopeAbove: sA, clampTime: atk, relaxTime: rel+In.kr(relMod))* gain );
 	}).add;
 
 	SynthDef(\compSX, {|in, ctrl, out= 0, dec  , thr  =0.01 ,sB = 1, sA = (1/4), atk = 0.001, rel = 0.04 , gain=1,tS=1,dur|

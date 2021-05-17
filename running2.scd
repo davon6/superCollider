@@ -120,8 +120,9 @@ f = { |n=14, min=0, max=11| (min..max).scramble.keep(n) };
 ~dispatchGrp = Group.after(~distoGrp);
 ~filterGrp  = Group.after(~dispatchGrp);
 ~distoGrp0 =  Group.after(~filterGrp);
+~gateGrp12= Group.after(~distoGrp0);
 
-~eqGrp0 = Group.after(~distoGrp0);
+~eqGrp0 = Group.after(~gateGrp12);
 ~distoGrp2 =  Group.after(~eqGrp0);
 
 ~gateGrp =  Group.after(~distoGrp2);
@@ -479,7 +480,14 @@ Pbind(\instrument, \filter, \dur,inf, \in,~hpK,\which,2,\busMod, ~bus5,\bus7,~bu
 
 
 						Pbind( \instrument, \playBufS, \trig, 0.3 ,\dur,  Pseq([1/1],inf), \tS,  0.39550810372374,\buf,~kb2,\out,~eqBass,\loopy,0),
-	Pbind(\instrument, \shift2, \in,~eqBass,\dur, Pseq([8/1],inf), \out,~dipatchKB, \freq,Prand([/*~bssFreq3,*/~bssFreq1,~bssFreq2],inf), \group,~shifGrp,\tS, 0.39550810372374,\vl,Pseq([1,1],inf)),
+
+	Pseq([
+	Pbind(\instrument, \shift2, \in,~eqBass,\dur, Pseq([8/1],1), \out,~dipatchKB, \freq,~bssFreq1, \group,~shifGrp,\tS, 0.39550810372374,\vl,Pseq([1,1],inf)),
+
+		Pbind(\instrument, \shift2, \in,~eqBass,\dur, Pseq([8/1],1), \out,~dipatchKB, \freq,~bssFreq2, \group,~shifGrp,\tS, 0.39550810372374,\vl,Pseq([1,1],inf)),
+
+	],inf),
+
 
 	Pbind(\instrument, \limiterS, \dur, inf, \in,~dipatchKB, \gain,100,\out,~dipatchKB2, \group, ~limitGrp2),
 
@@ -658,8 +666,17 @@ Pseq([
 	/*	Pseq([*/
 		Pseq([
 		Pbind(\instrument,\gate2, \in ,~toKbGate, \group, ~kbGate, \tS,  0.39550810370174,
-		\dur, Pseq([31/1],1)),
+		\dur, Pseq([14/1],1)),
+			Ppar([
+				Pbind(\instrument, \playBuf, \impulse, 0.003 ,\dur,Pseq([1/1],1), \tS,  0.39550810370174,\buf,~k2,\out, ~kbToPan2,\loopy,0,\start,0),
+					Pbind(\instrument,\gate2, \in ,~dipatchKB2, \group, ~kbGate, \tS,  0.39550810370174,
+		\dur, Pseq([2/1],1))
 
+
+			],1),
+
+			Pbind(\instrument,\gate2, \in ,~toKbGate, \group, ~kbGate, \tS,  0.39550810370174,
+		\dur, Pseq([15/1],1)),
 		Ppar([
 					Pbind(\instrument, \playBuf, \impulse, 0.003 ,\dur,Pseq([1/1],1), \tS,  0.39550810370174,\buf,~k2,\out, ~kbToPan2,\loopy,0,\start,0),
 			Pbind(\instrument,\gate2, \in ,~rollingK, \group, ~kbGate, \tS,  0.39550810370174,
@@ -703,7 +720,11 @@ Pseq([
 
 
 /*		Pseq([*/
+
+		//this all section is too free style below
 		Pseq([
+
+
 
 			Pseq([
 			Pbind(\instrument,\gate2, \in ,~toKbGate, \group, ~kbGate, \tS,  0.39550810370174,
@@ -839,10 +860,16 @@ Pseq([
 		Pseq([
 Pseq([
 			Pbind(\instrument,\gate2, \group, ~kbGate, \tS,  0.39550810370174,\in,~rollingK,
-		\dur, Pseq([31/1],1)),
+		\dur, Pseq([8/1],1)),
+
+				Pbind(\instrument,\gate2, \group, ~kbGate, \tS,  0.39550810370174,\in,~toKbGate,
+		\dur, Pseq([8/1],1)),
 
 				Pbind(\instrument,\gate2, \in ,~dipatchKB2, \group, ~kbGate, \tS,  0.39550810370174,
 		\dur, Pseq([1/1],1)),
+
+				Pbind(\instrument,\gate2, \group, ~kbGate, \tS,  0.39550810370174,\in,~toKbGate,
+		\dur, Pseq([15/1],1))
 
 					].scramble,1),
 
