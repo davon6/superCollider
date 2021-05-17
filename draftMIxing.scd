@@ -1,6 +1,6 @@
 ~mixa = Synth(\gate2, [\in,  ~no1,\dur, 9999] ,~eqGrp3);
 
-~mixa = Synth(\gateS, [\in,/*~toExtraFx*/~absoFinalGate2 /*~toGate102*//*~comSnaGrpBus2*/,\dur, 9999] ,~recGrp3);
+~mixa = Synth(\gateS, [\in,~toCom/*~toExtraFx*//*~absoFinalGate2*/ /*~toGate102*//*~comSnaGrpBus2*/,\dur, 9999] ,~recGrp3);
 
 
 ~mixa = Synth(\gate, [\in, ~distoPercu,\dur, 9999] ,~limitGrp4);
@@ -31,7 +31,7 @@ Ppar([~boost,~justHit],1).play(t)
 		/*Pbind(\instrument, \lfo13,\val,(1.2875),\out,~bus10 ,\dur,Pseq([16/1],inf),\ph,1.4, \rL,500,\rH,2900, \group, ~lfoGrp,\tS, 0.39550810372374),*/
 
 
-	Pbind(\instrument, \kick,\dur, Pseq([1/1],inf),\amp,(-10.2),\out,~kbus),
+	Pbind(\instrument, \kick,\dur, Pseq([1/1],inf),\amp,(-5.2),\out,~kbus),
 		/*Pseq([Pbindf(~hat2,\out,~kickHatEq2)],inf),
 	Pbind(\instrument ,	\EQ2,\dur, inf, \in,~kickHatEq2, \out,~kbus,\group, ~eqGrp, \val, 659.255, \quant,1, \gain ,(-30)),
 

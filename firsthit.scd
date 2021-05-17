@@ -9,7 +9,7 @@ Pbind(\instrument, \wNoise,\dur, Pseq([2/1],1),\dec ,Pkey(\dur),\amp,(2),\out,0,
 
 
 Pbind(\instrument, \wNoise,\dur, Pseq([2/1],1),\dec ,Pkey(\dur),\amp,(2),\out,0,\wFil,0,\valStart,900,\valEnd,1000,\durF,0.0968*2,\dA,2).play(t)
-
+~justHit.play(t)
 (
 ~justHit=
 Ppar([
@@ -17,7 +17,8 @@ Ppar([
 	Pbind(\instrument,\envSli,\out, ~bus17,\dur,Pseq([64/1],inf),\tS, 0.39550810372374,\val1,350,\crv,3.2),
 
 		Pseq([
-		Pseq([
+
+		/*Pseq([
 
 		Pseq([//maybe change to 12
 	Pbind(\instrument, \wNoise,\dur, Pseq([8/1],1),\dec ,Pkey(\dur),\amp,(-5),\out,0,\wFil,0,\valStart,900,\valEnd,1000,\durF,Pkey(\dur),\tS, 0.39550810372374,\out,~hitEq),
@@ -76,21 +77,57 @@ Ppar([
 
 
 
-				],1),
+				],1),*/
 
-		/*Ppar([
+	/*	Ppar([
 		Pseq([~part5,
 				Pbind(\instrument, \wNoise,\dur, Pseq([8/1],1),\dec ,Pkey(\dur),\amp,(-5),\out,0,\wFil,0,\valStart,900,\valEnd,1000,\durF,Pkey(\dur),\tS, 0.39550810372374,\out,~hitEq),
 			],1),
 		Pbind(\instrument, \gateS,\dur, Pseq([256/1],1), \tS,  0.39550810372374,\group, ~gateGrp11,\in,~tofinalRythm,\out,~toCom),
 
-		],1)*/
+			Pbind(\instrument, \wNoise,\dur, Pseq([4/1],64),\dec ,Pkey(\dur),\amp,(-5),\out,0,\wFil,0,\valStart,900,\valEnd,1000,\durF,Pkey(\dur),\tS, 0.39550810372374,\out,~hitEq,\type,Pseq([\note,\rest,\rest,\rest,\rest,\rest,\rest,\rest,\rest,\rest,\rest,\rest,\rest,\rest,\rest],inf))
+
+		],1),*/
+
+
+
+	Pbind(\instrument, \playBufS,\dur  ,Pseq([2/1],32),\buf,~fkAr,\tS,  0.39550810372374,\start,
+			Pfunc({~start}) ,\out, ~limitBus1),
+
+		Pbind(\instrument, \playBuf,\dur  ,Pseq([2/1],32),\buf,~kb2Test,\tS,  0.39550810372374,\start,
+			Pfunc({~start}) ,\out, ~limitBus1,\vl,0.01),
+
+
+
+Pbind(\instrument, \playBufS,\dur  ,Pseq([2/1],32),\buf,~pad,\tS,  0.39550810372374,\start,
+			Pfunc({~start}) ,\out, ~limitBus1),
+
+
+
 
 ],inf /*carefulll*/)
 	,
-	// Pbind(\instrument, \playBufS, \dur,  Pseq([1/1],256), \tS,  0.39550810372374,\buf,~kb2),
+ Pbind(\instrument, \playBufS, \dur,  Pseq([1/1],256), \tS,  0.39550810372374,\buf,~kb2),
 
 	Pbind(\instrument,\stereo, \dur, 9999, \in, ~hitStereo  ,\spread,0.1,\out,~toCom,\tS, 0.39550810372374,\group, ~stereoGrp),
+
+
+
+	//hum
+
+	Pbind(\instrument, \lfo13,\tS, 0.39550810372374, \dur, Pseq([16/1],inf),\out,~mod3,\rL,0 ,\rH,100,\val,
+
+		0.084/**4*/,\ph,4.1),
+
+
+	Pbind(\instrument,\rise,\dur,Pseq([16/1],inf), \vlAtk,0,\f1, 0.08 , \f2,0, \f3,0,  \ic_atk,0,\index,1,\mRatio,1,\out ,/*~flanToDisto2*/ ~downSG,\tS, 0.39550810372374,\atk,1 ,\freq,[164,168,322],\moduS,~mod3, \fS,1 ,\type,Pseq([\note,\note,\note,\note,\rest,\rest,\rest,\rest],inf)),
+
+
+	Pbind(\instrument,\gate3,\tS, 0.39550810372374,\dur,Pseq([1/4],inf),\in, ~downSG,
+
+		\atkT,1,\atkC,3,\decT,1,
+		\type,Pseq([\note,\note, \note,\note, \note,\rest,\note,\rest].scramble,inf),\out,0/*~downdel*/,\group,~dispatchGrp)
+
 
 
 ],1))

@@ -1,4 +1,14 @@
 
+
+f = { |n=14, min=0, max=11| (min..max).scramble.keep(n) };
+//~f2 = { |n=6, min=0, max=5| (min..max).scramble.keep(n) };
+~rythmsP = f.value(5, 0, 5);
+
+
+~rythmsP[2]
+
+//sync up hat and cymbal maybe use above
+
 //percu cutting the 1/2 for progression
 //new env shape for percu in env file
 //replace all TS by t.beatDur in running.scd
@@ -42,6 +52,8 @@
 ~modHz=240.00.rand; ~carHz=140.00.rrand(10.00); ~noiLv=1.00.rrand(0.3); ~crv1=(-12.00).rrand(-4.00); ~crv2=(-12.00).rrand(-4.00); ~rel=0.0968.rrand(0.05); ~rel2=0.0968.rrand(0.05); ~modAmp=5000.00.rrand(1.00); ~modAmp2=5000.00.rrand(1.00);
 ~rythm1=[\rest,\rest,\rest,\rest ,\rest,\rest ,\note, \rest].scramble; ~rythm2=[\rest,\rest,\rest,\rest ,\rest,\note ,\note, \rest].scramble; ~rythm3=[\rest,\rest,\rest,\rest ,\rest,\rest ,\note, \rest].scramble; ~rythm4=[\rest,\rest,\rest,\note ,\note,\note ,\note, \rest].scramble;
 	~rythmL = [\rest,\rest,\note,\note ,\rest,\note ,\note, \rest].scramble;
+
+~start = ~start =~fkAr.numFrames.rrand(215000)-215000
 
 
 ~no2S = (~bufSnoopy.numFrames.rrand(1400000)- 1400000);
@@ -1011,6 +1023,9 @@ Pbind(\instrument, \percussion, \dur,Pseq([8/1],1 ),\carHz, Pfunc({1050.12070612
 Ppar([
 
 
+		Pbind(\instrument, \lfo13T, \val,0.084,\dur,Pseq([32/1],inf),\rL,0.084,\rH,1.2875 ,\out,  ~bus26, \group, ~lfoGrp,\tS, 0.39550810372374,\ph,4.4),
+
+
 	//??
 	Pbind(\instrument, \envSli2, \out, ~bus23, \val1,Pfunc({20.6.rrand(5.15)}), \val2,Pfunc({41.2.rrand(20.6)}),\crv,2,\crv2,3.6, \dur,Pseq([16/1],inf),\tS, 0.39550810372374, \val0, Pfunc({5.15.rrand(0.3)})),
 
@@ -1028,7 +1043,7 @@ Ppar([
 
 		Pbind(\instrument, \envSli, \val1,50, \val2, 5600, \dur, Pseq([1/1],inf),\out, ~bus8,\tS, 0.39550810372374),
 
-
+/*below not working copz \modu instead of \val*/
 	Pbind(\instrument, \lfo13,\tS, 0.39550810372374, \dur, Pseq([64/1],inf),\out,~mod2,\rL,0 ,\rH,500,\modu,
 
 		0.001875/**4*/,\ph,1.42),
@@ -1059,7 +1074,7 @@ Ppar([
 		/*Pbind(\instrument,\rise,\dur,Pseq([4/1],inf), \vlAtk, ~ri2vlAtk,\f1, ~ri2f1 , \f2, ~ri2f2 , \f3, ~ri2f3,  \ic_atk,~ri2ic_atk,\index,~ri2index,\mRatio,~ri2mRatio,\out ,Prand([~bellFlang4, ~riToDisto2],inf),\tS, 0.39550810372374, \fR,~ri2fR, \moduR,~mod1,
 	\key,Pseq([\dec,\atk ], inf),\value,1, \finish, { ~key.envirPut(~value) }),*/
 	//~bellFlang4
-		Pbind(\instrument,\rise,\dur,Pseq([4/1],inf), \vlAtk,-1 ,\f1, 0.001 , \f2, 0.03 , \f3,0,  \ic_atk,4,\index,9,\mRatio,1,\out ,~riToDisto2,\tS, 0.39550810372374,\key,Pseq([\dec,\atk ], inf),\value,1, \finish, { ~key.envirPut(~value) }),
+		Pbind(\instrument,\rise,\dur,Pseq([4/1],inf), \vlAtk,-1 ,\f1, 0.001 , \f2, 0.03 , \f3,0,  \ic_atk,4,\index,9,\mRatio,1,\out ,~bellFlang4,\tS, 0.39550810372374,\key,Pseq([\dec,\atk ], inf),\value,1, \finish, { ~key.envirPut(~value) }),
 
 /*Pbind(\instrument,\rise,\dur,Pseq([1/1],inf/*64*/),\vlAtk, ~ri3vlAtk,\f1, ~ri3f1 , \f2, ~ri3f2 , \f3, ~ri3f3,  \ic_atk,~ri3ic_atk,\index,~ri3index,\mRatio,~ri3mRatio,\out ,Prand([~bellFlang3, ~riToDisto3],inf),\tS, 0.39550810372374,
 	\key,Pseq([\dec,\atk ], inf),\value,1, \finish, { ~key.envirPut(~value) }),*/

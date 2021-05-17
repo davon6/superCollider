@@ -44,6 +44,7 @@ ServerOptions.outDevices;
 	FreqScope.new;
 	s.meter;
 	s.plotTree;
+	s.scope;
 
 s.sync;
 	"buff init".postln;
@@ -346,7 +347,7 @@ s.sync;
 	~riToLimit3= Bus.audio(s,1);
 	~riToStereo3= Bus.audio(s,1);
 	~bellFlang3= Bus.audio(s,1);
-	~bellFlang4= Bus.audio(s,2);
+	~bellFlang4= Bus.audio(s,1);
 	~kbToPan2= Bus.audio(s,1);
 	~kToPan= Bus.audio(s,1);
 	~bgFil = Bus.audio(s,1);
@@ -1670,11 +1671,11 @@ SynthDef(\EQHP10, {|out=0, in, val, quant, gain, val2, quant2, gain2 frq=100, vo
 		HPF.ar(HPF.ar(HPF.ar(HPF.ar(HPF.ar(HPF.ar(HPF.ar(HPF.ar(HPF.ar(HPF.ar(In.ar(in, 10) ,frq),frq),frq),frq),frq),frq),frq),frq),frq),frq)* vol)};).add;
 
 
-	SynthDef(\EQHP10D, {|out=0,out2, in, val, quant, gain, val2, quant2, gain2 frq=100, vol =1| Out.ar(out,
+	SynthDef(\EQHP10D, {|out=0,out2,frq2=2800, in, val, quant, gain, val2, quant2, gain2 frq=100, vol =1| Out.ar(out,
 
 		HPF.ar(HPF.ar(HPF.ar(HPF.ar(HPF.ar(HPF.ar(HPF.ar(HPF.ar(HPF.ar(HPF.ar(In.ar(in, 10) ,frq),frq),frq),frq),frq),frq),frq),frq),frq),frq)* vol);
 
-	Out.ar(out2,HPF.ar(HPF.ar(HPF.ar(HPF.ar(HPF.ar(HPF.ar(HPF.ar(HPF.ar(HPF.ar(HPF.ar(In.ar(in, 10) ,frq),frq),frq),frq),frq),frq),frq),frq),frq),frq)* vol)};
+	Out.ar(out2,HPF.ar(HPF.ar(HPF.ar(HPF.ar(HPF.ar(HPF.ar(HPF.ar(HPF.ar(HPF.ar(HPF.ar(In.ar(in, 10) ,frq2),frq2),frq2),frq2),frq2),frq2),frq2),frq2),frq2),frq2)* vol)};
 
 	).add;
 
@@ -2175,7 +2176,7 @@ SynthDef(\sequ,{|value, dur, in=0, out=0, vlAtk=0, vlDec=1,vlSub=1,vlSub2=1, vlR
 
 }.add;
 
-	SynthDef(\flanger1, {arg flangefreq=0.3, fdback=0.3,in,tS=1,dur,out=0;
+	SynthDef(\flanger1, {arg flangefreq=0.3, fdback=0.3,in,tS=1,dur,out=0,flangMod;
 
 		var input, effect;
 
@@ -2183,7 +2184,7 @@ SynthDef(\sequ,{|value, dur, in=0, out=0, vlAtk=0, vlDec=1,vlSub=1,vlSub2=1, vlR
 
 		input= input+ LocalIn.ar(1);
 
-		effect= DelayN.ar(input,0.02,SinOsc.kr(flangefreq,0,0.005,0.005)); //max delay of 20msec
+		effect= DelayN.ar(input,0.02,SinOsc.kr(flangefreq+In.kr(flangMod),0,0.005,0.005)); //max delay of 20msec
 
 		LocalOut.ar(fdback*effect);
 
