@@ -659,16 +659,33 @@
 
 
 
+
+
+
+
 //hit
 // ~eqHit.free
 ~eqHit = Synth(\EQHP96, [\frq, 200 ],~eqGrp0);
 ~eqHit.set(\in,~hitEq,\out,~hitRev,\val,260,\quant,1,\gain,(-15),\val2,650,\quant,1,\gain,(-26));
 ~revHit= Synth( \reverb ,~revRnd[0],~revGrp);~revHit.set(\in,~hitRev, \out,~hitComp);
 ~compHit=Synth(\comp, [\ctrl, ~kbus,\in,~hitComp,\out, ~hitLimit ],~compGrp);
-~compHit.set(\thr,0.99 ,\sB, 1.006,\sA, 1/2,\atk ,0.0242, \rel ,0.0968, );
+~compHit.set(\thr,0.99 ,\sB, 1.006,\sA, 1/2,\atk ,0.0242, \rel ,0.0968,\out,0 );
 ~limitHit =Synth(\limitertoMixer,[ \in,~hitLimit,\out,~hitStereo],~limitGrp);
 ~limitHit.set(\gain,32);
 
+
+
+// ~eqHit2.free
+~eqHit2 = Synth(\EQHP96, [\frq, 100 ],~eqGrp0);
+~eqHit2.set(\in,~hitEq2,\out,~hitComp2,\val,260,\quant,1,\gain,(-15),\val2,650,\quant,1,\gain,(-26));
+~compHit2=Synth(\comp, [\ctrl,~kbToPan4 /*~kbus2*/,\in,~hitComp2,\out, ~hitLimit2],~compGrp);
+~compHit2.set(\thr,0.90 ,\sB, 1.206,\sA, 1/2,\atk ,0.0242, \rel ,0.0968, \out,~hitLimit2);
+/*~compHit2.free*/
+
+
+~limitHit2 =Synth(\limitertoMixer,[ \in,~hitLimit2,\out,~hitStereo],~limitGrp);
+~limitHit2.set(\gain,32,\out,~hitStereo);
+/*~limitHit2.free*/
 
 // ~bgEq.free
 ~bg= Synth(\playBufX, [\impulse, 0.00001,\loo,1,\buf,~audio3,\out, ~bgFil22,\amp,5]);
@@ -691,11 +708,11 @@
 ~eqP.set(\val, 0,\quant, 0, \gain,0,\val2,0,\quant2,0, \gain2,0, \val3,0,\quant3,0, \gain3,0,\val4,0,\shelf,0, \gain4,0,);
 ~revP=Synth(\reverb, ~rLon,~revGrp);~revP.set(\in,~reverbPercBg ,\out,~compPercBg);
 ~compP=Synth(\comp,[\in,~compPercBg ,\out,~limitPercBg,\ctrl, ~kbus],~compGrp);
-~compP.set(\thr,0.95 ,\sB, 1.050,\sA, 1/2,\atk ,0.0242, \rel ,0.0968,\gain,1);
+~compP.set(\thr,0.95 ,\sB, 1.060,\sA, 1/2,\atk ,0.0242, \rel ,0.0968,\gain,1);
 ~limitP=Synth(\limitertoMixer,[\in, ~limitPercBg,\out, ~stereoPercBg],~limitGrp);
-~limitP.set(\gain,15);
+~limitP.set(\gain,85,\out,~stereoPercBg);
 ~stereoP=Synth(\stereoO,[\in,~stereoPercBg ,\out,~toCom],~stereoGrp);
-~stereoP.set(\spread,0,\center,0,\dlt1,0.01,\dlt2,0.07,\decT,0.0121, \mxDel,1,\out,~percGate);
+~stereoP.set(\spread,0,\center,0,\dlt1,0.01,\dlt2,0.07,\decT,0.0121, \mxDel,1,\out,~toCom/*~percGate*/);
 
 
 

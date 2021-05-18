@@ -591,6 +591,9 @@ s.sync;
 	~dipatchKB2 = Bus.audio(s,2);
 	~stereoK= Bus.audio(s,1);
 	~rollingK = Bus.audio(s,10);
+
+	~revKck2= Bus.audio(s,1);
+
 	~lpK=Bus.audio(s,1);
 	~hpK=Bus.audio(s,1);
 	~bpK=Bus.audio(s,1);
@@ -616,6 +619,10 @@ s.sync;
 	~slideEq=  Bus.audio(s,1);
 	~slideEq2=  Bus.audio(s,1);
 	~outTolimit=  Bus.audio(s,3);
+	~hitRev2=  Bus.audio(s,1);
+	~hitComp2=  Bus.audio(s,1);
+	~hitLimit2=  Bus.audio(s,1);
+	~hitEq2=  Bus.audio(s,1);
 	~snareEQ=  Bus.audio(s,1);
 	~snareLimit=  Bus.audio(s,1);
 	~percuEq=  Bus.audio(s,1);
@@ -645,6 +652,7 @@ s.sync;
 	~part2RiComp2=  Bus.audio(s,10);
 	~part2RiLimit=  Bus.audio(s,2);
 	~part2RiStereo=  Bus.audio(s,2);
+	~toFilRise=  Bus.audio(s,2);
 	~fusible2=  Bus.audio(s,1);
 	~gateBou=  Bus.audio(s,1);
 	~flanToFilter2=  Bus.audio(s,1);
@@ -1124,13 +1132,13 @@ SynthDef(\kick, {
 
 		env = EnvGen.kr(Env([0,amp.dbamp,amp2],[atk,dec,0],[3,-2]),timeScale: tS,doneAction:2);
 
-	sig =  SelectX.ar(wFil,[
+	sig = SelectX.ar(wFil,[
 			LPF.ar(WhiteNoise.ar(env),XLine.kr(valStart,valEnd,durF,doneAction: dA)),
 
 			HPF.ar(WhiteNoise.ar(env),XLine.kr(valStart,valEnd,durF)),
 
-			BHiPass4.ar(LPF.ar(WhiteNoise.ar(0.3),EnvGen.kr(Env([0,10000],[3],3))),EnvGen.kr(Env([0,10000],[dur],3),timeScale: tS,doneAction:dA2),0.2)
-		]);
+			BHiPass4.ar(LPF.ar(WhiteNoise.ar(0.03),EnvGen.kr(Env([0,10000],[3],3))),EnvGen.kr(Env([0,10000],[dur],3),timeScale: tS,doneAction:dA2),0.2);
+	]);
 
 /*sig = Pan2.ar( sig , pan);*///0 was pan
 
