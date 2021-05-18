@@ -296,6 +296,9 @@ s.sync;
 	~bassEq = Bus.audio(s,1);
 	~phaseBus = Bus.audio(s,1);
 
+	~kbToPan3= Bus.audio(s,1);
+	~kbToPan4= Bus.audio(s,1);
+
 	~kickRv = Bus.audio(s,1);
 
 	~delToStereo= Bus.audio(s,2);
@@ -677,6 +680,7 @@ s.sync;
 	~bus28= Bus.control(s,1);
 
 	~bus29= Bus.control(s,1);
+	~bus30= Bus.control(s,1);
 
 	~mixM= Bus.control(s,1);
 	~roomM= Bus.control(s,1);

@@ -562,32 +562,6 @@
 
 
 
-// ~bgEq.free
-~bg= Synth(\playBufX, [\impulse, 0.00001,\loo,1,\buf,~audio3,\out, ~bgFil22,\amp,5]);
-//maybe delete filter on bg
-~filBg=Synth(\filter, [\in,~bgFil22, \busMod,~bus24, \rqLPF, ~bus1,\which,0,\out,~bgCom2],~filterGrp);
-~compBg=Synth(\comp, [\ctrl, ~kbus,\in, ~bgCom2],~compGrp);
-~compBg.set(\thr,0.95 ,\sB, 1.050,\sA, 1/2,\atk ,0.0242, \rel ,0.0968,\gain,1 ,\out,~eqBg10);
-~bgEq=Synth(\EQHP96, [ \in, ~eqBg10, \out,~bgLimit2,\frq,800],~delayGrp2);
-~bgEq.set(\frq,200,\val,268,\quant,1,\gain,(-20),\val2,668,\quant2,1,\gain2,(-12),\frq,100);
-//add reverb
-~limBg=Synth(\limitertoMixer,[ \c50,1, \in,~bgLimit2 ,\out,~bgStereo2, \gain, 20],~limitGrp  );
-~limBg.set(\gain,3);
-
-
-
-// ~perc= Synth(\playBufX, [\impulse, 0.00001,\loo,1,\buf,~ambPerc,\out, ~distoPercBg]);
-
-~distoP=Synth(\disto,[\in,~distoPercBg,\out,~eqPercBg],~distoGrp0);
-~eqP= Synth(\EQHP96,[\in,~eqPercBg ,\out,~reverbPercBg,\frq,100],~eqGrp0);
-~eqP.set(\val, 0,\quant, 0, \gain,0,\val2,0,\quant2,0, \gain2,0, \val3,0,\quant3,0, \gain3,0,\val4,0,\shelf,0, \gain4,0,);
-~revP=Synth(\reverb, ~rLon,~revGrp);~revP.set(\in,~reverbPercBg ,\out,~compPercBg);
-~compP=Synth(\comp,[\in,~compPercBg ,\out,~limitPercBg,\ctrl, ~kbus],~compGrp);
-~compP.set(\thr,0.95 ,\sB, 1.050,\sA, 1/2,\atk ,0.0242, \rel ,0.0968,\gain,1);
-~limitP=Synth(\limitertoMixer,[\in, ~limitPercBg,\out, ~stereoPercBg],~limitGrp);
-~limitP.set(\gain,15);
-~stereoP=Synth(\stereoO,[\in,~stereoPercBg ,\out,~toCom],~stereoGrp);
-~stereoP.set(\spread,0,\center,0,\dlt1,0.01,\dlt2,0.07,\decT,0.0121, \mxDel,1,\out,~percGate);
 
 
 
@@ -596,7 +570,7 @@
 
 ~kiDis=Synth(\distoS,[\in,~kiasDisto,\out,~kiasEq],~distoGrp0);
 
-~kiEq=Synth( \EQHP2, [\in, ~kiasEq ,\out, ~kiasRev,], ~eqGrp0));
+~kiEq=Synth( \EQHP2, [\in, ~kiasEq ,\out, ~kiasRev,], ~eqGrp0);
 ~kiEq.set(\frq, 40/*,\val,11800,\quant,1, \gain,(-18),\val2,2600,\quant2,8, \gain2,(-16)*/,\vol, 0.2);
 
 ~kiRev=Synth(\reverbS, ~rShor,~revGrp);~kiRev.set(\in,~kiasRev ,\out,~kiasComp);
@@ -695,6 +669,33 @@
 ~limitHit =Synth(\limitertoMixer,[ \in,~hitLimit,\out,~hitStereo],~limitGrp);
 ~limitHit.set(\gain,32);
 
+
+// ~bgEq.free
+~bg= Synth(\playBufX, [\impulse, 0.00001,\loo,1,\buf,~audio3,\out, ~bgFil22,\amp,5]);
+//maybe delete filter on bg
+~filBg=Synth(\filter, [\in,~bgFil22, \busMod,~bus24, \rqLPF, ~bus1,\which,0,\out,~bgCom2],~filterGrp);
+~compBg=Synth(\comp, [\ctrl, ~kbus,\in, ~bgCom2],~compGrp);
+~compBg.set(\thr,0.95 ,\sB, 1.050,\sA, 1/2,\atk ,0.0242, \rel ,0.0968,\gain,1 ,\out,~eqBg10);
+~bgEq=Synth(\EQHP96, [ \in, ~eqBg10, \out,~bgLimit2,\frq,800],~delayGrp2);
+~bgEq.set(\frq,200,\val,268,\quant,1,\gain,(-20),\val2,668,\quant2,1,\gain2,(-12),\frq,100);
+//add reverb
+~limBg=Synth(\limitertoMixer,[ \c50,1, \in,~bgLimit2 ,\out,~bgStereo2, \gain, 20],~limitGrp  );
+~limBg.set(\gain,3);
+
+
+
+// ~perc= Synth(\playBufX, [\impulse, 0.00001,\loo,1,\buf,~ambPerc,\out, ~distoPercBg]);
+
+~distoP=Synth(\disto,[\in,~distoPercBg,\out,~eqPercBg],~distoGrp0);
+~eqP= Synth(\EQHP96,[\in,~eqPercBg ,\out,~reverbPercBg,\frq,100],~eqGrp0);
+~eqP.set(\val, 0,\quant, 0, \gain,0,\val2,0,\quant2,0, \gain2,0, \val3,0,\quant3,0, \gain3,0,\val4,0,\shelf,0, \gain4,0,);
+~revP=Synth(\reverb, ~rLon,~revGrp);~revP.set(\in,~reverbPercBg ,\out,~compPercBg);
+~compP=Synth(\comp,[\in,~compPercBg ,\out,~limitPercBg,\ctrl, ~kbus],~compGrp);
+~compP.set(\thr,0.95 ,\sB, 1.050,\sA, 1/2,\atk ,0.0242, \rel ,0.0968,\gain,1);
+~limitP=Synth(\limitertoMixer,[\in, ~limitPercBg,\out, ~stereoPercBg],~limitGrp);
+~limitP.set(\gain,15);
+~stereoP=Synth(\stereoO,[\in,~stereoPercBg ,\out,~toCom],~stereoGrp);
+~stereoP.set(\spread,0,\center,0,\dlt1,0.01,\dlt2,0.07,\decT,0.0121, \mxDel,1,\out,~percGate);
 
 
 
