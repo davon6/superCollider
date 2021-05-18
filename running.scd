@@ -252,6 +252,7 @@ s.sync;
 	~part2ToEq = Bus.audio(s,1);
 	~snareComp= Bus.audio(s,1);
 	~buildUpG=Bus.audio(s,1);
+	~snareFlang=Bus.audio(s,1);
 
 	~flopped=Bus.audio(s,10);
 
@@ -666,6 +667,10 @@ s.sync;
 	~bus26 = Bus.control(s,1);
 	~bus27 = Bus.control(s,1);
 	~bus28= Bus.control(s,1);
+
+	~mixM= Bus.control(s,1);
+	~roomM= Bus.control(s,1);
+	~dampM= Bus.control(s,1);
 
 	~mod1= Bus.control(s,1);
 	~mod2= Bus.control(s,1);
@@ -1124,6 +1129,21 @@ SynthDef(\kick, {
 
 "side events init".postln;
 
+	SynthDef(\kiasmosPad, {arg freq = 440, out = 0, amp = 1, atk= 0.01, rel= 0.01,tS=1,dur;
+    var carriers, modulators, mix, verb, filter, env, filterEnv;
+    freq = freq + [0, Rand(1,4)];
+    carriers = [SinOsc, Saw, Pulse].collect(_.ar(freq));
+    modulators = carriers.collect {|c| SinOsc.kr(rrand(0.0322,1.0)*0.0647)};
+    mix = Mix(carriers * modulators) * 0.15;
+    verb = FreeVerb.ar(mix)/*+sig*/;
+
+	filterEnv = EnvGen.kr(Env([3600, 220], dur, \exp), doneAction: Done.freeSelf);
+	env = EnvGen.kr(Env([0, 1, 1, 0], [atk, dur - atk - rel, rel], [4,-4]));
+
+	filter = LPF.ar(verb, filterEnv);
+	Out.ar(out, filter * env * amp* EnvGen.kr(Env.step([1,1],[dur,0],4),timeScale: tS,doneAction:2));
+}).add;
+
 
 	SynthDef(\rise, {
 	arg freq=659.26, mRatio=1, cRatio=1,
@@ -1470,6 +1490,12 @@ timeScale: tS,	doneAction:2);
 	Out.ar(out, GrainBuf.ar(1,Impulse.ar(MouseX.kr(20.6,0.08)),duration,buf,MouseX.kr(0.01,10),pos,mul: amp) );
 	}).add;
 
+	SynthDef.new(\granLiveA, {
+		arg amp=1, buf =0, out=0,pitchRte=1,duration=8,impulse = 1.2875,pos=0, dur,vlAtk =0,vlDec=1 ,vlSub=1 ,vlSub2=1,vlRel=0,atkT=0,decT=1,subsT=0,relT=0,atckC=0,decC=0,relC=0,tS=1;
+
+	Out.ar(out, GrainBuf.ar(1,Impulse.ar(Line.kr(0.08,20.6,dur,doneAction: 2)),duration,buf,    Line.kr(10,0.01,dur,doneAction: 2),pos,mul: amp)* EnvGen.kr(Env.step([1,1],[dur,0]),timeScale: tS,doneAction:2) );
+	}).add;
+
 	SynthDef(\reverb, {
 		|out=0,in,damp,room,mix|
     Out.ar(    out,
@@ -1488,7 +1514,7 @@ timeScale: tS,	doneAction:2);
 				mix+In.kr(mixMod), // mix 0-1
             room+In.kr(roomMod), // room 0-1
             damp+In.kr(dampMod) // damp 0-1 duh
-        )/** EnvGen.kr(Env.step([1,1],[dur,0],4),timeScale: tS,doneAction:2)*/)}).add;
+        ))}).add;
 
 
 		SynthDef(\reverbMad, {
@@ -1796,9 +1822,6 @@ SynthDef(\EQHP10, {|out=0, in, val, quant, gain, val2, quant2, gain2 frq=100, vo
 	}).add;
 
 
-
-
-
 	SynthDef(\limiter10toMixer, {|in, out = 0,gain=1,vol =1, du =0.01,rel=0.8, atk =0.01 ,thr= 0.001,sB =1,sA= 0.05,
 		c1=0,c2=0,c3=0,c4=0,c5=0,c6 =0,c7 =0,c8 =0,c9 =0,c10 =0,c11 =0,c12 =0,c13 =0,c14 =0,c15 =0, c16=0,c17=0,c18=0,c19=0,c20 =0,c21=0,name|
 
@@ -1842,6 +1865,8 @@ SynthDef(\playBuf2ToMixer ,{|out = 0,start, trig= 0.002, dur, buf, dA=2, tS=1, l
 
 
 	"limiter init".postln;
+
+
 
 
 
@@ -2262,7 +2287,7 @@ SynthDef(\sequ,{|value, dur, in=0, out=0, vlAtk=0, vlDec=1,vlSub=1,vlSub2=1, vlR
 
 }.add;
 
-	SynthDef(\flanger1, {arg flangefreq=0.3, fdback=0.3,in,tS=1,dur,out=0,flangMod;
+	SynthDef(\flanger1, {arg flangefreq=0.3, fdback=0.3,in,tS=1,dur,out=0,flangMod,ph=0;
 
 		var input, effect;
 
@@ -2270,7 +2295,7 @@ SynthDef(\sequ,{|value, dur, in=0, out=0, vlAtk=0, vlDec=1,vlSub=1,vlSub2=1, vlR
 
 		input= input+ LocalIn.ar(1);
 
-		effect= DelayN.ar(input,0.02,SinOsc.kr(flangefreq+In.kr(flangMod),0,0.005,0.005)); //max delay of 20msec
+		effect= DelayN.ar(input,0.02,SinOsc.kr(flangefreq+In.kr(flangMod),ph,0.005,0.005)); //max delay of 20msec
 
 		LocalOut.ar(fdback*effect);
 

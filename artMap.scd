@@ -593,7 +593,7 @@ Pbind(\instrument, \playBufS,\dur, Pseq([1/4],inf),\buf,~conga,\tS,0.39550810372
 
 //voltingo
 
-Synth(\granLive,[\buf,~snare,\out,0,\amp,0.5])
+Synth(\granLive,[\buf,~snare,\out,0,\amp,0.05])
 
 
 Synth(\recLoop,[\buf,~ambPerc,\recording,1, \in,0],~recGrp2)
