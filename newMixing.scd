@@ -278,7 +278,7 @@
 
 
 //~eq12.free
- ~flang1=Synth( \flanger1,[ \in,~bellFlang4, \out,~riToDisto2],~phaserGrp);
+ ~flang1=Synth( \flanger1Mod,[ \in,~bellFlang4, \out,~riToDisto2],~phaserGrp);
  ~flang1.set(\flangefreq,0,\fdback,-0.46,\flangMod,~bus26);
 ~dist3= Synth(\disto,[\in, ~riToDisto2 , \out,~riToEnv3], ~distoGrp);
 ~fil3=Synth( \filter, [\in,~riToEnv3,\out,~riToEq, \busMod,~bus19, \which, 0,\qf,0.5],~filterGrp);
@@ -569,12 +569,15 @@
 ~compBg=Synth(\comp, [\ctrl, ~kbus,\in, ~bgCom2],~compGrp);
 ~compBg.set(\thr,0.95 ,\sB, 1.050,\sA, 1/2,\atk ,0.0242, \rel ,0.0968,\gain,1 ,\out,~eqBg10);
 ~bgEq=Synth(\EQHP96, [ \in, ~eqBg10, \out,~bgLimit2,\frq,800],~delayGrp2);
-~bgEq.set(\frq,200,\val,268,\quant,1,\gain,(-20),\val2,668,\quant2,1,\gain2,(-12));
-
+~bgEq.set(\frq,200,\val,268,\quant,1,\gain,(-20),\val2,668,\quant2,1,\gain2,(-12),\frq,100);
+//add reverb
 ~limBg=Synth(\limitertoMixer,[ \c50,1, \in,~bgLimit2 ,\out,~bgStereo2, \gain, 20],~limitGrp  );
-~limBg.set(\gain,8);
+~limBg.set(\gain,3);
 
-~perc= Synth(\playBufX, [\impulse, 0.00001,\loo,1,\buf,~ambPerc,\out, ~distoPercBg]);
+
+
+// ~perc= Synth(\playBufX, [\impulse, 0.00001,\loo,1,\buf,~ambPerc,\out, ~distoPercBg]);
+
 ~distoP=Synth(\disto,[\in,~distoPercBg,\out,~eqPercBg],~distoGrp0);
 ~eqP= Synth(\EQHP96,[\in,~eqPercBg ,\out,~reverbPercBg,\frq,100],~eqGrp0);
 ~eqP.set(\val, 0,\quant, 0, \gain,0,\val2,0,\quant2,0, \gain2,0, \val3,0,\quant3,0, \gain3,0,\val4,0,\shelf,0, \gain4,0,);
@@ -585,6 +588,22 @@
 ~limitP.set(\gain,15);
 ~stereoP=Synth(\stereoO,[\in,~stereoPercBg ,\out,~toCom],~stereoGrp);
 ~stereoP.set(\spread,0,\center,0,\dlt1,0.01,\dlt2,0.07,\decT,0.0121, \mxDel,1,\out,~percGate);
+
+
+
+
+
+
+~kiDis=Synth(\distoS,[\in,~kiasDisto,\out,~kiasEq],~distoGrp0);
+
+~kiEq=Synth( \EQHP2, [\in, ~kiasEq ,\out, ~kiasRev,], ~eqGrp0));
+~kiEq.set(\frq, 40/*,\val,11800,\quant,1, \gain,(-18),\val2,2600,\quant2,8, \gain2,(-16)*/,\vol, 0.2);
+
+~kiRev=Synth(\reverbS, ~rShor,~revGrp);~kiRev.set(\in,~kiasRev ,\out,~kiasComp);
+
+~kiComp= Synth(\compS, [\ctrl, ~kbus],~compGrp);
+~kiComp.set(\thr,0.8 ,\sB, 1.05,\sA, 1/4,\atk ,0.0484, \rel ,0.3872 ,\gain, 5,\in, ~kiasComp , \out,0);
+
 
 
 

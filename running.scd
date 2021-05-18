@@ -254,6 +254,12 @@ s.sync;
 	~buildUpG=Bus.audio(s,1);
 	~snareFlang=Bus.audio(s,1);
 
+	~kiasDisto= Bus.audio(s,2);
+	~kiasEq= Bus.audio(s,2);
+	~kiasRev= Bus.audio(s,2);
+	~kiasComp= Bus.audio(s,2);
+
+
 	~flopped=Bus.audio(s,10);
 
 	//WATCH OUT MIGHT BE NEEDED
@@ -533,9 +539,11 @@ s.sync;
 	~shiftLimit2=  Bus.audio(s,2);
 	~shiftStereo2=  Bus.audio(s,2);
 	~shiftComp2=  Bus.audio(s,2);
+	~filKick= Bus.audio(s,1);
 
 
 	~kbus = Bus.audio(s,1);
+	~kbus2 = Bus.audio(s,1);
 	~snBus = Bus.audio(s,1);
 	~bassShapB = Bus.audio(s,1);
 	~noiseRev =  Bus.audio(s,2);
@@ -667,6 +675,8 @@ s.sync;
 	~bus26 = Bus.control(s,1);
 	~bus27 = Bus.control(s,1);
 	~bus28= Bus.control(s,1);
+
+	~bus29= Bus.control(s,1);
 
 	~mixM= Bus.control(s,1);
 	~roomM= Bus.control(s,1);
@@ -1032,7 +1042,7 @@ SynthDef(\kick, {
 
 		Out.ar(out, sig/*Pan2.ar(sig)*/);
 
-		Out.ar(0,RMS.ar(sig).ampdb.round(0.1).poll(label:"bass db :")* [0,0,1])
+		// Out.ar(0,RMS.ar(sig).ampdb.round(0.1).poll(label:"bass db :")* [0,0,1])
 	}).add;
 
 
@@ -1712,6 +1722,11 @@ FreeVerb.ar(
 
 	SynthDef(\compS, {|in, ctrl, out= 0, dec  , thr  =0.01 ,sB = 1, sA = (1/4), atk = 0.001, rel = 0.04 , gain=1,relMod|
 
+		Out.ar(out, Compander.ar(In.ar(in,2) , In.ar(ctrl,1)  , thresh: thr, slopeBelow: sB, slopeAbove: sA, clampTime: atk, relaxTime: rel)* gain );
+	}).add;
+
+	SynthDef(\compSMod, {|in, ctrl, out= 0, dec  , thr  =0.01 ,sB = 1, sA = (1/4), atk = 0.001, rel = 0.04 , gain=1,relMod|
+
 		Out.ar(out, Compander.ar(In.ar(in,2) , In.ar(ctrl,1)  , thresh: thr, slopeBelow: sB, slopeAbove: sA, clampTime: atk, relaxTime: rel+In.kr(relMod))* gain );
 	}).add;
 
@@ -1951,13 +1966,13 @@ SynthDef(\playBuf2ToMixer ,{|out = 0,start, trig= 0.002, dur, buf, dA=2, tS=1, l
 	}).add;
 
 
-	SynthDef(\stereoX1,{|out=0, in, spread=0, level=1, center=0.0,dur,modPan,atkT=0,decT=1,crvA=0,tS=1|
+	SynthDef(\stereoX1,{|out=0, in, spread=0, level=1, center=0.0,dur,modPan,atkT=0,decT=1,crvA=0,tS=1,vlSub=1|
 
 		Out.ar(out,
 			Splay.arFill(10,
 				In.ar(in, 1)
 				,spread,level,center+ In.kr(modPan))
-			* EnvGen.kr(Env([0,1,1,0],[dur* atkT,dur*decT,0],[crvA,0]),timeScale: tS,doneAction: 2)
+			* EnvGen.kr(Env([0,1,vlSub,0],[dur* atkT,dur*decT,0],[crvA,0]),timeScale: tS,doneAction: 2)
 			//EnvGen.kr(Env.step([1],[dur]),doneAction: 2)
 		);
 	}).add;
@@ -2288,6 +2303,23 @@ SynthDef(\sequ,{|value, dur, in=0, out=0, vlAtk=0, vlDec=1,vlSub=1,vlSub2=1, vlR
 }.add;
 
 	SynthDef(\flanger1, {arg flangefreq=0.3, fdback=0.3,in,tS=1,dur,out=0,flangMod,ph=0;
+
+		var input, effect;
+
+		input=In.ar(in,1);
+
+		input= input+ LocalIn.ar(1);
+
+		effect= DelayN.ar(input,0.02,SinOsc.kr(flangefreq,ph,0.005,0.005)); //max delay of 20msec
+
+		LocalOut.ar(fdback*effect);
+
+		//LocalOut.ar(fdback*BPF.ar(effect,MouseX.kr(1000,10000),0.1)); //alternative with filter in the feedback loop
+
+		Out.ar(out,effect /** EnvGen.kr(Env.step([1,1],[dur,0]),timeScale: tS,doneAction: 2)*/);
+	}).add;
+
+		SynthDef(\flanger1Mod, {arg flangefreq=0.3, fdback=0.3,in,tS=1,dur,out=0,flangMod,ph=0;
 
 		var input, effect;
 
