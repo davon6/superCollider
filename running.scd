@@ -114,10 +114,22 @@ s.sync;
 
 	// ~k = Buffer.alloc(s, s.sampleRate *999,1);
 	~k2 = Buffer.alloc(s, s.sampleRate *1,1);
+
 	~b3 = Buffer.alloc(s, s.sampleRate *5,1);
+	~b4= Buffer.alloc(s, s.sampleRate *5,1);
+	~b5= Buffer.alloc(s, s.sampleRate *5,1);
+
+
+
+
 	~bass = Buffer.alloc(s, s.sampleRate *5,1);
 	~kb1 = Buffer.alloc(s, s.sampleRate *1,2);
 	~kb2 = Buffer.alloc(s, s.sampleRate *t.beatDur,2);
+
+	~bass2 = Buffer.alloc(s, s.sampleRate *t.beatDur,2);
+	~bass3 = Buffer.alloc(s, s.sampleRate *t.beatDur,2);
+
+
 	~cymb = Buffer.alloc(s, s.sampleRate *1,1);
 	~hat = Buffer.alloc(s, s.sampleRate *1,1);
 
@@ -998,7 +1010,7 @@ SynthDef(\kick, {
 		);
 
 
-		sig =Saw.ar(41.2,mul: -1,add: -0.4).lincurve(-1,1,-1,1,-7);
+		sig =Saw.ar(freq,mul: -1,add: -0.4).lincurve(-1,1,-1,1,-7);
 
 
 		sig =
@@ -1088,15 +1100,18 @@ SynthDef(\kick, {
 
 	SynthDef(\wNoise, {
 
-		arg in=0, mix=0.2, amp = (-20), dec =0,sub2 =3, valStart= 10000,valEnd =100, wFil=1, pan =0, durF =3,out =0,atk=0, tS=1,dA=0;
+		arg in=0, mix=0.2, amp = (-20), dec =0,sub2 =3, valStart= 10000,valEnd =100, wFil=1, pan =0, durF =3,out =0,atk=0, tS=1,dA=0,dA2=0,dur,amp2=0;
 	var env,dry, wet, sig,env2, ori;
 
-		env = EnvGen.kr(Env([0,amp.dbamp,0],[atk,dec,0],[3,-2]),timeScale: tS,doneAction:2);
+		env = EnvGen.kr(Env([0,amp.dbamp,amp2],[atk,dec,0],[3,-2]),timeScale: tS,doneAction:2);
 
 	sig =  SelectX.ar(wFil,[
 			LPF.ar(WhiteNoise.ar(env),XLine.kr(valStart,valEnd,durF,doneAction: dA)),
 
-			HPF.ar(WhiteNoise.ar(env),XLine.kr(valStart,valEnd,durF))]);
+			HPF.ar(WhiteNoise.ar(env),XLine.kr(valStart,valEnd,durF)),
+
+			BHiPass4.ar(LPF.ar(WhiteNoise.ar(0.3),EnvGen.kr(Env([0,10000],[3],3))),EnvGen.kr(Env([0,10000],[dur],3),timeScale: tS,doneAction:dA2),0.2)
+		]);
 
 /*sig = Pan2.ar( sig , pan);*///0 was pan
 
@@ -1180,14 +1195,14 @@ SynthDef(\shiftX, {|in, out=0, frq=0,mult=0,rte=1|Out.ar(out, FreqShift.ar(In.ar
 
 
 		SynthDef(\shiftExG, {|in, out, freq,boo, freq2, factor =1, factor2, factor3, vlPE =27.1366666667,vlPE2=0.2, crvEP = (-2), dcPE = 0.129066666667, dur,
-		vlPE3,vlPE33,crvEP2, dA=0, dA2=0, dA3=0, triMod=0.08046875,vl=1,tS=1  |
+		vlPE3,vlPE33,crvEP2, dA=0, dA2=0, dA3=0, triMod=0.08046875,vl=1,tS=1,hS=400  |
 
 
 		Out.ar(out, FreqShift.ar(In.ar(in, 2)/*.sign*/,
 
 			/*freq:  freq2+    In.kr( boo, 1)  +   (EnvGen.kr(Env([vlPE,vlPE2],[dur/*dcPE*/,0],crvEP),doneAction: dA)*factor2)
 */
-			freq:LFTri.ar(triMod/*1.2875/16*/).range(-400,400)
+			freq:LFTri.ar(triMod/*1.2875/16*/).range(-400,hS)
    )* EnvGen.kr(Env([0,vl,vl,0],[0,dur,0],4),timeScale: tS,doneAction:2));
 	}).add;
 
@@ -1463,6 +1478,17 @@ timeScale: tS,	doneAction:2);
             room, // room 0-1
             damp // damp 0-1 duh
         ))}).add;
+
+
+
+	SynthDef(\reverbModu, {
+		|out=0,in,damp,room,mix,dur,tS=1,mixMod,roomMod,dampMod|
+    Out.ar(    out,
+		 FreeVerb.ar(  In.ar(in,1),
+				mix+In.kr(mixMod), // mix 0-1
+            room+In.kr(roomMod), // room 0-1
+            damp+In.kr(dampMod) // damp 0-1 duh
+        )/** EnvGen.kr(Env.step([1,1],[dur,0],4),timeScale: tS,doneAction:2)*/)}).add;
 
 
 		SynthDef(\reverbMad, {

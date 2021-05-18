@@ -132,7 +132,7 @@ Pbind(\instrument, \playBufS,\dur  ,Pseq([2/1],32),\buf,~pad,\tS,  0.39550810372
 
 
 			Pbind(\instrument,\shiftExG, \in,~shiftPlay2,\out,  ~shiftDisto2 ,\group, ~filterGrp,\dur, Pseq([32/1],2),
-		\triMod,Pseq([0.08046875,0.08046875/4],inf),\tS, 0.3955081037237),
+				\triMod,Pseq([0.08046875,0.08046875/4],inf),\tS, 0.3955081037237,\hS,Pseq([400,800],inf)),
 /*
 Pseq([*/
 	Pbind(\instrument,\gate2,\tS, 0.3955081037237,  \dur, Pseq([8/1],8),\type,Pseq([\note,\rest,\note,\rest,\note,\note,\note,\note],inf),\in,~shiftGate,\out,  ~shiftEq2,\group,~gateGrp12),

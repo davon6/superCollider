@@ -53,7 +53,7 @@ f = { |n=14, min=0, max=11| (min..max).scramble.keep(n) };
 ~rythm1=[\rest,\rest,\rest,\rest ,\rest,\rest ,\note, \rest].scramble; ~rythm2=[\rest,\rest,\rest,\rest ,\rest,\note ,\note, \rest].scramble; ~rythm3=[\rest,\rest,\rest,\rest ,\rest,\rest ,\note, \rest].scramble; ~rythm4=[\rest,\rest,\rest,\note ,\note,\note ,\note, \rest].scramble;
 	~rythmL = [\rest,\rest,\note,\note ,\rest,\note ,\note, \rest].scramble;
 
-~start = ~start =~fkAr.numFrames.rrand(215000)-215000
+~start = ~start =~fkAr.numFrames.rrand(215000)-215000;
 
 
 ~no2S = (~bufSnoopy.numFrames.rrand(1400000)- 1400000);
