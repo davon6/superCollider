@@ -99,13 +99,13 @@ Synth(\filter, [\which,0,\busMod, ~bus29, \in,~filKick,\out,~kbToPan3,\qf,0.7],~
 
 	Pseq([
 
-		Pbind(\instrument, \playBuf, \impulse, 0.003 ,\dur,Pseq([64/1],1), \tS,  0.39550810370174,\buf,~k2,\type,\rest),
+		Pbind(\instrument, \playBuf, \impulse, 0.003 ,\dur,Pseq([58/1],1), \tS,  0.39550810370174,\buf,~k2,\type,\rest),
 
-							Pbind(\instrument, \granLiveA,\buf,~snare,\out,~snareFlang,\amp,0.005,\dur, Pseq([64/1],1), \tS,  0.39550810370174)  ],1),
+							Pbind(\instrument, \granLiveA,\buf,~snare,\out,~snareFlang,\amp,0.005,\dur, Pseq([70/1],1), \tS,  0.39550810370174)  ],1),
 
 	Pseq([
 
-		Pbind(\instrument, \playBuf, \impulse, 0.003 ,\dur,Pseq([16/1],1), \tS,  0.39550810370174,\buf,~k2,\out, ~kickRv,\loopy,0,\start,0,\rte,0.3,\type,\rest,\vl,8),
+		Pbind(\instrument, \playBuf, \impulse, 0.003 ,\dur,Pseq([16/1],1), \tS,  0.39550810370174,\buf,~k2,\out, ~kickRv,\loopy,0,\start,0,\rte,0.3,\type,\rest,\vl,1.2),
 
 		Ppar([
 
@@ -113,7 +113,7 @@ Synth(\filter, [\which,0,\busMod, ~bus29, \in,~filKick,\out,~kbToPan3,\qf,0.7],~
 Pbind(\instrument,\lfo13, \val,0.01005859375,\dur,Pseq([112/1],1),\ph,4.4, \out,~roomM ,\tS, 0.39550810372374,\rL,0 ,\rH,0.8),
 Pbind(\instrument,\lfo13, \val,0.01005859375,\dur,Pseq([112/1],1),\ph,4.4, \out, ~dampM,\tS, 0.39550810372374,\rL, 0.41,\rH,0.8),
 
-	Pbind(\instrument, \playBuf, \impulse, 0.003 ,\dur,Pseq([1/1],109), \tS,  0.39550810370174,\buf,~k2,\out, ~kickRv,\loopy,0,\start,0,\rte,0.3,\type,Pseq([ Pseq([\note],107),\rest,\rest],1),/*\vl,*/ ),
+	Pbind(\instrument, \playBuf, \impulse, 0.003 ,\dur,Pseq([1/1],109), \tS,  0.39550810370174,\buf,~k2,\out, ~kickRv,\loopy,0,\start,0,\rte,0.3,\type,Pseq([ Pseq([\note],107),\rest,\rest],1),\vl, 1.4),
 
 ],1)
 					],1)
@@ -133,7 +133,7 @@ Pbind(\instrument,\lfo13, \val,0.01005859375,\dur,Pseq([112/1],1),\ph,4.4, \out,
 	(~breakPart2=
 			 Ppar([
 
-				Pbind(\instrument, \envSli, \out,   ~bus30,  \dur,Pseq([128/1],1),\tS, 0.39550810372374,\val1,30,\val2,5000,\crv,39),
+				Pbind(\instrument, \envSli, \out,   ~bus30,  \dur,Pseq([128/1],1),\tS, 0.39550810372374,\val1,30,\val2,4000,\crv,56),
 
 				  Pbind(\instrument, \shap, \dur,Pseq([1/1],128),\dA1,2,\out,~bassShapB, \tS, 0.39550810372374),
 
@@ -163,7 +163,7 @@ Pseq([
 Ppar([
 
 						//here
-Pbind(\instrument,\wNoise,\dur,Pseq([60/1],1) ,\dA2,2, \wFil,2,\dec,Pkey(\dur),\tS,  0.39550810372374,\out, /*~hitEq2*/~hitStereo,   \amp,0.2  ,\amp2,0.2),
+Pbind(\instrument,\wNoise,\dur,Pseq([60/1],1) ,\dA2,2, \wFil,2,\dec,Pkey(\dur),\tS,  0.39550810372374,\out, /*~hitEq2*/~hitStereoX,   \amp,0.2  ,\amp2,0.2),
 
 
 
@@ -199,7 +199,7 @@ Pbind(\instrument, \playBufX2,\dur, Pseq([1/2],8),\impulse, 10.3,\loo,0,\buf,~vo
 
 
 //not reveiving beloq
-				Pbind(\instrument,\stereo, \dur, Pseq([128/1],1), \in, ~hitStereo  ,\spread,0.1,\out,~toFilRise,\tS, 0.39550810372374,\group, ~stereoGrp),
+				Pbind(\instrument,\stereo, \dur, Pseq([128/1],1), \in, ~hitStereoX  ,\spread,0.1,\out,~toFilRise,\tS, 0.39550810372374,\group, ~stereoGrp),
 
 
 

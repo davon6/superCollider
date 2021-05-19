@@ -323,6 +323,16 @@ s.sync;
 	~hitComp= Bus.audio(s,1);
 	~hitLimit= Bus.audio(s,1);
 	~hitStereo= Bus.audio(s,1);
+	~hitStereoX= Bus.audio(s,1);
+
+
+	~bigRiToDisto2= Bus.audio(s,1);
+	~bigRiToEnv2= Bus.audio(s,1);
+	~bigRiToEq2= Bus.audio(s,1);
+	~bigRiToRev2= Bus.audio(s,1);
+	~bigRiToComp2= Bus.audio(s,1);
+	~bigRiToLimit2= Bus.audio(s,1);
+	~bigRiToStereo2= Bus.audio(s,1);
 
 	~tofinalRythm= Bus.audio(s,10);
 
