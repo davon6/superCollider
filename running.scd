@@ -594,6 +594,8 @@ s.sync;
 
 	~revKck2= Bus.audio(s,1);
 
+	~slideComp= Bus.audio(s,1);
+
 	~lpK=Bus.audio(s,1);
 	~hpK=Bus.audio(s,1);
 	~bpK=Bus.audio(s,1);
@@ -689,6 +691,7 @@ s.sync;
 
 	~bus29= Bus.control(s,1);
 	~bus30= Bus.control(s,1);
+	~bus31= Bus.control(s,1);
 
 	~mixM= Bus.control(s,1);
 	~roomM= Bus.control(s,1);
@@ -1148,6 +1151,29 @@ SynthDef(\kick, {
 }).add;
 
 
+	SynthDef(\wNoise2, {
+
+		arg in=0, mix=0.2, amp = (-20), dec =0,sub2 =3, valStart= 10000,valEnd =100, wFil=1, pan =0, durF =3,out =0,atk=0, tS=1,dA=0,dA2=0,dur,amp2=0;
+	var env,dry, wet, sig,env2, ori;
+
+		env = EnvGen.kr(Env([0,amp.dbamp,amp2],[dur*atk,dur*dec,0],[3,-2]),timeScale: tS,doneAction:2);
+
+	sig = /* SelectX.ar(wFil,[
+			LPF.ar(WhiteNoise.ar(env),XLine.kr(valStart,valEnd,durF,doneAction: dA))*/
+
+		HPF.ar(WhiteNoise.ar(env),XLine.kr(valStart,valEnd,durF,doneAction: dA));   	/*,
+
+			BHiPass4.ar(LPF.ar(WhiteNoise.ar(0.03),EnvGen.kr(Env([0,10000],[3],3))),EnvGen.kr(Env([0,10000],[dur],3),timeScale: tS,doneAction:dA2),0.2);
+	]);*/
+
+/*sig = Pan2.ar( sig , pan);*///0 was pan
+
+	Out.ar(out, sig   /*.dup*/ *env;//* env2 //
+
+    )
+}).add;
+
+
 
 "side events init".postln;
 
@@ -1265,11 +1291,11 @@ freq         )* EnvGen.kr(Env([0,vl,vl,0],[0.055,dur-0.055,0],4),timeScale: tS,d
 
 		sig = In.ar(in,1);
 
-		lp = BLowPass4.ar(sig , freqFil+ In.kr(busMod, 1) ,qf +In.kr(rqLPF));
+		lp = BLowPass4.ar(sig , freqFil+ In.kr(busMod, 1) ,qf /*+In.kr(rqLPF)*/);
 
 		bp = BBandPass.ar(sig,freqFil+ In.kr(busMod, 1) *factor3  ,qf2 +0.26);
 
-		hp = BHiPass4.ar(sig, freqFil+ In.kr(busMod, 1),/*0.6 */ qf2 +In.kr(bus7, 1));
+		hp = BHiPass4.ar(sig, freqFil+ In.kr(busMod, 1),/*0.6 */ qf2 /*+In.kr(bus7, 1)*/);
 
 		sig = SelectX.ar(which, [lp, bp,hp,sig]);
 
@@ -1283,11 +1309,11 @@ freq         )* EnvGen.kr(Env([0,vl,vl,0],[0.055,dur-0.055,0],4),timeScale: tS,d
 
 		sig = In.ar(in,1);
 
-		lp = BLowPass4.ar(sig , freqFil+ In.kr(busMod, 1)+ MouseX.kr(40,22000) ,qf +In.kr(rqLPF));
+		lp = BLowPass4.ar(sig , freqFil+ In.kr(busMod, 1)+ MouseX.kr(40,22000) ,qf/* +In.kr(rqLPF)*/);
 
 		bp = BBandPass.ar(sig,freqFil+ In.kr(busMod, 1) *factor3+ MouseX.kr(40,10000)  ,qf2 +0.26);
 
-		hp = BHiPass4.ar(sig, freqFil+ In.kr(busMod, 1)+ MouseX.kr(40,22000),/*0.6 */ qf2 +In.kr(bus7, 1));
+		hp = BHiPass4.ar(sig, freqFil+ In.kr(busMod, 1)+ MouseX.kr(40,22000),/*0.6 */ qf2 /*+In.kr(bus7, 1)*/);
 
 		sig = SelectX.ar(which, [lp, bp,hp,sig]);
 
@@ -1335,11 +1361,11 @@ freq         )* EnvGen.kr(Env([0,vl,vl,0],[0.055,dur-0.055,0],4),timeScale: tS,d
 
 		sig = In.ar(in,2);
 
-		lp = BLowPass4.ar(sig , freqFil+ In.kr(busMod, 1) ,qf +In.kr(rqLPF));
+		lp = BLowPass4.ar(sig , freqFil+ In.kr(busMod, 1) ,qf /*+In.kr(rqLPF)*/);
 
 		bp = BPF.ar(sig,freqFil+In.kr(busMod, 1) *factor3  ,qf2 +0.26);
 
-		hp = BHiPass4.ar(sig, freqFil+ In.kr(busMod, 1),/*0.6 */ qf2 +In.kr(bus7, 1));
+		hp = BHiPass4.ar(sig, freqFil+ In.kr(busMod, 1),/*0.6 */ qf2/* +In.kr(bus7, 1)*/);
 
 		sig = SelectX.ar(which, [lp, bp,hp,sig]);
 
@@ -1353,11 +1379,11 @@ freq         )* EnvGen.kr(Env([0,vl,vl,0],[0.055,dur-0.055,0],4),timeScale: tS,d
 
 		sig = In.ar(in,10);
 
-		lp = BLowPass4.ar(sig , freqFil+ In.kr(busMod, 1) ,qf +In.kr(rqLPF));
+		lp = BLowPass4.ar(sig , freqFil+ In.kr(busMod, 1) ,qf /*+In.kr(rqLPF)*/);
 
 		bp = BPF.ar(sig,freqFil+In.kr(busMod, 1) *factor3  ,qf2 +0.26);
 
-		hp = BHiPass4.ar(sig, freqFil+ In.kr(busMod, 1),/*0.6 */ qf2 +In.kr(bus7, 1));
+		hp = BHiPass4.ar(sig, freqFil+ In.kr(busMod, 1),/*0.6 */ qf2 /*+In.kr(bus7, 1)*/);
 
 		sig = SelectX.ar(which, [lp, bp,hp,sig]);
 
@@ -2647,11 +2673,7 @@ Ppar([
 
 
 	Pbind(\instrument,\recLoopS,\buf,~kb2,\recording,1, \in,0,\group,~recGrp2,\dur,inf),
-/*Pseq([
-	Pbind(\instrument, \playBuf, \impulse, 0.003 ,\dur,    Pseq([1/2],1), \tS,  0.39550810372374,\buf,~k2,\out, ~kToPan,\loopy,0,\start,0,\tS, 0.39550810372374),
 
-		/*Pbindf(~kick ,\dur,    Pseq([1/2],1),\out,~kbToPan2),*/
-		Pbind(\instrument, \wNoise,\dur,Pseq([1/2],1),\dec ,Pkey(\dur),\amp,(-12),\tS, 0.39550810372374,\type, \rest  )],inf),*/
 
 Pseq([Pbind(\instrument, \wNoise,\dur,Pseq([1/4],1),\dec ,Pkey(\dur),\amp,(-12),\tS, 0.39550810372374,\type, \rest  ),
 

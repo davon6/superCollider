@@ -13,9 +13,11 @@
 ~kb=Pbind(\instrument, \playBufS, \dur,  Pseq([1/1],inf), \tS,  0.39550810372374,\buf,~kb2).play(t)
 ~kb=Pbind(\instrument, \playBufS, \dur,  Pseq([1/1],inf), \tS,  0.39550810372374,\buf,~kb1).play(t)
 ~kb.stop
+
+
 ~boost.play(t)
 
-Ppar([~boost,~justHit],1).play(t)
+Ppar([~boost,~kb,~justHit],1).play(t)
 (~boost=Ppar([
 
 
