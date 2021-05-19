@@ -34,14 +34,23 @@ v = Synth( \fmX, [\dur, inf,\stretch, 3.5,\mRatio, 1,\cRatio, 1,\index, 1,\atkE,
 ~v =  Synth(\comb1,[ \in, ~outFil,\out,~toShifter   /*~outDisto*/,\amp,1,\maxDel,0.7744,\decT,-0,\busMod,~seqBus],~combGrp);
 
 	Pbind(\instrument, \sequ,\out, ~seqBus, \value,Pseq([
-Scale.majorPentatonic(\just).degreeToFreq(7.rand, 76.midicps, -22),
+/*Scale.majorPentatonic(\just).degreeToFreq(7.rand, 76.midicps, -22),
 	Scale.majorPentatonic(\just).degreeToFreq(7.rand, 76.midicps, -21),
 	Scale.majorPentatonic(\just).degreeToFreq(7.rand, 76.midicps, -22),
 	Scale.majorPentatonic(\just).degreeToFreq(7.rand, 76.midicps, -22),
 	Scale.majorPentatonic(\just).degreeToFreq(7.rand, 76.midicps, -22),
 	Scale.majorPentatonic(\just).degreeToFreq(7.rand, 76.midicps, -21),
 	Scale.majorPentatonic(\just).degreeToFreq(7.rand, 76.midicps, -20),
-Scale.majorPentatonic(\just).degreeToFreq(7.rand, 76.midicps, -20)
+Scale.majorPentatonic(\just).degreeToFreq(7.rand, 76.midicps, -20)*/
+
+	Scale.chromatic(\just).degreeToFreq(7.rand, 76.midicps, -22),
+	Scale.chromatic(\just).degreeToFreq(7.rand, 76.midicps, -21),
+	Scale.chromatic(\just).degreeToFreq(7.rand, 76.midicps, -22),
+	Scale.chromatic(\just).degreeToFreq(7.rand, 76.midicps, -22),
+	Scale.chromatic(\just).degreeToFreq(7.rand, 76.midicps, -22),
+	Scale.chromatic(\just).degreeToFreq(7.rand, 76.midicps, -21),
+	Scale.chromatic(\just).degreeToFreq(7.rand, 76.midicps, -20),
+Scale.chromatic(\just).degreeToFreq(7.rand, 76.midicps, -20)
 
 ].scramble,inf),\dur,Pxrand([ Pseq([4/1],1),Pseq([1/1],4), Pseq([1/4],16)],inf),\legato, 2,\group,~shapGrp,\tS, 0.39550810372374,).play(t);
 
