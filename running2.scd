@@ -878,7 +878,7 @@ Pbind(\instrument, \percussion, \dur,Pseq([8/1],1 ),\carHz, Pfunc({1050.12070612
 Ppar([
 
 
-		Pbind(\instrument, \lfo13T, \val,0.084,\dur,Pseq([32/1],inf),\rL,0.084,\rH,1.2875 ,\out,  ~bus26, \group, ~lfoGrp,\tS, 0.39550810372374,\ph,4.4),
+		Pbind(\instrument, \lfo13T, \val,0.084,\dur,Pseq([32/1],inf),\rL,0.084,\rH,1.2875 ,\out,  ~bus26, \group, ~lfoGrp,\tS, 0.39550810372374,\xph,4.4),
 
 
 	//??
