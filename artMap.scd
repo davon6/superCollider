@@ -484,7 +484,7 @@ SynthDef(\chord,{
 		BHiPass4.ar((Saw.ar(64.midicps+EnvGen.kr(Env([50,0],[20],-5)))+
 		Saw.ar(67.midicps+EnvGen.kr(Env([50,0],[20],-5)))+
 			Saw.ar(63.midicps+EnvGen.kr(Env([50,0],[20],-5)))),MouseY.kr(30,12000),0.8)*0.06)
-}).play
+}).play;
 
 
 
