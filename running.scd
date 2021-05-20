@@ -2661,7 +2661,7 @@ Ppar([
 	Pbind(\instrument ,\EQHP2/*	\EQHP2*/,\dur, inf, \in,~bassEq, \out,0,\group, ~eqGrp, \frq, 20.6,\vol,1,
 
 
-			\val,659.255, \quant,1.1, \gain,(-16),
+			\val,659.255, \quant,1.1, \gain,(-14),
 \val2,1318.51, \quant2,2, \gain2,(-8),
 		\val3,2637.02, \quant3,1, \gain3,(-7),
 

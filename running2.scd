@@ -673,6 +673,7 @@ Pbind(\instrument,\gate2, \in ,~toKbGate, \group,~kbGate, \tS,  0.39550810370174
 			Pbind(\instrument,\gate2, \in ,~toKbGate, \group,~kbGate, \tS,  0.39550810370174,
 		\dur, Pseq([16/1],1)),
 
+
 			Pbind(\instrument,\gate2, \in ,~toKbGate, \group,~kbGate, \tS,  0.39550810370174,
 		\dur, Pseq([16/1],1)),
 Pseq([
@@ -753,7 +754,7 @@ Pseq([
 
 ].scramble,2),
 
-		~breakPart1,~breakPart2, ~jumpy
+		~breakPart1,/*~breakPart2,*/ ~jumpy
 
 		/*Pbind(\instrument,  \stereoX1, \in,~bgStereo2,  \out, ~toCom, \modPan,~bus10 ,   \center, 0.1  ,\dur,Pseq([64/1],1),  \group, ~stereoGrp,\spread, 0.8,\tS,  0.39550810372374,\vlSub,0.3,\atkT,  0.01,\decT,0.999)*/
 
