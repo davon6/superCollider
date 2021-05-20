@@ -1301,11 +1301,11 @@ freq         )* EnvGen.kr(Env([0,vl,vl,0],[0.055,dur-0.055,0],4),timeScale: tS,d
 
 		sig = In.ar(in,1);
 
-		lp = BLowPass4.ar(sig , freqFil+ In.kr(busMod, 1) ,qf /*+In.kr(rqLPF)*/);
+		lp = BLowPass4.ar(sig , freqFil+ In.kr(busMod, 1) ,qf +In.kr(rqLPF));
 
 		bp = BBandPass.ar(sig,freqFil+ In.kr(busMod, 1) *factor3  ,qf2 +0.26);
 
-		hp = BHiPass4.ar(sig, freqFil+ In.kr(busMod, 1),/*0.6 */ qf2 /*+In.kr(bus7, 1)*/);
+		hp = BHiPass4.ar(sig, freqFil+ In.kr(busMod, 1),/*0.6 */ qf2+In.kr(bus7, 1));
 
 		sig = SelectX.ar(which, [lp, bp,hp,sig]);
 
@@ -1319,11 +1319,11 @@ freq         )* EnvGen.kr(Env([0,vl,vl,0],[0.055,dur-0.055,0],4),timeScale: tS,d
 
 		sig = In.ar(in,1);
 
-		lp = BLowPass4.ar(sig , freqFil+ In.kr(busMod, 1)+ MouseX.kr(40,22000) ,qf/* +In.kr(rqLPF)*/);
+		lp = BLowPass4.ar(sig , freqFil+ In.kr(busMod, 1)+ MouseX.kr(40,22000) ,qf +In.kr(rqLPF));
 
 		bp = BBandPass.ar(sig,freqFil+ In.kr(busMod, 1) *factor3+ MouseX.kr(40,10000)  ,qf2 +0.26);
 
-		hp = BHiPass4.ar(sig, freqFil+ In.kr(busMod, 1)+ MouseX.kr(40,22000),/*0.6 */ qf2 /*+In.kr(bus7, 1)*/);
+		hp = BHiPass4.ar(sig, freqFil+ In.kr(busMod, 1)+ MouseX.kr(40,22000),/*0.6 */ qf2 +In.kr(bus7, 1));
 
 		sig = SelectX.ar(which, [lp, bp,hp,sig]);
 
@@ -1371,11 +1371,11 @@ freq         )* EnvGen.kr(Env([0,vl,vl,0],[0.055,dur-0.055,0],4),timeScale: tS,d
 
 		sig = In.ar(in,2);
 
-		lp = BLowPass4.ar(sig , freqFil+ In.kr(busMod, 1) ,qf /*+In.kr(rqLPF)*/);
+		lp = BLowPass4.ar(sig , freqFil+ In.kr(busMod, 1) ,qf +In.kr(rqLPF));
 
 		bp = BPF.ar(sig,freqFil+In.kr(busMod, 1) *factor3  ,qf2 +0.26);
 
-		hp = BHiPass4.ar(sig, freqFil+ In.kr(busMod, 1),/*0.6 */ qf2/* +In.kr(bus7, 1)*/);
+		hp = BHiPass4.ar(sig, freqFil+ In.kr(busMod, 1),/*0.6 */ qf2 +In.kr(bus7, 1));
 
 		sig = SelectX.ar(which, [lp, bp,hp,sig]);
 
@@ -1389,11 +1389,11 @@ freq         )* EnvGen.kr(Env([0,vl,vl,0],[0.055,dur-0.055,0],4),timeScale: tS,d
 
 		sig = In.ar(in,10);
 
-		lp = BLowPass4.ar(sig , freqFil+ In.kr(busMod, 1) ,qf /*+In.kr(rqLPF)*/);
+		lp = BLowPass4.ar(sig , freqFil+ In.kr(busMod, 1) ,qf +In.kr(rqLPF));
 
 		bp = BPF.ar(sig,freqFil+In.kr(busMod, 1) *factor3  ,qf2 +0.26);
 
-		hp = BHiPass4.ar(sig, freqFil+ In.kr(busMod, 1),/*0.6 */ qf2 /*+In.kr(bus7, 1)*/);
+		hp = BHiPass4.ar(sig, freqFil+ In.kr(busMod, 1),/*0.6 */ qf2+In.kr(bus7, 1));
 
 		sig = SelectX.ar(which, [lp, bp,hp,sig]);
 
@@ -2673,7 +2673,9 @@ Pseq([~kick],10).play(t)
 Ppar([
 
 
-	Pbind(\instrument, \kick,\dur, Pseq([1/1],inf),\amp,(-5.2),\out,~kbus),
+	// Pbind(\instrument, \kick,\dur, Pseq([1/1],inf),\amp,(-5.2),\out,~kbus),
+
+		Pseq([Pbindf(~kick,\out,~kbus)],inf),
 
 	/*Pseq([Pbindf(~hat2,\out,~kickHatEq2)],inf),
 		Pbind(\instrument ,	\EQ2,\dur, inf, \in,~kickHatEq2, \out,~kbus,\group, ~eqGrp, \val, 659.255, \quant,1, \gain ,(-30)),*/

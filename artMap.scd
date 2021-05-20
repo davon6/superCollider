@@ -484,12 +484,12 @@ SynthDef(\chord,{
 		BHiPass4.ar((Saw.ar(64.midicps+EnvGen.kr(Env([50,0],[20],-5)))+
 		Saw.ar(67.midicps+EnvGen.kr(Env([50,0],[20],-5)))+
 			Saw.ar(63.midicps+EnvGen.kr(Env([50,0],[20],-5)))),MouseY.kr(30,12000),0.8)*0.06)
-}).play)
+}).play
 
 
 
 
-Pbind(\instrument, \pingD, \in,~delayToLimit  ,\bufnum, ~delay6, \feedback,0.33 ,\dur, inf,\out,~delayBus2,\group,  ~extraDelay).play(t)
+Pbind(\instrument, \pingD, \in,~delayToLimit  ,\bufnum, ~delay6, \feedback,0.33 ,\dur, inf,\out,~delayBus2,\group,  ~extraDelay).play(t);
 
 
 
@@ -498,6 +498,7 @@ Pbind(\instrument, \pingD, \in,~delayToLimit  ,\bufnum, ~delay6, \feedback,0.33 
 ~rev2.set( \in,~delayBus2  , \out, 0,\taillevel,2,\revtime, 14.85, \damping, 0.1,\roomsize, 16,\inputbw,0.8)
 
 
+)
 
 a= Synth( \reverbMad,~churcx,    ~extraDelay );
 a.set( \in,~delayToLimit  , \out,0 /*~delayBus2*/,\taillevel,2,\revtime, 14.85, \damping, 0.1,\roomsize, 16,\inputbw,0.8)

@@ -111,7 +111,7 @@ Pbind(\instrument, \lfo13,\val,(~hzQbeat/4),\out,~bus2 ,\dur,999,\ph,0, \rL,200,
 	Pbind(\instrument,\envSli,\out, ~bus18,\dur,Pseq([128/1],inf),\tS, 0.39550810372374,\val1,350,\crv,3.2),*/
 
 
-~kb,~hitX,/*~pedonk,*/~fx,   ~justHit,
+~kb,~hitX,/*~pedonk, */ ~fx,  ~justHit,
 
 	//if below repeat maybe change to Pfunc
 

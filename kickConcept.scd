@@ -5,7 +5,7 @@ Pbind(\instrument, \playBuf, \impulse, 0.003 ,\dur,Pseq([1/1],128), \tS,  0.3955
 
 
 
-		Pbind(\instrument, \lfo13,\val,(~hzQbeat/32),\out,~bus24 ,\dur,999,\ph,4.4, \rL,800,\rH,6000, \group, ~lfoGrp,\tS, 0.39550810372374),
+		Pbind(\instrument, \lfo13,\val,(~hzQbeat/32),\out,~bus24 ,\dur,999,\ph,4.4, \rL,600,\rH,6000, \group, ~lfoGrp,\tS, 0.39550810372374),
 
 
 /*Pseq([*/
@@ -77,9 +77,9 @@ Pbindf(~kick,\out,  ~revKck2).play(t)
 
 ~flangSna= Synth( \flanger1,[ \in,~snareFlang, \out,~distoPercBg, \flangefreq,0.01005859375,\fdback,-0.8,\ph,5.6],~phaserGrp);
 
-Synth(\filter, [\which,0,\busMod, ~bus29, \in,~filKick,\out,~kbToPan3,\qf,0.7],~delayGrp);
+~fKick= Synth(\filter, [\which,0,\busMod, ~bus29, \in,~filKick,\out,~kbToPan3,\qf,0.7,\freqFil,100],~delayGrp);
 
-		Synth( \pan2, [\in,~kbToPan3,\out,0],~recGrp3);
+~kbPan	=	Synth( \pan2, [\in,~kbToPan3,\out,0],~recGrp3);
 
 (
 	~breakPart1=		Ppar([
@@ -162,8 +162,8 @@ Pseq([
 				Pbind(\instrument,\wNoise,\dur,Pseq([64/1],1) ,\dA2,2, \wFil,2,\amp2,1,\dec,Pkey(\dur),\tS,  0.39550810372374,\type,\rest),
 Ppar([
 
-						//here
-Pbind(\instrument,\wNoise,\dur,Pseq([60/1],1) ,\dA2,2, \wFil,2,\dec,Pkey(\dur),\tS,  0.39550810372374,\out, /*~hitEq2*/~hitStereoX,   \amp,0.2  ,\amp2,0.2),
+						//here// need eq
+Pbind(\instrument,\wNoise,\dur,Pseq([60/1],1) ,\dA2,2, \wFil,2,\dec,Pkey(\dur),\tS,  0.39550810372374,\out,~hitEq2/*~hitStereoX*/,   \amp,0.2  ,\amp2,0.2),
 
 
 
@@ -173,7 +173,8 @@ Pbind(\instrument,\wNoise,\dur,Pseq([60/1],1) ,\dA2,2, \wFil,2,\dec,Pkey(\dur),\
 								Pbind(\instrument,\kick, \dur, Pseq([ Pseq([1/2],8),Pseq([1/4],32),Pseq([1/8],128), Pseq([1/1],3),Pseq([1/2],2)],1) ,\type,Pseq([Pseq([\note],169),Pseq([\rest],2), Pseq([\note],2)],inf),\out,~kbus2),*/
 
 Pbind(\instrument,\kick, \dur, Pseq([ Pseq([1/2],8),Pseq([1/4],32),Pseq([1/8],128), Pseq([1/1],3),Pseq([1/2],2)],1) ,\type,Pseq([Pseq([\note],169),Pseq([\rest],2), Pseq([\note],2)],inf),\out,~kbToPan4)
-/*],1)*/],1)],1)
+/*],1)*/
+					],1)],1)
 ],1),
 
 				Pseq([
