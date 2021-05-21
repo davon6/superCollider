@@ -152,7 +152,7 @@ s.sync;
 	~lpPrec2 = Buffer.alloc(s, s.sampleRate *t.beatDur*64,1);
 
 	~lpPrec3 = Buffer.alloc(s, s.sampleRate *t.beatDur*64,1);
-
+~kb2Test2= Buffer.alloc(s, s.sampleRate * t.beatDur*16,2);
 	~kb2Test = Buffer.alloc(s, s.sampleRate * t.beatDur*16,2);
 	~e = Buffer.alloc(s, s.sampleRate *   t.beatDur*4 ,1);
 	~f = Buffer.alloc(s, s.sampleRate *  t.beatDur*4);
@@ -605,6 +605,7 @@ s.sync;
 	~rythmLimit=Bus.audio(s,10);
 	~toCom = Bus.audio(s,10);
 	~no1 = Bus.audio(s,10);
+	~no1b = Bus.audio(s,10);
 	~fusible = Bus.audio(s,10);
 	~dipatchKB = Bus.audio(s,2);
 	~dipatchKB2 = Bus.audio(s,2);
@@ -1296,7 +1297,7 @@ LFNoise0.kr(~hz1beat).range(0.1,0.0)/*,0.02)*/
 	Out.ar(out, filter * env * amp* EnvGen.kr(Env.step([1,1],[dur,0],4),timeScale: tS,doneAction:2));
 }).add;
 
-
+/*0.1-0.018    0.964-0.082*/
 	SynthDef(\rise, {
 	arg freq=659.26, mRatio=1, cRatio=1,
 	index=1, iScale=5, ic_atk=4, ic_rel=(-4),
@@ -1309,7 +1310,7 @@ LFNoise0.kr(~hz1beat).range(0.1,0.0)/*,0.02)*/
 			[ic_atk, ic_rel]//atkC was 10
 		),timeScale: tS,doneAction:2
 	);
-		env = EnvGen.kr(Env([0,1,1,0],[dur*0.018,dur*0.964,0,dur*0.018]/*[dur*0.01,dur*0.97,0,dur*0.02]*/,[16,0,0-16]),timeScale: tS,doneAction: 2);
+		env = EnvGen.kr(Env([0,1,1,0],[dur*0.05,dur*0.932,0,dur*0.018]/*[dur*0.01,dur*0.97,0,dur*0.02]*/,[16,0,0-16]),timeScale: tS,doneAction: 2);
 	mod2 = SinOsc.ar(freq/10*f3, mul:freq/10 *iEnv);
 
 	mod = SinOsc.ar(freq * f2 + mod2

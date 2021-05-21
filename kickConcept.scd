@@ -12,12 +12,15 @@
 
 ~kbPan	=	Synth( \pan2, [\in,~kbToPan3,\out,0],~recGrp3);
 
-(
+/*(
 	~breakPart1=		Ppar([
 					//careful for doublon --below
 
+/*
+			Pbind(\instrument,\envSli,\out, ~bus29,\dur,Pseq([128/1],1),\tS, 0.39550810372374,\val1,4600,\val2,1160,\crv,-2.2),*/
 
-			Pbind(\instrument,\envSli,\out, ~bus29,\dur,Pseq([128/1],1),\tS, 0.39550810372374,\val1,4600,\val2,1160,\crv,-2.2),
+	/*watch out
+			Pbind(\instrument,\lfo13,\out, ~bus29,\dur,Pseq([128/1],1),\tS, 0.39550810372374,\rL,4600,\rH,1160,\ph,-2.2),\val,(~hzQbeat/16),*/
 						Pbind(\instrument, \lfo13,\val,(~hzQbeat/32),\out,~bus24 ,\dur,Pseq([128/1],1),\ph,4.4, \rL,800,\rH,6000, \group, ~lfoGrp,\tS, 0.39550810372374),
 
 				Pbind(\instrument, \lfo13T,  \val, 0.1609375, \ph, 2.9,  \out,~bus32, \dur,Pseq([32/1],1),\rL,50,\rH,1600,\tS, 0.39550810372374),
@@ -159,7 +162,7 @@ Pbind(\instrument, \playBufX2,\dur, Pseq([1/2],8),\impulse, 10.3,\loo,0,\buf,~vo
 
 ],1)
 
-)
+)*/
 
 
 
@@ -169,7 +172,6 @@ Pbind(\instrument, \playBufX2,\dur, Pseq([1/2],8),\impulse, 10.3,\loo,0,\buf,~vo
 		Pseq([~breakPart1,~breakPart2],inf).play(t)
 
 
-//old below
 
 
 
@@ -296,7 +298,7 @@ Pbindf(~kick,\out,  ~revKck2).play(t)
 Pseq([
 
 					Ppar([
-			Pbind(\instrument,\envSli,\out, ~bus29,\dur,Pseq([64/1],1),\tS, 0.39550810372374,\val1,4600,\val2,1160,\crv,-2.2),
+			/*Pbind(\instrument,\envSli,\out, ~bus29,\dur,Pseq([64/1],1),\tS, 0.39550810372374,\val1,4600,\val2,1160,\crv,-2.2),*/
 						Pbind(\instrument, \lfo13,\val,(~hzQbeat/32),\out,~bus24 ,\dur,Pseq([64/1],1),\ph,4.4, \rL,800,\rH,6000, \group, ~lfoGrp,\tS, 0.39550810372374),
 
 				Pbind(\instrument, \lfo13T,  \val, 0.1609375, \ph, 2.9,  \out,~bus32, \dur,Pseq([32/1],1),\rL,50,\rH,600,\tS, 0.39550810372374),
@@ -351,8 +353,11 @@ Pbind(\instrument,\lfo13, \val,0.0201171875,\dur,Pseq([48/1],1),\ph,4.4, \out, ~
 
 				  Pbind(\instrument, \shap, \dur,Pseq([1/1],64),\dA1,2,\out,~bassShapB, \tS, 0.39550810372374),
 
+//changed buffer for one night
 
-Pbind(\instrument,\playBufXG, \buf,~kb2Test, \atckC,7, \relC,-18,\decT ,0.6, \atkT,0.15,\relT,0.25,  \vlSub, 0.02,\vlDec,Pkey(\vlSub) ,\vlSub2,Pkey(\vlSub), \dur,  Pseq([64/1],1), \tS,  0.39550810370174,\start,0),
+
+Pbind(\instrument,\playBufS/*\playBufXG*/, \buf,~kb2Test2, \vl, 0.038,\dur,  Pseq([64/1],1), \tS,  0.39550810370174,\start,0),
+/*Pbind(\instrument,\playBufS/*\playBufXG*/, \buf,~kb2Test2, \atckC,7, \relC,-18,\decT ,0.6, \atkT,0.15,\relT,0.24,  \vlSub, 0.02,\vlDec,Pkey(\vlSub) ,\vlSub2,Pkey(\vlSub), \dur,  Pseq([64/1],1), \tS,  0.39550810370174,\start,0),*/
 
 				//need bassshap, must hp at the end
 	Pbind(\instrument, \bass,\type, Pseq([\note, \rest, \note, \note,\rest,\note,\note,\note], inf),\dur,Pseq([1/4],254 /*512*/), \lpf,100,\midinote,Pseq([ Pseq([28],7),29,28,33,Pseq([28],7),29,28,27],inf), \bus, ~bassShapB,\atk, 0,\rel, t.beatDur/4 , \rel2, t.beatDur/4 * 0.0012,\atkcrv, -2,\relcrv, -2,\relcrv2, -4, \relcrv3, -6,\amp,(-20),\out,~kbToPan4/*~bassEq*/),
@@ -413,7 +418,7 @@ Pbind(\instrument, \playBufX2,\dur, Pseq([1/2],8),\impulse, 10.3,\loo,0,\buf,~vo
 
 
 				Pbind(\instrument,\gateS, \dur,Pseq([16/1],4),\vlSub, 1/*Pfunc({1.rand})*/, \vlSub2,Pkey(\vlSub),
-					/*\decC,Pfunc({(-10).rrand(2)}),*/\in,~vocToDispatch,\out,~toFilRise,\group, ~gateGrp4,\tS, 0.39550810372374,\type,Pseq([\rest,\note],inf)),
+					/*\decC,Pfunc({(-10).rrand(2)}),*/\in,~vocToDispatch,\out,~toFilRise,\group, ~gateGrp4,\tS, 0.39550810372374,\type,Pseq([\note,\rest],inf)),
 
 
 //not reveiving beloq

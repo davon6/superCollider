@@ -461,10 +461,10 @@ Ppar([
 (SynthDef(\idea, {Out.ar(0,CombN.ar(Saw.ar(/*LFNoise.kr(1.2875).range(0.3,432)*/216/*MouseY.kr(100,432)*/),delaytime:
 	LFNoise1.kr(2.575).range(0.00001,0.01)
 
-	/*MouseX.kr(0.01,0.2)*/ ,decaytime: /*LFNoise0.kr(5.2875).range(-0.1,0.4)*/-0.2))}).play)
+	/*MouseX.kr(0.01,0.2)*/ ,decaytime: /*LFNoise0.kr(5.2875).range(-0.1,0.4)*/-0.2)!2)}).play)
 
 
-Pbind(\instrument,\recLoopS,\buf,~kb2Test,\recording,1, \in,0,\group,~recGrp2,\dur,inf).play(t)
+Pbind(\instrument,\recLoopS,\buf,~kb2Test2,\recording,1, \in,0,\group,~recGrp2,\dur,inf).play(t)
 
 
 ~kb2Test.play
