@@ -20,7 +20,7 @@ Pseq([
 	,\loopy,0,\tS,0.39550810372374,\dur,Pseq([4/1],2)),
 
 	Pbind(\instrument, \playBuf10, \buf ,~leTout2,\out,~toExtraFx, \start, ~leTout2.numFrames/ 256 *
-		Pfunc({240.rand.postln})
+		Pfunc({240.rand})
 	,\loopy,0,\tS,0.39550810372374,\dur,Pseq([8/1],1))
 	],2),
 
@@ -30,7 +30,7 @@ Pseq([
 	,\loopy,0,\tS,0.39550810372374,\dur,Pseq([4/1],2)),
 
 	Pbind(\instrument, \playBuf10, \buf ,~leTout2,\out,~toExtraFx, \start, ~leTout2.numFrames/ 256 *
-		Pfunc({240.rand.postln})
+		Pfunc({240.rand})
 	,\loopy,0,\tS,0.39550810372374,\dur,Pseq([8/1],1))
 	],2),
 
@@ -73,8 +73,32 @@ Pseq([
 
 
 	],1),
+		//PART2
+		Ppar([
+
+			Pbind(\instrument, \playBuf10, \buf ,~leTout2,\out,~toExtraFx, \start,Pfunc({~one})
+	,\loopy,0,\tS,0.39550810372374,\dur,Pseq([4/1],8) ,\type,Pseq([\note,\rest,\note,\rest],inf)),
+
+				Pbind(\instrument, \playBuf10, \buf ,~leTout2,\out,~toExtraFx, \start,Pfunc({~one+(~leTout2.numFrames/256)}),\loopy,0,\tS,0.39550810372374,\dur,Pseq([4/1],4) ,\type,Pseq([\rest,\note,\rest,\rest],inf)),
 
 
+Pseq([
+
+				Pbind(\instrument, \playBuf10, \buf ,~leTout2,\out,~toExtraFx, \start,Pfunc({ ~two+(~leTout2.numFrames/256) }),\loopy,0,\tS,0.39550810372374,\dur,Pseq([4/1],4) ,\type,Pseq([\rest,\rest,\rest,\note],inf)),
+
+				Pbind(\instrument, \playBuf10, \buf ,~leTout2,\out,~toExtraFx, \start,Pfunc({ ~troi})
+	,\loopy,0,\tS,0.39550810372374,\dur,Pseq([4/1],3) ,\type,Pseq([\rest,\note,\rest,\rest],inf)),
+
+
+
+			Pbind(\instrument, \playBuf10, \buf ,~leTout2,\out,~toExtraFx, \start, Pfunc({~leTout2.numFrames/ 256 * 220})
+	,\loopy,0,\tS,0.39550810372374,\dur,Pseq([4/1],1) ,\type,Pseq([\note,\rest,\rest,\rest],inf))//to the end
+	],1),
+
+
+	],1),
+
+/*
 	Pbind(\instrument, \playBufS,\dur  ,Pseq([2/1],8),\buf,~fkAr,\tS,  0.39550810372374,\start,
 			Pfunc({~start}) ,\out, ~limitBus1),
 
@@ -104,7 +128,7 @@ Pseq([
 	],1),
 
 
-	],1)
+	],1)*/
 
 ],1)],1));
 
@@ -118,7 +142,7 @@ Ppar([
 	~part3c],1),Pbind(\instrument, \playBufS, \dur,  Pseq([1/1],8), \tS,  0.39550810372374,\buf,~kb2)],1).play(t)*/
 
 //maybe peu partially merge with  ~part3d
-(
+/*(
 ~part3c=Ppar([
 
 
@@ -150,7 +174,7 @@ Ppar([
 	],1)
 
 
-],1));
+],1));*/
 
 
 
@@ -190,7 +214,7 @@ Ppar([
 
 
 ],1)],1));*/
-~part5.play(t)
+/*~part5.play(t)
 
 // ~dispatchGrp =Group.new
 
@@ -211,7 +235,7 @@ Ppar([
 	/*Pbind(\instrument,\pingD, \in, \out,\group,)*/
 
 
-],inf));
+],inf));*/
 
 (
 ~part3e=Pseq([ Ppar([

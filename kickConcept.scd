@@ -265,7 +265,10 @@ Pbindf(~kick,\out,  ~revKck2).play(t)
 
 
 
-~brkFil = Synth(\filter,[\freqFil,10, \which,2,\qf2,0.7,\busMod,~bus32,\in,~filKB,\out,0 /*~kbToPan4*/],~filterGrp);
+~brkFil = Synth(\filter,[\freqFil,10, \which,2,\qf2,0.7,\busMod,~bus32,\in,~filKB,\out,~kbToPan5],~filterGrp);
+
+
+		Synth( \pan2,[ \in,~kbToPan5,\out,0 ],~stereoGrp);
 
 		Synth( \pan2,[ \in,~kbToPan4,\out,~toFilRise ],~stereoGrp);
 
@@ -352,7 +355,7 @@ Pbind(\instrument,\lfo13, \val,0.0201171875,\dur,Pseq([48/1],1),\ph,4.4, \out, ~
 Pbind(\instrument,\playBufXG, \buf,~kb2Test, \atckC,7, \relC,-18,\decT ,0.6, \atkT,0.15,\relT,0.25,  \vlSub, 0.02,\vlDec,Pkey(\vlSub) ,\vlSub2,Pkey(\vlSub), \dur,  Pseq([64/1],1), \tS,  0.39550810370174,\start,0),
 
 				//need bassshap, must hp at the end
-	Pbind(\instrument, \bass,\type, Pseq([\note, \rest, \note, \note,\rest,\note,\note,\note], inf),\dur,Pseq([1/4],254 /*512*/), \lpf,100,\midinote,Pseq([ Pseq([28],7),29,28,33,Pseq([28],7),29,28,27],inf), \bus, ~bassShapB,\atk, 0,\rel, t.beatDur/4 , \rel2, t.beatDur/4 * 0.0012,\atkcrv, -2,\relcrv, -2,\relcrv2, -4, \relcrv3, -6,\amp,(-10),\out,~kbToPan4/*~bassEq*/),
+	Pbind(\instrument, \bass,\type, Pseq([\note, \rest, \note, \note,\rest,\note,\note,\note], inf),\dur,Pseq([1/4],254 /*512*/), \lpf,100,\midinote,Pseq([ Pseq([28],7),29,28,33,Pseq([28],7),29,28,27],inf), \bus, ~bassShapB,\atk, 0,\rel, t.beatDur/4 , \rel2, t.beatDur/4 * 0.0012,\atkcrv, -2,\relcrv, -2,\relcrv2, -4, \relcrv3, -6,\amp,(-20),\out,~kbToPan4/*~bassEq*/),
 
 
 Pseq([

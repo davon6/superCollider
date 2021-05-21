@@ -205,8 +205,8 @@ s.sync;
 
 
 	~quickFi =[\room, 0.2, \mix,0.115, \damp, 0.41];
-	~rShor = [\room, 0.25, \mix,0.4, \damp, 0.1];
-	~rLon =	[\room, 0.5, \mix,0.3, \damp, 0.1];
+	~rShor = [\room, 0.25, \mix,0.3, \damp, 0.1];
+	~rLon =	[\room, 0.5, \mix,0.3, \damp, 0.2];
 
 
 	~revRnd = [~quickFi,~rShor,~rLon];
@@ -227,6 +227,11 @@ s.sync;
 	~comBus3= Bus.audio(s,2);
 	~comBus5= Bus.audio(s,2);
 	~limitBus1= Bus.audio(s,1);
+	~limitBus12= Bus.audio(s,1);
+
+	~bigRiToFil1= Bus.audio(s,1);
+	~bigRiToFil2= Bus.audio(s,1);
+
 	~limitBus2= Bus.audio(s,1);
 	~sterBus1= Bus.audio(s,1);
 	~sterBus2= Bus.audio(s,1);
@@ -298,6 +303,7 @@ s.sync;
 
 	~kbToPan3= Bus.audio(s,1);
 	~kbToPan4= Bus.audio(s,1);
+	~kbToPan5= Bus.audio(s,1);
 
 	~kickRv = Bus.audio(s,1);
 
@@ -706,6 +712,7 @@ s.sync;
 	~bus30= Bus.control(s,1);
 	~bus31= Bus.control(s,1);
 	~bus32= Bus.control(s,1);
+	~bus33= Bus.control(s,1);
 
 	~mixM= Bus.control(s,1);
 	~roomM= Bus.control(s,1);
