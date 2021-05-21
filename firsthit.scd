@@ -125,7 +125,7 @@ Ppar([
 		/*Pseq([/*~part5,*/*/
 
 Pbind(\instrument,\rise,\dur,Pseq([64/1],1), \vlAtk, 0,\f1, 0.3 , \f2, 0.4 , \f3, 0.1,  \ic_atk,3,\index,1,\mRatio,1,\out , ~downDisto2,\tS, 0.39550810372374,\atk,1,\moduS,~bus11,\fS, 0.01,
-				\freq, [659.255/8,639.255/8,619.255/8]),
+				\freq, [659.255/8,639.255/8,619.255/8],\atk2,0),
 
 
 
