@@ -446,10 +446,10 @@ Ppar([
 		],inf)
 	)
 	,
-	Pbind(\instrument, \filterGS,\which,1, \in,~percuStereo ,\out,0, \group, ~filterGrp,\qf2,0.08,\dur ,inf),
+	Pbind(\instrument, \filterGS,\which,1, \in,~percuStereo ,\out,~part2SRev, \group, ~filterGrp,\qf2,0.08,\dur ,inf),
 
 
-	Pbind(\instrument,\pingD, \in,~part2SRev,  \bufnum,~delay, \feedback,0.45 ,\group, ~delGrp,\dur, inf,\out,~limitBus1),
+	Pbind(\instrument,\pingD, \in,~part2SRev,  \bufnum,~delay, \feedback,0.65 ,\group, ~delGrp,\dur, inf,\out,~limitBus1),
 	Pbind(\instrument, \comb,\which,1, \in,~limitBus1,\group, ~combGrp,\qf2,0.1,\dur ,inf),
 
 	Pbind(\instrument,\recLoopS,\buf,~fkAr,\recording,1, \in,0,\group,~recGrp2,\dur,inf),
@@ -461,15 +461,15 @@ Ppar([
 (SynthDef(\idea, {Out.ar(0,CombN.ar(Saw.ar(/*LFNoise.kr(1.2875).range(0.3,432)*/216/*MouseY.kr(100,432)*/),delaytime:
 	LFNoise1.kr(2.575).range(0.00001,0.01)
 
-	/*MouseX.kr(0.01,0.2)*/ ,decaytime: /*LFNoise0.kr(5.2875).range(-0.1,0.4)*/-0.2)!2)}).play)
+	/*MouseX.kr(0.01,0.2)*/ ,decaytime: /*LFNoise0.kr(5.2875).range(-0.1,0.4)*/-0.2)!2)}).play;)
 
 
-Pbind(\instrument,\recLoopS,\buf,~kb2Test2,\recording,1, \in,0,\group,~recGrp2,\dur,inf).play(t)
+Pbind(\instrument,\recLoopS,\buf,~kb2Test,\recording,1, \in,0,\group,~recGrp2,\dur,inf).play(t)
 
 
 ~kb2Test.play
 
-
+(
 
 ~extraDelay = Group.new;
 ~revGrp = Group.after(~extraDelay);
@@ -496,7 +496,7 @@ Pbind(\instrument, \pingD, \in,~delayToLimit  ,\bufnum, ~delay6, \feedback,0.33 
 ~rev2= Synth( \reverbMad,~churcx,    ~revGrp );
 ~rev2.set( \in,~delayBus2  , \out, 0,\taillevel,2,\revtime, 14.85, \damping, 0.1,\roomsize, 16,\inputbw,0.8)
 
-
+)
 )
 
 a= Synth( \reverbMad,~churcx,    ~extraDelay );
