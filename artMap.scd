@@ -517,8 +517,21 @@ c = {
 
 z = s.scope(2, index: 0).style_(2).yZoom_(16);
 
+
+~mont =0
 //sick pad and kiasmo
-Pbind(\instrument, \percussion, \dur,Pseq([1/4],inf),\carHz, Pfunc({1050.12070612224.rrand(150)}),\modHz,Pfunc({9334.3179398.rrand(0.1)}),\modAmp,Pfunc({ 0.00875.rrand(0.0001)}) ,\amp,1,\rel,4.5544,\rel2,4.242,\stereoL, 0.00555, \crv1,  (-7.4), \crv1b,(-42), \mulMod, 901,\out,0,\latch,8900,\atk,0.01,\atk2,Pfunc({0.3.rrand(0.01)})).play(t)
+Pbind(\instrument, \percussion, \dur,Pseq([1/4],512),\carHz, Pfunc({50.12070612224.rrand(150)+(~mont=~mont+40)}),\modHz,Pfunc({34.3179398.rrand(0.1)+(~mont=~mont+40)}),\modAmp,Pfunc({ 0.00875.rrand(0.001)}) ,\amp,1,\rel,Pfunc({0.3872.rand}),\rel2,Pfunc({0.3872.rand}),\stereoL, 0.00555, \crv1, Pfunc({ (-7.4).rand}), \crv1b,Pfunc({(-42).rand}), \mulMod,Pfunc({1500.rand})/*901*/,\out,0,\latch,Pfunc({18900.rand}),\atk,0.01,\atk2,Pfunc({0.3.rrand(0.01)})).play(t)
+
+
+
+
+
+
+
+Pbind(\instrument, \percussion, \dur,Pseq([1/1],inf),\carHz, Pfunc({1050.12070612224.rrand(150)+(~mont=~mont+400)}),\modHz,Pfunc({9334.3179398.rrand(0.1)+(~mont=~mont+400)}),\modAmp,Pfunc({ 0.00875.rrand(0.0001)}) ,\amp,1,\rel,Pfunc({4.05544.rand}),\rel2,Pfunc({4.0242.rand}),\stereoL, 0.00555, \crv1, Pfunc({ (-7.4).rand}), \crv1b,Pfunc({(-42).rand}), \mulMod, 901,\out,0,\latch,8900,\atk,0.01,\atk2,Pfunc({0.3.rrand(0.01)})).play(t)
+
+/*//original
+Pbind(\instrument, \percussion, \dur,Pseq([1/4],inf),\carHz, Pfunc({1050.12070612224.rrand(150)}),\modHz,Pfunc({9334.3179398.rrand(0.1)}),\modAmp,Pfunc({ 0.00875.rrand(0.0001)}) ,\amp,1,\rel,4.5544,\rel2,4.242,\stereoL, 0.00555, \crv1,  (-7.4), \crv1b,(-42), \mulMod, 901,\out,0,\latch,8900,\atk,0.01,\atk2,Pfunc({0.3.rrand(0.01)})).play(t)*/
 
 
 //new percu dance

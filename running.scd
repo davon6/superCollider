@@ -1294,7 +1294,7 @@ LFNoise0.kr(~hz1beat).range(0.1,0.0)/*,0.02)*/
 	env = EnvGen.kr(Env([0, 1, 1, 0], [atk, dur - atk - rel, rel], [4,-4]));
 
 	filter = LPF.ar(verb, filterEnv);
-	Out.ar(out, filter * env * amp* EnvGen.kr(Env.step([1,1],[dur,0],4),timeScale: tS,doneAction:2));
+	Out.ar(out, filter * env * amp* EnvGen.kr(Env.step([1,1],[dur,0],4),timeScale: tS,doneAction:0));
 }).add;
 
 /*0.1-0.018    0.964-0.082*/
