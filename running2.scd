@@ -406,37 +406,39 @@ Pbind(\instrument, \filter, \freqFil,100,\dur,inf, \in,~hpK,\which,2,\busMod, ~b
 	Pbind(\instrument, \playBuf,  \tS,  0.39550810372374,	\buf,~snare,\type,
 		Pwrand([Pseq([\note ,\rest,\rest,\rest],1), Pseq([\rest ,\rest,\rest,\rest],1) ],[2,1,32].normalizeSum,inf)  ,\dA,Pseq([0.25],inf),\dur, Pseq([1/2], inf),\out,~snareEQ),
 
-	Pbind(\instrument, \playBuf,  \tS,  0.39550810372374,\buf,~snare,
+Pbind(\instrument, \playBuf,  \tS,  0.39550810372374,\buf,~snare,
 		\type,
 		Pseq([	Pseq([\rest],8),Pseq([
 
- Pseq([\rest,\rest,\rest,\rest ],32),
+ Pseq([\rest,\rest,\rest,\rest ,\rest,\rest,\rest,\rest,\rest,\rest,\rest,\rest,\rest,\rest,\rest,\rest ],4),
 
-		Pseq([
 
-				Pseq([\rest ,\rest,\note,\rest,\rest,\rest,\rest,\rest,
-						\rest,\rest,\rest,\rest,\rest,\rest,\rest,\rest,
-						\rest ,\rest,\rest,\rest,\rest,\rest,\rest,\rest,
-						\rest,\rest,\rest,\rest,\rest,\rest,\note,\rest
-					],2),
-
-				Pseq([\rest ,\rest,\note,\rest,\rest,\note,\rest,\rest,
-						\rest,\rest,\rest,\rest,\rest,\rest,\rest,\rest,
-
-					],2),
-
-				Pseq([\rest ,\rest,\note,\rest,\rest,\note,\rest,\rest,
-						\rest,\rest,\note,\rest,\rest,\rest,\rest,\rest,
-
-					],1),
-			Pseq([\rest ,\rest,\note,\rest,\rest,\rest,\note,\rest,
-						\rest,\rest,\note,\rest,\rest,\rest,\rest,\rest,
-
+Pseq([\rest ,\rest,\note,\rest,\rest,\rest,\rest,\rest,\rest,\rest,\rest,\rest,\rest,\rest,\rest,\rest,
+	\rest ,\rest,\rest,\rest,\rest,\rest,\rest,\rest,\rest,\rest,\rest,\rest,\rest,\rest,\rest,\rest,
+		\rest ,\rest,\note,\rest,  \rest,\rest,\rest,\rest,\rest,\rest,\rest,\rest,\rest,\rest,\rest,\rest,
+	\rest ,\rest,\note,\rest, \rest,\rest,\note,\rest,\rest,\rest,\note,\rest,\rest,\rest,\rest,\rest
 					],1),
 
 
-   Pseq([\rest ,\rest,\note,\rest] , 96),//was 96
-				Pseq([\rest,\rest,\rest,\rest],32)],1),    Pseq([\rest,\rest,\note,\rest ],128),  ],inf)  ],1)
+		Pseq([\rest ,\rest,\note,\rest,  \rest,\rest,\note,\rest,  \rest, \rest,\rest,\rest,  \rest,\rest,\rest,\rest,],1),
+
+			Pseq([\rest ,\rest,\note,\rest,  \rest,\rest,\note,\rest,  \rest, \rest,\note,\rest,  \rest,\rest,\rest,\rest,],1),
+
+
+
+Pseq([\rest ,\rest,\note,\rest  ,\rest,\rest,\note,\rest,  \rest,\rest,\note,\rest,  \rest,\rest,\note,\rest,
+					],2),
+
+
+			Pseq([\rest ,\rest,\note,\rest  ,\rest,\rest,\note,\rest,  \rest,\rest,\note,\rest,  \rest,\rest,\note,\rest,
+					],4),
+			Pseq([
+				Pseq([\rest,\rest,\note,\rest,\rest,\rest,\note,\rest,\rest,\rest,\note,\rest,\rest,\rest,\note,\rest
+
+
+	],16),    Pseq([\rest,\rest,\rest,\rest,\rest,\rest,\rest,\rest ,\rest,\rest,\rest,\rest ,\rest,\rest,\rest,\rest  ],4),  ],inf) ],1) ],1)
+
+
 		//l embrouille
 	,\dur, Pseq([1/2], inf) ,\out,~snareEQ,
 	\dA,Pseq([  Pseq([1],32), Pseq([0.5],32)],inf)),
@@ -582,9 +584,18 @@ Pbind(\instrument,\gate2, \in ,~toKbGate, \group,~kbGate, \tS,  0.39550810370174
 			Pbind(\instrument,\gate2, \in ,~toKbGate, \group,~kbGate, \tS,  0.39550810370174,
 		\dur, Pseq([16/1],1)),
 
-
+Pseq([
 			Pbind(\instrument,\gate2, \in ,~toKbGate, \group,~kbGate, \tS,  0.39550810370174,
-		\dur, Pseq([16/1],1)),
+		\dur, Pseq([14/1],1)),
+				Ppar([
+					Pbind(\instrument, \playBuf, \impulse, 0.003 ,\dur,Pseq([2/1],1), \tS,  0.39550810370174,\buf,~k2,\out, ~kbToPan2,\loopy,0,\start,0),
+	Pbind(\instrument,\gate2, \in ,~rollingK, \group, ~kbGate, \tS,  0.39550810370174,
+			\dur, Pseq([1/1],1))],1)
+			],1),
+
+
+
+
 Pseq([
 	Pbind(\instrument,\gate2, \in ,~toKbGate, \group,~kbGate, \tS,  0.39550810370174,
 		\dur, Pseq([15/1],1)),
