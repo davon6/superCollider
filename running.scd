@@ -138,9 +138,9 @@ s.sync;
 	~hatT = Buffer.alloc(s, s.sampleRate *1,1);*/
 
 	~snare = Buffer.alloc(s, s.sampleRate *1,1);
-	~bell1 = Buffer.alloc(s, s.sampleRate *1,2);
-	~bell2 = Buffer.alloc(s, s.sampleRate *5,2);
-	~bell3 = Buffer.alloc(s, s.sampleRate *1,2);
+	~bell1 = Buffer.alloc(s, s.sampleRate *1,1);
+	~bell2 = Buffer.alloc(s, s.sampleRate *10,1);
+	/*~bell3 = Buffer.alloc(s, s.sampleRate *1,2);*/
 
 	~fkAr = Buffer.alloc(s, s.sampleRate *t.beatDur*64,2);
 	~pad =  Buffer.alloc(s, s.sampleRate *t.beatDur*64,2);
@@ -164,6 +164,7 @@ s.sync;
 	~delay3 = Buffer.alloc(s, 48000 * 3, 2);
 	~delay6= Buffer.alloc(s, 48000 * 3, 2);
 
+	~hit2 = Buffer.alloc(s, s.sampleRate *   2 ,1);
 	~conga = Buffer.alloc(s, s.sampleRate *8,2);
 	~funkPerc  = Buffer.alloc(s, s.sampleRate * t.beatDur*8,2);
 
@@ -393,11 +394,11 @@ s.sync;
 	~stereoPercBg= Bus.audio(s,1);
 
 
-	~riToEq2= Bus.audio(s,2);
-	~riToRev2= Bus.audio(s,2);
-	~riToComp2= Bus.audio(s,2);
-	~riToLimit2= Bus.audio(s,2);
-	~riToStereo2= Bus.audio(s,2);
+	~riToEq2= Bus.audio(s,1);
+	~riToRev2= Bus.audio(s,1);
+	~riToComp2= Bus.audio(s,1);
+	~riToLimit2= Bus.audio(s,1);
+	~riToStereo2= Bus.audio(s,1);
 	~riToEq3= Bus.audio(s,1);
 	~riToRev3= Bus.audio(s,1);
 	~riToComp3= Bus.audio(s,1);
@@ -425,7 +426,7 @@ s.sync;
 	~no2ToLimit = Bus.audio(s,1);
 	~no2ToStereo = Bus.audio(s,1);
 	~toEq = Bus.audio(s,1);
-	~bellFlang= Bus.audio(s,2);
+	~bellFlang= Bus.audio(s,1);
 	~bgFil22= Bus.audio(s,1);
 	~bgCom2 = Bus.audio(s,1);
 	~bgLimit2 = Bus.audio(s,10);
@@ -463,9 +464,20 @@ s.sync;
 	~absoFinalGate6= Bus.audio(s,10);
 	~absoFinalGate7= Bus.audio(s,10);
 	~absoFinalGate8= Bus.audio(s,10);
+
+	~buildupDisto= Bus.audio(s,1);
+	~buildupEq= Bus.audio(s,1);
+	~buildupRev= Bus.audio(s,1);
+	~buildupComp= Bus.audio(s,1);
+	~buildupLimit= Bus.audio(s,1);
+	~buildupStereo= Bus.audio(s,1);
+	~buildupSter= Bus.audio(s,1);
+	~trippyGate= Bus.audio(s,1);
+
+
 	~riToEq= Bus.audio(s,1);
 	~riToComp= Bus.audio(s,1);
-	~riToDisto= Bus.audio(s,2);
+	~riToDisto= Bus.audio(s,1);
 	~riToDisto2= Bus.audio(s,1);
 	~riToDisto3= Bus.audio(s,1);
 	~riToEnv2= Bus.audio(s,1);
@@ -473,12 +485,12 @@ s.sync;
 	~riToLimit= Bus.audio(s,1);
 	~riToRev  = Bus.audio(s,1);
 	~riToStereo = Bus.audio(s,1);
-	~flanToEq= Bus.audio(s,2);
-	~flanToComp= Bus.audio(s,2);
-	~flanToDisto= Bus.audio(s,2);
-	~flanToLimit= Bus.audio(s,2);
-	~flanToRev  = Bus.audio(s,2);
-	~flanToStereo  = Bus.audio(s,2);
+	~flanToEq= Bus.audio(s,1);
+	~flanToComp= Bus.audio(s,1);
+	~flanToDisto= Bus.audio(s,1);
+	~flanToLimit= Bus.audio(s,1);
+	~flanToRev  = Bus.audio(s,1);
+	~flanToStereo  = Bus.audio(s,1);
 	~bigRiToEnv= Bus.audio(s,1);
 	~bigRiToEq= Bus.audio(s,1);
 	~bigRiToComp= Bus.audio(s,1);
@@ -619,7 +631,7 @@ s.sync;
 	~lpK=Bus.audio(s,1);
 	~hpK=Bus.audio(s,1);
 	~bpK=Bus.audio(s,1);
-	~riToEnv=Bus.audio(s,2);
+	~riToEnv=Bus.audio(s,1);
 	~no4ToGate=Bus.audio(s,1);
 	~no4ToGate2=Bus.audio(s,1);
 	~new10 =Bus.audio(s,10);
@@ -674,6 +686,10 @@ s.sync;
 	~part2RiComp2=  Bus.audio(s,10);
 	~part2RiLimit=  Bus.audio(s,2);
 	~part2RiStereo=  Bus.audio(s,2);
+
+	~hit2ToEq=  Bus.audio(s,1);
+	~hit2ToStereo=  Bus.audio(s,1);
+
 	~toFilRise=  Bus.audio(s,2);
 	~fusible2=  Bus.audio(s,1);
 	~gateBou=  Bus.audio(s,1);
@@ -1183,12 +1199,12 @@ LFNoise0.kr(~hz1beat).range(0.1,0.0)/*,0.02)*/
 
 		sig =  Latch.ar(tanh(car+car2),Impulse.ar(latch));
 
-		Out.ar(out, sig/*.dup * amp.dbamp*/
-	* [amp.dbamp+stereoL,amp.dbamp+stereoR]);
+		Out.ar(out, sig/*.dup * amp.dbamp
+	* [amp.dbamp+stereoL,amp.dbamp+stereoR]*/);
 }).add;
 
 
-	SynthDef.new(\percussion2, {
+	/*SynthDef.new(\percussion2, {
 	arg carHz=500, modHz=1899.3343179398, modAmp=0, atk=0, rel=1, amp=0.2, pan=0,rel2=1,out=0, latch = 6000, crv1, crv1b, mulMod, stereoL=0, stereoR=0, dA1=2, dA2=2,atk2=0,tS=1;
 	var car, mod, env, car2, mod2,env2,sig;
 
@@ -1204,7 +1220,7 @@ LFNoise0.kr(~hz1beat).range(0.1,0.0)/*,0.02)*/
 		sig =  Latch.ar(tanh(car+car2),Impulse.ar(latch));
 
 		Out.ar(out, sig);
-}).add;
+}).add;*/
 
 
 
@@ -1902,7 +1918,7 @@ FreeVerb.ar(
 			BPeakEQ.ar(
 		BPeakEQ.ar(	BPeakEQ.ar(In.ar(in, 1),val,quant, gain),val2,quant2, gain2)
 				,valD,quantD,
-				Amplitude.ar(In.ar(ctrl,1).linlin(0, 0.005, 0, -8)))
+				Amplitude.ar(In.ar(ctrl,1).linlin(0, 0.002, 0, -12)))
 
 			,
 		frq),frq),frq),frq),frq),frq),frq),frq)* vol)};).add;
@@ -2542,15 +2558,17 @@ s.sync;
 		,\amp,(-8.2/*-1*/)/*(-13)*/,\out,~bassEq
 	);
 
-	~hat2 =Pbind(\instrument, \percussion,\rel,0.04840,\rel2,0.02420,\amp, (-28.2), \crv1, (-4), \crv1b, (-5), \modHz, exprand(500,10000), \mulMod, rrand(100, 500), \carHz, exprand(20,10000), \modAmp, 1.10875.rrand(0.8) /*0.82875.rrand(0.4)*/,\dur,Pseq([1/1],1) ,\out, ~kickHatEq);
+	/*~hat2 =Pbind(\instrument, \percussion,\rel,0.04840,\rel2,0.02420,\amp, (-28.2), \crv1, (-4), \crv1b, (-5), \modHz, exprand(500,10000), \mulMod, rrand(100, 500), \carHz, exprand(20,10000), \modAmp, 1.10875.rrand(0.8) /*0.82875.rrand(0.4)*/,\dur,Pseq([1/1],1) ,\out, ~kickHatEq);*/
 
 	//SO WRONG NO VOL ctrl at all
 	~hit = Pbind(\instrument,\gran,\dur,~short1,\amp, 1,\buf,~bufSnoopy,\out,~eqDs,\gate, 1,\duration,Pkey(\dur),\impulse,0.003,
 				\vlSub, 0.8,\vlSub2,Pkey(\vlSub),\decC,Pfunc({(-10).rrand(2,1)}),\pos,Pfunc({0.90000.rand}));
 
 
-	//MAYBE ?
-	~hit2= Pbind(\instrument, \percussion,\dur,Pseq([1/4],1 ),\carHz,Pfunc({ 525.12070612224.rrand(0.01)}),\modHz,Pfunc({ 11899.3343179398.rrand(0.001)}),\modAmp,Pfunc({  0.12875.rrand(0.000001)}) ,\amp,(-17.5),\rel,Pseq([1/1],inf),\rel2,Pseq([1/4],inf),\latch,8000,\stereoL, 0.00555, \crv1, Pfunc({  (-14.4).rrand(-1)}), \crv1b,(-4), \mulMod, 1691,\out, 0);
+
+
+
+
 
 
 ~bassRest = Pbindf(~bass,  \type,Pseq([\rest],inf));
@@ -2584,6 +2602,8 @@ Ppar([
 	~hat2,~kick,Pbind(\instrument ,	\EQ2,\dur, inf, \in,~kickHatEq, \out,~main1GToG,\group, ~eqGrp, \val, 659.255/2, \quant,1, \gain ,(-30)),
 */
 
+			Pbind(\instrument, \percussion,\dur,Pseq([1/4],1 ),\carHz,Pfunc({ 525.12070612224.rrand(0.01)}),\modHz,Pfunc({ 11899.3343179398.rrand(0.001)}),\modAmp,Pfunc({  0.12875.rrand(0.000001)}) ,\amp,(-17.5),\rel,Pseq([1/1],inf),\rel2,Pseq([1/4],inf),\latch,8000,\stereoL, 0.00555, \crv1, Pfunc({  (-14.4).rrand(-1)}), \crv1b,(-4), \mulMod, 1691,\out, ~hit2ToEq),
+
 		Pbind(\instrument, \percussion, \dur,Pseq([8/1],1 ),\carHz, Pfunc({1050.12070612224.rrand(150)}),\modHz,Pfunc({9334.3179398.rrand(0.1)}),\modAmp,Pfunc({ 0.00875.rrand(0.0001)}) ,\amp,1,\rel,4.5544,\rel2,4.242,\stereoL, 0.00555, \crv1,  (-7.4), \crv1b,(-42), \mulMod, 901,\out,~bellFlang,\latch,8900,\atk,0.01,\atk2,Pfunc({0.3.rrand(0.01)}),\tS, 0.39550810372374),
 
 	Pbind(\instrument, \percussion, \dur,Pseq([3/1],1 ),\carHz, Pfunc({1050.12070612224.rrand(150)}),\modHz,Pfunc({9334.3179398.rrand(0.1)}),\modAmp,Pfunc({ 0.00875.rrand(0.0001)}) ,\amp,1,\rel,4.5544,\rel2,4.242,\stereoL, 0.00555, \crv1,  (-7.4), \crv1b,(-42), \mulMod, 901,\out,~flanToDisto,\latch,8900,\atk,0.01,\atk2,Pfunc({0.3.rrand(0.01)})),
@@ -2591,18 +2611,21 @@ Ppar([
 Pbind(\instrument, \snare,\carHz, 41.2 ,\atk, 0.00502929687,\rel, 0.0968,\rel2, 0.7744,\dur, Pseq([1/2], 1),\amp,1, \crv1,(-8),\crv2,(-7)   ,\out,~snareEQ, \atk,t.beatDur * 0.02, \atk2,Pkey(\atk),  \da1,0    ),
 
 
-		Pbind(\instrument, \percussion2 ,\dur,Pseq([1/4],1 ),\carHz, 525.12070612224.rrand(0.01),\modHz,11899.3343179398.rrand(0.001),\modAmp, 0.12875.rrand(0.000001).postln ,\amp,1,\rel,0.3872/*Pseq([1/4],inf)*/,\rel2,0.0968
+		Pbind(\instrument, \percussion ,\dur,Pseq([1/4],1 ),\carHz, 525.12070612224.rrand(0.01),\modHz,11899.3343179398.rrand(0.001),\modAmp, 0.12875.rrand(0.000001).postln ,\amp,1,\rel,0.3872/*Pseq([1/4],inf)*/,\rel2,0.0968
 			/*Pseq([1/16],inf)*/,\latch,8000,\stereoL, 0.00555, \crv1,  (-14.4).rrand(-1), \crv1b,(-4), \mulMod, 1691,\dA1,0, \dA2,0,
 			\out, ~comBusCymb),
 
 
-		Pbind(\instrument,\percussion2,\dur,Pseq([1/4], 1),\atk, 0,\rel,0.0968,\rel2,0.02420,\amp,1, \crv1, (-3), \crv1b, (-5), \modHz, exprand(500,10000).postln, \mulMod, rrand(100, 500).postln, \carHz, exprand(20,10000), \modAmp, 0.12875, \latch, 18500, \stereoR, 0.007,\dA1,2, \dA2,0,\out,~comBusHat),
+		Pbind(\instrument,\percussion,\dur,Pseq([1/4], 1),\atk, 0,\rel,0.0968,\rel2,0.02420,\amp,1, \crv1, (-3), \crv1b, (-5), \modHz, exprand(500,10000).postln, \mulMod, rrand(100, 500).postln, \carHz, exprand(20,10000), \modAmp, 0.12875, \latch, 18500, \stereoR, 0.007,\dA1,2, \dA2,0,\out,~comBusHat),
 
 
 
-	Pbind(\instrument,\recLoopS,\buf,~bell1,\recording,1, \in,~bellFlang,\group,~recGrp2,\dur,inf),
+	Pbind(\instrument,\recLoop,\buf,~bell1,\recording,1, \in,~bellFlang,\group,~recGrp2,\dur,inf),
 
-	Pbind(\instrument,\recLoopS,\buf,~bell2,\recording,1, \in,~flanToDisto,\group,~recGrp2,\dur,inf),
+	Pbind(\instrument,\recLoop,\buf,~bell2,\recording,1, \in,~flanToDisto,\group,~recGrp2,\dur,inf),
+
+
+Pbind(\instrument,\recLoop,\buf,~hit2,\recording,1, \in,~hit2ToEq,\group,~recGrp2,\dur,inf),
 
 Pbind(\instrument,\recLoop,\buf,~cymb,\recording,1, \in,~comBusCymb,\group,~recGrp2,\dur,inf),
 Pbind(\instrument,\recLoop,\buf,~hat,\recording,1, \in,~comBusHat,\group,~recGrp2,\dur,inf),
@@ -2641,6 +2664,8 @@ Ppar([/*~hat2,*/~kick,Pbind(\instrument ,	\EQ2,\dur, inf, \in,~kickHatEq, \out,0
 ~k2.play
 ~b3.play
 ~hat.plot
+
+~hit2.play
 
 (//BASS ALONE
 Ppar([

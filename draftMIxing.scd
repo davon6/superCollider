@@ -1,6 +1,6 @@
 ~mixa = Synth(\gate2, [\in,  ~no1,\dur, 9999] ,~eqGrp3);
 
-~mixa = Synth(\gateS, [\in,~toKbGate/*~toFilRise*//*~toCom*//*~toExtraFx*//*~absoFinalGate*/ /*~toGate102*//*~comSnaGrpBus2*/,\dur, 9999] ,~recGrp3);
+~mixa = Synth(\gateS, [\in,/*~toKbGate*//*~toFilRise*/~toCom/*~toExtraFx*//*~absoFinalGate*/ /*~toGate102*//*~comSnaGrpBus2*/,\dur, 9999] ,~recGrp3);
 
 
 ~mixa = Synth(\gate, [\in, ~distoPercu,\dur, 9999] ,~limitGrp4);
@@ -14,15 +14,21 @@
 ~kb=Pbind(\instrument, \playBufS, \dur,  Pseq([1/1],inf), \tS,  0.39550810372374,\buf,~kb1).play(t)
 ~kb.stop
 
+~justHit.play(t)
+~breakPart1.play(t)
 
 ~boost.play(t)
-
+Ppar([~boost,~breakPart1],1).play(t)
 Ppar([~boost,~kb/*,~justHit*/],1).play(t)
 (~boost=Ppar([
 
 
 	//pasrt3d
 	Pbind(\instrument, \lfo13,\val,(~hzQbeat/16),\out,~bus24 ,\dur,999,\ph,0, \rL,4000,\rH,6000, \group, ~lfoGrp,\tS, 0.39550810372374),
+/*	Pbind(\instrument, \lfo13T,  \val, 0.1609375, \ph, 2.9,  \out,~bus32, \dur,Pseq([32/1],1),\rL,650,\rH,4600,\tS, 0.39550810372374),*/
+
+
+	Pbind(\instrument, \lfo13T,  \val, 0.1609375, \ph, 2.9,  \out,~bus32, \dur,Pseq([32/1],inf),\rL,150,\rH,1600,\tS, 0.39550810372374),
 
 
 	//maybe glitchy
