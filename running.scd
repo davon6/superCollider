@@ -322,6 +322,10 @@ s.sync;
 	~halfAbso22  = Bus.audio(s,10);
 	~toExtraFx=Bus.audio(s,10);
 	~main1GToG= Bus.audio(s,1);
+	~main1GToG2= Bus.audio(s,1);
+	~main1GToG3= Bus.audio(s,1);
+
+
 	~percGate=Bus.audio(s,10);
 
 
@@ -730,6 +734,8 @@ s.sync;
 	~bus31= Bus.control(s,1);
 	~bus32= Bus.control(s,1);
 	~bus33= Bus.control(s,1);
+	~bus34= Bus.control(s,1);
+
 
 	~mixM= Bus.control(s,1);
 	~roomM= Bus.control(s,1);
@@ -796,18 +802,43 @@ s.sync;
 	Out.ar(out,In.ar( in, 10));}).add;
 
 
+
 	SynthDef(\playBufX ,{|out = 0,start, trig, dur, amp=1,buf, dA=2, loo=0,tS=1,impulse=0.001|Out.ar(out,PlayBuf.ar(1,buf,trigger:
 		Impulse.kr(impulse* (60/~bpm),mul: amp),startPos: start,loop:loo,doneAction: dA)*amp);}).add;
 
+	SynthDef(\playBufXs ,{|out = 0,start, trig, dur, amp=1,buf, dA=0, loo=1,impulse=0.001|Out.ar(out,PlayBuf.ar(1,buf,trigger:
+		Impulse.kr(impulse),startPos: start,loop:loo,doneAction: dA)*amp);}).add;
 
 
 
 	SynthDef(\playBufXG ,{|out = 0,start, trig, dur, amp=1,buf, dA=2, loo=0,tS=1,impulse=0.001,rte=1
-		vlAtk =0,vlDec=1 ,vlSub=1 ,vlSub2=1,vlRel=0,atkT=0,decT=1,subsT=0,relT=0,atckC=0,decC=0,relC=0|Out.ar(out,PlayBuf.ar(1,buf,rte,trigger:
+		vlAtk =0,vlDec=1 ,vlSub=1 ,vlSub2=1,vlRel=0,atkT=0,decT=1,subsT=0,relT=0,atckC=0,decC=0,relC=0,gateSub=0|Out.ar(out,PlayBuf.ar(1,buf,rte,trigger:
 		Impulse.kr(impulse* (60/~bpm),mul: amp),startPos: start,loop:loo,doneAction: 2)
 
 		* EnvGen.kr(Env([vlAtk,vlDec,vlSub,vlSub2,vlRel],
-			[dur * atkT,dur* decT,dur * subsT,dur *relT],
+			[dur * atkT,dur* decT-(dur*gateSub),dur * subsT,dur *relT],
+			[atckC,decC,0,relC]),timeScale: tS, doneAction:2)
+
+	);}).add;
+
+
+	SynthDef(\playBufXGMod ,{|out = 0,start, trig, dur, amp=1,buf, dA=2, loo=0,tS=1,impulse=0.001,rte=1,busMod
+		vlAtk =0,vlDec=1 ,vlSub=1 ,vlSub2=1,vlRel=0,atkT=0,decT=1,subsT=0,relT=0,atckC=0,decC=0,relC=0,gateSub=0|Out.ar(out,PlayBuf.ar(1,buf,rte+In.kr(busMod),trigger:
+		Impulse.kr(impulse* (60/~bpm),mul: amp),startPos: start,loop:loo,doneAction: 2)
+
+		* EnvGen.kr(Env([vlAtk,vlDec,vlSub,vlSub2,vlRel],
+			[dur * atkT,dur* decT-(dur*gateSub),dur * subsT,dur *relT],
+			[atckC,decC,0,relC]),timeScale: tS, doneAction:2)
+
+	);}).add;
+
+
+	SynthDef(\playBufXG ,{|out = 0,start, trig, dur, amp=1,buf, loo=0,tS=1,impulse=0.001,rte=1
+		vlAtk =0,vlDec=1 ,vlSub=1 ,vlSub2=1,vlRel=0,atkT=0,decT=1,subsT=0,relT=0,atckC=0,decC=0,relC=0,gateSub=0,dA=2|Out.ar(out,PlayBuf.ar(1,buf,rte,trigger:
+		Impulse.kr(impulse/** (60/~bpm),mul: amp*/),startPos: start,loop:loo,doneAction: dA)
+
+		* EnvGen.kr(Env([vlAtk,vlDec,vlSub,vlSub2,vlRel],
+			[dur * atkT,dur* decT-(dur*gateSub),dur * subsT,dur *relT],
 			[atckC,decC,0,relC]),timeScale: tS, doneAction:2)
 
 	);}).add;
@@ -976,7 +1007,7 @@ LFNoise0.kr(~hz1beat).range(0.1,0.0)/*,0.02)*/
 
 	}).add;
 
-	SynthDef(\kick, {
+	/*SynthDef(\kick, {
 		arg amp=0.2,out=0;
 		var sig, env, envF;
 
@@ -999,7 +1030,33 @@ LFNoise0.kr(~hz1beat).range(0.1,0.0)/*,0.02)*/
 		sig = sig * amp.dbamp  ;
 		sig = Pan2.ar(sig);
 		Out.ar(out, sig);
+	}).add;*/
+
+	SynthDef(\kick, {
+		arg amp=0.2,out=0;
+		var sig, env, envF;
+
+		envF = EnvGen.ar(
+			Env(
+				[5178.15,1539.47,114,26,0,0],
+				[0.00108,0.008,0.132,0,0.4],
+					[-6.8,-6,-2]
+			)
+		);
+
+		env =EnvGen.ar(
+	Env([ 0.209 , 0.14, 0.23  ,0,0],
+		[  0.0047, 0,0.1,     0  ],[-55,-32,3,4,-1]),doneAction:2);
+
+
+
+		sig = SinOsc.ar(envF, mul: env);
+
+		sig = sig * amp.dbamp  ;
+		sig = Pan2.ar(sig);
+		Out.ar(out, sig);
 	}).add;
+
 
 /*Backup
 	SynthDef(\kick, {
@@ -1432,7 +1489,7 @@ freq         )* EnvGen.kr(Env([0,vl,vl,0],[0.055,dur-0.055,0],4),timeScale: tS,d
 
 		lp = BLowPass4.ar(sig , freqFil+ In.kr(busMod, 1)+ MouseX.kr(40,22000) ,qf +In.kr(rqLPF));
 
-		bp = BBandPass.ar(sig,freqFil+ In.kr(busMod, 1) *factor3+ MouseX.kr(40,10000)  ,qf2 +0.26);
+		bp = BBandPass.ar(sig,freqFil+ MouseX.kr(40,20000)  ,qf2 +0.26);
 
 		hp = BHiPass4.ar(sig, freqFil+ In.kr(busMod, 1)+ MouseX.kr(40,22000),/*0.6 */ qf2 +In.kr(bus7, 1));
 
@@ -1530,7 +1587,7 @@ freq         )* EnvGen.kr(Env([0,vl,vl,0],[0.055,dur-0.055,0],4),timeScale: tS,d
 
 env =   In.ar(in, 1) *    EnvGen.kr(Env(
 			[vlAtk,vlDec                  ,vlSub ,vlSub2,vlRel,0],
-			[dur * atkT ,dur * decT  -relSu /*- In.kr(bus1, 1)*/  , dur * subsT-relSu,dur* relT],
+			[dur * atkT ,dur * decT  -(dur*relSu) /*- In.kr(bus1, 1)*/  , dur * subsT-relSu,dur* relT],
 			[atckC,decC ,0     ,relC]),    //decC- (In.kr(bus2, 1)
 
 timeScale: tS,	doneAction:2);
@@ -1649,7 +1706,7 @@ timeScale: tS,	doneAction:2);
 			[dur * atkT,dur* decT,dur * subsT,dur *relT],
 			[atckC,decC,0,relC]),timeScale: tS, doneAction:2);
 
-		Out.ar(out, GrainBuf.ar(1,Impulse.ar(impulse),duration,buf,pitchRte,pos,mul: amp)* env );
+		Out.ar(out, GrainBuf.ar(1,Impulse.ar(impulse),duration ,buf,pitchRte,pos,mul: amp)* env );
 	}).add;
 
 
@@ -1926,10 +1983,10 @@ FreeVerb.ar(
 
 
 
-SynthDef(\EQHP96, {|out=0, in, val, quant, gain,frq=100, vol =0.05, val2,quant2, gain2,val3,shelf, gain3,val4,quant4, gain4,val5,quant5, gain5| Out.ar(out,
+SynthDef(\EQHP96, {|out=0, in, val, quant, gain,frq=100, vol =0.05, val2,quant2, gain2,val3,shelf, gain3,val4,quant4, gain4,val5,quant5, gain5, val6,shelf2, gain6| Out.ar(out,
 
-		HPF.ar(HPF.ar(HPF.ar(HPF.ar(HPF.ar(HPF.ar(HPF.ar(HPF.ar(BPeakEQ.ar(	BPeakEQ.ar(	BHiShelf.ar(
-			BPeakEQ.ar(	BPeakEQ.ar(In.ar(in, 1),val,quant, gain),val2,quant2, gain2),val3,shelf, gain3),val4,quant4, gain4),val5,quant5, gain5),
+		HPF.ar(HPF.ar(HPF.ar(HPF.ar(HPF.ar(HPF.ar(HPF.ar(HPF.ar(BLowShelf.ar(BPeakEQ.ar(	BPeakEQ.ar(	BHiShelf.ar(
+			BPeakEQ.ar(	BPeakEQ.ar(In.ar(in, 1),val,quant, gain),val2,quant2, gain2),val3,shelf, gain3),val4,quant4, gain4),val5,quant5, gain5), val6,shelf2, gain6),
 
 		frq),frq),frq),frq),frq),frq),frq),frq)* vol)};).add;
 
