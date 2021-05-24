@@ -68,15 +68,15 @@
 
 
 ~playBp2=Synth(\playBufXs,[\buf, ~lpPrec3, \impulse, 0.080475,\out,~filterRnd]);
-~playBp2.set(\start,300000);
+~playBp2.set(\start,300000,\out,~filterRnd);
 //~eq5.free
 ~eq5=Synth(\EQHP, [\frq, 100, \out, ~reverbBus23],~eqGrp0);
 ~eq5.set(\in, ~filterRnd,\out,~gateBus23,\val, 800,\quant, 0.4, \gain,0,\val2,0,\quant2,0, \gain2,0, \val3,0,\quant3,0, \gain3,0,\val4,1200,\shelf,1.6, \gain4,(-16));
 ~rev5=Synth( \reverb ,~revRnd[1],~revGrp); ~rev5.set(\in,~reverbBus23  , \out,~comFuzz23);
 ~comp5=Synth(\comp, [\ctrl, ~kbus ],~compGrp);
-~comp5.set(\thr,0.88 ,\sB, 1.086,\sA, 1/2,\atk ,0.0121, \rel ,0.0968, \gain,4,\in, ~comFuzz23, \out,~limitFuzz23);
+~comp5.set(\thr,0.88 ,\sB, 1.016,\sA, 1/2,\atk ,0.0242, \rel ,0.0968, \gain,4,\in, ~comFuzz23, \out,~limitFuzz23);
 ~mix5= Synth(\limitertoMixer,[\c5,1,\in, ~limitFuzz23, \gain,0.3, \out,~stereoBus23],~limitGrp);
-~mix5.set(\gain,17);
+~mix5.set(\gain,17,\out,~stereoBus23);
 ~stereo5=Synth(\stereoO,[\in, ~stereoBus23,\out,~no3], ~stereoGrp);
 ~stereo5.set(\spread,0,\center,0,\dlt1,0.135,\dlt2,0.126,\decT,0.0121, \mxDel,1);
 
@@ -672,9 +672,9 @@
 ~comp31=Synth(\comp,[\ctrl, ~kbus,],~compGrp);
 ~comp31.set(\thr,0.9 ,\sB, 1.05,\sA, 1/2,\atk ,0.0121, \rel ,0.0968,\gain,3.5,\in, ~comBusCymb , \out,~limitC);
 ~mix31= Synth(\limitertoMixer,[\c50,1,\in, ~limitC,\gain,20,\out,~stereoCymb],~limitGrp);
- ~mix31.set(\gain,32,\in, ~limitC,\out,~stereoCymb);
+ ~mix31.set(\gain,12,\in, ~limitC,\out,~stereoCymb);
 ~sterCymb=Synth(\stereoO,[\in,~stereoCymb,\out,~comFuzz22],~stereoGrp);
-~sterCymb.set(\spread,1,\center,1,\dlt1,0.1,\dlt2,0.02,\decT,0.0121, \mxDel,1);
+~sterCymb.set(\spread,1,\center,1,\dlt1,0.1,\dlt2,0.2,\decT,0.0121, \mxDel,1);
 
 //group name chelou for dynaEq
 

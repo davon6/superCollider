@@ -675,10 +675,10 @@ Pbind(\instrument,\playBufXG,\dur,/*Pseq([1/2],inf)*/Pseq([1/2],inf)	,\tS, 0.395
 
 //weird
 Ppar([
-	Pbind(\instrument, \lfo13, \val,0.3,\dur,Pseq([64/1],inf), \out,  ~bus7,\tS, 0.39550810372374,\rL,-0.06,\rH,0.08),
+	Pbind(\instrument, \lfo13, \val,0.3,\dur,Pseq([64/1],inf), \out,  ~bus6,\tS, 0.39550810372374,\rL,-0.06,\rH,0.08),
 
 Pbind(\instrument,\playBufXGMod,\dur,/*Pseq([1/2],inf)*/Pseq([1/2],inf)	,\tS, 0.39550810372374
-		,\amp, 1,\buf,~lpPrec,\out,0,\impulse,0.03,\busMod,~bus7
+		,\amp, 1,\buf,~lpPrec,\out,0,\impulse,0.03,\busMod,~bus6
 		,\start,Pfunc({~lpPrec.numFrames.rand}))],1).play(t)
 
 

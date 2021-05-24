@@ -734,7 +734,7 @@ s.sync;
 	~bus31= Bus.control(s,1);
 	~bus32= Bus.control(s,1);
 	~bus33= Bus.control(s,1);
-	~bus34= Bus.control(s,1);
+	/*~bus34= Bus.control(s,1);*/
 
 
 	~mixM= Bus.control(s,1);
@@ -2219,14 +2219,9 @@ SynthDef(\playBuf2ToMixer ,{|out = 0,start, trig= 0.002, dur, buf, dA=2, tS=1, l
 		);
 	}).add;
 
-
-
 	SynthDef(\comp10, {|in, ctrl, out= 0, dec  , thr  =0.01 ,sB = 1, sA = (1/4), atk = 0.001, rel = 0.04 , gain=1, dur,tS=1|
 
 		Out.ar(out, Compander.ar(In.ar(in,10) , In.ar(ctrl,1)  , thresh: thr, slopeBelow: sB, slopeAbove: sA, clampTime: atk, relaxTime: rel)* gain/** EnvGen.kr(Env.step([1,1],[dur,0]),timeScale: tS,doneAction:2)*/)}).add;
-
-
-
 
 	SynthDef(\sinModul,{|modu, busMod,hS=2200,lS=(-40),dur,tS=1,out,ph=0|Out.kr(out, SinOsc.kr(modu+ In.kr(busMod),ph).range(lS,hS)
 		* EnvGen.kr(Env.step([1,1],[dur,0]),timeScale: tS,doneAction: 2))}).add;
@@ -2244,8 +2239,6 @@ SynthDef(\ranModulC,{|modu, busMod,lS=0, hS=4200,dur,tS=1,out|Out.kr(out,LFDNois
 			* EnvGen.kr(Env.step([1,1],[dur,0]),timeScale: tS,doneAction: 2))}).add;
 
 	SynthDef(\triModulC,{|modu, busMod,hS=1200,lS=(-40),dur,tS=1,out|Out.kr(out, LFTri.kr(modu).range(lS,hS)* EnvGen.kr(Env.step([1,1],[dur,0]),timeScale: tS,doneAction: 2))}).add;
-
-
 
 	SynthDef(\squaModul,{|modu, busMod,wdth=0.5,hS=1200,lS=0|Out.kr(busMod,Pulse.kr(modu,wdth).range(lS,hS) )}).add;
 SynthDef(\sawModul,{|modu, busMod,hS|Out.kr(busMod, Saw.kr(modu).range(-40,hS))}).add;
@@ -2829,11 +2822,6 @@ Pseq([Pbind(\instrument, \wNoise,\dur,Pseq([1/4],1),\dec ,Pkey(\dur),\amp,(-12),
 ],inf),
 Pbind(\instrument, \pan2, \in,~kbToPan2,\out,0 ,\group,~stereoGrp,\dur, inf),
 
-
-
-
-
-
 ],1).play(t);
 
 
@@ -2927,8 +2915,6 @@ Synth(\playBuf2,[\buf,~elect,\start,5000000])
 
 Synth(\playBuf2,[\buf,~elect,\start,10000000])
 ~elect= Buffer.read(s,"/Users/davidmignot/Downloads/10-Electrypnose_-_Give_Me_Some_Fun.wav");
-
-
 
 
 (
