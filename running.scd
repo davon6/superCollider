@@ -963,7 +963,7 @@ LFNoise0.kr(~hz1beat).range(0.1,0.0)/*,0.02)*/
 
 	SynthDef(\lfoSin, {|out, val, dur,tS=1,ph =0,gte=(-4),frq=1,wdth=0.5|Out.kr(out,
 
-	Osc.ar(~b.bufnum, LFNoise0.kr(1.2875).range(0.08046875,1.2875) ).range(0.6,1)
+	Osc.ar(~b.bufnum, LFNoise0.kr(1.2875/4).range(0.08046875,1.2875) ).range(0.7,1)
 
 		* EnvGen.kr(Env.step([1,1],[dur,0]),timeScale: tS,doneAction: 2)
 	)}).add;
