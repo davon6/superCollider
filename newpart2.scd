@@ -25,7 +25,7 @@ Ppar([
 Pbind(\instrument, \lfo13,\val,(~hzQbeat/4),\out,~bus2 ,\dur,999,\ph,0, \rL,200,\rH,4000, \group, ~lfoGrp,\tS, 0.39550810372374),
 
 
-~kb,/*~hitX,~pedonk, ~fx, ~justHit,*/
+~kb,~hitX,~pedonk, /*~fx, ~justHit,*/
 
 	//if below repeat maybe change to Pfunc
 
@@ -70,12 +70,11 @@ Pseq([ Pseq([8/1],1)],1)  ,Pseq([ Pseq([4/1],1)],1)   ,Pseq([Pseq([16/1],1) ,Pse
 
 //have one ris
 
-		//to fix
-		~part3b
 
-		/*~part3a,
+
+		~part3a,
 		Pbind(\instrument,\gateS, \dur,Pseq([64/1],1),\in,~absoFinalGate2 ,\out , ~toExtraFx,\group, ~recGrp2,\tS, 0.39550810372374),~part3b,~part3e,
-		Pbind(\instrument,\gateS, \dur,Pseq([64/1],1),\in,~absoFinalGate,\out , ~toExtraFx,\group, ~recGrp2,\tS, 0.39550810372374)*/
+		Pbind(\instrument,\gateS, \dur,Pseq([64/1],1),\in,~absoFinalGate,\out , ~toExtraFx,\group, ~recGrp2,\tS, 0.39550810372374)
 
 	].scramble,inf),
 

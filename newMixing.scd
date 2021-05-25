@@ -274,6 +274,22 @@
 
 
 
+/*~eq49=Synth(\EQHP,[\frq, 100],~eqGrp0);
+~eq49.set(\in, ~eqBus4 , \out,~revBus4,\val, ~val,\quant, ~quant, \gain,~gain,\val2,~val2,\quant2,~quant2, \gain2,~gain2,\val3,~val3,\quant3,~quant3, \gain3,~gain3,\val4,~val4,\shelf,~shelf, \gain4,~gain4);*/
+~rev49=Synth( \reverb ,~revRnd[1],~revGrp);~rev49.set(\in, ~revBus4 , \out, ~comBus4);
+~comp49=Synth(\comp, [\ctrl, ~kbus ],~compGrp);
+~comp49.set(\thr,0.92 ,\sB, 1.026,\sA, 1/2,\atk ,0.0121, \rel ,0.0968, \gain,80,\in, ~comBus4,\out,~part2Limit4);
+~mix49= Synth(\limitertoMixer,[\c49,1,\in,~part2Limit4 , \gain,8,\out,~sterBus4],~limitGrp);
+// ~mixa.set(\in,~sterBus4);
+ ~mix49.set(\gain,~gainMix);
+~stereo49= Synth(\stereoO,[  \in, ~sterBus4   ,\out,~absoFinalGate, ], ~stereoGrp);
+~stereo49.set(\spread,0,\center,0,\dlt1,0.08,\dlt2,0,\decT,0.0242, \mxDel,1);
+
+
+
+
+
+
 
 
 
@@ -438,16 +454,7 @@
 
 
 
-~eq49=Synth(\EQHP,[\frq, 100],~eqGrp0);
-~eq49.set(\in, ~eqBus4 , \out,~revBus4,\val, ~val,\quant, ~quant, \gain,~gain,\val2,~val2,\quant2,~quant2, \gain2,~gain2,\val3,~val3,\quant3,~quant3, \gain3,~gain3,\val4,~val4,\shelf,~shelf, \gain4,~gain4);
-~rev49=Synth( \reverb ,~revRnd[~r2],~revGrp);~rev49.set(\in, ~revBus4 , \out, ~comBus4);
-~comp49=Synth(\comp, [\ctrl, ~kbus ],~compGrp);
-~comp49.set(\thr,0.92 ,\sB, 1.026,\sA, 1/2,\atk ,0.0121, \rel ,0.0968, \gain,80,\in, ~comBus4,\out,~part2Limit4);
-~mix49= Synth(\limitertoMixer,[\c49,1,\in,~part2Limit4 , \gain,8,\out,~sterBus4],~limitGrp);
-// ~mixa.set(\in,~sterBus4);
- ~mix49.set(\gain,~gainMix);
-~stereo49= Synth(\stereoO,[  \in, ~sterBus4   ,\out,~absoFinalGate, ], ~stereoGrp);
-~stereo49.set(\spread,0,\center,0,\dlt1,0.08,\dlt2,0,\decT,0.0242, \mxDel,1);
+
 
 
 //stereoAbove not sync
@@ -601,12 +608,18 @@
 ~comp38.set(\thr,0.95 ,\sB, 1.190,\sA, 1/2,\atk ,0.0242, \rel ,0.0968,\gain,1,\in, ~buildupComp, \out,~buildupLimit );
 ~mix38= Synth(\limiterStoMixer,[\c38,1,\in,~buildupLimit ,\gain,6,\out,~buildupSter],~limitGrp);
 ~mix38.set(\gain,29);
-
-//problem
 ~stereo38=Synth(\stereoS,[ \dur, 9999, \in, ~buildupSter ,\spread,1 , \out,~toCom], ~stereoGrp );
 
 
+~eqAbc=Synth(\EQHP, [\frq, 100,\out, ~abcRev],~eqGrp0);
+~eqAbc.set(\val, 0,\quant, 0, \gain,0,\val2,0,\quant2,0, \gain2,0, \val3,0,\quant3,0, \gain3,0,\val4,0,\shelf,0, \gain4,0,\in, ~abcEq , \out,~abcRev);
+~revAbc=Synth( \reverb ,[\in, ~abcRev , \out, 0,\room, 0.8, \mix,0.5, \damp, 0.7,\out,~abcComp],~revGrp);
 
+~compAbc=Synth(\comp, [\ctrl, ~kbus],~compGrp);
+~compAbc.set(\thr,0.90 ,\sB, 1.090,\sA, 1/2,\atk ,0.0242, \rel ,0.0968,\gain,1,\in, ~abcComp, \out,~abcStereo );
+
+~stereoAbc= Synth(\stereoO,[\in, ~abcStereo,\out,~toCom], ~stereoGrp);
+~stereoAbc.set(\spread,1,\center,0,\dlt1,0.3,\dlt2,0.4,\decT,0, \mxDel,1);
 
 
 
@@ -858,7 +871,6 @@ Pbind(\instrument, \playBuf,  \tS,  0.39550810372374,\buf,~snare,\type, Pseq([\r
 ~mix44.set( \gain,30);
 ~stereo44= Synth(\stereoO,[  \in, ~bigRiToStereo2   ,\out,~toCom, ], ~stereoGrp);
 ~stereo44.set(\spread,1,\center,0.3,\dlt1,0.41,\dlt2,0.35,\decT,0.0968, \mxDel,1);
-
 
 
 

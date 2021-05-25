@@ -208,6 +208,7 @@ s.sync;
 	~quickFi =[\room, 0.2, \mix,0.115, \damp, 0.41];
 	~rShor = [\room, 0.25, \mix,0.3, \damp, 0.1];
 	~rLon =	[\room, 0.5, \mix,0.3, \damp, 0.2];
+	~mChu = [\room, 0.8, \mix,0.5, \damp, 0.7];
 
 
 	~revRnd = [~quickFi,~rShor,~rLon];
@@ -264,6 +265,10 @@ s.sync;
 	~kiasEq= Bus.audio(s,2);
 	~kiasRev= Bus.audio(s,2);
 	~kiasComp= Bus.audio(s,2);
+
+	~abcEq=Bus.audio(s,1);
+	~abcRev=Bus.audio(s,1);
+	~abcStereo=Bus.audio(s,1);
 
 
 	~flopped=Bus.audio(s,10);
@@ -1280,9 +1285,9 @@ LFNoise0.kr(~hz1beat).range(0.1,0.0)/*,0.02)*/
 }).add;*/
 
 
-
+/*
 	SynthDef(\homeStereo,{|in, out=0,stereoL=0, stereoR=0,amp|Out.ar(out, In.ar(in)
-		* [amp.dbamp+stereoL,amp.dbamp+stereoR]);}).add;
+		* [amp.dbamp+stereoL,amp.dbamp+stereoR]);}).add;*/
 
 
 	SynthDef.new(\snare, {
@@ -1369,6 +1374,9 @@ LFNoise0.kr(~hz1beat).range(0.1,0.0)/*,0.02)*/
 	filter = LPF.ar(verb, filterEnv);
 	Out.ar(out, filter * env * amp* EnvGen.kr(Env.step([1,1],[dur,0],4),timeScale: tS,doneAction:0));
 }).add;
+
+
+SynthDef(\abc, {|freq=432,out=0|Out.ar(out,LFPulse.ar(freq,mul: EnvGen.kr(Env.perc(releaseTime: 0.3872))))}).add;
 
 /*0.1-0.018    0.964-0.082*/
 	SynthDef(\rise, {

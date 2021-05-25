@@ -388,7 +388,7 @@ Ppar([Pbind(\instrument, \lfo13, \val,3.5,\dur,Pseq([64/1],inf), \out,  ~bus7,\t
 	\vlSub, 0.38 /*0.01*/, \vlSub2,Pkey(\vlSub), \atkT,0.001/*~pAtkT*/,\decT, 1,	\subsT,0.05 /*~pSubT*/ , \relT,0.01/*~pRelT*/,\atckC,0,\decC,-1,\relC,0,\vlAtk , 0 ,  \vlRel,  Pkey(\vlAtk),\loopy,0,\busMod,~bus1,),
 
 
-	Pbind(\instrument, \phaser,\in,~phaseBus,\dur ,9999,\value, 0.64375/64,\amp,1,\decT,0.8,\ph,4.4,\out,~gateMelo, \group,~phaserGrp),
+	Pbind(\instrument, \phaser,\in,~phaseBus,\dur ,9999,\value, 0.64375/*/64*/,\amp,1,\decT,0.8,\ph,4.4,\out,~gateMelo, \group,~phaserGrp),
 
 	// 0.64375
 Pbind(\instrument, \filterG, \dur, inf,\in,~gateMelo, \which,0,\out,0/*~eqPerch*/,\group,~distoGrp
