@@ -562,37 +562,40 @@ Pbind(\instrument, \playBufX2,\dur, Pseq([1/2],8),\impulse, 10.3,\loo,0,\buf,~vo
 
 
 
+(~part3a=
+Pseq([Ppar([
 
-(~part3a=Ppar([
 
 
-
-	Pbind(\instrument, \gate,\type,\rest,     \dur,  Pseq([5/1],1),\tS,  0.39550810372374
+	Pbind(\instrument, \gate,\type,\rest,     \dur,  Pseq([1/1],1),\tS,  0.39550810372374
 		,\buf, Pfunc({~fra = ~leTout2.numFrames/ 256 * 240.rand;~fra2= ~leTout2.numFrames/ 256 * 240.rand;~fra3 = ~leTout2.numFrames/ 256 * 240.rand;~fra4 = ~leTout2.numFrames/ 256 * 240.rand})),
 
 
-Pseq([
 Pseq([
 
 			Pbind(\instrument, \playBuf10, \buf ,~leTout2,\out,~toExtraFx, \start,Pfunc({~fra})
 	,\loopy,0,\tS,0.39550810372374,\dur,Pseq([4/1],2)),
 
-	Pbind(\instrument, \playBuf10, \buf ,~leTout2,\out,~toExtraFx, \start, ~leTout2.numFrames/ 256 *
-		Pfunc({240.rand})
+	Pbind(\instrument, \playBuf10, \buf ,~leTout2,\out,~toExtraFx, \start, Pfunc({~fra2})
 	,\loopy,0,\tS,0.39550810372374,\dur,Pseq([8/1],1))
-	],2),
 
-	Pseq([
+	],1),
+],2),
 
-			Pbind(\instrument, \playBuf10, \buf ,~leTout2,\out,~toExtraFx, \start,Pfunc({ ~fra2})
-	,\loopy,0,\tS,0.39550810372374,\dur,Pseq([4/1],2)),
+	Ppar([
 
-	Pbind(\instrument, \playBuf10, \buf ,~leTout2,\out,~toExtraFx, \start, ~leTout2.numFrames/ 256 *
-		Pfunc({240.rand})
-	,\loopy,0,\tS,0.39550810372374,\dur,Pseq([8/1],1))
-	],2),
+		Pseq([
 
-],1)],1));
+		Pbind(\instrument, \playBuf10, \buf ,~leTout2,\out,~toExtraFx, \start, Pfunc({~fra3})
+	,\loopy,0,\tS,0.39550810372374,\dur,Pseq([8/1],2)),
+
+		Pbind(\instrument, \playBuf10, \buf ,~leTout2,\out,~toExtraFx, \start,Pfunc({~leTout2.numFrames/ 256 * 240.rand})
+	,\loopy,0,\tS,0.39550810372374,\dur,Pseq([16/1],1)),
+
+		],1)
+	],1)
+		],1)
+);
 
 
 

@@ -268,6 +268,7 @@ s.sync;
 
 	~abcEq=Bus.audio(s,1);
 	~abcRev=Bus.audio(s,1);
+	~abcComp=Bus.audio(s,1);
 	~abcStereo=Bus.audio(s,1);
 
 
@@ -2923,7 +2924,7 @@ Synth(\playBuf2,[\buf,~elect,\start,5000000])
 
 Synth(\playBuf2,[\buf,~elect,\start,10000000])
 ~elect= Buffer.read(s,"/Users/davidmignot/Downloads/10-Electrypnose_-_Give_Me_Some_Fun.wav");
-
+~elect.play
 
 (
 ~eqGrp= Group.new;
@@ -2966,3 +2967,9 @@ Pbind(\instrument, \pan2, \in,~kbToPan2,\out,0 ,\group,~stereoGrp,\dur, inf),
 
 )
 
+
+Synth(\playBuf2,[\buf,~elect,\start,4000000])
+Synth(\playBuf2,[\buf,~elect,\start,5000000])
+
+Synth(\playBuf2,[\buf,~elect,\start,10000000])
+~elect= Buffer.read(s,"/Users/davidmignot/Desktop/toSee.wav");

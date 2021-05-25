@@ -2861,3 +2861,39 @@ Pseq([
 	],1),
 
 ],1)],1));
+
+////one more
+
+
+
+
+(~part3a=Ppar([
+
+
+
+	Pbind(\instrument, \gate,\type,\rest,     \dur,  Pseq([5/1],1),\tS,  0.39550810372374
+		,\buf, Pfunc({~fra = ~leTout2.numFrames/ 256 * 240.rand;~fra2= ~leTout2.numFrames/ 256 * 240.rand;~fra3 = ~leTout2.numFrames/ 256 * 240.rand;~fra4 = ~leTout2.numFrames/ 256 * 240.rand})),
+
+
+Pseq([
+Pseq([
+
+			Pbind(\instrument, \playBuf10, \buf ,~leTout2,\out,~toExtraFx, \start,Pfunc({~fra})
+	,\loopy,0,\tS,0.39550810372374,\dur,Pseq([4/1],2)),
+
+	Pbind(\instrument, \playBuf10, \buf ,~leTout2,\out,~toExtraFx, \start, ~leTout2.numFrames/ 256 *
+		Pfunc({240.rand})
+	,\loopy,0,\tS,0.39550810372374,\dur,Pseq([8/1],1))
+	],2),
+
+	Pseq([
+
+			Pbind(\instrument, \playBuf10, \buf ,~leTout2,\out,~toExtraFx, \start,Pfunc({ ~fra2})
+	,\loopy,0,\tS,0.39550810372374,\dur,Pseq([4/1],2)),
+
+	Pbind(\instrument, \playBuf10, \buf ,~leTout2,\out,~toExtraFx, \start, ~leTout2.numFrames/ 256 *
+		Pfunc({240.rand})
+	,\loopy,0,\tS,0.39550810372374,\dur,Pseq([8/1],1))
+	],2),
+
+],1)],1));
