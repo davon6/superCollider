@@ -131,7 +131,7 @@ MIDIdef.noteOn(\rcord, {|vel, nn, chan, src|
 	// s.record;
 
 
-s.record(path:"/Users/davidmignot/Music/SuperCollider Recordings/E/go.aiff",numChannels:1)
+s.record(path:"/Users/davidmignot/Music/SuperCollider Recordings/E/stem1.aiff",numChannels:1)
 
 },noteNum: 43);//is 8
 
