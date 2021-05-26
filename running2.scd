@@ -200,8 +200,11 @@ o = {
 	/*Out.kr(~bus1, SinOsc.ar(0.42916666666667).range(1,0.4));*/
 
 
-	Out.kr(~bus4, SinOsc.kr(Select.kr(LFNoise2.ar(10.3).range(0,1).round(1),
-		[  5.15 ,0.321875	]) ).range(82.4,2637.02));
+	/*Out.kr(~bus4, SinOsc.kr(Select.kr(LFNoise2.ar(10.3).range(0,1).round(1),
+		[  5.15 ,0.321875	]) ).range(82.4,2637.02));*/
+
+
+	Out.kr(~bus4, SinOsc.kr(0.3).range(82.4,2637.02));
 /*
 	Out.kr(~bus6, SinOsc.ar(1.2875).range(1,0.4));*/
 
@@ -788,21 +791,23 @@ Ppar([
 
 
 Pseq([
-		Pseq([
+	/*	Pseq([
 					Ppar([
 
 				Pxrand([
 
-			Pbind(\instrument, \playBuf,\loopy,0,\buf,~bell2,\out, ~flanToDisto,\tS,0.39550810372374,\dur,Pseq([8/1],1 ),\vl,1 )
+			Pbind(\instrument, \playBuf,\loopy,0,\buf,~bell1,\out, ~flanToDisto,\tS,0.39550810372374,\dur,Pseq([8/1],1 ),\vl,1 )
 						],1),
 
-],1),
+],1),*/
+			Pbind( \instrument, \playBuf10, \impulse, 10 ,
+							\dur,  Pseq([1/1],8) , \tS,  0.39550810372374,\start,~bangVar,\buf,~leTout,\out, ~bangLimit,\loopy,0,\vl,0.25)
 
 
 			Pbind(\instrument, \gateS, \group,~gateGrp3, \in,~risesGate, \out, ~gateRise,\dur,Pseq([56/1],1),\tS, 0.39550810372374 )
+//was 56
 
-
-		],1),
+	/*	],1),*/
 
 		Pseq([
 			/*Pxrand([*/
@@ -868,7 +873,7 @@ Ppar([
 
 
 
-						Pbind(\instrument, \playBuf,\loopy,0,\buf,~bell2,\out, ~flanToDisto,\tS,0.39550810372374,\dur,Pseq([1/1],1 ),\vl,1 ),
+						Pbind(\instrument, \playBuf,\loopy,0,\buf,~bell1,\out, ~flanToDisto,\tS,0.39550810372374,\dur,Pseq([1/1],1 ),\vl,1 ),
 
 
 
