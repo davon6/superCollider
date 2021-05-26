@@ -127,8 +127,11 @@ MIDIdef.noteOn(\start, {|vel, nn, chan, src|
 MIDIdef.noteOn(\rcord, {|vel, nn, chan, src|
 	[nn].postln;
 
-	x = Synth(\recLoop,[buf:~buf,\recording,1, \in,0],~recGrp);
+	// x = Synth(\recLoop,[buf:~buf,\recording,1, \in,0],~recGrp);
 	// s.record;
+
+
+s.record(path:"/Users/davidmignot/Music/SuperCollider Recordings/E/go.aiff",numChannels:1)
 
 },noteNum: 43);//is 8
 
