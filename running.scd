@@ -633,6 +633,7 @@ s.sync;
 	~dipatchKB2 = Bus.audio(s,2);
 	~stereoK= Bus.audio(s,1);
 	~rollingK = Bus.audio(s,10);
+	~rollingKS= Bus.audio(s,1);
 
 	~revKck2= Bus.audio(s,1);
 
