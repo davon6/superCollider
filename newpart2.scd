@@ -24,8 +24,7 @@ Ppar([
 
 Pbind(\instrument, \lfo13,\val,(~hzQbeat/4),\out,~bus2 ,\dur,999,\ph,0, \rL,200,\rH,4000, \group, ~lfoGrp,\tS, 0.39550810372374),
 
-
-~kb,~hitX,~pedonk, /*~fx, ~justHit,*/
+/*~kb,~hitX,~pedonk, */~fx, ~justHit,
 
 	//if below repeat maybe change to Pfunc
 
@@ -87,7 +86,7 @@ Pseq([ Pseq([8/1],1)],1)  ,Pseq([ Pseq([4/1],1)],1)   ,Pseq([Pseq([16/1],1) ,Pse
 		Pseq([
 			Pbind(\instrument,\gateS, \dur,Pseq([1/8],16),\type,Pseq([\note, \rest,\note, \rest,\note, \rest,\note,\rest],inf),\in,~toExtraFx  ,\out ,~delayBus2 ,\group, ~gateGrp7,\tS, 0.39550810372374),
 
-			Pbind(\instrument,\gateS, \dur, Pseq([1/1],1),\tS, 0.39550810372374,\type,\rest)
+			Pbind(\instrument,\gateS, \dur, Pseq([1/2],1),\tS, 0.39550810372374,\type,\rest)
 
 			],1)
 

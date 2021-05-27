@@ -142,18 +142,19 @@ s.sync;
 	~bell2 = Buffer.alloc(s, s.sampleRate *10,1);
 	/*~bell3 = Buffer.alloc(s, s.sampleRate *1,2);*/
 
-	~fkAr = Buffer.alloc(s, s.sampleRate *t.beatDur*64,2);
-	~pad =  Buffer.alloc(s, s.sampleRate *t.beatDur*64,2);
+	/*~fkAr = Buffer.alloc(s, s.sampleRate *t.beatDur*64,2);
+	~pad =  Buffer.alloc(s, s.sampleRate *t.beatDur*64,2);*/
 
 	~ambPerc =  Buffer.alloc(s, s.sampleRate *t.beatDur*32,1);
 
 
-	~lpPrec = Buffer.alloc(s, s.sampleRate *t.beatDur*64,1);
+	/*~lpPrec = Buffer.alloc(s, s.sampleRate *t.beatDur*64,1);
 	~lpPrec2 = Buffer.alloc(s, s.sampleRate *t.beatDur*64,1);
 
-	~lpPrec3 = Buffer.alloc(s, s.sampleRate *t.beatDur*64,1);
-~kb2Test2= Buffer.alloc(s, s.sampleRate * t.beatDur*16,2);
+	~lpPrec3 = Buffer.alloc(s, s.sampleRate *t.beatDur*64,1);*/
+/*~kb2Test2= Buffer.alloc(s, s.sampleRate * t.beatDur*16,2);*/
 	~kb2Test = Buffer.alloc(s, s.sampleRate * t.beatDur*16,2);
+
 	~e = Buffer.alloc(s, s.sampleRate *   t.beatDur*4 ,1);
 	~f = Buffer.alloc(s, s.sampleRate *  t.beatDur*4);
 	~e2 = Buffer.alloc(s, s.sampleRate *   t.beatDur*4,1);
@@ -166,16 +167,16 @@ s.sync;
 
 	~hit2 = Buffer.alloc(s, s.sampleRate *   2 ,1);
 	~conga = Buffer.alloc(s, s.sampleRate *8,2);
-	~funkPerc  = Buffer.alloc(s, s.sampleRate * t.beatDur*8,2);
+/*	~funkPerc  = Buffer.alloc(s, s.sampleRate * t.beatDur*8,2);*/
 
 
 
 	b = Buffer.alloc(s, 44100 * 2, 2);
 	~b2 = Buffer.alloc(s,48000,1);
 
-	~buf = Buffer.alloc(s,s.sampleRate*256* t.beatDur  );
+	/*~buf = Buffer.alloc(s,s.sampleRate*256* t.beatDur  );*/
 	~bufBg = Buffer.alloc(s,s.sampleRate*60,10 );
-	~bufSnoopy = Buffer.alloc(s,s.sampleRate*256* t.beatDur );
+	/*~bufSnoopy = Buffer.alloc(s,s.sampleRate*256* t.beatDur );*/
 	~leTout = Buffer.alloc(s,s.sampleRate* (256* t.beatDur),10);
 
 	~leTout2 = Buffer.alloc(s,s.sampleRate* (256* t.beatDur),10);
@@ -814,6 +815,9 @@ s.sync;
 		Impulse.kr(impulse* (60/~bpm),mul: amp),startPos: start,loop:loo,doneAction: dA)*amp);}).add;
 
 	SynthDef(\playBufXs ,{|out = 0,start, trig, dur, amp=1,buf, dA=0, loo=1,impulse=0.001|Out.ar(out,PlayBuf.ar(1,buf,trigger:
+		Impulse.kr(impulse),startPos: start,loop:loo,doneAction: dA)*amp);}).add;
+
+	SynthDef(\playBufXsS ,{|out = 0,start, trig, dur, amp=1,buf, dA=0, loo=1,impulse=0.001|Out.ar(out,PlayBuf.ar(2,buf,trigger:
 		Impulse.kr(impulse),startPos: start,loop:loo,doneAction: dA)*amp);}).add;
 
 
