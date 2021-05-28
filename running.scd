@@ -1412,7 +1412,7 @@ SynthDef(\abc, {|freq=432,out=0|Out.ar(out,LFPulse.ar(freq,mul: EnvGen.kr(Env.pe
 }).add;
 
 SynthDef(\trippyRise, {|out=0, ph=0,dur,tS=1|
-	var r = /*  MouseX.kr(0, 20.6); */  SinOsc.ar(0.075,ph).range(0, 20.6);
+	var r = /*  MouseX.kr(0, 20.6); */  SinOsc.ar(~hz1beat/32,ph).range(0, 20.6);
 	// stereo expansion
 	var phi = LFSaw.ar([44.1, 42.2], -1).range(0, 2pi);
 	var x = r * cos(phi);
