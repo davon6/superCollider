@@ -27,7 +27,7 @@ Ppar([
 
 Pbind(\instrument, \lfo13,\val,(~hzQbeat/4),\out,~bus2 ,\dur,999,\ph,0, \rL,200,\rH,4000, \group, ~lfoGrp,\tS, 0.39550810372374),
 
-~kb,~hitX,~pedonk, ~fx, ~justHit,
+/*~kb,~hitX,~pedonk,*/ ~fx, ~justHit,
 
 	//if below repeat maybe change to Pfunc
 
@@ -98,10 +98,12 @@ Pseq([ Pseq([8/1],1)],1)  ,Pseq([ Pseq([4/1],1)],1)   ,Pseq([Pseq([16/1],1) ,Pse
 
 	],1).play(t);
 
-	wait(0.160005);
+	wait(0.15);
 
 	 /* s.record(path:"/Users/davidmignot/Music/SuperCollider Recordings/E/stem2.aiff",numChannels:10,duration:t.beatDur*256);*/
-	s.record;
+
+
+	// s.record;
 
 
 }).play;)
