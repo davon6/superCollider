@@ -177,9 +177,9 @@ s.sync;
 	/*~buf = Buffer.alloc(s,s.sampleRate*256* t.beatDur  );*/
 	~bufBg = Buffer.alloc(s,s.sampleRate*60,10 );
 	/*~bufSnoopy = Buffer.alloc(s,s.sampleRate*256* t.beatDur );*/
-	~leTout = Buffer.alloc(s,s.sampleRate* (256* t.beatDur),10);
+	/*~leTout = Buffer.alloc(s,s.sampleRate* (256* t.beatDur),10);
 
-	~leTout2 = Buffer.alloc(s,s.sampleRate* (256* t.beatDur),10);
+	~leTout2 = Buffer.alloc(s,s.sampleRate* (256* t.beatDur),10);*/
 
 	~temp= Buffer.alloc(s,s.sampleRate*2,1);
 
@@ -285,14 +285,14 @@ s.sync;
 	~part2ToFilter= Bus.audio(s,1);*/
 
 
-	~shiftPlay= Bus.audio(s,2);
-	~shiftDisto= Bus.audio(s,2);
-	~shiftEq= Bus.audio(s,2);
-	~shiftRev= Bus.audio(s,2);
-	~shiftComp= Bus.audio(s,2);
-	~shiftLimit= Bus.audio(s,2);
-	~shiftStereo= Bus.audio(s,2);
-	~shiftGate= Bus.audio(s,2);
+	~shiftPlay= Bus.audio(s,1);
+	~shiftDisto= Bus.audio(s,1);
+	~shiftEq= Bus.audio(s,1);
+	~shiftRev= Bus.audio(s,1);
+	~shiftComp= Bus.audio(s,1);
+	~shiftLimit= Bus.audio(s,1);
+	~shiftStereo= Bus.audio(s,1);
+	~shiftGate= Bus.audio(s,1);
 
 	~gateSeqBus = Bus.audio(s,1);
 	~gateSeqRnd = Bus.audio(s,1);
@@ -453,7 +453,7 @@ s.sync;
 	~limitHat= Bus.audio(s,1);
 	~eqBg = Bus.audio(s,1);
 	~outDisto = Bus.audio(s,3);
-	~distoPerch2= Bus.audio(s,2);~eqPerch2= Bus.audio(s,2);~revPerch2= Bus.audio(s,2);~comPerch2= Bus.audio(s,2);~limitPerch2= Bus.audio(s,2);
+	~distoPerch2= Bus.audio(s,1);~eqPerch2= Bus.audio(s,1);~revPerch2= Bus.audio(s,1);~comPerch2= Bus.audio(s,1);~limitPerch2= Bus.audio(s,1);
 	~bellFlang2= Bus.audio(s,2);
 	~flanToDisto2= Bus.audio(s,1);
 	~flanToEq2= Bus.audio(s,1);
@@ -574,13 +574,13 @@ s.sync;
 	~vocToStereo=  Bus.audio(s,1);
 	~vocToDispatch=  Bus.audio(s,10);
 
-	~shiftPlay2=  Bus.audio(s,2);
-	~shiftDisto2=  Bus.audio(s,2);
-	~shiftEq2=  Bus.audio(s,2);
-	~shiftRev2=  Bus.audio(s,2);
-	~shiftLimit2=  Bus.audio(s,2);
-	~shiftStereo2=  Bus.audio(s,2);
-	~shiftComp2=  Bus.audio(s,2);
+	~shiftPlay2=  Bus.audio(s,1);
+	~shiftDisto2=  Bus.audio(s,1);
+	~shiftEq2=  Bus.audio(s,1);
+	~shiftRev2=  Bus.audio(s,1);
+	~shiftLimit2=  Bus.audio(s,1);
+	~shiftStereo2=  Bus.audio(s,1);
+	~shiftComp2=  Bus.audio(s,1);
 	~filKick= Bus.audio(s,1);
 	~filKB= Bus.audio(s,1);
 
@@ -601,7 +601,7 @@ s.sync;
 	~revPerch =  Bus.audio(s,1);
 	~comPerch=  Bus.audio(s,2);
 	~limitPerch=  Bus.audio(s,2);
-	~stereoPerch=  Bus.audio(s,2);
+	~stereoPerch=  Bus.audio(s,1);
 	~stereoPerch2=  Bus.audio(s,2);
 	~toGate10 =  Bus.audio(s,10);
 	~toGate102  =  Bus.audio(s,10);
@@ -1445,7 +1445,7 @@ SynthDef(\shiftX, {|in, out=0, frq=0,mult=0,rte=1|Out.ar(out, FreqShift.ar(In.ar
 		vlPE3,vlPE33,crvEP2, dA=0, dA2=0, dA3=0, triMod=0.08046875  |
 
 
-		Out.ar(out, FreqShift.ar(In.ar(in, 2)/*.sign*/,
+		Out.ar(out, FreqShift.ar(In.ar(in, 1)/*.sign*/,
 
 			/*freq:  freq2+    In.kr( boo, 1)  +   (EnvGen.kr(Env([vlPE,vlPE2],[dur/*dcPE*/,0],crvEP),doneAction: dA)*factor2)
 */
@@ -1458,7 +1458,7 @@ SynthDef(\shiftX, {|in, out=0, frq=0,mult=0,rte=1|Out.ar(out, FreqShift.ar(In.ar
 		vlPE3,vlPE33,crvEP2, dA=0, dA2=0, dA3=0, triMod=0.08046875,vl=1,tS=1,hS=400  |
 
 
-		Out.ar(out, FreqShift.ar(In.ar(in, 2)/*.sign*/,
+		Out.ar(out, FreqShift.ar(In.ar(in, 1)/*.sign*/,
 
 			/*freq:  freq2+    In.kr( boo, 1)  +   (EnvGen.kr(Env([vlPE,vlPE2],[dur/*dcPE*/,0],crvEP),doneAction: dA)*factor2)
 */
@@ -1955,9 +1955,9 @@ FreeVerb.ar(
 		Out.ar(out, Compander.ar(In.ar(in,2) , In.ar(ctrl,1)  , thresh: thr, slopeBelow: sB, slopeAbove: sA, clampTime: atk, relaxTime: rel)* gain );
 	}).add;
 
-	SynthDef(\compSMod, {|in, ctrl, out= 0, dec  , thr  =0.01 ,sB = 1, sA = (1/4), atk = 0.001, rel = 0.04 , gain=1,relMod|
+	SynthDef(\compMod, {|in, ctrl, out= 0, dec  , thr  =0.01 ,sB = 1, sA = (1/4), atk = 0.001, rel = 0.04 , gain=1,relMod|
 
-		Out.ar(out, Compander.ar(In.ar(in,2) , In.ar(ctrl,1)  , thresh: thr, slopeBelow: sB, slopeAbove: sA, clampTime: atk, relaxTime: rel+In.kr(relMod))* gain );
+		Out.ar(out, Compander.ar(In.ar(in,1) , In.ar(ctrl,1)  , thresh: thr, slopeBelow: sB, slopeAbove: sA, clampTime: atk, relaxTime: rel+In.kr(relMod))* gain );
 	}).add;
 
 	SynthDef(\compSX, {|in, ctrl, out= 0, dec  , thr  =0.01 ,sB = 1, sA = (1/4), atk = 0.001, rel = 0.04 , gain=1,tS=1,dur|
@@ -2649,7 +2649,7 @@ s.sync;
 
 
 
-	s.sync;
+	/*s.sync;
 
 
 ~eqGrp=Group.new;
@@ -2698,7 +2698,7 @@ Pbind(\instrument,\recLoop,\buf,~snare,\recording,1, \in,~snareEQ,\group,~recGrp
 
 /*Pbind(\instrument,\recLoop,\buf,~k2,\recording,1, \in,~main1GToG,\group,~recGrp2,\dur,inf),
 		Pbind(\instrument,\recLoop,\buf,~b3,\recording,1, \in,~bgFil,\group,~recGrp2,\dur,inf),*/
-],1).play(t);
+],1).play(t);*/
 
 
 
@@ -2978,3 +2978,88 @@ Synth(\playBuf2,[\buf,~elect,\start,5000000])
 
 Synth(\playBuf2,[\buf,~elect,\start,10000000])
 ~elect= Buffer.read(s,"/Users/davidmignot/Desktop/toSee.wav");
+
+
+//percussion record new
+
+(Routine({
+
+	Pbind(\instrument, \percussion ,\dur,Pseq([1/4],1 ),\carHz, 525.12070612224.rrand(0.01),\modHz,11899.3343179398.rrand(0.001),\modAmp, 0.12875.rrand(0.000001).postln ,\amp,1,\rel,0.3872,\rel2,0.0968,\latch,8000,\stereoL, 0.00555, \crv1,  (-14.4).rrand(-1), \crv1b,(-4), \mulMod, 1691,\dA1,0, \dA2,0,\out, 0).play(t);
+
+	wait(0.160005);
+
+	 s.record(path:"/Users/davidmignot/Music/SuperCollider Recordings/E/cymbal.aiff",numChannels:1,duration:0.4);
+
+}).play;)
+
+
+(Routine({
+
+	Pbind(\instrument,\percussion,\dur,Pseq([1/4], 1),\atk, 0,\rel,0.0968,\rel2,0.02420,\amp,1, \crv1, (-3), \crv1b, (-5), \modHz, exprand(500,10000).postln, \mulMod, rrand(100, 500).postln, \carHz, exprand(20,10000), \modAmp, 0.12875, \latch, 18500, \stereoR, 0.007,\dA1,2, \dA2,0,\out,0).play(t);
+
+	wait(0.162);
+
+	 s.record(path:"/Users/davidmignot/Music/SuperCollider Recordings/E/hat.aiff",numChannels:1,duration:0.4);
+}).play;)
+
+
+(Routine({
+
+	Pbind(\instrument, \snare,\carHz, 41.2 ,\atk, 0.00502929687,\rel, 0.0968,\rel2, 0.7744,\dur, Pseq([1/2], 1),\amp,1, \crv1,(-8),\crv2,(-7)   ,\out,0, \atk,t.beatDur * 0.02, \atk2,Pkey(\atk),  \da1,0    ).play(t);
+
+	wait(0.1505);
+
+	s.record(path:"/Users/davidmignot/Music/SuperCollider Recordings/E/snare.aiff",numChannels:1,duration:0.8);
+}).play;)
+
+
+
+
+
+(Routine({
+
+Pbind(\instrument, \percussion,\dur,Pseq([1/4],1 ),\carHz,Pfunc({ 525.12070612224.rrand(0.01)}),\modHz,Pfunc({ 11899.3343179398.rrand(0.001)}),\modAmp,Pfunc({  0.12875.rrand(0.000001)}) ,\amp,(-17.5),\rel,Pseq([1/1],inf),\rel2,Pseq([1/4],inf),\latch,8000,\stereoL, 0.00555, \crv1, Pfunc({  (-14.4).rrand(-1)}), \crv1b,(-4), \mulMod, 1691,\out, 0/*~hit2ToEq*/).play(t);
+
+	wait(0.16);
+
+	s.record(path:"/Users/davidmignot/Music/SuperCollider Recordings/E/hit2.aiff",numChannels:1,duration:0.8);
+}).play;)
+
+
+
+
+(Routine({
+
+
+		Pbind(\instrument, \percussion, \dur,Pseq([8/1],1 ),\carHz, Pfunc({1050.12070612224.rrand(150)}),\modHz,Pfunc({9334.3179398.rrand(0.1)}),\modAmp,Pfunc({ 0.00875.rrand(0.0001)}) ,\amp,1,\rel,4.5544,\rel2,4.242,\stereoL, 0.00555, \crv1,  (-7.4), \crv1b,(-42), \mulMod, 901,\out,0/*~bellFlang*/,\latch,8900,\atk,0.01,\atk2,Pfunc({0.3.rrand(0.01)}),\tS, 0.39550810372374).play(t);
+
+
+	wait(0.151);
+
+	s.record(path:"/Users/davidmignot/Music/SuperCollider Recordings/E/bell.aiff",numChannels:1,duration:1);
+}).play;)
+
+
+
+
+
+	Pbind(\instrument, \percussion, \dur,Pseq([3/1],1 ),\carHz, Pfunc({1050.12070612224.rrand(150)}),\modHz,Pfunc({9334.3179398.rrand(0.1)}),\modAmp,Pfunc({ 0.00875.rrand(0.0001)}) ,\amp,1,\rel,4.5544,\rel2,4.242,\stereoL, 0.00555, \crv1,  (-7.4), \crv1b,(-42), \mulMod, 901,\out,~flanToDisto,\latch,8900,\atk,0.01,\atk2,Pfunc({0.3.rrand(0.01)})),
+
+
+~cymb= Buffer.read(s,"/Users/davidmignot/Music/SuperCollider Recordings/E/cymbal.aiff");
+
+~hat= Buffer.read(s,"/Users/davidmignot/Music/SuperCollider Recordings/E/hat.aiff");
+
+~snare= Buffer.read(s,"/Users/davidmignot/Music/SuperCollider Recordings/E/snare.aiff");
+
+~hit2= Buffer.read(s,"/Users/davidmignot/Music/SuperCollider Recordings/E/hit2.aiff");
+
+~bell1= Buffer.read(s,"/Users/davidmignot/Music/SuperCollider Recordings/E/bell.aiff");
+
+
+~cymb.plot;~hat.plot;~snare.plot;~hit2.plot;~bell1.plot;
+
+
+~hat.play
+
+

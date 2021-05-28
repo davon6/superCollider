@@ -1,6 +1,6 @@
 ~mixa = Synth(\gate2, [\in,  ,\dur, 9999] ,~eqGrp3);
 
-~mixa = Synth(\gateS, [\in,/*~no2*//*~toKbGate*//*~toFilRise*/~toCom/*~toExtraFx*//*~absoFinalGate2*//*~toGate102*//*~comSnaGrpBus2*/,\dur, 9999] ,~recGrp3);
+~mixa = Synth(\gateS, [\in,/*~no1*/~toKbGate/*~toFilRise*//*~toCom*//*~toExtraFx*//*~absoFinalGate2*//*~toGate102*//*~comSnaGrpBus2*/,\dur, 9999] ,~recGrp3);
 
 
 ~mixa = Synth(\gate, [\in, ~distoPercu,\dur, 9999] ,~limitGrp4);
@@ -16,7 +16,7 @@
 
 ~justHit.play(t)
 ~breakPart1.play(t)
-
+~kb2.plot
 ~boost.play(t)
 Ppar([~boost,~breakPart1],1).play(t)
 Ppar([~boost,~kb/*,~justHit*/],1).play(t)
