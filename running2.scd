@@ -1343,8 +1343,7 @@ Pseq([1.5/1],1)  ,Pseq([1.25/1],1)],1), \in,~gateBus,\tS, 0.39550810372374,\grou
 (
 Routine({
 
-Ppar([~base,    ~no4,~sequ,~mainLead ]).play(t);
-
+	Ppar([~base,~no4,~sequ,~mainLead ]).play(t);
 
 	wait(0.160005);
 
@@ -1353,6 +1352,11 @@ Ppar([~base,    ~no4,~sequ,~mainLead ]).play(t);
 
 }).play;)
 
+
+
+~helpVol=Synth(\volAna,[\in,~toKbGate],target: ~recGrp3)
+
+~helpVol.free
 
 
 

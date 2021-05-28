@@ -509,14 +509,18 @@
 
 
 ~part5Dis2= Synth(\disto,[\in,~downDisto2,\out,~downSG2],~distoGrp);
+
+~part5Dis2.set(\out,0)
 ~part52=Synth( \pingD, [\in, ~downdel ,\bufnum,~delay2, \feedback,0.63 ,\out,~downEq2],~filterGrp);
+
+
 ~part5Eq2=Synth(\EQHP96, [\in,~downEq2,\out,~downRev2],~eqGrp0);
-~part5Eq2.set(\frq,100,\out,~downRev2,\val4,1000,\shelf,1,\gain4,(-24));
+~part5Eq2.set(\frq,100,\out,~downRev2,\val4,1000,\shelf,1,\gain4,(-24),\val,3400,\quant,1,\gain,(-25));
 ~part5Rev2=Synth(\reverb, ~rLon,~revGrp);   ~part5Rev2.set(\in,~downRev2,\out,~downComp2);
 ~part5Comp2=Synth( \comp, [\ctrl, ~kbus,\in,~downComp2,\out,~downLimit2],~compGrp);
 ~part5Comp2.set(\thr,0.9 ,\sB, 1.050,\sA, 1/2,\atk ,0.0242, \rel ,0.0968,\out,~downLimit2 );
 ~part5Limit2=Synth( \limitertoMixer,[\in,~downLimit2,\out,~downStereo2],~limitGrp);
-~part5Limit2.set(\gain,20,);
+~part5Limit2.set(\gain,24,);
 ~part5Stereo2= Synth(\stereoO,[\in, ~downStereo2,\out,~toCom], ~stereoGrp);
 ~part5Stereo2.set(\spread,1,\center,-0.8,\dlt1,0,\dlt2,0,\decT,0, \mxDel,1);
 

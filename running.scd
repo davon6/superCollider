@@ -2112,6 +2112,9 @@ SynthDef(\playBuf2ToMixer ,{|out = 0,start, trig= 0.002, dur, buf, dA=2, tS=1, l
 	"limiter init".postln;
 
 
+SynthDef(\volAna,{|in=0|RMS.ar( In.ar(in)).ampdb.round(0.1).poll(label:" db" )}).add;
+
+
 
 
 
