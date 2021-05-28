@@ -356,6 +356,9 @@ Ppar([
 
 /*	512*3   1536 +128*/
 Pseq([
+		Pbind(\instrument, \wNoise2, \durF,0.1936,\dA,2,\dur,  Pseq([16/1], 1),\atk, 1,\out, ~slideBus,\tS,  0.39550810372374,\type,\rest),
+
+	Pseq([
 	Pbind(\instrument, \wNoise2, \durF,0.1936,\dA,2,\dur,  Pseq([1/2], 1664),\atk, 1,\out, ~slideBus,\tS,  0.39550810372374
 		,\type,Pseq([Pseq([\rest],16), Pseq([\rest,\note,\rest,\rest,\rest,\note,\rest,\rest],8),Pseq([\rest],64)],inf),\valStart,14000),
 
@@ -368,6 +371,9 @@ Pseq([
 		].scramble,6)  ,Pseq([\rest ], 32)	].scramble,inf)  ),
 
 ],inf),
+
+		],1),
+
 	Prand([
 
 	Pbind(\instrument,\gran,\dur,Prand([Pseq([1/16],1), Pseq([1/16],16),Pseq([1/16],4),  Pseq([1/4],1),Pseq([1/4],4),Pseq([1/4],16)  ],1),\amp, 1,\buf, ~k2,\out,~dispatchBus,\pitchRte,(-1),\duration,Pkey(\dur),\impulse,0.001,\pos,0.05,\tS,  0.39550810372374),
