@@ -2897,3 +2897,29 @@ Pseq([
 	],2),
 
 ],1)],1));
+
+////another
+
+(~part3b=
+Ppar([
+
+
+	Pbind(\instrument, \gate,\type,\rest,     \dur,  Pseq([1/1],1),\tS,  0.39550810372374
+		,\buf, Pfunc({~one = ~leTout2.numFrames/ 256 * 240.rand;~two = ~leTout2.numFrames/ 256 * 240.rand;~troi= ~leTout2.numFrames/ 256 * 240.rand;~start = ~start =~fkAr.numFrames.rrand(215000)-215000})),
+
+
+	Pseq([
+
+
+		Pbind(\instrument, \playBuf10, \buf ,~leTout2,\out,~toExtraFx, \start,
+	Pseq([ Pfuncn({~one}), Pfuncn({~one}) ,Pfuncn({~one}),Pfuncn({ ~two}),
+				Pfuncn({~one}) ,Pfuncn({~one}) ,Pfuncn({~one+(~leTout2.numFrames/ 256 )}), Pfuncn({~troi}),
+
+	Pfuncn({~one+(~leTout2.numFrames/ 256 )}),Pfuncn({~one+((~leTout2.numFrames/ 256 )*2)}),Pfuncn({~one}),Pfuncn({ ~two}),
+				Pfuncn({ ~two+(~leTout2.numFrames/ 256 )}),Pfuncn({ ~two+(~leTout2.numFrames/ 256 )}),Pfuncn({ ~two+(~leTout2.numFrames/ 256 )}),
+					Pfuncn({~leTout2.numFrames/ 256 * 220})
+
+			].scramble,inf),\type,Pseq([\note,\rest,\rest,\rest,\rest,\note,\note,\note,\note,\note,\note,\note,\note,\note,\note,\note].scramble,inf)
+	,\loopy,0,\tS,0.39550810372374,\dur,Pseq([4/1],16)),
+
+],1)],1)	);

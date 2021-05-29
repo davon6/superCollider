@@ -1382,7 +1382,7 @@ LFNoise0.kr(~hz1beat).range(0.1,0.0)/*,0.02)*/
 }).add;
 
 
-SynthDef(\abc, {|freq=432,out=0|Out.ar(out,LFPulse.ar(freq,mul: EnvGen.kr(Env.perc(releaseTime: 0.3872))))}).add;
+	SynthDef(\abc, {|freq=432,out=0|Out.ar(out,Saw.ar([freq,freq-50],mul: EnvGen.kr(Env.perc(releaseTime: 0.3872))))}).add;
 
 /*0.1-0.018    0.964-0.082*/
 	SynthDef(\rise, {
@@ -1417,7 +1417,7 @@ SynthDef(\trippyRise, {|out=0, ph=0,dur,tS=1|
 	var phi = LFSaw.ar([44.1, 42.2], -1).range(0, 2pi);
 	var x = r * cos(phi);
 	var y = r * sin(phi);
-		Out.ar(out,Limiter.ar(~fPo.(x, y), 0.2)*  EnvGen.kr(Env([0,1,1,0],[dur*0.05 ,dur*0.90,0,dur*0.05],[9,0,0-9]),timeScale: tS,doneAction: 2))
+		Out.ar(out,/*Limiter.ar(*/~fPo.(x, y)/*, 0.2)*/*  EnvGen.kr(Env([0,0.1,0.1,0],[dur*0.05 ,dur*0.90,0,dur*0.05],[9,0,0-9]),timeScale: tS,doneAction: 2))
 }).add;
 
 
@@ -2391,7 +2391,7 @@ SynthDef(\sequ,{|value, dur, in=0, out=0, vlAtk=0, vlDec=1,vlSub=1,vlSub2=1, vlR
 
 
 
-	SynthDef(\pan2,{|out=0,in|Out.ar(out, Pan2.ar(In.ar(in)))}).add;
+	SynthDef(\pan2,{|out=0,in,amp=1|Out.ar(out, Pan2.ar(In.ar(in))*amp)}).add;
 
 	SynthDef(\filterU, {|out=0,in,  hFrq=900,lFrq=300 ,qfH = 0.822379, qlL = 0.504212|Out.ar(out, BLowPass4.ar(   BHiPass4.ar(  In.ar(in,1) , hFrq , qfH), lFrq
 		/*MouseX.kr(20,22000)*/,qlL )) }).add;
@@ -3066,3 +3066,28 @@ Pbind(\instrument, \percussion,\dur,Pseq([1/4],1 ),\carHz,Pfunc({ 525.1207061222
 ~hat.play
 
 
+//ale
+
+
+	s.record(path:"/Users/davidmignot/Music/SuperCollider Recordings/E/zing.aiff",numChannels:1,duration:t.beatDur*16);
+
+
+~zing.play
+
+~zing= Buffer.read(s,"/Users/davidmignot/Music/SuperCollider Recordings/E/zing.aiff");
+
+
+
+
+
+
+SynthDef(\zing,{Out.ar(~bigRiToEq,BLowPass4.ar(
+
+	Saw.ar([ 329,329/2,329/4]*SinOsc.kr(~hz1beat/4)).lincurve(-1,1,-1,1,-7).round(2**(-16))
+
+	,MouseY.kr(30,20000)));}).play;
+
+
+
+~eq43= Synth( \EQHP96, [\frq, 220],~eqGrp0);
+~eq43.set(\in, ~bigRiToEq, \out, 0,\val,0, \quant,0, \gain,0,\val2,0,\quant2,0, \gain2,0,\val4,0,\shelf,0, \gain4,0,\vol,1);
