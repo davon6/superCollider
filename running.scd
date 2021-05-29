@@ -583,6 +583,8 @@ s.sync;
 	~shiftComp2=  Bus.audio(s,1);
 	~filKick= Bus.audio(s,1);
 	~filKB= Bus.audio(s,1);
+	~filKB2= Bus.audio(s,1);
+
 
 
 

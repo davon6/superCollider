@@ -676,7 +676,7 @@
 
 // ~mix32.free
 ~mix32=	Synth( \limiter10toMixer,[\c32,1,\dur, inf, \in,~rythmLimit,\out,/*~toKbGate*/~flopped, \gain,22,], ~limitGrp);
-~mix32.set(\gain,31);
+~mix32.set(\gain,25);
 ~flopd = 	Synth(\stereoO10, [ \in,~flopped,\out,~toCom/*~rythmComp*/],~stereoGrp);
 ~flopd.set(\spread,0,\center,0,\dlt1,0.05,\dlt2,0,\decT,0, \mxDel,0);
 
@@ -909,6 +909,10 @@ Pbind(\instrument, \playBuf,  \tS,  0.39550810372374,\buf,~snare,\type, Pseq([\r
 \val2,1318.51, \quant2,2, \gain2,(-8),\val3,2637.02, \quant3,1, \gain3,(-7),\val5,164.81375, \quant5,1, \gain5,(-14)],~eqGrp0);
 ~filKb=Synth(\filterS, [\in, ~toFilRise, \out, ~toCom   ,\which,2, \qf2,0.4, \busMod,~bus30,/*\freqFil,60*/],~compGrp4);
 ~brkFil = Synth(\filter,[\freqFil,10, \which,2,\qf2,0.7,\busMod,~bus32,\in,~filKB,\out,~kbToPan5],~filterGrp);
+
+~brkFil2 = Synth(\filterS,[\freqFil,10, \which,2,\qf2,0.7,\busMod,~bus32,\in,~filKB2,\out,0],~filterGrp);
+
+
 ~pan2K5	=Synth( \pan2,[ \in,~kbToPan5,\out,0 ],~stereoGrp);
 ~pan2K4=Synth( \pan2,[ \in,~kbToPan4,\out,~toFilRise ],~stereoGrp);
 ~revKick2=Synth(\reverbMad, [\roomsize, 38, \revtime, 14.85, \damping, 0.1, \inputbw, 0.39, \drylevel, -8, \earlylevel, -9, \taillevel, 10 ,\in,~revKck2,\out, ],~revGrp);

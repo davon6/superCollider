@@ -515,7 +515,7 @@ Pseq([
 	Pseq([
 
 		Pbind(\instrument, \playBuf, \impulse, 0.003 ,\dur,Pseq([16/1],1), \tS,  0.39550810370174,\buf,~k2,\out, ~kickRv,\loopy,0,\start,0,\rte,0.3,\type,\rest,\vl,1.2),
-				Pbind(\instrument, \playBufS, \dur,  Pseq([1/1],24 ), \tS,  0.39550810372374,\buf,~kb2),
+				Pbind(\instrument, \playBufS, \dur,  Pseq([1/1],24 ), \tS,  0.39550810372374,\buf,~kb2,\out,~filKB2),
 
 		Ppar([
 
