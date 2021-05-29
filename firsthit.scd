@@ -463,32 +463,7 @@ Ppar([
 
 
 
-		Synth(\EQHP2,[ \in,~bassEq, \out,~kbToPan4,\frq, 20.6,\vol,1,	\val,659.255, \quant,1.1, \gain,(-16),
-\val2,1318.51, \quant2,2, \gain2,(-8),\val3,2637.02, \quant3,1, \gain3,(-7),\val5,164.81375, \quant5,1, \gain5,(-14)],~eqGrp0);
 
-
-
-		Synth(\filterS, [\in, ~toFilRise, \out, ~toCom   ,\which,2, \qf2,0.4, \busMod,~bus30,/*\freqFil,60*/],~compGrp4);
-
-
-
-~brkFil = Synth(\filter,[\freqFil,10, \which,2,\qf2,0.7,\busMod,~bus32,\in,~filKB,\out,~kbToPan5],~filterGrp);
-
-
-		Synth( \pan2,[ \in,~kbToPan5,\out,0 ],~stereoGrp);
-
-		Synth( \pan2,[ \in,~kbToPan4,\out,~toFilRise ],~stereoGrp);
-
-		~revKick2=Synth(\reverbMad, [\roomsize, 38, \revtime, 14.85, \damping, 0.1, \inputbw, 0.39, \drylevel, -8, \earlylevel, -9, \taillevel, 10 ,\in,~revKck2,\out, ],~revGrp);
-
-
-~revKick=Synth(\reverbModu, [\mix,0,\room, 0, \damp, 0,\in,~kickRv,\out,~filKick,\mixMod,~mixM,\roomMod,~roomM,\dampMod,~dampM],~revGrp);
-
-~flangSna= Synth( \flanger1,[ \in,~snareFlang, \out,~distoPercBg, \flangefreq,0.01005859375,\fdback,-0.8,\ph,5.6],~phaserGrp);
-
-~fKick= Synth(\filter, [\which,0,\busMod, ~bus29, \in,~filKick,\out,~kbToPan3,\qf,0.7,\freqFil,100],~delayGrp);
-
-~kbPan	=	Synth( \pan2, [\in,~kbToPan3,\out,0],~recGrp3);
 
 (
 	~breakPart1=		Ppar([
@@ -549,9 +524,9 @@ Pbind(\instrument,\lfo13, \val,0.1609375,\dur,Pseq([16/1],1),\ph,1.4, \out,~room
 Pbind(\instrument,\lfo13, \val,0.1609375,\dur,Pseq([16/1],1),\ph,1.4, \out, ~dampM,\tS, 0.39550810372374,\rL, 0.41,\rH,0.8),
 
 	/*Pbind(\instrument, \playBuf, \impulse, 0.003 ,\dur,Pseq([1/1],45), \tS,  0.39550810370174,\buf,~k2,\out, ~kickRv,\loopy,0,\start,0,\rte,0.3,\type,Pseq([ Pseq([\note],44),\rest,\rest],1),\vl, 1.3),*/
-
-					Pbind(\instrument, \playBuf, \impulse, 0.003 ,\dur,Pseq([1/1],16), \tS,  0.39550810370174,\buf,~k2,\out, ~kickRv,\loopy,0,\start,0,\rte,0.3,\type,Pseq([ Pseq([\note],13),\rest,\rest,\rest],1),\vl, 1.3),
-
+Pseq([
+					Pbind(\instrument, \playBuf, \impulse, 0.003 ,\dur,Pseq([1/1],13), \tS,  0.39550810370174,\buf,~k2,\out, ~kickRv,\loopy,0,\start,0,\rte,0.3,\type,Pseq([ Pseq([\note],13),\rest,\rest,\rest],1),\vl, 1.3),
+Pbind(\instrument, \playBufX,\dur, Pseq([3/1],1),\impulse, 0.00001,\loo,0,\buf,~vocal,\out, ~vocalBus,\tS,  0.39550810372374,\vl,0.162),],1)
 
 
 ],1)
@@ -576,7 +551,7 @@ Pbind(\instrument,\lfo13, \val,0.1609375,\dur,Pseq([16/1],1),\ph,1.4, \out, ~dam
 /*	Pbind(\instrument, \bass,\type, Pseq([\note, \rest, \note, \note,\rest,\note,\note,\note], inf),\dur,Pseq([1/4],254 /*512*/), \lpf,100,\midinote,Pseq([ Pseq([28],7),29,28,33,Pseq([28],7),29,28,27],inf), \bus, ~bassShapB,\atk, 0,\rel, t.beatDur/4 , \rel2, t.beatDur/4 * 0.0012,\atkcrv, -2,\relcrv, -2,\relcrv2, -4, \relcrv3, -6,\amp,(-20),\out,~kbToPan4/*~bassEq*/),*/
 
 Ppar([
-Pbind(\instrument, \bass,\type, Pseq([\rest, \note, \note, \note,\rest,\note,\note,\note], inf)/*Pseq([\note, \rest, \note, \note,\rest,\note,\note,\note], inf)*/,\dur,Pseq([1/4],254 /*512*/), \lpf,100,\midinote,Pseq([ Pseq([28],7),29,28,33,Pseq([28],7),29,28,27],inf), \bus, ~bassShapB,\atk, 0,\rel, t.beatDur , \rel2, t.beatDur * 0.0012,\atkcrv, -2,\relcrv, -2,\relcrv2, -4, \relcrv3, -6,\amp,(-20),\out,~kbToPan4/*~bassEq*/),
+Pbind(\instrument, \bass,\type, Pseq([\rest, \note, \note, \note,\rest,\note,\note,\note], inf)/*Pseq([\note, \rest, \note, \note,\rest,\note,\note,\note], inf)*/,\dur,Pseq([1/4],254 /*512*/), \lpf,100,\midinote,Pseq([ Pseq([28],7),29,28,33,Pseq([28],7),29,28,27],inf), \bus, ~bassShapB,\atk, 0,\rel, t.beatDur , \rel2, t.beatDur * 0.0012,\atkcrv, -2,\relcrv, -2,\relcrv2, -4, \relcrv3, -6,\amp,(-20),\out,/*~kbToPan4*/~bassEq),
 
 
 

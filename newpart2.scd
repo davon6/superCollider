@@ -1,6 +1,6 @@
 (
-
-Routine({
+/*
+Routine({*/
 
 Ppar([
 
@@ -16,7 +16,7 @@ Ppar([
 
 
 	Pbind(\instrument,\gate3,\tS, 0.39550810372374,\dur,Pseq([1/1],inf),\in, ~downSG
-,\atkT,1,\atckC,0,\decT,0,\vlDec,1,	\type,Pseq([\note,\rest],inf),\out,~downEq,\group,~dispatchGrp)
+,\atkT,1,\atckC,0,\decT,0,\vlDec,1,	\type,Pseq([\note,\rest],inf),\out,~downEq,\group,~dispatchGrp),
 
 		/// til here
 
@@ -47,7 +47,7 @@ Ppar([
 
 Pbind(\instrument, \lfo13,\val,(~hzQbeat/4),\out,~bus2 ,\dur,999,\ph,0, \rL,200,\rH,4000, \group, ~lfoGrp,\tS, 0.39550810372374),
 
-~kb,~hitX,~pedonk, ~fx, ~justHit,
+~kb,~hitX,~pedonk, ~fx,    /* ~justHit,*/
 
 	//if below repeat maybe change to Pfunc
 
@@ -83,10 +83,12 @@ Pseq([ Pseq([8/1],1)],1)  ,Pseq([ Pseq([4/1],1)],1)   ,Pseq([Pseq([16/1],1) ,Pse
 
 	,  \group, ~gateGrp6,\tS, 0.39550810372374),
 
-
-
-
+Pseq([
+//WATCH OUT
+Pbind(\instrument,\gate2, \in ,~toKbGate, \group,~kbGate, \tS,  0.39550810370174,\dur, Pseq([16/1],1),\type,\rest),
 	Pseq([
+
+
 
 	/*		Pbind(\instrument,\gateS, \dur,Pseq([64/1],1),\in,~absoFinalGate2 ,\out , ~toExtraFx,\group, ~recGrp2,\tS, 0.39550810372374)*/
 
@@ -100,7 +102,7 @@ Pseq([ Pseq([8/1],1)],1)  ,Pseq([ Pseq([4/1],1)],1)   ,Pseq([Pseq([16/1],1) ,Pse
 		Pbind(\instrument,\gateS, \dur,Pseq([64/1],1),\in,~absoFinalGate,\out , ~toExtraFx,\group, ~recGrp2,\tS, 0.39550810372374)
 
 	].scramble,inf),
-
+	],1),
 
 	Pwrand([
 
@@ -121,15 +123,17 @@ Pseq([ Pseq([8/1],1)],1)  ,Pseq([ Pseq([4/1],1)],1)   ,Pseq([Pseq([16/1],1) ,Pse
 		Pseq([
 
 	Pbind(\instrument,\gate2, \in ,~toKbGate, \group,~kbGate, \tS,  0.39550810370174,\dur, Pseq([16/1],1),\type,\rest),
-			~hitPart1,~hitPart2,~hitPart3,~hitPart4
+			~hitPart1,~hitPart2,*//*~hitPart3,~hitPart4
 
 
-		].1)
+		],1),
+
+	// Pbind(\instrument, \playBufS, \dur,  Pseq([1/1],256), \tS,  0.39550810372374,\buf,~kb2)
 
 
 	],1).play(t);
 
-	wait(0.142);
+/*	wait(0.142);
 
 	 /* s.record(path:"/Users/davidmignot/Music/SuperCollider Recordings/E/stem2.aiff",numChannels:10,duration:t.beatDur*256);*/
 
@@ -137,7 +141,7 @@ Pseq([ Pseq([8/1],1)],1)  ,Pseq([ Pseq([4/1],1)],1)   ,Pseq([Pseq([16/1],1) ,Pse
 	s.record;
 
 
-}).play;)
+}).play;*/)
 
 
 

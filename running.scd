@@ -1382,7 +1382,7 @@ LFNoise0.kr(~hz1beat).range(0.1,0.0)/*,0.02)*/
 }).add;
 
 
-	SynthDef(\abc, {|freq=432,out=0|Out.ar(out,Saw.ar([freq,freq-50],mul: EnvGen.kr(Env.perc(releaseTime: 0.3872))).lincurve(-1,1,-1,1,-7).round(2**(-16)))}).add;
+	SynthDef(\abc, {|freq=432,out=0|Out.ar(out,Saw.ar([freq,freq-50],mul: EnvGen.kr(Env.perc(releaseTime: 0.3872))).round(2**(-16)))}).add;
 
 /*0.1-0.018    0.964-0.082*/
 	SynthDef(\rise, {
@@ -1417,7 +1417,7 @@ SynthDef(\trippyRise, {|out=0, ph=0,dur,tS=1|
 	var phi = LFSaw.ar([44.1, 42.2], -1).range(0, 2pi);
 	var x = r * cos(phi);
 	var y = r * sin(phi);
-		Out.ar(out,/*Limiter.ar(*/~fPo.(x, y)/*, 0.2)*/*  EnvGen.kr(Env([0,0.02,0.02,0],[dur*0.05 ,dur*0.90,0,dur*0.05],[9,0,0-9]),timeScale: tS,doneAction: 2))
+		Out.ar(out,/*Limiter.ar(*/~fPo.(x, y)/*, 0.2)*/*  EnvGen.kr(Env([0,1,1,0],[dur*0.05 ,dur*0.90,0,dur*0.05],[9,0,0-9]),timeScale: tS,doneAction: 2))
 }).add;
 
 
