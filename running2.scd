@@ -416,9 +416,9 @@ Pbind(\instrument, \filter, \freqFil,100,\dur,inf, \in,~hpK,\which,2,\busMod, ~b
 						Pbind( \instrument, \playBufS, \trig, 0.3 ,\dur,  Pseq([1/1],inf), \tS,  0.39550810372374,\buf,~kb2,\out,~eqBass,\loopy,0),
 
 	Pseq([
-	Pbind(\instrument, \shift2, \in,~eqBass,\dur, Pseq([8/1],1), \out,~dipatchKB, \freq,~bssFreq1, \group,~shifGrp,\tS, 0.39550810372374,\vl,0.8),
+	Pbind(\instrument, \shift2, \in,~eqBass,\dur, Pseq([8/1],1), \out,~dipatchKB, \freq,/*~bssFreq1*/ 582, \group,~shifGrp,\tS, 0.39550810372374,\vl,0.006),
 
-		Pbind(\instrument, \shift2, \in,~eqBass,\dur, Pseq([8/1],1), \out,~dipatchKB, \freq,~bssFreq2, \group,~shifGrp,\tS, 0.39550810372374,\vl,0.006),
+		Pbind(\instrument, \shift2, \in,~eqBass,\dur, Pseq([8/1],1), \out,~dipatchKB, \freq,300/*~bssFreq2*/, \group,~shifGrp,\tS, 0.39550810372374,\vl,0.02),
 
 	],inf),
 
@@ -487,7 +487,9 @@ Pseq([\rest ,\rest,\note,\rest  ,\rest,\rest,\note,\rest,  \rest,\rest,\note,\re
 
 
 //for future
-	Pbind(\instrument, \playBuf,  \tS,  0.39550810372374,\buf,~cymb,\type,Pseq([ Pseq([ \rest],64),Pseq([ Pseq([Pseq(~rythm1,1),Pseq(~rythm2,1),],4),Pseq([Pseq(~rythm3,1),Pseq(~rythm4,1),],4),Pseq(~rythmL, 128 /*32*/),Pseq([Pseq(~rythmL, 256),Pseq([\rest],256) ],inf)],1)],1),\dur,Pseq([1/4],inf ),\stereoL, 0.00555,\out,    ~cymbalEq),
+	Pbind(\instrument, \playBuf,  \tS,  0.39550810372374,\buf,~cymb,\type,Pseq([ Pseq([ \rest],128),Pseq([ Pseq([Pseq(~rythm1,1),Pseq(~rythm2,1),],4),Pseq([Pseq(~rythm3,1),Pseq(~rythm4,1),],4),
+
+		/*Pseq(~rythmL, 128 /*32*/),*/Pseq([Pseq(~rythmL,512),Pseq([\rest],128) ],inf)],1)],1),\dur,Pseq([1/4],inf ),\stereoL, 0.00555,\out,    ~cymbalEq),
 
 
 
@@ -515,17 +517,17 @@ Pseq([\rest ,\rest,\note,\rest  ,\rest,\rest,\note,\rest,  \rest,\rest,\note,\re
 ],inf),*/
 
 
-	Pbind(\instrument,\envSli,\out, ~bus21,\dur,Pseq([1/2],inf),\tS, 0.39550810372374,\val1,1600,\val2,(-40),\crv,-3.2),
+	Pbind(\instrument,\envSli,\out, ~bus21,\dur,Pseq([1/2],inf),\tS, 0.39550810372374,\val1,1200,\val2,(-40),\crv,-3.2),
 
 
-	Pbind(\instrument, \filter10,\freqFil,600 ,\busMod,~bus21 ,\in,~rythmFil,\which,0,\qf,0.75, \dur, inf, \out,~rythmFilEQ, \group,~filterGrp),
+	Pbind(\instrument, \filter10,\freqFil,300 ,\busMod,~bus21 ,\in,~rythmFil,\which,0,\qf,0.75, \dur, inf, \out,~rythmFilEQ, \group,~filterGrp),
 
 	Pbind(\instrument, \EQHP10, \in,~rythmFilEQ,\dur, inf, \out,~rythmLimit, \group,~eqGrp,\vol,4,\val,320,\quant,4, \gain,(-16)),
 
 /*	Pbind(\instrument, \limiter10toMixer,\c20,1,\name,30, \dur, inf, \in,~rythmLimit,\out,~rythmComp, \gain,40, \group, ~limitGrp),*/
 
-	Pbind(\instrument,\comp10, \dur,inf,\thr,0.9 ,\sB, 1.08,\sA, 1/2,\atk ,0.001, \rel ,0.3872,\dur,9999
-		,\gain,1,\in,~rythmComp  ,\ctrl, ~kbus, \out, ~toKbGate,\group, ~compGrp2 ,\tS, 0.39550810372374),
+	/*Pbind(\instrument,\comp10, \dur,inf,\thr,0.9 ,\sB, 1.08,\sA, 1/2,\atk ,0.001, \rel ,0.3872,\dur,9999
+		,\gain,1,\in,~rythmComp  ,\ctrl, ~kbus, \out, ~toKbGate,\group, ~compGrp2 ,\tS, 0.39550810372374),*/
 
 
 
