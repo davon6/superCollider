@@ -1,6 +1,6 @@
 ~mixa = Synth(\gate2, [\in,  ,\dur, 9999] ,~eqGrp3);
 
-~mixa = Synth(\gateS, [\in,/*~no1*//*~toKbGate*//*~toFilRise*/~toCom/*~toExtraFx*//*~absoFinalGate2*//*~toGate102*//*~comSnaGrpBus2*/,\dur, 9999] ,~recGrp3);
+~mixa = Synth(\gateS, [\in,~no1/*~toKbGate*//*~toFilRise*//*~toCom*//*~toExtraFx*//*~absoFinalGate2*//*~toGate102*//*~comSnaGrpBus2*/,\dur, 9999] ,~recGrp3);
 
 
 ~mixa = Synth(\gate, [\in, ~distoPercu,\dur, 9999] ,~limitGrp4);
@@ -11,7 +11,9 @@
 ~mixa.set(\in,~no3/*~tofinalRythm*//*~absoFinalGate7*//*~percuCom2*/);
 
 ~kb=Pbind(\instrument, \playBufS, \dur,  Pseq([1/1],inf), \tS,  0.39550810372374,\buf,~kb2).play(t)
-~kb=Pbind(\instrument, \playBufS, \dur,  Pseq([1/1],inf), \tS,  0.39550810372374,\buf,~kb1).play(t)
+
+
+~kb=Pbind(\instrument, \playBufS, \dur,  Pseq([1/1],inf), \tS,  0.39550810372374,\buf,~kb1,\loopy,0).play(t)
 ~kb.stop
 
 ~justHit.play(t)

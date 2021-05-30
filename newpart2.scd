@@ -47,7 +47,7 @@ Ppar([
 
 Pbind(\instrument, \lfo13,\val,(~hzQbeat/4),\out,~bus2 ,\dur,999,\ph,0, \rL,200,\rH,4000, \group, ~lfoGrp,\tS, 0.39550810372374),
 
-~kb,~hitX,~pedonk, ~fx,    /* ~justHit,*/
+~kb,~hitX,~pedonk, ~fx,
 
 	//if below repeat maybe change to Pfunc
 
