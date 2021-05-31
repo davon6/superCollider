@@ -576,7 +576,7 @@
 ~shift2 =  Synth(\shiftEx,[\in,~shiftPlay,\out,  ~shiftDisto ],~filterGrp);
 ~disto36=Synth(\disto, [\in, ~shiftDisto , \out,~shiftEq], ~distoGrp0);
 ~eq36= Synth(\EQHP96, [\in, ~shiftEq, \out, ~shiftRev/*~buildUpG*/ ], ~eqGrp0);
-~eq36.set(\out,~shiftRev/*~buildUpG*/,\val4,1250,\shelf,1.58,\gain4,(-10));
+~eq36.set(\out,~shiftRev/*~buildUpG*/,\val4,1250,\shelf,1.58,\gain4,(-10),\frq,500);
 ~rev36=Synth(\reverb, ~rShor ,~revGrp);
 ~rev36.set(\in,~shiftRev, \out,~shiftComp);
 ~comp36=Synth(\comp, [\ctrl, ~kbus],~compGrp);
@@ -814,7 +814,7 @@ Pbind(\instrument, \playBuf,  \tS,  0.39550810372374,\buf,~snare,\type, Pseq([\r
 //hit
 // ~eqHit.free
 ~eqHit = Synth(\EQHP96, [\frq, 200 ],~eqGrp0);
-~eqHit.set(\in,~hitEq,\out,~hitRev,\val,260,\quant,1,\gain,(-15),\val2,650,\quant,1,\gain,(-23),\val4,1800, \shelf,1.2,\gain4,(-12));
+~eqHit.set(\in,~hitEq,\out,~hitRev,\val,260,\quant,1,\gain,(-15),\val2,650,\quant,1,\gain,(-23),\val4,3000, \shelf,1.2,\gain4,(-12));
 ~revHit= Synth( \reverb ,~revRnd[0],~revGrp);~revHit.set(\in,~hitRev, \out,~hitComp);
 ~compHit=Synth(\comp, [\ctrl, ~kbus,\in,~hitComp,\out, ~hitLimit ],~compGrp);
 ~compHit.set(\thr,0.79 ,\sB, 1.006,\sA, 1/2,\atk ,0.0242, \rel ,0.0968,\out,~hitLimit );
@@ -918,7 +918,7 @@ Pbind(\instrument, \playBuf,  \tS,  0.39550810372374,\buf,~snare,\type, Pseq([\r
 ~filKb=Synth(\filterS, [\in, ~toFilRise, \out, ~toCom   ,\which,2, \qf2,0.4, \busMod,~bus30,/*\freqFil,60*/],~compGrp4);
 ~brkFil = Synth(\filter,[\freqFil,10, \which,2,\qf2,0.7,\busMod,~bus32,\in,~filKB,\out,~kbToPan5],~filterGrp);
 
-~brkFil2 = Synth(\filterS,[\freqFil,10, \which,2,\qf2,0.7,\busMod,~bus32,\in,~filK2,\out,0],~filterGrp);
+~brkFil2 = Synth(\filterS,[\freqFil,10, \which,2,\qf2,0.7,\busMod,~bus29,\in,~filK2,\out,0],~filterGrp);
 
 
 ~pan2K5	=Synth( \pan2,[ \in,~kbToPan5,\out,0 ],~stereoGrp);
