@@ -270,10 +270,10 @@ s.sync;
 	~kiasRev= Bus.audio(s,2);
 	~kiasComp= Bus.audio(s,2);
 
-	~abcEq=Bus.audio(s,1);
-	~abcRev=Bus.audio(s,1);
-	~abcComp=Bus.audio(s,1);
-	~abcStereo=Bus.audio(s,1);
+	~abcEq=Bus.audio(s,2);
+	~abcRev=Bus.audio(s,2);
+	~abcComp=Bus.audio(s,2);
+	~abcStereo=Bus.audio(s,2);
 
 
 	~flopped=Bus.audio(s,10);
@@ -486,7 +486,7 @@ s.sync;
 	~buildupLimit= Bus.audio(s,1);
 	~buildupStereo= Bus.audio(s,1);
 	~buildupSter= Bus.audio(s,1);
-	~trippyGate= Bus.audio(s,2);
+	~trippyGate= Bus.audio(s,1);
 
 
 	~riToEq= Bus.audio(s,1);
@@ -520,9 +520,9 @@ s.sync;
 	~distoBus1 = Bus.audio(s,1);
 	~distoBus4 = Bus.audio(s,1);
 	~eqBass = Bus.audio(s,2);
-	~filterPass1= Bus.audio(s,1);~eqPass1= Bus.audio(s,1); ~revPass1= Bus.audio(s,1); ~compPass1= Bus.audio(s,2); ~limitPass1= Bus.audio(s,2); ~stereoPass1= Bus.audio(s,2);
-	~filterPass2= Bus.audio(s,1); ~eqPass2= Bus.audio(s,1); ~revPass2= Bus.audio(s,1); ~compPass2= Bus.audio(s,2); ~limitPass2= Bus.audio(s,2); ~stereoPass2= Bus.audio(s,2);
-	~filterPass3= Bus.audio(s,1); ~eqPass3= Bus.audio(s,1); ~revPass3= Bus.audio(s,1); ~compPass3= Bus.audio(s,2); ~limitPass3= Bus.audio(s,2); ~stereoPass3= Bus.audio(s,2);~comp10Pass= Bus.audio(s,10);
+	~filterPass1= Bus.audio(s,1);~eqPass1= Bus.audio(s,1); ~revPass1= Bus.audio(s,1); ~compPass1= Bus.audio(s,1); ~limitPass1= Bus.audio(s,1); ~stereoPass1= Bus.audio(s,1);
+	~filterPass2= Bus.audio(s,1); ~eqPass2= Bus.audio(s,1); ~revPass2= Bus.audio(s,1); ~compPass2= Bus.audio(s,1); ~limitPass2= Bus.audio(s,1); ~stereoPass2= Bus.audio(s,1);
+	~filterPass3= Bus.audio(s,1); ~eqPass3= Bus.audio(s,1); ~revPass3= Bus.audio(s,1); ~compPass3= Bus.audio(s,1); ~limitPass3= Bus.audio(s,1); ~stereoPass3= Bus.audio(s,1);/*~comp10Pass= Bus.audio(s,10);*/
 	~delayBus = Bus.audio(s,1);
 	~delayBus2= Bus.audio(s,1);
 	~reverbBus = Bus.audio(s,1);
@@ -558,12 +558,14 @@ s.sync;
 	~limitSquelch = Bus.audio(s,2);
 	~delayEq= Bus.audio(s,2);
 	~limitRkick = Bus.audio(s,1);
-	~riTriptoDisto = Bus.audio(s, 2);
-	~riTriptoEq = Bus.audio(s, 2);
-	~riTriptoRev = Bus.audio(s, 2);
-	~riTriptoComp = Bus.audio(s, 2);
-	~riTriptoLimit = Bus.audio(s, 2);
-	~riTriptoStereo = Bus.audio(s, 2);
+
+	~riTriptoDisto = Bus.audio(s, 1);
+	~riTriptoEq = Bus.audio(s, 1);
+	~riTriptoRev = Bus.audio(s, 1);
+	~riTriptoComp = Bus.audio(s, 1);
+	~riTriptoLimit = Bus.audio(s, 1);
+	~riTriptoStereo = Bus.audio(s, 1);
+
 	~noiseToMixA= Bus.audio(s, 2);
 	~noiseToMixB= Bus.audio(s, 2);
 	~noiseToMixC= Bus.audio(s, 2);
@@ -587,6 +589,8 @@ s.sync;
 	~filKick= Bus.audio(s,1);
 	~filKB= Bus.audio(s,1);
 	~filKB2= Bus.audio(s,1);
+
+	~filK2= Bus.audio(s,1);
 
 
 
@@ -663,7 +667,7 @@ s.sync;
 	~distoBus43 =  Bus.audio(s,1);~filterBus23=  Bus.audio(s,1);  ~eqBus23=  Bus.audio(s,1); ~gateBus23=  Bus.audio(s,1); ~reverbBus23=  Bus.audio(s,1); ~micBus23=  Bus.audio(s,1); ~micBus33=  Bus.audio(s,1);  ~comFuzz23=  Bus.audio(s,1);
 	~limitFuzz23=  Bus.audio(s,1); ~stereoBus23=  Bus.audio(s,1); ~no3=  Bus.audio(s,10);
 	~ptrBus23=Bus.audio(s,1); ~ptrBus33=Bus.audio(s,1);
-	~stereoBus14=  Bus.audio(s,2);  ~limitFuzz4=  Bus.audio(s,2);~comFuzz4=  Bus.audio(s,2);~reverbBus4=  Bus.audio(s,1);
+	~stereoBus14=  Bus.audio(s,1);  ~limitFuzz4=  Bus.audio(s,1);~comFuzz4=  Bus.audio(s,1);~reverbBus4=  Bus.audio(s,1);
 	~slideBus2=  Bus.audio(s,1);
 	~slideBus=  Bus.audio(s,1);  ~slideBusToLimit=  Bus.audio(s,1);
 	~slideBusToLimit2=  Bus.audio(s,1);
@@ -796,7 +800,7 @@ s.sync;
 	SynthDef(\playBufS ,{|out = 0,start=0,rte=1, trig= 0.002, dur, buf, dA=2, tS=1, loopy=1,vl=1|Out.ar(out,PlayBuf.ar(2,buf,rte,trigger:
 		trig/*Dust.kr(4.0)*/,startPos: start,loop: loopy,doneAction: dA)* EnvGen.kr(Env([0,vl,vl,0],[0,dur,0]),timeScale: tS,doneAction: 2));}).add;
 
-	SynthDef(\playBuf10 ,{|out = 0,start=0, trig= 0.002, dur, buf, dA=2, tS=1, loopy=1,vl=1|Out.ar(out,PlayBuf.ar(10,buf,trigger:
+	SynthDef(\playBuf10 ,{|out = 0,start=0, trig= 0.002, dur, buf, dA=2, tS=1, loopy=1,vl=1,rte=1|Out.ar(out,PlayBuf.ar(10,buf,rte,trigger:
 		trig/*Dust.kr(4.0)*/,startPos: start,loop: loopy/*,doneAction: dA*/)* EnvGen.kr(Env([0,vl,vl,0],[0,dur,0]),timeScale: tS,doneAction: 2));}).add;
 
 		SynthDef(\playB10 ,{|out = 0,start=0, trig= 0.002, dur, buf, dA=2, tS=1, loopy=1,vl=1|Out.ar(out,PlayBuf.ar(10,buf,trigger:
@@ -1370,7 +1374,7 @@ SynthDef(\kick, {
 }).add;
 
 
-	SynthDef(\abc, {|freq=432,out=0|Out.ar(out,Saw.ar([freq,freq-50],mul: EnvGen.kr(Env.perc(releaseTime: 0.3872))).round(2**(-16)))}).add;
+	SynthDef(\abc, {|freq=432,out=0|Out.ar(out,Saw.ar([freq,freq-50],mul: EnvGen.kr(Env.perc(releaseTime: 0.3872),doneAction: 2)).round(2**(-16)))}).add;
 
 /*0.1-0.018    0.964-0.082*/
 	SynthDef(\rise, {
@@ -2167,7 +2171,7 @@ SynthDef(\volAna,{|in=0|RMS.ar( In.ar(in)).ampdb.round(0.1).poll(label:" db" )})
 	SynthDef(\stereoS,{|out=0, in, spread=0, level=1, center=0.0,dur,modPan,atkT=0,decT=1,crvA=0,tS=1|
 
 		Out.ar(out,
-			Splay.arFill(10,
+			Splay(
 				{Mix.ar(In.ar(in, 2))}
 				,spread,level,center/*+ In.kr(modPan)*/)
 			* EnvGen.kr(Env([0,1,1,0],[dur* atkT,dur*decT,0],[crvA,0]),timeScale: tS,doneAction: 2)
@@ -2799,3 +2803,17 @@ Ppar([
 ~kb=Pbind(\instrument, \playBufS, \dur,  Pseq([1/1],inf), \tS,  0.39550810372374,\buf,~kb1,\loopy,0).play(t)
 
 
+(
+Routine({
+
+
+Pbind(\instrument, \trippyRise, \dur,  Pseq([64/1],1)/*,   \ph, Pfunc({ 6.00.rand})*/,\tS, 0.39550810372374, \out,/*~trippyGate*/0 ).play(t);
+
+
+	wait(0.152);
+
+	s.record(path:"/Users/davidmignot/Music/SuperCollider Recordings/E/trippy.aiff",numChannels:1,duration:t.beatDur*64);
+}).play;)
+
+
+~trippy=Buffer.read(s,"/Users/davidmignot/Music/SuperCollider Recordings/E/trippy.aiff");

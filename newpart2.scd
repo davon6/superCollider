@@ -1,6 +1,6 @@
 (
-/*
-Routine({*/
+
+Routine({
 
 Ppar([
 
@@ -29,7 +29,7 @@ Ppar([
 	Pbind(\instrument, \lfo13,\val,(~hzQbeat/4),\out,~bus10 ,\dur,Pseq([64/1],inf),\ph,1.4, \rL,-0.4,\rH,0.4, \group, ~lfoGrp,\tS, 0.39550810372374),
 
 
-	Pseq([Pbindf(~kick,\out,~kbus)],inf),
+		Pseq([Pbindf(~kick,\out,~kbus)],inf),
 
 
 	Pbind(\instrument, \playBuf,  \tS,  0.39550810372374,\buf,~snare,\dur, Pseq([1/2], inf),\type,  Pseq([\rest ,\rest,\note,\rest] , inf),\out,~dumSnaEq),
@@ -54,18 +54,18 @@ Pbind(\instrument, \lfo13,\val,(~hzQbeat/4),\out,~bus2 ,\dur,999,\ph,0, \rL,200,
 	Pbind(\instrument, \playBuf10, \buf ,~leTout,\out,~toGate10, \start,
 
 	Pseq([
-			Pseq([ (~leTout.numFrames/ 256 * 222.rrand(1) )],3),
-	Pseq([(~leTout.numFrames/ 256 * 222.rrand(1))],3),
-	Pseq([ (~leTout.numFrames/ 256 * 222.rrand(1))],3),
-	Pseq([ (~leTout.numFrames/ 256 * 222.rrand(1))],3),
-		Pseq([ (~leTout.numFrames/ 256 * 222.rrand(1))],3),
-	Pseq([(~leTout.numFrames/ 256 * 222.rrand(1))],3),
-	Pseq([ (~leTout.numFrames/ 256 * 222.rrand(1))],3),
-	Pseq([ (~leTout.numFrames/ 256 * 222.rrand(1))],3),
-		Pseq([ (~leTout.numFrames/ 256 * 222.rrand(1))],3),
-	Pseq([(~leTout.numFrames/ 256 * 222.rrand(1))],3),
-	Pseq([ (~leTout.numFrames/ 256 * 222.rrand(1))],3),
-	Pseq([ (~leTout.numFrames/ 256 * 222.rrand(1))],3),
+			Pseq([ (~leTout.numFrames/ 256 * 190.rrand(1) )],3),
+	Pseq([(~leTout.numFrames/ 256 * 190.rrand(1))],3),
+	Pseq([ (~leTout.numFrames/ 256 * 190.rrand(1))],3),
+	Pseq([ (~leTout.numFrames/ 256 * 190.rrand(1))],3),
+		Pseq([ (~leTout.numFrames/ 256 * 190.rrand(1))],3),
+	Pseq([(~leTout.numFrames/ 256 * 190.rrand(1))],3),
+	Pseq([ (~leTout.numFrames/ 256 * 190.rrand(1))],3),
+	Pseq([ (~leTout.numFrames/ 256 * 190.rrand(1))],3),
+		Pseq([ (~leTout.numFrames/ 256 * 190.rrand(1))],3),
+	Pseq([(~leTout.numFrames/ 256 * 190.rrand(1))],3),
+	Pseq([ (~leTout.numFrames/ 256 * 190.rrand(1))],3),
+	Pseq([ (~leTout.numFrames/ 256 * 190.rrand(1))],3),
 	],inf)
 	,\loopy,0,\tS,0.39550810372374,\dur,  Pseq([
 
@@ -90,7 +90,7 @@ Pbind(\instrument,\gate2, \in ,~toKbGate, \group,~kbGate, \tS,  0.39550810370174
 
 
 
-	/*		Pbind(\instrument,\gateS, \dur,Pseq([64/1],1),\in,~absoFinalGate2 ,\out , ~toExtraFx,\group, ~recGrp2,\tS, 0.39550810372374)*/
+		/*	Pbind(\instrument,\gateS, \dur,Pseq([64/1],1),\in,~absoFinalGate2 ,\out , ~toExtraFx,\group, ~recGrp2,\tS, 0.39550810372374)*/
 
 //have one ris
 
@@ -122,26 +122,28 @@ Pbind(\instrument,\gate2, \in ,~toKbGate, \group,~kbGate, \tS,  0.39550810370174
 
 		Pseq([
 
-	Pbind(\instrument,\gate2, \in ,~toKbGate, \group,~kbGate, \tS,  0.39550810370174,\dur, Pseq([16/1],1),\type,\rest),
-			~hitPart1,~hitPart2,*//*~hitPart3,~hitPart4
+	Pbind(\instrument,\gate2, \in ,~toKbGate, \group,~lfoGrp, \tS,  0.39550810370174,\dur, Pseq([16/1],1),\type,\rest),
+			~hitPart1,~hitPart2,~hitPart3,~hitPart4
 
 
 		],1),
+
+		Pbind(\instrument,\gateS, \dur,9999,\vlSub, 1, \vlSub2,Pkey(\vlSub),\in,~vocToDispatch,\out,0,\group, ~kbGate,\tS, 0.39550810372374),
 
 	// Pbind(\instrument, \playBufS, \dur,  Pseq([1/1],256), \tS,  0.39550810372374,\buf,~kb2)
 
 
 	],1).play(t);
 
-/*	wait(0.142);
+	wait(0.142);
 
-	 /* s.record(path:"/Users/davidmignot/Music/SuperCollider Recordings/E/stem2.aiff",numChannels:10,duration:t.beatDur*256);*/
+	// s.record(path:"/Users/davidmignot/Music/SuperCollider Recordings/E/stem2.aiff",numChannels:10,duration:t.beatDur*256);
 
 
 	s.record;
 
 
-}).play;*/)
+}).play;)
 
 
 
