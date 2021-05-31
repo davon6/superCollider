@@ -1374,7 +1374,7 @@ SynthDef(\kick, {
 }).add;
 
 
-	SynthDef(\abc, {|freq=432,out=0|Out.ar(out,Saw.ar([freq,freq-50],mul: EnvGen.kr(Env.perc(releaseTime: 0.3872),doneAction: 2)).round(2**(-16)))}).add;
+	SynthDef(\abc, {|freq=432,out=0,tS=1|Out.ar(out,Saw.ar([freq,freq-50],mul: EnvGen.kr(Env.perc(releaseTime: 0.3872),timeScale: tS,doneAction: 2)).round(2**(-16)))}).add;
 
 /*0.1-0.018    0.964-0.082*/
 	SynthDef(\rise, {

@@ -307,7 +307,7 @@ MIDIdef.cc(\lpF2x, { |value|var modFreq = value.linlin(0, 127, 710/*800*/,24000/
 },ccNum: 1 );*/
 
 
-MIDIdef.cc(\lpF2x2, { |value|var modFreq = value.linlin(0, 127, 310/*800*/,24000);
+MIDIdef.cc(\lpF2x2, { |value|var modFreq = value.linlin(0, 127, /*310*/600,24000);
 
 	k.set(\lFrq2,"lp: ".postln;modFreq.round(1).post;)
 
@@ -317,7 +317,7 @@ MIDIdef.cc(\lpF2x2, { |value|var modFreq = value.linlin(0, 127, 310/*800*/,24000
 
 
 
-MIDIdef.cc(\hpF, { |value|var modFreq = value.linlin(0, 127, 70, 18000);
+MIDIdef.cc(\hpF, { |value|var modFreq = value.linlin(0, 127, 70, 3200/*18000*/);
 
 k.set(\hFrq, "hp: ".postln;modFreq.round(1).post);},ccNum: 72 );// is 16
 
