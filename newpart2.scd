@@ -95,9 +95,10 @@ Pbind(\instrument,\gate2, \in ,~toKbGate, \group,~kbGate, \tS,  0.39550810370174
 //have one ris
 
 
+				Pbind(\instrument, \playBuf10, \dur,Pseq([64/1],1),\buf ,~leTout,\out,~toExtraFx, \tS, 0.39550810372374,\group, ~recGrp2, \start,Pfunc({~leTout.numFrames/4  *4.rand})),
 
 		~part3a,
-		~part3b,~part3e,
+		/*~part3b,*/~part3e,
 		Pbind(\instrument,\gateS, \dur,Pseq([64/1],1),\in,~absoFinalGate2 ,\out , ~toExtraFx,\group, ~recGrp2,\tS, 0.39550810372374),
 		Pbind(\instrument,\gateS, \dur,Pseq([64/1],1),\in,~absoFinalGate,\out , ~toExtraFx,\group, ~recGrp2,\tS, 0.39550810372374)
 
