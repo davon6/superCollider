@@ -134,6 +134,8 @@ Pbind(\instrument,\gate2, \in ,~toKbGate, \group,~kbGate, \tS,  0.39550810370174
 	// Pbind(\instrument, \playBufS, \dur,  Pseq([1/1],256), \tS,  0.39550810372374,\buf,~kb2)
 
 
+		Pbind(\instrument,\gate,\vlSub, 1, \vlSub2,Pkey(\vlSub),\in,	~bgGate,\out,~bgComp,\group, ~granuGrp,\type, Pseq([   Pseq([\note,\rest  ,\note,\rest,\note,\rest  ,\note,\rest ,\note,\rest  ,\note,\rest ,\note,\rest  ,\note,\rest   ].scramble,16) ,           Pseq([  \rest,\note ],1),\note, ,Pseq([\note,\rest  ,\note,\rest  ].scramble,4)   ],inf),  \dur ,Pseq([Pseq([4/1],64) , Pseq([128/1],2) Pseq([256/1],1),Pseq([16/1],16)   ],inf))
+
 	],1).play(t);
 
 	wait(0.142);
@@ -145,6 +147,8 @@ Pbind(\instrument,\gate2, \in ,~toKbGate, \group,~kbGate, \tS,  0.39550810370174
 
 
 }).play;)
+
+
 
 
 

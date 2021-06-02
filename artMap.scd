@@ -738,3 +738,310 @@ Pbind(\instrument,\playBufXG,\rte,0.5,\dur,/*Pseq([1/2],inf)*/Pseq([1/16],inf)
 	/*	Pseq([ Pseq([ 82],8) /* ,20.6,20.6,10.3*/],inf)*/
 		,\start, ~st
 	,\tS, 0.39550810372374 ,\vlSub, /*0.3*/ 1 , \vlSub2,Pkey(\vlSub), \atkT,~pAtkT,\decT, ~pDecT ,	\subsT, ~pSubT , \atckC,~pAtkC,\decC,~pDecC,\vlAtk , ~pvlAtk/*,\gateSub,Pfunc({0.8.exprand(0.001)})*/,\dA,2,\loo,1).play(t)
+
+
+//aleeee
+
+
+
+
+MIDIdef.noteOn(\onTest, {|vel, nn, chan, src|[vel, nn, chan, src].postln});
+MIDIdef.cc(\onTestT, {|vel, nn, chan, src|[vel, nn, chan, src].postln});
+
+Pbindef(\choo,\dur,Pseq([ 1/4],inf))
+Pbindef(\choo,\dur,Pseq([ 1/1],inf))
+Pbindef(\choo,\dur,Pseq([ 4/1],inf))
+Pbindef(\choo,\dur,Pseq([ 16/1],inf))
+Pbindef(\choo,\tS,1.8)
+
+MIDIClient.init
+MIDIIn.connectAll;
+MIDIIn.disconnectAll;
+
+FreqScope.new
+s.meter
+~buf.play
+~buf=Buffer.read(s,"/Users/davidmignot/Music/SuperCollider Recordings/E/src1.aiff")
+
+
+(
+~notes = Array.newClear(128);
+~dispatchGrp= Group.new;
+~synthGrp = Group.after(~dispatchGrp);
+~combGrp = Group.after(~synthGrp);
+~shiftGrp = Group.after(~combGrp);
+~shapGrp= Group.after(~shiftGrp);
+~limitGrp= Group.after(~shapGrp);
+~distoGrp= Group.after(~limitGrp);
+~revGrp= Group.after(~distoGrp);
+
+~recGrp= Group.after(~revGrp);
+
+
+
+/*v =*/ /*Pbindef(\choo,\instrument,\learn,\dur,Pseq([ 1/4],inf),\n1,Pseq( [ Pseq(  ~rog ,1) , Pseq(  ~rog.reverse  ,1)         ],inf),\freq,1,\out,~outFil).play(t);*/
+Pbindef(\choo,\instrument,\learn,\dur,Pseq([ 1/4],inf),\n1,Pseq( [
+	61, 69,  64, 69,       74, 83, 78,83,    88, 97, 92, 97,   102,110, 105, 110],inf),\out,~outFil).play(t);
+
+~v =  Synth(\comb1,[ \in, ~outFil,\out,~toShifter   /*~outDisto*/,\amp,1,\maxDel,0.7744,\decT,-0,\busMod,~seqBus],~combGrp);
+
+	Pbind(\instrument, \sequ,\out, ~seqBus, \value,Pseq([
+/*Scale.majorPentatonic(\just).degreeToFreq(7.rand, 76.midicps, -22),
+	Scale.majorPentatonic(\just).degreeToFreq(7.rand, 76.midicps, -21),
+	Scale.majorPentatonic(\just).degreeToFreq(7.rand, 76.midicps, -22),
+	Scale.majorPentatonic(\just).degreeToFreq(7.rand, 76.midicps, -22),
+	Scale.majorPentatonic(\just).degreeToFreq(7.rand, 76.midicps, -22),
+	Scale.majorPentatonic(\just).degreeToFreq(7.rand, 76.midicps, -21),
+	Scale.majorPentatonic(\just).degreeToFreq(7.rand, 76.midicps, -20),
+Scale.majorPentatonic(\just).degreeToFreq(7.rand, 76.midicps, -20)*/
+
+	Scale.chromatic(\just).degreeToFreq(7.rand, 76.midicps, -22),
+	Scale.chromatic(\just).degreeToFreq(7.rand, 76.midicps, -21),
+	Scale.chromatic(\just).degreeToFreq(7.rand, 76.midicps, -22),
+	Scale.chromatic(\just).degreeToFreq(7.rand, 76.midicps, -22),
+	Scale.chromatic(\just).degreeToFreq(7.rand, 76.midicps, -22),
+	Scale.chromatic(\just).degreeToFreq(7.rand, 76.midicps, -21),
+	Scale.chromatic(\just).degreeToFreq(7.rand, 76.midicps, -20),
+Scale.chromatic(\just).degreeToFreq(7.rand, 76.midicps, -20)
+
+].scramble,inf),\dur,Pxrand([ Pseq([4/1],1),Pseq([1/1],4), Pseq([1/4],16)],inf),\legato, 2,\group,~shapGrp,\tS, 0.39550810372374,).play(t);
+
+
+
+ ~h1 = Synth(\shiftX,[\in,~toShifter,\out ,~outTolimit,\freq,0],~shiftGrp);
+
+~l1 = Synth(\lim,[\in, ~outTolimit,\out,~outDisto],~limitGrp);
+
+
+
+h = Synth(\disto3,[\in,  ~outDisto , \out,~bigRiToRev2/*~outTolimit*/,\gain,1],~distoGrp);
+
+~rev44= Synth( \reverb, ~rShor, ~revGrp);
+~rev44.set(\in,~bigRiToRev2  /*,\mix, 0.8,\room, 1,\damp,1*/);
+
+/*~rev44.set(\in,~bigRiToRev2  ,\mix, 0.8,\room, 1,\damp,1);
+~rev44.set(\in,~bigRiToRev2  ,\mix, 0.3,\room, 0.2,\damp,0.1);*/
+
+/*
+// l = Synth(\limiter,[\in, ~outTolimit,\out,0, \gain, 140],~limitGrp);*/
+
+
+
+
+/*MIDIdef.noteOn(\piana,{arg vel, nn;
+	[ nn].postln;
+	~notes[nn] =  Synth( \fmX, [\freq, nn.midicps,\dur, inf,\stretch, 3.5,\mRatio, 1,\cRatio, 1,\index, 1,\atkE, 0.1,\amp,1,\out,0/*~outFil*/
+		,\amp, vel.linexp(1,127,0.12,0.14,\freq, nn.midicps)
+	],~synthGrp);
+});
+
+
+MIDIdef.noteOff(\offPiana, {arg vel, nn;nn.postln;
+	~notes[nn].set(\gate,0);
+	~notes[nn] = nil;
+});*/
+
+
+MIDIdef.cc(\fmCt ,{ |value|var modFreq = value.linlin(0, 127,0, 0.8);
+
+	// ~notes.do{arg synth; synth.set(/*\fmCtrl*/\cRatio, modFreq.round(0.01))};
+	// v.set(\cRatio, modFreq.round(0.01).postln);
+
+	Pbindef(\choo,\cRatio, modFreq.round(0.01))
+},ccNum: 74 ); //is2
+
+
+MIDIdef.cc(\rateGate, { |value|var modFreq = value.linlin(61, 67, 40, 20);
+
+	// if(modFreq.round(1).postln ==20,{Pbindef(\choo,   \dur,Pseq([64/1],inf));},{});
+	if(modFreq.round(1).postln ==20,{Pbindef(\choo,   \dur,Pseq([16/1],inf));},{});
+	if(modFreq.round(1).postln ==20,{Pbindef(\choo,   \dur,Pseq([4/1],inf));},{});
+	if(modFreq.round(1).postln ==30,{Pbindef(\choo,  \dur,Pseq([1/1],inf));},{});
+	if(modFreq.round(1).postln ==40,{Pbindef(\choo,  \dur,Pseq([1/4],inf));},{});
+
+
+
+},ccNum: 114 );
+
+
+
+
+MIDIdef.cc(\raett, { |value|var modFreq = value.linlin(61, 67, -200, 1200);
+
+	~h1.set(\frq,modFreq.round(1).postln );
+
+
+
+},ccNum: 112 );
+
+
+
+/*MIDIdef.cc(\fmCt2 ,{ |value|var modFreq = value.linlin(61, 67, 0.8, 0);
+
+	v.set(\fmCtrl, modFreq.round(0.01).postln);
+	~notes.do{arg synth; synth.set(\fmCtrl, modFreq.round(0.01))};
+
+},ccNum: 114 ); //is 9.*/
+
+
+MIDIdef.cc(\fmCtrl, { |value|var modFreq = value.linlin(0, 127,0.8, 0.01);
+
+	Pbindef(\choo,\fmCtrl, modFreq.round(0.01));},ccNum: 19 );//is 11
+
+
+
+
+MIDIdef.cc(\rteShit, { |value|var modFreq = value.linlin(0, 127, 1, 0);
+
+	~h1.set(\rte, modFreq.round(0.01).postln);
+
+},ccNum: 75 ); //is 8
+
+
+
+
+
+MIDIdef.noteOn(\start, {|vel, nn, chan, src|
+	[nn].postln;
+/*v.set(\gate,1);*/
+/* v = Synth( \fmX, [\dur, inf,\stretch, 3.5,\mRatio, 1,\cRatio, 1,\index, 1,\atkE, 0.1,\amp,1,\out,~outFil,],~synthGrp);*/
+
+		~h1.set(\frq,0);
+
+},noteNum: 36); //button 1
+
+
+MIDIdef.noteOn(\rcord, {|vel, nn, chan, src|
+	[nn].postln;
+
+	// x = Synth(\recLoop,[buf:~buf,\recording,1, \in,0],~recGrp);
+	// s.record;
+
+
+	s.record(path:"/Users/davidmignot/Music/SuperCollider Recordings/E/bg.aiff",numChannels:1)
+
+},noteNum: 43);//is 8
+
+
+
+/*MIDIdef.cc(\ml, { |value|var modFreq = value.linlin(0, 127, 0, 0.8);
+
+	~v.set(\multi, modFreq.round(0.01).postln);
+
+},ccNum: 18 ); //is 10*/
+
+
+
+MIDIdef.cc(\ml2, { |value|var modFreq = value.linlin(0, 127, 0, 0.8);
+
+	~h1.set(\mult, modFreq.round(0.01).postln);
+
+},ccNum: 18 ); //is 10
+
+
+
+
+
+/*MIDIdef.cc(\mDel, { |value|var modFreq = value.linlin(0, 127, 0.42, -0.2);
+
+	~v.set(\decT, modFreq.round(0.001).postln);
+
+},ccNum: 71 );  //is 3*/
+
+
+
+MIDIdef.cc(\mDel, { |value|var modFreq = value.linlin(0, 127, 0.3872, -0.0968);
+
+	~v.set(\decT, modFreq.round(0.001).postln);
+
+},ccNum: 71 );  //is 3
+
+
+/*MIDIdef.cc(\mDel, { |value|var modFreq = value.linlin(0, 127, -0.0, -0.5);
+
+	~v.set(\decT, modFreq.round(0.001).postln);
+
+},ccNum: 71 );  //is 3
+
+MIDIdef.cc(\mDelup, { |value|var modFreq = value.linlin(0, 127, 0.0, 1);
+
+	~v.set(\decT, modFreq.round(0.001).postln);
+
+},ccNum: 74 );  //is 2*/
+
+
+MIDIdef.cc(\fr, { |value|var modFreq = value.linlin(0, 127, 0, 1);
+
+	~v.set(\fr, modFreq.round(0.001).postln);
+},ccNum:   16); //is 12
+
+
+MIDIdef.cc(\frCtrl, { |value|var modFreq = value.linlin(0, 127, 0.075, 20.6);
+
+	~v.set(\modR, modFreq.round(0.001).postln);
+},ccNum:   76); //is 12
+
+MIDIdef.cc(\f1, { |value|var modFreq = value.linlin(0, 127, 0, 1);
+
+	~v.set(\f1, modFreq.round(0.001).postln);
+},ccNum:   17); //is 13
+
+MIDIdef.cc(\f1Ctrl, { |value|var modFreq = value.linlin(0, 127, 0.075, 20.6);
+
+	~v.set(\modS, modFreq.round(0.001).postln);
+},ccNum:   77); //is 5
+
+
+MIDIdef.cc(\f2, { |value|var modFreq = value.linlin(0, 127, 0, 1);
+
+	~v.set(\f2, modFreq.round(0.001).postln);
+},ccNum:        91 );//is 14
+
+MIDIdef.cc(\f2Ctrl, { |value|var modFreq = value.linlin(0, 127, 0.075, 20.6);
+
+	~v.set(\modT, modFreq.round(0.001).postln);
+},ccNum:        93 );//is 6
+
+
+MIDIdef.cc(\f3, { |value|var modFreq = value.linlin(0, 127, 0, 1);
+
+	~v.set(\f3, modFreq.round(0.001).postln);
+},ccNum: 79);//is 15
+
+
+MIDIdef.cc(\f3Ctrl, { |value|var modFreq = value.linlin(0,127, 0.075, 20.6);
+
+	~v.set(\modSa, modFreq.round(0.001).postln);
+},ccNum: 73);//is 7
+
+
+
+MIDIdef.cc(\fx, { |value|var modFreq = value.linlin(0, 127, 0, 1);
+
+	~v.set(\fx, modFreq.round(0.001).postln);
+},ccNum:  72 );//is 16
+
+
+/*MIDIdef.cc(\rise, { |value|var modFreq = value.linlin(0, 127, 0.001, 1);
+
+	v.set(\cRatio, modFreq.round(0.001).postln);
+
+},ccNum: 1 );*/
+
+
+MIDIdef.cc(\riseShift, { |value|var modFreq = value.linlin(0, 127, 0, 5000);
+
+	~h1.set(\frq, modFreq.round(0.1).postln);
+
+},ccNum: 1 );
+
+
+
+/*MIDIdef.cc(\mVo, { |value|var modFreq = value.linlin(0, 127, 0, 1);
+
+v.set(\multi, modFreq.round(0.01).postln);
+	/*d.set(\multi, modFreq.round(0.01));*/
+
+},ccNum: 75 ); //is 11*/
+
+)

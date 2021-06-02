@@ -39,7 +39,7 @@ ServerOptions.outDevices;
 	~hzQbeat = ~hz1beat/4;
 	~hzHbeat = ~hzQbeat/4;
 	~hz8Oct = ~hz1beat * 2048;
-	~scale = 2.rand;
+	/*~scale = 2.rand;*/
 
 	FreqScope.new;
 	s.meter;
@@ -286,6 +286,12 @@ s.sync;
 	~part2ToStereo= Bus.audio(s,2);
 	~part2ToComp2= Bus.audio(s,10);
 	~part2ToFilter= Bus.audio(s,1);*/
+
+~bgGate= Bus.audio(s,1);
+	~bgComp= Bus.audio(s,1);
+	~bgEqu= Bus.audio(s,1);
+	~bgLimite= Bus.audio(s,1);
+	~bgStereoO= Bus.audio(s,1);
 
 
 	~shiftPlay= Bus.audio(s,1);
@@ -2253,7 +2259,52 @@ SynthDef(\ranModulC,{|modu, busMod,lS=0, hS=4200,dur,tS=1,out|Out.kr(out,LFDNois
 	SynthDef(\squaModul,{|modu, busMod,wdth=0.5,hS=1200,lS=0|Out.kr(busMod,Pulse.kr(modu,wdth).range(lS,hS) )}).add;
 SynthDef(\sawModul,{|modu, busMod,hS|Out.kr(busMod, Saw.kr(modu).range(-40,hS))}).add;
 
+
 	SynthDef(\fmX, {
+		arg freq= 659.26, freq2=200,freq3=200, mRatio=1, cRatio=0,  amp=1.5, sineRate = 0.0000000095262251,  sineRangeLow=0, pitch = 0, phRise= 0 ,out=0, eFreq =0 , phFm=8, bus2,bus3,bus4,busBP,bus6, bus7, bus8, busSR, busSS, busSP, gra=0.5,lvlDec=1,factor=0, factor2 =0 ,factorx=0, factorx2 =0,factorxx=0, factorxx2 =0  , rqLPF =0.5, factor3 =1, decE= 0.1936, dur, gain =50,gate=1,pan=0, modu,modu2, multi=0, multi2=0,modux=0,moduxx=0,fmCtrl=1;
+
+	var car, mod, mod2, iEnv, sig, filRte,env;
+
+		env = EnvGen.kr(Env.adsr,gate,doneAction: 2);
+
+	iEnv = EnvGen.kr(
+			Env.new(
+
+			[1, 1 * 5, 1 * 5,4.8],
+			[0,0.000000000001,        (dur  ),      0.0000000001],
+			[4, 4,(-4)]
+		));
+
+	//second level of modulation
+	mod2 = SinOsc.ar(freq/10+ (In.kr(moduxx,1)* EnvGen.kr(Env.adsr(sustainLevel: 1,releaseTime: 0.1),factorxx ))+(In.kr(~seqBus,1)* factorxx2), mul:freq/10 *iEnv /*In.kr( gra, 1)*/ );
+
+	//first level of modulation
+
+		mod = SinOsc.ar( MouseX.kr( freq * mRatio + mod2 )
+
+
+
+			 * SinOsc.kr(sineRate,phRise).range([sineRangeLow])+ (In.kr(modux,1)* EnvGen.kr(Env.adsr(sustainLevel: 1,releaseTime: 0.1),factorx )), mul:
+
+		 MouseY.kr(freq/2,  freq * mRatio *iEnv)
+		);
+
+	//my carrier is a mess but bring interesting outputs
+
+		car =SinOsc.ar(
+
+			(In.kr(modu,1)* EnvGen.kr(Env.adsr(sustainLevel: 1,releaseTime: 0.1),factor ))+(In.kr(~seqBus,1)* factor2)+
+
+		SelectX.ar(fmCtrl  ,[In.ar(~phaseBus,1),mod])   +( freq * cRatio )+ 0.00502929687 );
+
+	sig = Shaper.ar(~tfBuf,   car);
+
+	sig  = LeakDC.ar(sig);
+
+	Out.ar(out, sig    * amp     *env);
+}).add;
+
+	/*SynthDef(\fmX, {
 		arg freq= 659.26, freq2=200,freq3=200, mRatio=1, cRatio=0,  amp=1.5, sineRate = 0.0000000095262251,  sineRangeLow=0, pitch = 0, phRise= 0 ,out=0, eFreq =0 , phFm=8, bus2,bus3,bus4,busBP,bus6, bus7, bus8, busSR, busSS, busSP, gra=0.5,lvlDec=1,factor=0, factor2 =0 ,factorx=0, factorx2 =0,factorxx=0, factorxx2 =0  /*,vlPE =27.1366666667,vlPE2=0.2,dcPE = 0.129066666667*/, rqLPF =0.5, factor3 =1, decE= 0.1936, dur, gain =50/*, crvEP = (-2)*/,gate=1,pan=0, modu,modu2, multi=0, multi2=0,modux=0,moduxx=0,fmCtrl=1;
 
 	var car, mod, mod2, iEnv, sig, filRte,env;
@@ -2332,7 +2383,7 @@ SynthDef(\sawModul,{|modu, busMod,hS|Out.kr(busMod, Saw.kr(modu).range(-40,hS))}
 	// sig = Splay.arFill(2,sig,spread: 0);
 	Out.ar(out, sig /* !2*/   * amp     *env/** EnvGen.kr(Env.adsr(0.1), gate)*/);
 }).add;
-
+*/
 
 SynthDef(\filterModu,{|out=0, in, filMod=600,filMod2=500,qf=0.5,qf2=0.5,  which=0, filFreq2 =0, filFreq =0|
 
