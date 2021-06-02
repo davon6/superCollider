@@ -219,8 +219,8 @@ Pbind(\instrument,\rise,\dur,Pseq([64/1],1), \vlAtk, 0,\f1, 0.3 , \f2, 0.4 , \f3
 
 			Pbind(\instrument, \wNoise,\dur, Pseq([4/1],16),\dec ,Pkey(\dur),\amp,(-5),\out,0,\wFil,0,\valStart,900,\valEnd,1000,\durF,Pkey(\dur),\tS, 0.39550810372374,\out,~hitEq,\type,Pseq([\note,\rest,\rest,\rest,\rest,\rest,\rest,\rest,\rest,\rest,\rest,\rest,\rest,\rest,\rest],inf)),
 
-			Pbind(\instrument,\gate3,\tS, 0.39550810372374,\dur,Pseq([1/4],256),\in, ~downSG2,
-		\type,Pseq([\note,\note, \note,\note, \note,\rest,\note,\rest],inf),\out,~downdel,\group,~dispatchGrp),
+			Pbind(\instrument,\gate3,\tS, 0.39550810372374,\dur,Pseq([1/8],512),\in, ~downSG2,
+		\type,Pseq([\note,\note, \note,\note, \rest,\rest,\rest,\rest].scramble,inf),\out,~downdel,\group,~dispatchGrp),
 
 
 
@@ -593,6 +593,15 @@ Ppar([
 	~breakPart1=		Ppar([
 
 
+	Pseq([
+
+		Pbind(\instrument, \playBuf, \impulse, 0.003 ,\dur,Pseq([61/1],1), \tS,  0.39550810370174,\buf,~k2,\type,\rest),
+
+	Pbind(\instrument, \playBuf,\rte,0.5,\dur, Pseq([5/1],1),\impulse, 0.00001,\loo,0,\buf,~vocal,\out, ~vocalBus,\tS,  0.39550810372374,\vl,2.162),
+
+	],1),
+
+
 Pseq([
 
 		Pbind(\instrument, \playBuf, \impulse, 0.003 ,\dur,Pseq([32/1],1), \tS,  0.39550810370174,\buf,~k2,\type,\rest),
@@ -650,7 +659,7 @@ Pbind(\instrument,\lfo13, \val,0.1609375,\dur,Pseq([16/1],1),\ph,1.4, \out, ~dam
 	/*Pbind(\instrument, \playBuf, \impulse, 0.003 ,\dur,Pseq([1/1],45), \tS,  0.39550810370174,\buf,~k2,\out, ~kickRv,\loopy,0,\start,0,\rte,0.3,\type,Pseq([ Pseq([\note],44),\rest,\rest],1),\vl, 1.3),*/
 Pseq([
 					Pbind(\instrument, \playBuf, \impulse, 0.003 ,\dur,Pseq([1/1],13), \tS,  0.39550810370174,\buf,~k2,\out, ~kickRv,\loopy,0,\start,0,\rte,0.3,\type,Pseq([ Pseq([\note],13),\rest,\rest,\rest],1),\vl, 1.3),
-Pbind(\instrument, \playBuf,\rte,0.5,\dur, Pseq([3/1],1),\impulse, 0.00001,\loo,0,\buf,~vocal,\out, ~vocalBus,\tS,  0.39550810372374,\vl,2.162),],1)
+Pbind(\instrument, \playBuf,\rte,0.5,\dur, Pseq([3/1],1),\impulse, 0.00001,\loo,0,\buf,~vocal,\out, ~vocalBus,\tS,  0.39550810372374,\vl,2.162),\type,\rest],1)
 
 
 ],1)

@@ -293,6 +293,8 @@ s.sync;
 	~bgLimite= Bus.audio(s,1);
 	~bgStereoO= Bus.audio(s,1);
 
+		~bgDisto= Bus.audio(s,1);
+
 
 	~shiftPlay= Bus.audio(s,1);
 	~shiftDisto= Bus.audio(s,1);

@@ -496,7 +496,7 @@
 ~part5Comp=Synth( \comp, [\ctrl, ~kbus,\in,~downComp,\out,~downLimit],~compGrp);
 ~part5Comp.set(\thr,0.9 ,\sB, 1.050,\sA, 1/2,\atk ,0.0242, \rel ,0.0968);
 ~part5Limit=Synth( \limitertoMixer,[\in,~downLimit,\out,~downStereo],~limitGrp);
-~part5Limit.set(\gain,40,\out,~downStereo);
+~part5Limit.set(\gain,46,\out,~downStereo);
 ~part5Stereo= Synth(\stereoO,[\in, ~downStereo,\out,~toCom], ~stereoGrp);
 ~part5Stereo.set(\spread,1,\center,0,\dlt1,0.1,\dlt2,0,\decT,0, \mxDel,1);
 
@@ -505,18 +505,18 @@
 ~part5Dis2= Synth(\disto,[\in,~downDisto2,\out,~downSG2],~distoGrp);
 
 // ~part5Dis2.set(\out,0)
-~part52=Synth( \pingD, [\in, ~downdel ,\bufnum,~delay2, \feedback,0.63 ,\out,~downEq2],~filterGrp);
+~part52=Synth( \pingD, [\in, ~downdel ,\bufnum,~delay2, \feedback,0.33 ,\out,~downEq2],~filterGrp);
 
 
 ~part5Eq2=Synth(\EQHP96, [\in,~downEq2,\out,~downRev2],~eqGrp0);
-~part5Eq2.set(\frq,100,\out,~downRev2,\val4,800,\shelf,1,\gain4,(-24),\val,3400,\quant,1,\gain,(-25));
+~part5Eq2.set(\frq,350,\out,~downRev2,\val4,800,\shelf,1,\gain4,(-24),\val,3400,\quant,1,\gain,(-25));
 ~part5Rev2=Synth(\reverb, ~rLon,~revGrp);   ~part5Rev2.set(\in,~downRev2,\out,~downComp2);
 ~part5Comp2=Synth( \comp, [\ctrl, ~kbus,\in,~downComp2,\out,~downLimit2],~compGrp);
-~part5Comp2.set(\thr,0.9 ,\sB, 1.073,\sA, 1/2,\atk ,0.0242, \rel ,0.0968,\out,~downLimit2 );
+~part5Comp2.set(\thr,0.9 ,\sB, 1.003,\sA, 1/2,\atk ,0.0242, \rel ,0.0968,\out,~downLimit2 );
 ~part5Limit2=Synth( \limitertoMixer,[\in,~downLimit2,\out,~downStereo2],~limitGrp);
-~part5Limit2.set(\gain,22,);
+~part5Limit2.set(\gain,35,);
 ~part5Stereo2= Synth(\stereoO,[\in, ~downStereo2,\out,~toCom], ~stereoGrp);
-~part5Stereo2.set(\spread,1,\center,-0.8,\dlt1,0,\dlt2,0,\decT,0, \mxDel,1);
+~part5Stereo2.set(\spread,0.4,\center,0,\dlt1,0,\dlt2,0,\decT,0, \mxDel,1);
 
 
 
@@ -613,7 +613,7 @@
 ~comp38=Synth(\comp, [\ctrl, ~kbus],~compGrp);
 ~comp38.set(\thr,0.95 ,\sB, 1.190,\sA, 1/2,\atk ,0.0242, \rel ,0.0968,\gain,1,\in, ~buildupComp, \out,~buildupLimit );
 ~mix38= Synth(\limiterStoMixer,[\c38,1,\in,~buildupLimit ,\gain,6,\out,~buildupSter],~limitGrp);
-~mix38.set(\gain,57.5);
+~mix38.set(\gain,56.5);
 ~stereo38=Synth(\stereo,[ \dur, 9999, \in, ~buildupSter ,\spread,1 , \out,~toCom], ~stereoGrp );
 
 
@@ -806,8 +806,10 @@ Pbind(\instrument, \playBuf,  \tS,  0.39550810372374,\buf,~snare,\type, Pseq([\r
 
 
 ~bgX= Synth(\playBufX, [\impulse, 0.00001,\loo,1,\buf,~audio4,\out, ~bgGate,\amp,1,\start,0]);
+
+~distoBGX=Synth(\disto,[\in,~bgDisto,\out,~bgComp],~distoGrp0);
 ~compBgX=Synth(\comp, [\ctrl, ~kbus,\in, ~bgComp],~compGrp);
-~compBgX.set(\thr,0.90 ,\sB, 1.080,\sA, 1/2,~bgLimite ,0.0242, \rel ,0.0968,\gain,1 ,\out,~bgEqu);
+~compBgX.set(\thr,0.90 ,\sB, 1.080,\sA, 1/2,\atk ,0.0242, \rel ,0.0968,\gain,1 ,\out,~bgEqu);
 ~bgEqX=Synth(\EQHP96, [ \in, ~bgEqu, \out,~bgLimite,\frq,800],~delayGrp2);
 ~bgEqX.set(\frq,600,\val4,10668,\shelf,1,\gain2,(-13));
 ~limBgX=Synth(\limitertoMixer,[ \c50,1, \in,~bgLimite ,\out,~bgStereoO, \gain, 20],~limitGrp  );
