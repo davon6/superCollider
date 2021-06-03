@@ -359,7 +359,7 @@ MIDIdef.cc(\filRez, { |value|var modFreq = value.linlin(0, 127, 0.3, 8);
 (Ppar([
 
 Pbind(\instrument,\playBufXG,\rte,2,\dur,Pseq([1/16],inf)
-,\buf,~buf,\out,0,\impulse,0.003,\start,~st/*=(~buf.numFrames.rrand(1400000)- 1400000).postln*/
+,\buf,~buf,\out,0,\impulse,0.003,\start,~st=(~buf.numFrames.rrand(1400000)- 1400000).postln
 ,\tS, 0.39550810372374 ,\vlSub,  0.5 , \vlSub2,Pkey(\vlSub), \atkT,~pAtkT,\decT, ~pDecT ,	\subsT, ~pSubT , \atckC,~pAtkC,\decC,~pDecC,\vlAtk , ~pvlAtk)
 
 
@@ -367,7 +367,10 @@ Pbind(\instrument,\playBufXG,\rte,2,\dur,Pseq([1/16],inf)
 
 ],1).play(t))
 
-~st=1416566.6640023                 //2201750.7150731
+
+// close     ~st=3856011
+
+~st=1416566.6640023                 //~st=2201750.7150731
 
 (~buf.numFrames.rrand(1400000)- 1400000).postln
 
