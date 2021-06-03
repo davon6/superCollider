@@ -1,6 +1,6 @@
 ~mixa = Synth(\gate2, [\in,  ,\dur, 9999] ,~eqGrp3);
 
-~mixa = Synth(\gateS, [\in,/*~no1*//*~toKbGate*//*~toFilRise*/~toCom/*~toExtraFx*//*~absoFinalGate2*//*~toGate102*//*~comSnaGrpBus2*/,\dur, 9999] ,~recGrp3);
+~mixa = Synth(\gateS, [\in,/*~no1*/~toKbGate/*~toFilRise*//*~toCom*//*~toExtraFx*//*~absoFinalGate2*//*~toGate102*//*~comSnaGrpBus2*/,\dur, 9999] ,~recGrp3);
 
 
 ~mixa = Synth(\gate, [\in, ~distoPercu,\dur, 9999] ,~limitGrp4);
@@ -19,7 +19,7 @@
 ~justHit.play(t)
 ~breakPart1.play(t)
 ~kb2.plot
-~boost.play(t)
+~boost.play(t,quant:1)
 Ppar([~boost,~breakPart1],1).play(t)
 Ppar([~boost,~kb/*,~justHit*/],1).play(t)
 (~boost=Ppar([
@@ -125,7 +125,7 @@ Ppar([
 
 
 		~part3a,
-		~part3b,~part3e,
+		~part3e,
 
 
 	].scramble,inf),
@@ -143,16 +143,16 @@ Pbind(\instrument, \playBuf,\dur  ,Pseq([2/1],inf),\buf,~pad,\tS,  0.39550810372
 
 					Pbind(\instrument,\gate,\tS, 0.3955081037237,  \dur, Pseq([8/1],1),\in,~shiftGate,\out,  ~shiftEq2,\group,~gateGrp12,\vlSub,1,\vlSub2,Pkey(\vlSub)),
 
-Pbind(\instrument, \gateS,\dur, Pseq([8/1],1), \tS,  0.39550810372374,\group, ~gateGrp11,\in,~tofinalRythm,\out,~toCom),
+Pbind(\instrument, \gateS,\dur, Pseq([8/1],1), \tS,  0.39550810372374,\group, ~gateGrp11,\in,~toExtraFx,\out,~toCom),
 
 	Pbind(\instrument,\gate2,\tS, 0.3955081037237,  \dur, Pseq([8/1],1),\in,~shiftGate,\out,  ~shiftEq2,\group,~gateGrp12),
 
-	Pbind(\instrument, \gateS,\dur, Pseq([8/1],1), \tS,  0.39550810372374,\group, ~gateGrp11,\in,~tofinalRythm,\out,~toCom),
+	Pbind(\instrument, \gateS,\dur, Pseq([8/1],1), \tS,  0.39550810372374,\group, ~gateGrp11,\in,~toExtraFx,\out,~toCom),
 				Ppar([
 
 					Pbind(\instrument,\gate2,\tS, 0.3955081037237,  \dur, Pseq([32/1],1),\in,~shiftGate,\out,  ~shiftEq2,\group,~gateGrp12),
 
-Pbind(\instrument, \gateS,\dur, Pseq([32/1],1), \tS,  0.39550810372374,\group, ~gateGrp11,\in,~tofinalRythm,\out,~toCom)
+Pbind(\instrument, \gateS,\dur, Pseq([32/1],1), \tS,  0.39550810372374,\group, ~gateGrp11,\in,~toExtraFx,\out,~toCom)
 
 				],1)
 
@@ -160,4 +160,74 @@ Pbind(\instrument, \gateS,\dur, Pseq([32/1],1), \tS,  0.39550810372374,\group, ~
 
 ],1).play(t)
 
-	
+
+
+//killer env
+
+Ppar([
+
+
+
+	Pseq([~part3a,~part3e,].scramble,inf),
+
+
+			Prand([
+		Pbind(\instrument, \playBuf, \out,~limitBus1,\dur,Pseq([ 2/1],1)
+			,\impulse,0.075,\tS, 0.39550810372374,\loopy,0,\buf, ~fkAr,\start,Pfunc({~start})),
+//293102
+
+
+		Pbind(\instrument, \gateS, \out, ~toCom,\dur,Pseq([ 2/1],1),\in,~toExtraFx,\tS, 0.39550810372374,\group, ~gateGrp11),
+
+		],inf),
+
+
+
+
+
+],1).play(t)
+
+
+// Synth(\gateS, [\in,~toExtraFx,\dur, 9999] ,~recGrp3);
+
+
+
+//killer env
+
+Ppar([
+
+
+
+	Pseq([~part3a,~part3e,].scramble,inf),
+
+
+
+Ppar([
+
+		Pbind(\instrument, \playBuf,\dur  ,Pseq([2/1],32),\buf,~kb2Test,\tS,  0.39550810372374,\start,
+			Pfunc({~start}) ,\out, ~shiftPlay,\vl,0.01),
+Pseq([
+			Pbind(\instrument, \gateS,\dur, Pseq([4/1],1), \tS,  0.39550810372374,\group, ~gateGrp11,\in,~toExtraFx,\out,~toCom),
+
+Pseq([
+					Pbind(\instrument, \gateS,\dur, Pseq([1/4],1), \tS,  0.39550810372374,\group, ~gateGrp11,\in,~toExtraFx,\out,~toCom),
+
+					Pbind(\instrument, \gateS,\dur, Pseq([15/4],1), \tS,  0.39550810372374,\group, ~gateGrp11,\in,~toExtraFx,\out,~toCom),
+				],7),
+
+
+					Pbind(\instrument, \gateS,\dur, Pseq([32/1],1), \tS,  0.39550810372374,\group, ~gateGrp11,\in,~toExtraFx,\out,~toCom),
+
+						],1),
+
+			/*Pbind(\instrument,\gate, \vlSub,  1 , \vlSub2,Pkey(\vlSub), \dur, Prand([  Pseq([1/2],1) ,Pseq([1.5/1],1)  ,Pseq([1.25/1],1)],42),\type,Prand([\rest,\note,\rest],inf), \in,~gateBus3,\tS, 0.39550810372374,\group, ~gateGrp,\out,~revBus1),*/
+
+			/*Pbind(\instrument, \gateS,\dur, Pseq([64/1],1), \tS,  0.39550810372374,\group, ~gateGrp11,\in,~no1b,\out,~toCom)*/
+
+		],inf),
+
+
+
+
+
+],1).play(t)

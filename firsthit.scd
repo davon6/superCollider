@@ -34,7 +34,7 @@ Ppar([
 
 		Pbind(\instrument,\triModul, \lS, 1100, \hS,  600, \modu,0.08/16,  \out, ~bus11,\ph,4.25 ,\dur,Pseq([64/1],inf), \tS, 0.39550810372374,),
 Pbind(\instrument,\rise,\dur,Pseq([64/1],1), \vlAtk, 0,\f1, 0.3 , \f2, 0.4 , \f3, 0.1,  \ic_atk,3,\index,1,\mRatio,1,\out ,0 /*~downDisto2*/,\tS, 0.39550810372374,\atk,1,\moduS,~bus11,\fS, 0.01,
-		\freq, [659.255/8,639.255/8,619.255/8])],1).play(t)*/
+		\freq, [659.255/16,639.255/16,619.255/16])],1).play(t)*/
 
 
 /*Pbind(\instrument,\rise,\dur,Pseq([64/1],inf), \vlAtk, 0,\f1, 0.3 , \f2, 0.4 , \f3, 0.1,  \ic_atk,3,\index,1,\mRatio,1,\out , ~downDisto2,\tS, 0.39550810372374,\atk,1,\moduS,~bus11,\fS, 0.01,
@@ -162,18 +162,18 @@ Pbind(\instrument, \wNoise,\dur, Pseq([1/2],1),\dec ,Pkey(\dur),\amp,(-5),\out,0
 
 
 Ppar([
-				Pbind(\instrument, \wNoise,\dur, Pseq([1/1],1),\dec ,Pkey(\dur),\amp,(-5),\out,0,\wFil,0,\valStart,900,\valEnd,1000,\durF,0.3872,\out,~hitEq, \tS,  0.39550810372374),
+		/*		Pbind(\instrument, \wNoise,\dur, Pseq([1/1],1),\dec ,Pkey(\dur),\amp,(-5),\out,0,\wFil,0,\valStart,900,\valEnd,1000,\durF,0.3872,\out,~hitEq, \tS,  0.39550810372374),*/
 
 
 
-		Pwrand([
+	Pseq([
 
 		Pbind(\instrument, \wNoise,\dur, Pseq([4/1],1),\dec ,Pkey(\dur),\amp,(-5),\out,0,\wFil,0,\valStart,900,\valEnd,1000,\durF,Pkey(\dur),\tS, 0.39550810372374,\out,~hitEq),
 
 
-					Pbind(\instrument, \gateS,\dur, Pseq([4/1],1), \tS,  0.39550810372374,\group, ~gateGrp11,\in,~tofinalRythm,\out,~toCom),
-		],[1,4].normalizeSum,16),
+					Pbind(\instrument, \gateS,\dur, Pseq([56/1],1), \tS,  0.39550810372374,\group, ~gateGrp11,\in,~tofinalRythm,\out,~toCom),
 
+		],1),
 
 				Pbind(\instrument,\rise,\dur,Pseq([64/1],1 ), \vlAtk,0,\f1,0.8 , \f2, 0.4 , \f3,0,  \ic_atk,7.2,\index,13,\mRatio,1,\out , ~bigRiToDisto,\tS, 0.39550810372374,\atk,1,\freq,[659.26,639.29,672.34])],1)
 
@@ -191,7 +191,7 @@ Ppar([
 		/*Pseq([/*~part5,*/*/
 
 Pbind(\instrument,\rise,\dur,Pseq([64/1],1), \vlAtk, 0,\f1, 0.3 , \f2, 0.4 , \f3, 0.1,  \ic_atk,3,\index,1,\mRatio,1,\out , ~downDisto2,\tS, 0.39550810372374,\atk,1,\moduS,~bus11,\fS, 0.01,
-				\freq, [659.255/8,639.255/8,619.255/8],\atk2,0),
+				\freq, [659.255/16,639.255/16,619.255/16],\atk2,0),
 
 
 
@@ -399,7 +399,9 @@ Pseq([
 
 				Pbind(\instrument, \playBufS, \dur,Pseq([  Pseq([1/1],8) , Pseq([1/4],24) ,Pseq([1/8],16)],1)  , \tS,  0.39550810370174,\buf,~kb1,\out, ~filKB,\loopy,0),
 
+/*8 6, 2 =16
 
+110   -- 126*/
 			],1),
 
 
@@ -477,7 +479,7 @@ Ppar([
 
 	Pseq([
 	Pbind(\instrument, \wNoise,\dur, Pseq([2/1],1),\dec ,Pkey(\dur),\amp,(-5),\out,0,\wFil,0,\valStart,900,\valEnd,1000,\durF,Pkey(\dur),\out,~hitEq,\tS,  0.39550810372374),
-				Pbind(\instrument, \gateS,\dur, Pseq([14/1],1), \tS,  0.39550810372374,\group, ~gateGrp11,\in,~tofinalRythm,\out,~toCom)
+				Pbind(\instrument, \gateS,\dur, Pseq([14/1],1), \tS,  0.39550810372374,\group, ~gateGrp11,\in,~tofinalRythm,\out,~toCom),
 
 			Pbind(\instrument, \wNoise,\dur, Pseq([1/1],1),\dec ,Pkey(\dur),\amp,(-5),\out,0,\wFil,0,\valStart,900,\valEnd,1000,\durF,Pkey(\dur),\out,~hitEq,\tS,  0.39550810372374),
 				Pbind(\instrument, \gateS,\dur, Pseq([15/1],1), \tS,  0.39550810372374,\group, ~gateGrp11,\in,~tofinalRythm,\out,~toCom),
@@ -597,7 +599,10 @@ Ppar([
 
 		Pbind(\instrument, \playBuf, \impulse, 0.003 ,\dur,Pseq([61/1],1), \tS,  0.39550810370174,\buf,~k2,\type,\rest),
 
-	Pbind(\instrument, \playBuf,\rte,0.5,\dur, Pseq([5/1],1),\impulse, 0.00001,\loo,0,\buf,~vocal,\out, ~vocalBus,\tS,  0.39550810372374,\vl,2.162),
+		Ppar([
+			Pbind(\instrument,\lfo13T, \out,~bus9,\val, 0.1609375,  \rL,0,\rH,-0.26, \ph, 0, \dur, Pseq([8/1],1), \tS,  0.39550810372374),
+	Pbind(\instrument, \playBufMod,\rte,0.5,\dur, Pseq([6/1],1),\impulse, 0.00001,\loo,0,\buf,~vocal,\out, ~vocalBus,\tS,  0.39550810372374,\vl,2.162,\modP,~bus9),
+		],1)
 
 	],1),
 
@@ -658,8 +663,8 @@ Pbind(\instrument,\lfo13, \val,0.1609375,\dur,Pseq([16/1],1),\ph,1.4, \out, ~dam
 
 	/*Pbind(\instrument, \playBuf, \impulse, 0.003 ,\dur,Pseq([1/1],45), \tS,  0.39550810370174,\buf,~k2,\out, ~kickRv,\loopy,0,\start,0,\rte,0.3,\type,Pseq([ Pseq([\note],44),\rest,\rest],1),\vl, 1.3),*/
 Pseq([
-					Pbind(\instrument, \playBuf, \impulse, 0.003 ,\dur,Pseq([1/1],13), \tS,  0.39550810370174,\buf,~k2,\out, ~kickRv,\loopy,0,\start,0,\rte,0.3,\type,Pseq([ Pseq([\note],13),\rest,\rest,\rest],1),\vl, 1.3),
-Pbind(\instrument, \playBuf,\rte,0.5,\dur, Pseq([3/1],1),\impulse, 0.00001,\loo,0,\buf,~vocal,\out, ~vocalBus,\tS,  0.39550810372374,\vl,2.162),\type,\rest],1)
+					Pbind(\instrument, \playBuf, \impulse, 0.003 ,\dur,Pseq([1/1],11), \tS,  0.39550810370174,\buf,~k2,\out, ~kickRv,\loopy,0,\start,0,\rte,0.3,\type,Pseq([ Pseq([\note],13),\rest,\rest,\rest],1),\vl, 1.3),
+						Pbind(\instrument, \playBuf,\rte,0.5,\dur, Pseq([3/1],1),\impulse, 0.00001,\loo,0,\buf,~vocal,\out, ~vocalBus,\tS,  0.39550810372374,\vl,2.162,\type,\rest)],1)
 
 
 ],1)
@@ -855,4 +860,21 @@ Pbind(\instrument, \playBuf10, \buf ,~leTout2,\out,~toExtraFx, \start,Pfunc({~le
 	,\loopy,0,\tS,0.39550810372374,\dur,Pseq([1/2],8))
 
 
-],2))
+],2));
+
+~blank=	Pseq([
+	Pbind(\instrument, \blank, \dur,Pseq([255/4],1),\type,\rest),
+
+	Pbind(\instrument, \blank, \dur,Pseq([1/4],1),\in,3400,\group,~recGrp3),
+
+	Pbind(\instrument, \blank, \dur,Pseq([63/1],1),\type,\rest),
+
+	Pbind(\instrument, \blank, \dur,Pseq([1/1],1),\in,3400,\group,~recGrp3),
+
+	Pbind(\instrument, \blank, \dur,Pseq([62/1],1),\type,\rest),
+
+	Pbind(\instrument, \blank, \dur,Pseq([2/1],1),\in,Prand([ ~eqBus10,~rollingKS,~toCom2],inf),\group,~recGrp3),
+
+	Pbind(\instrument, \blank, \dur,Pseq([60/1],1),\type,\rest),
+
+	Pbind(\instrument, \blank, \dur,Pseq([4/1],1),\in,Prand([ ~eqBus10,~rollingKS,~toCom2],inf),\group,~recGrp3)],1);

@@ -223,6 +223,8 @@ s.sync;
 	~distoPercu= Bus.audio(s,1);
 	~part2Fuzz= Bus.audio(s,10);
 	~part2Fuzz2= Bus.audio(s,10);
+
+	~toCom2= Bus.audio(s,10);
 	~revBus1= Bus.audio(s,1);
 	~revBus2= Bus.audio(s,1);
 	~comBus1= Bus.audio(s,1);
@@ -784,6 +786,9 @@ s.sync;
 	EnvGen.kr(Env([0,vl,vl,vl,0],[0,dur*decT*dA,dur* subsT]),timeScale: tS,doneAction: 2)
 
 	);}).add;
+
+
+
 
 	/*SynthDef(\playBufLive,{|out = 0,start=0, trig= 0.002, dur, buf,rte=1 , tS=1, loopy=1,	decT=1, subsT=0,vl=1 ,dA=1 |Out.ar(out,PlayBuf.ar(1,buf,MouseX.kr(-1,10) ,trigger:
 		Impus,startPos: start,loop: loopy)*
@@ -1975,10 +1980,10 @@ FreeVerb.ar(
 
 
 
-	SynthDef(\EQHP2, {|out=0, in, val, quant, gain,frq=100, vol =0.05, val2,quant2, gain2,val3,quant3, gain3,val4, gain4, shelf,val5,quant5, gain5,val6,quant6, gain6| Out.ar(out,
+	SynthDef(\EQHP2, {|out=0, in, val, quant, gain,frq=100, vol =0.05, val2,quant2, gain2,val3,quant3, gain3,val4, gain4, shelf,val5,quant5, gain5,val6,shelf2, gain6| Out.ar(out,
 
-		HPF.ar(HPF.ar(HPF.ar(HPF.ar(HPF.ar(HPF.ar(HPF.ar(HPF.ar(BPeakEQ.ar(BHiShelf.ar(BPeakEQ.ar(
-			BPeakEQ.ar(	BPeakEQ.ar(In.ar(in, 2),val,quant, gain),val2,quant2, gain2),val3,quant3, gain3),val4,shelf, gain4),val5,quant5, gain5),
+		HPF.ar(HPF.ar(HPF.ar(HPF.ar(HPF.ar(HPF.ar(HPF.ar(HPF.ar( BLowShelf.ar(  BPeakEQ.ar(BHiShelf.ar(BPeakEQ.ar(
+			BPeakEQ.ar(	BPeakEQ.ar(In.ar(in, 2),val,quant, gain),val2,quant2, gain2),val3,quant3, gain3),val4,shelf, gain4),val5,quant5, gain5),val6,shelf2, gain6),
 
 		frq),frq),frq),frq),frq),frq),frq),frq)* vol)};).add;
 
