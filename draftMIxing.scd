@@ -1,6 +1,6 @@
 ~mixa = Synth(\gate2, [\in,  ,\dur, 9999] ,~eqGrp3);
 
-~mixa = Synth(\gateS, [\in,~no3/*~toKbGate*//*~toFilRise*//*~toCom*//*~toExtraFx*//*~absoFinalGate2*//*~toGate102*//*~comSnaGrpBus2*/,\dur, 9999] ,~recGrp3);
+~mixa = Synth(\gateS, [\in,/*~no1*//*~toKbGate*//*~toFilRise*//*~toCom*/~toExtraFx/*~absoFinalGate2*//*~toGate102*//*~comSnaGrpBus2*/,\dur, 9999] ,~recGrp3);
 
 
 ~mixa = Synth(\gate, [\in, ~distoPercu,\dur, 9999] ,~limitGrp4);
@@ -18,7 +18,7 @@
 
 ~justHit.play(t)
 ~breakPart1.play(t)
-~kb2.plot
+~kb1.plot
 ~boost.play(t,quant:1)
 Ppar([~boost,~breakPart1],1).play(t)
 Ppar([~boost,~kb/*,~justHit*/],1).play(t)
@@ -73,11 +73,9 @@ Pbind( \instrument,\playBuf /*\playBuf1N*/, \impulse, 0.3,\dur,Pseq([3/1],1), \t
 Pbind( \instrument,\playBuf /*\playBuf1N*/, \impulse, 0.3,\dur,Pseq([3/1],1), \tS,  0.39550810372374,\start, ~pass4,\buf,~bufSnoopy,\out, 0,\loopy,0).play(t)
 
 
-
-~pass1 =(~buf.numFrames.rrand(400000)- 400000);~pass2=(~buf.numFrames.rrand(400000)- 400000);~pass3=(~buf.numFrames.rrand(400000)- 400000);~pass4=(~buf.numFrames.rrand(400000)- 400000);
 (
 
-Ppar([/*~base,  */  ~no4,~sequ,~mainLead ,~boost
+Ppar([~base,  ~no4,~sequ,~mainLead,/*~boost*/
 
 
 	// Pbind(\instrument, \playBufS, \dur,  Pseq([1/1],inf), \tS,  0.39550810372374,\buf,~kb2)
@@ -120,7 +118,7 @@ Ppar([
 				Pbind(\instrument,\lfoStep,\out,~bus28,\tS, 0.39550810372374,\dur,Pseq([56/1],1),\val, 0.0484),
 		Pbind(\instrument,\lfoStep,\out,~bus28,\tS, 0.39550810372374,\dur,Pseq([8/1],1), \val,0.0968),
 				],inf),
-	Pseq([
+/*	Pseq([
 
 
 
@@ -128,7 +126,7 @@ Ppar([
 		~part3e,
 
 
-	].scramble,inf),
+	].scramble,inf),*/
 
 Pbind(\instrument, \playBuf,\dur  ,Pseq([2/1],inf),\buf,~pad,\tS,  0.39550810372374,\start,
 			Pfunc({~start}) ,\out, ~shiftPlay2),
@@ -158,7 +156,7 @@ Pbind(\instrument, \gateS,\dur, Pseq([32/1],1), \tS,  0.39550810372374,\group, ~
 
 			],inf)
 
-],1).play(t)
+],1).play(t,quant:1)
 
 
 
@@ -168,12 +166,12 @@ Ppar([
 
 
 
-	Pseq([~part3a,~part3e,].scramble,inf),
+	// Pseq([~part3a,~part3e,].scramble,inf),
 
 
 			Prand([
 		Pbind(\instrument, \playBuf, \out,~limitBus1,\dur,Pseq([ 2/1],1)
-			,\impulse,0.075,\tS, 0.39550810372374,\loopy,0,\buf, ~fkAr,\start,Pfunc({~start})),
+			,\impulse,0.075,\tS, 0.39550810372374,\loopy,0,\buf, ~fkAr,\start,(~fkAr.numFrames.rrand(80000)-80000).postln),
 //293102
 
 
@@ -197,8 +195,8 @@ Ppar([
 Ppar([
 
 
-
-	Pseq([~part3a,~part3e,].scramble,inf),
+/*
+	Pseq([~part3a,~part3e,].scramble,inf),*/
 
 
 

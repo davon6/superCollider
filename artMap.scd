@@ -359,7 +359,7 @@ MIDIdef.cc(\filRez, { |value|var modFreq = value.linlin(0, 127, 0.3, 8);
 (Ppar([
 
 Pbind(\instrument,\playBufXG,\rte,2,\dur,Pseq([1/16],inf)
-,\buf,~buf,\out,0,\impulse,0.003,\start,~st=(~buf.numFrames.rrand(1400000)- 1400000).postln
+,\buf,~buf,\out,0,\impulse,0.003,\start,~st=SAVE VALUE
 ,\tS, 0.39550810372374 ,\vlSub,  0.5 , \vlSub2,Pkey(\vlSub), \atkT,~pAtkT,\decT, ~pDecT ,	\subsT, ~pSubT , \atckC,~pAtkC,\decC,~pDecC,\vlAtk , ~pvlAtk)
 
 
@@ -860,7 +860,7 @@ MIDIdef.cc(\rateGate, { |value|var modFreq = value.linlin(61, 67, 40, 20);
 	if(modFreq.round(1).postln ==20,{Pbindef(\choo,   \dur,Pseq([16/1],inf));},{});
 	if(modFreq.round(1).postln ==20,{Pbindef(\choo,   \dur,Pseq([4/1],inf));},{});
 	if(modFreq.round(1).postln ==30,{Pbindef(\choo,  \dur,Pseq([1/1],inf));},{});
-	if(modFreq.round(1).postln ==40,{Pbindef(\choo,  \dur,Pseq([1/4],inf));},{});
+	if(modFreq.round(1).postln ==40,{Pbindef(\choo,  \dur,Pseq([4/4],inf));},{});
 
 
 

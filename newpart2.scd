@@ -85,12 +85,12 @@ Pseq([ Pseq([8/1],1)],1)  ,Pseq([ Pseq([4/1],1)],1)   ,Pseq([Pseq([16/1],1) ,Pse
 
 Pseq([
 //WATCH OUT
-Pbind(\instrument,\gate2, \in ,~toKbGate, \group,~kbGate, \tS,  0.39550810370174,\dur, Pseq([16/1],1),\type,\rest),
+			Pbind(\instrument,\gate2, \in ,~toKbGate, \group,~kbGate, \tS,  0.39550810370174,\dur, Pseq([16/1],1),\type,\rest),
 	Pseq([
 
 
 
-		/*	Pbind(\instrument,\gateS, \dur,Pseq([64/1],1),\in,~absoFinalGate2 ,\out , ~toExtraFx,\group, ~recGrp2,\tS, 0.39550810372374)*/
+	/*	Pbind(\instrument,\gateS, \dur,Pseq([64/1],1),\in,~absoFinalGate2 ,\out , ~toExtraFx,\group, ~recGrp2,\tS, 0.39550810372374)*/
 
 //have one ris
 
@@ -140,7 +140,7 @@ Pbind(\instrument,\gate2, \in ,~toKbGate, \group,~kbGate, \tS,  0.39550810370174
 	// Pbind(\instrument, \playBufS, \dur,  Pseq([1/1],256), \tS,  0.39550810372374,\buf,~kb2)
 
 
-		Pbind(\instrument,\gate,\vlSub, 1, \vlSub2,Pkey(\vlSub),\in,	~bgGate,\out,~bgDisto,\group, ~granuGrp,\type, Pseq([   Pseq([\note,\rest  ,\note,\rest,\note,\rest  ,\note,\rest ,\note,\rest  ,\note,\rest ,\note,\rest  ,\note,\rest   ].scramble,16) ,         Pseq([\rest ,  \rest,\note,\note ],1) ,Pseq([\note,\rest  ,\note,\rest  ].scramble,4)   ],inf),  \dur ,Pseq([Pseq([4/1],64) ,Pseq([256/1],1), Pseq([64/1],2) ,Pseq([128/1],1),Pseq([16/1],16)   ],inf))
+		Pbind(\instrument,\gate,\vlSub, 1, \vlSub2,Pkey(\vlSub),\in,	~bgGate,\out,~bgDisto,\group, ~granuGrp,\type, Pseq([   Pseq([\note,\rest  ,\note,\rest,\note,\rest  ,\note,\rest ,\note,\rest  ,\note,\rest ,\note,\rest  ,\note,\rest   ].scramble,16) ,         Pseq([\rest ,  \rest,\note,\note ],1) ,Pseq([\note,\rest  ,\note,\rest,\rest,\rest,\rest  ].scramble,2)   ],inf),  \dur ,Pseq([Pseq([4/1],64) ,Pseq([256/1],1), Pseq([64/1],2) ,Pseq([128/1],1),Pseq([16/1],16)   ],inf))
 
 	],1).play(t);
 

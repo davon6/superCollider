@@ -289,7 +289,7 @@ Pxrand([
 
 
 
-Pbind(\instrument,\gateS, \dur,Pseq([2/1],2),\in, Pseq([~vocToDispatch,~percuCom2,~comSnaGrpBus2,~tam,~no2].scramble,inf), \out,~finGran,\group, ~gateGrp4,\tS, 0.39550810372374,)
+Pbind(\instrument,\gateS, \dur,Pseq([2/1],2),\in, Pseq([/*~vocToDispatch,*/~percuCom2,~comSnaGrpBus2,~tam,~no2].scramble,inf), \out,~finGran,\group, ~gateGrp4,\tS, 0.39550810372374,)
 
 
 	].scramble,inf),
@@ -523,7 +523,7 @@ Pseq([\rest ,\rest,\note,\rest  ,\rest,\rest,\note,\rest,  \rest,\rest,\note,\re
 ],inf),*/
 
 
-	Pbind(\instrument,\envSli,\out, ~bus21,\dur,Pseq([1/2],inf),\tS, 0.39550810372374,\val1,1200,\val2,(-40),\crv,-3.2),
+	Pbind(\instrument,\envSli,\out, ~bus21,\dur,Pseq([1/2],inf),\tS, 0.39550810372374,\val1,1000,\val2,(-40),\crv,-3.2),
 
 
 	Pbind(\instrument, \filter10,\freqFil,300 ,\busMod,~bus21 ,\in,~rythmFil,\which,0,\qf,0.75, \dur, inf, \out,~rythmFilEQ, \group,~filterGrp),
@@ -859,7 +859,7 @@ Pseq([
 
 ],1),*/
 			Pbind( \instrument, \playBuf10, \impulse, 10 ,
-							\dur,  Pseq([1/1],8) , \tS,  0.39550810372374,\start,~bangVar,\buf,~leTout,\out, ~bangLimit,\loopy,0,\vl,0.25),
+							\dur,  Pseq([1/1],8) , \tS,  0.39550810372374,\start,1385868.5,\buf,~leTout,\out, ~bangLimit,\loopy,0,\vl,0.25),
 
 
 			Pbind(\instrument, \gateS, \group,~gateGrp3, \in,~risesGate, \out, ~gateRise,\dur,Pseq([56/1],1),\tS, 0.39550810372374 ),
@@ -879,7 +879,7 @@ Pseq([
 
 							,
 						Pbind( \instrument, \playBuf10, \impulse, 10 ,
-							\dur,  Pseq([1/1],3) , \tS,  0.39550810372374,\start,~bangVar,\buf,~leTout,\out, ~bangLimit,\loopy,0,\vl,0.25)
+							\dur,  Pseq([1/1],3) , \tS,  0.39550810372374,\start,1385868.5,\buf,~leTout,\out, ~bangLimit,\loopy,0,\vl,0.25)
 						],1),
 ],1),
 
@@ -905,7 +905,7 @@ Pbind(\instrument,\playBuf,\loopy,0,\buf,~bell1,\out, ~bellFlang  ,\tS, 0.395508
 
 					,
 						Pbind( \instrument, \playBuf10, \impulse, 10 ,
-							\dur,  Pseq([1/2],4) , \tS,  0.39550810372374,\start,~bangVar,\buf,~leTout,\out, ~bangLimit,\loopy,0,\vl,0.25)
+							\dur,  Pseq([1/2],4) , \tS,  0.39550810372374,\start,1518760.0,\buf,~leTout,\out, ~bangLimit,\loopy,0,\vl,0.25)
 
 				],1),
 ],1),
@@ -936,7 +936,7 @@ Ppar([
 
 
 						Pbind( \instrument, \playBuf10, \impulse, 10 ,
-							\dur,  Pseq([1/1],1) , \tS,  0.39550810372374,\start,~bangVar,\buf,~leTout,\out, ~bangLimit,\loopy,0,\vl,0.25)
+							\dur,  Pseq([1/1],1) , \tS,  0.39550810372374,\start,1518760.0,\buf,~leTout,\out, ~bangLimit,\loopy,0,\vl,0.25)
 				],1),
 ],1),
 
@@ -1016,16 +1016,14 @@ Pbind(\instrument,\stereo, \dur, 9999, \in, ~flanToStereo  ,\spread,0.2,\out,~ga
 /*	Pseq([Pbind( \instrument, \playBuf10, \impulse, 0.3 ,
 				\dur,Pseq([4/1],1), \tS,  0.39550810372374,\start,Pfunc({(~leTout.numFrames/ 256 * 222.rand)}),\buf,~leTout,\out, ~rndBus,\loopy,0)],inf),*/
 
-	Prand([
-/*Pbind(\instrument, \playBufX,\dur, Pseq([4/1],1),\impulse, 0.00001,\loo,0,\buf,~vocal,\out, ~vocalBus,\tS,  0.39550810372374,
-\vl,0.162
-	),*/
+	/*Prand([
+
 
 	Pbind(\instrument, \playBufX2,\dur, Pseq([1/1],1),\impulse, 20.6,\loo,0,\buf,~vocal,\out, ~vocalBus,\tS,  0.39550810372374,\vl,0.162),
 
 Pbind(\instrument, \playBufX2,\dur, Pseq([1/2],2),\impulse, 10.3,\loo,0,\buf,~vocal,\out, ~vocalBus,\tS,  0.39550810372374,
 		\start,Pfunc({(~vocal.numFrames-7000).rand}),\vl,0.162)
-],inf),
+],inf),*/
 
 
 	/*Pbind(\instrument,  \stereoS, \in,~vocToStereo,  \out,~vocToDispatch , \dur,9999, \spread, 0.8.rrand(0.1),\tS,  0.39550810372374,\group,~stereoGrp),*/
@@ -1232,7 +1230,7 @@ Pbind(\instrument, \gate, \dur, Pxrand([ Pseq([1/4],10),/* Pseq([1/1],1) */ ],1)
 \in, ~gateBus23,\tS, 0.39550810372374,\vlSub,1,\vlSub2,Pkey(\vlSub), \out,~reverbBus23),
 
 
-			Pbind(\instrument, \gate ,\dur, Pseq([  Pseq([1.5/1 ],1), Pseq([0.75/1 ],1), Pseq([1/2],1)].scramble,1),\in,Prand([~main1GToG,~main1GToG2,~main1GToG3],inf) ,\group,~gateGrp2 ,\out,~reverbBus23,\vlDec,2.12,\vlSub,2.12,\vlAtk,0, \vlSub2,Pkey(\vlSub),\tS, 0.39550810372374)
+			Pbind(\instrument, \gate ,\dur, Pseq([  Pseq([1.5/1 ],1), Pseq([0.75/1 ],1), Pseq([1/2],1)].scramble,1),\in,Prand([~main1GToG,~main1GToG2,~main1GToG3],inf) ,\group,~gateGrp2 ,\out,~reverbBus23,\vlDec,2.04,\vlSub,2.04,\vlAtk,0, \vlSub2,Pkey(\vlSub),\tS, 0.39550810372374)
 
 ].scramble,1),
 
