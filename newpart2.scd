@@ -140,8 +140,14 @@ Pseq([
 	// Pbind(\instrument, \playBufS, \dur,  Pseq([1/1],256), \tS,  0.39550810372374,\buf,~kb2)
 
 
-		Pbind(\instrument,\gate,\vlSub, 1, \vlSub2,Pkey(\vlSub),\in,	~bgGate,\out,~bgDisto,\group, ~granuGrp,\type, Pseq([   Pseq([\note,\rest  ,\note,\rest,\note,\rest  ,\note,\rest ,\note,\rest  ,\note,\rest ,\note,\rest  ,\note,\rest   ].scramble,16) ,         Pseq([\rest ,  \rest,\note,\note ],1) ,Pseq([\note,\rest  ,\note,\rest,\rest,\rest,\rest  ].scramble,2)   ],inf),  \dur ,Pseq([Pseq([4/1],64) ,Pseq([256/1],1), Pseq([64/1],2) ,Pseq([128/1],1),Pseq([16/1],16)   ],inf))
 
+
+		Pseq([
+			Pbind(\instrument,\gate,\vlSub, 1, \vlSub2,Pkey(\vlSub),\in,	~bgGate,\out,~bgDisto,\group, ~granuGrp,\type,  Pseq([\note,\rest  ,\note,\rest,\note,\rest  ,\note,\rest ,\note,\rest  ,\note,\rest ,\note,\rest  ,\note,\rest   ].scramble,16) ,  \dur ,Pseq([4/1],64) ,\vlAtk,0.5,\atkT,0.25,\relT,0.25,\decT,0.5,\atckC,6, \relC,-6),
+
+
+		Pbind(\instrument,\gate,\vlSub, 1, \vlSub2,Pkey(\vlSub),\in,	~bgGate,\out,~bgDisto,\group, ~granuGrp,\type, Pseq([         Pseq([\rest ,  \rest,\note,\note ],1) ,Pseq([\note,\rest  ,\note,\rest,\rest,\rest,\rest  ].scramble,2)   ],inf),  \dur, Pseq([Pseq([256/1],1), Pseq([64/1],2) ,Pseq([128/1],1),Pseq([16/1],16)   ],inf))
+		],1)
 	],1).play(t);
 
 	wait(0.142);
@@ -157,6 +163,7 @@ Pseq([
 
 
 
+// Pbind(\instrument,\gate,\vlSub, 1, \vlSub2,Pkey(\vlSub),\in,	~bgGate,\out,~bgDisto,\group, ~granuGrp,\type, Pseq([   Pseq([\note,\rest  ,\note,\rest,\note,\rest  ,\note,\rest ,\note,\rest  ,\note,\rest ,\note,\rest  ,\note,\rest   ].scramble,16) ,         Pseq([\rest ,  \rest,\note,\note ],1) ,Pseq([\note,\rest  ,\note,\rest,\rest,\rest,\rest  ].scramble,2)   ],inf),  \dur ,Pseq([Pseq([4/1],64) ,Pseq([256/1],1), Pseq([64/1],2) ,Pseq([128/1],1),Pseq([16/1],16)   ],inf))
 
 
 
