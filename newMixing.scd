@@ -504,12 +504,13 @@
 
 
 
-~part5Dis2= Synth(\disto,[\in,~downDisto2,\out,~downSG2],~distoGrp);
-
+~part5Dis2= Synth(\disto,[\in,~downDisto2,\out,~downFil2],~phaserGrp);
+~part5Fil2=Synth(\filter,[\freqFil,100, \which,1,\qf2,0.2, \busMod,~bus16,\in,~downFil2,\out,~downSG2],~distoGrp);
+/*~part5Fil2.set(\out,~downSG2)*/
 // ~part5Dis2.set(\out,0)
 ~part52=Synth( \pingD, [\in, ~downdel ,\bufnum,~delay2, \feedback,0.33 ,\out,~downEq2],~filterGrp);
 
-
+/*~part52.set(\out,0)*/
 ~part5Eq2=Synth(\EQHP96, [\in,~downEq2,\out,~downRev2],~eqGrp0);
 ~part5Eq2.set(\frq,350,\out,~downRev2,\val4,800,\shelf,1,\gain4,(-24),\val,3400,\quant,1,\gain,(-25),\val3, 1300,\quant3,1,\gain3,(-14));
 ~part5Rev2=Synth(\reverb, ~rLon,~revGrp);   ~part5Rev2.set(\in,~downRev2,\out,~downComp2);

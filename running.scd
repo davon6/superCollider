@@ -377,6 +377,7 @@ s.sync;
 	~downSG2= Bus.audio(s,1);
 	~downdel= Bus.audio(s,1);
 	~downDisto2= Bus.audio(s,1);
+	~downFil2= Bus.audio(s,1);
 ~downEq2= Bus.audio(s,1);
 ~downRev2= Bus.audio(s,1);
 ~downComp2= Bus.audio(s,1);

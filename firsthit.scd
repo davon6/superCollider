@@ -187,6 +187,8 @@ Ppar([
 
 	(~hitPart2 =	Pseq([ Ppar([
 //part2
+		Pbind(\instrument, \lfo13,\tS, 0.39550810372374, \dur, Pseq([64/1],1),\out,~bus16,\rL,4200 ,\rH,1100,\val,0.001875,\ph,1.42),
+
 
 		/*Pseq([/*~part5,*/*/
 
@@ -219,8 +221,8 @@ Pbind(\instrument,\rise,\dur,Pseq([64/1],1), \vlAtk, 0,\f1, 0.3 , \f2, 0.4 , \f3
 
 			Pbind(\instrument, \wNoise,\dur, Pseq([4/1],16),\dec ,Pkey(\dur),\amp,(-5),\out,0,\wFil,0,\valStart,900,\valEnd,1000,\durF,Pkey(\dur),\tS, 0.39550810372374,\out,~hitEq,\type,Pseq([\note,\rest,\rest,\rest,\rest,\rest,\rest,\rest,\rest,\rest,\rest,\rest,\rest,\rest,\rest],inf)),
 
-			Pbind(\instrument,\gate3,\tS, 0.39550810372374,\dur,Pseq([1/4],256),\in, ~downSG2,
-		\type,Pseq([\note,\note, \note,\note, \rest,\rest,\rest,\rest].scramble,inf),\out,~downdel,\group,~dispatchGrp),
+	Pbind(\instrument,\gate,\tS, 0.39550810372374,\dur,Pseq([1/4],256),\in, ~downSG2,\vlSub,1,\vlSub2,Pkey(\vlSub),
+		\type,Pseq([\note,\rest, \note,\rest, \note,\note,\note,\note],inf),\out,~downdel,\group,~dispatchGrp),
 
 
 
@@ -677,7 +679,7 @@ Pseq([
 
 //here
 
-				Pbind(\instrument, \envSli, \out,   ~bus30,  \dur,Pseq([64/1],1),\tS, 0.39550810372374,\val1,30,\val2,4000,\crv,56),
+				Pbind(\instrument, \envSli, \out,   ~bus30,  \dur,Pseq([64/1],1),\tS, 0.39550810372374,\val1,30,\val2,7000,\crv,16),
 
 				  Pbind(\instrument, \shap, \dur,Pseq([1/1],64),\dA1,2,\out,~bassShapB, \tS, 0.39550810372374),
 
