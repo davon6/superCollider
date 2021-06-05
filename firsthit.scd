@@ -399,7 +399,7 @@ Pseq([
 				Pbind(\instrument, \wNoise,\dur, Pseq([79/1],1),\dec ,Pkey(\dur),\amp,(-5),\out,0,\wFil,0,\valStart,900,\valEnd,1000,\durF,Pkey(\dur),\tS, 0.39550810372374,\out,~hitEq,\type,\rest),
 
 
-				Pbind(\instrument, \playBufS, \dur,Pseq([  Pseq([1/1],8) , Pseq([1/4],24) ,Pseq([1/8],16)],1)  , \tS,  0.39550810370174,\buf,~kb1,\out, ~filKB,\loopy,0),
+				Pbind(\instrument, \playBufS, \dur,Pseq([  Pseq([1/1],8) , Pseq([1/4],24) ,Pseq([1/8],16)],1)  , \tS,  0.39550810370174,\buf,~kb1,\out, ~filKB,\loopy,0, \start,800),
 
 /*8 6, 2 =16
 
@@ -628,7 +628,7 @@ Pseq([
 
 
 
-	Pbind(\instrument, \playBufS, \dur,  Pseq([1/1],8), \tS,  0.39550810370174,\buf,~kb1,\out, ~filKB,\loopy,0),
+	Pbind(\instrument, \playBufS, \dur,  Pseq([1/1],8), \tS,  0.39550810370174,\buf,~kb1,\out, ~filKB,\loopy,0, \start,800),
 
 
 
@@ -655,13 +655,13 @@ Pseq([
 	Pseq([
 
 		Pbind(\instrument, \playBuf, \impulse, 0.003 ,\dur,Pseq([16/1],1), \tS,  0.39550810370174,\buf,~k2,\out, ~kickRv,\loopy,0,\start,0,\rte,0.3,\type,\rest,\vl,1.2),
-				Pbind(\instrument, \playBufS, \dur,  Pseq([1/1],24 ), \tS,  0.39550810372374,\buf,~kb1,\out,~filKB2),
+				Pbind(\instrument, \playBufS, \dur,  Pseq([1/1],24 ), \tS,  0.39550810372374,\buf,~kb1,\out,~filKB2, \start,800),
 
 		Ppar([
 
-	Pbind(\instrument,\lfo13, \val,0.0201171875*8,\dur,Pseq([16/1],1)/*Pseq([48/1],1)*/,\ph,1.4, \out,~mixM, \tS, 0.39550810372374,\rL,0 ,\rH,0.8),
-Pbind(\instrument,\lfo13, \val,0.1609375,\dur,Pseq([16/1],1),\ph,1.4, \out,~roomM ,\tS, 0.39550810372374,\rL,0 ,\rH,0.8),
-Pbind(\instrument,\lfo13, \val,0.1609375,\dur,Pseq([16/1],1),\ph,1.4, \out, ~dampM,\tS, 0.39550810372374,\rL, 0.41,\rH,0.8),
+	Pbind(\instrument,\lfo13, \val,0.0201171875*8,\dur,Pseq([16/1],1)/*Pseq([48/1],1)*/,\ph,4.4, \out,~mixM, \tS, 0.39550810372374,\rL,0 ,\rH,0.8),
+Pbind(\instrument,\lfo13, \val,0.1609375,\dur,Pseq([16/1],1),\ph,4.4, \out,~roomM ,\tS, 0.39550810372374,\rL,0 ,\rH,0.8),
+Pbind(\instrument,\lfo13, \val,0.1609375,\dur,Pseq([16/1],1),\ph,4.4, \out, ~dampM,\tS, 0.39550810372374,\rL, 0.41,\rH,0.8),
 
 	/*Pbind(\instrument, \playBuf, \impulse, 0.003 ,\dur,Pseq([1/1],45), \tS,  0.39550810370174,\buf,~k2,\out, ~kickRv,\loopy,0,\start,0,\rte,0.3,\type,Pseq([ Pseq([\note],44),\rest,\rest],1),\vl, 1.3),*/
 Pseq([
@@ -870,7 +870,7 @@ Pbind(\instrument, \playBuf10, \buf ,~leTout2,\out,~toExtraFx, \start,Pfunc({~le
 ~blank=	Pseq([
 	Pbind(\instrument, \blank, \dur,Pseq([255/4],1),\type,\rest),
 
-	Pbind(\instrument, \blank, \dur,Pseq([1/4],1),\in,Prand([ 3400,~eqBus10,~rollingKS],inf),\group,~recGrp3),
+	Pbind(\instrument, \blank, \dur,Pseq([1/4],1),\in,Prand([ 3400,~eqBus10],inf),\group,~recGrp3),
 
 	Pbind(\instrument, \blank, \dur,Pseq([63/1],1),\type,\rest),
 

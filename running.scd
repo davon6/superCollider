@@ -1140,7 +1140,7 @@ SynthDef(\kick, {
 
 		Out.ar(out, sig/*Pan2.ar(sig)*/);
 
-		// Out.ar(0,RMS.ar(sig).ampdb.round(0.1).poll(label:"bass db :")* [0,0,1])
+
 	}).add;
 
 
@@ -1912,7 +1912,7 @@ FreeVerb.ar(
 			BPeakEQ.ar(
 		BPeakEQ.ar(	BPeakEQ.ar(In.ar(in, 1),val,quant, gain),val2,quant2, gain2)
 				,valD,quantD,
-				Amplitude.ar(In.ar(ctrl,1).linlin(0, 0.002, 0, -12)))
+				Amplitude.ar(In.ar(ctrl,1)).linlin(0, 0.003, 0, -12).poll)
 
 			,
 		frq),frq),frq),frq),frq),frq),frq),frq)* vol)};).add;
@@ -2699,7 +2699,7 @@ Ppar([
 
 		\vlDecFx,1800,/*\vlDecF,400,*/
 		\atkcrv, -2,
-		\relcrv, -2,\relcrv2, -4, \relcrv3, -6
+		\relcrv, -2,\relcrv2, -9, \relcrv3, -6
 		,\amp,(-6/*-1*/)/*(-13)*/,\out,~bassEq
 	),
 
@@ -2708,7 +2708,7 @@ Ppar([
 
 			\val,659.255, \quant,1.1, \gain,(-14),
 \val2,1318.51, \quant2,2, \gain2,(-8),
-		\val3,2637.02, \quant3,1, \gain3,(-7),
+		\val3,2637.02, \quant3,1.3, \gain3,(-14),
 
 
 
@@ -2726,7 +2726,7 @@ Ppar([
 }).play;)
 
 ~b3=Buffer.read(s,"/Users/davidmignot/Music/SuperCollider Recordings/E/bass.aiff")
-~b3.play
+~b3.plot
 ~k2.plot
 
 ~kb1.plot
@@ -2747,7 +2747,7 @@ Ppar([
 			Pbind(\instrument, \playBuf, \dur,  Pseq([1/1],inf), \tS,  0.39550810372374,\buf,~k2,\out,~limitKick),
 
 	Pbind( \instrument, \playBufXG, \impulse, 0.003 ,\dur,    Pseq([1/4],inf), \tS,  0.39550810372374,
-	\start,250,\type,Pseq([\rest,\note,\note,\note],inf),\buf,~b3,\out,~comFuzz ,\loopy,0, \decT,0.6,\vlDec,1,\vlSub,Pkey(\vlDec),\vlSub2,Pkey(\vlDec),\subsT ,Pseq([0,0.085,0.17,0.34],inf))
+	\start,0,\type,Pseq([\rest,\note,\note,\note],inf),\buf,~b3,\out,~comFuzz ,\loopy,0, \decT,0.6,\vlDec,1,\vlSub,Pkey(\vlDec),\vlSub2,Pkey(\vlDec),\subsT ,Pseq([0,0.085,0.17,0.34],inf))
 
 ],1)
 
@@ -2764,7 +2764,7 @@ Ppar([
 
 ~kbPan2 = Synth(\pan2,[ \in,~kToPan,\out,0],~stereoGrp);
 
-	wait(0.166);
+	wait(0.150);
 
 	s.record(path:"/Users/davidmignot/Music/SuperCollider Recordings/E/kB.aiff",numChannels:2,duration:t.beatDur);
 }).play;)
@@ -2778,7 +2778,7 @@ Ppar([
 ~kb1.plot
 ~k2.plot
 
-~kb=Pbind(\instrument, \playBufS, \dur,  Pseq([1/1],inf), \tS,  0.39550810372374,\buf,~kb1,\loopy,0).play(t)
+~kb=Pbind(\instrument, \playBufS, \dur,  Pseq([1/1],inf), \tS,  0.39550810372374,\buf,~kb1,\loopy,0,\start,800).play(t)
 
 
 (
