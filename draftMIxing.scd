@@ -13,7 +13,7 @@
 // ~kb=Pbind(\instrument, \playBufS, \dur,  Pseq([1/1],inf), \tS,  0.39550810372374,\buf,~kb2).play(t)
 
 
-~kb=Pbind(\instrument, \playBufS, \start,800,\dur,  Pseq([1/1],inf), \tS,  0.39550810372374,\buf,~kb1,\loopy,0).play(t,quant:1)
+~kb=Pbind(\instrument, \playBufS, \start,793,\dur,  Pseq([1/1],inf), \tS,  0.39550810372374,\buf,~kb1,\loopy,0).play(t,quant:1)
 ~kb.stop
 
 ~justHit.play(t)

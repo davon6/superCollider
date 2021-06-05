@@ -728,7 +728,7 @@ Pbind(\instrument, \playBuf,  \tS,  0.39550810372374,\buf,~snare,\type, Pseq([\r
 
 //~eq34.free
 ~eq34= Synth(\EQHP96, [\frq, 220 ],~eqGrp);
-~eq34.set(\in, ~snareEQ, \val, 400, \quant, 8, \gain, (-10), \out , ~snareComp,\frq, 120,\val5,1800,\shelf2,1.6,\gain5,(-8));
+~eq34.set(\in, ~snareEQ, \val, 400, \quant, 8, \gain, (-10), \out , ~snareComp,\frq, 120,\val5,1800,\shelf2,1.6,\gain5,(-8),\val4,3000,\shelf,1.6,\gain4,(-12));
 ~comp34=Synth(\comp, [\ctrl,~kbus ],~compGrp);
 ~comp34.set(\thr,0.88 ,\sB, 1.04,\sA, 1/2,\atk ,0.0242, \rel ,0.1936, \in, ~snareComp ,\out,~snareLimit);
 ~mix34= Synth(\limitertoMixer,[\c34,1,\in, ~snareLimit,\gain,40,\out,~toPan2],~limitGrp);
@@ -814,7 +814,7 @@ Pbind(\instrument, \playBuf,  \tS,  0.39550810372374,\buf,~snare,\type, Pseq([\r
 ~compBgX=Synth(\comp, [\ctrl, ~kbus,\in, ~bgComp],~compGrp);
 ~compBgX.set(\thr,0.90 ,\sB, 1.080,\sA, 1/2,\atk ,0.0242, \rel ,0.0968,\gain,1 ,\out,~bgEqu);
 ~bgEqX=Synth(\EQHP96, [ \in, ~bgEqu, \out,~bgLimite,\frq,800],~delayGrp2);
-~bgEqX.set(\frq,650,\val4,3668,\shelf,1.2,\gain2,(-16));
+~bgEqX.set(\frq,650,\val4,3668,\shelf,1.2,\gain4,(-12));
 ~limBgX=Synth(\limitertoMixer,[ \c50,1, \in,~bgLimite ,\out,~bgStereoO, \gain, 20],~limitGrp  );
 ~limBgX.set(\gain,37);
 ~stereoP=Synth(\stereoO,[\in,~bgStereoO ,\out,~toCom,\dur,9999],~stereoGrp);

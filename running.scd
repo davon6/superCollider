@@ -1042,34 +1042,8 @@ LFNoise0.kr(~hz1beat).range(0.1,0.0)/*,0.02)*/
 	}).add;
 
 
-/*SynthDef(\kick, {
-		arg amp=0.2,out=0;
-		var sig, env, envF;
 
-		envF = EnvGen.ar(
-			Env(
-				[5178.15,1539.47,114,26,0,0],
-				[0.00108,0.008,0.132,0,0.4],
-					[-6.8,-6,-2]
-			)
-		);
-
-		env =
-
-	EnvGen.ar(
-	Env([ 0.209 , 0.08, 0.21  ,0,0],
-		[  0.0047,0,0.1,     0  ],[-14,-32,3,4,-1]),doneAction:2);
-
-
-		sig = SinOsc.ar(envF, mul: env);
-
-		sig = sig * amp.dbamp  ;
-		sig = Pan2.ar(sig);
-		Out.ar(out, sig);
-	}).add;*/
-
-
-
+/*
 SynthDef(\kick, {
 		arg amp=0.2,out=0;
 		var sig, env, envF;
@@ -1094,8 +1068,33 @@ SynthDef(\kick, {
 		sig = sig * amp.dbamp  ;
 		sig = Pan2.ar(sig);
 		Out.ar(out, sig);
-	}).add;
+	}).add;*/
 
+SynthDef(\kick, {
+		arg amp=0.2,out=0;
+		var sig, env, envF;
+
+		envF = EnvGen.ar(
+			Env(
+				[5178.15,440,114,26,0,0],
+				[0.0008,0.02,0.132,0,0.4],
+					[-6.8,-3,-2]
+			)
+		);
+
+		env =
+
+	EnvGen.ar(
+	Env([ 0.406 , 0.2, 0.51  ,0,0],
+		[ 0.0011,0.03,  0.1 , 0  ],[-14,-32,3,24,1]),doneAction:2);
+
+
+		sig = SinOsc.ar(envF, mul: env);
+
+		sig = sig * amp.dbamp  ;
+		sig = Pan2.ar(sig);
+		Out.ar(out, sig);
+	}).add;
 
 	SynthDef(\bass,{
 		arg freq=41.2, dure=1, amp=0.5,
@@ -1115,9 +1114,9 @@ SynthDef(\kick, {
 
 		envF = EnvGen.kr(
 			Env(
-				[0,vlDecFx,vlDecF,0],
-				[atk,rel/2,rel2],
-				[atkcrv,relcrv3,relcrv2]
+				[vlDecFx,0],
+				[atk,rel],
+				[atkcrv,relcrv2]
 			),
 			doneAction:2
 		);
@@ -1130,7 +1129,7 @@ SynthDef(\kick, {
 		LPF.ar(LPF.ar(
 
 
-			sig.round(2**(-2))
+			sig.round(2**(-8))
 
 			,envF+lpf - In.ar(bus, 1)),envF+lpf - In.ar(bus, 1));
 
@@ -2560,7 +2559,7 @@ SynthDef(\sequ,{|value, dur, in=0, out=0, vlAtk=0, vlDec=1,vlSub=1,vlSub2=1, vlR
 
 s.sync;
 
-	~kick =	Pbind(\instrument, \kick,\dur, Pseq([1/1],1),\amp,1,\out,0);
+	~kick =	Pbind(\instrument, \kick,\dur, Pseq([1/1],1),\amp,1,\out,-2);
 
 	~bassShap = Pbind(\instrument, \shap, \dur,Pseq([1/1],1),\dA1,2,\out,~bassShapB, \tS, 0.39550810372374);
 
@@ -2697,7 +2696,7 @@ Ppar([
 		\rel, t.beatDur/**4*/* 0.996,
 		\rel2, t.beatDur/4 * 0.0012,
 
-		\vlDecFx,1800,/*\vlDecF,400,*/
+		\vlDecFx,1600,/*\vlDecF,400,*/
 		\atkcrv, -2,
 		\relcrv, -2,\relcrv2, -9, \relcrv3, -6
 		,\amp,(-6/*-1*/)/*(-13)*/,\out,~bassEq
@@ -2706,8 +2705,8 @@ Ppar([
 	Pbind(\instrument ,\EQHP2/*	\EQHP2*/,\dur, inf, \in,~bassEq, \out,0,\group, ~eqGrp, \frq, 20.6,\vol,1,
 
 
-			\val,659.255, \quant,1.1, \gain,(-14),
-\val2,1318.51, \quant2,2, \gain2,(-8),
+			\val,659.255, \quant,1.36, \gain,(-20.5),
+\val2,1318.51, \quant2,1.8, \gain2,(-14),
 		\val3,2637.02, \quant3,1.3, \gain3,(-14),
 
 
@@ -2744,10 +2743,10 @@ Ppar([
 	Pseq([Pbindf(~kick,\out,~kbus)],inf),
 Ppar([
 
-			Pbind(\instrument, \playBuf, \dur,  Pseq([1/1],inf), \tS,  0.39550810372374,\buf,~k2,\out,~limitKick),
+			Pbind(\instrument, \playBuf, \dur,  Pseq([1/1],inf), \tS,  0.39550810372374,\buf,~k2,\out,~limitKick,\start, 300),
 
 	Pbind( \instrument, \playBufXG, \impulse, 0.003 ,\dur,    Pseq([1/4],inf), \tS,  0.39550810372374,
-	\start,0,\type,Pseq([\rest,\note,\note,\note],inf),\buf,~b3,\out,~comFuzz ,\loopy,0, \decT,0.6,\vlDec,1,\vlSub,Pkey(\vlDec),\vlSub2,Pkey(\vlDec),\subsT ,Pseq([0,0.085,0.17,0.34],inf))
+	\start,0,\type,Pseq([\rest,\note,\note,\note],inf),\buf,~b3,\out,~comFuzz ,\loopy,0, \decT,0.6,\vlDec,1,\vlSub,Pkey(\vlDec),\vlSub2,Pkey(\vlDec),\subsT ,Pseq([0,0.085,0.17,0.34],inf),\start,3000)
 
 ],1)
 
@@ -2758,9 +2757,9 @@ Ppar([
 
 
 ~limK=Synth(\limitertoMixer,[\c45,1,\in, ~limitKick, \gain,1,\out,~kToPan],~limitGrp);
-~limK.set(\gain,145);
+~limK.set(\gain,225);
 ~limB=Synth(\limitertoMixer,[\c46,1,\in, ~limitBass, \gain,68,\out,~kToPan],~limitGrp);
-~limB.set(\gain,183);
+~limB.set(\gain,176);
 
 ~kbPan2 = Synth(\pan2,[ \in,~kToPan,\out,0],~stereoGrp);
 
@@ -2795,3 +2794,9 @@ Pbind(\instrument, \trippyRise, \dur,  Pseq([64/1],1)/*,   \ph, Pfunc({ 6.00.ran
 
 
 ~trippy=Buffer.read(s,"/Users/davidmignot/Music/SuperCollider Recordings/E/trippy.aiff");
+
+
+({PlayBuf.ar(2,~elec,startPos: 4500000)}.play)
+
+~elec=Buffer.read(s,"/Users/davidmignot/Downloads/10-Electrypnose_-_Give_Me_Some_Fun.wav");
+
