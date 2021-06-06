@@ -52,6 +52,10 @@ f = { |n=14, min=0, max=11| (min..max).scramble.keep(n) };
 ~trippy=Buffer.read(s,"/Users/davidmignot/Music/SuperCollider Recordings/E/trippy.aiff");
 ~audio4=Buffer.read(s,"/Users/davidmignot/Music/SuperCollider Recordings/E/bg.aiff");
 
+~one = ~leTout2.numFrames/ 256 * 240.rand;
+~two = ~leTout2.numFrames/ 256 * 240.rand;
+~troi= ~leTout2.numFrames/ 256 * 240.rand;
+
 ~st2=~lpPrec.numFrames.rand;
 
 //MUST RUN  ( ~buf.numFrames.rrand(320000)- 320000)

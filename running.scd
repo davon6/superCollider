@@ -307,6 +307,8 @@ s.sync;
 	~shiftStereo= Bus.audio(s,1);
 	~shiftGate= Bus.audio(s,1);
 
+	~toDelay10 = Bus.audio(s,10);
+
 	~gateSeqBus = Bus.audio(s,1);
 	~gateSeqRnd = Bus.audio(s,1);
 	~delayToLimit= Bus.audio(s,2);
@@ -1681,6 +1683,9 @@ timeScale: tS,	doneAction:2);
 	"reverb init".postln;
 
 SynthDef(\del, {|out=0, in, decT=1.5544|Out.ar(out,AllpassL.ar(In.ar(in,1),decaytime: decT))}).add;
+
+
+		SynthDef(\del10, {|out=0, in, decT=1.5544|Out.ar(out,AllpassL.ar(In.ar(in,10),decaytime: decT))}).add;
 
 	SynthDef(\pingD, { |out = 0, bufnum = 0, dur, feedback = 0.5, delayTime = 0.3, in /*stereoL =0.00555, stereoR =0, dec=0.5, amp =1*/ |
     var left;

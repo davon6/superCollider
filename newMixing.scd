@@ -564,12 +564,12 @@
 ~disto35=Synth(\disto, [\in, ~distoPerch2 , \out,~eqPerch2], ~distoGrpEx);
 ~disto35.set(\out,~eqPerch2);
 ~eq35= Synth(\EQHP96, [\in, ~eqPerch2, \out, ~revPerch2 ], ~eqGrpEx);
-~eq35.set(\out,~revPerch2,\val4,1950,\shelf,1.58,\gain4,0,\val5,1900,\shelf2,1.2,\gain5,(-16),\val,500,\quant,1.4,\gain,(-11));
+~eq35.set(\out,~revPerch2,\val4,1950,\shelf,1.58,\gain4,0,\val5,1900,\shelf2,1.2,\gain5,(-16),\val,700,\quant,1.4,\gain,(-11));
 ~rev35=Synth(\reverb, ~quickFi ,~revGrpEx);~rev35.set(\in,~revPerch2, \out,~comPerch2 );
 ~comp35=Synth(\comp, [\ctrl, ~kbus],~compGrpEx);
 ~comp35.set(\thr,0.85 ,\sB, 1.086,\sA, 1/2,\atk ,0.0242, \rel ,0.0968, \gain,1,\in, ~comPerch2, \out,~limitPerch2);
 ~mix35= Synth(\limitertoMixer,[\c36,1,\in,~limitPerch2 ,\gain,6,\out,~stereoPerch],~limitGrpEx);
-~mix35.set(\gain,62);
+~mix35.set(\gain,56);
 ~stereo35=Synth(\stereo,[ \dur, 9999, \in, ~stereoPerch ,\spread,1 , \out,~toCom], ~stereoGrpEx );
 
 
@@ -947,6 +947,8 @@ Pbind(\instrument, \playBuf,  \tS,  0.39550810372374,\buf,~snare,\type, Pseq([\r
  ~kbPan	=	Synth( \pan2, [\in,~kbToPan3,\out,0],~recGrp3);
 ///////
 
+
+~del10=Synth(\del10,[\in,~toDelay10,\decT,1.5544,\out,~toCom],~delayGrp);
 
 
 ~reverb =  Synth(\reverbMad, [\roomsize, 80, \revtime, 4.85, \damping, 0.41, \inputbw, 0.59, \drylevel, -8, \earlylevel, -9, \taillevel, -5 , \in,~reverbSquelch  , \out,~comSquelch],~extraRev);
