@@ -750,7 +750,106 @@ Ppar([
 			\dur, Pseq([4/1],1)) ],1),  ].scramble,1)
 
 ].scramble,2),
-		Pseq(~steady.reverse,1),
+		/*Pseq(~steady.reverse,1),*/
+		Pseq([
+		Pseq([
+	Pbind(\instrument,\gate2, \in ,~toKbGate, \group, ~kbGate, \tS,  0.39550810372374,
+		\dur, Pseq([14/1],1)),
+
+					Ppar([
+					Pbind(\instrument, \playBuf, \impulse, 0.003 ,\dur,Pseq([1/1],1), \tS,  0.39550810372374,\buf,~k2,\out, ~kbToPan2,\loopy,0,\start,0),
+			Pbind(\instrument,\gate2, \in ,Prand([~dipatchKB2,~rollingKS,~to4bar],inf), \group, ~kbGate, \tS,  0.39550810372374,
+			\dur, Pseq([2/1],1))].scramble,1),
+				],1),
+
+
+		Pseq([
+	Pbind(\instrument,\gate2, \in ,~toKbGate, \group, ~kbGate, \tS,  0.39550810372374,
+		\dur, Pseq([7/1],1)),
+
+			Pbind(\instrument,\gate2, \in ,~toKbGate, \group, ~kbGate, \tS,  0.39550810372374,
+		\dur, Pseq([7/1],1)),
+
+					Ppar([
+					Pbind(\instrument, \playBuf, \impulse, 0.003 ,\dur,Pseq([1/1],1), \tS,  0.39550810372374,\buf,~k2,\out, ~kbToPan2,\loopy,0,\start,0),
+			Pbind(\instrument,\gate2, \in ,Prand([~dipatchKB2,~rollingKS,~to4bar],inf), \group, ~kbGate, \tS,  0.39550810372374,
+			\dur, Pseq([2/1],1))].scramble,1),
+				],1),
+
+		Pseq([
+	Pbind(\instrument,\gate2, \in ,~toKbGate, \group, ~kbGate, \tS,  0.39550810372374,
+		\dur, Pseq([12/1],1)),
+
+	Prand([
+				Pbind(\instrument, \playBuf, \impulse, 0.003 ,\dur,    Pseq([1/1],4), \tS,  0.39550810372374,\buf,~k2,\out, ~kbToPan2,\loopy,0,\start,0,\tS, 0.39550810372374),
+			Pbind(\instrument,\gate2, \in ,Prand([~dipatchKB2,~rollingKS],inf), \group, ~kbGate, \tS,  0.39550810372374,
+			\dur, Pseq([4/1],1)) ],1),  ].scramble,1),
+
+
+			Pseq([
+	Pbind(\instrument,\gate2, \in ,~toKbGate, \group, ~kbGate, \tS,  0.39550810372374,
+		\dur, Pseq([6/1],1)),
+Ppar([
+
+					Pbind(\instrument, \playBuf, \impulse, 0.003 ,\dur,    Pseq([1/1],1), \tS,  0.39550810372374,\buf,~k2,\out, ~kbToPan2,\loopy,0,\start,0,\tS, 0.39550810372374),
+			Pbind(\instrument,\gate2, \in ,~toKbGate, \group, ~kbGate, \tS,  0.39550810372374,
+		\dur, Pseq([6/1],1),\type,\rest),
+
+				],1),
+
+	Prand([
+				Pbind(\instrument, \playBuf, \impulse, 0.003 ,\dur,    Pseq([1/1],4), \tS,  0.39550810372374,\buf,~k2,\out, ~kbToPan2,\loopy,0,\start,0,\tS, 0.39550810372374),
+			Pbind(\instrument,\gate2, \in ,Prand([~dipatchKB2,~rollingKS],inf), \group, ~kbGate, \tS,  0.39550810372374,
+			\dur, Pseq([4/1],1)) ],1),  ].scramble,1),
+
+				Pseq([
+	Pbind(\instrument,\gate2, \in ,~toKbGate, \group, ~kbGate, \tS,  0.39550810372374,
+		\dur, Pseq([14/1],1)),
+
+					Ppar([
+					Pbind(\instrument, \playBuf, \impulse, 0.003 ,\dur,Pseq([1/1],1), \tS,  0.39550810372374,\buf,~k2,\out, ~kbToPan2,\loopy,0,\start,0),
+			Pbind(\instrument,\gate2, \in ,Prand([~dipatchKB2,~rollingKS,~to4bar],inf), \group, ~kbGate, \tS,  0.39550810372374,
+			\dur, Pseq([2/1],1))].scramble,1),
+				],1),
+
+
+		Pseq([
+	Pbind(\instrument,\gate2, \in ,~toKbGate, \group, ~kbGate, \tS,  0.39550810372374,
+		\dur, Pseq([7/1],1)),
+
+			Pbind(\instrument,\gate2, \in ,~toKbGate, \group, ~kbGate, \tS,  0.39550810372374,
+		\dur, Pseq([7/1],1)),
+
+					Ppar([
+					Pbind(\instrument, \playBuf, \impulse, 0.003 ,\dur,Pseq([1/1],1), \tS,  0.39550810372374,\buf,~k2,\out, ~kbToPan2,\loopy,0,\start,0),
+			Pbind(\instrument,\gate2, \in ,Prand([~dipatchKB2,~rollingKS,~to4bar],inf), \group, ~kbGate, \tS,  0.39550810372374,
+			\dur, Pseq([2/1],1))].scramble,1),
+				],1),
+
+		Pseq([
+	Pbind(\instrument,\gate2, \in ,~toKbGate, \group, ~kbGate, \tS,  0.39550810372374,
+		\dur, Pseq([12/1],1)),
+
+	Prand([
+				Pbind(\instrument, \playBuf, \impulse, 0.003 ,\dur,    Pseq([1/1],4), \tS,  0.39550810372374,\buf,~k2,\out, ~kbToPan2,\loopy,0,\start,0,\tS, 0.39550810372374),
+			Pbind(\instrument,\gate2, \in ,Prand([~dipatchKB2,~rollingKS],inf), \group, ~kbGate, \tS,  0.39550810372374,
+			\dur, Pseq([4/1],1)) ],1),  ].scramble,1),
+
+
+
+	Pbind(\instrument,\gate2, \in ,~toKbGate, \group, ~kbGate, \tS,  0.39550810372374,
+		\dur, Pseq([6/1],1)),
+
+
+		].scramble,1),
+
+
+
+
+		Pbind(\instrument,\gate2, \in ,3000,  \tS,  0.39550810372374,
+			\dur, Pseq([10/1],1),\type,\rest),
+
+
 		~breakPart1,
 
 

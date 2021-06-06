@@ -3729,3 +3729,30 @@ Pbind(\instrument,\learn,\dur,Pseq([ 1/4],inf),\n1,Pseq( [
 SynthDef(\learn,{|out=0,freq=1,n1=64,addF=0,dur,tS=1|Out.ar(out,Saw.ar((n1).midicps*freq,mul: EnvGen.kr(Env.perc(attackTime:0.01 ,releaseTime: dur),timeScale: tS,doneAction: 2)))}).add;
 
 
+
+//letbku
+
+
+(~part3b=
+Ppar([
+
+
+
+
+
+		Pseq([
+
+
+		Pbind(\instrument, \playBuf10, \buf ,~leTout2,\out,~toCom, \start,
+	Pseq([ Pfuncn({~one}), Pfuncn({~one}) ,Pfuncn({~one+((~leTout2.numFrames/ 256 )*2)}),Pfuncn({ ~two}),
+				Pfuncn({~one}) ,Pfuncn({~one}) ,Pfuncn({~one+(~leTout2.numFrames/ 256 )}), Pfuncn({~troi}),
+
+	Pfuncn({~one+(~leTout2.numFrames/ 256 )}),Pfuncn({~one+((~leTout2.numFrames/ 256 )*2)}),Pfuncn({~one+((~leTout2.numFrames/ 256 )*2)}),Pfuncn({ ~two}),
+				Pfuncn({ ~two+(~leTout2.numFrames/ 256 )}),Pfuncn({ ~two+(~leTout2.numFrames/ 256 )}),Pfuncn({ ~two+(~leTout2.numFrames/ 256 )}),
+					Pfuncn({~leTout2.numFrames/ 256 * 220})
+
+			].scramble,inf),\type,Pfunc({Pseq([\note,\rest,\rest,\rest,\rest,\note,\note,\note,\note,\note,\note,\note,\note,\note,\note,\note].scramble,inf)})
+	,\loopy,0,\tS,0.39550810372374,\dur,Pseq([4/1],16)),
+
+],1)],1)	);
+

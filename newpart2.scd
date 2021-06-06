@@ -143,7 +143,7 @@ Pseq([
 
 
 		Pseq([
-			Pbind(\instrument,\gate, \tS,  0.39550810370174,\vlSub, 0.2, \vlSub2,Pkey(\vlSub),\in,	~bgGate,\out,~bgDisto,\group, ~granuGrp,\type,  Pseq([\note,\rest  ,\note,\rest,\note,\rest  ,\note,\rest ,\note,\rest  ,\note,\rest ,\note,\rest  ,\note,\rest   ].scramble,16) ,  \dur ,Pseq([4/1],60) ,\vlAtk,0.2,\atkT,0.25,\relT,0.25,\decT,0.5,\atckC,6, \relC,-6,\vlRel,0.2,),
+			Pbind(\instrument,\gate, \tS,  0.39550810370174,\vlSub, 0.5, \vlSub2,Pkey(\vlSub),\in,	~bgGate,\out,~bgDisto,\group, ~granuGrp,\type,  Pseq([\note,\rest  ,\note,\rest,\note,\rest  ,\note,\rest ,\note,\rest  ,\note,\rest ,\note,\rest  ,\note,\rest   ].scramble,16) ,  \dur ,Pseq([4/1],60) ,\vlAtk,0.5,\atkT,0.25,\relT,0.25,\decT,0.5,\atckC,6, \relC,-6,\vlRel,0.5,),
 
 
 			Pbind(\instrument,\gate, \tS,  0.39550810370174,\in,	~bgGate,\out,~bgDisto,\group, ~granuGrp,\type, \rest ,  \dur ,Pseq([4/1],4) ,\vlAtk,0.2,\atkT,0.25,\relT,0.25,\decT,0.5,\atckC,6, \relC,-6,\vlRel,0.2),
@@ -169,7 +169,7 @@ Pseq([
 	// s.record(path:"/Users/davidmignot/Music/SuperCollider Recordings/E/stem2.aiff",numChannels:10,duration:t.beatDur*256);
 
 
-	s.record;
+	// s.record;
 
 
 }).play;)

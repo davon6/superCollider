@@ -1,14 +1,5 @@
 
-(~part3b=
-Ppar([
-
-
-
-
-
-		Pseq([
-
-
+~part3b=
 		Pbind(\instrument, \playBuf10, \buf ,~leTout2,\out,~toCom, \start,
 	Pseq([ Pfuncn({~one}), Pfuncn({~one}) ,Pfuncn({~one+((~leTout2.numFrames/ 256 )*2)}),Pfuncn({ ~two}),
 				Pfuncn({~one}) ,Pfuncn({~one}) ,Pfuncn({~one+(~leTout2.numFrames/ 256 )}), Pfuncn({~troi}),
@@ -17,10 +8,10 @@ Ppar([
 				Pfuncn({ ~two+(~leTout2.numFrames/ 256 )}),Pfuncn({ ~two+(~leTout2.numFrames/ 256 )}),Pfuncn({ ~two+(~leTout2.numFrames/ 256 )}),
 					Pfuncn({~leTout2.numFrames/ 256 * 220})
 
-			].scramble,inf),\type,Pfunc({Pseq([\note,\rest,\rest,\rest,\rest,\note,\note,\note,\note,\note,\note,\note,\note,\note,\note,\note].scramble,inf)})
-	,\loopy,0,\tS,0.39550810372374,\dur,Pseq([4/1],16)),
+	].scramble,inf),\type,Pseq([\note,\rest,\rest,\rest,\rest,\note,\note,\note,\note,\note,\note,\note,\note,\note,\note,\note].scramble,inf)
+	,\loopy,0,\tS,0.39550810372374,\dur,Pseq([4/1],16));
 
-],1)],1)	);
+
 
 
 
@@ -452,7 +443,15 @@ Pseq([
 
 		Pseq([
 
-		~part3b,
+		Pbindf(~part3b,\type,\note,\start,
+	Pseq([ Pfuncn({~one}), Pfuncn({~one}) ,Pfuncn({~leTout.numFrames/256* (220.rand)}),Pfuncn({ ~two}),
+				Pfuncn({~leTout.numFrames/256* (220.rand)}) ,Pfuncn({~leTout.numFrames/256* (220.rand)}) ,Pfuncn({~leTout.numFrames/256* (220.rand)}), Pfuncn({~troi}),
+
+	Pfuncn({~one+(~leTout2.numFrames/ 256 )}),Pfunc({~leTout.numFrames/256* (220.rand)}),Pfuncn({~one+((~leTout2.numFrames/ 256 )*2)}),Pfuncn({ ~two}),
+				Pfuncn({ ~two+(~leTout2.numFrames/ 256 )}),Pfuncn({~leTout.numFrames/256* (220.rand)}),Pfuncn({ ~two+(~leTout2.numFrames/ 256 )}),
+					Pfuncn({~leTout2.numFrames/ 256 * 220})
+
+			].scramble,inf)),
 
 Ppar([
 	Pbind(\instrument, \wNoise,\dur, Pseq([8/1],1),\dec ,Pkey(\dur),\amp,(-5),\out,0,\wFil,0,\valStart,900,\valEnd,1000,\durF,Pkey(\dur),\tS, 0.39550810372374,\out,~hitEq),
