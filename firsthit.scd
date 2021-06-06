@@ -399,7 +399,7 @@ Pseq([
 				Pbind(\instrument, \wNoise,\dur, Pseq([79/1],1),\dec ,Pkey(\dur),\amp,(-5),\out,0,\wFil,0,\valStart,900,\valEnd,1000,\durF,Pkey(\dur),\tS, 0.39550810372374,\out,~hitEq,\type,\rest),
 
 
-				Pbind(\instrument, \playBufS, \dur,Pseq([  Pseq([1/1],8) , Pseq([1/4],24) ,Pseq([1/8],16)],1)  , \tS,  0.39550810370174,\buf,~kb1,\out, ~filKB,\loopy,0, \start,800),
+				Pbind(\instrument, \playBufS, \dur,Pseq([  Pseq([1/1],8) , Pseq([1/4],24) ,Pseq([1/8],16)],1)  , \tS,  0.39550810370174,\buf,~kb1,\out, ~filKB,\loopy,0, \start,0),
 
 /*8 6, 2 =16
 
@@ -628,7 +628,7 @@ Pseq([
 
 
 
-	Pbind(\instrument, \playBufS, \dur,  Pseq([1/1],8), \tS,  0.39550810370174,\buf,~kb1,\out, ~filKB,\loopy,0, \start,800),
+	Pbind(\instrument, \playBufS, \dur,  Pseq([1/1],8), \tS,  0.39550810370174,\buf,~kb1,\out, ~filKB,\loopy,0, \start,0),
 
 
 
@@ -655,7 +655,7 @@ Pseq([
 	Pseq([
 
 		Pbind(\instrument, \playBuf, \impulse, 0.003 ,\dur,Pseq([16/1],1), \tS,  0.39550810370174,\buf,~k2,\out, ~kickRv,\loopy,0,\start,0,\rte,0.3,\type,\rest,\vl,1.2),
-				Pbind(\instrument, \playBufS, \dur,  Pseq([1/1],24 ), \tS,  0.39550810372374,\buf,~kb1,\out,~filKB2, \start,800),
+				Pbind(\instrument, \playBufS, \dur,  Pseq([1/1],24 ), \tS,  0.39550810372374,\buf,~kb1,\out,~filKB2, \start,0),
 
 		Ppar([
 
@@ -729,7 +729,7 @@ Pbind(\instrument,\wNoise,\dur,Pseq([60/1],1) ,\dA2,2, \wFil,2,\dec,Pkey(\dur),\
 							/*Ppar([
 								Pbind(\instrument,\kick, \dur, Pseq([ Pseq([1/2],8),Pseq([1/4],32),Pseq([1/8],128), Pseq([1/1],3),Pseq([1/2],2)],1) ,\type,Pseq([Pseq([\note],169),Pseq([\rest],2), Pseq([\note],2)],inf),\out,~kbus2),*/
 
-Pbind(\instrument,\kick, \dur, Pseq([ Pseq([1/2],8),Pseq([1/4],32),Pseq([1/8],120), Pseq([1/1],3),Pseq([1/2],2)],1) ,\type,Pseq([Pseq([\note],169),Pseq([\rest],2), Pseq([\note],2)],inf),\out,~kbToPan4)
+Pbind(\instrument,\kick, \dur, Pseq([ Pseq([1/2],8),Pseq([1/4],32),Pseq([1/8],120), Pseq([1/1],3),Pseq([1/2],2)],1) ,\type,Pseq([Pseq([\note],169),Pseq([\rest],2), Pseq([\note],2)],inf),\out,~kbToPan4,\amp,(-10))
 /*],1)*/
 					],1)],1)
 /*],1)*/,

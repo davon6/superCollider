@@ -135,7 +135,7 @@ Pseq([
 		Pseq([
 
 	Pbind(\instrument,\gate2, \in ,~toKbGate, \group,~lfoGrp, \tS,  0.39550810370174,\dur, Pseq([16/1],1),\type,\rest),
-		Pseq([~blank],4),		],1),
+		Pseq([~blank],2),Pbind(\instrument,\gate2, \tS,  0.39550810370174,\dur, Pseq([256/1],1),\type,\rest),		~blank],1),
 
 	// Pbind(\instrument, \playBufS, \dur,  Pseq([1/1],256), \tS,  0.39550810372374,\buf,~kb2)
 
@@ -149,11 +149,12 @@ Pseq([
 			Pbind(\instrument,\gate,\in,	~bgGate,\out,~bgDisto,\group, ~granuGrp,\type, \rest ,  \dur ,Pseq([4/1],4) ,\vlAtk,0.2,\atkT,0.25,\relT,0.25,\decT,0.5,\atckC,6, \relC,-6,\vlRel,0.2),
 
 
-		Pbind(\instrument,\gate,\vlSub, 1, \vlSub2,Pkey(\vlSub),\in,	~bgGate,\out,~bgDisto,\group, ~granuGrp,\type, Pseq([         Pseq([\rest ,  \rest,\note,\note ],1)  ],inf),  \dur, Pseq([Pseq([256/1],1), Pseq([64/1],2) ,Pseq([128/1],1) ],inf)),
+		Pbind(\instrument,\gate,\vlSub, 1, \vlSub2,Pkey(\vlSub),\in,	~bgGate,\out,~bgDisto,\group, ~granuGrp,\type, Pseq([         Pseq([\rest ,  \rest,\note,\rest,\note ],1)  ],inf),  \dur, Pseq([Pseq([256/1],1), Pseq([64/1],1),
+				Pseq([32/1],2),Pseq([128/1],1) ],inf)),
 
 
 			Pbind(\instrument,\gate,\in,	~bgGate,\out,~bgDisto,\group, ~granuGrp,\type,Pseq([\note,\rest  ,\rest,\rest,\rest,\rest,\rest,\rest  ].scramble,2)  ,  \dur, Pseq([16/1],16),
-				\vlAtk,0,\atkT,0.05,\relT,0.25,\decT,0.70,\atckC,6, \relC,-6,\vlRel,0,\decC,9)
+				\vlAtk,0,\atkT,0.05,\relT,0.25,\decT,0.70,\atckC,6, \relC,-6,\vlRel,0,\decC,(-9))
 
 
 		],1)
@@ -164,7 +165,7 @@ Pseq([
 	// s.record(path:"/Users/davidmignot/Music/SuperCollider Recordings/E/stem2.aiff",numChannels:10,duration:t.beatDur*256);
 
 
-	// s.record;
+	s.record;
 
 
 }).play;)
