@@ -52,6 +52,9 @@ f = { |n=14, min=0, max=11| (min..max).scramble.keep(n) };
 ~trippy=Buffer.read(s,"/Users/davidmignot/Music/SuperCollider Recordings/E/trippy.aiff");
 ~audio4=Buffer.read(s,"/Users/davidmignot/Music/SuperCollider Recordings/E/bg.aiff");
 
+~lpPrec32= Buffer.read(s,"/Users/davidmignot/Music/SuperCollider Recordings/E/BPL2.aiff");
+~lpPrec33= Buffer.read(s,"/Users/davidmignot/Music/SuperCollider Recordings/E/BPLX2.aiff");
+
 ~one = ~leTout2.numFrames/ 256 * 240.rand;
 ~two = ~leTout2.numFrames/ 256 * 240.rand;
 ~troi= ~leTout2.numFrames/ 256 * 240.rand;
@@ -215,7 +218,8 @@ f = { |n=14, min=0, max=11| (min..max).scramble.keep(n) };
 ~dynaEq= Group.after(~eqGrp3);
 ~stereoGrp5 = Group.after(~dynaEq);
 ~compGrp6 = Group.after(~stereoGrp5);
-~kbGate= Group.after(~compGrp6);
+~extraGrp = Group.after(~compGrp6);
+~kbGate= Group.after(~extraGrp);
 ~recGrp3= Group.after(~kbGate);
 
 
@@ -350,6 +354,9 @@ Ppar([~base, ~kb],1).play(t,quant:1)
 (~kb =
 Ppar([
 
+
+	Pbind(\instrument, \lfo13T, \val,~hzQbeat/8,\dur,Pseq([64/1],inf),\rL,5000,\rH,1400 ,\out,  ~bus23, \group, ~lfoGrp,\tS, 0.39550810372374,\ph,0),
+
 	Pbind(\instrument,\lfo13T, \out, ~bus31, \val, 0.1609375,  \rL,2370,\rH,4000, \ph, 4.4, \dur, Pseq([64/1],inf), \tS,  0.39550810372374) ,
 
 
@@ -361,6 +368,29 @@ Ppar([
 		Pseq([(-0.3),(-0.4),(-0.5),(-0.6)],inf) ,\out,  ~bus22, \group, ~lfoGrp,\tS, 0.39550810372374),
 
 /*	512*3   1536 +128*/
+
+Pseq([
+
+
+		Pbind(\instrument,\wNoise,\dec,Pkey(\dur),\tS,t.beatDur,\valStart,4500,\valEnd,9500,\durF,0.3,\wFil,0,\dA,2,\dur,Pseq([144/2],1),\crv,(-8),\out,~toNoise,\type, \rest,),
+
+
+	/*Pwrand([*/
+
+	Pseq([
+	Pbind(\instrument,\wNoise,\dec,Pkey(\dur),\tS,t.beatDur,\valStart,4500,\valEnd,9500,\durF,0.3,\wFil,0,\dA,2,\dur,Pseq([1/2],128),\crv,(-8),\out,~toNoise,\type, Pseq([\note ,\rest,\rest,\rest,  ],inf),),
+
+			Pbind(\instrument,\wNoise,\dec,Pkey(\dur),\tS,t.beatDur,\valStart,4500,\valEnd,9500,\durF,0.3,\wFil,0,\dA,2,\dur,Pseq([128/2],1),\crv,(-8),\out,~toNoiseEq,\type, \rest,),
+
+	],inf)
+	/*Pbind(\instrument,\wNoise,\dec,Pkey(\dur),\tS,t.beatDur,\valStart,1500,\valEnd,3500,\durF,0.3,\wFil,0,\dA,2,\dur,Pseq([1/2],4),\crv,(-8),\out,0,\type, \rest),
+	],[1.25,1].normalizeSum,32),
+*/
+
+		/*Pbind(\instrument,\wNoise,\dec,Pkey(\dur),\tS,t.beatDur,\valStart,1500,\valEnd,3500,\durF,0.3,\wFil,0,\dA,2,\dur,Pseq([1/2],32),\crv,(-8),\out,0,\type, \rest),*/
+
+	],inf),
+
 Pseq([
 		Pbind(\instrument, \wNoise2, \durF,0.1936,\dA,2,\dur,  Pseq([16/1], 1),\atk, 1,\out, ~slideBus,\tS,  0.39550810372374,\type,\rest),
 
@@ -446,14 +476,14 @@ Pbind(\instrument, \filter, \freqFil,100,\dur,inf, \in,~hpK,\which,2,\busMod, ~b
 
 
 		Pbind(\instrument, \playBuf,  \tS,  0.39550810372374, \rte, (-4.4),	\buf,~snare,\type,
-		Pwrand([Pseq([\note ,\rest,\rest,\rest] ,1),Pseq([\rest ,\note,\rest,\rest] ,1),
+		Pwrand([Pseq([\rest ,\note,\rest,\rest] ,1),
 
 			Pseq([\rest ,\rest,\rest,\rest] ,1)
 
-	],[1,1,128].normalizeSum,inf),\dur, Pseq([1/2], inf),\out,~snareEQ),
+],[1,128].normalizeSum,inf),\dur, Pseq([1/2], inf),\out,~snareEQ),
 
-	Pbind(\instrument, \playBuf,  \tS,  0.39550810372374,	\buf,~snare,\type,
-		Pwrand([Pseq([\note ,\rest,\rest,\rest],1), Pseq([\rest ,\rest,\rest,\rest],1) ],[2,1,32].normalizeSum,inf)  ,\dA,Pseq([0.25],inf),\dur, Pseq([1/2], inf),\out,~snareEQ),
+/*	Pbind(\instrument, \playBuf,  \tS,  0.39550810372374,	\buf,~snare,\type,
+		Pwrand([Pseq([\note ,\rest,\rest,\rest],1), Pseq([\rest ,\rest,\rest,\rest],1) ],[2,1,32].normalizeSum,inf)  ,\dA,Pseq([0.25],inf),\dur, Pseq([1/2], inf),\out,~snareEQ),*/
 
 Pbind(\instrument, \playBuf,  \tS,  0.39550810372374,\buf,~snare,
 		\type,
@@ -838,7 +868,7 @@ Ppar([
 
 
 	Pbind(\instrument,\gate2, \in ,~toKbGate, \group, ~kbGate, \tS,  0.39550810372374,
-		\dur, Pseq([6/1],1)),
+		\dur, Pseq([2s/1],1)),
 
 
 		].scramble,1),
@@ -847,7 +877,7 @@ Ppar([
 
 
 		Pbind(\instrument,\gate2, \in ,3000,  \tS,  0.39550810372374,
-			\dur, Pseq([10/1],1),\type,\rest),
+			\dur, Pseq([14/1],1),\type,\rest),
 
 
 		~breakPart1,
@@ -1194,7 +1224,7 @@ Pbind(\instrument,\playBufXGMod,\dur,/*Pseq([1/2],inf)*/Pseq([1/2],inf)	,\tS, 0.
 			\relC,Pfunc({-8.exprand(-2,1)}),\vlAtk ,Pfunc({1.00.exprand(0.01)}),\vlRel,Pfunc({0.1.exprand(0.01)})),
 
 		Pbind(\instrument,\gate,\dur,Pxrand([ Pseq([1/4],1),Pseq([1/1],1)],1), \in,  ~gateBus,\out,
-   ~reverbBus, \tS, 0.39550810372374,\group, ~gateGrp,\atkC,9.00.rrand(2),	\atkT,1, \decT,0),
+   ~reverbBus, \tS, 0.39550810372374,\group, ~gateGrp,\atckC,9.00.rrand(2),	\atkT,1, \decT,0),
 
 		Pbind(\instrument, \gate ,\in,  ~gateBus ,\vlDec,1,
 		\dur,Pxrand([Pseq([1/4],4),   Pseq([1/4],12), Pseq([1/1],1) ],1) ,    \group,~gateGrp, \out,~reverbBus,\tS, 0.39550810372374,
@@ -1272,7 +1302,7 @@ Ppar([
 
 
 Pbind(\instrument,\gate,\dur,Pxrand([ /*Pseq([1/4],1),*/Pseq([1/1],1)],inf), \in,~gateBus23  ,\out, ~micBus33,\group, ~distoGrp2,
-	\atkC,9.00.rrand(2),	\atkT,1, \decT,0,\tS, 0.39550810372374,\vlSub,1,\vlSub2,Pkey(\vlSub)),
+	\atckC,9.00.rrand(2),	\atkT,1, \decT,0,\tS, 0.39550810372374,\vlSub,1,\vlSub2,Pkey(\vlSub)),
 
 
 		Pbind(\instrument, \gate ,\in,~gateBus23   ,\vlDec,1,
@@ -1315,7 +1345,7 @@ Pseq([
 
 
 Pbind(\instrument,\gate,\dur,Pxrand([ Pseq([1/1],1)],1), \in,~gateBus23  ,\out, ~reverbBus23,\group, ~gateGrp,
-	\atkC,9.00.rrand(2),	\atkT,1, \decT,0,\tS, 0.39550810372374,),
+	\atckC,5.00.rrand(2),	\atkT,1, \decT,0,\tS, 0.39550810372374,),
 
 		Pbind(\instrument, \gate ,\in,~gateBus23   ,\vlDec,1,
 		\dur,Pxrand([Pseq([1/4],4),   Pseq([1/4],12), Pseq([1/1],1) ],1) ,    \group,~gateGrp, \out,~reverbBus23,\tS, 0.39550810372374,
@@ -1323,7 +1353,7 @@ Pbind(\instrument,\gate,\dur,Pxrand([ Pseq([1/1],1)],1), \in,~gateBus23  ,\out, 
 	\decT,Pfunc({0.6.exprand(0.8,0.3)}),
 	\subsT,Pfunc({0.3.exprand(0.2)}),
 	\relT,Pfunc({0.22.exprand(0.1,1)}),
-	\atckC,Pfunc({6.exprand(1,1)}),
+	\atckC,Pfunc({4.exprand(1,1)}),
 	\decC,Pfunc({-4.exprand(-0.1)}),
 				\relC,Pfunc({-8.exprand(-2,1)}),\vlAtk ,Pfunc({0.01.exprand(0.001)}),\vlRel,Pkey(\vlAtk)),
 
@@ -1503,3 +1533,13 @@ s.scope
 
 Pbind(\instrument,\rise,\dur,Pseq([16/1],1), \vlAtk,0,\f1, 1 , \f2,0, \f3,0.00001,  \ic_atk,-3,\index,1,\mRatio,5,\out ,0,\tS, 0.39550810372374,\atk,1,\moduS,~mod2, \fS,1 ,\freq,300).play(t)
 
+
+({LPF.ar( WhiteNoise.ar(0.3),XLine.kr(1500,3500,0.1)*EnvGen.kr(Env.perc(releaseTime:  0.3),doneAction:2))!2}.play)
+
+
+SynthDef(\vlan, {|out=0, in, val, quant, gain,frq=220, vol =0.05, val2,quant2, gain2,val3,shelf, gain3,val4,quant3, gain4,val5,quant5, gain5, val6,shelf2, gain6| Out.ar(out,
+
+		HPF.ar(HPF.ar(HPF.ar(HPF.ar(HPF.ar(HPF.ar(HPF.ar(HPF.ar(BLowShelf.ar(	BHiShelf.ar( 	BPeakEQ.ar(
+		BPeakEQ.ar(	BPeakEQ.ar(LPF.ar( WhiteNoise.ar(0.3),XLine.kr(1500,3500,0.1)*EnvGen.kr(Env.perc(releaseTime:  0.3),doneAction:2)),val,quant, gain),val2,quant2, gain2),val3,quant3, gain3),val4,shelf, gain4),1000,1, (-16)),
+
+		frq),frq),frq),frq),frq),frq),frq),frq)!2* 4)};).play;

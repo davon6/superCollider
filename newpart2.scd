@@ -4,6 +4,9 @@ Routine({
 
 Ppar([
 
+		//new
+		~delExtraSeq,
+
 		//from firsthit.scd
 		Pbind(\instrument,\envSli,\out, ~bus17,\dur,Pseq([64/1],inf),\tS, 0.39550810372374,\val1,150,\crv,5.2),
 
@@ -97,8 +100,7 @@ Pseq([
 
 				Pbind(\instrument, \playBuf10, \dur,Pseq([64/1],1),\buf ,~leTout,\out,~toExtraFx, \tS, 0.39550810372374,\group, ~recGrp2, \start,Pfunc({~leTout.numFrames/4  *4.rand})),
 
-		~part3a,
-		/*~part3b,*/~part3e,
+		~part3a,~part3e,
 		Pbind(\instrument,\gateS, \dur,Pseq([64/1],1),\in,~absoFinalGate2 ,\out , ~toExtraFx,\group, ~recGrp2,\tS, 0.39550810372374),
 		Pbind(\instrument,\gateS, \dur,Pseq([64/1],1),\in,~absoFinalGate,\out , ~toExtraFx,\group, ~recGrp2,\tS, 0.39550810372374)
 
@@ -143,14 +145,17 @@ Pseq([
 
 
 		Pseq([
-			Pbind(\instrument,\gate, \tS,  0.39550810370174,\vlSub, 0.5, \vlSub2,Pkey(\vlSub),\in,	~bgGate,\out,~bgDisto,\group, ~granuGrp,\type,  Pseq([\note,\rest  ,\note,\rest,\note,\rest  ,\note,\rest ,\note,\rest  ,\note,\rest ,\note,\rest  ,\note,\rest   ].scramble,16) ,  \dur ,Pseq([4/1],60) ,\vlAtk,0.5,\atkT,0.25,\relT,0.25,\decT,0.5,\atckC,6, \relC,-6,\vlRel,0.5,),
+			/*Pbind(\instrument,\gate, \tS,  0.39550810370174,\vlSub, 0.5, \vlSub2,Pkey(\vlSub),\in,	~bgGate,\out,~bgDisto,\group, ~granuGrp,\type,  Pseq([\note,\rest  ,\note,\rest,\note,\rest  ,\note,\rest ,\note,\rest  ,\note,\rest ,\note,\rest  ,\note,\rest   ].scramble,16) ,  \dur ,Pseq([4/1],60) ,\vlAtk,0.5,\atkT,0.25,\relT,0.25,\decT,0.5,\atckC,6, \relC,-6,\vlRel,0.5,),*/
 
 
-			Pbind(\instrument,\gate, \tS,  0.39550810370174,\in,	~bgGate,\out,~bgDisto,\group, ~granuGrp,\type, \rest ,  \dur ,Pseq([4/1],4) ,\vlAtk,0.2,\atkT,0.25,\relT,0.25,\decT,0.5,\atckC,6, \relC,-6,\vlRel,0.2),
+			Pbind(\instrument,\gate, \tS,  0.39550810370174,\vlSub, 1, \vlSub2,Pkey(\vlSub),\in,	~bgGate,\out,~bgDisto,\group, ~granuGrp,  \dur ,Pseq([76/1],1) ,\vlAtk,0.2,\atkT,0.01,\relT,0.01,\decT,0.98,\atckC,6, \relC,-6,\vlRel,0.25,),
 
 
-		Pbind(\instrument,\gate,\vlSub, 1, \vlSub2,Pkey(\vlSub), \tS,  0.39550810370174,\in,	~bgGate,\out,~bgDisto,\group, ~granuGrp,\type, Pseq([         Pseq([\rest ,  \rest,\note,\rest,\note ],1)  ],inf),  \dur, Pseq([Pseq([256/1],1), Pseq([64/1],1),
-				Pseq([32/1],2),Pseq([128/1],1) ],inf)),
+			Pbind(\instrument,\gate, \tS,  0.39550810370174,\in,	~bgGate,\out,~bgDisto,\group, ~granuGrp,\type, \rest ,  \dur ,Pseq([4/1],1) ,\vlAtk,0.2,\atkT,0.25,\relT,0.25,\decT,0.5,\atckC,6, \relC,-6,\vlRel,0.2),
+
+
+		Pbind(\instrument,\gate,\vlSub, 1, \vlSub2,Pkey(\vlSub), \tS,  0.39550810370174,\in,	~bgGate,\out,~bgDisto,\group, ~granuGrp,\type, Pseq([         Pseq([\rest ,  \rest,\rest,\note,\rest,\note ],1)  ],inf),  \dur, Pseq([Pseq([256/1],1), Pseq([64/1],1),
+				Pseq([32/1],2),Pseq([64/1],2) ],inf)),
 
 
 				Pbind(\instrument,\gate,\in,	~bgGate,\out,~bgDisto,\group, ~granuGrp,\type,\rest ,  \dur, Pseq([256/1],1), \tS,  0.39550810370174,
@@ -169,7 +174,7 @@ Pseq([
 	// s.record(path:"/Users/davidmignot/Music/SuperCollider Recordings/E/stem2.aiff",numChannels:10,duration:t.beatDur*256);
 
 
-	// s.record;
+	s.record;
 
 
 }).play;)
