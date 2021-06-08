@@ -4,9 +4,6 @@ Routine({
 
 Ppar([
 
-		//new
-		~delExtraSeq,
-
 		//from firsthit.scd
 		Pbind(\instrument,\envSli,\out, ~bus17,\dur,Pseq([64/1],inf),\tS, 0.39550810372374,\val1,150,\crv,5.2),
 
@@ -50,11 +47,11 @@ Ppar([
 
 Pbind(\instrument, \lfo13,\val,(~hzQbeat/4),\out,~bus2 ,\dur,999,\ph,0, \rL,200,\rH,4000, \group, ~lfoGrp,\tS, 0.39550810372374),
 
-~kb,~hitX,~pedonk, ~fx,
+/*~kb,~hitX,*/ ~fx,
 
 	//if below repeat maybe change to Pfunc
 
-	Pbind(\instrument, \playBuf10, \buf ,~leTout,\out,~toGate10, \start,
+/*	Pbind(\instrument, \playBuf10, \buf ,~leTout,\out,~toGate10, \start,
 
 	Pseq([
 			Pseq([ (~leTout.numFrames/ 256 * 190.rrand(1) )],3),
@@ -105,31 +102,64 @@ Pseq([
 		Pbind(\instrument,\gateS, \dur,Pseq([64/1],1),\in,~absoFinalGate,\out , ~toExtraFx,\group, ~recGrp2,\tS, 0.39550810372374)
 
 	].scramble,inf),
-	],1),
+	],1),*/
 
-	Pwrand([
 
-		Pbind(\instrument,\gateS, \dur, Prand([Pseq([1.5/1],1), Pseq([3/1],1),Pseq([1/1],1),],1),
-			\in,  ~toExtraFx  ,\out ,Pwrand([~tofinalRythm,~reverbSquelch],[8,1].normalizeSum,inf), \group, ~gateGrp7,\tS, 0.39550810372374),
 
 		Pseq([
-			Pbind(\instrument,\gateS, \dur,Pseq([1/8],16),\type,Pseq([\note, \rest,\note, \rest,\note, \rest,\note,\rest],inf),\in,~toExtraFx  ,\out ,~delayBus2 ,\group, ~gateGrp7,\tS, 0.39550810372374),
+		Pseq([
+			Pbind(\instrument, \playBuf10, \buf ,~leTout,\out,~toExtraFx ,\loopy,0,\tS,t.beatDur,\dur,Pseq([64/1],1)),
+			Pbind(\instrument, \playBuf10, \buf ,~leTout2,\out,~toExtraFx,\loopy,0,\tS,t.beatDur,\dur,Pseq([64/1],1)),
+			Pbind(\instrument, \playBuf10, \buf ,~leTout,\out,~toExtraFx,\loopy,0,\tS,t.beatDur,\dur,Pseq([64/1],1),\start,~leTout.numFrames/4 ),
+			Pbind(\instrument, \playBuf10, \buf ,~rising,\out,~toExtraFx ,\loopy,0,\tS,t.beatDur,\dur,Pseq([64/1],1)),
+		],1),
+
+		Pseq([
+			Pbind(\instrument, \playBuf10, \buf ,~leTout,\out,~toExtraFx,\loopy,0,\tS,t.beatDur,\dur,Pseq([64/1],1),\start,~leTout.numFrames/4*2),
+			Pbind(\instrument, \playBuf10, \buf ,~ped,\out,~toExtraFx,\loopy,0,\tS,t.beatDur,\dur,Pseq([64/1],1)),
+			Pbind(\instrument, \playBuf10, \buf ,~leTout,\out,~toExtraFx,\loopy,0,\tS,t.beatDur,\dur,Pseq([64/1],1),\start,~leTout.numFrames/4*3 ),
+			Pbind(\instrument, \playBuf10, \buf ,~leTout2,\out,~toExtraFx,\loopy,0,\tS,t.beatDur,\dur,Pseq([64/1],1),\start,~leTout.numFrames/4*2),
+		],1),
+
+		Pseq([
+
+			Pbind(\instrument, \playBuf10, \buf,~leTout2,\out,~toExtraFx ,\loopy,0,\tS,t.beatDur,\dur,Pseq([64/1],1),\start,~leTout.numFrames/4*3),
+			~part3e,
+			Pbind(\instrument, \playBuf10, \buf ,~leTout2,\out,0,\loopy,0,\tS,t.beatDur,\dur,Pseq([128/1],1),\start,0,\type,\rest),
+		],1),
+
+		Pseq([
+			~part3e,
+			Pbind(\instrument, \playBuf10, \buf ,~ped,\out,~toExtraFx ,\loopy,0,\tS,t.beatDur,\dur,Pseq([64/1],1)),
+			~part3e,
+			Pbind(\instrument, \playBuf10, \buf , ~vap,\out,~toExtraFx ,\loopy,0,\tS,t.beatDur,\dur,Pseq([64/1],1)),
+		],1),
+	],1),
+
+
+/*	Pwrand([*/
+
+		Pbind(\instrument,\gateS, \dur, Prand([Pseq([1.5/1],1), Pseq([3/1],1),Pseq([1/1],1),],inf),
+			\in,  ~toExtraFx  ,\out ,/*Pwrand([~tofinalRythm,*/~reverbSquelch/*],[8,1].normalizeSum,inf)*/, \group, ~gateGrp7,\tS, 0.39550810372374),
+
+		/*Pseq([
+				Pbind(\instrument,\gateS, \dur,Pseq([1/8],16),\type,Pseq([\note, \rest,\note, \rest,\note, \rest,\note,\rest],inf),\in,~toExtraFx  ,\out ,~delayBus2 ,\group, ~gateGrp7,\tS, 0.39550810372374),
 
 			Pbind(\instrument,\gateS, \dur, Pseq([1/2],1),\tS, 0.39550810372374,\type,\rest)
 
-			],1)
+			],1),*/
 
-	],[36,1].normalizeSum,  inf),
+/*	],[36,1].normalizeSum,  inf),*/
 
 
 
-		Pseq([
+		/*Pseq([
 
 	Pbind(\instrument,\gate2, \in ,~toKbGate, \group,~lfoGrp, \tS,  0.39550810370174,\dur, Pseq([16/1],1),\type,\rest),
 			~hitPart1,~hitPart2,~hitPart3,~hitPart4
 
 
-		],1),
+		],1),*/
 
 		Pbind(\instrument,\gateS, \dur,9999,\vlSub, 1, \vlSub2,Pkey(\vlSub),\in,~vocToDispatch,\out,0,\group, ~kbGate,\tS, 0.39550810372374),
 
@@ -174,7 +204,7 @@ Pseq([
 	// s.record(path:"/Users/davidmignot/Music/SuperCollider Recordings/E/stem2.aiff",numChannels:10,duration:t.beatDur*256);
 
 
-	s.record;
+	// s.record;
 
 
 }).play;)

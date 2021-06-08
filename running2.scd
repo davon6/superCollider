@@ -198,13 +198,18 @@ f = { |n=14, min=0, max=11| (min..max).scramble.keep(n) };
 ~gateGrp6 = Group.after(~gateGrp10);
 ~eqGrp2 = Group.after(~gateGrp6);
 ~recGrp2= Group.after(~eqGrp2);
+
+
 ~gateGrp7 = Group.after(~recGrp2);
+
+
 ~extraDelay= Group.after(~gateGrp7);
 ~extraRev= Group.after(~extraDelay);
 ~compGrp4 = Group.after(~extraRev);
 ~eqGrp4 = Group.after(~compGrp4);
 ~limitGrp4 = Group.after(~eqGrp4);
 ~stereoGrp4 = Group.after(~limitGrp4);
+
 ~gateGrp11 = Group.after(~stereoGrp4);
 ~shiftGrpEx = Group.after(~gateGrp11);
 ~distoGrpEx = Group.after(~shiftGrpEx);
@@ -355,7 +360,7 @@ Ppar([~base, ~kb],1).play(t,quant:1)
 Ppar([
 
 
-	Pbind(\instrument, \lfo13T, \val,~hzQbeat/8,\dur,Pseq([64/1],inf),\rL,5000,\rH,1400 ,\out,  ~bus23, \group, ~lfoGrp,\tS, 0.39550810372374,\ph,0),
+	Pbind(\instrument, \lfo13T, \val,~hzQbeat/8,\dur,Pseq([64/1],inf),\rL,5000,\rH,3400 ,\out,  ~bus23, \group, ~lfoGrp,\tS, 0.39550810372374,\ph,0),
 
 	Pbind(\instrument,\lfo13T, \out, ~bus31, \val, 0.1609375,  \rL,2370,\rH,4000, \ph, 4.4, \dur, Pseq([64/1],inf), \tS,  0.39550810372374) ,
 
@@ -1383,13 +1388,20 @@ Ppar([~base,~fx],1).play(t)
 (~fx=Ppar([
 
 
-	Pbind(\instrument,\stereoS, \dur,Pseq([8/1],inf), \in, ~delToStereo   ,\out,~tofinalRythm,\spread,1, \center, Prand([ Pfunc({0.5.rrand(0.2)}),Pfunc({-0.5.rrand(-0.3)})],inf),\group,~stereoGrp4,\tS, 0.39550810372374),
+	Pbind(\instrument,\stereoS, \dur,Pseq([8/1],inf), \in, ~delToStereo   ,\out,~tofinalRythm,\spread,1, \center, Prand([ Pfunc({0.6.rrand(0.2)}),Pfunc({-0.6.rrand(-0.2)})],inf),\group,~stereoGrp4,\tS, 0.39550810372374),
 
 
 	Pbind(\instrument,\stereoS, \dur, 9999, \in, ~stereoBus3b   ,\out,~tofinalRythm,\spread,1, \group, ~stereoGrp4),
 
 ],1))
-Ppar([~kb,~pedonk],1).play(t)
+
+Routine({
+
+Ppar([~boost,~pedonk],1).play(t);
+	wait(0.16);
+	s.record(path:"/Users/davidmignot/Music/SuperCollider Recordings/E/pedonk.aiff",numChannels:10,duration:t.beatDur*128);
+}).play(t,quant:1)
+
 ~pedonk.play(t)
 .stop
 (~pedonk =Ppar([
@@ -1459,7 +1471,7 @@ Pseq([1.5/1],1)  ,Pseq([1.25/1],1)],1), \in,~gateBus,\tS, 0.39550810372374,\grou
 	Pseq([
 
 		Prand([
-		Pbind(\instrument,\playBufXG, \dur,Pseq([3.75/1],1),\amp, 1,\buf,~lpPrec,\out,~eqBus4,\impulse,0.003,\start,~st2 ,\tS, 0.39550810372374,\vlDec,1 ,\vlSub,  ~pSub,\vlSub2,Pkey(\vlSub), \atkT,0.05,\decT, 0.9 ,	\subsT, 0.05 , \relT,0,\atckC,~pAtkC,\decC,~pDecC,\relC,~pRelC,\vlAtk , ~pvlAtk ,  \vlRel,  Pkey(\vlAtk),\loopy,0),
+		Pbind(\instrument,\playBufXG, \dur,Pseq([3.75/1],1),\amp, 1,\buf,~lpPrec,\out,~eqBus4,\impulse,0.003,\start,1643640 ,\tS, 0.39550810372374,\vlDec,1 ,\vlSub,  ~pSub,\vlSub2,Pkey(\vlSub), \atkT,0.05,\decT, 0.9 ,	\subsT, 0.05 , \relT,0,\atckC,~pAtkC,\decC,~pDecC,\relC,~pRelC,\vlAtk , ~pvlAtk ,  \vlRel,  Pkey(\vlAtk),\loopy,0),
 
 
 

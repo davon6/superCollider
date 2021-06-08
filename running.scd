@@ -382,6 +382,8 @@ s.sync;
 
 	~tofinalRythm2= Bus.audio(s,10);
 
+		~tofinalRythm3= Bus.audio(s,10);
+
 	~tam= Bus.audio(s,2);
 	~tamFil= Bus.audio(s,2);
 	~tamEq= Bus.audio(s,2);
@@ -672,6 +674,8 @@ s.sync;
 
 	~no41= Bus.audio(s,10);
 	~no51= Bus.audio(s,10);
+
+
 
 
 	~rollingKS= Bus.audio(s,1);
@@ -1902,12 +1906,12 @@ SynthDef(\EQHP96, {|out=0, in, val, quant, gain,frq=100, vol =0.05, val2,quant2,
 
 		frq),frq),frq),frq),frq),frq),frq),frq)* vol)};).add;
 
-	SynthDef(\EQHP96Mod, {|out=0, in, val, quant, gain,frq=100, vol =0.05, val2,quant2, gain2,val3,shelf, gain3,val4,quant3, gain4,val5,quant5, gain5, val6,shelf2, gain6,gainMod| Out.ar(out,
+	SynthDef(\EQHP96Mod, {|out=0, in, val, quant, gain,frq=100, vol =0.05, val2,quant2, gain2,val3,shelf, gain3,val4,quant3, gain4,val5,quant5, gain5, val6,shelf2, gain6,gainMod,amp=1| Out.ar(out,
 
 		HPF.ar(HPF.ar(HPF.ar(HPF.ar(HPF.ar(HPF.ar(HPF.ar(HPF.ar(BLowShelf.ar(	BHiShelf.ar( 	BPeakEQ.ar(
 			BPeakEQ.ar(	BPeakEQ.ar(In.ar(in, 1),val,quant, gain),val2,quant2, gain2),val3,quant3, gain3),val4,shelf, gain4),val5,shelf2, gain5),
 
-		frq),frq),frq),frq),frq),frq),frq),frq)*  In.ar(gainMod).linlin(0, 0.003, 1, 0).poll)};).add;
+		frq),frq),frq),frq),frq),frq),frq),frq)*  In.ar(gainMod).linlin(0, 0.003,amp, 0).poll)};).add;
 
 
 	SynthDef(\EQHP, {|out=0, in, val, quant, gain,frq=100, vol =0.05, val2,quant2, gain2,val3,quant3,gain3, gain4,val4,shelf,val5,quant5, gain6| Out.ar(out,
@@ -2096,7 +2100,7 @@ SynthDef(\volAna,{|in=0|RMS.ar( In.ar(in)).ampdb.round(0.1).poll(label:" db" )})
 	SynthDef(\stereoS,{|out=0, in, spread=0, level=1, center=0.0,dur,modPan,atkT=0,decT=1,crvA=0,tS=1|
 
 		Out.ar(out,
-			Splay(
+			Splay.ar(
 				{Mix.ar(In.ar(in, 2))}
 				,spread,level,center/*+ In.kr(modPan)*/)
 			* EnvGen.kr(Env([0,1,1,0],[dur* atkT,dur*decT,0],[crvA,0]),timeScale: tS,doneAction: 2)
@@ -2668,7 +2672,7 @@ Pbind(\instrument, \percussion,\dur,Pseq([1/4],1 ),\carHz,Pfunc({ 525.1207061222
 
 
 
-		wait(0.150);
+		wait(0.155);
 
 	s.record(path:"/Users/davidmignot/Music/SuperCollider Recordings/E/kick.aiff",numChannels:1,duration:t.beatDur);
 }).play;)
@@ -2707,14 +2711,14 @@ Ppar([
 	Pbind(\instrument ,\EQHP2/*	\EQHP2*/,\dur, inf, \in,~bassEq, \out,0,\group, ~eqGrp, \frq, 20.6,\vol,1,
 
 
-			\val7,329.6275,\quant7,1.4 ,\gain7,(-6),
+			\val7,329.6275,\quant7,1.2 ,\gain7,(-4),
 			\val,659.255, \quant,1.2, \gain,(-18),
 \val2,1318.51, \quant2,1.8, \gain2,(-9),
 		\val3,2637.02, \quant3,1.3, \gain3,(-21),
 
 
-
-		\val5,164.81375, \quant5,1.2, \gain5,(-19)
+//that one
+		\val5,164.81375, \quant5,2.2, \gain5,(-19)
 
 
 	),
@@ -2756,7 +2760,7 @@ Ppar([
 
 ],1).play(t);
 ~comp=Synth(\comp, [\ctrl, ~kbus ],~compGrp);
-~comp.set(\thr,0.7 ,\sB, 1.034,\sA, 1/2,\atk ,0.0484, \rel ,0.0968, \gain,1,\in, ~comFuzz,\out,~limitBass);
+~comp.set(\thr,0.3 ,\sB, 1.034,\sA, 1/2,\atk ,0.0484, \rel ,0.0968, \gain,1,\in, ~comFuzz,\out,~limitBass);
 
 ~limK=Synth(\limitertoMixer,[\c45,1,\in, ~limitKick, \gain,1,\out,~kToPan],~limitGrp);
 ~limK.set(\gain,185);
@@ -2765,9 +2769,9 @@ Ppar([
 
 ~kbPan2 = Synth(\pan2,[ \in,~kToPan,\out,0],~stereoGrp);
 
-	wait(0.17);
+	wait(0.1686);
 
-	// s.record(path:"/Users/davidmignot/Music/SuperCollider Recordings/E/kB.aiff",numChannels:2,duration:t.beatDur);
+	 s.record(path:"/Users/davidmignot/Music/SuperCollider Recordings/E/kB.aiff",numChannels:2,duration:t.beatDur);
 }).play;)
 
 
@@ -2779,7 +2783,7 @@ Ppar([
 ~kb1.plot
 ~k2.plot
 
-~kb=Pbind(\instrument, \playBufS, \dur,  Pseq([1/1],inf), \tS,  0.39550810372374,\buf,~kb1,\loopy,0,\start,0).play(t)
+~kb=Pbind(\instrument, \playBufS, \dur,  Pseq([1/1],inf), \tS,  0.39550810372374,\buf,~kb1,\loopy,0,\start,0,\vl,1).play(t)
 
 
 (
