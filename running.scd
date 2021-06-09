@@ -478,6 +478,8 @@ s.sync;
 	~eqBg10 = Bus.audio(s,1);
 	~finGran = Bus.audio(s,10);
 
+	~bgFilX= Bus.audio(s,1);
+
 	~stereoHat= Bus.audio(s,1);
 	~stereoCymb= Bus.audio(s,1);
 	~limitC= Bus.audio(s,1);
@@ -1213,7 +1215,7 @@ SynthDef(\kick, {
 
 	SynthDef(\wNoise, {
 
-		arg in=0, mix=0.2, amp = (-20), dec =0,sub2 =3, valStart= 10000,valEnd =100, wFil=1, pan =0, durF =3,out =0,atk=0, tS=1,dA=0,dA2=0,dur,amp2=0,crv=(-2),dwn=0;
+		arg in=0, mix=0.2, amp = (-20), dec =0,sub2 =3, valStart= 10000,valEnd =100, wFil=1, pan =0, durF =3,out =0,atk=0, tS=1,dA=0,dA2=0,dur,amp2=0,crv=(-2),dwn=0,amp3=1;
 	var env,dry, wet, sig,env2, ori;
 
 		env = EnvGen.kr(Env([dwn,amp.dbamp,amp2],[atk,dec,0],[3,crv]),timeScale: tS,doneAction:2);
@@ -1228,7 +1230,7 @@ SynthDef(\kick, {
 
 /*sig = Pan2.ar( sig , pan);*///0 was pan
 
-	Out.ar(out, sig   /*.dup*/ *amp.dbamp;//* env2 //
+	Out.ar(out, sig   /*.dup*/ *amp.dbamp *amp3;//* env2 //
 
     )
 }).add;
@@ -2702,7 +2704,7 @@ Ppar([
 		\rel, t.beatDur*4*0.9988,
 		\rel2, t.beatDur/4 * 0.0012,
 
-		\vlDecFx,1800,/*\vlDecF,400,*/
+		\vlDecFx,3800,/*\vlDecF,400,*/
 		\atkcrv, -2,
 		\relcrv, -2,\relcrv2, -9, \relcrv3, -6
 		,\amp,(-6/*-1*/)/*(-13)*/,\out,~bassEq
@@ -2712,9 +2714,9 @@ Ppar([
 
 
 			\val7,329.6275,\quant7,1.2 ,\gain7,(-4),
-			\val,659.255, \quant,1.2, \gain,(-18),
-\val2,1318.51, \quant2,1.8, \gain2,(-9),
-		\val3,2637.02, \quant3,1.3, \gain3,(-21),
+			\val,659.255, \quant,1.5, \gain,(-27),
+\val2,1318.51, \quant2,1.4, \gain2,(-11),
+		\val3,2637.02, \quant3,1.3, \gain3,(-15),
 
 
 //that one
@@ -2760,18 +2762,18 @@ Ppar([
 
 ],1).play(t);
 ~comp=Synth(\comp, [\ctrl, ~kbus ],~compGrp);
-~comp.set(\thr,0.3 ,\sB, 1.034,\sA, 1/2,\atk ,0.0484, \rel ,0.0968, \gain,1,\in, ~comFuzz,\out,~limitBass);
+~comp.set(\thr,0.3 ,\sB, 1.034,\sA, 1/2,\atk ,0.0242, \rel ,0.0968, \gain,1,\in, ~comFuzz,\out,~limitBass);
 
 ~limK=Synth(\limitertoMixer,[\c45,1,\in, ~limitKick, \gain,1,\out,~kToPan],~limitGrp);
-~limK.set(\gain,185);
+~limK.set(\gain,205);
 ~limB=Synth(\limitertoMixer,[\c46,1,\in, ~limitBass, \gain,68,\out,~kToPan],~limitGrp);
-~limB.set(\gain,168);
+~limB.set(\gain,158);
 
 ~kbPan2 = Synth(\pan2,[ \in,~kToPan,\out,0],~stereoGrp);
 
-	wait(0.1686);
+	wait(0.168);
 
-	 s.record(path:"/Users/davidmignot/Music/SuperCollider Recordings/E/kB.aiff",numChannels:2,duration:t.beatDur);
+	// s.record(path:"/Users/davidmignot/Music/SuperCollider Recordings/E/kB.aiff",numChannels:2,duration:t.beatDur);
 }).play;)
 
 
@@ -2779,11 +2781,13 @@ Ppar([
 ~limB.free
 ~kb1.plot
 ~kick.play
+/*~kb1=Buffer.read(s,"/Users/davidmignot/Music/SuperCollider Recordings/E/bacup/kB.aiff")*/
+
 ~kb1=Buffer.read(s,"/Users/davidmignot/Music/SuperCollider Recordings/E/kB.aiff")
 ~kb1.plot
 ~k2.plot
 
-~kb=Pbind(\instrument, \playBufS, \dur,  Pseq([1/1],inf), \tS,  0.39550810372374,\buf,~kb1,\loopy,0,\start,0,\vl,1).play(t)
+~kb=Pbind(\instrument, \playBufS, \dur,  Pseq([1/1],inf), \tS,  t.beatDur,\buf,~kb1,\loopy,0,\start,0,\vl,1).play(t)
 
 
 (

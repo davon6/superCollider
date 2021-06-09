@@ -55,6 +55,13 @@ f = { |n=14, min=0, max=11| (min..max).scramble.keep(n) };
 ~lpPrec32= Buffer.read(s,"/Users/davidmignot/Music/SuperCollider Recordings/E/BPL2.aiff");
 ~lpPrec33= Buffer.read(s,"/Users/davidmignot/Music/SuperCollider Recordings/E/BPLX2.aiff");
 
+~ped= Buffer.read(s,"/Users/davidmignot/Music/SuperCollider Recordings/E/pedonk.aiff");
+~vap  = Buffer.read(s,"/Users/davidmignot/Music/SuperCollider Recordings/E/vap.aiff");
+~rising  = Buffer.read(s,"/Users/davidmignot/Music/SuperCollider Recordings/E/rising.aiff");
+
+
+
+
 ~one = ~leTout2.numFrames/ 256 * 240.rand;
 ~two = ~leTout2.numFrames/ 256 * 240.rand;
 ~troi= ~leTout2.numFrames/ 256 * 240.rand;
@@ -353,14 +360,14 @@ Pbind(\instrument,\gateS, \dur,Pseq([2/1],2),\in, Pseq([/*~vocToDispatch,*/~perc
 ],1))
 
 s.scope
-Ppar([~base, ~kb],1).play(t,quant:1)
+Ppar([~boost, ~kb],1).play(t,quant:1)
 ~kb.play(t);
 .stop
 (~kb =
 Ppar([
 
 
-	Pbind(\instrument, \lfo13T, \val,~hzQbeat/8,\dur,Pseq([64/1],inf),\rL,5000,\rH,3400 ,\out,  ~bus23, \group, ~lfoGrp,\tS, 0.39550810372374,\ph,0),
+	// Pbind(\instrument, \lfo13T, \val,~hzQbeat/8,\dur,Pseq([64/1],inf),\rL,5000,\rH,3400 ,\out,  ~bus23, \group, ~lfoGrp,\tS, 0.39550810372374,\ph,0),
 
 	Pbind(\instrument,\lfo13T, \out, ~bus31, \val, 0.1609375,  \rL,2370,\rH,4000, \ph, 4.4, \dur, Pseq([64/1],inf), \tS,  0.39550810372374) ,
 
@@ -374,18 +381,23 @@ Ppar([
 
 /*	512*3   1536 +128*/
 
-Pseq([
 
 
-		Pbind(\instrument,\wNoise,\dec,Pkey(\dur),\tS,t.beatDur,\valStart,4500,\valEnd,9500,\durF,0.3,\wFil,0,\dA,2,\dur,Pseq([144/2],1),\crv,(-8),\out,~toNoise,\type, \rest,),
+/*	~bruti={In.kr(~fusible2).linlin(0,0.0304096,1,0)}.play*/
+/*Pseq([
 
 
+		/*Pbind(\instrument,\wNoise,\dec,Pkey(\dur),\tS,t.beatDur,\valStart,4500,\valEnd,9500,\durF,0.3,\wFil,0,\dA,2,\dur,Pseq([144/2],1),\crv,(-8),\out,~toNoise,\type, \rest,),
+*/
+/*~by=True;*/
+
+		/*,\amp3,Pfunc({   if( /*In.kr(~fusible2).linlin(0,0.0304096,1,0)*/  <= 0.5 , {1;},{0;})  })  */
 	/*Pwrand([*/
 
 	Pseq([
-	Pbind(\instrument,\wNoise,\dec,Pkey(\dur),\tS,t.beatDur,\valStart,4500,\valEnd,9500,\durF,0.3,\wFil,0,\dA,2,\dur,Pseq([1/2],128),\crv,(-8),\out,~toNoise,\type, Pseq([\note ,\rest,\rest,\rest,  ],inf),),
+			Pbind(\instrument,\wNoise,\dec,Pkey(\dur),\tS,t.beatDur,\valStart,4500,\valEnd,9500,\durF,Pseq([Pseq([0.1],256),Pseq([0.05],256)],inf),\wFil,0,\dA,2,\dur,Pseq([1/2],256),\crv,(-8),\out,~toNoise,\type, Pseq([\note ,\rest,\note,\rest,  ],inf) ,\amp,(-20),\amp2,Pkey(\amp)),
 
-			Pbind(\instrument,\wNoise,\dec,Pkey(\dur),\tS,t.beatDur,\valStart,4500,\valEnd,9500,\durF,0.3,\wFil,0,\dA,2,\dur,Pseq([128/2],1),\crv,(-8),\out,~toNoiseEq,\type, \rest,),
+		/*	Pbind(\instrument,\wNoise,\dec,Pkey(\dur),\tS,t.beatDur,\valStart,4500,\valEnd,9500,\durF,0.3,\wFil,0,\dA,2,\dur,Pseq([256/2],1),\crv,(-8),\out,~toNoiseEq,\type, \rest,),*/
 
 	],inf)
 	/*Pbind(\instrument,\wNoise,\dec,Pkey(\dur),\tS,t.beatDur,\valStart,1500,\valEnd,3500,\durF,0.3,\wFil,0,\dA,2,\dur,Pseq([1/2],4),\crv,(-8),\out,0,\type, \rest),
@@ -394,7 +406,7 @@ Pseq([
 
 		/*Pbind(\instrument,\wNoise,\dec,Pkey(\dur),\tS,t.beatDur,\valStart,1500,\valEnd,3500,\durF,0.3,\wFil,0,\dA,2,\dur,Pseq([1/2],32),\crv,(-8),\out,0,\type, \rest),*/
 
-	],inf),
+	],inf),*/
 
 Pseq([
 		Pbind(\instrument, \wNoise2, \durF,0.1936,\dA,2,\dur,  Pseq([16/1], 1),\atk, 1,\out, ~slideBus,\tS,  0.39550810372374,\type,\rest),
@@ -873,7 +885,7 @@ Ppar([
 
 
 	Pbind(\instrument,\gate2, \in ,~toKbGate, \group, ~kbGate, \tS,  0.39550810372374,
-		\dur, Pseq([2s/1],1)),
+		\dur, Pseq([2/1],1)),
 
 
 		].scramble,1),
@@ -1555,3 +1567,14 @@ SynthDef(\vlan, {|out=0, in, val, quant, gain,frq=220, vol =0.05, val2,quant2, g
 		BPeakEQ.ar(	BPeakEQ.ar(LPF.ar( WhiteNoise.ar(0.3),XLine.kr(1500,3500,0.1)*EnvGen.kr(Env.perc(releaseTime:  0.3),doneAction:2)),val,quant, gain),val2,quant2, gain2),val3,quant3, gain3),val4,shelf, gain4),1000,1, (-16)),
 
 		frq),frq),frq),frq),frq),frq),frq),frq)!2* 4)};).play;
+
+
+
+
+
+
+{ DynKlank.ar(`[[LFNoise0.kr(0.3).range(100,800),LFNoise0.kr(0.3).range(800,3000),LFNoise0.kr(0.3).range(100,3000),LFNoise0.kr(0.3).range(100,3000)], nil, [4, 4, 4, 4]], Impulse.ar(0.3, 0, 0.1)) }.play;
+
+
+
+
