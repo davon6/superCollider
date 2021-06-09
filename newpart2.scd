@@ -108,7 +108,7 @@ Pseq([
 
 		Pseq([
 				Pbind(\instrument,\gate2, \in ,~toKbGate, \group,~lfoGrp, \tS,  0.39550810370174,\dur, Pseq([16/1],1),\type,\rest),
-	/*	Pseq([
+		Pseq([
 			Pbind(\instrument, \playBuf10, \buf ,~leTout,\out,~toExtraFx ,\loopy,0,\tS,t.beatDur,\dur,Pseq([64/1],1)),
 			Pbind(\instrument, \playBuf10, \buf ,~leTout2,\out,~toExtraFx,\loopy,0,\tS,t.beatDur,\dur,Pseq([64/1],1)),
 			Pbind(\instrument, \playBuf10, \buf ,~leTout,\out,~toExtraFx,\loopy,0,\tS,t.beatDur,\dur,Pseq([64/1],1),\start,~leTout.numFrames/4 ),
@@ -127,11 +127,11 @@ Pseq([
 			Pbind(\instrument, \playBuf10, \buf,~leTout2,\out,~toExtraFx ,\loopy,0,\tS,t.beatDur,\dur,Pseq([64/1],1),\start,~leTout.numFrames/4*3),
 			~part3e,
 			Pbind(\instrument, \playBuf10, \buf ,~leTout2,\out,0,\loopy,0,\tS,t.beatDur,\dur,Pseq([128/1],1),\start,0,\type,\rest),
-		],1),*/
+		],1),
 
 		Pseq([
 			~part3e,
-			Pbind(\instrument, \playBuf10, \buf ,~ped,\out,~toExtraFx ,\loopy,0,\tS,t.beatDur,\dur,Pseq([64/1],1),\start,~leTout.numFrames/2),
+			Pbind(\instrument, \playBuf10, \buf ,~ped,\out,~toExtraFx ,\loopy,0,\tS,t.beatDur,\dur,Pseq([64/1],1),\start,~ped.numFrames/2),
 			~part3e,
 			Pbind(\instrument, \playBuf10, \buf , ~vap,\out,~toExtraFx ,\loopy,0,\tS,t.beatDur,\dur,Pseq([64/1],1))
 		],1),
@@ -157,7 +157,7 @@ Pseq([
 		Pseq([
 
 	Pbind(\instrument,\gate2, \in ,~toKbGate, \group,~lfoGrp, \tS,  0.39550810370174,\dur, Pseq([16/1],1),\type,\rest),
-		/*	~hitPart1,~hitPart2,~hitPart3,*/~hitPart4
+			~hitPart1,~hitPart2,~hitPart3,~hitPart4
 
 
 		],1),
@@ -179,7 +179,7 @@ Pseq([
 
 
 
-	/*	Pseq([
+		Pseq([
 			/*Pbind(\instrument,\gate, \tS,  0.39550810370174,\vlSub, 0.5, \vlSub2,Pkey(\vlSub),\in,	~bgGate,\out,~bgDisto,\group, ~granuGrp,\type,  Pseq([\note,\rest  ,\note,\rest,\note,\rest  ,\note,\rest ,\note,\rest  ,\note,\rest ,\note,\rest  ,\note,\rest   ].scramble,16) ,  \dur ,Pseq([4/1],60) ,\vlAtk,0.5,\atkT,0.25,\relT,0.25,\decT,0.5,\atckC,6, \relC,-6,\vlRel,0.5,),*/
 
 
@@ -201,7 +201,7 @@ Pseq([
 				\vlAtk,0,\atkT,0.05,\relT,0.25,\decT,0.70,\atckC,6, \relC,-6,\vlRel,0,\decC,(-9))*/
 
 
-		],1)*/
+		],1)
 	],1).play(t);
 
 	wait(0.142);
