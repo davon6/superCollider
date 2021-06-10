@@ -714,7 +714,7 @@ Pbind(\instrument,\gate2, \in ,~toKbGate, \group,~kbGate, \tS,  0.39550810372374
 						Ppar([
 					Pbind(\instrument, \playBuf, \impulse, 0.003 ,\dur,Pseq([1/1],1), \tS,  0.39550810372374,\buf,~k2,\out, ~kbToPan2,\loopy,0,\start,0),
 	Pbind(\instrument,\gate2, \in ,~rollingK, \group, ~kbGate, \tS,  0.39550810372374,\dur, Pseq([8/1],1))].scramble,1),
-		],1)],1),Pseq( ~steady.reverse,1),
+		],1)].scramble,1),Pseq( ~steady.reverse,1),
 	~jumpy= Pseq([
 	/*Pseq([*/
 

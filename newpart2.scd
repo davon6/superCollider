@@ -226,4 +226,41 @@ Pseq([
 
 
 
+// + +
+
+
+
+~bobo=700;
+~crv=6;
+
+Ppar([
+
+	~boubou,
+
+	Pbind(\instrument,\envSli,\out, ~bus33,\dur,Pseq([16/1],inf),\tS, 0.39550810372374,\val1,0,\val2,Pfunc({~bobo=~bobo+25}),\crv,Pfunc({~crv=~crv+0.5})),
+
+
+	Pbind(\instrument,\shift10,\bus,~bus33,\in, ~toShift ,\out,~toExtraFx,\dur,Pseq([16/1],inf),\group, ~granuGrp)
+
+],1).play(t)
+
+
+
+
+1024/16
+
+64*25
+
+
+
+
+8
+
+
+
+
+Pbind(\instrument,\shift10,\bus,~bus33,\in, ~toShift ,\out,~toExtraFx,\dur,Pseq([16/1],inf),\group, ~granuGrp).play
+
+
+
 

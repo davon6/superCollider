@@ -2723,13 +2723,13 @@ Ppar([
 
 
 			\val7,329.6275,\quant7,1.2 ,\gain7,(-4),
-			\val,659.255, \quant,2.1, \gain,(-21),
+			\val,659.255, \quant,2.1, \gain,(-13),
 \val2,1318.51, \quant2,1.4, \gain2,(-11),
-		\val3,2637.02, \quant3,1.3, \gain3,(-15),
+		\val3,2637.02, \quant3,1.4, \gain3,(-18),
 
 
 //that one
-		\val5,164.81375, \quant5,2.8, \gain5,(-19)
+		\val5,164.81375, \quant5,2.4, \gain5,(-17)
 
 
 	),
@@ -2776,13 +2776,13 @@ Ppar([
 ~limK=Synth(\limitertoMixer,[\c45,1,\in, ~limitKick, \gain,1,\out,~kToPan],~limitGrp);
 ~limK.set(\gain,182);
 ~limB=Synth(\limitertoMixer,[\c46,1,\in, ~limitBass, \gain,68,\out,~kToPan],~limitGrp);
-~limB.set(\gain,132);
+~limB.set(\gain,124);
 
 ~kbPan2 = Synth(\pan2,[ \in,~kToPan,\out,0],~stereoGrp);
 
-	wait(0.16883);
+	wait(0.168);
 
-	// s.record(path:"/Users/davidmignot/Music/SuperCollider Recordings/E/kB.aiff",numChannels:2,duration:t.beatDur*1024);
+	s.record(path:"/Users/davidmignot/Music/SuperCollider Recordings/E/kB.aiff",numChannels:2,duration:t.beatDur*24);
 }).play;)
 
 
