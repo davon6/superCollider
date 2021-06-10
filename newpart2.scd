@@ -7,16 +7,16 @@ Ppar([
 		//from firsthit.scd
 		Pbind(\instrument,\envSli,\out, ~bus17,\dur,Pseq([64/1],inf),\tS, 0.39550810372374,\val1,150,\crv,5.2),
 
-		Pbind(\instrument, \lfo13,\tS, 0.39550810372374, \dur, Pseq([16/1],inf),\out,~mod3,\rL,0 ,\rH,100,\val,
+	/*	Pbind(\instrument, \lfo13,\tS, 0.39550810372374, \dur, Pseq([16/1],inf),\out,~mod3,\rL,0 ,\rH,100,\val,
 
-		0.084/**4*/,\ph,4.1),
+		0.084/**4*/,\ph,4.1),*/
 
 
 	/*Pbind(\instrument,\rise,\dur,Pseq([16/1],inf), \vlAtk,0,\f1, 0.08 , \f2,0, \f3,0,  \ic_atk,0,\index,1,\mRatio,1,\out ,/*~flanToDisto2*/ ~downDisto,\tS, 0.39550810372374,\atk,1 ,\freq,[164,168,322],\moduS,~mod3, \fS,1 ,\type,Pseq([\note,\note,\rest,\rest,\rest,\rest,\rest,\rest].scramble,inf)),*/
 
 
-	Pbind(\instrument,\gate3,\tS, 0.39550810372374,\dur,Pseq([1/1],inf),\in, ~downSG
-,\atkT,1,\atckC,0,\decT,0,\vlDec,1,	\type,Pseq([\note,\rest],inf),\out,~downEq,\group,~dispatchGrp),
+/*	Pbind(\instrument,\gate3,\tS, 0.39550810372374,\dur,Pseq([1/1],inf),\in, ~downSG
+,\atkT,1,\atckC,0,\decT,0,\vlDec,1,	\type,Pseq([\note,\rest],inf),\out,~downEq,\group,~dispatchGrp),*/
 
 		/// til here
 
@@ -109,33 +109,38 @@ Pseq([
 		Pseq([
 				Pbind(\instrument,\gate2, \in ,~toKbGate, \group,~lfoGrp, \tS,  0.39550810370174,\dur, Pseq([16/1],1),\type,\rest),
 		Pseq([
-			Pbind(\instrument, \playBuf10, \buf ,~leTout,\out,~toExtraFx ,\loopy,0,\tS,t.beatDur,\dur,Pseq([64/1],1)),
-			Pbind(\instrument, \playBuf10, \buf ,~leTout2,\out,~toExtraFx,\loopy,0,\tS,t.beatDur,\dur,Pseq([64/1],1)),
-			Pbind(\instrument, \playBuf10, \buf ,~leTout,\out,~toExtraFx,\loopy,0,\tS,t.beatDur,\dur,Pseq([64/1],1),\start,~leTout.numFrames/4 ),
-			Pbind(\instrument, \playBuf10, \buf ,~rising,\out,~toExtraFx ,\loopy,0,\tS,t.beatDur,\dur,Pseq([64/1],1)),
+			Pbind(\instrument, \playBuf10, \buf ,~leTout,\out,~toShift ,\loopy,0,\tS,t.beatDur,\dur,Pseq([64/1],1)),
+			Pbind(\instrument, \playBuf10, \buf ,~leTout2,\out,~toShift,\loopy,0,\tS,t.beatDur,\dur,Pseq([64/1],1)),
+			Pbind(\instrument, \playBuf10, \buf ,~leTout,\out,~toShift,\loopy,0,\tS,t.beatDur,\dur,Pseq([64/1],1),\start,~leTout.numFrames/4 ),
+			Pbind(\instrument, \playBuf10, \buf ,~rising,\out,~toShift ,\loopy,0,\tS,t.beatDur,\dur,Pseq([64/1],1)),
 		],1),
 
 		Pseq([
-			Pbind(\instrument, \playBuf10, \buf ,~leTout,\out,~toExtraFx,\loopy,0,\tS,t.beatDur,\dur,Pseq([64/1],1),\start,~leTout.numFrames/4*2),
-			Pbind(\instrument, \playBuf10, \buf ,~ped,\out,~toExtraFx,\loopy,0,\tS,t.beatDur,\dur,Pseq([64/1],1)),
-			Pbind(\instrument, \playBuf10, \buf ,~leTout,\out,~toExtraFx,\loopy,0,\tS,t.beatDur,\dur,Pseq([64/1],1),\start,~leTout.numFrames/4*3 ),
-			Pbind(\instrument, \playBuf10, \buf ,~leTout2,\out,~toExtraFx,\loopy,0,\tS,t.beatDur,\dur,Pseq([64/1],1),\start,~leTout.numFrames/4*2),
+			Pbind(\instrument, \playBuf10, \buf ,~leTout,\out,~toShift,\loopy,0,\tS,t.beatDur,\dur,Pseq([64/1],1),\start,~leTout.numFrames/4*2),
+			Pbind(\instrument, \playBuf10, \buf ,~ped,\out,~toShift,\loopy,0,\tS,t.beatDur,\dur,Pseq([64/1],1)),
+			Pbind(\instrument, \playBuf10, \buf ,~leTout,\out,~toShift,\loopy,0,\tS,t.beatDur,\dur,Pseq([64/1],1),\start,~leTout.numFrames/4*3 ),
+			Pbind(\instrument, \playBuf10, \buf ,~leTout2,\out,~toShift,\loopy,0,\tS,t.beatDur,\dur,Pseq([64/1],1),\start,~leTout.numFrames/4*2),
 		],1),
 
 		Pseq([
 
-			Pbind(\instrument, \playBuf10, \buf,~leTout2,\out,~toExtraFx ,\loopy,0,\tS,t.beatDur,\dur,Pseq([64/1],1),\start,~leTout.numFrames/4*3),
+			Pbind(\instrument, \playBuf10, \buf,~leTout2,\out,~toShift ,\loopy,0,\tS,t.beatDur,\dur,Pseq([64/1],1),\start,~leTout.numFrames/4*3),
 			~part3e,
 			Pbind(\instrument, \playBuf10, \buf ,~leTout2,\out,0,\loopy,0,\tS,t.beatDur,\dur,Pseq([128/1],1),\start,0,\type,\rest),
 		],1),
 
 		Pseq([
 			~part3e,
-			Pbind(\instrument, \playBuf10, \buf ,~ped,\out,~toExtraFx ,\loopy,0,\tS,t.beatDur,\dur,Pseq([64/1],1),\start,~ped.numFrames/2),
+			Pbind(\instrument, \playBuf10, \buf ,~ped,\out,~toShift ,\loopy,0,\tS,t.beatDur,\dur,Pseq([64/1],1),\start,~ped.numFrames/2),
 			~part3e,
-			Pbind(\instrument, \playBuf10, \buf , ~vap,\out,~toExtraFx ,\loopy,0,\tS,t.beatDur,\dur,Pseq([64/1],1))
+			Pbind(\instrument, \playBuf10, \buf , ~vap,\out,~toShift ,\loopy,0,\tS,t.beatDur,\dur,Pseq([64/1],1))
 		],1),
 	],1),
+
+			Pbind(\instrument,\envSli,\out, ~bus33,\dur,Pseq([16/1],inf),\tS, 0.39550810372374,\val1,0,\val2,Pfunc({~bobo=~bobo+25}),\crv,Pfunc({~crv=~crv+0.5})),
+
+	Pbind(\instrument,\shift10,\bus,~bus33,\in, ~toShift ,\out,~toExtraFx,\dur,Pseq([16/1],inf),\group, ~granuGrp)
+
 
 
 	Pwrand([

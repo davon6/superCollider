@@ -266,6 +266,7 @@ s.sync;
 	~snareComp= Bus.audio(s,1);
 	~buildUpG=Bus.audio(s,1);
 	~snareFlang=Bus.audio(s,1);
+	~toShift=Bus.audio(s,10);
 
 	~toNoise=Bus.audio(s,1);
 	~toNoiseEq=Bus.audio(s,1);
@@ -1370,6 +1371,14 @@ SynthDef(\shiftX, {|in, out=0, frq=0,mult=0,rte=1|Out.ar(out, FreqShift.ar(In.ar
 
 		Out.ar(out, FreqShift.ar(In.ar(in, 2)/*.sign*/,
 freq         )* EnvGen.kr(Env([0,vl,vl,0],[0.055,dur-0.055,0],4),timeScale: tS,doneAction:2))}).add;
+
+
+
+
+	SynthDef(\shift10, {|in, out, freq, dur,vl=1,bus|
+
+		Out.ar(out, FreqShift.ar(In.ar(in, 10),In.kr(bus  ) )
+			* EnvGen.kr(Env.step([vl,0],[dur,0]),timeScale: t.beatDur,doneAction:2))}).add;
 
 
 
@@ -2714,13 +2723,13 @@ Ppar([
 
 
 			\val7,329.6275,\quant7,1.2 ,\gain7,(-4),
-			\val,659.255, \quant,1.5, \gain,(-27),
+			\val,659.255, \quant,2.2, \gain,(-25),
 \val2,1318.51, \quant2,1.4, \gain2,(-11),
 		\val3,2637.02, \quant3,1.3, \gain3,(-15),
 
 
 //that one
-		\val5,164.81375, \quant5,2.2, \gain5,(-19)
+		\val5,164.81375, \quant5,2.8, \gain5,(-19)
 
 
 	),

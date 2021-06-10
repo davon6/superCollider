@@ -4862,27 +4862,27 @@ Pbind(\instrument, \playBuf10, \buf ,~rising,\out,0/*~tofinalRythm3*/ ,\loopy,0,
 
 
 
-Ppar([
+~boubou= Ppar([
 
 
 	Pseq([
 		Pseq([
-			Pbind(\instrument, \playBuf10, \buf ,~leTout,\out,~toExtraFx ,\loopy,0,\tS,t.beatDur,\dur,Pseq([64/1],1)),
-			Pbind(\instrument, \playBuf10, \buf ,~leTout2,\out,~toExtraFx,\loopy,0,\tS,t.beatDur,\dur,Pseq([64/1],1)),
-			Pbind(\instrument, \playBuf10, \buf ,~leTout,\out,~toExtraFx,\loopy,0,\tS,t.beatDur,\dur,Pseq([64/1],1),\start,~leTout.numFrames/4 ),
-			Pbind(\instrument, \playBuf10, \buf ,~rising,\out,~toExtraFx ,\loopy,0,\tS,t.beatDur,\dur,Pseq([64/1],1)),
+			Pbind(\instrument, \playBuf10, \buf ,~leTout,\out,~toShift ,\loopy,0,\tS,t.beatDur,\dur,Pseq([64/1],1)),
+			Pbind(\instrument, \playBuf10, \buf ,~leTout2,\out,~toShift,\loopy,0,\tS,t.beatDur,\dur,Pseq([64/1],1)),
+			Pbind(\instrument, \playBuf10, \buf ,~leTout,\out,~toShift,\loopy,0,\tS,t.beatDur,\dur,Pseq([64/1],1),\start,~leTout.numFrames/4 ),
+			Pbind(\instrument, \playBuf10, \buf ,~rising,\out,~toShift ,\loopy,0,\tS,t.beatDur,\dur,Pseq([64/1],1)),
 		],1),
 
 		Pseq([
-			Pbind(\instrument, \playBuf10, \buf ,~leTout,\out,~toExtraFx,\loopy,0,\tS,t.beatDur,\dur,Pseq([64/1],1),\start,~leTout.numFrames/4*2),
-			Pbind(\instrument, \playBuf10, \buf ,~ped,\out,~toExtraFx,\loopy,0,\tS,t.beatDur,\dur,Pseq([64/1],1)),
-			Pbind(\instrument, \playBuf10, \buf ,~leTout,\out,~toExtraFx,\loopy,0,\tS,t.beatDur,\dur,Pseq([64/1],1),\start,~leTout.numFrames/4*3 ),
-			Pbind(\instrument, \playBuf10, \buf ,~leTout2,\out,~toExtraFx,\loopy,0,\tS,t.beatDur,\dur,Pseq([64/1],1),\start,~leTout.numFrames/4*2),
+			Pbind(\instrument, \playBuf10, \buf ,~leTout,\out,~toShift,\loopy,0,\tS,t.beatDur,\dur,Pseq([64/1],1),\start,~leTout.numFrames/4*2),
+			Pbind(\instrument, \playBuf10, \buf ,~ped,\out,~toShift,\loopy,0,\tS,t.beatDur,\dur,Pseq([64/1],1)),
+			Pbind(\instrument, \playBuf10, \buf ,~leTout,\out,~toShift,\loopy,0,\tS,t.beatDur,\dur,Pseq([64/1],1),\start,~leTout.numFrames/4*3 ),
+			Pbind(\instrument, \playBuf10, \buf ,~leTout2,\out,~toShift,\loopy,0,\tS,t.beatDur,\dur,Pseq([64/1],1),\start,~leTout.numFrames/4*2),
 		],1),
 
 		Pseq([
 
-			Pbind(\instrument, \playBuf10, \buf,~leTout2,\out,~toExtraFx ,\loopy,0,\tS,t.beatDur,\dur,Pseq([64/1],1),\start,~leTout.numFrames/4*3),
+			Pbind(\instrument, \playBuf10, \buf,~leTout2,\out,~toShift ,\loopy,0,\tS,t.beatDur,\dur,Pseq([64/1],1),\start,~leTout.numFrames/4*3),
 			~part3e,
 			Pbind(\instrument, \playBuf10, \buf ,~leTout2,\out,0,\loopy,0,\tS,t.beatDur,\dur,Pseq([128/1],1),\start,0,\type,\rest),
 		],1),
@@ -5079,3 +5079,37 @@ Ppar([
 
 
 /*],1));*/
+
+
+
+
+
+Ppar([
+	Pbind(\instrument, \lfo13,\tS, 0.39550810372374, \dur, Pseq([64/1],1),\out,~mod3,\rL,0 ,\rH,100,\val,
+
+		0.084/2,\ph,0.3),
+
+
+	Pbind(\instrument,\rise,\dur,Pseq([64/1],1), \vlAtk,1,\f1, 0.08 , \f2,0.1, \f3,0,  \ic_atk,0,\index,0,\mRatio,1,\out ,~downDisto,\tS, 0.39550810372374,\atk,1 ,\freq,[164,168,322],\moduS,~mod3, \fS,1 ,/*\type,Pseq([\note,\note,\rest,\rest,\rest,\rest,\rest,\rest].scramble,inf)*/),
+
+
+		Pbind(\instrument,\gate3,\tS, 0.39550810372374,\dur,Pseq([1/1],64),\in, ~downSG
+,\atkT,1,\atckC,0,\decT,0,\vlDec,1,	\type,Pseq([\note,\rest],inf),\out,~downEq,\group,~dispatchGrp),
+
+
+],1)
+.play(t)
+
+
+Routine({
+
+Ppar([
+			Pbind(\instrument,\lfo13T, \out,~bus9,\val, 0.1609375,  \rL,0,\rH,-0.26, \ph, 0, \dur, Pseq([8/1],1), \tS,  0.39550810372374),
+	Pbind(\instrument, \playBufMod,\rte,0.5,\dur, Pseq([6/1],1),\impulse, 0.00001,\loo,0,\buf,~vocal,\out, 0/*~vocalBus*/,\tS,  0.39550810372374,\vl,2.162,\modP,~bus9),
+		],1).play(t);
+
+	wait(0.16);
+
+		  s.record(path:"/Users/davidmignot/Music/SuperCollider Recordings/E/voc.aiff",numChannels:1,duration:t.beatDur*6);
+
+}).play(t,quant:1);

@@ -58,7 +58,7 @@ f = { |n=14, min=0, max=11| (min..max).scramble.keep(n) };
 ~ped= Buffer.read(s,"/Users/davidmignot/Music/SuperCollider Recordings/E/pedonk.aiff");
 ~vap  = Buffer.read(s,"/Users/davidmignot/Music/SuperCollider Recordings/E/vap.aiff");
 ~rising  = Buffer.read(s,"/Users/davidmignot/Music/SuperCollider Recordings/E/rising.aiff");
-
+~voc= Buffer.read(s,"/Users/davidmignot/Music/SuperCollider Recordings/E/voc.aiff");
 
 
 
@@ -149,6 +149,11 @@ f = { |n=14, min=0, max=11| (min..max).scramble.keep(n) };
 
 (
 	~mont =0;
+
+~bobo=700;
+~crv=6;
+
+
 ~lfoGrp  = Group.new;
 
 ~ptrGrp0 = Group.after(~lfoGrp);
@@ -367,7 +372,7 @@ Ppar([~boost, ~kb],1).play(t,quant:1)
 Ppar([
 
 
-	// Pbind(\instrument, \lfo13T, \val,~hzQbeat/8,\dur,Pseq([64/1],inf),\rL,5000,\rH,3400 ,\out,  ~bus23, \group, ~lfoGrp,\tS, 0.39550810372374,\ph,0),
+	Pbind(\instrument, \lfo13T, \val,~hzQbeat/8,\dur,Pseq([64/1],inf),\rL,5000,\rH,3400 ,\out,  ~bus23, \group, ~lfoGrp,\tS, 0.39550810372374,\ph,0),
 
 	Pbind(\instrument,\lfo13T, \out, ~bus31, \val, 0.1609375,  \rL,2370,\rH,4000, \ph, 4.4, \dur, Pseq([64/1],inf), \tS,  0.39550810372374) ,
 
@@ -384,7 +389,7 @@ Ppar([
 
 
 /*	~bruti={In.kr(~fusible2).linlin(0,0.0304096,1,0)}.play*/
-/*Pseq([
+Pseq([
 
 
 		/*Pbind(\instrument,\wNoise,\dec,Pkey(\dur),\tS,t.beatDur,\valStart,4500,\valEnd,9500,\durF,0.3,\wFil,0,\dA,2,\dur,Pseq([144/2],1),\crv,(-8),\out,~toNoise,\type, \rest,),
@@ -395,9 +400,9 @@ Ppar([
 	/*Pwrand([*/
 
 	Pseq([
-			Pbind(\instrument,\wNoise,\dec,Pkey(\dur),\tS,t.beatDur,\valStart,4500,\valEnd,9500,\durF,Pseq([Pseq([0.1],256),Pseq([0.05],256)],inf),\wFil,0,\dA,2,\dur,Pseq([1/2],256),\crv,(-8),\out,~toNoise,\type, Pseq([\note ,\rest,\note,\rest,  ],inf) ,\amp,(-20),\amp2,Pkey(\amp)),
+			Pbind(\instrument,\wNoise,\dec,Pkey(\dur),\tS,t.beatDur,\valStart,4500,\valEnd,9500,\durF,Pseq([0.025],256),\wFil,0,\dA,2,\dur,Pseq([1/2],256),\crv,(-8),\out,~toNoise,\type, Pseq([\note ,\rest,\note,\rest,  ],inf) ,\amp,0),
 
-		/*	Pbind(\instrument,\wNoise,\dec,Pkey(\dur),\tS,t.beatDur,\valStart,4500,\valEnd,9500,\durF,0.3,\wFil,0,\dA,2,\dur,Pseq([256/2],1),\crv,(-8),\out,~toNoiseEq,\type, \rest,),*/
+			Pbind(\instrument,\wNoise,\dec,Pkey(\dur),\tS,t.beatDur,\valStart,4500,\valEnd,9500,\durF,0.3,\wFil,0,\dA,2,\dur,Pseq([64/2],1),\crv,(-8),\out,~toNoiseEq,\type, \rest,),
 
 	],inf)
 	/*Pbind(\instrument,\wNoise,\dec,Pkey(\dur),\tS,t.beatDur,\valStart,1500,\valEnd,3500,\durF,0.3,\wFil,0,\dA,2,\dur,Pseq([1/2],4),\crv,(-8),\out,0,\type, \rest),
@@ -406,7 +411,7 @@ Ppar([
 
 		/*Pbind(\instrument,\wNoise,\dec,Pkey(\dur),\tS,t.beatDur,\valStart,1500,\valEnd,3500,\durF,0.3,\wFil,0,\dA,2,\dur,Pseq([1/2],32),\crv,(-8),\out,0,\type, \rest),*/
 
-	],inf),*/
+	],inf),
 
 Pseq([
 		Pbind(\instrument, \wNoise2, \durF,0.1936,\dA,2,\dur,  Pseq([16/1], 1),\atk, 1,\out, ~slideBus,\tS,  0.39550810372374,\type,\rest),
@@ -532,7 +537,7 @@ Pseq([\rest ,\rest,\note,\rest  ,\rest,\rest,\note,\rest,  \rest,\rest,\note,\re
 				Pseq([\rest,\rest,\note,\rest,\rest,\rest,\note,\rest,\rest,\rest,\note,\rest,\rest,\rest,\note,\rest
 
 
-	],16),    Pseq([\rest,\rest,\rest,\rest,\rest,\rest,\rest,\rest ,\rest,\rest,\rest,\rest ,\rest,\rest,\rest,\rest  ],4),  ],inf) ],1) ],1)
+	],6),    Pseq([\rest,\rest,\rest,\rest,\rest,\rest,\rest,\rest ,\rest,\rest,\rest,\rest ,\rest,\rest,\rest,\rest  ],2),  ].scramble,inf) ],1) ],1)
 
 
 	,\dur, Pseq([1/2], inf) ,\out,~snareEQ,
@@ -542,7 +547,7 @@ Pseq([\rest ,\rest,\note,\rest  ,\rest,\rest,\note,\rest,  \rest,\rest,\note,\re
 
 	Pbind(\instrument, \playBuf,  \tS,  0.39550810372374,\buf,~cymb,\type,Pseq([ Pseq([ \rest],128),Pseq([ Pseq([Pseq(~rythm1,1),Pseq(~rythm2,1),],4),Pseq([Pseq(~rythm3,1),Pseq(~rythm4,1),],4),
 
-		/*Pseq(~rythmL, 128 /*32*/),*/Pseq([Pseq(~rythmL,512),Pseq([\rest],128) ],inf)],1)],1),\dur,Pseq([1/4],inf ),\stereoL, 0.00555,\out,    ~cymbalEq),
+		/*Pseq(~rythmL, 128 /*32*/),*/Pseq([Pseq(~rythmL,1024),Pseq([\rest],128) ],inf)],1)],1),\dur,Pseq([1/4],inf ),\stereoL, 0.00555,\out,    ~cymbalEq),
 
 
 
