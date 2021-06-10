@@ -12,9 +12,9 @@
 ~playLp.set(\start,600000);
 ~eq2=Synth(\EQHP96, [\frq, 100,\out, ~reverbBus],~eqGrp0);
 ~eq2.set(\val, 20000,\quant, 4, \gain,(-24),\val2,0,\quant2,0, \gain2,0, \val3,0,\quant3,0, \gain3,0,\val4,6700,\shelf,1, \gain4,(-12),\val5,1900,\shelf2,1, \gain5,(-40),\in, ~eqBus1 ,\out,~gateBus,\frq, 210);
-~rev2=Synth( \reverb ,~revRnd[2],~revGrp);~rev2.set( \in, ~reverbBus , \out, ~comFuzz);
+~rev2=Synth( \reverb ,~revRnd[2],~revGrp);~rev2.set( \in, ~reverbBus , \out, ~comFuzzy);
 ~comp2=Synth(\comp, [\ctrl, ~kbus ],~compGrp);
-~comp2.set(\thr,0.92 ,\sB, 1.06,\sA, 1/2,\atk ,0.0242, \rel ,0.0968, \gain,25,\in, ~comFuzz,\out,~limitFuzz);
+~comp2.set(\thr,0.92 ,\sB, 1.06,\sA, 1/2,\atk ,0.0242, \rel ,0.0968, \gain,25,\in, ~comFuzzy,\out,~limitFuzz);
 ~mix2= Synth(\limitertoMixer,[\c2,1,\in, ~limitFuzz, \gain,20,\out,~stereoBus1],~limitGrp);
 ~mix2.set(\gain,82.8);
 ~stereo2= Synth(\stereoO,[\in, ~stereoBus1   ,\out,~no1,],~stereoGrp);
@@ -746,7 +746,7 @@ Pbind(\instrument, \playBuf,  \tS,  0.39550810372374,\buf,~snare,\type, Pseq([\r
 ~comp34=Synth(\comp, [\ctrl,~kbus ],~compGrp);
 ~comp34.set(\thr,0.88 ,\sB, 1.04,\sA, 1/2,\atk ,0.0242, \rel ,0.1936, \in, ~snareComp ,\out,~snareLimit);
 ~mix34= Synth(\limitertoMixer,[\c34,1,\in, ~snareLimit,\gain,40,\out,~toPan2],~limitGrp);
-~mix34.set(\gain,48);
+~mix34.set(\gain,98);
 ~pan34=Synth( \pan2,[\in, ~toPan2,\out, /*~tofinalRythm*/  ~toKbGate], ~stereoGrp);
 
 
@@ -986,7 +986,7 @@ Pbind(\instrument, \playBuf,  \tS,  0.39550810372374,\buf,~snare,\type, Pseq([\r
 
 ~del10=Synth(\del10,[\in,~toDelay10,\decT,1.5544,\out,~toCom],~delayGrp);
 
-
+/*
 ~comp=Synth(\comp, [\ctrl, ~kbus ],~compGrp);
 ~comp.set(\thr,0.4 ,\sB, 1.034,\sA, 1/2,\atk ,0.0242, \rel ,0.0968, \gain,1,\in, ~comFuzz,\out,~limitBass);
 
@@ -994,6 +994,17 @@ Pbind(\instrument, \playBuf,  \tS,  0.39550810372374,\buf,~snare,\type, Pseq([\r
 ~limK.set(\gain,182);
 ~limB=Synth(\limitertoMixer,[\c46,1,\in, ~limitBass, \gain,68,\out,~kToPan],~limitGrp);
 ~limB.set(\gain,132);
+
+~kbPan2 = Synth(\pan2,[ \in,~kToPan,\out,~toKbGate],~stereoGrp);*/
+
+
+~comp=Synth(\comp, [\ctrl, ~kbus ],~compGrp);
+~comp.set(\thr,0.5 ,\sB, 1.034,\sA, 1/2,\atk ,0.0242, \rel ,0.0968, \gain,1,\in, ~comFuzz,\out,~limitBass);
+
+~limK=Synth(\limitertoMixer,[\c45,1,\in, ~limitKick, \gain,1,\out,~kToPan],~limitGrp);
+~limK.set(\gain,182);
+~limB=Synth(\limitertoMixer,[\c46,1,\in, ~limitBass, \gain,68,\out,~kToPan],~limitGrp);
+~limB.set(\gain,164);
 
 ~kbPan2 = Synth(\pan2,[ \in,~kToPan,\out,~toKbGate],~stereoGrp);
 

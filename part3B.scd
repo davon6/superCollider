@@ -5113,3 +5113,32 @@ Ppar([
 		  s.record(path:"/Users/davidmignot/Music/SuperCollider Recordings/E/voc.aiff",numChannels:1,duration:t.beatDur*6);
 
 }).play(t,quant:1);
+
+
+//NEW SNARE
+
+({}.play)
+
+Routine({
+
+({LPF.ar( WhiteNoise.ar(1.6),XLine.kr(1000,5500,0.3)*EnvGen.kr(Env.perc(releaseTime:  0.3,curve: -5),doneAction:2))}.play);
+
+
+~snare.play;
+
+	wait(0.16);
+
+	s.record(path:"/Users/davidmignot/Music/SuperCollider Recordings/E/snare2.aiff",numChannels:1,duration:t.beatDur*2);}).play
+
+
+
+~snare2 =Buffer.read(s,"/Users/davidmignot/Music/SuperCollider Recordings/E/snare2.aiff")
+
+~snare2.plot
+
+~snare2.play;
+
+~snare.play
+
+
+({PlayBuf.ar(1,~snare)*0.4}.play)
