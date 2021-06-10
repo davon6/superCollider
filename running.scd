@@ -1121,7 +1121,7 @@ SynthDef(\kick, {
 		sig = SinOsc.ar(envF, mul: env);
 
 		sig = sig * amp.dbamp  ;
-		sig = Pan2.ar(sig);
+		/*sig = Pan2.ar(sig);*/
 		Out.ar(out, sig);
 	}).add;
 
@@ -2723,7 +2723,7 @@ Ppar([
 
 
 			\val7,329.6275,\quant7,1.2 ,\gain7,(-4),
-			\val,659.255, \quant,2.2, \gain,(-25),
+			\val,659.255, \quant,2.1, \gain,(-21),
 \val2,1318.51, \quant2,1.4, \gain2,(-11),
 		\val3,2637.02, \quant3,1.3, \gain3,(-15),
 
@@ -2761,33 +2761,33 @@ Ppar([
 	Pseq([Pbindf(~kick,\out,~kbus)],inf),
 Ppar([
 
-			Pbind(\instrument, \playBuf, \dur,  Pseq([1/1],inf), \tS,  0.39550810372374,\buf,~k2,\out,~limitKick,\start,00),
-
+			// Pbind(\instrument, \playBuf, \dur,  Pseq([1/1],inf), \tS,  0.39550810372374,\buf,~k2,\out,~limitKick,\start,00),
+			Pseq([Pbindf(~kick,\out,~limitKick)],inf),
 	Pbind( \instrument, \playBufXG, \impulse, 0.003 ,\dur,    Pseq([1/4],inf), \tS,  0.39550810372374,
-	\start,0,\type,Pseq([\rest,\note,\note,\note],inf),\buf,~b3,\out,~comFuzz ,\loopy,0, \decT,0.6,\vlDec,1,\vlSub,Pkey(\vlDec),\vlSub2,Pkey(\vlDec),\subsT ,Pseq([0,0.1,0.2,0.4],inf),\start,3800)
+	\start,0,\type,Pseq([\rest,\note,\note,\note],inf),\buf,~b3,\out,~comFuzz ,\loopy,0, \decT,0.6,\vlDec,1,\vlSub,Pkey(\vlDec),\vlSub2,Pkey(\vlDec),\subsT ,Pseq([0,0.15,0.3,0.4],inf),\start,3800)
 
 ],1)
 
 
 ],1).play(t);
 ~comp=Synth(\comp, [\ctrl, ~kbus ],~compGrp);
-~comp.set(\thr,0.3 ,\sB, 1.034,\sA, 1/2,\atk ,0.0242, \rel ,0.0968, \gain,1,\in, ~comFuzz,\out,~limitBass);
+~comp.set(\thr,0.4 ,\sB, 1.034,\sA, 1/2,\atk ,0.0242, \rel ,0.0968, \gain,1,\in, ~comFuzz,\out,~limitBass);
 
 ~limK=Synth(\limitertoMixer,[\c45,1,\in, ~limitKick, \gain,1,\out,~kToPan],~limitGrp);
-~limK.set(\gain,205);
+~limK.set(\gain,182);
 ~limB=Synth(\limitertoMixer,[\c46,1,\in, ~limitBass, \gain,68,\out,~kToPan],~limitGrp);
-~limB.set(\gain,158);
+~limB.set(\gain,132);
 
 ~kbPan2 = Synth(\pan2,[ \in,~kToPan,\out,0],~stereoGrp);
 
-	wait(0.168);
+	wait(0.16883);
 
-	// s.record(path:"/Users/davidmignot/Music/SuperCollider Recordings/E/kB.aiff",numChannels:2,duration:t.beatDur);
+	// s.record(path:"/Users/davidmignot/Music/SuperCollider Recordings/E/kB.aiff",numChannels:2,duration:t.beatDur*1024);
 }).play;)
 
 
 
-~limB.free
+~limK.free
 ~kb1.plot
 ~kick.play
 /*~kb1=Buffer.read(s,"/Users/davidmignot/Music/SuperCollider Recordings/E/bacup/kB.aiff")*/
@@ -2796,7 +2796,7 @@ Ppar([
 ~kb1.plot
 ~k2.plot
 
-~kb=Pbind(\instrument, \playBufS, \dur,  Pseq([1/1],inf), \tS,  t.beatDur,\buf,~kb1,\loopy,0,\start,0,\vl,1).play(t)
+~kb=Pbind(\instrument, \playBufS, \dur,  Pseq([10/1],inf), \tS,  t.beatDur,\buf,~kb1,\loopy,0,\start,1,\vl,1).play(t)
 
 
 (

@@ -139,7 +139,7 @@ Pseq([
 
 			Pbind(\instrument,\envSli,\out, ~bus33,\dur,Pseq([16/1],inf),\tS, 0.39550810372374,\val1,0,\val2,Pfunc({~bobo=~bobo+25}),\crv,Pfunc({~crv=~crv+0.5})),
 
-	Pbind(\instrument,\shift10,\bus,~bus33,\in, ~toShift ,\out,~toExtraFx,\dur,Pseq([16/1],inf),\group, ~granuGrp)
+	Pbind(\instrument,\shift10,\bus,~bus33,\in, ~toShift ,\out,~toExtraFx,\dur,Pseq([16/1],inf),\group, ~granuGrp),
 
 
 
@@ -194,7 +194,7 @@ Pseq([
 			Pbind(\instrument,\gate, \tS,  0.39550810370174,\in,	~bgGate,\out,~bgComp,\group, ~gateGrp12,\type, \rest ,  \dur ,Pseq([4/1],1) ,\vlAtk,0.2,\atkT,0.25,\relT,0.25,\decT,0.5,\atckC,6, \relC,-6,\vlRel,0.2),
 
 
-		Pbind(\instrument,\gate,\vlSub, 1, \vlSub2,Pkey(\vlSub), \tS,  0.39550810370174,\in,	~bgGate,\out,~bgComp,\group, ~gateGrp12,\type, Pseq([         Pseq([\rest ,  \rest,\rest,\rest,\note,\rest,\note ],1)  ],inf),  \dur, Pseq([Pseq([256/1],1), Pseq([64/1],1),
+		Pbind(\instrument,\gate,\vlSub, 1, \vlSub2,Pkey(\vlSub), \tS,  0.39550810370174,\in,	~bgGate,\out,~bgComp,\group, ~gateGrp12,\type, Pseq([         Pseq([\rest ,  \rest,\rest,\rest,\rest,\note,\rest,\note ],1)  ],inf),  \dur, Pseq([Pseq([256/1],1), Pseq([64/1],1),
 				Pseq([32/1],2),Pseq([64/1],2) ],inf)),
 
 
