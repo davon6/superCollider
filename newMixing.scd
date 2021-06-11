@@ -506,11 +506,11 @@
 ~part5Eq.set(\frq,600);
 ~part5Rev=Synth(\reverb, ~rShor,~revGrp);   ~part5Rev.set(\in,~downRev,\out,~downComp);
 ~part5Comp=Synth( \comp, [\ctrl, ~kbus,\in,~downComp,\out,~downLimit],~compGrp);
-~part5Comp.set(\thr,0.9 ,\sB, 1.050,\sA, 1/2,\atk ,0.0242, \rel ,0.0968);
+~part5Comp.set(\thr,0.8 ,\sB, 1.050,\sA, 1/2,\atk ,0.0242, \rel ,0.0968);
 ~part5Limit=Synth( \limitertoMixer,[\in,~downLimit,\out,~downStereo],~limitGrp);
 ~part5Limit.set(\gain,26,\out,~downStereo);
 ~part5Stereo= Synth(\stereoO,[\in, ~downStereo,\out,~toCom], ~stereoGrp);
-~part5Stereo.set(\spread,0.3,\center,0,\dlt1,0.1,\dlt2,0,\decT,0, \mxDel,1);
+~part5Stereo.set(\spread,0.3,\center,0,\dlt1,0.06,\dlt2,0,\decT,0, \mxDel,1);
 
 
 
@@ -756,11 +756,11 @@ Pbind(\instrument, \playBuf,  \tS,  0.39550810372374,\buf,~snare,\type, Pseq([\r
 // ~eq40.free
 // Pbind(\instrument, \playBuf, \buf, ~clap,\vl,1,\tS,t.beatDur,\dur,Pseq([1/2],inf),\loopy,0,\type, Pseq([\rest,\rest,\note,\rest ],inf),\out,~clapEq).play(t,quant:2)
 ~eq40 = Synth(\EQHP96, [\frq, 100 ],~eqGrp);
-~eq40.set(\in, ~clapEq, \out , ~clapComp,\frq, 240,\val, 2000, \quant, 1, \gain,0, \val5,1100,\shelf2,1.1,\gain5,(-18),\val4,6000,\shelf,1.1,\gain4,(-16));
+~eq40.set(\in, ~clapEq, \out , ~clapComp,\frq, 140,\val, 2000, \quant, 1, \gain,0, \val5,1100,\shelf2,1.1,\gain5,(-18),\val4,6000,\shelf,1.1,\gain4,(-16));
 ~comp40=Synth(\comp, [\ctrl,~kbus ],~compGrp);
 ~comp40.set(\thr,0.28 ,\sB, 1.04,\sA, 1/2,\atk ,0.0242, \rel ,0.0968, \in, ~clapComp ,\out,~claplimit);
 ~mix40= Synth(\limitertoMixer,[\c34,1,\in, ~claplimit,\gain,40,\out,~clapPan2],~limitGrp);
-~mix40.set(\gain,48);
+~mix40.set(\gain,47.6);
 ~pan40=Synth( \pan2,[\in, ~clapPan2,\out,  ~toKbGate], ~stereoGrp);
 
 
@@ -788,10 +788,25 @@ Pbind(\instrument, \playBuf,  \tS,  0.39550810372374,\buf,~snare,\type, Pseq([\r
 
 ~fil20= Synth(\filter, [\busMod, ~bus31, \freqFil, 1000,\in, ~slideBus,\out,~slideEq,\qf,0.8],~filterGrp);
 ~eq20 =Synth(\EQHP96, [ \frq, 100 ], ~eqGrp0);
-~eq20.set(\in, ~slideEq , \out, ~slideBusToStereo ,\frq, 500, \val,12000, \quant,1.6, \gain,(-26),\val2,0,\quant2,0, \gain2,0, \vol,0.095);
+~eq20.set(\in, ~slideEq , \out, ~slideBusToStereo ,\frq, 500, \val,12000, \quant,1.6, \gain,(-26),\val2,0,\quant2,0, \gain2,0, \vol,0.125);
 ~pan20=Synth(\pan2, [/*\in, ~toPan2,*/\in,~slideBusToStereo, \out,~toKbGate], ~stereoGrp);
 
 
+
+// ~bassEqX.free
+
+
+/*~bassEqX=Synth(\EQHP2 ,[\in,~bassEq, \out,~comFuzz, \frq, 20.6,\vol,1,
+
+
+			\val7,329.6275,\quant7,1.2 ,\gain7,(-4),
+			\val,659.255, \quant,1.9, \gain,(-9),
+\val2,1318.51, \quant2,1.4, \gain2,(-11),
+		\val3,2637.02, \quant3,1.4, \gain3,(-18),
+
+
+//that one
+	\val5,164.81375, \quant5,2.4, \gain5,(-15)],~eqGrp0);*/
 
 ~comp=Synth(\comp, [\ctrl, ~kbus ],~compGrp);
 ~comp.set(\thr,0.5 ,\sB, 1.034,\sA, 1/2,\atk ,0.0242, \rel ,0.0968, \gain,1,\in, ~comFuzz,\out,~limitBass);

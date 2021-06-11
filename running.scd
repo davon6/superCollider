@@ -2726,20 +2726,17 @@ Ppar([
 		,\amp,(-6/*-1*/)/*(-13)*/,\out,~bassEq
 	),
 
-	Pbind(\instrument ,\EQHP2/*	\EQHP2*/,\dur, inf, \in,~bassEq, \out,0,\group, ~eqGrp, \frq, 20.6,\vol,1,
+Pbind(\instrument ,\EQHP2 ,\in,~bassEq, \out,0, \frq, 20.6,\vol,1,
 
 
 			\val7,329.6275,\quant7,1.2 ,\gain7,(-4),
-			\val,659.255, \quant,2.1, \gain,(-13),
+			\val,659.255, \quant,1.9, \gain,(-9),
 \val2,1318.51, \quant2,1.4, \gain2,(-11),
 		\val3,2637.02, \quant3,1.4, \gain3,(-18),
 
 
 //that one
-		\val5,164.81375, \quant5,2.4, \gain5,(-17)
-
-
-	),
+	\val5,164.81375, \quant5,2.4, \gain5,(-15),\group,~eqGrp)
 
 
 
@@ -2771,7 +2768,7 @@ Ppar([
 			// Pbind(\instrument, \playBuf, \dur,  Pseq([1/1],inf), \tS,  0.39550810372374,\buf,~k2,\out,~limitKick,\start,00),
 			Pseq([Pbindf(~kick,\out,~limitKick)],inf),
 	Pbind( \instrument, \playBufXG, \impulse, 0.003 ,\dur,    Pseq([1/4],inf), \tS,  0.39550810372374,
-	\start,0,\type,Pseq([\rest,\note,\note,\note],inf),\buf,~b4,\out,~comFuzz ,\loopy,0, \decT,0.7,\vlDec,1,\vlSub,Pkey(\vlDec),\vlSub2,Pkey(\vlDec),\subsT ,Pseq([0,0.1,0.2,0.3],inf),\start,2800)
+	\start,0,\type,Pseq([\rest,\note,\note,\note],inf),\buf,~b3,\out,~comFuzz ,\loopy,0, \decT,0.7,\vlDec,1,\vlSub,Pkey(\vlDec),\vlSub2,Pkey(\vlDec),\subsT ,Pseq([0,0.1,0.2,0.3],inf),\start,2800)
 
 ],1)
 
@@ -2852,20 +2849,18 @@ Ppar([
 		,\amp,(-6/*-1*/)/*(-13)*/,\out,~bassEq
 	),
 
-	Pbind(\instrument ,\EQHP2/*	\EQHP2*/,\dur, inf, \in,~bassEq, \out,0,\group, ~eqGrp, \frq, 20.6,\vol,1,
+
+Pbind(\instrument ,\EQHP2 ,\in,~bassEq, \out,0, \frq, 20.6,\vol,1,
 
 
 			\val7,329.6275,\quant7,1.2 ,\gain7,(-4),
-			\val,659.255, \quant,2.1, \gain,(-13),
+			\val,659.255, \quant,1.9, \gain,(-9),
 \val2,1318.51, \quant2,1.4, \gain2,(-11),
 		\val3,2637.02, \quant3,1.4, \gain3,(-18),
 
 
 //that one
-		\val5,164.81375, \quant5,2.4, \gain5,(-17)
-
-
-	),
+	\val5,164.81375, \quant5,2.4, \gain5,(-15),\group,~eqGrp)
 
 
 
@@ -2874,5 +2869,5 @@ Ppar([
 
 	s.record(path:"/Users/davidmignot/Music/SuperCollider Recordings/E/bass2.aiff",numChannels:1,duration:t.beatDur);
 }).play;)
-
+~b4.plot
 ~b4=Buffer.read(s,"/Users/davidmignot/Music/SuperCollider Recordings/E/bass2.aiff");
