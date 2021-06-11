@@ -5258,7 +5258,7 @@ SynthDef(\kick, {
 
 	EnvGen.ar(
 	Env([ 0.076 , 0.51 ,   0.2  ,  0.8 ,0,0],
-		[ 0.0048,  0.0048,   0.1  , 0.1 , 0.1  ],[-1,6,-3,2,-1]),doneAction:2);
+		[ 0.0048,  0.0048,   0.08  , 0.1 , 0.1  ],[-1,6,-3,2,-1]),doneAction:2);
 
 
 		sig = SinOsc.ar(envF, mul: env);
@@ -5267,3 +5267,5 @@ SynthDef(\kick, {
 		sig = Pan2.ar(sig);
 		Out.ar(out, sig);
 	}).play;
+
+
