@@ -1113,7 +1113,7 @@ SynthDef(\kick, {
 		envF = EnvGen.ar(
 			Env(
 				[5178.15,440,114,26,0,0],
-				[0.0016,0.01,0.167,0,0.4],
+				[0.016,0.01,0.167,0,0.4],
 					[-6.8,-3,-2]
 			)
 		);
@@ -1121,8 +1121,8 @@ SynthDef(\kick, {
 		env =
 
 	EnvGen.ar(
-	Env([ 0.376 , 0.06, 1.1 ,0,0],
-		[ 0.0011,0.074,  0.09 , 0  ],[-1,-6,3,2,1]),doneAction:2);
+	Env([ 0.076 , 0.51 ,   0.2  ,  0.8 ,0,0],
+		[ 0.0048,  0.0048,   0.08  , 0.1 , 0.1  ],[-1,6,-3,2,-1]),doneAction:2);
 
 
 		sig = SinOsc.ar(envF, mul: env);
@@ -2690,7 +2690,7 @@ Pbind(\instrument, \percussion,\dur,Pseq([1/4],1 ),\carHz,Pfunc({ 525.1207061222
 
 
 
-		wait(0.155);
+		wait(0.15);
 
 	s.record(path:"/Users/davidmignot/Music/SuperCollider Recordings/E/kick.aiff",numChannels:1,duration:t.beatDur);
 }).play;)
@@ -2768,7 +2768,7 @@ Ppar([
 			// Pbind(\instrument, \playBuf, \dur,  Pseq([1/1],inf), \tS,  0.39550810372374,\buf,~k2,\out,~limitKick,\start,00),
 			Pseq([Pbindf(~kick,\out,~limitKick)],inf),
 	Pbind( \instrument, \playBufXG, \impulse, 0.003 ,\dur,    Pseq([1/4],inf), \tS,  0.39550810372374,
-	\start,0,\type,Pseq([\rest,\note,\note,\note],inf),\buf,~b3,\out,~comFuzz ,\loopy,0, \decT,0.7,\vlDec,1,\vlSub,Pkey(\vlDec),\vlSub2,Pkey(\vlDec),\subsT ,Pseq([0,0.1,0.2,0.3],inf),\start,2800)
+	\start,0,\type,Pseq([\rest,\note,\note,\note],inf),\buf,~b4,\out,~comFuzz ,\loopy,0, \decT,0.7,\vlDec,1,\vlSub,Pkey(\vlDec),\vlSub2,Pkey(\vlDec),\subsT ,Pseq([0,0.1,0.2,0.3],inf),\start,2800)
 
 ],1)
 
@@ -2778,9 +2778,9 @@ Ppar([
 ~comp.set(\thr,0.5 ,\sB, 1.034,\sA, 1/2,\atk ,0.0242, \rel ,0.0968, \gain,1,\in, ~comFuzz,\out,~limitBass);
 
 ~limK=Synth(\limitertoMixer,[\c45,1,\in, ~limitKick, \gain,1,\out,~kToPan],~limitGrp);
-~limK.set(\gain,182);
+~limK.set(\gain,242);
 ~limB=Synth(\limitertoMixer,[\c46,1,\in, ~limitBass, \gain,68,\out,~kToPan],~limitGrp);
-~limB.set(\gain,164);
+~limB.set(\gain,194);
 
 ~kbPan2 = Synth(\pan2,[ \in,~kToPan,\out,0],~stereoGrp);
 
@@ -2791,7 +2791,7 @@ Ppar([
 
 
 
-~limK.free
+~limB.free
 ~kb1.plot
 ~kick.play
 /*~kb1=Buffer.read(s,"/Users/davidmignot/Music/SuperCollider Recordings/E/bacup/kB.aiff")*/

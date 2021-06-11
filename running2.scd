@@ -588,7 +588,7 @@ Pseq([\rest ,\rest,\note,\rest  ,\rest,\rest,\note,\rest,  \rest,\rest,\note,\re
 			Pseq([Pbindf(~kick,\out,~limitKick)],1024),
 
 	Pbind( \instrument, \playBufXG, \impulse, 0.003 ,\dur,    Pseq([1/4],4096), \tS,  0.39550810372374,
-		\start,0,\type,Pseq([\rest,\note,\note,\note],inf),\buf,Pseq([Pseq([~b3],256),Pseq([~b4],768)  ],inf)   ,\out,~comFuzz ,\loopy,0, \decT,0.7,\vlDec,1,\vlSub,Pkey(\vlDec),\vlSub2,Pkey(\vlDec),\subsT ,Pseq([0,0.1,0.2,0.3],inf),\start,2800),
+		\start,0,\type,Pseq([\rest,\note,\note,\note],inf),\buf,Pseq([Pseq([~b3],64) , Pseq([Pseq([~b3],256),Pseq([~b4],768)  ],inf) ],1)  ,\out,~comFuzz ,\loopy,0, \decT,0.7,\vlDec,1,\vlSub,Pkey(\vlDec),\vlSub2,Pkey(\vlDec),\subsT ,Pseq([0,0.1,0.2,0.3],inf),\start,2800),
 
 
 	/*Pbind( \instrument, \playBufXG, \impulse, 0.003 ,\dur,    Pseq([1/4],4096), \tS,  0.39550810372374,

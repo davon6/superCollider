@@ -579,7 +579,7 @@ Ppar([
 Pseq([
 	Pbind(\instrument, \wNoise,\dur, Pseq([2/1],1),\dec ,Pkey(\dur),\amp,(-5),\out,0,\wFil,0,\valStart,900,\valEnd,1000,\durF,8*t.beatDur,\tS, 0.39550810372374,\out,~hitEq),
 
-~gateGrp12
+
 
 
 			Pbind(\instrument, \gate,\vlSub,1,\vlSub2,Pkey(\vlSub),\dur  ,Pseq([4/1],1),\tS,  0.39550810372374,\out, ~riTriptoEq,\in,~trippyGate,\group,~gateGrp12),
