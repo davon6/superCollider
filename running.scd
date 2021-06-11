@@ -286,6 +286,10 @@ s.sync;
 	~abcRev=Bus.audio(s,2);
 	~abcComp=Bus.audio(s,2);
 	~abcStereo=Bus.audio(s,2);
+	~clapEq=Bus.audio(s,1);
+	~clapComp=Bus.audio(s,1);
+	~claplimit=Bus.audio(s,1);
+	~clapPan2=Bus.audio(s,1);
 
 
 	~flopped=Bus.audio(s,10);
@@ -750,6 +754,8 @@ s.sync;
 	~hit2ToEq=  Bus.audio(s,1);
 	~hit2ToStereo=  Bus.audio(s,1);
 
+	~trippyGate=  Bus.audio(s,1);
+
 	~toFilRise=  Bus.audio(s,2);
 	~fusible2=  Bus.audio(s,1);
 	~gateBou=  Bus.audio(s,1);
@@ -1131,7 +1137,7 @@ SynthDef(\kick, {
 		SynthDef(\bass,{
 		arg freq=41.2, dure=1, amp=0.5,
 		atkcrv=1, relcrv=5,
-		atk=0, rel=0.8, lpf=100, out = 0, bus, dur,cho=0,rel2,relcrv2,envF,relcrv3,vlDec=0.6,vlDecF=0,vlDecFx=1080 ;
+		atk=0, rel=0.8, lpf=100, out = 0, bus, dur,cho=0,rel2,relcrv2,envF,relcrv3,vlDec=0.6,vlDecF=0,vlDecFx=1080, vlDecFx2=0;
 
 		var sig, env, lvlBa;
 
@@ -1146,7 +1152,7 @@ SynthDef(\kick, {
 
 		envF = EnvGen.kr(
 			Env(
-				[vlDecFx,0],
+				[vlDecFx,vlDecFx2],
 				[rel],
 				[atkcrv,relcrv2]
 			),
@@ -1909,8 +1915,8 @@ FreeVerb.ar(
 		frq),frq),frq),frq),frq),frq),frq),frq)* vol)};).add;
 
 
-
-
+/*warning*/
+//POTENTIAL GLITCH IN FURTE SET VOL TO 1
 SynthDef(\EQHP96, {|out=0, in, val, quant, gain,frq=100, vol =0.05, val2,quant2, gain2,val3,shelf, gain3,val4,quant3, gain4,val5,quant5, gain5, val6,shelf2, gain6| Out.ar(out,
 
 		HPF.ar(HPF.ar(HPF.ar(HPF.ar(HPF.ar(HPF.ar(HPF.ar(HPF.ar(BLowShelf.ar(	BHiShelf.ar( 	BPeakEQ.ar(
@@ -2765,7 +2771,7 @@ Ppar([
 			// Pbind(\instrument, \playBuf, \dur,  Pseq([1/1],inf), \tS,  0.39550810372374,\buf,~k2,\out,~limitKick,\start,00),
 			Pseq([Pbindf(~kick,\out,~limitKick)],inf),
 	Pbind( \instrument, \playBufXG, \impulse, 0.003 ,\dur,    Pseq([1/4],inf), \tS,  0.39550810372374,
-	\start,0,\type,Pseq([\rest,\note,\note,\note],inf),\buf,~b3,\out,~comFuzz ,\loopy,0, \decT,0.7,\vlDec,1,\vlSub,Pkey(\vlDec),\vlSub2,Pkey(\vlDec),\subsT ,Pseq([0,0.1,0.2,0.3],inf),\start,2800)
+	\start,0,\type,Pseq([\rest,\note,\note,\note],inf),\buf,~b4,\out,~comFuzz ,\loopy,0, \decT,0.7,\vlDec,1,\vlSub,Pkey(\vlDec),\vlSub2,Pkey(\vlDec),\subsT ,Pseq([0,0.1,0.2,0.3],inf),\start,2800)
 
 ],1)
 
@@ -2784,7 +2790,7 @@ Ppar([
 	wait(0.162);
 
 	// s.record(path:"/Users/davidmignot/Music/SuperCollider Recordings/E/kB.aiff",numChannels:2,duration:t.beatDur*24);
-}).play;)
+}).play(t,quant:1))
 
 
 
@@ -2821,8 +2827,6 @@ Pbind(\instrument, \trippyRise, \dur,  Pseq([64/1],1)/*,   \ph, Pfunc({ 6.00.ran
 ~elec=Buffer.read(s,"/Users/davidmignot/Downloads/10-Electrypnose_-_Give_Me_Some_Fun.wav");
 
 
-
-
 (//BASS ALONE
 
 ~eqGrp=Group.new;
@@ -2834,15 +2838,15 @@ Routine({
 
 Ppar([
 
-		Pseq([~bassShap],inf),
+	~bassShap,
 	Pbind(\instrument, \bass,
-		\dur, Pseq([1/4],inf),\lpf,100,
+		\dur, Pseq([4/1],1),\lpf,100,
 		\midinote, 28, \bus, ~bassShapB,
 		\atk, 0,
-		\rel, t.beatDur/4*0.9988,
+		\rel, t.beatDur *0.9988,
 		\rel2, t.beatDur/4 * 0.0012,
-			\type,Pseq([\rest,\note,\note,\note],inf),
-		\vlDecFx,3800,/*\vlDecF,400,*/
+
+		\vlDecFx,3800,\vlDecFx2,600,
 		\atkcrv, -2,
 		\relcrv, -2,\relcrv2, -9, \relcrv3, -6
 		,\amp,(-6/*-1*/)/*(-13)*/,\out,~bassEq
@@ -2868,6 +2872,7 @@ Ppar([
 ],1).play(t);
 	wait(0.152);
 
-	 s.record(path:"/Users/davidmignot/Music/SuperCollider Recordings/E/bass.aiff",numChannels:1,duration:t.beatDur);
+	s.record(path:"/Users/davidmignot/Music/SuperCollider Recordings/E/bass2.aiff",numChannels:1,duration:t.beatDur);
 }).play;)
 
+~b4=Buffer.read(s,"/Users/davidmignot/Music/SuperCollider Recordings/E/bass2.aiff");

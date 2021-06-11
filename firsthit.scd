@@ -401,11 +401,11 @@ Pbind(\instrument, \playBuf10, \impulse, 0.003 ,\dur,Pseq([2/1],1), \tS,  0.3955
 
 		/*],1),*/
 
-Pbind(\instrument, \playBuf10, \impulse, 0.003 ,\dur,Pseq([1/1],1), \tS,  0.39550810370174,\buf,~leTout,\out, 0,\loopy,0,\start,Pfunc({ ~reve}),\rte,1.5,\vl,0.76),
+Pbind(\instrument, \playBuf10, \impulse, 0.003 ,\dur,Pseq([1/1],1), \tS,  0.39550810370174,\buf,~leTout,\out, 0,\loopy,0,\start,Pfunc({ ~reve}),\rte,1.5,\vl,0.7),
 
 Pbind(\instrument, \gateS, \out, ~toCom,\dur,Pseq([ 1/1],1),\in,~tofinalRythm,\tS, 0.39550810372374,\group, ~gateGrp11),
 
-Pbind(\instrument, \playBuf10, \impulse, 0.003 ,\dur,Pseq([1/1],1), \tS,  0.39550810370174,\buf,~leTout,\out, 0,\loopy,0,\start,Pfunc({ ~reve}),\rte,1.7,\vl,0.76),
+Pbind(\instrument, \playBuf10, \impulse, 0.003 ,\dur,Pseq([1/1],1), \tS,  0.39550810370174,\buf,~leTout,\out, 0,\loopy,0,\start,Pfunc({ ~reve}),\rte,1.7,\vl,0.64),
 
 /*Prand([
 		Pbind(\instrument, \playBuf, \out,~limitBus1,\dur,Pseq([ 2/1],1)
@@ -416,15 +416,15 @@ Pbind(\instrument, \playBuf10, \impulse, 0.003 ,\dur,Pseq([1/1],1), \tS,  0.3955
 		Pbind(\instrument, \gateS, \out, ~toCom,\dur,Pseq([ 1/2],1),\in,~tofinalRythm,\tS, 0.39550810372374,\group, ~gateGrp11),
 
 
-Pbind(\instrument, \playBuf10, \impulse, 0.003 ,\dur,Pseq([1/2],1), \tS,  0.39550810370174,\buf,~leTout,\out, 0,\loopy,0,\start,Pfunc({ ~reve}),\rte,1.9,\vl,0.76),
+Pbind(\instrument, \playBuf10, \impulse, 0.003 ,\dur,Pseq([1/2],1), \tS,  0.39550810370174,\buf,~leTout,\out, 0,\loopy,0,\start,Pfunc({ ~reve}),\rte,1.9,\vl,0.57),
 
 		/*],2),*/
 
 Pbind(\instrument, \gateS, \out, ~toCom,\dur,Pseq([ 1/2],1),\in,~tofinalRythm,\tS, 0.39550810372374,\group, ~gateGrp11),
-Pbind(\instrument, \playBuf10, \impulse, 0.003 ,\dur,Pseq([1/2],1), \tS,  0.39550810370174,\buf,~leTout,\out, 0,\loopy,0,\start,Pfunc({ ~reve}),\rte,2.1),
+Pbind(\instrument, \playBuf10, \impulse, 0.003 ,\dur,Pseq([1/2],1), \tS,  0.39550810370174,\buf,~leTout,\out, 0,\loopy,0,\start,Pfunc({ ~reve}),\rte,2.1,\vl,0.54),
 
 
-Pbind(\instrument, \playBuf10, \impulse, 0.003 ,\dur,Pseq([1/1],1), \tS,  0.39550810370174,\buf,~leTout,\out, 0,\loopy,0,\start,Pfunc({ ~reve}),\rte,2.4,\vl,0.76),
+Pbind(\instrument, \playBuf10, \impulse, 0.003 ,\dur,Pseq([1/1],1), \tS,  0.39550810370174,\buf,~leTout,\out, 0,\loopy,0,\start,Pfunc({ ~reve}),\rte,2.4,\vl,0.53),
 
 
 
@@ -574,35 +574,39 @@ Ppar([
 
 	//above 32
 
-
+Ppar([
+			Pbind(\instrument, \playBuf,\dur  ,Pseq([32/1],1),\buf,~trippy,\tS,  0.39550810372374,\out, ~riTriptoDisto),
 Pseq([
 	Pbind(\instrument, \wNoise,\dur, Pseq([2/1],1),\dec ,Pkey(\dur),\amp,(-5),\out,0,\wFil,0,\valStart,900,\valEnd,1000,\durF,8*t.beatDur,\tS, 0.39550810372374,\out,~hitEq),
 
+~gateGrp12
 
 
-
-		Pbind(\instrument, \playBuf,\dur  ,Pseq([4/1],1),\buf,~trippy,\tS,  0.39550810372374,\out, ~riTriptoDisto),
+			Pbind(\instrument, \gate,\vlSub,1,\vlSub2,Pkey(\vlSub),\dur  ,Pseq([4/1],1),\tS,  0.39550810372374,\out, ~riTriptoEq,\in,~trippyGate,\group,~gateGrp12),
 
 			Pbind(\instrument, \playBuf10, \buf ,~leTout2,\out,~toCom, \start,Pfunc({~leTout2.numFrames/256* (220.rand)}),\dur,Pseq([2/1],1)		,\loopy,0,\tS,0.39550810372374),
 
 
-				Pbind(\instrument, \playBuf,\dur  ,Pseq([4/1],1),\buf,~trippy,\tS,  0.39550810372374,\out, ~riTriptoDisto),
+					Pbind(\instrument, \gate,\vlSub,1,\vlSub2,Pkey(\vlSub),\dur  ,Pseq([4/1],1),\tS,  0.39550810372374,\out, ~riTriptoEq,\in,~trippyGate,\group,~gateGrp12),
+
 
 		Pbind(\instrument, \playBuf10, \buf ,~leTout2,\out,~toDelay10, \start,Pfunc({~leTout2.numFrames/256* (220.rand)})
 			,\loopy,0,\tS,0.39550810372374,\dur,Pseq([1/1],1)),
 
 
-		Pbind(\instrument, \playBuf,\dur  ,Pseq([5/1],1),\buf,~trippy,\tS,  0.39550810372374,\out, ~riTriptoDisto),
+			Pbind(\instrument, \gate,\vlSub,1,\vlSub2,Pkey(\vlSub),\dur  ,Pseq([5/1],1),\tS,  0.39550810372374,\out, ~riTriptoEq,\in,~trippyGate,\group,~gateGrp12),
+
 
 			Pbind(\instrument, \playBuf10, \buf ,~leTout2,\out,~toCom, \start,Pfunc({~leTout2.numFrames/256* (220.rand)}),\dur,Pseq([3/1],1)		,\loopy,0,\tS,0.39550810372374),
 
 
-			Pbind(\instrument, \playBuf,\dur  ,Pseq([7/1],1),\buf,~trippy,\tS,  0.39550810372374,\out, ~riTriptoDisto),
+				Pbind(\instrument, \gate,\vlSub,1,\vlSub2,Pkey(\vlSub),\dur  ,Pseq([7/1],1),\tS,  0.39550810372374,\out, ~riTriptoEq,\in,~trippyGate,\group,~gateGrp12),
+
 
 		Pbind(\instrument, \playBuf10, \buf ,~leTout2,\out,~toCom, \start,Pfunc({~leTout2.numFrames/256* (220.rand)}),\dur,Pseq([4/1],1)		,\loopy,0,\tS,0.39550810372374),
 
 		],1),
-
+],1),
 	//32
 
 

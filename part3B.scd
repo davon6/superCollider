@@ -5121,7 +5121,7 @@ Ppar([
 
 Routine({
 
-({LPF.ar( WhiteNoise.ar(1.6),XLine.kr(1000,5500,0.3)*EnvGen.kr(Env.perc(releaseTime:  0.3,curve: -5),doneAction:2))}.play);
+({LPF.ar( Saw.ar(41.2,2),XLine.kr(1000,5500,0.3)*EnvGen.kr(Env.perc(releaseTime:  0.3,curve: -5),doneAction:2))}.play);
 
 
 ~snare.play;
@@ -5142,3 +5142,97 @@ Routine({
 
 
 ({PlayBuf.ar(1,~snare)*0.4}.play)
+
+
+//CLAP
+
+
+Routine({
+
+({BLowPass.ar(WhiteNoise.ar(EnvGen.kr(Env.perc(0.001, 0.1, 1, -8),doneAction: 2)),
+	EnvGen.kr(Env([3520,1318],[0.3872,0],-8),doneAction: 2),0.4)
+	}.play);
+
+	// ({Saw.ar(82,EnvGen.kr(Env.perc(releaseTime: 0.05,curve: -9),doneAction: 2))}.play);
+
+
+		s.record(path:"/Users/davidmignot/Music/SuperCollider Recordings/E/clap.aiff",numChannels:1,duration:t.beatDur*0.5);}).play
+
+
+
+~clap =Buffer.read(s,"/Users/davidmignot/Music/SuperCollider Recordings/E/clap.aiff")
+
+~clap.plot
+~clap.play
+~snare.play
+
+({PlayBuf.ar(1,~clap)*90}.play)
+
+Routine({
+Pbind(\instrument, \playBuf, \buf, ~clap,\vl,180,\tS,t.beatDur,\dur,Pseq([ Pseq([1/128],3)  ,   Pseq([1/2],1)],1),\loopy,0).play;
+
+
+wait(0.158);
+	s.record(path:"/Users/davidmignot/Music/SuperCollider Recordings/E/clap2.aiff",numChannels:1,duration:t.beatDur*0.5);
+
+
+}).play
+
+
+~clap2 =Buffer.read(s,"/Users/davidmignot/Music/SuperCollider Recordings/E/clap2.aiff")
+
+///////
+
+
+
+~clap2.play;
+~snare.play
+~snare3.plot
+~snare2.play
+
+Routine({
+Pbind(\instrument, \playBuf, \buf, ~clap2,\vl,0.1,\tS,t.beatDur,\dur,Pseq([1/1],1),\loopy,0,\type, Pseq([\note,\rest,\note,\rest ],inf),\out,0).play;
+
+
+Pbind(\instrument, \playBuf, \buf, ~snare,\vl,1,\tS,t.beatDur,\dur,Pseq([1/1],1),\loopy,0,\type, Pseq([\note,\rest,\note,\rest ],inf),\out,0).play;
+	wait(0.158);
+		s.record(path:"/Users/davidmignot/Music/SuperCollider Recordings/E/snaCla.aiff",numChannels:1,duration:t.beatDur*1);
+
+}).play
+
+
+
+~snare3 =Buffer.read(s,"/Users/davidmignot/Music/SuperCollider Recordings/E/snaCla.aiff")
+
+
+
+
+({BLowPass.ar(WhiteNoise.ar(EnvGen.kr(Env.perc(0.001, 0.1, 1, -8),doneAction: 2)),
+	EnvGen.kr(Env([3520,1318],[0.3872,0],-8),doneAction: 2),0.4)*EnvGen.kr(Env([1,0,0.8,0,0.8,0,0.4,0],[0.01,0,0.01,0,0.01,0,0.38],-4))
+	}.play);
+
+
+
+({EnvGen.kr(Env([1,0,0.8,0,0.8,0,0.4,0],[0.01,0,0.01,0,0.01,0,0.38],-4))}.plot(duration:0.5))
+
+({BLowPass.ar(WhiteNoise.ar(0.4),
+	EnvGen.kr(Env([3520,1318],[0.3872,0],-8),doneAction: 2),0.5)*EnvGen.kr(Env([1,0,0.8,0,0.8,0,0.4,0],[0.01,0,0.01,0,0.01,0,0.37],-4))
+	}.play);
+
+~snare.play
+
+Routine({
+
+({BLowPass.ar(WhiteNoise.ar(0.4),
+	EnvGen.kr(Env([3520,1318],[0.3872,0],-8),doneAction: 2),0.5)*EnvGen.kr(Env([1,0,0.8,0,0.8,0,0.4,0],[0.01,0,0.01,0,0.01,0,0.37],-4))
+	}.play);
+/*	wait(0.1);*/
+
+		s.record(path:"/Users/davidmignot/Music/SuperCollider Recordings/E/clap.aiff",numChannels:1,duration:t.beatDur*1);}).play
+
+
+
+~clap =Buffer.read(s,"/Users/davidmignot/Music/SuperCollider Recordings/E/clap.aiff")
+
+
+	~clap.play
