@@ -3761,16 +3761,16 @@ Ppar([
 
 Routine({
 
-~playBp2=Synth(\playBufXs,[\buf, ~lpPrec3, \impulse, 0.02011875,\out,~filterRnd]);
+~playBp2=Synth(\playBufXs,[\buf, ~lpPrec3, \impulse, 0.080475,\out,~filterRnd]);
 ~playBp2.set(\start,2100000,\out,~filterRnd);
 //~eq5.free
 ~eq5=Synth(\EQHP96, [\frq, 100, \out, ~reverbBus23],~eqGrp0);
-~eq5.set(\in, ~filterRnd,\out,~reverbBus23,\val, 1800,\quant, 1, \gain,(-15),\val2,5200,\quant2,1, \gain2,(-12), \val3,2800,\quant3,1, \gain3,(-6.2),\val4,6000,\shelf,1.2, \gain4,(-11),\val5,2200,\shelf2,1.3, \gain5,(-12));
+~eq5.set(\in, ~filterRnd,\out,~gateBus23,\val, 1800,\quant, 1, \gain,(-15),\val2,5200,\quant2,1, \gain2,(-12), \val3,2800,\quant3,1, \gain3,(-6.2),\val4,6000,\shelf,1.2, \gain4,(-11),\val5,2200,\shelf2,1.1, \gain5,(-18));
 ~rev5=Synth( \reverb ,~revRnd[1],~revGrp); ~rev5.set(\in,~reverbBus23  , \out,~comFuzz23);
 ~comp5=Synth(\comp, [\ctrl, ~kbus ],~compGrp);
 ~comp5.set(\thr,0.88 ,\sB, 1.016,\sA, 1/2,\atk ,0.0242, \rel ,0.0968, \gain,4,\in, ~comFuzz23, \out,~limitFuzz23);
 ~mix5= Synth(\limitertoMixer,[\c5,1,\in, ~limitFuzz23, \gain,0.3, \out,~stereoBus23],~limitGrp);
-~mix5.set(\gain,33.9,\out,~stereoBus23);
+~mix5.set(\gain,42,\out,~stereoBus23);
 ~stereo5=Synth(\stereoO,[\in, ~stereoBus23,\out,~no3], ~stereoGrp);
 ~stereo5.set(\spread,0,\center,0,\dlt1,0.35,\dlt2,0.34,\decT,0.0121, \mxDel,1,\out,~no3);
 
@@ -3779,11 +3779,38 @@ Routine({
 	wait(0.180);
 
 
-	s.record(path:"/Users/davidmignot/Music/SuperCollider Recordings/E/BPL2.aiff",numChannels:10,duration:t.beatDur*64);
+	s.record(path:"/Users/davidmignot/Music/SuperCollider Recordings/E/BPLX2.aiff",numChannels:10,duration:t.beatDur*64);
 
 }).play(t,quant:1)
 
 ///////
+
+
+
+Routine({
+
+
+~playBp=Synth(\playBufXs,[\buf, ~lpPrec3, \impulse, 0.080475,\out,~eqBus2x]);
+~playBp.set(\start,30000,\out,~eqBus2x);
+~eq4=Synth(\EQHP96, [\frq, 100, \out, ~revBus2],~eqGrp0);
+~eq4.set(\in, ~eqBus2x,/*\out,~gateBusB,*/\val, 1800,\quant, 1, \gain,(-15),\val2,5200,\quant2,1, \gain2,(-12), \val3,2800,\quant3,1, \gain3,(-6.2),\val4,6000,\shelf,1.2, \gain4,(-11),\val5,2200,\shelf2,1.1, \gain5,(-18));
+~rev4=Synth( \reverb ,~revRnd[1],~revGrp); ~rev4.set(\in, ~revBus2 , \out, ~comBus2);
+~comp4=Synth(\comp, [\ctrl, ~kbus ],~compGrp);
+~comp4.set(\thr,0.88 ,\sB, 1.086,\sA, 1/2,\atk ,0.0242, \rel ,0.0968, \gain,4,\in, ~comBus2, \out,~limitBus2);
+~mix4= Synth(\limitertoMixer,[\c4,1,\in, ~limitBus2,\gain,2,\out,~sterBus2],~limitGrp);
+~mix4.set(\gain,42);
+~stereo4= Synth(\stereoO,[  \in, ~sterBus2, \out,~no1/*~no3*/], ~stereoGrp);
+//main2
+~stereo4.set(\spread,0,\center,0,\dlt1,0.35,\dlt2,0.34,\decT,0.0121, \mxDel,1);
+
+	// ~boost.play(t,quant:1);
+
+	wait(0.180);
+
+
+	s.record(path:"/Users/davidmignot/Music/SuperCollider Recordings/E/BPLX.aiff",numChannels:10,duration:t.beatDur*64);
+
+}).play(t,quant:1)
 
 
 Routine({
@@ -4805,13 +4832,13 @@ Routine({
 Pseq([
 
 
-Pbind(\instrument, \playBuf10, \buf ,~leTout2,\out,0, \start,Pfunc({~leTout2.numFrames/256* 115})
+		Pbind(\instrument, \playBuf10, \buf ,~leTout2,\out,0, \start,~leTout2.numFrames/256* (215.rand.postln)
 		,\loopy,0,\tS,0.39550810372374,\dur,Pseq([2/1],1),\rte,Pfunc({~uuu=~uuu+0.2;~uuu;})),
 
 
 
 
-	Pbind(\instrument, \gateS ,\in,~no41   ,\vlDec,1,
+	Pbind(\instrument, \gateS ,\in,~no51   ,\vlDec,1,
 		\dur,Pxrand([Pseq([1/4],4),   Pseq([1/4],12), Pseq([1.5/1],1)  ],3) ,    \group,~gateGrp4, \out,0,\tS, 0.39550810372374,
 		\vlSub,Pfunc({0.9.exprand(0.4,1)}),\vlSub2,Pkey(\vlSub),\atkT,Pfunc({0.10.exprand(0.01)}),
 	\decT,Pfunc({0.6.exprand(0.8,0.3)}),

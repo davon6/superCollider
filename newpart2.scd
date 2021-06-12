@@ -47,25 +47,25 @@ Ppar([
 
 Pbind(\instrument, \lfo13,\val,(~hzQbeat/4),\out,~bus2 ,\dur,999,\ph,0, \rL,200,\rH,4000, \group, ~lfoGrp,\tS, 0.39550810372374),
 
-~kb,/*~hitX,*/ ~fx,
+/*~hitX,*/~fx,~kb,
 
-	//if below repeat maybe change to Pfunc
+/*	//if below repeat maybe change to Pfunc
 
-/*	Pbind(\instrument, \playBuf10, \buf ,~leTout,\out,~toGate10, \start,
+	Pbind(\instrument, \playBuf10, \buf ,~leTout,\out,~toGate10, \start,
 
 	Pseq([
-			Pseq([ (~leTout.numFrames/ 256 * 190.rrand(1) )],3),
-	Pseq([(~leTout.numFrames/ 256 * 190.rrand(1))],3),
-	Pseq([ (~leTout.numFrames/ 256 * 190.rrand(1))],3),
-	Pseq([ (~leTout.numFrames/ 256 * 190.rrand(1))],3),
-		Pseq([ (~leTout.numFrames/ 256 * 190.rrand(1))],3),
-	Pseq([(~leTout.numFrames/ 256 * 190.rrand(1))],3),
-	Pseq([ (~leTout.numFrames/ 256 * 190.rrand(1))],3),
-	Pseq([ (~leTout.numFrames/ 256 * 190.rrand(1))],3),
-		Pseq([ (~leTout.numFrames/ 256 * 190.rrand(1))],3),
-	Pseq([(~leTout.numFrames/ 256 * 190.rrand(1))],3),
-	Pseq([ (~leTout.numFrames/ 256 * 190.rrand(1))],3),
-	Pseq([ (~leTout.numFrames/ 256 * 190.rrand(1))],3),
+				Pseq([ (~leTout.numFrames/ 256 * (190.rrand(1)) )],3),
+				Pseq([(~leTout.numFrames/ 256 * (190.rrand(1)))],3),
+				Pseq([ (~leTout.numFrames/ 256 * (190.rrand(1)))],3),
+				Pseq([ (~leTout.numFrames/ 256 * (190.rrand(1)))],3),
+				Pseq([ (~leTout.numFrames/ 256 * (190.rrand(1)))],3),
+				Pseq([(~leTout.numFrames/ 256 *( 190.rrand(1)))],3),
+				Pseq([ (~leTout.numFrames/ 256 * (190.rrand(1)))],3),
+				Pseq([ (~leTout.numFrames/ 256 * (190.rrand(1)))],3),
+				Pseq([ (~leTout.numFrames/ 256 * (190.rrand(1)))],3),
+					Pseq([(~leTout.numFrames/ 256 * (190.rrand(1)))],3),
+						Pseq([ (~leTout.numFrames/ 256 * (190.rrand(1)))],3),
+							Pseq([ (~leTout.numFrames/ 256 * (190.rrand(1)))],3),
 	],inf)
 	,\loopy,0,\tS,0.39550810372374,\dur,  Pseq([
 
@@ -78,31 +78,17 @@ Pseq([ Pseq([8/1],1)],1)  ,Pseq([ Pseq([4/1],1)],1)   ,Pseq([Pseq([16/1],1) ,Pse
 
 
 
-	Pbind(\instrument,\gateS, \dur, Prand([ Pseq([1.5/1],1), Pseq([3/1],1),Pseq([1/1],1),],inf),
-		\in,  Prand([~toGate10,~toGate102], inf)  ,\out ,~absoFinalGate2
+	Pbind(\instrument,\gateS, \dur, Prand([ Pseq([1.5/1],1), Pseq([3/1],1),Pseq([1/1],1),Pseq([1/2],1)],inf),
+		\in,  Prand([~toGate10,~toGate102], inf)  ,\out ,0
 
-	,  \group, ~gateGrp6,\tS, 0.39550810372374),
-
-Pseq([
-//WATCH OUT
-			Pbind(\instrument,\gate2, \in ,~toKbGate, \group,~kbGate, \tS,  0.39550810370174,\dur, Pseq([16/1],1),\type,\rest),
-	Pseq([
+	,  \group, ~gateGrp6,\tS, 0.39550810372374),*/
 
 
-
-	/*	Pbind(\instrument,\gateS, \dur,Pseq([64/1],1),\in,~absoFinalGate2 ,\out , ~toExtraFx,\group, ~recGrp2,\tS, 0.39550810372374)*/
+		/*Pbind(\instrument,\gateS, \dur,Pseq([256/1],inf),\in,~absoFinalGate2 ,\out , ~toExtraFx,\group, ~recGrp2,\tS, 0.39550810372374)*/
 
 //have one ris
 
 
-				Pbind(\instrument, \playBuf10, \dur,Pseq([64/1],1),\buf ,~leTout,\out,~toExtraFx, \tS, 0.39550810372374,\group, ~recGrp2, \start,Pfunc({~leTout.numFrames/4  *4.rand})),
-
-		~part3a,~part3e,
-		Pbind(\instrument,\gateS, \dur,Pseq([64/1],1),\in,~absoFinalGate2 ,\out , ~toExtraFx,\group, ~recGrp2,\tS, 0.39550810372374),
-		Pbind(\instrument,\gateS, \dur,Pseq([64/1],1),\in,~absoFinalGate,\out , ~toExtraFx,\group, ~recGrp2,\tS, 0.39550810372374)
-
-	].scramble,inf),
-	],1),*/
 
 
 
