@@ -149,7 +149,8 @@ Pseq([
 			\in,  ~toExtraFx  ,\out ,Pwrand([~tofinalRythm,~reverbSquelch],[8,1].normalizeSum,inf), \group, ~gateGrp7,\tS, 0.39550810372374),
 
 		Pseq([
-				Pbind(\instrument,\gateS, \dur,Pseq([1/8],16),\type,Pseq([\note, \rest,\note, \rest,\note, \rest,\note,\rest],inf),\in,~toExtraFx  ,\out ,~delayBus2 ,\group, ~gateGrp7,\tS, 0.39550810372374),
+				/*Pbind(\instrument,\gateS, \dur,Pseq([1/8],16),\type,Pseq([\note, \rest,\note, \rest,\note, \rest,\note,\rest],inf),\in,~toExtraFx  ,\out ,~delayBus2 ,\group, ~gateGrp7,\tS, 0.39550810372374),*/
+				Pbind(\instrument,\gateS, \dur,Pseq([2/1],1),\in,~toExtraFx  ,\out ,~delayBus2 ,\group, ~gateGrp7,\tS, 0.39550810372374),
 
 			Pbind(\instrument,\gateS, \dur, Pseq([1/2],1),\tS, 0.39550810372374,\type,\rest)
 
@@ -217,7 +218,7 @@ Pseq([
 	s.record;
 
 
-}).play;)
+}).play(t,quant:1))
 
 
 

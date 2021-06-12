@@ -5268,4 +5268,177 @@ SynthDef(\kick, {
 		Out.ar(out, sig);
 	}).play;
 
+//agai
 
+Pbind(\instrument, \playBuf,  \tS,  0.39550810372374,\buf,~snare,\type, Pseq([\rest,\rest,\note,\rest ],inf),\dur, Pseq([1/2], inf) ,\out,0,\dA,Pseq([ /* Pseq([1],32), */Pseq([1],32)],inf)).play(t,quant:2)
+
+
+~clap2.play
+
+Pbind(\instrument, \playBuf, \buf, ~clap2,\vl,1,\tS,t.beatDur,\dur,Pseq([1/2],4),\loopy,0,\type, Pseq([\rest,\rest,\note,\rest ],inf),\out,0).play(t,quant:2)
+
+
+~leTout2.play
+
+~clap2.play;
+~snare.play
+~snare3.play
+~snare2.play
+
+Routine({
+Pbind(\instrument, \playBuf, \buf, ~clap2,\vl,0.1,\tS,t.beatDur,\dur,Pseq([1/1],1),\loopy,0,\type, Pseq([\note,\rest,\note,\rest ],inf),\out,0).play;
+
+
+Pbind(\instrument, \playBuf, \buf, ~snare,\vl,1,\tS,t.beatDur,\dur,Pseq([1/1],1),\loopy,0,\type, Pseq([\note,\rest,\note,\rest ],inf),\out,0).play;
+	wait(0.154);
+		s.record(path:"/Users/davidmignot/Music/SuperCollider Recordings/E/snaCla.aiff",numChannels:1,duration:t.beatDur*1);}).play
+
+~clap2.play
+~snare3.play
+~snare3 =Buffer.read(s,"/Users/davidmignot/Music/SuperCollider Recordings/E/snaCla.aiff")
+
+
+
+~snare4 =Buffer.read(s,"/Users/davidmignot/Music/SuperCollider Recordings/E/snare4.aiff")
+~snare4.play
+Routine({
+
+({HPF.ar(HPF.ar(HPF.ar(HPF.ar(HPF.ar(HPF.ar(HPF.ar(HPF.ar(PlayBuf.ar(1,~snare3,),200),200),200),200),200),200),200),200)}.play);
+
+	wait(0.12);
+		s.record(path:"/Users/davidmignot/Music/SuperCollider Recordings/E/snare4.aiff",numChannels:1,duration:t.beatDur*1);}).play
+
+
+
+({(PlayBuf.ar(1,~snare4))}.play)
+
+Pbind(\instrument, \playBuf,  \tS,  0.39550810372374,\buf,~snare3,\type, Pseq([\rest,\rest,\note,\rest ],inf),\dur, Pseq([1/2], inf) ,\out,0,\dA,Pseq([  Pseq([1],32), Pseq([0.5],32)],inf)).play(t,quant:2)
+
+
+
+
+SynthDef(\EQ6, {|out=0, in, val, quant, gain,frq=0, vol =0.05, val2,quant2, gain2,val3,shelf, gain3,val4,quant3, gain4,val5,quant5, gain5, val6,shelf2, gain6| Out.ar(out,
+
+		HPF.ar(HPF.ar(HPF.ar(HPF.ar(HPF.ar(HPF.ar(HPF.ar(HPF.ar(BLowShelf.ar(	BHiShelf.ar( 	BPeakEQ.ar(
+		BPeakEQ.ar(	BPeakEQ.ar(PlayBuf.ar(1,~snare3,),val,quant, gain),val2,quant2, gain2),val3,quant3, gain3),val4,shelf, gain4),val5,shelf2, gain5),
+
+		frq),frq),frq),frq),frq),frq),frq),frq)* 1)};).play;
+
+///old passant
+
+Pseq([
+//maybe no rrepeat wiht this one
+		Pseq([
+		Pbind( \instrument,\playBuf /*\playBuf1N*/, \impulse, 0.3,\dur,Pseq([4/1],1), \tS,  0.39550810372374,\start, 514019,\buf,~bufSnoopy,\out, ~filterBou,\loopy,0),
+
+		Pbind(\instrument,\gateS, \dur,  Pseq([12/1],1),\in,~finGran, \out,0/*~toGate10*/,\group, ~gateGrp5,\tS, 0.39550810372374,),
+		],1),
+
+			Pseq([
+
+		Pbind( \instrument,\playBuf /*\playBuf1N*/, \impulse, 0.3,\dur,Pseq([2/1],2), \tS,  0.39550810372374,\start, 4060549,\buf,~bufSnoopy,\out, ~filterPass1,\loopy,0),
+
+		Pbind(\instrument,\gateS, \dur,  Pseq([4/1],1),\in,~finGran, \out,0/*~toGate10*/,\group, ~gateGrp5,\tS, 0.39550810372374,),
+		].scramble,2),
+
+
+			Pseq([
+		Pbind( \instrument,\playBuf /*\playBuf1N*/, \impulse, 0.3,\dur,Pseq([1/1],2), \tS,  0.39550810372374,\start,2286611,\buf,~bufSnoopy,\out, ~filterPass2,\loopy,0),
+
+		Pbind(\instrument,\gateS, \dur,  Pseq([6/1],1),\in,~finGran, \out,0/*~toGate10*/,\group, ~gateGrp5,\tS, 0.39550810372374,),
+		].scramble,2),
+
+
+
+
+
+
+
+			Pseq([
+		Pbind( \instrument,\playBuf /*\playBuf1N*/, \impulse, 0.3,\dur,Pseq([1/2],2), \tS,  0.39550810372374,\start,4302193,\buf,~bufSnoopy,\out, ~filterPass3,\loopy,0),
+
+		Pbind(\instrument,\gateS, \dur,  Pseq([7/1],1),\in,~finGran, \out,0/*~toGate10*/,\group, ~gateGrp5,\tS, 0.39550810372374,),
+		].scramble,2),
+
+].scramble,1)
+
+
+
+/////
+
+
+
+
+( // this first
+var lfo = { |freq, phase, gate|
+  var phasor = (Phasor.kr(gate, freq * 2pi / ControlRate.ir, 0, 2pi) + (phase * 2pi)).wrap(0, 2pi);
+  SinOsc.kr(0, phasor);
+};
+
+var vco = { |freq, amp|
+  var slop = 0.01;
+  var rate = freq + LFNoise1.ar(LFNoise1.kr(1).range(0.2, 0.3), mul: slop * (freq / 1000));
+  var phase = Phasor.ar(DC.ar(0), rate / SampleRate.ir, 0, 1) * 2pi;
+  var k = 12000 * (SampleRate.ir/44100) / (freq * log10(freq));
+  var sinSig = SinOsc.ar(0, phase);
+  var cosSig = SinOsc.ar(0, phase + (pi/2));
+  var sqSig = tanh(sinSig * k);
+  var sawSig = sqSig * (cosSig + 1) * 0.5;
+  [sqSig, sawSig] * amp;
+};
+
+SynthDef(\roygbiv, { |out = 0, midinote = 40, gate = 0|
+  var note = midinote.lag2(0.03);
+  var freq1 = (note + (lfo.(1.75, 0.75, gate) * 0.2)).midicps;
+  var freq2 = (note - 12 + (lfo.(0.98, 0, gate) * 0.25)).midicps;
+	var sig = vco.(freq1, 0.4)[1] + vco.(freq2, 0.1)[0] * SinOsc.kr(0.33).range(100,0)+ WhiteNoise.ar(0.04);
+  var env = Env.adsr(0.001, 3.3, 0.3, 0.17).ar(0, gate);
+	var cutoff = 80 * (env * EnvGen.kr(Env([41.2,0],[3,0]))).midiratio;
+  sig = DFM1.ar(sig, cutoff, 0.05, 2.1);
+  sig = sig * Env.adsr(0.001, 0, 1, 0.18,0.1).ar(0, gate);
+  Out.ar(out, sig!2 * 0.22);
+}).add;
+)
+
+
+( // then this
+
+x.free; y.free; r.stop;
+
+	 s.record(path:"/Users/davidmignot/Music/SuperCollider Recordings/E/bassBrk.aiff",numChannels:2,duration:t.beatDur*4);
+x = Synth(\roygbiv);
+
+y = {
+  var dry = BHiPass.ar(In.ar(0, 2), 80);
+  var wet = NHHall.ar(LPF.ar(dry, 3000), 1.3, hiFreq: 2600, hiRatio: 0.9);
+  ReplaceOut.ar(0, dry + (wet * 0.85));
+}.play(addAction: 'addToTail');
+
+r = fork {
+  loop {
+    x.set(\midinote, 28, \gate, 1);
+    exprand(0.2, 2).wait;
+    x.set(\gate, 0);
+    exprand(0.01, 0.03).wait;
+  }
+}
+)
+
+~bssBrk.play
+
+~bssBrk =  Buffer.read(s,"/Users/davidmignot/Music/SuperCollider Recordings/E/bassBrk.aiff")
+
+
+
+~bssBrk.play
+({PlayBuf.ar(2,~bssBrk)*0.1}.play)
+Routine({
+({LPFVS6.ar( PlayBuf.ar(2,~bssBrk),100)*4}.play);
+
+	wait(0.16);
+	 s.record(path:"/Users/davidmignot/Music/SuperCollider Recordings/E/bassBrkF.aiff",numChannels:2,duration:t.beatDur*4);
+
+}).play
+	~bssBrkF.play
+~bssBrkF =  Buffer.read(s,"/Users/davidmignot/Music/SuperCollider Recordings/E/bassBrkF.aiff")
+~bssBrk =  Buffer.read(s,"/Users/davidmignot/Music/SuperCollider Recordings/E/bassBrk.aiff")

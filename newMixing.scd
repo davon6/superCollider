@@ -167,7 +167,7 @@
 ~comp11.set(\thr,0.8 ,\sB, 1.05,\sA, 1/2,\atk ,0.0484, \rel ,0.0968,\gain,30,\in, ~percuCom, \out,~percuLimit);
 ~mix11= Synth(\limitertoMixer,[ \c11,1,\in,~percuLimit, \gain,1,\out,~percuStereo],~limitGrp);
 // ~mixa.set(\in,~percuCom2);
-~mix11.set(\gain,21 );
+~mix11.set(\gain,09 );
 ~stereo11=Synth(\stereoO,[\in, ~percuStereo ,\out,~percuCom2], ~stereoGrp);
 ~stereo11.set(\spread,0,\center,0,\dlt1,0,\dlt2,0,\decT,0.0242, \mxDel,1);
 

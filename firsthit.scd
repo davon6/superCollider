@@ -523,10 +523,10 @@ Pseq([
 				Pbind(\instrument, \wNoise,\dur, Pseq([11/1],1),\dec ,Pkey(\dur),\amp,(-5),\out,0,\wFil,0,\valStart,900,\valEnd,1000,\durF,11*t.beatDur,\tS, 0.39550810372374,\out,~hitEq,\type,\rest),
 				Pbind(\instrument,\gate2,\tS, 0.3955081037237,  \dur, Pseq([1/1],1),\in,~shiftGate,\out,  ~shiftEq2,\group,~gateGrp12,\type,\rest),
 
-				Pbind(\instrument, \wNoise,\dur, Pseq([79/1],1),\dec ,Pkey(\dur),\amp,(-5),\out,0,\wFil,0,\valStart,900,\valEnd,1000,\durF,79*t.beatDur,\tS, 0.39550810372374,\out,~hitEq,\type,\rest),
+				Pbind(\instrument, \wNoise,\dur, Pseq([81/1],1),\dec ,Pkey(\dur),\amp,(-5),\out,0,\wFil,0,\valStart,900,\valEnd,1000,\durF,79*t.beatDur,\tS, 0.39550810372374,\out,~hitEq,\type,\rest),
 
 
-				Pbind(\instrument, \playBufS, \dur,Pseq([  Pseq([1/1],8) , Pseq([1/4],24) ,Pseq([1/8],16)],1)  , \tS,  0.39550810370174,\buf,~kb1,\out, ~filKB,\loopy,0, \start,0),
+				Pbind(\instrument, \playBufS, \dur,Pseq([  Pseq([1/1],6) , Pseq([1/4],24) ,Pseq([1/8],16)],1)  , \tS,  0.39550810370174,\buf,~kb1,\out, ~filKB,\loopy,0, \start,0),
 
 /*8 6, 2 =16
 
