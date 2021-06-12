@@ -75,7 +75,7 @@ Pbind( \instrument,\playBuf /*\playBuf1N*/, \impulse, 0.3,\dur,Pseq([3/1],1), \t
 
 (
 
-Ppar([~base,  ~no4,~sequ,~mainLead,/*~boost*/
+Ppar([~base, ~no4,~sequ,~mainLead,/*~boost*/
 
 
 	// Pbind(\instrument, \playBufS, \dur,  Pseq([1/1],inf), \tS,  0.39550810372374,\buf,~kb2)

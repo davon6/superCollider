@@ -1121,14 +1121,14 @@ SynthDef(\kick, {
 		env =
 
 	EnvGen.ar(
-	Env([ 0.076 , 0.51 ,   0.2  ,  0.8 ,0,0],
-		[ 0.0048,  0.0048,   0.08  , 0.1 , 0.1  ],[-1,6,-3,2,-1]),doneAction:2);
+	Env([ 0.076 , 0.41 ,   0.14  ,  0.8 ,0,0],
+		[ 0.0048,  0.0048,   0.08  , 0.1 , 0.1  ],[-2,1.6,-3,2,-1]),doneAction:2);
 
 
 		sig = SinOsc.ar(envF, mul: env);
 
 		sig = sig * amp.dbamp  ;
-		/*sig = Pan2.ar(sig);*/
+	/*sig = Pan2.ar(sig);*/
 		Out.ar(out, sig);
 	}).add;
 
@@ -2690,7 +2690,7 @@ Pbind(\instrument, \percussion,\dur,Pseq([1/4],1 ),\carHz,Pfunc({ 525.1207061222
 
 
 
-		wait(0.15);
+		wait(0.1482);
 
 	s.record(path:"/Users/davidmignot/Music/SuperCollider Recordings/E/kick.aiff",numChannels:1,duration:t.beatDur);
 }).play;)
@@ -2699,7 +2699,7 @@ Pbind(\instrument, \percussion,\dur,Pseq([1/4],1 ),\carHz,Pfunc({ 525.1207061222
 ~k2=Buffer.read(s,"/Users/davidmignot/Music/SuperCollider Recordings/E/kick.aiff")
 
 
-~k2.plot
+~k2.play
 
 (//BASS ALONE
 
@@ -2780,7 +2780,7 @@ Ppar([
 ~limK=Synth(\limitertoMixer,[\c45,1,\in, ~limitKick, \gain,1,\out,~kToPan],~limitGrp);
 ~limK.set(\gain,242);
 ~limB=Synth(\limitertoMixer,[\c46,1,\in, ~limitBass, \gain,68,\out,~kToPan],~limitGrp);
-~limB.set(\gain,194);
+~limB.set(\gain,210);
 
 ~kbPan2 = Synth(\pan2,[ \in,~kToPan,\out,0],~stereoGrp);
 
@@ -2790,8 +2790,8 @@ Ppar([
 }).play(t,quant:1))
 
 
-
-~limB.free
+~limK.free;
+~limB.free;
 ~kb1.plot
 ~kick.play
 /*~kb1=Buffer.read(s,"/Users/davidmignot/Music/SuperCollider Recordings/E/bacup/kB.aiff")*/
