@@ -5469,3 +5469,106 @@ Routine({
 	~bssBrkF.play
 ~bssBrkF =  Buffer.read(s,"/Users/davidmignot/Music/SuperCollider Recordings/E/bassBrkF.aiff")
 ~bssBrk =  Buffer.read(s,"/Users/davidmignot/Music/SuperCollider Recordings/E/bassBrk.aiff")
+
+/////////
+
+
+
+
+SynthDef(\tantra,{|out=0,wT=0,in,dur|Out.ar(out,SelectX.ar(wT,[
+
+	PingPong.ar(~delay3.bufnum,Mix.ar( In.ar(in,10) )!2,0.3)*0.23,
+	FreqShift.ar(In.ar(in,10),  LFNoise0.kr(5.15).range(-2041.2,3020.6)),
+	FreeVerb.ar( In.ar(in,10), 0.9,0.9,0.7),
+
+])* EnvGen.kr(Env.step([1,0],[dur,0]),timeScale: t.beatDur,doneAction: 2))}).add;
+
+
+
+
+Ppar([
+	// Pbind(\instrument, \playBuf10, \buf ,~leTout,\out,0,\loopy,0,\tS,t.beatDur,\dur,Pseq([256/1],inf)),
+Pbind(\instrument, \playBuf10, \buf ,~leTout,\out,0/*~tantraG*/,\loopy,0,\tS,t.beatDur,\dur,Pseq([256/1],inf)),
+
+	// Pbind(\instrument, \aGate, \in, 0/*~tantraG*/,  \out,~toFx, \out2,0, \dur,Pseq([4/1],inf)
+
+	Pbind(\instrument, \tantra, \in,0/*~toFx*/, \wT,Pfunc({3.rand}), \dur,Pseq([4/1],inf),\group, ~granuGrp,\out,~toDelay10b,\type,Pwrand(
+		[\note,\rest],[1,7].normalizeSum,inf))],1).play(t)
+
+
+
+// Pbind(\instrument, \playBuf10, \buf ,~leTout,\out,0,\loopy,0,\tS,t.beatDur,\dur,Pseq([256/1],inf)).play(t)
+
+
+gate
+
+
+		~granuGrp= Group.new;
+~delayGrp= Group.after(~granuGrp)
+
+~del10X=Synth(\del10,[\in,~toDelay10b,\decT,1.5544/*0.7772*/,\out,~tofinalRythm],~delayGrp);
+
+
+\out->tantra       y/n
+\out2->normal     y/n
+
+//damn
+({PingPong.ar(~delay3.bufnum,Mix.ar(PlayBuf.ar(10,~leTout,startPos:0,loop: 1))!2,0.3)}.play)
+
+
+
+({FreqShift.ar( /*PingPong.ar(~delay3.bufnum,*/PlayBuf.ar(10,~leTout,startPos:0,loop: 1)/*!2,0.3)*/,  LFNoise0.kr(5.15).range(-2041.2,3020.6))       }.play)
+
+
+
+
+({FreeVerb.ar( /*PingPong.ar(~delay3.bufnum,*/PlayBuf.ar(10,~leTout,trigger: Impulse.kr(20.6),startPos:LFNoise0.kr(5.15).range(10000,~leTout.numFrames),loop: 1)/*!2,0.3)*/, 0.9,0.9,0.7)       }.play)
+
+
+GrainBuf.ar(
+
+	ONE WITH GRANU TO SAW and LP going up
+
+
+
+({PlayBuf.ar(1,~leTout,startPos:0,loop: 1)}.play)
+
+
+({Saw.ar(432,EnvGen.kr(Env.perc(releaseTime: 0.3),Impulse.ar(LFNoise0.kr(5.15).range(41.2,20.6)).range(1,0),doneAction: 0))}.play)
+
+
+
+
+Ppar([
+
+	Pbind(\instrument,\ptr, \buf, ~e, \out, ~ptrBus,\group,~ptrGrp,\dur,inf),
+	Pbind(\instrument,\rec, \ptrIn, ~ptrBus, \micIn, ~micBus, \buf, ~e,\group,~recGrp,\dur,inf),
+
+
+	Pbind(\instrument,\gran,\dur,Pseq([1/16],inf),\amp, 1,\buf, ~e,\out,~bpK,\ptrBus, ~ptrBus,\group,~granGrp,\duration,0.0968/4,\impulse,80.1,\amp,0.8,\tS, 0.39550810372374, \vlSub,1,\vlSub2,Pkey(\vlSub)),
+
+
+	Pbind(\instrument, \filter, \freqFil,100,\dur,inf, \in,~bpK,\which,1,\busMod, ~bus9, \out, ~limitRnd, \group,~filterGrp,\qf2,0.4),
+
+	],1).play(t)
+
+
+
+	Routine({
+
+
+
+	Pbind(\instrument, \wNoise,\dur, Pseq([4/1],1),\dec ,Pkey(\dur),\amp,(-5),\wFil,0,\valStart,900,\valEnd,1000,\durF,Pkey(\dur),\out,~hitEq, \tS,  0.39550810372374,\group,~lfoGrp).play(t);
+
+		wait(0.16);
+
+		 s.record(path:"/Users/davidmignot/Music/SuperCollider Recordings/E/noiseHIt.aiff",numChannels:10,duration:t.beatDur*4);
+
+	}).play(t,quant:1)
+
+	~noise.play
+
+	~noise =  Buffer.read(s,"/Users/davidmignot/Music/SuperCollider Recordings/E/noiseHIt.aiff")
+
+
+	Pbind(\instrument, \playBuf10, \buf ,~leTout,\start,~leTout.numFrames.rand,\out,0/*~tantraG*/,\loopy,0,\tS,t.beatDur,\dur,Pseq([2/1],4)).play(t)

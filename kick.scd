@@ -1,63 +1,187 @@
-(
-SynthDef(\kick,{
-	arg amp = 0.002;
-
-var sig;
-
-	sig = SinOsc.ar(
-
-/*
-
-	EnvGen.ar(Env([0,6645,1319,165,26],
-	            [0,0.01,0.005,0.01,0.04],
-	            [0,-4  ,-3  ,-2,0]*/
 
 
+SynthDef(\kick, {
+		arg amp=0.2,out=0;
+		var sig, env, envF;
 
-		EnvGen.ar(Env([0,6645  ,1319  ,165  ,26],
-	                  [0,0.000005,0.05,0.1,0.04],
-	                  [0,-4 ,-5    ,-2.6   ,0]
-)//.plot
+		envF = EnvGen.ar(
+			Env(
+				[5178.15,440,114,26,0,0],
+				[0.016,0.024,0.167,0,0.4],
+					[-6.8,-3,-2]
+			)
+		);
 
-		,doneAction:2),
+		env =
 
-		mul:EnvGen.ar(Env([0,1     ,0.16 ,0.95,0.93],
-	                      [0,0.0135,0.005,0.02,0.0065,0],
-	                      [0,-4    ,-3  ,1    ,4]
+	EnvGen.ar(
+	Env([ 0.076 , 0.51 ,   0.04  ,  0.8 ,0,0],
+		[ 0.0096,  0.0096,   0.02  , 0.1 , 0.1  ],[1,-17.6,-3,2,-1]),doneAction:2);
 
 
-)
-	)	)*amp
+		sig = SinOsc.ar(envF, mul: env);
+
+		sig = sig * amp.dbamp  ;
+	sig = Pan2.ar(sig);
+		Out.ar(out, sig);
+	}).play;
 
 
 
 
 
 
-		!2;
-Out.ar(0, sig);
-}).add;)
-
-Synth(\kick,[\amp,1]);
-
-( Pdef(\k,Pbind(\instrument, \kick,\dur, Pseq([1/1], 1024),\amp,1)).play(t))
-//amp
-({	EnvGen.ar(Env([0,1   ,0.16 ,0.95,0.93,0],
-	              [0,0.014,0.005,0.02,0.0065,0],
-	              [0,-4  ,-3  ,1,4]
-))
-}.plot(duration:0.06))
 
 
 
 
 
-//key
-
-({	EnvGen.ar(Env([0,6645 ,1319 ,165 ,26],
-	              [0,0.0005,0.005,0.001,0.04],
-	              [0,-3.4   ,-3   ,-2  ,0]
-)
 
 
-)}.plot(duration:0.02))
+
+SynthDef(\kick, {
+		arg amp=0.2,out=0;
+		var sig, env, envF;
+
+		envF = EnvGen.ar(
+			Env(
+				[5178.15,440,114,26,0,0],
+				[0.016,0.024,0.167,0,0.4],
+					[-6.8,-3,-2]
+			)
+		);
+
+		env =
+
+	EnvGen.ar(
+	Env([ 0.076 , 0.51 ,   0.04  ,  1 ,0,0],
+		[ 0.0048,  0.0048,   0.08  , 0.1 , 0.1  ],[1,-17.6,-3,2,-1]),doneAction:2);
+
+
+		sig = SinOsc.ar(envF, mul: env);
+
+		sig = sig * amp.dbamp  ;
+	sig = Pan2.ar(sig);
+		Out.ar(out, sig);
+	}).play;
+
+
+
+
+SynthDef(\kick, {
+		arg amp=0.2,out=0;
+		var sig, env, envF;
+
+		envF = EnvGen.ar(
+			Env(
+				[5178.15,440,114,26,0,0],
+				[0.016,0.01,0.167,0,0.4],
+					[-6.8,-3,-2]
+			)
+		);
+
+		env =
+
+	EnvGen.ar(
+	Env([ 0.076 , 0.41 ,   0.14  ,  0.8 ,0,0],
+		[ 0.0048,  0.0048,   0.08  , 0.1 , 0.1  ],[-2,1.6,-3,2,-1]),doneAction:2);
+
+
+		sig = SinOsc.ar(envF, mul: env);
+
+		sig = sig * amp.dbamp  ;
+sig = Pan2.ar(sig);
+		Out.ar(out, sig);
+	}).play;
+
+
+
+
+
+SynthDef(\kick, {
+		arg amp=0.2,out=0;
+		var sig, env, envF;
+
+		envF = EnvGen.ar(
+			Env(
+				[5178.15,440,114,26,0,0],
+				[0.016,0.01,0.167,0,0.4],
+					[-6.8,-3,-2]
+			)
+		);
+
+		env =
+
+	EnvGen.ar(
+	Env([ 0.076 , 0.31 ,   0.04  ,  0.8 ,0,0],
+		[ 0.0048,  0.0048,   0.08  , 0.1 , 0.1  ],[2,-17.6,-3,2,-1]),doneAction:2);
+
+
+		sig = SinOsc.ar(envF, mul: env);
+
+		sig = sig * amp.dbamp  ;
+	sig = Pan2.ar(sig);
+		Out.ar(out, sig);
+	}).play;
+
+
+
+
+
+
+
+
+SynthDef(\kick, {
+		arg amp=0.2,out=0;
+		var sig, env, envF;
+
+		envF = EnvGen.ar(
+			Env(
+				[5178.15,440,114,26,0,0],
+				[0.016,0.01,0.167,0,0.4],
+					[-6.8,-3,-2]
+			)
+		);
+
+		env =
+
+	EnvGen.ar(
+	Env([ 0.076 , 0.31 ,   0.04  ,  0.8 ,0,0],
+		[ 0.0048,  0.0048,   0.08  , 0.1 , 0.1  ],[2,-17.6,-3,2,-1]),doneAction:2);
+
+
+		sig = SinOsc.ar(envF, mul: env);
+
+		sig = sig * amp.dbamp  ;
+	sig = Pan2.ar(sig);
+		Out.ar(out, sig);
+	}).add;
+
+
+
+
+SynthDef(\kick, {
+		arg amp=0.2,out=0;
+		var sig, env, envF;
+
+		envF = EnvGen.ar(
+			Env(
+				[5178.15,440,114,26,0,0],
+				[0.016,0.01,0.167,0,0.4],
+					[-6.8,-3,-2]
+			)
+		);
+
+		env =
+
+	EnvGen.ar(
+	Env([ 0.076 , 0.41 ,   0.14  ,  0.8 ,0,0],
+		[ 0.0048,  0.0048,   0.08  , 0.1 , 0.1  ],[-2,1.6,-3,2,-1]),doneAction:2);
+
+
+		sig = SinOsc.ar(envF, mul: env);
+
+		sig = sig * amp.dbamp  ;
+	sig = Pan2.ar(sig);
+		Out.ar(out, sig);
+	}).add;

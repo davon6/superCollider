@@ -227,6 +227,7 @@ s.sync;
 	~toCom2= Bus.audio(s,10);
 	~toCom3= Bus.audio(s,10);
 
+	~ktoPan2= Bus.audio(s,1);
 
 	~revBus1= Bus.audio(s,1);
 	~revBus2= Bus.audio(s,1);
@@ -239,6 +240,8 @@ s.sync;
 
 	~bigRiToFil1= Bus.audio(s,1);
 	~bigRiToFil2= Bus.audio(s,1);
+
+	~toFx= Bus.audio(s,10);
 
 	~limitBus2= Bus.audio(s,1);
 	~sterBus1= Bus.audio(s,1);
@@ -1113,7 +1116,7 @@ SynthDef(\kick, {
 		envF = EnvGen.ar(
 			Env(
 				[5178.15,440,114,26,0,0],
-				[0.016,0.01,0.167,0,0.4],
+				[0.016,0.024,0.167,0,0.4],
 					[-6.8,-3,-2]
 			)
 		);
@@ -1121,8 +1124,8 @@ SynthDef(\kick, {
 		env =
 
 	EnvGen.ar(
-	Env([ 0.076 , 0.41 ,   0.14  ,  0.8 ,0,0],
-		[ 0.0048,  0.0048,   0.08  , 0.1 , 0.1  ],[-2,1.6,-3,2,-1]),doneAction:2);
+	Env([ 0.076 , 0.18,   0.04  ,  1 ,0,0],
+		[ 0.0048,  0.0048,   0.08  , 0.1 , 0.1  ],[-4,-17.6,-3,2,-1]),doneAction:2);
 
 
 		sig = SinOsc.ar(envF, mul: env);
@@ -1131,7 +1134,6 @@ SynthDef(\kick, {
 	/*sig = Pan2.ar(sig);*/
 		Out.ar(out, sig);
 	}).add;
-
 
 
 		SynthDef(\bass,{
@@ -2581,6 +2583,15 @@ SynthDef(\sequ,{|value, dur, in=0, out=0, vlAtk=0, vlDec=1,vlSub=1,vlSub2=1, vlR
 
 	SynthDef(\lim10,{|out=0,ml=0.2,in|Out.ar(out,Balance.ar(In.ar(in,10),SinOsc.ar(mul: ml)))}).add;
 
+	SynthDef(\tantra,{|out=0,wT=0,in,dur|Out.ar(out,SelectX.ar(wT,[
+
+	PingPong.ar(~delay3.bufnum,Mix.ar( In.ar(in,10) )!2,0.3)*0.21,
+	FreqShift.ar(In.ar(in,10),  LFNoise0.kr(5.15).range(-2041.2,3020.6)),
+	FreeVerb.ar( In.ar(in,10), 0.9,0.9,0.7),
+
+])* EnvGen.kr(Env.step([1,0],[dur,0]),timeScale: t.beatDur,doneAction: 2))}).add;
+
+
 s.sync;
 
 	~kick =	Pbind(\instrument, \kick,\dur, Pseq([1/1],1),\amp,(-10),\out,0);
@@ -2768,7 +2779,7 @@ Ppar([
 			// Pbind(\instrument, \playBuf, \dur,  Pseq([1/1],inf), \tS,  0.39550810372374,\buf,~k2,\out,~limitKick,\start,00),
 			Pseq([Pbindf(~kick,\out,~limitKick)],inf),
 	Pbind( \instrument, \playBufXG, \impulse, 0.003 ,\dur,    Pseq([1/4],inf), \tS,  0.39550810372374,
-	\start,0,\type,Pseq([\rest,\note,\note,\note],inf),\buf,~b4,\out,~comFuzz ,\loopy,0, \decT,0.7,\vlDec,1,\vlSub,Pkey(\vlDec),\vlSub2,Pkey(\vlDec),\subsT ,Pseq([0,0.1,0.2,0.3],inf),\start,2800)
+	\start,0,\type,Pseq([\rest,\note,\note,\note],inf),\buf,~b4,\out,~comFuzz ,\loopy,0, \decT,0.9/*0.7*/,\vlDec,1,\vlSub,Pkey(\vlDec),\vlSub2,Pkey(\vlDec),/*\subsT ,Pseq([0,0.1,0.2,0.3],inf),*/\start,2800)
 
 ],1)
 
@@ -2778,9 +2789,9 @@ Ppar([
 ~comp.set(\thr,0.5 ,\sB, 1.034,\sA, 1/2,\atk ,0.0242, \rel ,0.0968, \gain,1,\in, ~comFuzz,\out,~limitBass);
 
 ~limK=Synth(\limitertoMixer,[\c45,1,\in, ~limitKick, \gain,1,\out,~kToPan],~limitGrp);
-~limK.set(\gain,242);
+~limK.set(\gain,232);
 ~limB=Synth(\limitertoMixer,[\c46,1,\in, ~limitBass, \gain,68,\out,~kToPan],~limitGrp);
-~limB.set(\gain,210);
+~limB.set(\gain,160);
 
 ~kbPan2 = Synth(\pan2,[ \in,~kToPan,\out,0],~stereoGrp);
 
