@@ -572,7 +572,7 @@ Pseq([\rest ,\rest,\note,\rest  ,\rest,\rest,\note,\rest,  \rest,\rest,\note,\re
 				Pseq([\rest,\rest,\note,\rest,\rest,\rest,\note,\rest,\rest,\rest,\note,\rest,\rest,\rest,\note,\rest
 
 
-	],6),    Pseq([\rest,\rest,\rest,\rest,\rest,\rest,\rest,\rest ,\rest,\rest,\rest,\rest ,\rest,\rest,\rest,\rest  ],2),  ].scramble,inf) ],1)
+	],6),    Pseq([\rest,\rest,\rest,\rest,\rest,\rest,\rest,\rest ,\rest,\rest,\rest,\rest ,\rest,\rest,\rest,\rest  ],2),  ],inf) ],1)
 
 
 	,\dur, Pseq([1/2], 512) ,\out,~snareEQ,
@@ -658,7 +658,9 @@ Pbind(\instrument,\blank, \in,~kSRise,\out,~toKbGate,\dur,Pseq([16/1], 1),\group
 
 	Pbind(\instrument, \filter10,\freqFil,300 ,\busMod,~bus21 ,\in,~rythmFil,\which,0,\qf,0.75, \dur, inf, \out,~rythmFilEQ, \group,~filterGrp),
 
-	Pbind(\instrument, \EQHP10, \in,~rythmFilEQ,\dur, inf, \out,~rythmLimit, \group,~eqGrp,\vol,4,\val,1320,\quant,2, \gain,(-16)),
+
+
+	Pbind(\instrument, \EQHP10, \in,~rythmFilEQ,\dur, inf, \out,~toComp10, \group,~eqGrp,\vol,4,\val,1320,\quant,2, \gain,(-16)),
 
 /*	Pbind(\instrument, \limiter10toMixer,\c20,1,\name,30, \dur, inf, \in,~rythmLimit,\out,~rythmComp, \gain,40, \group, ~limitGrp),*/
 

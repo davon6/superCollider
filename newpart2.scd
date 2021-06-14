@@ -168,7 +168,7 @@ Pseq([ Pseq([8/1],1)],1)  ,Pseq([ Pseq([4/1],1)],1)   ,Pseq([Pseq([16/1],1) ,Pse
 	// Pbind(\instrument, \playBufS, \dur,  Pseq([1/1],256), \tS,  0.39550810372374,\buf,~kb2)
 
 
-		Pbind(\instrument, \lfo13,\tS, 0.39550810372374, \dur, Pseq([64/1],inf),\out,~bus25,\rL,0 ,\rH,9000,\val,
+		Pbind(\instrument, \lfo13,\tS, 0.39550810372374, \dur, Pseq([64/1],inf),\out,~bus25,\rL,0 ,\rH,5000,\val,
 
 			Prand([~hz1beat/4,~hz1beat/8,~hz1beat/16],inf),\ph,4.1),
 

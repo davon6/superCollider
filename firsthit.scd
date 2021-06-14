@@ -152,7 +152,7 @@ Ppar([*/
 
 // Ppar([~boost,~hitPart1],1).play(t)
 
-ATTENTION PERCU TOO HIGH
+
 
 (~hitPart1 =Pseq([//maybe change to 12
 
@@ -589,30 +589,27 @@ Pseq([
 	Pbind(\instrument, \wNoise,\dur, Pseq([2/1],1),\dec ,Pkey(\dur),\amp,(-5),\out,0,\wFil,0,\valStart,900,\valEnd,1000,\durF,8*t.beatDur,\tS, 0.39550810372374,\out,~hitEq),
 
 
+	Pbind(\instrument, \gateS,\dur, Pseq([1/2],1),\type, \rest \tS,  t.beatDur,\group, ~gateGrp11,\in,~tofinalRythm,\out,~toCom),
+
+	Pbind(\instrument, \gateS,\dur, Pseq([4.5/1],1), \tS,  0.39550810372374,\group, ~gateGrp11,\in,~tofinalRythm,\out,~toCom),
+
+				Pbind(\instrument, \gateS,\dur, Pseq([1/2],1),\type, \rest \tS,  t.beatDur,\group, ~gateGrp11,\in,~tofinalRythm,\out,~toCom),
 
 
-			Pbind(\instrument, \gate,\vlSub,1,\vlSub2,Pkey(\vlSub),\dur  ,Pseq([4/1],1),\tS,  0.39550810372374,\out, ~riTriptoEq,\in,~trippyGate,\group,~gateGrp12),
-
-			Pbind(\instrument, \playBuf10, \buf ,~leTout2,\out,~toCom, \start,Pfunc({~leTout2.numFrames/256* (220.rand)}),\dur,Pseq([2/1],1)		,\loopy,0,\tS,0.39550810372374),
 
 
-					Pbind(\instrument, \gate,\vlSub,1,\vlSub2,Pkey(\vlSub),\dur  ,Pseq([4/1],1),\tS,  0.39550810372374,\out, ~riTriptoEq,\in,~trippyGate,\group,~gateGrp12),
+			Pbind(\instrument, \gateS,\dur, Pseq([4.5/1],1), \tS,  0.39550810372374,\group, ~gateGrp11,\in,~tofinalRythm,\out,~toCom),
+			Pbind(\instrument, \gateS,\dur, Pseq([1/2],1),\type, \rest \tS,  t.beatDur,\group, ~gateGrp11,\in,~tofinalRythm,\out,~toCom),
+			Pbind(\instrument, \gateS,\dur, Pseq([4.5/1],1), \tS,  0.39550810372374,\group, ~gateGrp11,\in,~tofinalRythm,\out,~toCom),
+			Pbind(\instrument, \gateS,\dur, Pseq([1/2],1),\type, \rest \tS,  t.beatDur,\group, ~gateGrp11,\in,~tofinalRythm,\out,~toCom),
 
+			Pbind(\instrument, \gateS,\dur, Pseq([4.5/1],1), \tS,  0.39550810372374,\group, ~gateGrp11,\in,~tofinalRythm,\out,~toCom),
+			Pbind(\instrument, \gateS,\dur, Pseq([1/2],1),\type, \rest \tS,  t.beatDur,,\group, ~gateGrp11,\in,~tofinalRythm,\out,~toCom),
+			Pbind(\instrument, \gateS,\dur, Pseq([4.5/1],1), \tS,  0.39550810372374,\group, ~gateGrp11,\in,~tofinalRythm,\out,~toCom),
+			Pbind(\instrument, \gateS,\dur, Pseq([1/2],1), \type, \rest \tS,  t.beatDur,\group, ~gateGrp11,\in,~tofinalRythm,\out,~toCom),
 
-		Pbind(\instrument, \playBuf10, \buf ,~leTout2,\out,~toDelay10, \start,Pfunc({~leTout2.numFrames/256* (220.rand)})
-			,\loopy,0,\tS,0.39550810372374,\dur,Pseq([1/1],1)),
+				Pbind(\instrument, \gateS,\dur, Pseq([4/1],1),\tS,  t.beatDur,\group, ~gateGrp11,\in,~tofinalRythm,\out,~toCom),
 
-
-			Pbind(\instrument, \gate,\vlSub,1,\vlSub2,Pkey(\vlSub),\dur  ,Pseq([5/1],1),\tS,  0.39550810372374,\out, ~riTriptoEq,\in,~trippyGate,\group,~gateGrp12),
-
-
-			Pbind(\instrument, \playBuf10, \buf ,~leTout2,\out,~toCom, \start,Pfunc({~leTout2.numFrames/256* (220.rand)}),\dur,Pseq([3/1],1)		,\loopy,0,\tS,0.39550810372374),
-
-
-				Pbind(\instrument, \gate,\vlSub,1,\vlSub2,Pkey(\vlSub),\dur  ,Pseq([7/1],1),\tS,  0.39550810372374,\out, ~riTriptoEq,\in,~trippyGate,\group,~gateGrp12),
-
-
-		Pbind(\instrument, \playBuf10, \buf ,~leTout2,\out,~toCom, \start,Pfunc({~leTout2.numFrames/256* (220.rand)}),\dur,Pseq([4/1],1)		,\loopy,0,\tS,0.39550810372374),
 
 		],1),
 ],1),
@@ -824,7 +821,7 @@ Pseq([
 
 					Pbind(\instrument, \wNoise,\dur, Pseq([27/1],1),\dec ,Pkey(\dur),\amp,(-5),\out,0,\wFil,0,\valStart,1600,\valEnd,1000,\durF,27*t.beatDur,\out,~hitEq,\type,\rest, \tS, 0.39550810372374),
 
-				Pbind(\instrument, \wNoise,\dur, Pseq([4/1],1),\atk ,Pkey(\dur),\amp,(-5),\out,0,\wFil,0,\valStart,1600,\valEnd,1000,\durF,4*t.beatDur,\out,~hitEq, \tS, 0.39550810372374),
+				Pbind(\instrument, \wNoise,\dur, Pseq([4/1],1),\atk ,Pkey(\dur),\amp,(-5),\out,0,\wFil,0,\valStart,1100,\valEnd,500,\durF,4*t.beatDur,\out,~hitEq, \tS, 0.39550810372374),
 				],1),
 
 			/*Pseq([*/
