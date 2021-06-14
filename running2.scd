@@ -63,9 +63,9 @@ f = { |n=14, min=0, max=11| (min..max).scramble.keep(n) };
 ~rising  = Buffer.read(s,"/Users/davidmignot/Music/SuperCollider Recordings/E/rising.aiff");
 ~voc= Buffer.read(s,"/Users/davidmignot/Music/SuperCollider Recordings/E/voc.aiff");
 ~clap =Buffer.read(s,"/Users/davidmignot/Music/SuperCollider Recordings/E/clap.aiff");
-~bssBrkF =  Buffer.read(s,"/Users/davidmignot/Music/SuperCollider Recordings/E/bassBrkF.aiff")
-~noise =  Buffer.read(s,"/Users/davidmignot/Music/SuperCollider Recordings/E/noiseHIt.aiff")
-
+~bssBrkF =  Buffer.read(s,"/Users/davidmignot/Music/SuperCollider Recordings/E/bassBrkF.aiff");
+~noise =  Buffer.read(s,"/Users/davidmignot/Music/SuperCollider Recordings/E/noiseHIt.aiff");
+~kRise=Buffer.read(s,"/Users/davidmignot/Music/SuperCollider Recordings/E/kickRise.aiff");
 
 
 ~one = ~leTout2.numFrames/ 256 * 240.rand;
@@ -597,6 +597,19 @@ Pseq([\rest ,\rest,\note,\rest  ,\rest,\rest,\note,\rest,  \rest,\rest,\note,\re
 
 	// Pbindef(\kb,\instrument, \playBufS, \dur,  Pseq([1024/1],1), \tS,  0.39550810372374,\buf,~kb1,\out,~toKbGate,\loopy,0, \start,0),
 
+
+
+Pseq([
+	Pbind(\instrument, \playBuf,  \tS,  0.39550810372374,\dur, Pseq([256/1], 1),\type,\rest),
+
+Ppar([
+
+Pbind(\instrument, \playBufS,  \tS,  0.39550810372374,\buf,~kRise,\dur, Pseq([16/1], 1),\out, ~filKBX),
+Pbind(\instrument,\blank, \in,~kSRise,\out,~toKbGate,\dur,Pseq([16/1], 1),\group,~kbGate)
+
+],1)
+
+],1),
 
 
 			Pseq([Pbindf(~kick,\out,~limitKick)],1024),
@@ -1146,7 +1159,7 @@ Ppar([
 			Ppar([Pxrand([
 
 
-					Pbind(\instrument, \playBuf,\loopy,0,\buf,~hit2,\out,~hit2ToEq,\tS,0.39550810372374,\dur,Pseq([1/1],1 ),\vl,1 ),
+					// Pbind(\instrument, \playBuf,\loopy,0,\buf,~hit2,\out,~hit2ToEq,\tS,0.39550810372374,\dur,Pseq([1/1],1 ),\vl,1 ),
 
 
 
@@ -1504,7 +1517,7 @@ Ppar([~boost,~pedonk],1).play(t);
 	wait(0.16);
 	s.record(path:"/Users/davidmignot/Music/SuperCollider Recordings/E/pedonk.aiff",numChannels:10,duration:t.beatDur*128);
 }).play(t,quant:1)
-
+// ~ped.play
 ~pedonk.play(t)
 .stop
 (~pedonk =Ppar([
@@ -1572,9 +1585,9 @@ Pseq([1.5/1],1)  ,Pseq([1.25/1],1)],1), \in,~gateBus,\tS, 0.39550810372374,\grou
 
 
 	Pseq([
-
+//1643640
 		Prand([
-		Pbind(\instrument,\playBufXG, \dur,Pseq([3.75/1],1),\amp, 1,\buf,~lpPrec,\out,~eqBus4,\impulse,0.003,\start,1643640 ,\tS, 0.39550810372374,\vlDec,1 ,\vlSub,  ~pSub,\vlSub2,Pkey(\vlSub), \atkT,0.05,\decT, 0.9 ,	\subsT, 0.05 , \relT,0,\atckC,~pAtkC,\decC,~pDecC,\relC,~pRelC,\vlAtk , ~pvlAtk ,  \vlRel,  Pkey(\vlAtk),\loopy,0),
+			Pbind(\instrument,\playBufXG, \dur,Pseq([3.75/1],1),\amp, 1,\buf,~lpPrec,\out,~eqBus4,\impulse,0.003,\start,43640 ,\tS, 0.39550810372374,\vlDec,1 ,\vlSub,  ~pSub,\vlSub2,Pkey(\vlSub), \atkT,0.05,\decT, 0.9 ,	\subsT, 0.05 , \relT,0,\atckC,~pAtkC,\decC,~pDecC,\relC,~pRelC,\vlAtk , ~pvlAtk ,  \vlRel,  Pkey(\vlAtk),\loopy,0),
 
 
 

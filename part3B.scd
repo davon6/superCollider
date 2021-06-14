@@ -5572,3 +5572,68 @@ Ppar([
 
 
 	Pbind(\instrument, \playBuf10, \buf ,~leTout,\start,~leTout.numFrames.rand,\out,0/*~tantraG*/,\loopy,0,\tS,t.beatDur,\dur,Pseq([2/1],4)).play(t)
+
+
+
+	////////
+
+
+	Routine({
+
+Ppar([
+
+Pbind(\instrument, \playBuf,  \tS,  0.39550810372374,\buf,~snare,\dur, Pseq([Pseq([1/1], 4),Pseq([1/2], 8),Pseq([1/4], 16),Pseq([1/8], 32),
+],1)	,\out,~snareEQ,\type,Pseq([Pseq([\rest],4),Pseq([\note],inf)],inf)),
+
+
+
+
+
+Pbind(\instrument, \playBuf,  \tS,  0.39550810372374,\buf,~k2,\dur, Pseq([Pseq([1/1], 4),Pseq([1/2], 8),Pseq([1/4], 16),Pseq([1/8], 32),
+],1),	\out,~limitKick)
+
+],1).play(t);
+
+	wait(0.16);
+
+	s.record(path:"/Users/davidmignot/Music/SuperCollider Recordings/E/kickRise.aiff",numChannels:2,duration:t.beatDur*16);
+
+
+}).play(t,quant:1)
+
+~kRise.plot
+~kRise=Buffer.read(s,"/Users/davidmignot/Music/SuperCollider Recordings/E/kickRise.aiff");
+
+
+
+Pseq([
+	Pbind(\instrument, \playBuf,  \tS,  0.39550810372374,\dur, Pseq([256/1], 1),\type,\rest),
+
+Ppar([
+
+Pbind(\instrument, \playBufS,  \tS,  0.39550810372374,\buf,~kRise,\dur, Pseq([16/1], 1),\out,~kSRise),
+Pbind(\instrument,\blank, \in,~kSRise,\out,~toKbGate,\dur,Pseq([16/1], 1),\group,~kbGate)
+
+],1)
+
+],1),
+
+
+
+
+.play(t)
+
+
+
+Pbind(\instrument, \playBuf,  \tS,  0.39550810372374,\buf,~snare,\dur, Pseq([1/1],1)).play(t)
+
+
+~k2.play
+~kick.play
+
+	Pseq([Pbindf(~kick,\out,~limitKick)],inf).play(t)
+
+	Pseq([Pbindf(~kick,\out,0,\dur, Pseq([Pseq([1/1], 4),Pseq([1/2], 8),Pseq([1/4], 16),Pseq([1/8], 32),
+],1)	)],inf).play(t)
+
+

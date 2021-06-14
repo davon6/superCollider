@@ -294,6 +294,8 @@ s.sync;
 	~claplimit=Bus.audio(s,1);
 	~clapPan2=Bus.audio(s,1);
 
+	~kSRise=Bus.audio(s,2);
+
 
 	~flopped=Bus.audio(s,10);
 
@@ -502,6 +504,9 @@ s.sync;
 	~flanToComp2= Bus.audio(s,1);
 	~flanToLimit2= Bus.audio(s,1);
 	~flanToStereo2= Bus.audio(s,1);
+
+	~filKBX= Bus.audio(s,2);
+
 	~part2G = Bus.audio(s,1);
 	~part2G2 = Bus.audio(s,1);
 	~part2G3 = Bus.audio(s,1);
@@ -1116,24 +1121,25 @@ SynthDef(\kick, {
 		envF = EnvGen.ar(
 			Env(
 				[5178.15,440,114,26,0,0],
-				[0.016,0.024,0.167,0,0.4],
-					[-6.8,-3,-2]
+				[0.006,0.024,0.167,0,0.4],
+					[-8.8,-3,-2]
 			)
 		);
 
 		env =
 
 	EnvGen.ar(
-	Env([ 0.076 , 0.18,   0.04  ,  1 ,0,0],
-		[ 0.0048,  0.0048,   0.08  , 0.1 , 0.1  ],[-4,-17.6,-3,2,-1]),doneAction:2);
+	Env([ 0.076 , 0.12,   0.04  ,  0.78,0,0],
+		[ 0.0048,  0.0048,   0.08  , 0.1 , 0.1  ],[-4,-17.6,-9,2,-1]),doneAction:2);
 
 
 		sig = SinOsc.ar(envF, mul: env);
 
 		sig = sig * amp.dbamp  ;
-	/*sig = Pan2.ar(sig);*/
+		// sig = Pan2.ar(sig);
 		Out.ar(out, sig);
 	}).add;
+
 
 
 		SynthDef(\bass,{
@@ -2392,11 +2398,11 @@ SynthDef(\sequ,{|value, dur, in=0, out=0, vlAtk=0, vlDec=1,vlSub=1,vlSub2=1, vlR
 
 	SynthDef(\filterU, {|out=0,in,  hFrq=900, hFrq2=900,lFrq=300,lFrq2=300 ,qfH = 0.822379, qfH2=0.6,qlL = 0.504212,qlL2=0.4|Out.ar(out,
 
-	/*BLowPass4.ar(   BLowPass4.ar( */BLowPass.ar(
+	/*BLowPass4.ar(  */ BLowPass4.ar( BLowPass.ar(
 			BHiPass4.ar(  BHiPass4.ar(
 				In.ar(in,1)
 				, hFrq2 , qfH) 	, hFrq , qfH2)
-/*	, lFrq,qlL ) */,lFrq2 ,qlL2 )
+	, lFrq,qlL ) ,lFrq2 ,qlL2 )
 
 	) }).add;
 
@@ -2585,7 +2591,7 @@ SynthDef(\sequ,{|value, dur, in=0, out=0, vlAtk=0, vlDec=1,vlSub=1,vlSub2=1, vlR
 
 	SynthDef(\tantra,{|out=0,wT=0,in,dur|Out.ar(out,SelectX.ar(wT,[
 
-	PingPong.ar(~delay3.bufnum,Mix.ar( In.ar(in,10) )!2,0.3)*0.21,
+	PingPong.ar(~delay3.bufnum,Mix.ar( In.ar(in,10) )!2,0.38)*0.21,
 	FreqShift.ar(In.ar(in,10),  LFNoise0.kr(5.15).range(-2041.2,3020.6)),
 	FreeVerb.ar( In.ar(in,10), 0.9,0.9,0.7),
 
@@ -2786,12 +2792,12 @@ Ppar([
 
 ],1).play(t);
 ~comp=Synth(\comp, [\ctrl, ~kbus ],~compGrp);
-~comp.set(\thr,0.5 ,\sB, 1.034,\sA, 1/2,\atk ,0.0242, \rel ,0.0968, \gain,1,\in, ~comFuzz,\out,~limitBass);
+~comp.set(\thr,0.2 ,\sB, 1.034,\sA, 1/2,\atk ,0.0242, \rel ,0.0968, \gain,1,\in, ~comFuzz,\out,~limitBass);
 
 ~limK=Synth(\limitertoMixer,[\c45,1,\in, ~limitKick, \gain,1,\out,~kToPan],~limitGrp);
-~limK.set(\gain,232);
+~limK.set(\gain,218);
 ~limB=Synth(\limitertoMixer,[\c46,1,\in, ~limitBass, \gain,68,\out,~kToPan],~limitGrp);
-~limB.set(\gain,160);
+~limB.set(\gain,174.3);
 
 ~kbPan2 = Synth(\pan2,[ \in,~kToPan,\out,0],~stereoGrp);
 

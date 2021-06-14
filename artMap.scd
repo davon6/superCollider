@@ -299,18 +299,20 @@ MIDIdef.cc(\lpF2x, { |value|var modFreq = value.linlin(0, 127, 710/*800*/,24000/
 
 
 
-/*MIDIdef.cc(\lpF2x2, { |value|var modFreq = value.linlin(0, 127, 710/*800*/,12000);
+MIDIdef.cc(\lpF2x, { |value|var modFreq = value.linlin(0, 127, 710/*800*/,12000);
 
-	k.set(\lFrq2,"lp: ".postln;modFreq.round(1).post;)
-
-
-},ccNum: 1 );*/
+	k.set(\lFrq,"lp: ".postln;modFreq.round(1).post;)
 
 
-MIDIdef.cc(\lpF2x2, { |value|var modFreq = value.linlin(0, 127, /*310*/600,24000);
+},ccNum: 18 );
 
-	k.set(\lFrq2,"lp: ".postln;modFreq.round(1).post;)
 
+MIDIdef.cc(\lpF2x2, { |value|var modFreq = value.linlin(0, 127, /*310*/600,22000);
+
+	k.set(\lFrq2,"lp: ".postln;modFreq.round(1).post;);
+
+
+	// k.set(\lFrq,"lp: ".postln;modFreq.round(1).post;)
 
 },ccNum: 18 );
 
@@ -335,7 +337,7 @@ MIDIdef.noteOn(\rec, {|vel, nn, chan, src|
 
 	// x = Synth(\recLoop,[buf:~bufSnoopy,\recording,1, \in,0],~recGrp);
 
-	s.record(path:"/Users/davidmignot/Music/SuperCollider Recordings/E/src1F.aiff",numChannels:1)
+	s.record(path:"/Users/davidmignot/Music/SuperCollider Recordings/E/src1F2.aiff",numChannels:1)
 
 },noteNum: 43);// is 43
 
