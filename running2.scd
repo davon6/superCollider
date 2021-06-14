@@ -328,27 +328,22 @@ Pbind(\instrument,\gateS, \dur,Pseq([2/1],2),\in, Pxrand([/*~vocToDispatch,*/~pe
 
 
 
-
-	Pseq([
-
-		Pbind(\instrument, \gateS ,\dur, Pxrand([Pseq([4/1],4), Pseq([1/1],16) ],4)
-,\tS, 0.39550810372374, \in ,Pxrand([ ~no1, ~no2,~no3],inf),\out,/*~toGate10*/0,\group,~gateGrp5),
-
-
-Pseq([
+/*~passant=*/Pseq([
 //maybe no rrepeat wiht this one
 		Pseq([
-		Pbind( \instrument,\playBuf /*\playBuf1N*/, \impulse, 0.3,\dur,Pseq([2.5/1],1), \tS,  0.39550810372374,\start, 514019,\buf,~bufSnoopy,\out, ~filterBou,\loopy,0),
+		Pbind( \instrument,\playBuf /*\playBuf1N*/, \impulse, 0.3,\dur,Pseq([6/1],1), \tS,  0.39550810372374,\start, 514019,\buf,~bufSnoopy,\out, ~filterBou,\loopy,0),
 
-		Pbind(\instrument,\gateS, \dur,  Pseq([12.5/1],1),\in,~finGran, \out,0/*~toGate10*/,\group, ~gateGrp5,\tS, 0.39550810372374,),
+		Pbind(\instrument,\gateS, \dur,  Pseq([10/1],1),\in,~finGran, \out,0/*~toGate10*/,\group, ~gateGrp5,\tS, 0.39550810372374,),
 		],1),
+
 
 			Pseq([
 
-		Pbind( \instrument,\playBufXG, \impulse, 0.3,\dur,Pseq([1/2],5), \tS,  0.39550810372374,\start, 4060549,\buf,~bufSnoopy,\out, ~filterPass1,\loopy,0,\vlSub,0 ,\vlSub2,0,\decC,(-1),\type,Pseq([\note,\note,\rest,\note,\note,],inf)),
+		Pbind( \instrument,\playBufXG, \impulse, 0.3,\dur,Pseq([1/4],12), \tS,  0.39550810372374,\start, 4060549,\buf,~bufSnoopy,\out, ~filterPass1,\loopy,0,\vlSub,0 ,\vlSub2,0,\decC,(-1),\type,Pseq([\note,\note,\rest,\rest,\note,\note,\rest,\rest].scramble,inf)),
 
-		Pbind(\instrument,\gateS, \dur,  Pseq([5.5/1],1),\in,~finGran, \out,0/*~toGate10*/,\group, ~gateGrp5,\tS, 0.39550810372374,),
+		Pbind(\instrument,\gateS, \dur,  Pseq([5/1],1),\in,~finGran, \out,0/*~toGate10*/,\group, ~gateGrp5,\tS, 0.39550810372374,),
 	].scramble,2),
+
 
 
 			Pseq([
@@ -367,16 +362,14 @@ Pseq([
 		/*Pbind( \instrument,\playBufXG, \impulse, 0.3,\dur,Pseq([1/2],5), \tS,  0.39550810372374,\start, 4302193,\buf,~bufSnoopy,\out, ~filterPass3,\loopy,0,\vlSub,0 ,\vlSub2,0,\decC,(-3),\type,Pseq([\note,\note,\rest,\note,\note,],inf)),*/
 
 
-Pbind( \instrument,\playBufXG, \impulse, 0.3,\dur,Pseq([1/2],5), \tS,  0.39550810372374,\start, 4302193,\buf,~bufSnoopy,\out, ~filterPass3,\loopy,0,\decT,0,\atkT,1,\atckC,4,\type,Pseq([\note,\note,\rest],inf)),
+Pbind( \instrument,\playBufXG, \impulse, 0.3,\dur,Pseq([1/4],3), \tS,  0.39550810372374,\start, 4302193,\buf,~bufSnoopy,\out, ~filterPass3,\loopy,0,\decT,0,\atkT,1,\atckC,4,\type,Pseq([\note,\rest].scramble,inf)),
 
-		Pbind(\instrument,\gateS, \dur,  Pseq([5.5/1],1),\in,~finGran, \out,0/*~toGate10*/,\group, ~gateGrp5,\tS, 0.39550810372374,),
+		Pbind(\instrument,\gateS, \dur,  Pseq([7.25/1],1),\in,~finGran, \out,0/*~toGate10*/,\group, ~gateGrp5,\tS, 0.39550810372374,),
 		].scramble,2),
 
-].scramble,1)
+],inf)
 
 
-
-].scramble,inf),
 
 ],1))
 
