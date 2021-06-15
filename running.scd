@@ -24,7 +24,7 @@ Server.default.options.outDevice_("MacBook Air Speakers");
 
 
 ServerOptions.outDevices;
-
+/*({SinOsc.ar}.play)*/
 
 (
  s.waitForBoot({
@@ -567,6 +567,13 @@ s.sync;
 	~filterPass1= Bus.audio(s,1);~eqPass1= Bus.audio(s,1); ~revPass1= Bus.audio(s,1); ~compPass1= Bus.audio(s,1); ~limitPass1= Bus.audio(s,1); ~stereoPass1= Bus.audio(s,1);
 	~filterPass2= Bus.audio(s,1); ~eqPass2= Bus.audio(s,1); ~revPass2= Bus.audio(s,1); ~compPass2= Bus.audio(s,1); ~limitPass2= Bus.audio(s,1); ~stereoPass2= Bus.audio(s,1);
 	~filterPass3= Bus.audio(s,1); ~eqPass3= Bus.audio(s,1); ~revPass3= Bus.audio(s,1); ~compPass3= Bus.audio(s,1); ~limitPass3= Bus.audio(s,1); ~stereoPass3= Bus.audio(s,1);/*~comp10Pass= Bus.audio(s,10);*/
+
+	~eqPass4= Bus.audio(s,1);
+	~eqPass5= Bus.audio(s,1);
+	~eqPass6= Bus.audio(s,1);
+	~eqPass7= Bus.audio(s,1);
+/*	~eqPass8= Bus.audio(s,1);*/
+
 	~delayBus = Bus.audio(s,1);
 	~delayBus2= Bus.audio(s,1);
 	~reverbBus = Bus.audio(s,1);
@@ -1395,6 +1402,13 @@ freq         )* EnvGen.kr(Env([0,vl,vl,0],[0.055,dur-0.055,0],4),timeScale: tS,d
 	SynthDef(\shift10, {|in, out, freq, dur,vl=1,bus|
 
 		Out.ar(out, FreqShift.ar(In.ar(in, 10),In.kr(bus  ) )
+			* EnvGen.kr(Env.step([vl,0],[dur,0]),timeScale: t.beatDur,doneAction:2))}).add;
+
+
+
+		SynthDef(\shift1, {|in, out, freq, dur,vl=1,bus|
+
+		Out.ar(out, FreqShift.ar(In.ar(in, 1),In.kr(bus  ) )
 			* EnvGen.kr(Env.step([vl,0],[dur,0]),timeScale: t.beatDur,doneAction:2))}).add;
 
 

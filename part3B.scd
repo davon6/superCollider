@@ -5689,3 +5689,114 @@ Pbind( \instrument,\playBufXG, \impulse, 0.3,\dur,Pseq([1/2],5), \tS,  0.3955081
 
 ].scramble,inf),*/
 
+
+
+
+//passant
+
+/*Pbind( \instrument,\playBuf /*\playBuf1N*/, \impulse, 0.3,\dur,Pseq([2.5/1],inf), \tS,  0.39550810372374,\start, 514019,\buf,~bufSnoopy,\out, ~filterBou,\loopy,0).play(t)*/
+
+//~pass1 =~pass1 - 20000
+//(~bufSnoopy.numFrames.rrand(400000)- 400000).postln;  Pseq([2.5/1],1)
+// ~test1=Synth(\playBufX ,[ \impulse,0.31604915 /*5.15/6/*\dur,Pseq([6/1],1),*/*/,\start,(~bufSnoopy.numFrames.rrand(400000)- 400000).postln ,\buf,~bufSnoopy,\out,~filterBou,\loopy,1,\dA,0]);
+//~test1.set(\start,514019)
+// ~eq24.free
+~fil6 =Synth(\filter,[\which,0, \in ,~filterBou, \busMod, ~bus3,\freqFil,4700, \qf,0.7, \out, ~gateBou],~filterGrp); /*~fil6.set(\freqFil,4900,)*/
+~eq24=Synth(\EQHP96, [\frq, 100 ],~gateGrp2);
+~eq24.set(\in, ~gateBou, \out , ~reverbBus4,\val, 0,\quant, 0, \gain,0,\val2,0,\quant2,0, \gain2,0, \val3,0,\quant3,0, \gain3,0,\val4,1200,\shelf,1.2, \gain4,(-15.4),\frq, 170,\val5,600,\shelf2,1.45,\gain5,(-14));
+~rev24=Synth(\reverb,~quickFi,~revGrp);~rev24.set(\in,~reverbBus4, \out,~comFuzz4);
+~comp24=Synth(\comp,[\ctrl, ~kbus],~compGrp);
+~comp24.set(\thr,0.9 ,\sB, 1.034,\sA, 1/2,\atk ,0.0242, \rel ,0.0968, \gain,10,\in, ~comFuzz4, \out,~limitFuzz4);
+~mix24= Synth(\limitertoMixer,[\c24,1,\in, ~limitFuzz4, \gain,30, \out,~stereoBus14],~limitGrp);
+~mix24.set(\gain,16.6);
+~stereo24=Synth(\stereo,[ \dur, 9999, \in, ~stereoBus14  ,\spread,0.2 ,\out,0], ~stereoGrp);
+
+// 1194540
+// ~eq25.free
+/*~pass2= ~pass2-40000*/
+
+/*Pbind( \instrument,\playBufXG, \impulse, 0.3,\dur,Pseq([1/2],inf), \tS,  0.39550810372374,\start, 4060549,\buf,~bufSnoopy,\out, ~filterPass1,\loopy,0,\vlSub,0 ,\vlSub2,0,\decC,(-1),\type,Pseq([\note,\note,\rest,\note,\note,],inf)).play(t)*/
+
+//(~bufSnoopy.numFrames.rrand(400000)- 400000).postln;
+// ~test2=Synth(\playBufX ,[ \impulse, 5.15/3/*\dur,Pseq([3/1],1),*/,\start,(~bufSnoopy.numFrames.rrand(400000)- 400000).postln,\buf,~bufSnoopy,\out, ~filterPass1,\loopy,1])
+// ~test2.set(\start,4060549);
+~fil7 =Synth(\filter,[\which,0, \in ,~filterPass1, \busMod, ~bus3,\freqFil,2100, \qf,0.7, \out, ~eqPass1],~filterGrp); /*  ~fil7.set(\freqFil,1700,)*/
+// ~fil7.set(\freqFil,2100)
+~eq25=Synth(\EQHP96, [\frq, 100 ],~gateGrp2);
+~eq25.set(\in, ~eqPass1,\out, ~revPass1,\val, 0,\quant, 0, \gain,0,\val2,0,\quant2,0, \gain2,0, \val3,0,\quant3,0, \gain3,0,\val4,1600,\shelf,1.5, \gain4,(-11),\frq, 170);
+~rev25=Synth(\reverb,~quickFi,~revGrp);~rev25.set(\in,~revPass1, \out,~compPass1);
+~comp25=Synth(\comp,[\ctrl, ~kbus],~compGrp);
+~comp25.set(\thr,0.8 ,\sB, 1.016,\sA, 1/2,\atk ,0.0242, \rel ,0.0968, \gain,2,\in, ~compPass1, \out,~limitPass1);
+~mix25= Synth(\limitertoMixer,[\c58,1,\in, ~limitPass1, \gain,24, \out,~stereoPass1],~limitGrp);
+~mix25.set(\gain,16);
+~stereo25=Synth(\stereo,[\dur, 9999, \in, ~stereoPass1  ,\spread,0.2 ,\out,0], ~stereoGrp);
+
+
+// ~eq26.free            ~pass3 = ~pass3-30000
+
+/*
+Pbind( \instrument,\playBuf /*\playBuf1N*/, \impulse, 0.3,\dur,Pseq([1.5/1],inf), \tS,  0.39550810372374,\start,2286611,\buf,~bufSnoopy,\out, ~filterPass2,\loopy,0).play(t)*/
+
+//(~buf.numFrames.rrand(400000)- 400000).postln
+//~test3=Synth(\playBufX ,[ \impulse, 5.15/*\dur,Pseq([1/1],1),*/,\start,(~buf.numFrames.rrand(400000)- 400000).postln,\buf,~bufSnoopy,\out, ~filterPass2,\loopy,1])
+// ~test3.set(\start,2286611);
+~fil8 =Synth(\filter,[\which,0, \in ,~filterPass2, \busMod, ~bus3,\freqFil,1600, \qf,0.7, \out, ~eqPass2],~filterGrp);
+// ~fil8.set(\freqFil,1600)
+~eq26=Synth(\EQHP96, [\frq, 100 ],~gateGrp2);
+~eq26.set(\in, ~eqPass2,\out, ~revPass2,\val, 368,\quant, 1.6, \gain,(-14),\val2,0,\quant2,0, \gain2,0, \val3,0,\quant3,0, \gain3,0,\val4,1200,\shelf,1.3, \gain4,(-10),\frq, 230);
+~rev26=Synth(\reverb,~quickFi,~revGrp);~rev26.set(\in,~revPass2, \out,~compPass2);
+~comp26=Synth(\comp,[\ctrl, ~kbus],~compGrp);
+~comp26.set(\thr,0.9 ,\sB, 1.026,\sA, 1/2,\atk ,0.0242, \rel ,0.0968, \gain,1,\in, ~compPass2, \out,~limitPass2);
+~mix26= Synth(\limitertoMixer,[\c26,1,\in, ~limitPass2, \gain,30, \out,~stereoPass2],~limitGrp);
+ ~mix26.set(\gain,17,\out,~stereoPass2);
+~stereo26=Synth(\stereo,[\dur, 9999, \in, ~stereoPass2  ,\spread,0.2 ,\center,0.3,\out,0], ~stereoGrp);
+
+
+/*Pbind( \instrument,\playBufXG, \impulse, 0.3,\dur,Pseq([1/2],inf), \tS,  0.39550810372374,\start, 4302193,\buf,~bufSnoopy,\out, ~filterPass3,\loopy,0,\decT,0,\atkT,1,\atckC,4,\type,Pseq([\note,\note,\rest],inf)).play(t,quant:2)*/
+
+// ~eq27.free
+// (~buf.numFrames.rrand(400000)- 400000).postln
+// ~test4=Synth(\playBufX ,[ \impulse, 2.575/*\dur,Pseq([2/1],1),*/,\start,(~buf.numFrames.rrand(400000)- 400000).postln,\buf,~bufSnoopy,\out, ~filterPass3,\loopy,1])
+//~test4.set(\start,4302193)
+~fil9 =Synth(\filter,[\which,0, \in ,~filterPass3, \busMod, ~bus3,\freqFil,2800, \qf,0.7, \out, ~eqPass3],~filterGrp);/*~fil9.set(\freqFil,2800)*/
+~eq27=Synth(\EQHP96, [\frq, 100 ],~gateGrp2);
+~eq27.set(\in, ~eqPass3,\out, ~revPass3,\val, 3850,\quant, 1.8, \gain,(-15),\val2,0,\quant2,0, \gain2,0, \val3,0,\quant3,0, \gain3,0,\val4,1200,\shelf,1.46, \gain4,(-22),\frq, 120,\val5,650,\shelf2,1.6,\gain5,(-17));
+~rev27=Synth(\reverb,~quickFi,~revGrp);~rev27.set(\in,~revPass3, \out,~compPass3);
+~comp27=Synth(\comp,[\ctrl, ~kbus],~compGrp);
+~comp27.set(\thr,0.38 ,\sB, 1.026,\sA, 1/2,\atk ,0.0242, \rel ,0.0968, \gain,10,\in, ~compPass3, \out,~limitPass3);
+~mix27= Synth(\limitertoMixer,[\c56,1,\in, ~limitPass3, \gain,35, \out,~stereoPass3],~limitGrp);
+~mix27.set(\gain,37.6,\out,~stereoPass3, \c56,1);
+~stereo27=Synth(\stereo,[ \dur, 9999, \in, ~stereoPass3  ,\spread,0.2 ,\out,0], ~stereoGrp);
+
+/////
+
+
+
+	/*~passant=*/Pseq([
+
+		Pseq([
+		Pbind( \instrument,\playBuf , \impulse, 0.3,\dur,Pseq([6/1],1), \tS,  0.39550810372374,\start, 514019,\buf,~bufSnoopy,\out, ~gateBou,\loopy,0),
+		Pbind(\instrument,\gateS, \dur,  Pseq([10/1],1),\in,~finGran, \out,0,\group, ~gateGrp5,\tS, 0.39550810372374,),
+		],1),
+
+			Pseq([
+		Pbind( \instrument,\playBufXG, \impulse, 0.3,\dur,Pseq([1/4],12), \tS,  0.39550810372374,\start, 4060549,\buf,~bufSnoopy,\out, ~eqPass1,\loopy,0,\vlSub,0 ,\vlSub2,0,\decC,(-1),\type,Pseq([\note,\note,\rest,\rest,\note,\note,\rest,\rest].scramble,inf)),
+
+		Pbind(\instrument,\gateS, \dur,  Pseq([5/1],1),\in,~finGran, \out,0,\group, ~gateGrp5,\tS, 0.39550810372374,),
+	].scramble,2),
+
+			Pseq([
+		Pbind( \instrument,\playBuf, \impulse, 0.3,\dur,Pseq([1.5/1],1), \tS,  0.39550810372374,\start,2286611,\buf,~bufSnoopy,\out, ~eqPass2,\loopy,0),
+
+		Pbind(\instrument,\gateS, \dur,  Pseq([6.5/1],1),\in,~finGran, \out,0,\group, ~gateGrp5,\tS, 0.39550810372374,),
+		].scramble,2),
+
+			Pseq([
+Pbind( \instrument,\playBufXG, \impulse, 0.3,\dur,Pseq([1/4],3), \tS,  0.39550810372374,\start, 4302193,\buf,~bufSnoopy,\out, ~eqPass3,\loopy,0,\decT,0,\atkT,1,\atckC,4,\type,Pseq([\note,\rest].scramble,inf)),
+
+		Pbind(\instrument,\gateS, \dur,  Pseq([7.25/1],1),\in,~finGran, \out,0,\group, ~gateGrp5,\tS, 0.39550810372374,),
+		].scramble,2),
+
+
+
+],inf).play(t)

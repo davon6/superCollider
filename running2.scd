@@ -31,7 +31,10 @@ f = { |n=14, min=0, max=11| (min..max).scramble.keep(n) };
 // ~audio3 = Buffer.read(s,"/Users/davidmignot/Documents/REAPER Media/02-consolidated-03.wav");
 ~audio3 = Buffer.read(s,"/Users/davidmignot/Documents/REAPER Media/03-thEnd-consolidated-01.wav");
 ~buf=Buffer.read(s,"/Users/davidmignot/Music/SuperCollider Recordings/E/src1.aiff");
+
 ~bufSnoopy=Buffer.read(s,"/Users/davidmignot/Music/SuperCollider Recordings/E/src1F.aiff");
+~bufSnoopy2=Buffer.read(s,"/Users/davidmignot/Music/SuperCollider Recordings/E/src1F2.aiff");
+
 ~lpPrec2 =  Buffer.read(s,"/Users/davidmignot/Music/SuperCollider Recordings/E/LPL.aiff");
 ~lpPrec =  Buffer.read(s,"/Users/davidmignot/Music/SuperCollider Recordings/E/HPL.aiff");
 ~lpPrec3= Buffer.read(s,"/Users/davidmignot/Music/SuperCollider Recordings/E/BPL.aiff");
@@ -158,6 +161,8 @@ f = { |n=14, min=0, max=11| (min..max).scramble.keep(n) };
 
 ~bobo=700;
 ~crv=6;
+~as=1676373; ~tram=3659560;~gram=373706; ~pick=285965;
+~bool=True;
 
 
 ~lfoGrp  = Group.new;
@@ -282,7 +287,7 @@ Out.kr(~bus9, SinOsc.kr( LFTri.kr( ~hz1beat/4).range(~hz1beat/4,~hz1beat)).range
 
 
 
-	Pbind(\instrument, \lfo13, \val,0.075,\dur,Pseq([64/1],inf),\rL,3200,\rH,1720, \ph,4.2,\out,  ~bus3, \group, ~lfoGrp,\tS, 0.39550810372374),
+	Pbind(\instrument, \lfo13, \val,0.075,\dur,Pseq([64/1],inf),\rL,3200,\rH,1520, \ph,4.2,\out,  ~bus3, \group, ~lfoGrp,\tS, 0.39550810372374),
 
 	Pseq([Pbindf(~kick,\out,~kbus)],inf),
 
@@ -328,46 +333,57 @@ Pbind(\instrument,\gateS, \dur,Pseq([2/1],2),\in, Pxrand([/*~vocToDispatch,*/~pe
 
 
 
-/*~passant=*/Pseq([
-//maybe no rrepeat wiht this one
-		Pseq([
-		Pbind( \instrument,\playBuf /*\playBuf1N*/, \impulse, 0.3,\dur,Pseq([6/1],1), \tS,  0.39550810372374,\start, 514019,\buf,~bufSnoopy,\out, ~filterBou,\loopy,0),
+Pseq([
 
-		Pbind(\instrument,\gateS, \dur,  Pseq([10/1],1),\in,~finGran, \out,0/*~toGate10*/,\group, ~gateGrp5,\tS, 0.39550810372374,),
+		Pseq([
+		Pbind( \instrument,\playBuf , \impulse, 0.3,\dur,Pseq([6/1],1), \tS,  0.39550810372374,\start, Pfunc({~as}),\buf,~bufSnoopy2,\out,
+			Pfunc({if(~as==1676373 ,{~gateBou;},{~eqPass5;})})
+			,\loopy,0),
+		Pbind(\instrument,\gateS, \dur,  Pseq([10/1],1),\in,~finGran, \out,0,\group, ~gateGrp5,\tS, 0.39550810372374,),
 		],1),
 
-
 			Pseq([
+		Pbind( \instrument,\playBufXG, \impulse, 0.3,\dur,Pseq([1/4],12), \tS,  0.39550810372374,\start,  Pfunc({~tram}),\buf,~bufSnoopy2,\out,
+			Pfunc({if(~tram==3659560 ,{~eqPass1;},{~eqPass6;})})
+			,\loopy,0,\vlSub,0 ,\vlSub2,0,\decC,(-1),\type,Pseq([\note,\note,\rest,\rest,\note,\note,\rest,\rest].scramble,inf)),
 
-		Pbind( \instrument,\playBufXG, \impulse, 0.3,\dur,Pseq([1/4],12), \tS,  0.39550810372374,\start, 4060549,\buf,~bufSnoopy,\out, ~filterPass1,\loopy,0,\vlSub,0 ,\vlSub2,0,\decC,(-1),\type,Pseq([\note,\note,\rest,\rest,\note,\note,\rest,\rest].scramble,inf)),
-
-		Pbind(\instrument,\gateS, \dur,  Pseq([5/1],1),\in,~finGran, \out,0/*~toGate10*/,\group, ~gateGrp5,\tS, 0.39550810372374,),
+		Pbind(\instrument,\gateS, \dur,  Pseq([5/1],1),\in,~finGran, \out,0,\group, ~gateGrp5,\tS, 0.39550810372374,),
 	].scramble,2),
 
-
-
 			Pseq([
-		Pbind( \instrument,\playBuf /*\playBuf1N*/, \impulse, 0.3,\dur,Pseq([1.5/1],1), \tS,  0.39550810372374,\start,2286611,\buf,~bufSnoopy,\out, ~filterPass2,\loopy,0),
+		Pbind( \instrument,\playBuf, \impulse, 0.3,\dur,Pseq([1.5/1],1), \tS,  0.39550810372374,\start, Pfunc({~gram}),\buf,~bufSnoopy2,\out,
+			Pfunc({if(~gram==373706 ,{~eqPass2;},{~eqPass7;})})
+			,\loopy,0),
 
-		Pbind(\instrument,\gateS, \dur,  Pseq([6.5/1],1),\in,~finGran, \out,0/*~toGate10*/,\group, ~gateGrp5,\tS, 0.39550810372374,),
+		Pbind(\instrument,\gateS, \dur,  Pseq([6.5/1],1),\in,~finGran, \out,0,\group, ~gateGrp5,\tS, 0.39550810372374,),
 		].scramble,2),
 
-
-
-
-
-
-
+	Ppar([
 			Pseq([
-		/*Pbind( \instrument,\playBufXG, \impulse, 0.3,\dur,Pseq([1/2],5), \tS,  0.39550810372374,\start, 4302193,\buf,~bufSnoopy,\out, ~filterPass3,\loopy,0,\vlSub,0 ,\vlSub2,0,\decC,(-3),\type,Pseq([\note,\note,\rest,\note,\note,],inf)),*/
+Pbind( \instrument,\playBufXG, \impulse, 0.3,\dur,Pseq([1/4],3), \tS,  0.39550810372374,\start,  Pfunc({~pick}),\buf,~bufSnoopy2,\out,
+				Pfunc({if(~pick==285965 ,{~eqPass3;},{~eqPass4;})})
+				,\loopy,0,\decT,0,\atkT,1,\atckC,8,\type,Pseq([\note,\rest].scramble,inf)),
 
-
-Pbind( \instrument,\playBufXG, \impulse, 0.3,\dur,Pseq([1/4],3), \tS,  0.39550810372374,\start, 4302193,\buf,~bufSnoopy,\out, ~filterPass3,\loopy,0,\decT,0,\atkT,1,\atckC,4,\type,Pseq([\note,\rest].scramble,inf)),
-
-		Pbind(\instrument,\gateS, \dur,  Pseq([7.25/1],1),\in,~finGran, \out,0/*~toGate10*/,\group, ~gateGrp5,\tS, 0.39550810372374,),
+		Pbind(\instrument,\gateS, \dur,  Pseq([7.25/1],1),\in,~finGran, \out,0,\group, ~gateGrp5,\tS, 0.39550810372374,),
 		].scramble,2),
+
+		Pseq([
+			Pbind(\instrument,\gateS, \dur,  Pseq([15.9/1],1),\tS,t.beatDur,\type,\rest),
+			Pbind(\instrument,\gateS, \dur,  Pseq([0.1/1],1),\tS,t.beatDur,\type,\rest,\in,Pfunc({
+				if(~bool==True,{
+					~as=3890307; ~tram=135844;~gram=2321737; ~pick=65263;
+					~bool=False;
+				},{
+				~as=1676373; ~tram=3659560;~gram=373706; ~pick=285965;
+					~bool=True;})
+		}))],1)
+	],1)
+
+
+	// ~as=4676373/3890307; ~tram=3659560/135844;~gram=373706/2321737; ~pick=285965/65263
 
 ],inf)
+
 
 
 
@@ -1237,7 +1253,7 @@ Ppar([~base,~no4],1).play(t, quant:1)
 	/*Pbind(\instrument,\stereo, \dur, Pseq([4/1],inf), \in,  ~no2ToStereo  ,\out,~no2,\center, Pxrand([0.2,(-0.2),(-0.1),(0.1)],inf), \group, ~stereoGrp,\tS, 0.39550810372374),*/
 
 
-	Pbind(\instrument,\stereo, \dur, Pseq([4/1],inf), \in, ~stereoBus3   ,\out,~comSnaGrpBus2,\center, Pfunc({0.24.rrand(-0.24)}), \group, ~stereoGrp,\tS,  0.39550810372374,\spread,0.4),
+	Pbind(\instrument,\stereo, \dur, Pseq([16/1],inf), \in, ~stereoBus3   ,\out,~comSnaGrpBus2,\center, Pfunc({0.24.rrand(-0.24)}), \group, ~stereoGrp,\tS,  0.39550810372374,\spread,0.4),
 
 
 //no limiter

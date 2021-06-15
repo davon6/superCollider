@@ -152,7 +152,7 @@ Ppar([*/
 
 // Ppar([~boost,~hitPart1],1).play(t)
 
-
+MUST RERECROD RISING MAYBE MAKE IT BETTER
 
 (~hitPart1 =Pseq([//maybe change to 12
 
