@@ -5800,3 +5800,49 @@ Pbind( \instrument,\playBufXG, \impulse, 0.3,\dur,Pseq([1/4],3), \tS,  0.3955081
 
 
 ],inf).play(t)
+
+	///nexttt
+
+
+
+Ppar([
+
+
+Pseq([
+
+
+		Pbind(\instrument, \lfo13T, \val,~hz1beat/64,\dur,Pseq([16/1],1),\rL,0,\rH,3350, \ph,3.1,\out, ~bus33 , \group, ~lfoGrp,\tS, 0.39550810372374),
+
+Pbind(\instrument, \lfo13T, \val,~hz1beat/64,\dur,Pseq([48/1],1),\rL,0,\rH,3350, \ph,3.1,\out, ~bus33 , \group, ~lfoGrp,\tS, 0.39550810372374),
+
+
+	],1),
+
+		Pseq([
+
+		Pbind( \instrument,\playBufXG , \impulse, 0.3,\dur,Pseq([1/8],16), \tS,  0.39550810372374,\start,~bufSnoopy2.numFrames.rand.postln,\buf,~bufSnoopy2,\out,~gateBou,\loopy,0,\type,Pseq([\note,\rest,\note,\rest],inf),
+			\vlSub,0.7.exprand(0.4,1),\vlSub2,Pkey(\vlSub),\atkT,0.10.exprand(0.01),
+	\decT,0.6.exprand(0.8,0.3),
+	\subsT,0.2.exprand(0.1),
+	\relT,0.22.exprand(0.1,1),
+	\atckC,6.exprand(1,1),
+	\decC,-4.exprand(-0.1),
+			\relC,-8.exprand(-2,1),\vlAtk ,1.00.exprand(0.01),\vlRel,0.1.exprand(0.01)),
+
+
+	Pbind(\instrument,\gateS, \dur,  Pseq([5/1],1),\in,~finGran, \out,0,\group, ~gateGrp5,\tS, 0.39550810372374,),
+
+	].scramble,8),
+
+
+	Pbind(\instrument, \shift1,\in, ~gateBou ,\bus,  ~bus33, \dur, Pseq([64/1],1),\group,~filterGrp)
+
+
+
+],1).play(t)
+
+
+
+
+
+

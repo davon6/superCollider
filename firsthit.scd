@@ -152,7 +152,9 @@ Ppar([*/
 
 // Ppar([~boost,~hitPart1],1).play(t)
 
-MUST RERECROD RISING MAYBE MAKE IT BETTER
+MUST RERECROD RISING MAYBE MAKE IT BETTER,
+
+HAVE RISES MADE OUT OF TANTRA STYLE
 
 (~hitPart1 =Pseq([//maybe change to 12
 

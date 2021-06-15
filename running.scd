@@ -2611,7 +2611,7 @@ SynthDef(\sequ,{|value, dur, in=0, out=0, vlAtk=0, vlDec=1,vlSub=1,vlSub2=1, vlR
 	FreqShift.ar(In.ar(in,10),  LFNoise0.kr(5.15).range(-2041.2,3020.6)),
 	FreeVerb.ar( In.ar(in,10), 0.9,0.9,0.7),
 
-])* EnvGen.kr(Env.step([1,0],[dur,0]),timeScale: t.beatDur,doneAction: 2))}).add;
+])* EnvGen.kr(Env.step([1,0],[dur,0]),timeScale: t.beatDur*2,doneAction: 2))}).add;
 
 
 s.sync;
