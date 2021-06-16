@@ -276,6 +276,9 @@ s.sync;
 	~snareFlang=Bus.audio(s,1);
 	~toShift=Bus.audio(s,10);
 
+	~extraComp=Bus.audio(s,10);
+	~extraEq=Bus.audio(s,10);
+
 	~toNoise=Bus.audio(s,1);
 	~toNoiseEq=Bus.audio(s,1);
 	~toNoiseCom=Bus.audio(s,1);
@@ -1117,7 +1120,7 @@ SynthDef(\kick, {
 
 	EnvGen.ar(
 	Env([ 0.15 ,0.21, 0.18,   0.04  ,  0.4,0,0],
-		[ 0.0024,0.0003,  0.0048,   0.08  , 0.07 , 0.1  ],[2.4,1,-12.6,-8,2,-1]),doneAction:2);
+		[ 0.0024,0.0003,  0.0048,   0.08  , 0.07 , 0.1  ],[1.5,1,-12.6,-8,2,-1]),doneAction:2);
 
 
 		sig = SinOsc.ar(envF, mul: env);
@@ -2799,14 +2802,14 @@ Ppar([
 Pbind(\instrument ,\EQHP2 ,\in,~bassEq, \out,0, \frq, 20.6,\vol,1,
 
 
-			\val7,329.6275,\quant7,1.2 ,\gain7,(-4),
+				\val7,329.6275,\quant7,1.8 ,\gain7,(-2),
 			\val,659.255, \quant,1.9, \gain,(-9),
 \val2,1318.51, \quant2,1.4, \gain2,(-11),
 		\val3,2637.02, \quant3,1.4, \gain3,(-18),
 
 
 //that one
-	\val5,164.81375, \quant5,2.4, \gain5,(-15),\group,~eqGrp)
+	\val5,164.81375, \quant5,2.4, \gain5,(-13),\group,~eqGrp)
 
 
 
@@ -2848,9 +2851,9 @@ Ppar([
 ~comp.set(\thr,0.2 ,\sB, 1.034,\sA, 1/2,\atk ,0.0242, \rel ,0.0968, \gain,1,\in, ~comFuzz,\out,~limitBass);
 
 ~limK=Synth(\limitertoMixer,[\c45,1,\in, ~limitKick, \gain,1,\out,~kToPan],~limitGrp);
-~limK.set(\gain,187);
+~limK.set(\gain,192.5);
 ~limB=Synth(\limitertoMixer,[\c46,1,\in, ~limitBass, \gain,68,\out,~kToPan],~limitGrp);
-~limB.set(\gain,161.6);
+~limB.set(\gain,168.5);
 
 ~kbPan2 = Synth(\pan2,[ \in,~kToPan,\out,0],~stereoGrp);
 
@@ -2923,14 +2926,14 @@ Ppar([
 Pbind(\instrument ,\EQHP2 ,\in,~bassEq, \out,0, \frq, 20.6,\vol,1,
 
 
-			\val7,329.6275,\quant7,1.2 ,\gain7,(-4),
+			\val7,329.6275,\quant7,1.8 ,\gain7,(-2),
 			\val,659.255, \quant,1.9, \gain,(-9),
 \val2,1318.51, \quant2,1.4, \gain2,(-11),
 		\val3,2637.02, \quant3,1.4, \gain3,(-18),
 
 
 //that one
-	\val5,164.81375, \quant5,2.4, \gain5,(-15),\group,~eqGrp)
+	\val5,164.81375, \quant5,2.4, \gain5,(-13),\group,~eqGrp)
 
 
 

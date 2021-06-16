@@ -242,7 +242,9 @@ f = { |n=14, min=0, max=11| (min..max).scramble.keep(n) };
 ~limitGrpEx = Group.after(~compGrpEx);
 ~stereoGrpEx = Group.after(~limitGrpEx);
 ~compGrp5 = Group.after(~stereoGrpEx);
+
 ~eqGrp3=Group.after(~compGrp5);
+
 ~dynaEq= Group.after(~eqGrp3);
 ~stereoGrp5 = Group.after(~dynaEq);
 ~compGrp6 = Group.after(~stereoGrp5);

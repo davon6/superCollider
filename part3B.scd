@@ -3799,13 +3799,13 @@ Routine({
 ~comp4.set(\thr,0.88 ,\sB, 1.086,\sA, 1/2,\atk ,0.0242, \rel ,0.0968, \gain,4,\in, ~comBus2, \out,~limitBus2);
 ~mix4= Synth(\limitertoMixer,[\c4,1,\in, ~limitBus2,\gain,2,\out,~sterBus2],~limitGrp);
 ~mix4.set(\gain,42);
-~stereo4= Synth(\stereoO,[  \in, ~sterBus2, \out,~no1/*~no3*/], ~stereoGrp);
+~stereo4= Synth(\stereoO,[  \in, ~sterBus2, \out,0], ~stereoGrp);
 //main2
 ~stereo4.set(\spread,0,\center,0,\dlt1,0.35,\dlt2,0.34,\decT,0.0121, \mxDel,1);
 
 	// ~boost.play(t,quant:1);
 
-	wait(0.180);
+	wait(0.160);
 
 
 	s.record(path:"/Users/davidmignot/Music/SuperCollider Recordings/E/BPLX.aiff",numChannels:10,duration:t.beatDur*64);
