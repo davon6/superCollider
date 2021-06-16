@@ -63,7 +63,7 @@
 ~playBp=Synth(\playBufXs,[\buf, ~lpPrec3, \impulse, 0.080475,\out,~eqBus2x]);
 ~playBp.set(\start,30000,\out,~eqBus2x);
 ~eq4=Synth(\EQHP96, [\frq, 100, \out, ~revBus2],~eqGrp0);
-~eq4.set(\in, ~eqBus2x,\out,~gateBusB,\val, 1800,\quant, 1, \gain,(-15),\val2,5200,\quant2,1, \gain2,(-12), \val3,2800,\quant3,1, \gain3,(-6.2),\val4,6000,\shelf,1.2, \gain4,(-11),\val5,2200,\shelf2,1.1, \gain5,(-18));
+~eq4.set(\in, ~eqBus2x,\out,~gateBusB,\val, 1800,\quant, 1, \gain,(-15),\val2,5200,\quant2,1, \gain2,(-12), \val3,2800,\quant3,1, \gain3,(-6.2),\val4,6000,\shelf,1.2, \gain4,(-14),\val5,2200,\shelf2,1.1, \gain5,(-18));
 ~rev4=Synth( \reverb ,~revRnd[1],~revGrp); ~rev4.set(\in, ~revBus2 , \out, ~comBus2);
 ~comp4=Synth(\comp, [\ctrl, ~kbus ],~compGrp);
 ~comp4.set(\thr,0.88 ,\sB, 1.086,\sA, 1/2,\atk ,0.0242, \rel ,0.0968, \gain,4,\in, ~comBus2, \out,~limitBus2);
@@ -86,7 +86,7 @@
 ~playBp2.set(\start,2100000,\out,~filterRnd);
 //~eq5.free
 ~eq5=Synth(\EQHP96, [\frq, 100, \out, ~reverbBus23],~eqGrp0);
-~eq5.set(\in, ~filterRnd,\out,~gateBus23,\val, 1800,\quant, 1, \gain,(-15),\val2,5200,\quant2,1, \gain2,(-12), \val3,2800,\quant3,1, \gain3,(-6.2),\val4,6000,\shelf,1.2, \gain4,(-11),\val5,2200,\shelf2,1.1, \gain5,(-18));
+~eq5.set(\in, ~filterRnd,\out,~gateBus23,\val, 1800,\quant, 1, \gain,(-15),\val2,5200,\quant2,1, \gain2,(-12), \val3,2800,\quant3,1, \gain3,(-6.2),\val4,6000,\shelf,1.2, \gain4,(-14),\val5,2200,\shelf2,1.1, \gain5,(-18));
 ~rev5=Synth( \reverb ,~revRnd[1],~revGrp); ~rev5.set(\in,~reverbBus23  , \out,~comFuzz23);
 ~comp5=Synth(\comp, [\ctrl, ~kbus ],~compGrp);
 ~comp5.set(\thr,0.88 ,\sB, 1.016,\sA, 1/2,\atk ,0.0242, \rel ,0.0968, \gain,4,\in, ~comFuzz23, \out,~limitFuzz23);
@@ -205,6 +205,19 @@
 
 
 
+
+// ~eq61.free
+
+~eq61=Synth(\EQHP2, [\in,~toEq2,\out,~reverbBus4],~eqGrp0);
+~eq61.set(    \frq,100,\val6,500,\shelf2,1.5, \gain6,(-22));/*  \val, 1600,\quant, 1, \gain,(-8),\val2,110,\quant2,4,\gain2,(-10),\frq, 180,\val2,3700,\quant2,1.8,\gain2,(-16),\val4,2700,\shelf,1, \gain4,(-16.7),\val6,800,\shelf2,1, \gain6,(-22),\frq,200);*/
+~rev24=Synth(\reverbS,~quickFi,~revGrp);~rev24.set(\in,~reverbBus4, \out,~comFuzz4);
+~comp24=Synth(\compS,[\ctrl, ~kbus],~compGrp);
+~comp24.set(\thr,0.7 ,\sB, 1.024,\sA, 1/2,\atk ,0.0242, \rel ,0.0968, \gain,10,\in, ~comFuzz4, \out,~limitFuzz4);
+~mix24= Synth(\limiterStoMixer,[\c24,1,\in, ~limitFuzz4, \gain,30, \out,~stereoBus14],~limitGrp);
+~mix24.set(\gain,20.1,\out,~stereoBus14);
+~stereo24=Synth(\stereoS,[ \dur, 9999, \in, ~stereoBus14  ,\spread,0.2 ,\out,0], ~stereoGrp);
+~stereo24.set(\spread,0.5,\center,0.2);
+
 //passant
 
 
@@ -221,7 +234,7 @@ Pbindef(\testPa,\start,1676373);
 // ~eq24.free
 
 ~eq24=Synth(\EQHP96, [\frq, 100 ],~gateGrp2);
-~eq24.set(\in, ~gateBou, \out ,~revPass3 ,\val, 0,\quant, 0, \gain,0,\val2,0,\quant2,0, \gain2,0, \val3,0,\quant3,0, \gain3,0,\val4,2600,\shelf,1, \gain4,(-20),\frq, 100,\val5,1000,\shelf2,1.6,\gain5,(-10),\vol,0.0011);
+~eq24.set(\in, ~gateBou, \out ,~revPass3 ,\val, 0,\quant, 0, \gain,0,\val2,0,\quant2,0, \gain2,0, \val3,0,\quant3,0, \gain3,0,\val4,2600,\shelf,1, \gain4,(-20),\frq, 100,\val5,1000,\shelf2,1.6,\gain5,(-10),\vol,0.00096);
 
 
 /*
@@ -251,7 +264,7 @@ Pbindef(\testPa,\instrument,\playBufXG, \impulse, 0.3,\dur,Pseq([1/4],inf), \tS,
 Pbindef(\testPa, \start,135844)*/
 // ~eq30.free
 ~eq30=Synth(\EQHP96, [\frq, 100 ],~gateGrp2);
-~eq30.set(\in, ~eqPass6,\out, ~revPass3,\val, 3600,\quant, 1.4, \gain,(-13),\val2,800,\quant2,1.4, \gain2,(-10), \val3,0,\quant3,0, \gain3,0,\val4,2900,\shelf,1, \gain4,(-21),\frq, 100,\vol,0.00416);
+~eq30.set(\in, ~eqPass6,\out, ~revPass3,\val, 3600,\quant, 1.4, \gain,(-13),\val2,800,\quant2,1.4, \gain2,(-10), \val3,0,\quant3,0, \gain3,0,\val4,2900,\shelf,1, \gain4,(-14),\frq, 100,\vol,0.00416);
 
 
 
@@ -309,13 +322,8 @@ Pbindef(\testPa, \start,65263)
 ~stereo27=Synth(\stereo,[ \dur, 9999, \in, ~stereoPass3  ,\spread,0.2 ,\out,0], ~stereoGrp);
 
 
-
-
-
-
-
-
-
+~eq25=Synth(\EQHP96, [\frq, 100 ],~eqGrp0);
+~eq25.set(\in, ~eqRi,\out, ~revPass3,\val, 0,\quant, 0, \gain,0,\val2,0,\quant2,0, \gain2,0, \val3,0,\quant3,0, \gain3,0,\val4,1600,\shelf,1.5, \gain4,(-12),\frq, 150,\vol,0.00216);
 
 
 
@@ -856,9 +864,9 @@ Pbind(\instrument, \playBuf,  \tS,  0.39550810372374,\buf,~snare,\type, Pseq([\r
 
 
 ~limK=Synth(\limitertoMixer,[\c45,1,\in, ~limitKick, \gain,1,\out,~kToPan],~limitGrp);
-~limK.set(\gain,202);
+~limK.set(\gain,195.5);
 ~limB=Synth(\limitertoMixer,[\c46,1,\in, ~limitBass, \gain,68,\out,~kToPan],~limitGrp);
-~limB.set(\gain,178.5);
+~limB.set(\gain,176.5);
 
 ~kbPan2 = Synth(\pan2,[ \in,~kToPan,\out,~toKbGate],~stereoGrp);
 

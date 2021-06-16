@@ -152,9 +152,13 @@ Ppar([*/
 
 // Ppar([~boost,~hitPart1],1).play(t)
 
+
+/*
 MUST RERECROD RISING MAYBE MAKE IT BETTER,
 
-HAVE RISES MADE OUT OF TANTRA STYLE
+HAVE RISES MADE OUT OF TANTRA STYLE*/
+
+
 
 (~hitPart1 =Pseq([//maybe change to 12
 
@@ -454,7 +458,9 @@ Pseq([
 				],7),*/
 
 		//Pseq([32/1],1),
-					Pbind(\instrument, \gateS,\dur, Pseq([64/1],1), \tS,  0.39550810372374,\group, ~gateGrp11,\in,~tofinalRythm,\out,~toCom),
+				/*	Pbind(\instrument, \gateS,\dur, Pseq([64/1],1), \tS,  0.39550810372374,\group, ~gateGrp11,\in,~tofinalRythm,\out,~toCom),*/
+
+			Pbind(\instrument,\comp10P,\sB,1,\sA,0.3, \thr,1, \ctrl, ~shiftStereo,\tS,t.beatDur,\dur,Pseq([64/1],1),\in,~tofinalRythm,\out, ~toCom,\group,~gateGrp11),
 
 						],1),
 

@@ -249,6 +249,10 @@ s.sync;
 	~sterBus2= Bus.audio(s,1);
 	~sterBus5= Bus.audio(s,2);
 	~sterBus6= Bus.audio(s,2);
+
+	~eqRi= Bus.audio(s,1);
+
+	~toEq2 = Bus.audio(s,2);
 	~toLim = Bus.audio(s,2);
 	~to4bar= Bus.audio(s,2);
 	~bgSfil= Bus.audio(s,1);
@@ -726,7 +730,7 @@ s.sync;
 	~distoBus43 =  Bus.audio(s,1);~filterBus23=  Bus.audio(s,1);  ~eqBus23=  Bus.audio(s,1); ~gateBus23=  Bus.audio(s,1); ~reverbBus23=  Bus.audio(s,1); ~micBus23=  Bus.audio(s,1); ~micBus33=  Bus.audio(s,1);  ~comFuzz23=  Bus.audio(s,1);
 	~limitFuzz23=  Bus.audio(s,1); ~stereoBus23=  Bus.audio(s,1); ~no3=  Bus.audio(s,10);
 	~ptrBus23=Bus.audio(s,1); ~ptrBus33=Bus.audio(s,1);
-	~stereoBus14=  Bus.audio(s,1);  ~limitFuzz4=  Bus.audio(s,1);~comFuzz4=  Bus.audio(s,1);~reverbBus4=  Bus.audio(s,1);
+	~stereoBus14=  Bus.audio(s,2);  ~limitFuzz4=  Bus.audio(s,2);~comFuzz4=  Bus.audio(s,2);~reverbBus4=  Bus.audio(s,2);
 	~slideBus2=  Bus.audio(s,1);
 	~slideBus=  Bus.audio(s,1);  ~slideBusToLimit=  Bus.audio(s,1);
 	~slideBusToLimit2=  Bus.audio(s,1);
@@ -766,6 +770,8 @@ s.sync;
 	~part2RiComp2=  Bus.audio(s,10);
 	~part2RiLimit=  Bus.audio(s,2);
 	~part2RiStereo=  Bus.audio(s,2);
+
+	~gateComp =  Bus.audio(s,10);
 
 	~hit2ToEq=  Bus.audio(s,1);
 	~hit2ToStereo=  Bus.audio(s,1);
@@ -1110,7 +1116,7 @@ SynthDef(\kick, {
 		env =
 
 	EnvGen.ar(
-	Env([ 0.16 ,0.22, 0.18,   0.04  ,  0.4,0,0],
+	Env([ 0.15 ,0.21, 0.18,   0.04  ,  0.4,0,0],
 		[ 0.0024,0.0003,  0.0048,   0.08  , 0.07 , 0.1  ],[2.4,1,-12.6,-8,2,-1]),doneAction:2);
 
 
@@ -1983,6 +1989,9 @@ SynthDef(\EQHP96, {|out=0, in, val, quant, gain,frq=100, vol =0.05, val2,quant2,
 
 		frq),frq),frq),frq),frq),frq),frq),frq)*  In.ar(gainMod).linlin(0, 0.003,amp, 0).poll)};).add;
 
+	SynthDef(\gateVol,{|out=0,gainMod,amp=0.4,in,dur|Out.ar(out,In.ar(in, 10)*EnvGen.kr(Env.step([In.ar(gainMod).linlin(0, 0.003,amp, 0).poll,0],[dur,0],),timeScale: t.beatDur,doneAction: 2))}).add;
+
+
 
 	SynthDef(\EQHP, {|out=0, in, val, quant, gain,frq=100, vol =0.05, val2,quant2, gain2,val3,quant3,gain3, gain4,val4,shelf,val5,quant5, gain6| Out.ar(out,
 
@@ -2235,7 +2244,7 @@ SynthDef(\volAna,{|in=0|RMS.ar( In.ar(in)).ampdb.round(0.1).poll(label:" db" )})
 
 	SynthDef(\comp10P, {|in, ctrl, out= 0, dec  , thr  =0.01 ,sB = 1, sA = (1/4), atk = 0.001, rel = 0.04 , gain=1, dur,tS=1|
 
-		Out.ar(out, Compander.ar(In.ar(in,10) , In.ar(ctrl,1)  , thresh: thr, slopeBelow: sB, slopeAbove: sA, clampTime: atk, relaxTime: rel)* gain* EnvGen.kr(Env.step([1,1],[dur,0]),timeScale: tS,doneAction:2))}).add;
+		Out.ar(out, Compander.ar(In.ar(in,10) , In.ar(ctrl,1)/*.neg */ , thresh: thr, slopeBelow: sB, slopeAbove: sA, clampTime: atk, relaxTime: rel)* gain* EnvGen.kr(Env.step([1,1],[dur,0]),timeScale: tS,doneAction:2))}).add;
 
 
 
