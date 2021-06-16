@@ -174,6 +174,8 @@ rerecord stem2 check volumes rises
 
 FOLLOWING THE FLOW SHIF 2 may need to reverse compression control
 
+tantra need sichaining from main
+
 */
 
 

@@ -1160,6 +1160,8 @@ EnvGen.ar(
 	}).add;*/
 
 
+/*	before last
+
 	SynthDef(\kick, {
 		arg amp=0.2,out=0;
 		var sig, env, envF;
@@ -1176,8 +1178,36 @@ EnvGen.ar(
 
 EnvGen.ar(
 	Env([ 0.11 , 0.18,   0.04  ,  0.4,0,0],
-		[ 0.0024,  0.0048,   0.08  , 0.07 , 0.1  ],[1.5,-2.6,-12,2,-1]),doneAction:2);
+		[ 0.0024,  0.0048,   0.08  , 0.07 , 0.1  ],[1.5,0.5,-12,2,-1]),doneAction:2);
+                                                     //-2.6 can be zero
 
+		sig = SinOsc.ar(envF, mul: env);
+
+		sig = sig * amp.dbamp  ;
+	// sig = Pan2.ar(sig);
+		Out.ar(out, sig);
+	}).add;*/
+
+	//late last siuggestion
+
+		SynthDef(\kick, {
+		arg amp=0.2,out=0;
+		var sig, env, envF;
+
+		envF = EnvGen.ar(
+			Env(
+				[5178.15,440,114,26,0,0],
+				[0.006,0.018,0.167,0,0.4],
+					[-8.84,-3,-2]
+			)
+		);
+
+		env =
+
+EnvGen.ar(
+	Env([ 0.11 , 0.18,   0.04  ,  0.62,0,0],
+		[ 0.0024,  0.0048,   0.08  , 0.04 , 0.01  ],[1.5,0.5,-12,2,-6]),doneAction:2);
+                                                     //-2.6 can be zero
 
 		sig = SinOsc.ar(envF, mul: env);
 
