@@ -4860,6 +4860,177 @@ Pseq([
 }).play(t,quant:1))
 
 
+//////
+
+
+({ReplaceOut.ar(0,In.ar(0)!2)}.play)
+
+({PlayBuf.ar(1,~kb2Test)!2}.play)
+
+~kb2Test.play
+
+
+({Decimator.ar(PlayBuf.ar(1,~kb2Test),44800,12)!2}.play)
+
+
+Routine({
+({PingPong.ar(~delay6,LPF.ar(Decimator.ar(PlayBuf.ar(1,~kb2Test), XLine.kr(44800, 1200, 5, 1.0, doneAction: 0), XLine.kr(64, 24, 0.546, 1.0, 1.0, doneAction:     0)),MouseX.kr(80,14000))!2,0.4,0.5)*0.03}.play);
+	wait(0.16);
+
+	// s.record(path:"/Users/davidmignot/Music/SuperCollider Recordings/E/crushed.aiff",numChannels:2,duration:t.beatDur*64);
+
+}).play(t,quant:1)
+
+	~crushed=Buffer.read(s,"/Users/davidmignot/Music/SuperCollider Recordings/E/crushed.aiff");
+~crushed.play
+
+
+	Decimator.ar(sig, XLine.kr(44100.0, 37485.0, 0.546, 1.0, 1.0, doneAction: Done.freeSelf), XLine.kr(32, 24, 0.546, 1.0, 1.0, doneAction:     Done.freeSelf), 1.0, 0.0);
+
+Pbind(\instrument,\playBufS,\buf,~crushed,\tS,t.beatDur,\dur,Pseq([64/1],1),\out,0).play(t)
+
+Pbind(\instrument,\comp10P,\sB,99,\sA,2,  \ctrl, ~gateComp,\tS,t.beatDur,\dur,Pseq([64/1],1),\in,\out, 0,\group,~gateGrp5),
+
+Pbind(\instrument,\gateS, \tS,t.beatDur,\dur,Pseq([64/1],1),\in,~gateComp,\group,~gateGrp5),
+
+
+
+
+
+
+Routine({
+({PingPong.ar(~delay6,LPF.ar(Decimator.ar(
+
+	CombN.ar(Saw.ar(/*LFNoise.kr(1.2875).range(0.3,432)*/52.midicps/*MouseY.kr(100,432)*/),delaytime:
+	LFNoise1.kr(2.575).range(0.00001,0.01)
+
+	/*MouseX.kr(0.01,0.2)*/ ,decaytime: /*LFNoise0.kr(5.2875).range(-0.1,0.4)*/-0.2)
+	, XLine.kr(44800, 1200, 5, 1.0, doneAction: 0), XLine.kr(64, 24, 0.546, 1.0, 1.0, doneAction:     0)),MouseX.kr(80,14000))!2,0.4,0.5)*0.03}.play);
+	wait(0.16);
+
+	// s.record(path:"/Users/davidmignot/Music/SuperCollider Recordings/E/crushed.aiff",numChannels:2,duration:t.beatDur*64);
+
+}).play(t,quant:1)
+
+({PingPong.ar(~delay6,LPF.ar(PlayBuf.ar(1,~kb2Test),MouseX.kr(80,14000)),0.3,0.5)}.play)
+
+
+
+({Decimator.ar(PlayBuf.ar(1,~kb2Test),
+	SinOsc.kr(~hz1beat/16,1.4).range(44800,1200)
+/*	XLine.kr(44800, 1200, 5, 1.0, doneAction: 0)*/,
+
+	XLine.kr(64, 24, 0.546, 1.0, 1.0, doneAction:     0))!2}.play)
+
+
+
+({Decimator.ar(PlayBuf.ar(1,~kb2Test,loop: 1),
+	SinOsc.kr(~hz1beat/16,1.4).range(44800,1200)
+/*	XLine.kr(44800, 1200, 5, 1.0, doneAction: 0)*/,
+	SinOsc.kr(~hz1beat/16,0).range(65,25)
+/*	XLine.kr(64, 24, 0.546, 1.0, 1.0, doneAction:     0)*/)!2}.play)
+
+
+
+({Decimator.ar(PlayBuf.ar(1,~kb2Test),
+	SinOsc.kr(~hz1beat/16,1.4).range(44800,1200)
+/*	XLine.kr(44800, 1200, 5, 1.0, doneAction: 0)*/,
+
+	XLine.kr(64, 24, 0.546, 1.0, 1.0, doneAction:     0))!2}.play)
+
+
+Routine({
+({PingPong.ar(~delay6,LPF.ar(Decimator.ar(
+
+	CombN.ar(Saw.ar(52.midicps),delaytime:
+	LFNoise1.kr(2.575).range(0.00001,0.01)
+,decaytime:-0.2)
+	, /*XLine.kr(44800, 1200, 5, 1.0, doneAction: 0)*/
+		SinOsc.kr(~hz1beat/16,1.4).range(44800,1200), XLine.kr(64, 24, 0.546, 1.0, 1.0, doneAction:     0)),MouseX.kr(80,14000))!2,0.4,0.5)*0.03}.play);
+
+	wait(0.16);
+
+	s.record(path:"/Users/davidmignot/Music/SuperCollider Recordings/E/crushed.aiff",numChannels:2,duration:t.beatDur*64);
+
+}).play(t,quant:1)
+
+
+
+
+Pbind( \instrument,\playBufXG , \impulse, 0.3,\dur,Pseq([1/8],inf), \tS,  0.39550810372374,\start,/*~bufSnoopy2.numFrames.rand.postln*/3574097,\buf,~buf,\out,/*~gateBou*/~eqRi,\loopy,0,\type,Pseq([\note,\rest,\note,\rest],inf),
+			\vlSub,0.7.exprand(0.4,1),\vlSub2,Pkey(\vlSub),\atkT,0.10.exprand(0.01),
+	\decT,0.6.exprand(0.8,0.3),
+	\subsT,0.2.exprand(0.1),
+	\relT,0.22.exprand(0.1,1),
+	\atckC,6.exprand(1,1),
+	\decC,-4.exprand(-0.1),
+	\relC,-8.exprand(-2,1),\vlAtk ,1.00.exprand(0.01),\vlRel,0.1.exprand(0.01)).play(t)
+
+
+
+
+Pseq([
+
+		Pseq([
+		Pbind( \instrument,\playBuf , \impulse, 0.3,\dur,Pseq([6/1],1), \tS,  0.39550810372374,\start, Pfunc({~as}),\buf,~bufSnoopy2,\out,
+			Pfunc({if(~as==1676373 ,{~gateBou;},{~eqPass5;})})
+			,\loopy,0),
+		Pbind(\instrument,\gateS, \dur,  Pseq([10/1],1),\in,~finGran, \out,0,\group, ~gateGrp5,\tS, 0.39550810372374,),
+		],1),
+
+			Pseq([
+		Pbind( \instrument,\playBufXG, \impulse, 0.3,\dur,Pseq([1/4],12), \tS,  0.39550810372374,\start,  Pfunc({~tram}),\buf,~bufSnoopy2,\out,
+			Pfunc({if(~tram==3659560 ,{~eqPass1;},{~eqPass6;})})
+			,\loopy,0,\vlSub,0 ,\vlSub2,0,\decC,(-1),\type,Pseq([\note,\note,\rest,\rest,\note,\note,\rest,\rest].scramble,inf)),
+
+		Pbind(\instrument,\gateS, \dur,  Pseq([5/1],1),\in,~finGran, \out,0,\group, ~gateGrp5,\tS, 0.39550810372374,),
+	].scramble,2),
+
+			Pseq([
+		Pbind( \instrument,\playBuf, \impulse, 0.3,\dur,Pseq([1.5/1],1), \tS,  0.39550810372374,\start, Pfunc({~gram}),\buf,~bufSnoopy2,\out,
+			Pfunc({if(~gram==373706 ,{~eqPass2;},{~eqPass7;})})
+			,\loopy,0),
+
+		Pbind(\instrument,\gateS, \dur,  Pseq([6.5/1],1),\in,~finGran, \out,0,\group, ~gateGrp5,\tS, 0.39550810372374,),
+		].scramble,2),
+
+	Ppar([
+			Pseq([
+Pbind( \instrument,\playBufXG, \impulse, 0.3,\dur,Pseq([1/4],3), \tS,  0.39550810372374,\start,  Pfunc({~pick}),\buf,~bufSnoopy2,\out,
+				Pfunc({if(~pick==285965 ,{~eqPass3;},{~eqPass4;})})
+				,\loopy,0,\decT,0,\atkT,1,\atckC,8,\type,Pseq([\note,\rest].scramble,inf)),
+
+		Pbind(\instrument,\gateS, \dur,  Pseq([7.25/1],1),\in,~finGran, \out,0,\group, ~gateGrp5,\tS, 0.39550810372374,),
+		].scramble,2),
+
+		Pseq([
+			Pbind(\instrument,\gateS, \dur,  Pseq([15.9/1],1),\tS,t.beatDur,\type,\rest),
+			Pbind(\instrument,\gateS, \dur,  Pseq([0.1/1],1),\tS,t.beatDur,\type,\rest,\in,Pfunc({
+				if(~bool==True,{
+					~as=3890307; ~tram=135844;~gram=2321737; ~pick=65263;
+					~bool=False;
+				},{
+				~as=1676373; ~tram=3659560;~gram=373706; ~pick=285965;
+					~bool=True;})
+		}))],1)
+	],1)
+
+
+	// ~as=4676373/3890307; ~tram=3659560/135844;~gram=373706/2321737; ~pick=285965/65263
+
+],2),
+
+
+({	EnvGen.ar(
+	Env([ 0.15 ,0.21, 0.18,   0.04  ,  0.4,0,0],
+		[ 0.0024,0.0003,  0.0048,   0.08  , 0.07 , 0.1  ],[2.4,1,-12.6,-8,2,-1]),doneAction:2);}.plot(duration:0.3))
+
+
+
+
+
+
+
 
 ~rising  = Buffer.read(s,"/Users/davidmignot/Music/SuperCollider Recordings/E/rising.aiff");
 

@@ -249,7 +249,9 @@ f = { |n=14, min=0, max=11| (min..max).scramble.keep(n) };
 ~stereoGrp5 = Group.after(~dynaEq);
 ~compGrp6 = Group.after(~stereoGrp5);
 ~extraGrp = Group.after(~compGrp6);
-~kbGate= Group.after(~extraGrp);
+~dynaEq2= Group.after(~extraGrp);
+~compGrp7 = Group.after(~dynaEq2);
+~kbGate= Group.after(~compGrp7);
 ~recGrp3= Group.after(~kbGate);
 
 

@@ -54,18 +54,18 @@ Pbind(\instrument, \lfo13,\val,(~hzQbeat/4),\out,~bus2 ,\dur,999,\ph,0, \rL,200,
 	Pbind(\instrument, \playBuf10, \buf ,~leTout,\out,~toGate10, \start,
 
 	Pseq([
-				Pseq([ (~leTout.numFrames/ 256 * (190.rrand(1)) )],3),
-				Pseq([(~leTout.numFrames/ 256 * (190.rrand(1)))],3),
-				Pseq([ (~leTout.numFrames/ 256 * (190.rrand(1)))],3),
-				Pseq([ (~leTout.numFrames/ 256 * (190.rrand(1)))],3),
-				Pseq([ (~leTout.numFrames/ 256 * (190.rrand(1)))],3),
-				Pseq([(~leTout.numFrames/ 256 *( 190.rrand(1)))],3),
-				Pseq([ (~leTout.numFrames/ 256 * (190.rrand(1)))],3),
-				Pseq([ (~leTout.numFrames/ 256 * (190.rrand(1)))],3),
-				Pseq([ (~leTout.numFrames/ 256 * (190.rrand(1)))],3),
-					Pseq([(~leTout.numFrames/ 256 * (190.rrand(1)))],3),
-						Pseq([ (~leTout.numFrames/ 256 * (190.rrand(1)))],3),
-							Pseq([ (~leTout.numFrames/ 256 * (190.rrand(1)))],3),
+				Pseq([ (~leTout.numFrames/ 256 * (128.rrand(1)) )],3),
+				Pseq([(~leTout.numFrames/ 256 * (128.rrand(1)))],3),
+				Pseq([ (~leTout.numFrames/ 256 * (128.rrand(1)))],3),
+				Pseq([ (~leTout.numFrames/ 256 * (128.rrand(1)))],3),
+				Pseq([ (~leTout.numFrames/ 256 * (128.rrand(1)))],3),
+				Pseq([(~leTout.numFrames/ 256 *( 128.rrand(1)))],3),
+				Pseq([ (~leTout.numFrames/ 256 * (128.rrand(1)))],3),
+				Pseq([ (~leTout.numFrames/ 256 * (128.rrand(1)))],3),
+				Pseq([ (~leTout.numFrames/ 256 * (128.rrand(1)))],3),
+					Pseq([(~leTout.numFrames/ 256 * (128.rrand(1)))],3),
+						Pseq([ (~leTout.numFrames/ 256 * (128.rrand(1)))],3),
+							Pseq([ (~leTout.numFrames/ 256 * (128.rrand(1)))],3),
 	],inf)
 	,\loopy,0,\tS,0.39550810372374,\dur,  Pseq([
 
@@ -99,6 +99,7 @@ Pseq([ Pseq([8/1],1)],1)  ,Pseq([ Pseq([4/1],1)],1)   ,Pseq([Pseq([16/1],1) ,Pse
 			Pbind(\instrument, \playBuf10, \buf ,~leTout2,\out,~toShift,\loopy,0,\tS,t.beatDur,\dur,Pseq([64/1],1)),
 			Pbind(\instrument, \playBuf10, \buf ,~leTout,\out,~toShift,\loopy,0,\tS,t.beatDur,\dur,Pseq([64/1],1),\start,~leTout.numFrames/4 ),
 			Pbind(\instrument, \playBuf10, \buf ,~rising,\out,~toShift ,\loopy,0,\tS,t.beatDur,\dur,Pseq([64/1],1)),
+				//above can be better
 		],1),
 
 		Pseq([
@@ -198,8 +199,36 @@ Pseq([ Pseq([8/1],1)],1)  ,Pseq([ Pseq([4/1],1)],1)   ,Pseq([Pseq([16/1],1) ,Pse
 		/*	Pbind(\instrument,\gate,\in,	~bgGate,\out,~bgDisto,\group, ~granuGrp,\type,Pseq([\note,\rest  ,\rest,\rest,\rest,\rest,\rest,\rest  ].scramble,2)  ,  \dur, Pseq([16/1],16),
 				\vlAtk,0,\atkT,0.05,\relT,0.25,\decT,0.70,\atckC,6, \relC,-6,\vlRel,0,\decC,(-9))*/
 
+		],1),
+
+		Pseq([
+
+			//3*64+16
+		Pbind(\instrument,\gateS,\in,~toExtraComp  ,\out,  0 ,\group,~kbGate,\dur, Pseq([208/1],1),\tS,t.beatDur),
+		Pbind(\instrument,\comp10P,\sB,1,\sA,0.3, \thr,1, \ctrl,~bigRiToStereo ,\tS,t.beatDur,\dur,Pseq([64/1],1),\in,~toExtraComp,\out, 0,\group,~kbGate),
+			//for downshifter
+				Pbind(\instrument,\comp10P,\sB,1,\sA,0.3, \thr,1, \ctrl,~downStereo ,\tS,t.beatDur,\dur,Pseq([64/1],1),\in,~toExtraComp,\out, 0,\group,~kbGate),
+
+			// 34*16
+		Pbind(\instrument,\gateS,\in,~toExtraComp  ,\out,  0  	,\group,~kbGate, \dur,Pseq([416/1],1),\tS,t.beatDur),
+
+			//for shift 2
+			Pbind(\instrument,\comp10P,\sB,1,\sA,0.3, \thr,1, \ctrl,~shiftStereo ,\tS,t.beatDur,\dur,Pseq([64/1],1),\in,~toExtraComp,\out, 0,\group,~kbGate),
+			//for shift 3
+			Pbind(\instrument,\comp10P,\sB,1,\sA,0.3, \thr,1, \ctrl,~shiftStereo2 ,\tS,t.beatDur,\dur,Pseq([64/1],1),\in,~toExtraComp,\out, 0,\group,~kbGate),
+
+			//for trippy
+			Pbind(\instrument,\comp10P,\sB,1,\sA,0.3, \thr,1, \ctrl,~riTriptoStereo ,\tS,t.beatDur,\dur,Pseq([32/1],1),\in,~toExtraComp,\out, 0,\group,~kbGate),
+			Pbind(\instrument,\gateS,\in, ~toExtraComp ,\out, 0,\group,~kbGate,\dur, Pseq([129/1],1),\tS,t.beatDur),
+			// 8*16 +1
+			//bigrises no2
+			Pbind(\instrument,\comp10P,\sB,1,\sA,0.3, \thr,1, \ctrl,~bigRiToStereo2 ,\tS,t.beatDur,\dur,Pseq([64/1],1),\in,~toExtraComp,\out, 0,\group,~kbGate),
 
 		],1)
+
+		/*208+64+64+544+32+129+64=1105
+
+1105-1024*/
 	],1).play(t);
 
 	wait(0.142);

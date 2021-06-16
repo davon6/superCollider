@@ -156,7 +156,25 @@ Ppar([*/
 /*
 MUST RERECROD RISING MAYBE MAKE IT BETTER,
 
-HAVE RISES MADE OUT OF TANTRA STYLE*/
+HAVE RISES MADE OUT OF TANTRA STYLE !!
+
+LOST BG BUT SO BAD JUST HAVE IT AS INTRO
+
+find a way  maybe compression to makie bigri more intense
+
+lost all compressed bgs
+
+letout part 4 wrong
+
+
+try reduce bass freq to increase general volume while reaval more 300
+
+
+rerecord stem2 check volumes rises
+
+FOLLOWING THE FLOW SHIF 2 may need to reverse compression control
+
+*/
 
 
 
@@ -722,7 +740,7 @@ Ppar([
 		Pbind(\instrument, \playBuf, \impulse, 0.003 ,\dur,Pseq([61/1],1), \tS,  0.39550810370174,\buf,~k2,\type,\rest),
 
 
-		Pbind(\instrument, \playBuf,\rte,1,\dur, Pseq([6/1],1),\impulse, 0.00001,\loo,0,\buf,~voc,\out, ~vocalBus,\tS,  0.39550810372374,\vl,1)
+	/*	Pbind(\instrument, \playBuf,\rte,1,\dur, Pseq([6/1],1),\impulse, 0.00001,\loo,0,\buf,~voc,\out, ~vocalBus,\tS,  0.39550810372374,\vl,1)*/
 
 
 	],1),
