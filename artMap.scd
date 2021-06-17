@@ -1050,3 +1050,90 @@ v.set(\multi, modFreq.round(0.01).postln);
 },ccNum: 75 ); //is 11*/
 
 )
+
+
+2/12*2
+
+
+(
+SynthDef(\chord2,{|bu=1,dur,out=0|
+
+	Out.ar(out,
+		(Saw.ar(64.midicps*In.kr(bu)+EnvGen.kr(Env([50],[dur]), timeScale:t.beatDur*1.5),EnvGen.kr(Env([0,1,1],[1.23,dur]),timeScale: t.beatDur*1,doneAction: 2))
+			+		Saw.ar(69.midicps*In.kr(bu)+EnvGen.kr(Env([50],[dur]), timeScale:t.beatDur*1.5), EnvGen.kr(Env([0,1,1],[1.23,dur]),timeScale: t.beatDur*1,doneAction: 2))+
+			Saw.ar(61.midicps*In.kr(bu)+EnvGen.kr(Env([50],[dur]), timeScale:t.beatDur*1.5),EnvGen.kr(Env([0,1,1],[1.23,dur]),timeScale: t.beatDur*1,doneAction: 2))).round(2**(-16))*0.07)
+}).add;
+
+
+
+/*
+~extraDelay =Group.new;
+Ppar([
+Pbind(\instrument, \chord2, \bu, /*Pseq([1,1.33333333333333,1.5,1.33333333333333,0.16666666666667,1.33333333333333],1),*/
+	Pseq([1,1.083333333333335,1.16666666666 667,1.083333333333335,1.041666666666667,1.16666666666667],inf),
+	\dur,Pseq([  Pseq([2/1],1),Pseq([2/1],1)  ,Pseq([1/1],1),Pseq([2/1],1),Pseq([1],1),Pseq([1/1],1)],inf)),
+
+	Pbind(\instrument, \pingD, \in,~delayToLimit  ,\bufnum, ~delay6, \feedback,0.33 ,\dur, inf,\out,0/*~delayBus2*/,\group,  ~extraDelay)],1).play(t);*/
+
+
+
+~extraDelay =Group.new;
+~revGrp=Group.after(~extraDelay);
+Ppar([
+Pbind(\instrument, \chord2, \bu, /*Pseq([1,1.33333333333333,1.5,1.33333333333333,0.16666666666667,1.33333333333333],1),*/
+	Pseq([1,1.083333333333335,1.16666666666667,1.083333333333335,1.041666666666667,1.083333333333335,
+			1,1.083333333333335,1.16666666666667,1.23333333333334 ,1.33333333333334,1.4
+
+		],inf),
+	\dur,Pseq([  Pseq([4/1],1),Pseq([3/1],1)  ,Pseq([2/1],1),Pseq([3/1],1),Pseq([2/1],1),Pseq([2/1],1),
+	 Pseq([4/1],1),Pseq([3/1],1)  ,Pseq([2/1],1),Pseq([3/1],1),Pseq([2/1],1),Pseq([2/1],1)
+	],inf)),
+
+	Pbind(\instrument, \pingD, \in,~delayToLimit  ,\bufnum, ~delay6, \feedback,0.33 ,\dur, inf,\out,~delayBus2,\group,  ~extraDelay)],1).play(t);
+
+
+//preferred
+Routine({
+~extraDelay =Group.new;
+~revGrp=Group.after(~extraDelay);
+Ppar([
+
+
+
+	Pbind(\instrument, \lfoStep,\out,~bus1, \val,	Pseq([1,1.083333333333335,1.16666666666667,1.083333333333335,1.041666666666667,1.083333333333335,
+			1,1.083333333333335,1.16666666666667,1.23333333333334 ,1.33333333333334,/*1.4*/
+
+		],inf),\tS,t.beatDur,\dur,Pseq([  Pseq([4/1],1),Pseq([3/1],1)  ,Pseq([2/1],1),Pseq([3/1],1),Pseq([2/1],1),Pseq([2/1],1),
+		Pseq([5/1],1)/*,Pseq([3/1],1) */ ,Pseq([2/1],1),Pseq([3/1],1),Pseq([2/1],1),Pseq([4/1],1)	],inf)),
+
+
+	Pbind(\instrument, \chord2,\bu,~bus1,\dur,Pseq([ 64/1],1),\out, ~delayToLimit/* \bu,
+	Pseq([1,1.083333333333335,1.16666666666667,1.083333333333335,1.041666666666667,1.083333333333335,
+			1,1.083333333333335,1.16666666666667,1.23333333333334 ,1.33333333333334,1.4
+
+		],inf),
+	\dur,Pseq([  Pseq([6/1],1),Pseq([3/1],1)  ,Pseq([2/1],1),Pseq([3/1],1),Pseq([2/1],1),Pseq([2/1],1),
+	 Pseq([2/1],1),Pseq([3/1],1)  ,Pseq([2/1],1),Pseq([3/1],1),Pseq([2/1],1),Pseq([2/1],1)
+	],inf)*/),
+
+	Pbind(\instrument, \pingD, \in,~delayToLimit  ,\bufnum, ~delay6, \feedback,0.33 ,\dur, inf,\out,~delayBus2,\group,  ~extraDelay,\delayTime,0.3)],1).play(t);
+
+/*Pbind(\instrument, \del, \in,~delayToLimit  ,\bufnum, ~delay6, \decT,1.5544,\delT,0.6 ,\dur, inf,\out,~delayBus2,\group,  ~extraDelay,\delayTime,0.25)],1).play(t);*/
+
+~rev2= Synth( \reverbS,~rLon,    ~revGrp );
+~rev2.set(\in,~delayBus2 , \mix,0.8,\room,0.6);
+/*~rev2= Synth( \reverbMad,~churcx,    ~revGrp );
+~rev2.set( \in,~delayBus2  , \out, 0,\taillevel,2,\revtime, 14.85, \damping, 0.1,\roomsize, 16,\inputbw,0.8);
+~rev2.set( \in,~delayBus2  , \out, 0,\taillevel,-4,\revtime, 14.85, \damping, 0.01,\roomsize, 46,\inputbw,0.02);*/
+
+
+wait(0.16);
+
+
+ s.record(path:"/Users/davidmignot/Music/SuperCollider Recordings/E/pad2.aiff",numChannels:1);
+
+}).play(t)
+
+
+ ~pad2= Buffer.read(s,"/Users/davidmignot/Music/SuperCollider Recordings/E/pad2.aiff");
+~pad2.play

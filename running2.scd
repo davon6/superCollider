@@ -60,6 +60,7 @@ f = { |n=14, min=0, max=11| (min..max).scramble.keep(n) };
 ~lpPrec33= Buffer.read(s,"/Users/davidmignot/Music/SuperCollider Recordings/E/BPLX2.aiff");
 
 ~b4=Buffer.read(s,"/Users/davidmignot/Music/SuperCollider Recordings/E/bass2.aiff");
+~rise1=Buffer.read(s,"/Users/davidmignot/Music/SuperCollider Recordings/E/rise1.aiff");
 
 ~ped= Buffer.read(s,"/Users/davidmignot/Music/SuperCollider Recordings/E/pedonk.aiff");
 ~vap  = Buffer.read(s,"/Users/davidmignot/Music/SuperCollider Recordings/E/vap.aiff");
@@ -249,10 +250,12 @@ f = { |n=14, min=0, max=11| (min..max).scramble.keep(n) };
 ~stereoGrp5 = Group.after(~dynaEq);
 ~compGrp6 = Group.after(~stereoGrp5);
 ~extraGrp = Group.after(~compGrp6);
-~dynaEq2= Group.after(~extraGrp);
+
+~kbGate= Group.after(~extraGrp);
+
+~dynaEq2= Group.after(~kbGate);
 ~compGrp7 = Group.after(~dynaEq2);
-~kbGate= Group.after(~compGrp7);
-~recGrp3= Group.after(~kbGate);
+~recGrp3= Group.after(~compGrp7);
 
 
 
@@ -616,7 +619,7 @@ Pseq([\rest ,\rest,\note,\rest  ,\rest,\rest,\note,\rest,  \rest,\rest,\note,\re
 
 		Pseq([
 
-	 Pbind(\instrument, \playBuf, \buf, ~clap,\vl,1,\tS,t.beatDur,\dur,Pseq([1/2],64),\loopy,0,\type, Pseq([\rest,\rest,\note,\rest ],inf),\out,~clapEq),
+	 Pbind(\instrument, \playBuf, \buf, ~clap,\vl,1,\tS,t.beatDur,\dur,Pseq([1/2],128),\loopy,0,\type, Pseq([\rest,\rest,\note,\rest ],inf),\out,~clapEq),
 
 		Pbind(\instrument, \playBuf,  \tS,  0.39550810372374,\buf,~snare,
 		\type,
@@ -1076,7 +1079,7 @@ Ppar([
 
 
 
-~hitX.play(t)
+~hitX.play(t,quant:1)
 ~hitX.stop;
 (~hitX=
 
@@ -1147,7 +1150,7 @@ Pseq([
 
 ],1),*/
 			Pbind( \instrument, \playBuf10, \impulse, 10 ,
-							\dur,  Pseq([1/1],8) , \tS,  0.39550810372374,\start,1385868.5,\buf,~leTout,\out, ~gateRise,\loopy,0,\vl,1),
+			\dur,  Pseq([1/1],8) , \tS,  0.39550810372374,\start,~leTout.numFrames/192*(115),\buf,~leTout,\out, ~gateRise,\loopy,0,\vl,1),
 
 
 			Pbind(\instrument, \gateS, \group,~gateGrp3, \in,~risesGate, \out, ~gateRise,\dur,Pseq([56/1],1),\tS, 0.39550810372374 ),
@@ -1167,7 +1170,7 @@ Pseq([
 
 							,
 						Pbind( \instrument, \playBuf10, \impulse, 10 ,
-							\dur,  Pseq([1/1],3) , \tS,  0.39550810372374,\start,1385868.5,\buf,~leTout,\out, ~gateRise,\loopy,0,\vl,1)
+							\dur,  Pseq([1/1],3) , \tS,  0.39550810372374,\start,~leTout.numFrames/192*(115),\buf,~leTout,\out, ~gateRise,\loopy,0,\vl,1)
 						],1),
 ],1),
 
@@ -1193,7 +1196,7 @@ Pbind(\instrument,\playBuf,\loopy,0,\buf,~bell1,\out, ~bellFlang  ,\tS, 0.395508
 
 					,
 						Pbind( \instrument, \playBuf10, \impulse, 10 ,
-							\dur,  Pseq([1/2],4) , \tS,  0.39550810372374,\start,1518760.0,\buf,~leTout,\out, ~gateRise,\loopy,0,\vl,1)
+							\dur,  Pseq([1/2],4) , \tS,  0.39550810372374,\start,~leTout.numFrames/192*(118),\buf,~leTout,\out, ~gateRise,\loopy,0,\vl,1)
 
 				],1),
 ],1),
@@ -1224,7 +1227,7 @@ Ppar([
 
 
 						Pbind( \instrument, \playBuf10, \impulse, 10 ,
-							\dur,  Pseq([1/1],1) , \tS,  0.39550810372374,\start,1518760.0,\buf,~leTout,\out,~gateRise /*~bangLimit*/,\loopy,0,\vl,1)
+							\dur,  Pseq([1/1],1) , \tS,  0.39550810372374,\start,~leTout.numFrames/192*(118),\buf,~leTout,\out,~gateRise /*~bangLimit*/,\loopy,0,\vl,1)
 				],1),
 ],1),
 
@@ -1566,6 +1569,8 @@ Ppar([~base,~fx],1).play(t)
 
 ],1))
 
+Pedonk is obvisouly wrong
+
 Routine({
 
 Ppar([~boost,~pedonk],1).play(t);
@@ -1674,7 +1679,7 @@ Routine({
 
 	wait(0.160005);
 
-	  s.record(path:"/Users/davidmignot/Music/SuperCollider Recordings/E/stem1.aiff",numChannels:10,duration:t.beatDur*256);
+	  s.record(path:"/Users/davidmignot/Music/SuperCollider Recordings/E/stem1.aiff",numChannels:10,duration:t.beatDur*192);
 
 
 }).play(t,quant:1))
@@ -1688,8 +1693,7 @@ Routine({
 
 
 
-
-
+128+64
 
 
 ~leTout =  Buffer.read(s,"/Users/davidmignot/Music/SuperCollider Recordings/E/stem1.aiff")

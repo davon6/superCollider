@@ -3830,7 +3830,7 @@ Pbind(\instrument, \gate, \in,~gateBus23,\tS,t.beatDur,\dur,Pseq([9999/1],inf), 
 
 Pseq([
 
-		Pbind(\instrument, \playBuf10, \buf ,~leTout2,\out,Pwrand([~toDelay10b,~toCom3],[1,4].normalizeSum,inf), \start,Pfunc({~leTout.numFrames/ 256 * 190.rand})
+		Pbind(\instrument, \playBuf10, \buf ,~leTout2,\out,Pwrand([~toDelay10b,~toCom3],[1,4].normalizeSum,inf), \start,Pfunc({~leTout.numFrames/ 128 * 96.rand})
 	,\loopy,0,\tS,0.39550810372374,\dur,Pseq([2/1],1),),
 
 
@@ -4144,7 +4144,7 @@ Pbind(\instrument,\rise,\dur,Pseq([64/1],1), \vlAtk, 0,\f1, 0.3 , \f2, 0.4 , \f3
 		],15),
 
 
-				Pbind(\instrument, \playBuf10, \impulse, 0.003 ,\dur,Pseq([2/1],1), \tS,  0.39550810370174,\buf,~leTout,\out, 0,\loopy,0,\start,(~leTout.numFrames /256*(190.rand))),
+				Pbind(\instrument, \playBuf10, \impulse, 0.003 ,\dur,Pseq([2/1],1), \tS,  0.39550810370174,\buf,~leTout,\out, 0,\loopy,0,\start,(~leTout.numFrames /128*(96.rand))),
 
 
 				Prand([
@@ -4157,7 +4157,7 @@ Pbind(\instrument,\rise,\dur,Pseq([64/1],1), \vlAtk, 0,\f1, 0.3 , \f2, 0.4 , \f3
 
 		],7),
 
-Pbind(\instrument, \playBuf10, \impulse, 0.003 ,\dur,Pseq([2/1],1), \tS,  0.39550810370174,\buf,~leTout,\out, 0,\loopy,0,\start,Pfunc({ ~reve=(~leTout.numFrames /256*(190.rand))})),
+Pbind(\instrument, \playBuf10, \impulse, 0.003 ,\dur,Pseq([2/1],1), \tS,  0.39550810370174,\buf,~leTout,\out, 0,\loopy,0,\start,Pfunc({ ~reve=(~leTout.numFrames /128*(96.rand))})),
 
 
 						Prand([
@@ -5603,7 +5603,7 @@ SynthDef(\roygbiv, { |out = 0, midinote = 40, gate = 0|
 
 x.free; y.free; r.stop;
 
-	 s.record(path:"/Users/davidmignot/Music/SuperCollider Recordings/E/bassBrk.aiff",numChannels:2,duration:t.beatDur*4);
+	 s.record(path:"/Users/davidmignot/Music/SuperCollider Recordings/E/bassBrk.aiff",numChannels:2,duration:t.beatDur*8);
 x = Synth(\roygbiv);
 
 y = {
@@ -5634,7 +5634,7 @@ Routine({
 ({LPFVS6.ar( PlayBuf.ar(2,~bssBrk),100)*4}.play);
 
 	wait(0.16);
-	 s.record(path:"/Users/davidmignot/Music/SuperCollider Recordings/E/bassBrkF.aiff",numChannels:2,duration:t.beatDur*4);
+	 s.record(path:"/Users/davidmignot/Music/SuperCollider Recordings/E/bassBrkF.aiff",numChannels:2,duration:t.beatDur*8);
 
 }).play
 	~bssBrkF.play
@@ -6010,4 +6010,297 @@ Pbind(\instrument, \lfo13T, \val,~hz1beat/64,\dur,Pseq([48/1],1),\rL,0,\rH,3350,
 
 
 
+///rise1
+	// Pbind(\instrumentm,\wNoise,\dur,Pseq([64/1],1),\tS,t.beatDur,
 
+SynthDef(\noisy,{Out.ar(~bellFlang4, WhiteNoise.ar(0.5))}).add;
+
+Routine({
+Ppar([
+	Pbind(\instrument,\lfo13, \val ,~hz1beat/128,\ph,5.6,\rL,100,\rH,9520,\dur,Pseq([64/1],1),\out,~bus19),
+	Pbind(\instrument,\noisy,\dur,Pseq([64/1],1))
+],1).play(t,quant:1);
+
+	wait(0.16);
+
+	s.record(path:"/Users/davidmignot/Music/SuperCollider Recordings/E/rise1.aiff",numChannels:1,duration:t.beatDur*128);
+
+}).play(t,quant:1)
+
+~rise1=Buffer.read(s,"/Users/davidmignot/Music/SuperCollider Recordings/E/rise1.aiff");
+~rise1.play
+
+ ~flangBon=Synth( \flanger1,[ \in,~bellFlang4, \out,~riToDisto2],~phaserGrp);
+ ~flangBon.set(\flangefreq,~hz1beat/64,\ph,4.3,\fdback,-0.8,\out,~riToDisto2);
+~distBon= Synth(\disto,[\in, ~riToDisto2 , \out,~riToEnv3], ~distoGrp);
+
+~filBon=Synth( \filter, [\in,~riToEnv3,\out,0, \busMod,~bus19, \which, 0,\qf,0.5, \freqFil, 1500],~filterGrp);
+
+// Pseq([~kick],128).play(t)
+
+~eqBon =Synth(\EQHP96, [ \frq, 100 ], ~eqGrp0);
+~eqBon.set(\in, ~riToEq , \out, ~riToRev, \val4,0,\shelf,0, \gain4,(-0), \val5,0,\shelf2,0, \gain5,0/*\val,3000, \quant,1, \gain,(-8),\val2,5000,\quant2,6, \gain2,(-8)*/);
+
+Pbind(\instrument, \playBuf,\buf, ~rise1, \tS, t.beatDur, \dur ,Pseq([64/1],1),\loopy,0,\start,1430016).play(t)
+	~rise1.numFrames
+
+
+	//rising 2
+
+
+
+~uuu = 1;
+(
+Routine({
+
+
+Pseq([
+
+
+		Pbind(\instrument, \playBuf10, \buf ,~leTout2,\out,0, \start,~leTout2.numFrames/256* (215.rand.postln)
+		,\loopy,0,\tS,0.39550810372374,\dur,Pseq([2/1],1),\rte,Pfunc({~uuu=~uuu+0.2;~uuu;})),
+
+
+
+Prand([
+	Pbind(\instrument, \gateS ,\in,~no51   ,\vlDec,1,
+		\dur,Pxrand([Pseq([1/4],10), Pseq([1.5/1],1)  ],1) ,    \group,~gateGrp4, \out,0,\tS, 0.39550810372374,
+		\vlSub,Pfunc({0.9.exprand(0.4,1)}),\vlSub2,Pkey(\vlSub),\atkT,Pfunc({0.10.exprand(0.01)}),
+	\decT,Pfunc({0.6.exprand(0.8,0.3)}),
+	\subsT,Pfunc({0.3.exprand(0.2)}),
+	\relT,Pfunc({0.22.exprand(0.1,1)}),
+	\atckC,Pfunc({6.exprand(1,1)}),
+	\decC,Pfunc({-4.exprand(-0.1)}),
+				\relC,Pfunc({-8.exprand(-2,1)}),\vlAtk ,Pfunc({0.01.exprand(0.001)}),\vlRel,Pkey(\vlAtk)),
+
+
+					Pbind(\instrument, \gateS , \dur,Pseq([1/8],20),  \in,~no51 ,\type,Pseq([\note,\rest],inf),\tS, 0.39550810372374,  \group,~gateGrp4,)
+				],1)
+
+
+],12).play(t);
+
+	wait(0.16);
+
+	 s.record(path:"/Users/davidmignot/Music/SuperCollider Recordings/E/rising.aiff",numChannels:10,duration:t.beatDur*33);
+}).play(t,quant:1))
+
+
+
+	///slidy
+
+
+	Ppar([
+
+	Pbind(\instrument, \playBuf10, \buf ,~leTout2,\out,Pseq([
+	Pseq([  ~toSlide],4),~toDelay10c, Pseq([  0],3),
+	Pseq([  0],8),
+
+	Pseq([  ~toSlide],5),~toDelay10c, Pseq([  0],2),
+		Pseq([  0],8),
+	Pseq([  ~toSlide],6),~toDelay10c, Pseq([  0],1),
+		Pseq([  0],8),
+	Pseq([  ~toSlide],7),~toDelay10c,
+	Pseq([  0],8),
+
+
+],inf)
+
+
+	, \start,Pfunc({~leTout2.numFrames/256* (220.rand)})
+			,\loopy,0,\tS,0.39550810372374,\dur,Pseq([1/2],128),
+
+	\type,Pseq([\note,\note,\note,\note,\note,      \rest,\rest,\rest,
+	Pseq([\rest],8),
+	\note,\note,\note,\note,\note,\note,             \rest,\rest,
+	Pseq([\rest],8),
+	\note,\note,\note,\note,\note,\note,\note,       \rest,
+	Pseq([\rest],8),
+	\note,\note,\note,\note,\note,\note,\note,\note,
+	Pseq([\rest],8),
+],inf)),
+
+	Pbind(\instrument, \envSli, \out,~bus34,\val1,700,\val2,11000, \tS, t.beatDur,\dur,Pseq([2/1],32),\crv,3,
+		\fc1,0.77,\fc2,0.23
+	)
+
+
+],1).play(t)
+
+~slidy=Synth(\filter10, [\freqFil,100, \busMod,~bus34,\qf,0.5,\in,~toSlide,\out,0],~filterGrp)
+
+
+//break new backup
+
+	(
+	~breakPart1=		Ppar([
+
+
+	Pseq([
+
+		Pbind(\instrument, \playBuf, \impulse, 0.003 ,\dur,Pseq([61/1],1), \tS,  0.39550810370174,\buf,~k2,\type,\rest),
+
+
+	/*	Pbind(\instrument, \playBuf,\rte,1,\dur, Pseq([6/1],1),\impulse, 0.00001,\loo,0,\buf,~voc,\out, ~vocalBus,\tS,  0.39550810372374,\vl,1)*/
+
+
+	],1),
+
+
+Pseq([
+
+		Pbind(\instrument, \playBuf, \impulse, 0.003 ,\dur,Pseq([32/1],1), \tS,  0.39550810370174,\buf,~k2,\type,\rest),
+
+				Pbind(\instrument, \granLiveA,\buf,~snare,\out,~snareFlang,\amp,0.005,\dur, Pseq([90/1],1), \tS,  0.39550810370174/*,\type,Pseq([\rest,\note],inf)*/),
+
+				 ],1),
+
+
+	Pbind(\instrument, \kiasmosPad,\scale, Scale.chromatic,\degree, Prand((0..12), inf) + [-31,-15,-11,-5,0,1], \amp, 0.1,\atk, 4, \rel, 1.5544,\legato, 2,\dur, Pseq([16/1],5),\tS,  0.39550810370174,\out,~kiasDisto),
+
+	//from here
+Pseq([
+
+						Ppar([
+			Pbind(\instrument,\envSli,\out, ~bus29,\dur,Pseq([64/1],1),\tS, 0.39550810372374,\val1,4600,\val2,1160,\crv,-2.2),
+						Pbind(\instrument, \lfo13,\val,(~hzQbeat/32),\out,~bus24 ,\dur,Pseq([64/1],1),\ph,1.4, \rL,800,\rH,6000, \group, ~lfoGrp,\tS, 0.39550810372374),
+
+
+
+	Pbind(\instrument, \playBufS, \dur,  Pseq([8/1],1), \tS,  0.39550810370174,\buf,~kb1,\out, ~filKB,\loopy,0, \start,0),
+
+
+
+			Pbind(\instrument,  \stereoX1, \in,~bgStereo2,  \out, ~toCom, \modPan,~bus10 ,   \center, 0.1  ,\dur,Pseq([64/1],1),  \group, ~stereoGrp,\spread, 0.8,\tS,  0.39550810372374,\vlSub,0.3,\atkT,  0.01,\decT,0.999),
+
+
+
+
+
+
+
+/*
+	Pseq([
+
+		Pbind(\instrument, \playBuf, \impulse, 0.003 ,\dur,Pseq([32/1],1), \tS,  0.39550810370174,\buf,~k2,\type,\rest),
+
+
+						Pbind(\instrument,\playBufXG2, \buf,~pad, \atckC,4, \relC,-8,\decT ,0.85, \atkT,0.05,\relT,0.1,  \vlSub, 0.6,  \vlDec,Pkey(\vlSub), \vlSub2,Pkey(\vlSub),
+						\dur,  Pseq([32/1],1), \tS,  0.39550810370174,\start,0/*~pad.numFrames.rrand(180000)-180000*/),
+
+				 ],1),*/
+
+
+	Pseq([
+
+		Pbind(\instrument, \playBuf, \impulse, 0.003 ,\dur,Pseq([16/1],1), \tS,  0.39550810370174,\buf,~k2,\out, ~kickRv,\loopy,0,\start,0,\rte,0.3,\type,\rest,\vl,1.2),
+				Pbind(\instrument, \playBufS, \dur,  Pseq([24/1],1 ), \tS,  0.39550810372374,\buf,~kb1,\out,~filKB2, \start,0),
+
+		Ppar([
+
+	Pbind(\instrument,\lfo13, \val,0.0201171875*8,\dur,Pseq([16/1],1)/*Pseq([48/1],1)*/,\ph,4.4, \out,~mixM, \tS, 0.39550810372374,\rL,0 ,\rH,0.8),
+Pbind(\instrument,\lfo13, \val,0.1609375,\dur,Pseq([16/1],1),\ph,4.4, \out,~roomM ,\tS, 0.39550810372374,\rL,0 ,\rH,0.8),
+Pbind(\instrument,\lfo13, \val,0.1609375,\dur,Pseq([16/1],1),\ph,4.4, \out, ~dampM,\tS, 0.39550810372374,\rL, 0.41,\rH,0.8),
+
+	/*Pbind(\instrument, \playBuf, \impulse, 0.003 ,\dur,Pseq([1/1],45), \tS,  0.39550810370174,\buf,~k2,\out, ~kickRv,\loopy,0,\start,0,\rte,0.3,\type,Pseq([ Pseq([\note],44),\rest,\rest],1),\vl, 1.3),*/
+Pseq([
+					Pbind(\instrument, \playBuf, \impulse, 0.003 ,\dur,Pseq([1/1],12), \tS,  0.39550810370174,\buf,~k2,\out, ~kickRv,\loopy,0,\start,0,\rte,0.3,\type,Pseq([ Pseq([\note],13),\rest,\rest,\rest],1),\vl, 1.3),
+						Pbind(\instrument, \playBuf,\rte,0.5,\dur, Pseq([2/1],1),\impulse, 0.00001,\loo,0,\buf,~k2/*~vocal*/,\out, /*~vocalBus*/0,\tS,  0.39550810372374,\vl,2.162,\type,\rest)],1)
+
+
+],1)
+					],1),
+
+						 ],1),
+
+
+					Ppar([
+
+//here
+
+				Pbind(\instrument, \envSli, \out,   ~bus30,  \dur,Pseq([64/1],1),\tS, 0.39550810372374,\val1,30,\val2,7000,\crv,16),
+
+				  Pbind(\instrument, \shap, \dur,Pseq([1/1],64),\dA1,2,\out,~bassShapB, \tS, 0.39550810372374),
+
+//changed buffer for one night
+/*Pbind(\instrument,\playBufS/*\playBufXG*/, \buf,~kb2Test, \vl, 0.038,\dur,  Pseq([64/1],1), \tS,  0.39550810370174,\start,0),*/
+/*Pbind(\instrument,\playBufS/*\playBufXG*/, \buf,~kb2Test2, \atckC,7, \relC,-18,\decT ,0.6, \atkT,0.15,\relT,0.24,  \vlSub, 0.02,\vlDec,Pkey(\vlSub) ,\vlSub2,Pkey(\vlSub), \dur,  Pseq([64/1],1), \tS,  0.39550810370174,\start,0),*/
+
+				//need bassshap, must hp at the end
+/*	Pbind(\instrument, \bass,\type, Pseq([\note, \rest, \note, \note,\rest,\note,\note,\note], inf),\dur,Pseq([1/4],254 /*512*/), \lpf,100,\midinote,Pseq([ Pseq([28],7),29,28,33,Pseq([28],7),29,28,27],inf), \bus, ~bassShapB,\atk, 0,\rel, t.beatDur/4 , \rel2, t.beatDur/4 * 0.0012,\atkcrv, -2,\relcrv, -2,\relcrv2, -4, \relcrv3, -6,\amp,(-20),\out,~kbToPan4/*~bassEq*/),*/
+
+
+Ppar([
+Pbind(\instrument, \bass,\type, Pseq([\rest, \note, \note, \note,\rest,\note,\note,\note], inf)/*Pseq([\note, \rest, \note, \note,\rest,\note,\note,\note], inf)*/,\dur,Pseq([1/4],254 /*512*/), \lpf,100,\midinote,Pseq([ Pseq([28],7),29,28,33,Pseq([28],7),29,28,27],inf), \bus, ~bassShapB,\atk, 0,\rel, t.beatDur , \rel2, t.beatDur * 0.0012,\atkcrv, -2,\relcrv, -2,\relcrv2, -4, \relcrv3, -6,\amp,(-20),\out,/*~kbToPan4*/~bassEq, \tS,  0.39550810372374),
+
+
+Pbind(\instrument, \playBuf, \impulse, 0.003 ,\dur,    Pseq([1/1],64), \tS,  0.39550810372374,\buf,~k2,\out, ~kbToPan4,\loopy,0,\start,0,\tS, 0.39550810372374),
+
+
+Pseq([
+				Pbind(\instrument, \wNoise,\dur, Pseq([8/1],1),\dec ,Pkey(\dur),\amp,(-5),\out,0,\wFil,0,\valStart,1600,\valEnd,1000,\durF,8*t.beatDur,\out,~hitEq, \tS, 0.39550810372374,\type,\rest ),
+				Pbind(\instrument, \wNoise,\dur, Pseq([24/1],1),\dec ,Pkey(\dur),\amp,(-5),\out,0,\wFil,0,\valStart,1600,\valEnd,1000,\durF,24*t.beatDur,\out,~hitEq,\type,\rest ,\tS, 0.39550810372374),
+
+						/*Pbind(\instrument, \wNoise,\dur, Pseq([2/1],1),\dec ,Pkey(\dur),\amp,(-5),\out,0,\wFil,0,\valStart,1600,\valEnd,1000,\durF,Pkey(\dur),\out,~hitEq, \tS, 0.39550810372374),*/
+
+					Pbindf(~kick,\out,  ~revKck2),
+
+/*					Pbind(\instrument, \wNoise,\dur, Pseq([31/1],1),\dec ,Pkey(\dur),\amp,(-5),\out,0,\wFil,0,\valStart,1600,\valEnd,1000,\durF,Pkey(\dur),\out,~hitEq,\type,\rest, \tS, 0.39550810372374),
+
+				Pbind(\instrument, \wNoise,\dur, Pseq([2/1],1),\dec ,Pkey(\dur),\amp,(-5),\out,0,\wFil,0,\valStart,1600,\valEnd,1000,\durF,Pkey(\dur),\out,~hitEq, \tS, 0.39550810372374),*/
+
+					Pbind(\instrument, \wNoise,\dur, Pseq([27/1],1),\dec ,Pkey(\dur),\amp,(-5),\out,0,\wFil,0,\valStart,1600,\valEnd,1000,\durF,27*t.beatDur,\out,~hitEq,\type,\rest, \tS, 0.39550810372374),
+
+				Pbind(\instrument, \wNoise,\dur, Pseq([4/1],1),\atk ,Pkey(\dur),\amp,(-5),\out,0,\wFil,0,\valStart,1100,\valEnd,500,\durF,4*t.beatDur,\out,~hitEq, \tS, 0.39550810372374),
+				],1),
+
+			/*Pseq([*/
+				/*Pbind(\instrument,\wNoise,\dur,Pseq([64/1],1) ,\dA2,2, \wFil,2,\amp2,1,\dec,Pkey(\dur),\tS,  0.39550810372374,\type,\rest),*/
+Ppar([
+
+						//here// need eq
+Pbind(\instrument,\wNoise,\dur,Pseq([60/1],1) ,\dA2,0, \wFil,2,\dec,Pkey(\dur),\tS,  0.39550810372374,\out,~hitEq2/*~hitStereoX*/,   \amp,0.2  ,\amp2,0.2),
+
+
+
+	Pseq([
+		Pbind(\instrument,\wNoise,\dur,Pseq([32/1],1) ,\dA2,0, \wFil,2,\amp2,1,\dec,Pkey(\dur),\type,\rest,\tS,  0.39550810372374),
+							/*Ppar([
+								Pbind(\instrument,\kick, \dur, Pseq([ Pseq([1/2],8),Pseq([1/4],32),Pseq([1/8],128), Pseq([1/1],3),Pseq([1/2],2)],1) ,\type,Pseq([Pseq([\note],169),Pseq([\rest],2), Pseq([\note],2)],inf),\out,~kbus2),*/
+
+Pbind(\instrument,\kick, \dur, Pseq([ Pseq([1/2],8),Pseq([1/4],32),Pseq([1/8],120), Pseq([1/1],3),Pseq([1/2],2)],1) ,\type,Pseq([Pseq([\note],169),Pseq([\rest],2), Pseq([\note],2)],inf),\out,~kbToPan4,\amp,(-10))
+/*],1)*/
+					],1)],1)
+/*],1)*/,
+
+	/*		/*	4,8,16to15,3,2	*/	Pseq([
+
+					Pbind(\instrument,\wNoise,\dur,Pseq([16/1],1) ,\dA2,2, \wFil,2,\amp2,1,\dec,Pkey(\dur),\type,\rest,\tS,  0.39550810372374),
+
+				Pxrand([
+Pbind(\instrument, \playBufX,\dur, Pseq([4/1],1),\impulse, 0.00001,\loo,0,\buf,~vocal,\out, ~vocalBus,\tS,  0.39550810372374,\vl,0.162),
+
+	Pbind(\instrument, \playBufX2,\dur, Pseq([1/1],4),\impulse, 20.6,\loo,0,\buf,~vocal,\out, ~vocalBus,\tS,  0.39550810372374,\vl,0.162,\start,Pfunc({(~vocal.numFrames-7000).rand})),
+
+Pbind(\instrument, \playBufX2,\dur, Pseq([1/2],8),\impulse, 10.3,\loo,0,\buf,~vocal,\out, ~vocalBus,\tS,  0.39550810372374,
+		\start,Pfunc({(~vocal.numFrames-7000).rand}),\vl,0.162)
+],4),
+
+				],1),*/
+
+
+
+
+				/*Pbind(\instrument,\gateS, \dur,Pseq([16/1],4),\vlSub, 1/*Pfunc({1.rand})*/, \vlSub2,Pkey(\vlSub),
+					/*\decC,Pfunc({(-10).rrand(2)}),*/\in,~vocToDispatch,\out,~toFilRise,\group, ~gateGrp4,\tS, 0.39550810372374,\type,Pseq([\note,\rest],inf)),*/
+
+
+//not reveiving beloq
+				Pbind(\instrument,\stereo, \dur, Pseq([64/1],1), \in, ~hitStereoX  ,\spread,0.1,\out,~toFilRise,\tS, 0.39550810372374,\group, ~stereoGrp),
+
+ ],1), ],1),
+
+
+],1)],1)
+
+);
