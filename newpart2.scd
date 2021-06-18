@@ -97,12 +97,11 @@ Pseq([ Pseq([8/1],1)],1)  ,Pseq([ Pseq([4/1],1)],1)   ,Pseq([Pseq([16/1],1) ,Pse
 		Pseq([
 
 
-Pbind(\instrument, \playBuf10, \buf ,~leTout,\out,~toShift ,\loopy,0,\tS,t.beatDur,\dur,Pseq([64/1],1)),
 
-				Pbind(\instrument, \playBuf10, \buf ,~leTout,\out,~toShift, \start,~leTout.numFrames/ 192 * (160.rand),\loopy,0,\tS,0.39550810372374,\dur,Pseq([1/1],16)),
-				Pbind(\instrument, \playBuf10, \buf ,~leTout,\out,~toShift, \start,~leTout.numFrames/ 192 * (160.rand),\loopy,0,\tS,0.39550810372374,\dur,Pseq([2/1],8)),
-				Pbind(\instrument, \playBuf10, \buf ,~leTout,\out,~toShift, \start,~leTout.numFrames/ 192 * (160.rand),\loopy,0,\tS,0.39550810372374,\dur,Pseq([4/1],4)),
-				Pbind(\instrument, \playBuf10, \buf ,~leTout,\out,~toShift, \start,~leTout.numFrames/ 192 * (160.rand),\loopy,0,\tS,0.39550810372374,\dur,Pseq([8/1],2)),
+				~part3a,
+					Pbind(\instrument, \playBuf10, \buf ,~leTout,\out,~toShift ,\loopy,0,\tS,t.beatDur,\dur,Pseq([64/1],1)),
+
+
 
 
 
@@ -110,6 +109,7 @@ Pbind(\instrument, \playBuf10, \buf ,~leTout,\out,~toShift ,\loopy,0,\tS,t.beatD
 
 
 			Pbind(\instrument, \playBuf10, \buf ,~leTout2,\out,~toShift,\loopy,0,\tS,t.beatDur,\dur,Pseq([64/1],1)),
+
 			// Pbind(\instrument, \playBuf10, \buf ,~leTout,\out,~toShift,\loopy,0,\tS,t.beatDur,\dur,Pseq([64/1],1),\start,~leTout.numFrames/3 ),
 				//below was removed for above
 			Pbind(\instrument, \playBuf10, \buf ,~rising,\out,~toShift ,\loopy,0,\tS,t.beatDur,\dur,Pseq([32/1],1)),
@@ -121,7 +121,8 @@ Pbind(\instrument, \playBuf10, \buf ,~leTout,\out,~toShift ,\loopy,0,\tS,t.beatD
 		Pseq([
 			Pbind(\instrument, \playBuf10, \buf ,~leTout,\out,~toShift,\loopy,0,\tS,t.beatDur,\dur,Pseq([64/1],1),\start,~leTout.numFrames/3*2),
 	/*		Pbind(\instrument, \playBuf10, \buf ,~ped,\out,~toShift,\loopy,0,\tS,t.beatDur,\dur,Pseq([64/1],1)),*/
-					Pbind(\instrument, \playBuf10, \buf , ~vap,\out,~toShift ,\loopy,0,\tS,t.beatDur,\dur,Pseq([64/1],1)),
+				// Pbind(\instrument, \playBuf10, \buf , ~vap,\out,~toShift ,\loopy,0,\tS,t.beatDur,\dur,Pseq([64/1],1)),
+				Pbind(\instrument, \playBuf10, \buf ,~ped,\out,~toShift ,\loopy,0,\tS,t.beatDur,\dur,Pseq([64/1],1),\start,0 /*~ped.numFrames/2*/),
 
 
 
@@ -144,7 +145,8 @@ Pbind(\instrument, \playBuf10, \buf ,~leTout,\out,~toShift ,\loopy,0,\tS,t.beatD
 			~part3e,
 			Pbind(\instrument, \playBuf10, \buf ,~leTout2,\out,~toShift,\loopy,0,\tS,t.beatDur,\dur,Pseq([64/1],1),\start,~leTout.numFrames/4),
 			~part3e,
-				Pbind(\instrument, \playBuf10, \buf ,~ped,\out,~toShift ,\loopy,0,\tS,t.beatDur,\dur,Pseq([64/1],1),\start,0 /*~ped.numFrames/2*/),
+				~part3a
+
 		],1),
 	],1),
 
