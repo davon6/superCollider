@@ -72,6 +72,8 @@ f = { |n=14, min=0, max=11| (min..max).scramble.keep(n) };
 ~kRise=Buffer.read(s,"/Users/davidmignot/Music/SuperCollider Recordings/E/kickRise.aiff");
 ~crushed=Buffer.read(s,"/Users/davidmignot/Music/SuperCollider Recordings/E/crushed.aiff");
 
+ ~pad2= Buffer.read(s,"/Users/davidmignot/Music/SuperCollider Recordings/E/pad2.aiff");
+
 ~one = ~leTout2.numFrames/ 256 * 240.rand;
 ~two = ~leTout2.numFrames/ 256 * 240.rand;
 ~troi= ~leTout2.numFrames/ 256 * 240.rand;

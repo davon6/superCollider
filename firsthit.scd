@@ -7,7 +7,7 @@ Pbind(\instrument, \gate, \in,~gateBus23,\tS,t.beatDur,\dur,Pseq([9999/1],inf), 
 
 Pseq([
 
-		Pbind(\instrument, \playBuf10, \buf ,~leTout2,\out,Pwrand([~toDelay10,0],[1,8].normalizeSum,inf), \start,Pfunc({~leTout.numFrames/ 192 * 160.rand})
+Pbind(\instrument, \playBuf10, \buf ,~leTout2,\out,Pwrand([~toDelay10,0],[1,8].normalizeSum,inf), \start,Pfunc({~leTout.numFrames/ 192 * (160.rand)})
 	,\loopy,0,\tS,0.39550810372374,\dur,Pseq([2/1],1),),
 
 
@@ -156,7 +156,7 @@ Ppar([*/
 /*
 
 
-MUST RERECROD RISING MAYBE MAKE IT BETTER,
+VAR AGAIN HAD NO RIGHT DIVIDE TO RERECROD + MIXINF FOR EveRY thing
 
 HAVE RISES MADE OUT OF TANTRA STYLE !!
 
@@ -200,13 +200,25 @@ compress finalrytjhm to hits
 	Pbind(\instrument, \playBuf10, \buf ,~noise,\out,~toDelay10,\loopy,0,\tS,0.39550810372374,\dur,Pseq([8/1],1),\vl,1),
 
 
-		Pbind(\instrument, \wNoise,\dur, Pseq([8/1],1),\dec ,Pkey(\dur),\amp,(-5),\out,0,\wFil,0,\valStart,900,\valEnd,1000,\durF,8*t.beatDur,\dA,0,\out,0, \tS,  0.39550810372374,\type,\rest),
+		Pbind(\instrument, \wNoise,\dur, Pseq([4/1],1),\dec ,Pkey(\dur),\amp,(-5),\out,0,\wFil,0,\valStart,900,\valEnd,1000,\durF,8*t.beatDur,\dA,0,\out,0, \tS,  0.39550810372374,\type,\rest),
 
+		Pbind(\instrument, \gateS,\dur, Pseq([4/1],1), \tS,  0.39550810372374,\group, ~gateGrp11,\in,~tofinalRythm,\out,~toCom),
 
+	//32
 
 	/*Pbind(\instrument, \gateS,\dur, Pseq([4/1],8), \tS,  0.39550810372374,\group, ~gateGrp11,\in,~tofinalRythm,\out,~toCom,\type,Pseq([\note,\note,\note,\note,\rest,\rest,\rest,\rest].scramble,inf)),*/
 
-	Pbind(\instrument, \gateS,\dur, Pseq([32/1],1), \tS,  0.39550810372374,\group, ~gateGrp11,\in,~tofinalRythm,\out,~toCom,),
+	Pbind(\instrument, \wNoise,\dur, Pseq([1/1],1),\dec ,Pkey(\dur),\amp,(-5),\out,0,\wFil,0,\valStart,900,\valEnd,1000,\durF,8*t.beatDur,\dA,0,\out,0, \tS,  0.39550810372374,\type,\rest),
+	Pbind(\instrument, \gateS,\dur, Pseq([7/1],1), \tS,  0.39550810372374,\group, ~gateGrp11,\in,~tofinalRythm,\out,~toCom,),
+
+	Pbind(\instrument, \wNoise,\dur, Pseq([1/1],1),\dec ,Pkey(\dur),\amp,(-5),\out,0,\wFil,0,\valStart,900,\valEnd,1000,\durF,8*t.beatDur,\dA,0,\out,0, \tS,  0.39550810372374,\type,\rest),
+	Pbind(\instrument, \gateS,\dur, Pseq([7/1],1), \tS,  0.39550810372374,\group, ~gateGrp11,\in,~tofinalRythm,\out,~toCom,),
+
+
+
+	Pbind(\instrument, \gateS,\dur, Pseq([16/1],1), \tS,  0.39550810372374,\group, ~gateGrp11,\in,~tofinalRythm,\out,~toCom,),
+
+
 
 
 
@@ -660,7 +672,7 @@ Ppar([
 
 	//idea finish with an opening for next above
 
-	//above 32 no 36
+	//above 32
 
 Ppar([
 			Pbind(\instrument, \playBuf,\dur  ,Pseq([32/1],1),\buf,~trippy,\tS,  0.39550810372374,\out, ~riTriptoDisto),
@@ -688,7 +700,7 @@ Pseq([
 			Pbind(\instrument, \gateS,\dur, Pseq([4.5/1],1), \tS,  0.39550810372374,\group, ~gateGrp11,\in,~tofinalRythm,\out,~toCom),
 			Pbind(\instrument, \gateS,\dur, Pseq([1/2],1), \type, \rest, \tS,  t.beatDur,\group, ~gateGrp11,\in,~tofinalRythm,\out,~toCom),
 
-				Pbind(\instrument, \gateS,\dur, Pseq([4/1],1),\tS,  t.beatDur,\group, ~gateGrp11,\in,~tofinalRythm,\out,~toCom),
+				Pbind(\instrument, \gateS,\dur, Pseq([4.5/1],1),\tS,  t.beatDur,\group, ~gateGrp11,\in,~tofinalRythm,\out,~toCom),
 
 
 		],1),
