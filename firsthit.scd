@@ -255,12 +255,13 @@ Ppar([
 
 	],1),
 //64
-
-		Pbind(\instrument, \playBuf10, \buf ,~leTout,\out,~toCom2, \start,~leTout.numFrames/ 192 * (160.rand),\loopy,0,\tS,0.39550810372374,\dur,Pseq([1/1],16)),
+Pseq([
+		Pbind(\instrument, \playBuf10, \buf ,~leTout,\out,~toCom2, \start,~leTout.numFrames/ 192 * (160.rand),\loopy,0,\tS,0.39550810372374,\dur,Pseq([2/1],8)),
 				Pbind(\instrument, \playBuf10, \buf ,~leTout,\out,~toCom2, \start,~leTout.numFrames/ 192 * (160.rand),\loopy,0,\tS,0.39550810372374,\dur,Pseq([2/1],8)),
-				Pbind(\instrument, \playBuf10, \buf ,~leTout,\out,~toCom2, \start,~leTout.numFrames/ 192 * (160.rand),\loopy,0,\tS,0.39550810372374,\dur,Pseq([4/1],4)),
-				Pbind(\instrument, \playBuf10, \buf ,~leTout,\out,~toCom2, \start,~leTout.numFrames/ 192 * (160.rand),\loopy,0,\tS,0.39550810372374,\dur,Pseq([8/1],2)),
-	],1)
+				Pbind(\instrument, \playBuf10, \buf ,~leTout,\out,~toCom2, \start,~leTout.numFrames/ 192 * (160.rand),\loopy,0,\tS,0.39550810372374,\dur,Pseq([2/1],4)),
+				Pbind(\instrument, \playBuf10, \buf ,~leTout,\out,~toCom2, \start,~leTout.numFrames/ 192 * (160.rand),\loopy,0,\tS,0.39550810372374,\dur,Pseq([2/1],8)),
+				],1),
+	],1),
 
 
 
@@ -328,9 +329,11 @@ Ppar([
 
 		],1),
 
+		Pseq([
+		Pbind(\instrument, \wNoise,\dur, Pseq([48/1],1),\dec ,Pkey(\dur),\amp,(-5),\out,0,\wFil,0,\valStart,900,\valEnd,1000,\durF,4*t.beatDur,\tS, 0.39550810372374,\out,~hitEq,\type,\rest),
 
-	Pbind(\instrument, \playBuf,\buf, ~rise1, \tS, t.beatDur, \dur ,Pseq([64/1],1),\loopy,0,\start,1430016,\out,~downEq2)],1)
-
+	Pbind(\instrument, \playBuf,\buf, ~rise1, \tS, t.beatDur, \dur ,Pseq([16/1],1),\loopy,0,\start,1430016,\out,~downEq2)],1)
+	],1)
 
 
 ],1));
@@ -788,7 +791,7 @@ Ppar([
 
 			],1),
 
-				Pbind(\instrument,\rise,\dur,Pseq([64/1],1 ), \vlAtk,1,\f1,0.1 , \f2, 0.4 , \f3,0.1,  \ic_atk,7.2,\index,13,\mRatio,1,\out , ~bigRiToDisto2,\tS, 0.39550810372374,\atk,1,\freq,[659.26,/*639.29,*/672.34]/2)
+				Pbind(\instrument,\rise,\dur,Pseq([64/1],1 ), \vlAtk,1,\f1,0.1 , \f2, 0.4 , \f3,0.1,  \ic_atk,7.2,\index,13,\mRatio,1,\out , ~bigRiToDisto2,\tS, 0.39550810372374,\atk,1,\freq,[659.26,/*639.29,*/672.34]/2,\atk2,0.3)
 
 			],1)
 

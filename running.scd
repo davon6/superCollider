@@ -240,6 +240,8 @@ s.sync;
 	~limitBus1= Bus.audio(s,1);
 	~limitBus12= Bus.audio(s,1);
 
+	~downSLi= Bus.audio(s,1);
+
 	~bigRiToFil1= Bus.audio(s,1);
 	~bigRiToFil2= Bus.audio(s,1);
 
@@ -247,6 +249,8 @@ s.sync;
 	~toFx= Bus.audio(s,10);
 
 	~toExtraComp= Bus.audio(s,10);
+
+	~toGateRise= Bus.audio(s,10);
 
 	~limitBus2= Bus.audio(s,1);
 	~sterBus1= Bus.audio(s,1);
@@ -1146,35 +1150,85 @@ EnvGen.ar(
 		Out.ar(out, sig);
 	}).add*/
 
+SynthDef(\kick, {
+	arg amp=0.2,out=0;
+	var sig, env, envF;
 
+	envF = EnvGen.ar(
+		Env(
+			[117.midicps,64.midicps,114,26,0,0],
+			[0.005,0.018,0.1652,0,0.4],
+			[-8.4,-3,-2]
+		)
+	);
 
-				SynthDef(\kick, {
-		arg amp=0.2,out=0;
-		var sig, env, envF;
+	env =
 
-		envF = EnvGen.ar(
-			Env(
-				[117.midicps,64.midicps,114,26,0,0],
-				[0.005,0.018,0.1652,0,0.4],
-					[-8.4,-3,-2]
-			)
-		);
+	EnvGen.ar(
+		Env([ 0.04 , 0.088,   0.04 ,  0.42,0.2,0],
+			[ 0.0062,  0.01,   0.014  , 0.06 , 0.06  ],[-1.1,0.5,-12,4,-6]),doneAction:2);
+	//-2.6 can be zero
 
-		env =
+	sig = SinOsc.ar(envF, mul: env);
 
-EnvGen.ar(
-	Env([ 0.06 , 0.22,   0.007  ,  0.42,0.3,0],
-		[ 0.0062,  0.01,   0.014  , 0.06 , 0.06  ],[-0.7,0.5,-12,2,-6]),doneAction:2);
-                                                     //-2.6 can be zero
-
-		sig = SinOsc.ar(envF, mul: env);
-
-		sig = sig * amp.dbamp  ;
+	sig = sig * amp.dbamp  ;
 	// sig = Pan2.ar(sig);
-		Out.ar(out, sig);
-	}).add
+	Out.ar(out, sig);
+}).add;
 
 
+/*
+	SynthDef(\kick, {
+	arg amp=0.2,out=0;
+	var sig, env, envF;
+
+	envF = EnvGen.ar(
+		Env(
+			[117.midicps,64.midicps,114,26,0,0],
+			[0.005,0.018,0.1652,0,0.4],
+			[-8.4,-3,-2]
+		)
+	);
+
+	env =
+
+	EnvGen.ar(
+		Env([ 0.04 , 0.088,   0.04 ,  0.40,0,0],
+			[ 0.0062,  0.01,   0.014  , 0.06 , 0.06  ],[-2,0.5,-12,4,-6]),doneAction:2);
+	//-2.6 can be zero
+
+	sig = SinOsc.ar(envF, mul: env);
+
+	sig = sig * amp.dbamp  ;
+	// sig = Pan2.ar(sig);
+	Out.ar(out, sig);
+}).add;*/
+
+/*SynthDef(\kick, {
+	arg amp=0.2,out=0;
+	var sig, env, envF;
+
+	envF = EnvGen.ar(
+		Env(
+			[117.midicps,64.midicps,114,26,0,0],
+			[0.005,0.018,0.1652,0,0.4],
+			[-8.4,-3,-2]
+		)
+	);
+
+	env =
+
+	EnvGen.ar(
+		Env([ 0.04 , 0.078,   0.07  ,  0.42,0.2,0],
+			[ 0.0062,  0.01,   0.014  , 0.06 , 0.06  ],[-1.1,0.5,-12,2,-6]),doneAction:2);
+	//-2.6 can be zero
+
+	sig = SinOsc.ar(envF, mul: env);
+
+	sig = sig * amp.dbamp  ;
+	// sig = Pan2.ar(sig);
+	Out.ar(out, sig);
+}).add;*/
 
 
 
@@ -2242,6 +2296,16 @@ SynthDef(\volAna,{|in=0|RMS.ar( In.ar(in)).ampdb.round(0.1).poll(label:" db" )})
 		Out.ar(out, Compander.ar(In.ar(in,10) , In.ar(ctrl,1)  , thresh: thr, slopeBelow: sB, slopeAbove: sA, clampTime: atk, relaxTime: rel)* gain/** EnvGen.kr(Env.step([1,1],[dur,0]),timeScale: tS,doneAction:2)*/)}).add;
 
 
+	SynthDef(\comp1010P, {|in, ctrl, out= 0, dec  , thr  =0.01 ,sB = 1, sA = (1/4), atk = 0.001, rel = 0.04 , gain=1, dur,tS=1|
+
+		Out.ar(out, Compander.ar(In.ar(in,10) , In.ar(ctrl,10)  , thresh: thr, slopeBelow: sB, slopeAbove: sA, clampTime: atk, relaxTime: rel)* gain* EnvGen.kr(Env.step([1,1],[dur,0]),timeScale: t.beatDur,doneAction:2))}).add;
+
+
+	SynthDef(\comp1010, {|in, ctrl, out= 0, dec  , thr  =0.01 ,sB = 1, sA = (1/4), atk = 0.001, rel = 0.04 , gain=1, dur,tS=1|
+
+		Out.ar(out, Compander.ar(In.ar(in,10) , In.ar(ctrl,10)  , thresh: thr, slopeBelow: sB, slopeAbove: sA, clampTime: atk, relaxTime: rel)* gain/** EnvGen.kr(Env.step([1,1],[dur,0]),timeScale: tS,doneAction:2)*/)}).add;
+
+
 	SynthDef(\comp10P, {|in, ctrl, out= 0, dec  , thr  =0.01 ,sB = 1, sA = (1/4), atk = 0.001, rel = 0.04 , gain=1, dur,tS=1|
 
 		Out.ar(out, Compander.ar(In.ar(in,10) , In.ar(ctrl,1)/*.neg */ , thresh: thr, slopeBelow: sB, slopeAbove: sA, clampTime: atk, relaxTime: rel)* gain* EnvGen.kr(Env.step([1,1],[dur,0]),timeScale: tS,doneAction:2))}).add;
@@ -2393,6 +2457,21 @@ SynthDef(\sawModul,{|modu, busMod,hS|Out.kr(busMod, Saw.kr(modu).range(-40,hS))}
 	Out.ar(out, sig /* !2*/   * amp     *env/** EnvGen.kr(Env.adsr(0.1), gate)*/);
 }).add;
 */
+
+	SynthDef(\fader, { |in, out, level = 1, pan = 0|
+		var sig = In.ar(in, 10) * level;
+		Out.ar(out, Balance2.ar(sig[0], sig[1], pan))
+	}).add;
+
+	SynthDef(\fakeSidechain, { |out, sideBus, thresh = 0.05,
+		clamp = 0.05, clampLevel = 0.2, relax = 0.08|
+		var sig = In.ar(out, 10);
+		var side = In.ar(sideBus, 2).sum;
+		var level = Amplitude.ar(side, 0.01, 0.1);
+		var gate = level > thresh;
+		var eg = EnvGen.ar(Env([1, clampLevel, 1], [clamp, relax], releaseNode: 1), gate);
+		ReplaceOut.ar(out, sig * eg);
+			}).add;
 
 SynthDef(\filterModu,{|out=0, in, filMod=600,filMod2=500,qf=0.5,qf2=0.5,  which=0, filFreq2 =0, filFreq =0|
 
@@ -2801,7 +2880,7 @@ Pbind(\instrument ,\EQHP2 ,\in,~bassEq, \out,0, \frq, 20.6,\vol,1,
 
 
 			\val7,329.6275,\quant7,1.8 ,\gain7,(-2),
-			\val,659.255, \quant,1.9, \gain,(-8),
+			\val,659.255, \quant,1.9, \gain,(-13),
 \val2,1318.51, \quant2,2.2, \gain2,(-11),
 		\val3,2637.02, \quant3,1.9, \gain3,(-18),
 
@@ -2851,9 +2930,9 @@ Ppar([
 ~comp.set(\thr,0.2 ,\sB, 1.034,\sA, 1/2,\atk ,0.0242, \rel ,0.0968, \gain,1,\in, ~comFuzz,\out,~limitBass);
 
 ~limK=Synth(\limitertoMixer,[\c45,1,\in, ~limitKick, \gain,1,\out,~kToPan],~limitGrp);
-~limK.set(\gain,198);
+~limK.set(\gain,245);
 ~limB=Synth(\limitertoMixer,[\c46,1,\in, ~limitBass, \gain,68,\out,~kToPan],~limitGrp);
-~limB.set(\gain,173.6);
+~limB.set(\gain,184.2);
 
 ~kbPan2 = Synth(\pan2,[ \in,~kToPan,\out,0],~stereoGrp);
 
@@ -2927,7 +3006,7 @@ Pbind(\instrument ,\EQHP2 ,\in,~bassEq, \out,0, \frq, 20.6,\vol,1,
 
 
 			\val7,329.6275,\quant7,1.8 ,\gain7,(-2),
-			\val,659.255, \quant,1.9, \gain,(-8),
+			\val,659.255, \quant,1.9, \gain,(-13),
 \val2,1318.51, \quant2,2.2, \gain2,(-11),
 		\val3,2637.02, \quant3,1.9, \gain3,(-18),
 

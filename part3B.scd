@@ -6304,3 +6304,58 @@ Pbind(\instrument, \playBufX2,\dur, Pseq([1/2],8),\impulse, 10.3,\loo,0,\buf,~vo
 ],1)],1)
 
 );
+
+
+	////
+
+	Pseq([
+
+Pbind(\instrument, \playBuf10, \buf ,~leTout,\out,0, \start,~leTout.numFrames/ 192 * 160.rand,\loopy,0,\tS,0.39550810372374,\dur,Pseq([1/1],16)),
+
+
+
+Pbind(\instrument, \playBuf10, \buf ,~leTout,\out,0, \start,~leTout.numFrames/ 192 * 160.rand,\loopy,0,\tS,0.39550810372374,\dur,Pseq([2/1],8)),
+
+
+
+	Pbind(\instrument, \playBuf10, \buf ,~leTout,\out,0, \start,~leTout.numFrames/ 192 * 160.rand,\loopy,0,\tS,0.39550810372374,\dur,Pseq([4/1],4)),
+
+		Pbind(\instrument, \playBuf10, \buf ,~leTout,\out,0, \start,~leTout.numFrames/ 192 * 160.rand,\loopy,0,\tS,0.39550810372374,\dur,Pseq([8/1],2)),
+],1).play(t,quant:1)
+
+
+
+
+Prand([
+
+Pseq([
+
+Pseq([
+
+Pbind(\instrument, \playBuf10, \buf ,~leTout,\out,~toShift, \start,Pfunc({~blu= ~leTout.numFrames/ 192 * (160.rand)}),
+				\loopy,0,\tS,0.39550810372374,\dur,Pseq([1/8],1),	\type,Pseq([\note,\rest],inf)),
+
+		Pbind(\instrument, \playBuf10, \buf ,~leTout,\out,~toShift, \start,Pfunc({~blu}),\loopy,0,\tS,0.39550810372374,\dur,
+		Pseq([1/8],7),	\type,Pseq([\rest,\note],inf)),
+
+	Pbind(\instrument, \playBuf10, \buf ,~leTout,\out,~toShift, \start,Pfunc({~blu}),\loopy,0,\tS,0.39550810372374,\dur,
+			Pseq([2/1],1))],1),
+
+
+	Pbind(\instrument, \playBuf10, \buf ,~leTout,\out,~toShift, \start,Pfunc({~leTout.numFrames/ 192 * (160.rand)}),\loopy,0,\tS,0.39550810372374,\dur,Pseq([5/1],1))].scramble,1),
+
+Pseq([
+
+Pseq([
+
+Pbind(\instrument, \playBuf10, \buf ,~leTout,\out,~toShift, \start,Pfunc({~blu= ~leTout.numFrames/ 192 * (160.rand)}),
+				\loopy,0,\tS,0.39550810372374,\dur,Pseq([1/16],1),	\type,Pseq([\note,\rest],inf)),
+
+		Pbind(\instrument, \playBuf10, \buf ,~leTout,\out,~toShift, \start,Pfunc({~blu}),\loopy,0,\tS,0.39550810372374,\dur,
+		Pseq([1/16],15),	\type,Pseq([\rest,\note],inf)),
+
+	Pbind(\instrument, \playBuf10, \buf ,~leTout,\out,~toShift, \start,Pfunc({~blu}),\loopy,0,\tS,0.39550810372374,\dur,
+			Pseq([2/1],1))],1),
+
+
+		Pbind(\instrument, \playBuf10, \buf ,~leTout,\out,~toShift, \start,Pfunc({~leTout.numFrames/ 192 * (160.rand)}),\loopy,0,\tS,0.39550810372374,\dur,Pseq([5/1],1))].scramble,1)],8).play(t,quant:1)

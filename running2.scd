@@ -162,19 +162,19 @@ f = { |n=14, min=0, max=11| (min..max).scramble.keep(n) };
 (
 	~mont =0;
 
-~bobo=700;
+~bobo=300;
 ~crv=6;
 ~as=1676373; ~tram=3659560;~gram=373706; ~pick=285965;
 ~bool=True;
 
 
 ~lfoGrp  = Group.new;
-
-~ptrGrp0 = Group.after(~lfoGrp);
+~lfoGrp2  = Group.after(~lfoGrp);
+~ptrGrp0 = Group.after(~lfoGrp2);
 ~recGrp0 = Group.after(~ptrGrp0);
+~extra2 = Group.after(~recGrp0);
 
-
-~granuGrp= Group.after(~recGrp0);
+~granuGrp= Group.after(~extra2);
 ~phaserGrp =  Group.after(~granuGrp);
 ~distoGrp =  Group.after(~phaserGrp);
 ~dispatchGrp = Group.after(~distoGrp);
@@ -255,7 +255,22 @@ f = { |n=14, min=0, max=11| (min..max).scramble.keep(n) };
 
 ~kbGate= Group.after(~extraGrp);
 
-~dynaEq2= Group.after(~kbGate);
+~kickgroup1 = Group.after(~kbGate);
+	~kickgroup = Group(~kickgroup1);
+~padgroup1 = Group.after(~kickgroup1);
+	~padgroup = Group(~padgroup1);
+
+
+
+~kickgroup2 = Group.after(~padgroup);
+	~kickgroup3 = Group(~kickgroup2);
+~padgroup2 = Group.after(~kickgroup2);
+	~padgroup3 = Group(~padgroup2);
+
+
+
+
+~dynaEq2= Group.after(~padgroup2);
 ~compGrp7 = Group.after(~dynaEq2);
 ~recGrp3= Group.after(~compGrp7);
 
@@ -810,7 +825,9 @@ Pbind(\instrument,\gate2, \in ,~toKbGate, \group,~kbGate, \tS,  0.39550810372374
 
 			Pbind(\instrument,\gate2, \in ,~toKbGate, \group,~kbGate, \tS,  0.39550810372374,\dur, Pseq([16/1],1)),
 
-				Pseq([
+			Pbind(\instrument,\gate2, \in ,~toKbGate, \group,~kbGate, \tS,  0.39550810372374,\dur, Pseq([16/1],1)),
+
+				/*Pseq([
 	Pbind(\instrument,\gate2, \in ,~toKbGate, \group, ~kbGate, \tS,  0.39550810372374,
 		\dur, Pseq([14/1],1)),
 
@@ -818,7 +835,7 @@ Pbind(\instrument,\gate2, \in ,~toKbGate, \group,~kbGate, \tS,  0.39550810372374
 					Pbind(\instrument, \playBuf, \impulse, 0.003 ,\dur,Pseq([1/1],1), \tS,  0.39550810372374,\buf,~k2,\out, ~kbToPan2,\loopy,0,\start,0,\vl,1.76),
 			Pbind(\instrument,\gate2, \in ,Prand([~dipatchKB2,~rollingKS,~to4bar],inf), \group, ~kbGate, \tS,  0.39550810372374,
 			\dur, Pseq([2/1],1))].scramble,1),
-				],1),
+				],1),*/
 
 				Pseq([
 	Pbind(\instrument,\gate2, \in ,~toKbGate, \group, ~kbGate, \tS,  0.39550810372374,
