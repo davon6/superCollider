@@ -125,7 +125,7 @@ Pbind(\instrument, \playBuf10, \buf ,~leTout,\out,~toShift,\loopy,0,\tS,t.beatDu
 			Pbind(\instrument, \playBuf10, \buf ,~rising,\out,~toShift ,\loopy,0,\tS,t.beatDur,\dur,Pseq([32/1],1)),
 
 				Ppar([
-					Pbind(\instrument, \playBuf, \buf ,~pad2,\out,~slideBus2 ,\loopy,0,\tS,t.beatDur,\dur,Pseq([16/1],1),\type,Pseq([\note,\rest],inf)),
+					Pbind(\instrument, \playBuf, \buf ,~pad2,\out,~slideBus2 ,\loopy,0,\tS,t.beatDur,\dur,Pseq([16/1],2),\type,Pseq([\note,\rest],inf)),
 
 			/*Pbind(\instrument, \gateS,\in,~toGateRise,\group,~dispatchGrp2,\dur,	Pseq([16/1],2),	\tS,t.beatDur, \out,Pseq([~tofinalRythm,~toShift],inf))*/
 				],1)

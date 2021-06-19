@@ -258,6 +258,9 @@ Ppar([
 
 
 
+Ppar([
+		//chnaged last ngiht
+		Pbind(\instrument, \playBufXG,\buf, ~rise1, \tS, t.beatDur, \dur ,Pseq([64/1],1),\loopy,0,\start,1430016,\out,~downEq2,\atckC,14,\atkT,0.13,\decT,0.87)
 
 		// Pbind(\instrument,\del10T,\in,~toDelay10b,\out,~toCom,\dur,Pseq([64/1],1),\group,~delayGrp),
 
@@ -284,11 +287,11 @@ Pbind(\instrument, \wNoise,\dur, Pseq([1/2],1),\dec ,Pkey(\dur),\amp,(-5),\out,0
 			Pbind(\instrument, \wNoise,\dur, Pseq([1/2],1),\dec ,Pkey(\dur),\amp,(-5),\out,0,\wFil,0,\valStart,600,\valEnd,400,\durF,0.5*t.beatDur,\dA,0,\out,~hitEq, \tS,  0.39550810372374),
 				Pbind(\instrument, \gateS,\dur, Pseq([7/1],1), \tS,  0.39550810372374,\group, ~gateGrp11,\in,~tofinalRythm,\out,~toCom)*/
 
-	],1),
+	/*],1),
 
 //32
 
-		Pseq([
+		Pseq([*/
 		Pbind(\instrument, \wNoise,\dur, Pseq([2/1],1),\dec ,Pkey(\dur),\amp,(-5),\out,0,\wFil,0,\valStart,900,\valEnd,1000,\durF,2*t.beatDur,\out,~hitEq, \tS,  0.39550810372374),
 
 		Pbind(\instrument, \gateS,\dur, Pseq([30/1],1), \tS,  0.39550810372374,\group, ~gateGrp11,\in,~tofinalRythm,\out,~toCom),
@@ -303,7 +306,7 @@ Pbind(\instrument, \wNoise,\dur, Pseq([1/2],1),\dec ,Pkey(\dur),\amp,(-5),\out,0
 		Pbind(\instrument, \wNoise,\dur, Pseq([1/1],1),\dec ,Pkey(\dur),\amp,(-5),\out,0,\wFil,0,\valStart,900,\valEnd,1000,\durF,1*t.beatDur,\out,~hitEq, \tS,  0.39550810372374),
 			Pbind(\instrument, \gateS,\dur, Pseq([7/1],1), \tS,  0.39550810372374,\group, ~gateGrp11,\in,~tofinalRythm,\out,~toCom)*/
 	],1),
-
+],1),
 //32
 
 
@@ -322,13 +325,15 @@ Ppar([
 
 					Pbind(\instrument, \gateS,\dur, Pseq([56/1],1), \tS,  0.39550810372374,\group, ~gateGrp11,\in,~tofinalRythm,\out,~toCom),
 
+				Pbind(\instrument, \wNoise,\dur, Pseq([4/1],1),\dec ,Pkey(\dur),\amp,(-5),\out,0,\wFil,0,\valStart,900,\valEnd,1000,\durF,4*t.beatDur,\tS, 0.39550810372374,\out,~hitEq,\type,\rest),
+
 		],1),
 
-		Pseq([
+		/*Pseq([
 		/*Pbind(\instrument, \wNoise,\dur, Pseq([48/1],1),\dec ,Pkey(\dur),\amp,(-5),\out,0,\wFil,0,\valStart,900,\valEnd,1000,\durF,4*t.beatDur,\tS, 0.39550810372374,\out,~hitEq,\type,\rest),*/
 
 
-	Pbind(\instrument, \playBufXG,\buf, ~rise1, \tS, t.beatDur, \dur ,Pseq([64/1],1),\loopy,0,\start,1430016,\out,~downEq2,\atckC,14,\atkT,0.13,\decT,0.87)],1)
+	Pbind(\instrument, \playBufXG,\buf, ~rise1, \tS, t.beatDur, \dur ,Pseq([64/1],1),\loopy,0,\start,1430016,\out,~downEq2,\atckC,14,\atkT,0.13,\decT,0.87)],1)*/
 	],1)
 
 
@@ -1037,7 +1042,7 @@ Pbind(\instrument,\kick, \dur, Pseq([ Pseq([1/2],8),Pseq([1/4],32),Pseq([1/8],12
 		Pseq([1/16],32),	\type,Pseq([\note,\rest,],inf)),
 
 		],1),
-],2);
+],1);
 
 
 
