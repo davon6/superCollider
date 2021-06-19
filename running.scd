@@ -886,6 +886,11 @@ s.sync;
 	SynthDef(\playBuf10 ,{|out = 0,start=0, trig= 0.002, dur, buf, dA=2, tS=1, loopy=1,vl=1,rte=1|Out.ar(out,PlayBuf.ar(10,buf,rte,trigger:
 		trig/*Dust.kr(4.0)*/,startPos: start,loop: loopy/*,doneAction: dA*/)* EnvGen.kr(Env([0,vl,vl,0],[0,dur,0]),timeScale: tS,doneAction: 2));}).add;
 
+
+	SynthDef(\playBuf10Mod ,{|out = 0,start=0, trig= 0.002, dur, buf, dA=2, tS=1, loopy=1,vl=1,rte=1|Out.ar(out,PlayBuf.ar(10,buf,rte,trigger:
+		trig/*Dust.kr(4.0)*/,startPos: MouseX.kr(0, ~leTout.numFrames  )+start,loop: loopy/*,doneAction: dA*/)* EnvGen.kr(Env([0,vl,vl,0],[0,dur,0]),timeScale: tS,doneAction: 2));}).add;
+
+
 		SynthDef(\playB10 ,{|out = 0,start=0, impulse= 0.002, dur, buf, dA=2, tS=1, loopy=1,vl=1|Out.ar(out,PlayBuf.ar(10,buf,trigger:
 		Impulse.kr(impulse),startPos: start,loop: loopy/*,doneAction: dA*/))}).add;
 
@@ -1124,31 +1129,36 @@ LFNoise0.kr(~hz1beat).range(0.1,0.0)/*,0.02)*/
 
 
 
-	/*SynthDef(\kick, {
-		arg amp=0.2,out=0;
-		var sig, env, envF;
 
-		envF = EnvGen.ar(
-			Env(
-				[5178.15*2,64.midicps,114,26,0,0],
-				[0.005,0.018,0.1652,0,0.4],
-					[-8.84,-3,-2]
-			)
-		);
 
-		env =
 
-EnvGen.ar(
-	Env([ 0.1 , 0.302,   0.01  ,  0.5,0,0],
-		[ 0.006,  0.01,   0.014  , 0.14 , 0.06  ],[-0.7,0.5,-12,2,-6]),doneAction:2);
-                                                     //-2.6 can be zero
+/*SynthDef(\kick, {
+	arg amp=0.2,out=0;
+	var sig, env, envF;
 
-		sig = SinOsc.ar(envF, mul: env);
+	envF = EnvGen.ar(
+		Env(
+			[117.midicps,64.midicps,114,26,0,0],
+			[0.005,0.018,0.152,0,0.4],
+			[-8.4,-3,-2]
+		)
+	);
 
-		sig = sig * amp.dbamp  ;
+	env =
+
+	EnvGen.ar(
+		Env([ 0.052 , 0.088,   0.02 ,  0.42,0.2,0],
+			[ 0.0062,  0.01,   0.0014  , 0.087 , 0.06  ],[-0.96,0.5,-12,4,-6]),doneAction:2);
+	//-2.6 can be zero
+
+	sig = SinOsc.ar(envF, mul: env);
+
+	sig = sig * amp.dbamp  ;
 	// sig = Pan2.ar(sig);
-		Out.ar(out, sig);
-	}).add*/
+	Out.ar(out, sig);
+}).add;*/
+
+
 
 SynthDef(\kick, {
 	arg amp=0.2,out=0;
@@ -1157,16 +1167,16 @@ SynthDef(\kick, {
 	envF = EnvGen.ar(
 		Env(
 			[117.midicps,64.midicps,114,26,0,0],
-			[0.005,0.018,0.1652,0,0.4],
+			[0.005,0.018,0.152,0,0.4],
 			[-8.4,-3,-2]
 		)
 	);
 
 	env =
 
-	EnvGen.ar(
-		Env([ 0.04 , 0.088,   0.04 ,  0.42,0.2,0],
-			[ 0.0062,  0.01,   0.014  , 0.06 , 0.06  ],[-1.1,0.5,-12,4,-6]),doneAction:2);
+EnvGen.ar(
+		Env([ 0.052 , 0.088,   0.02 ,  0.42,0.2,0],
+			[ 0.0062,  0.004,   0.054  , 0.037 , 0.06  ],[-0.96,0.5,-12,4,-6]),doneAction:2);
 	//-2.6 can be zero
 
 	sig = SinOsc.ar(envF, mul: env);
@@ -1177,58 +1187,6 @@ SynthDef(\kick, {
 }).add;
 
 
-/*
-	SynthDef(\kick, {
-	arg amp=0.2,out=0;
-	var sig, env, envF;
-
-	envF = EnvGen.ar(
-		Env(
-			[117.midicps,64.midicps,114,26,0,0],
-			[0.005,0.018,0.1652,0,0.4],
-			[-8.4,-3,-2]
-		)
-	);
-
-	env =
-
-	EnvGen.ar(
-		Env([ 0.04 , 0.088,   0.04 ,  0.40,0,0],
-			[ 0.0062,  0.01,   0.014  , 0.06 , 0.06  ],[-2,0.5,-12,4,-6]),doneAction:2);
-	//-2.6 can be zero
-
-	sig = SinOsc.ar(envF, mul: env);
-
-	sig = sig * amp.dbamp  ;
-	// sig = Pan2.ar(sig);
-	Out.ar(out, sig);
-}).add;*/
-
-/*SynthDef(\kick, {
-	arg amp=0.2,out=0;
-	var sig, env, envF;
-
-	envF = EnvGen.ar(
-		Env(
-			[117.midicps,64.midicps,114,26,0,0],
-			[0.005,0.018,0.1652,0,0.4],
-			[-8.4,-3,-2]
-		)
-	);
-
-	env =
-
-	EnvGen.ar(
-		Env([ 0.04 , 0.078,   0.07  ,  0.42,0.2,0],
-			[ 0.0062,  0.01,   0.014  , 0.06 , 0.06  ],[-1.1,0.5,-12,2,-6]),doneAction:2);
-	//-2.6 can be zero
-
-	sig = SinOsc.ar(envF, mul: env);
-
-	sig = sig * amp.dbamp  ;
-	// sig = Pan2.ar(sig);
-	Out.ar(out, sig);
-}).add;*/
 
 
 
@@ -2930,9 +2888,9 @@ Ppar([
 ~comp.set(\thr,0.2 ,\sB, 1.034,\sA, 1/2,\atk ,0.0242, \rel ,0.0968, \gain,1,\in, ~comFuzz,\out,~limitBass);
 
 ~limK=Synth(\limitertoMixer,[\c45,1,\in, ~limitKick, \gain,1,\out,~kToPan],~limitGrp);
-~limK.set(\gain,245);
+~limK.set(\gain,247);
 ~limB=Synth(\limitertoMixer,[\c46,1,\in, ~limitBass, \gain,68,\out,~kToPan],~limitGrp);
-~limB.set(\gain,184.2);
+~limB.set(\gain,178.6);
 
 ~kbPan2 = Synth(\pan2,[ \in,~kToPan,\out,0],~stereoGrp);
 

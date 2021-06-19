@@ -6359,3 +6359,144 @@ Pbind(\instrument, \playBuf10, \buf ,~leTout,\out,~toShift, \start,Pfunc({~blu= 
 
 
 		Pbind(\instrument, \playBuf10, \buf ,~leTout,\out,~toShift, \start,Pfunc({~leTout.numFrames/ 192 * (160.rand)}),\loopy,0,\tS,0.39550810372374,\dur,Pseq([5/1],1))].scramble,1)],8).play(t,quant:1)
+
+
+
+	//64
+
+
+
+	Pbind(\instrument, \wNoise,\dur, Pseq([8/1],1),\dec ,Pkey(\dur),\amp,(-5),\out,0,\wFil,0,\valStart,900,\valEnd,1000,\durF,8*t.beatDur,\dA,0,\out,~hitEq, \tS,  0.39550810372374),
+
+	Pbind(\instrument, \wNoise,\dur, Pseq([4/1],1),\dec ,Pkey(\dur),\amp,(-5),\out,0,\wFil,0,\valStart,900,\valEnd,1000,\durF,8*t.beatDur,\dA,0,\out,0, \tS,  0.39550810372374,\type,\rest),
+
+	Pbind(\instrument, \gateS,\dur, Pseq([4/1],1), \tS,  0.39550810372374,\group, ~gateGrp11,\in,~tofinalRythm,\out,~toCom),
+
+
+	Pbind(\instrument, \playBuf10, \buf ,~noise,\out,~toDelay10,\loopy,0,\tS,0.39550810372374,\dur,Pseq([8/1],1),\vl,1),
+
+
+		Pbind(\instrument, \wNoise,\dur, Pseq([4/1],1),\dec ,Pkey(\dur),\amp,(-5),\out,0,\wFil,0,\valStart,900,\valEnd,1000,\durF,8*t.beatDur,\dA,0,\out,0, \tS,  0.39550810372374,\type,\rest),
+
+		Pbind(\instrument, \gateS,\dur, Pseq([4/1],1), \tS,  0.39550810372374,\group, ~gateGrp11,\in,~tofinalRythm,\out,~toCom),
+
+	//32
+
+	/*Pbind(\instrument, \gateS,\dur, Pseq([4/1],8), \tS,  0.39550810372374,\group, ~gateGrp11,\in,~tofinalRythm,\out,~toCom,\type,Pseq([\note,\note,\note,\note,\rest,\rest,\rest,\rest].scramble,inf)),*/
+
+	Pbind(\instrument, \wNoise,\dur, Pseq([1/1],1),\dec ,Pkey(\dur),\amp,(-5),\out,0,\wFil,0,\valStart,900,\valEnd,1000,\durF,8*t.beatDur,\dA,0,\out,0, \tS,  0.39550810372374,\type,\rest),
+	Pbind(\instrument, \gateS,\dur, Pseq([7/1],1), \tS,  0.39550810372374,\group, ~gateGrp11,\in,~tofinalRythm,\out,~toCom,),
+
+	Pbind(\instrument, \wNoise,\dur, Pseq([1/1],1),\dec ,Pkey(\dur),\amp,(-5),\out,0,\wFil,0,\valStart,900,\valEnd,1000,\durF,8*t.beatDur,\dA,0,\out,0, \tS,  0.39550810372374,\type,\rest),
+	Pbind(\instrument, \gateS,\dur, Pseq([7/1],1), \tS,  0.39550810372374,\group, ~gateGrp11,\in,~tofinalRythm,\out,~toCom,),
+
+
+
+	Pbind(\instrument, \gateS,\dur, Pseq([16/1],1), \tS,  0.39550810372374,\group, ~gateGrp11,\in,~tofinalRythm,\out,~toCom,),
+
+
+
+
+~glou=~leTout2.numFrames/256* (220.rand)
+
+ \start,Pfunc({1.exprand(~leTout2.numFrames-860032)})
+
+Pseq([
+
+
+	Pbind(\instrument, \playBuf10Mod, \buf ,~leTout2,\out,0
+	,\loopy,0,\tS,0.39550810372374,\dur,Pseq([1/8],1)),
+
+Pbind(\instrument, \playBuf10Mod, \buf ,~leTout2,\out,0/*~toExtraFx*/
+	,\loopy,0,\tS,0.39550810372374,\dur,Pseq([1/8],8)),
+
+
+],inf).play(t)
+
+
+
+
+Routine({
+
+
+Pseq([
+
+/*MouseY.kr(*/
+
+
+Pbind(\instrument, \playBuf10Mod, \buf ,~leTout2,\out,0/*~toExtraFx*/
+	,\loopy,0,\tS,0.39550810372374,\dur,Pseq([1/8],8)),
+
+	Pbind(\instrument, \playBuf10Mod, \buf ,~leTout2,\out,0/*~toExtraFx*/
+	,\loopy,0,\tS,0.39550810372374,\dur,Pseq([1/4],4)),
+
+
+
+		Pbind(\instrument, \playBuf10Mod, \buf ,~leTout2,\out,0/*~toExtraFx*/
+	,\loopy,0,\tS,0.39550810372374,\dur,Pseq([1/1],1)),
+
+	Pbind(\instrument, \playBuf10Mod, \buf ,~leTout2,\out,0/*~toExtraFx*/
+	,\loopy,0,\tS,0.39550810372374,\dur,Pseq([4/1],1)),
+
+],inf).play(t);
+
+	wait(0.16);
+
+		// s.record(path:"/Users/davidmignot/Music/SuperCollider Recordings/E/elec.aiff",numChannels:10,duration:t.beatDur*64);
+}).play(t,quant:1)
+
+
+
+~charmin.play
+
+Pbind(\instrument, \playBuf10, \buf ,~charmin,\out,0/*~toExtraFx*/
+	,\loopy,0,\tS,0.39550810372374,\dur,Pseq([4/1],1),\start,Pfunc({~charmin.numFrames.rand})).play(t,quant:1)
+
+Pbind(\instrument, \playBuf10, \buf ,~charmin,\out,0/*~toExtraFx*/
+	,\loopy,0,\tS,0.39550810372374,\dur,Pseq([64/1],1)).play(t,quant:1)
+
+~charmin=  Buffer.read(s,"/Users/davidmignot/Music/SuperCollider Recordings/E/elec.aiff");
+
+
+////compresisobn
+
+
+	~kickfader = Synth(\fader, [in: ~toExtraComp, out: 0], ~kickgroup1, \addToTail);
+	~padfader = Synth(\fader, [in: ~toCom2, out: 0], ~padgroup1, \addToTail);
+	~fakeSidechain = Synth(\fakeSidechain, [
+		out: ~toCom2, sideBus: ~toExtraComp,
+		relax: 0.1
+	], ~padfader, \addBefore);
+
+
+~kickfader2 = Synth(\fader, [in: ~extraComp    , out: 0], ~kickgroup2, \addToTail);
+	~padfader2 = Synth(\fader, [in: ~toExtraComp          , out: 0], ~padgroup2, \addToTail);
+	~fakeSidechain2 = Synth(\fakeSidechain, [
+		out: ~toExtraComp      , sideBus: ~extraComp,
+		relax: 0.1
+	], ~padfader2, \addBefore);
+
+
+
+	//
+
+
+	~compUlti= Synth(\comp10,[\ctrl, ~snBus,],~compGrp5);
+~compUlti.set(\thr,0.76 ,\sB, 1.06,\sA, 1/2,\atk ,0.0484, \rel ,0.1936 ,\in, ~toCom, \out,~eqBus10);
+// ~compUlti.set(\out,0)
+
+/*~compUlti.set(\out,~eqBus10)*/
+
+~mixingUlti = Synth(\EQHP10D, [\in, ~eqBus10, \frq, 100,\vol, 2.2,\out2,~fusible2,\out,~toExtraComp /*\val,4000,\quant,1.98,\gain,(-6.8)*/], ~eqGrp3);
+ ~mixingUlti.set(\vol, 1.31,/*\gain,(-6.9),\quant,1.98*/);//1.82
+
+				// ~mixingUlti.free
+
+
+
+~compExtra= Synth(\comp10,[\ctrl, ~snBus,],~dynaEq2);
+~compExtra.set(\thr,0.85 ,\sB, 1.04,\sA, 1/2,\atk ,0.0484, \rel ,0.1936 ,\in,~extraComp , \out,~extraEq);
+~mixingExtra=Synth(\EQHP10, [\in, ~extraEq, \frq, 100,\vol, 2.2,\out,0], ~compGrp7);
+ ~mixingExtra.set(\vol, 1.75,/*\gain,(-6.9),\quant,1.98*/\out,0);//1.82
+
+

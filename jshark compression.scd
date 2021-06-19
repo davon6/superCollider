@@ -70,9 +70,54 @@ s.waitForBoot {
 };
 )
 
+
+
 // stop:
 ~pad.type_(\off).play;
 Pdef(\kick).stop;
 
 // clean up:
 ~kickgroup1.free; ~padgroup1.free;
+
+
+////example number 2
+
+
+
+(
+{
+var samp = WhiteNoise.ar(0.3);
+var osc = SinOsc.ar([400,401]);
+
+osc-Compander.ar(osc,samp,0.2,12,1)
+}.play;
+)
+
+
+
+~sidechain = Bus.audio(s, 1);
+
+(
+a = {
+	var sig = SinOsc.ar(440);
+	var trig = Dust.kr(1.2);
+	var ampLFO = ToggleFF.kr(trig) * 0.1 + 0.02;
+	sig = sig * ampLFO;
+	Out.ar(~sidechain, sig);
+	Out.ar(0, sig.dup)
+}.play;
+)
+
+(
+b = {
+	var sig = LFTri.ar(LFDNoise3.kr(3).exprange(200, 800));
+	var ctl = In.ar(~sidechain, 1);
+
+	sig = Compander.ar(sig, ctl,
+		thresh: 0.05, slopeBelow: 1, slopeAbove: -50,
+		clampTime: 0.05, relaxTime: 0.1
+	);
+
+	(sig * 0.1).dup
+}.play(target: a, addAction: \addAfter);
+)
