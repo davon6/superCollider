@@ -4,8 +4,12 @@ Routine({
 
 Ppar([
 
+
 		//from firsthit.scd
 		Pbind(\instrument,\envSli,\out, ~bus17,\dur,Pseq([64/1],inf),\tS, 0.39550810372374,\val1,150,\crv,5.2),
+
+		Pbind(\instrument, \envSli, \out,~bus34,\val1,700,\val2,11000, \tS, t.beatDur,\dur,Pseq([2/1],inf),\crv,3,
+		\fc1,0.77,\fc2,0.23),
 
 	/*	Pbind(\instrument, \lfo13,\tS, 0.39550810372374, \dur, Pseq([16/1],inf),\out,~mod3,\rL,0 ,\rH,100,\val,
 
@@ -98,15 +102,20 @@ Pseq([ Pseq([8/1],1)],1)  ,Pseq([ Pseq([4/1],1)],1)   ,Pseq([Pseq([16/1],1) ,Pse
 
 
 
-				/*Pbind(\instrument, \playBuf10, \buf ,~charmin,\out,~toExtraFx,\type,Pseq([\note,\rest].scramble,inf)
-					,\loopy,0,\tS,0.39550810372374,\dur,Pseq([4/1],16),\start,Pfunc({~charmin.numFrames/64*(64.rand)})),*/
-				Pseq([
+				Pbind(\instrument, \playBuf10, \buf ,~charmin,\out,~toExtraFx,\type,Pseq([\note,\rest].scramble,inf)
+					,\loopy,0,\tS,0.39550810372374,\dur,Pseq([4/1],16),\start,Pfunc({~charmin.numFrames/64*(64.rand)})),
+
+
+				/*Pseq([
 					Pbind(\instrument, \playBuf10, \buf ,~charmin,\out,~toExtraFx
 					,\loopy,0,\tS,0.39550810372374,\dur,Pseq([6/1],1),\start,Pfunc({~charmin.numFrames/64*(64.rand)})),
 
 					Pbind(\instrument, \playBuf10, \buf ,~charmin,\out,~toExtraFx,\type,\rest
 					,\loopy,0,\tS,0.39550810372374,\dur,Pseq([2/1],1),\start,Pfunc({~charmin.numFrames/64*(64.rand)}))
-				].scramble,8),
+				].scramble,8),*/
+
+				~part3b,
+
 				~part3a,
 				// Pbind(\instrument, \playBuf10, \buf ,~leTout,\out,~toShift ,\loopy,0,\tS,t.beatDur,\dur,Pseq([64/1],1)),\
 
@@ -117,7 +126,7 @@ Pseq([ Pseq([8/1],1)],1)  ,Pseq([ Pseq([4/1],1)],1)   ,Pseq([Pseq([16/1],1) ,Pse
 
 
 
-Pbind(\instrument, \playBuf10, \buf ,~leTout,\out,~toShift,\loopy,0,\tS,t.beatDur,\dur,Pseq([64/1],1)),
+				// Pbind(\instrument, \playBuf10, \buf ,~leTout,\out,~toShift,\loopy,0,\tS,t.beatDur,\dur,Pseq([64/1],1)),
 			/*Pbind(\instrument, \playBuf10, \buf ,~leTout2,\out,~toShift,\loopy,0,\tS,t.beatDur,\dur,Pseq([64/1],1)),*/
 
 			// Pbind(\instrument, \playBuf10, \buf ,~leTout,\out,~toShift,\loopy,0,\tS,t.beatDur,\dur,Pseq([64/1],1),\start,~leTout.numFrames/3 ),
@@ -139,8 +148,8 @@ Pbind(\instrument, \playBuf10, \buf ,~leTout,\out,~toShift,\loopy,0,\tS,t.beatDu
 			Pbind(\instrument, \playBuf10, \buf ,~leTout,\out,~toShift,\loopy,0,\tS,t.beatDur,\dur,Pseq([64/1],1),\start,~leTout.numFrames/3),
 	/*		Pbind(\instrument, \playBuf10, \buf ,~ped,\out,~toShift,\loopy,0,\tS,t.beatDur,\dur,Pseq([64/1],1)),*/
 				// Pbind(\instrument, \playBuf10, \buf , ~vap,\out,~toShift ,\loopy,0,\tS,t.beatDur,\dur,Pseq([64/1],1)),
-				Pbind(\instrument, \playBuf10, \buf ,~ped,\out,~toShift ,\loopy,0,\tS,t.beatDur,\dur,Pseq([64/1],1),\start,0 /*~ped.numFrames/2*/),
-
+				// Pbind(\instrument, \playBuf10, \buf ,~ped,\out,~toShift ,\loopy,0,\tS,t.beatDur,\dur,Pseq([64/1],1),\start,0 /*~ped.numFrames/2*/),
+~part3a,
 
 
 			Pbind(\instrument, \playBuf10, \buf ,~leTout,\out,~toShift,\loopy,0,\tS,t.beatDur,\dur,Pseq([64/1],1),\start,~leTout.numFrames/3*3,\type,\rest ),
@@ -203,7 +212,7 @@ Pbind(\instrument, \playBuf10, \buf ,~leTout,\out,~toShift,\loopy,0,\tS,t.beatDu
 	Pwrand([
 
 		Pbind(\instrument,\gateS, \dur, Prand([Pseq([1.5/1],1), Pseq([3/1],1),Pseq([1/1],1),],1),
-			\in,  ~toExtraFx  ,\out ,Pwrand([~tofinalRythm,~reverbSquelch],[8,1].normalizeSum,inf), \group, ~gateGrp7,\tS, 0.39550810372374),
+			\in,  ~toExtraFx  ,\out ,Pwrand([~toCom,~reverbSquelch],[8,1].normalizeSum,inf), \group, ~gateGrp7,\tS, 0.39550810372374),
 
 		Pseq([
 				/*Pbind(\instrument,\gateS, \dur,Pseq([1/8],16),\type,Pseq([\note, \rest,\note, \rest,\note, \rest,\note,\rest],inf),\in,~toExtraFx  ,\out ,~delayBus2 ,\group, ~gateGrp7,\tS, 0.39550810372374),*/
@@ -217,13 +226,13 @@ Pbind(\instrument, \playBuf10, \buf ,~leTout,\out,~toShift,\loopy,0,\tS,t.beatDu
 
 
 
-		Pseq([
+		/*Pseq([
 
 	Pbind(\instrument,\gate2, \in ,~toKbGate, \group,~lfoGrp, \tS,  0.39550810370174,\dur, Pseq([16/1],1),\type,\rest),
 			~hitPart1,~hitPart2,~hitPart3,~hitPart4
 
 
-		],1),
+		],1),*/
 
 		/*Pbind(\instrument,\gateS, \dur,9999,\vlSub, 1, \vlSub2,Pkey(\vlSub),\in,~vocToDispatch,\out,0,\group, ~kbGate,\tS, 0.39550810372374),*/
 
@@ -316,7 +325,7 @@ Pbind(\instrument,\gate, \tS,  0.39550810370174,\vlSub, 1, \vlSub2,Pkey(\vlSub),
 	// s.record(path:"/Users/davidmignot/Music/SuperCollider Recordings/E/stem2.aiff",numChannels:10,duration:t.beatDur*256);
 
 
-	// s.record;
+	s.record;
 
 
 }).play(t,quant:1))

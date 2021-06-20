@@ -231,6 +231,8 @@ s.sync;
 
 	~ktoPan2= Bus.audio(s,1);
 
+	~hiCom= Bus.audio(s,10);
+
 	~revBus1= Bus.audio(s,1);
 	~revBus2= Bus.audio(s,1);
 	~comBus1= Bus.audio(s,1);
@@ -249,6 +251,7 @@ s.sync;
 	~toFx= Bus.audio(s,10);
 
 	~toExtraComp= Bus.audio(s,10);
+	~toExtraComp2= Bus.audio(s,10);
 
 	~toGateRise= Bus.audio(s,10);
 
@@ -1175,8 +1178,8 @@ SynthDef(\kick, {
 	env =
 
 EnvGen.ar(
-		Env([ 0.052 , 0.088,   0.02 ,  0.42,0.2,0],
-			[ 0.0062,  0.004,   0.054  , 0.037 , 0.06  ],[-0.96,0.5,-12,4,-6]),doneAction:2);
+		Env([ 0.050 , 0.087,   0.02 ,  0.356,0.2,0],
+			[ 0.00602 , 0.004,   0.05  , 0.041 , 0.06  ],[-0.96,0.5,-12,3.12,-6]),doneAction:2);
 	//-2.6 can be zero
 
 	sig = SinOsc.ar(envF, mul: env);
@@ -1185,6 +1188,8 @@ EnvGen.ar(
 	// sig = Pan2.ar(sig);
 	Out.ar(out, sig);
 }).add;
+
+
 
 
 
@@ -2254,6 +2259,11 @@ SynthDef(\volAna,{|in=0|RMS.ar( In.ar(in)).ampdb.round(0.1).poll(label:" db" )})
 		Out.ar(out, Compander.ar(In.ar(in,10) , In.ar(ctrl,1)  , thresh: thr, slopeBelow: sB, slopeAbove: sA, clampTime: atk, relaxTime: rel)* gain/** EnvGen.kr(Env.step([1,1],[dur,0]),timeScale: tS,doneAction:2)*/)}).add;
 
 
+		SynthDef(\comp10Duo, {|in, in2, ctrl, out= 0, dec  , thr  =0.01 ,sB = 1, sA = (1/4), atk = 0.001, rel = 0.04 , gain=1, dur,tS=1|
+
+		Out.ar(out, Compander.ar(In.ar(in,10)+In.ar(in2,10) , In.ar(ctrl,1)  , thresh: thr, slopeBelow: sB, slopeAbove: sA, clampTime: atk, relaxTime: rel)* gain/** EnvGen.kr(Env.step([1,1],[dur,0]),timeScale: tS,doneAction:2)*/)}).add;
+
+
 	SynthDef(\comp1010P, {|in, ctrl, out= 0, dec  , thr  =0.01 ,sB = 1, sA = (1/4), atk = 0.001, rel = 0.04 , gain=1, dur,tS=1|
 
 		Out.ar(out, Compander.ar(In.ar(in,10) , In.ar(ctrl,10)  , thresh: thr, slopeBelow: sB, slopeAbove: sA, clampTime: atk, relaxTime: rel)* gain* EnvGen.kr(Env.step([1,1],[dur,0]),timeScale: t.beatDur,doneAction:2))}).add;
@@ -2497,6 +2507,9 @@ SynthDef(\sequ,{|value, dur, in=0, out=0, vlAtk=0, vlDec=1,vlSub=1,vlSub2=1, vlR
 	) }).add;
 
 
+	SynthDef(\rien,{|dur=1|EnvGen.kr(Env.step(times:[ dur,0]),timeScale: t.beatDur,doneAction: 2)}).add;
+
+
 
 	SynthDef(\recLoop){|buf=0,out=0,recording = 1,in = (~toRecord)|
 		var input =  Mix.ar(In.ar(in,1));
@@ -2589,6 +2602,8 @@ SynthDef(\sequ,{|value, dur, in=0, out=0, vlAtk=0, vlDec=1,vlSub=1,vlSub2=1, vlR
 		Out.ar(0,HPF.ar(input,100));
 	Out.ar(~dead10,play);
 }.add;
+
+
 
 		SynthDef(\recLoop102){|buf=0,in=0,out=0,recording = 1|
 	var input = In.ar(in/*~toRecord2*/,10);
@@ -2888,11 +2903,11 @@ Ppar([
 ~comp.set(\thr,0.2 ,\sB, 1.034,\sA, 1/2,\atk ,0.0242, \rel ,0.0968, \gain,1,\in, ~comFuzz,\out,~limitBass);
 
 ~limK=Synth(\limitertoMixer,[\c45,1,\in, ~limitKick, \gain,1,\out,~kToPan],~limitGrp);
-~limK.set(\gain,247);
+~limK.set(\gain,200.5);
 ~limB=Synth(\limitertoMixer,[\c46,1,\in, ~limitBass, \gain,68,\out,~kToPan],~limitGrp);
-~limB.set(\gain,178.6);
+~limB.set(\gain,167.2);
 
-~kbPan2 = Synth(\pan2,[ \in,~kToPan,\out,0],~stereoGrp);
+~kbPan2 = Synth(\pan2,[ \in,~ kToPan,\out,0],~stereoGrp);
 
 	wait(0.162);
 

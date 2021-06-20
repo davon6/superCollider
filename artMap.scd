@@ -583,9 +583,14 @@ Pbind(\instrument, \percussion, \dur,Pseq([1/4],inf),\carHz, Pfunc({1050.1207061
 //new percu dance
 
 
-(
+
 ~stereoGrp=Group.new;
 ~recGrp2=Group.after(~stereoGrp);
+
+(
+Routine({
+
+
 a=Prand([
 
 Pbind(\instrument, \percussion ,\dur,Pseq([1/4],4 ),\carHz, Pfunc({525.12070612224.rrand(0.01)}),\modHz,Pfunc({11899.3343179398.rrand(0.001)}),\modAmp, Pfunc({0.12875.rrand(0.000001)}) ,\amp,3,\rel,Pseq([1/4],inf),\rel2,Pseq([1/16],inf),\latch,8000,\stereoL, 0.00555, \crv1, Pfunc({ (-14.4).rrand(-1)}), \crv1b,(-4).rand, \mulMod, 1691,\out,   ~delayToLimit),
@@ -597,7 +602,14 @@ Pbind(\instrument, \percussion ,\dur,Pseq([1/4],4 ),\carHz, Pfunc({525.120706122
 Pbind(\instrument,\percussion,\dur,Pseq([1/4], 2),\atk, 0,\rel,0.04840,\rel2,0.02420,\amp,-1, \crv1, Pfunc({(-3).rand}), \crv1b,Pfunc({ (-5).rand}), \modHz, Pfunc({exprand(500,10000)}), \mulMod, Pfunc({rrand(100, 500)}), \carHz, Pfunc({exprand(20,10000)}), \modAmp, Pfunc({0.12875.rand}), \latch, 18500, \stereoR, 0.007,\out,~toKbGate)
 ],inf).play(t);
 
+	wait(0.16);
 
+	 s.record(path:"/Users/davidmignot/Music/SuperCollider Recordings/E/funkPerc2.aiff",numChannels:2,duration:t.beatDur*64)
+
+}).play
+
+)
+// Pbind(\instrument,\recLoopS,\buf,~funkPerc,\recording,1, \in,0,\group,~recGrp2,\dur,inf).play(t,quant:1)
 
 ~ste1=Synth(\stereoO,[\in,~delayToLimit],~stereoGrp);
 ~ste1.set(\spread,1, \level,1, \center,0,\dlt1,0.01,\dlt2,0,\decT,0.0968, \mxDel,0);
@@ -607,8 +619,7 @@ Pbind(\instrument,\percussion,\dur,Pseq([1/4], 2),\atk, 0,\rel,0.04840,\rel2,0.0
 
 ~ste3=Synth(\stereoO,[\in,~toKbGate],~stereoGrp);
 ~ste3.set(\spread,0, \level,1, \center,0.0,\dlt1,0.1,\dlt2,0.2,\decT,1.5544, \mxDel,1)
-)
-// Pbind(\instrument,\recLoopS,\buf,~funkPerc,\recording,1, \in,0,\group,~recGrp2,\dur,inf).play(t,quant:1)
+
 
 
 ~ste2.free

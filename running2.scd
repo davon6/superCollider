@@ -42,6 +42,9 @@ f = { |n=14, min=0, max=11| (min..max).scramble.keep(n) };
 ~kb2Test= Buffer.read(s,"/Users/davidmignot/Music/SuperCollider Recordings/E/idea.aiff");
 ~pad= Buffer.read(s,"/Users/davidmignot/Music/SuperCollider Recordings/E/pad.aiff");
 ~funkPerc= Buffer.read(s,"/Users/davidmignot/Music/SuperCollider Recordings/E/funkPerc.aiff");
+
+~funkPerc2= Buffer.read(s,"/Users/davidmignot/Music/SuperCollider Recordings/E/funkPerc2.aiff",);
+
 ~leTout =  Buffer.read(s,"/Users/davidmignot/Music/SuperCollider Recordings/E/stem1.aiff");
 ~leTout2 =  Buffer.read(s,"/Users/davidmignot/Music/SuperCollider Recordings/E/stem2.aiff");
 ~cymb= Buffer.read(s,"/Users/davidmignot/Music/SuperCollider Recordings/E/cymbal.aiff");
@@ -261,12 +264,13 @@ f = { |n=14, min=0, max=11| (min..max).scramble.keep(n) };
 ~padgroup1 = Group.after(~kickgroup1);
 	~padgroup = Group(~padgroup1);
 
+~compGrp8= Group.after(~padgroup1);
 
-
-~kickgroup2 = Group.after(~padgroup1);
+~kickgroup2 = Group.after(~compGrp8);
 	~kickgroup3 = Group(~kickgroup2);
 ~padgroup2 = Group.after(~kickgroup2);
 	~padgroup3 = Group(~padgroup2);
+
 
 ~finalComp= Group.after(~padgroup2);
 ~finalEq= Group.after(~finalComp);
@@ -603,7 +607,7 @@ Pbind(\instrument, \filter, \freqFil,100,\dur,inf, \in,~hpK,\which,2,\busMod, ~b
 /*	Pbind(\instrument, \playBuf,  \tS,  0.39550810372374,	\buf,~snare,\type,
 		Pwrand([Pseq([\note ,\rest,\rest,\rest],1), Pseq([\rest ,\rest,\rest,\rest],1) ],[2,1,32].normalizeSum,inf)  ,\dA,Pseq([0.25],inf),\dur, Pseq([1/2], inf),\out,~snareEQ),*/
 Pseq([
-Pbind(\instrument, \playBuf,  \tS,  0.39550810372374,\buf,~snare,
+/*Pbind(\instrument, \playBuf,  \tS,  0.39550810372374,\buf,~snare,
 		\type,
 		Pseq([	Pseq([\rest],8),
 
@@ -630,7 +634,7 @@ Pseq([\rest ,\rest,\note,\rest  ,\rest,\rest,\note,\rest,  \rest,\rest,\note,\re
 
 
 	,\dur, Pseq([1/2], 40) ,\out,~snareEQ,
-	\dA,Pseq([  Pseq([1],64), Pseq([0.5],64)].scramble,inf)),
+	\dA,Pseq([  Pseq([1],64), Pseq([0.5],64)].scramble,inf)),*/
 
 Pseq([
 
@@ -641,7 +645,7 @@ Pseq([
 		\type,
 				Pseq([\rest,\rest,\note,\rest,\rest,\rest,\note,\rest,\rest,\rest,\note,\rest,\rest,\rest,\note,\rest],inf),
 
-	\dur, Pseq([1/2],96) ,\out,~snareEQ,
+	\dur, Pseq([1/2],128) ,\out,~snareEQ,
 	\dA,Pseq([  Pseq([1],128), Pseq([0.5],128)],inf)),
 
 
@@ -1596,10 +1600,10 @@ Ppar([~base,~fx],1).play(t)
 (~fx=Ppar([
 
 
-	Pbind(\instrument,\stereoS, \dur,Pseq([8/1],inf), \in, ~delToStereo   ,\out,~tofinalRythm,\spread,1, \center, Prand([ Pfunc({0.6.rrand(0.2)}),Pfunc({-0.6.rrand(-0.2)})],inf),\group,~stereoGrp4,\tS, 0.39550810372374),
+	Pbind(\instrument,\stereoS, \dur,Pseq([8/1],inf), \in, ~delToStereo   ,\out,~toCom/*~tofinalRythm*/,\spread,1, \center, Prand([ Pfunc({0.6.rrand(0.2)}),Pfunc({-0.6.rrand(-0.2)})],inf),\group,~stereoGrp4,\tS, 0.39550810372374),
 
 
-	Pbind(\instrument,\stereoS, \dur, 9999, \in, ~stereoBus3b   ,\out,~tofinalRythm,\spread,1, \group, ~stereoGrp4),
+	Pbind(\instrument,\stereoS, \dur, 9999, \in, ~stereoBus3b   ,\out,~toCom/*~tofinalRythm*/,\spread,1, \group, ~stereoGrp4),
 
 ],1))
 
