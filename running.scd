@@ -288,10 +288,10 @@ s.sync;
 	~extraEq=Bus.audio(s,10);
 
 	~toNoise=Bus.audio(s,1);
-	~toNoiseEq=Bus.audio(s,1);
-	~toNoiseCom=Bus.audio(s,1);
-	~toNoiseLimit=Bus.audio(s,1);
-	~toNoiseStereo=Bus.audio(s,1);
+	~toNoiseEq=Bus.audio(s,2);
+	~toNoiseCom=Bus.audio(s,2);
+	~toNoiseLimit=Bus.audio(s,2);
+	~toNoiseStereo=Bus.audio(s,2);
 
 	~limitKick=Bus.audio(s,1);
 	~limitBass=Bus.audio(s,1);
@@ -886,9 +886,9 @@ s.sync;
 	SynthDef(\playBuf10 ,{|out = 0,start=0, trig= 0.002, dur, buf, dA=2, tS=1, loopy=1,vl=1,rte=1|Out.ar(out,PlayBuf.ar(10,buf,rte,trigger:
 		trig/*Dust.kr(4.0)*/,startPos: start,loop: loopy/*,doneAction: dA*/)* EnvGen.kr(Env([0,vl,vl,0],[0,dur,0]),timeScale: tS,doneAction: 2));}).add;
 
-
+/*on hold
 	SynthDef(\playBuf10Mod ,{|out = 0,start=0, trig= 0.002, dur, buf, dA=2, tS=1, loopy=1,vl=1,rte=1|Out.ar(out,PlayBuf.ar(10,buf,rte,trigger:
-		trig/*Dust.kr(4.0)*/,startPos: MouseX.kr(0, ~leTout.numFrames  )+start,loop: loopy/*,doneAction: dA*/)* EnvGen.kr(Env([0,vl,vl,0],[0,dur,0]),timeScale: tS,doneAction: 2));}).add;
+		trig/*Dust.kr(4.0)*/,startPos: MouseX.kr(0, ~leTout.numFrames  )+start,loop: loopy/*,doneAction: dA*/)* EnvGen.kr(Env([0,vl,vl,0],[0,dur,0]),timeScale: tS,doneAction: 2));}).add;*/
 
 
 		SynthDef(\playB10 ,{|out = 0,start=0, impulse= 0.002, dur, buf, dA=2, tS=1, loopy=1,vl=1|Out.ar(out,PlayBuf.ar(10,buf,trigger:

@@ -812,16 +812,19 @@ Pbind(\instrument, \playBuf,  \tS,  0.39550810372374,\buf,~snare,\type, Pseq([\r
 // ~fil39.free
 /*
 ~fil39= Synth(\filter, [\in,~toNoise,\out,~toNoiseEq,\freqFil,400,\busMod, ~bus23,\which,0,\qf,0.4],~eqGrp);
-~eq39= Synth(\EQHP96Mod, [\frq, 220 ,\gainMod,~fusible2],~dynaEq);
-~eq39.set(\in, ~toNoiseEq, \out , ~toNoiseStereo /*\val, 400, \quant, 8, \gain, (-10),,\frq, 120,\val5,1800,\shelf2,1.6,\gain5,(-8),\val4,3000,\shelf,1.6,\gain4,(-12)*/,\frq, 100,\vol,0.1,\val5,2500,\shelf2,1.5,\gain5,(-19),\amp,0.06);
-/*~comp39=Synth(\comp, [\ctrl,~kbus ],~stereoGrp5);
-~comp39.set(\thr,0.98 ,\sB, 1.06,\sA, 1/2,\atk ,0.0242, \rel ,0.0968, \in, ~toNoiseCom ,\out,~toNoiseStereo);*/
+*/
+
+~eq39= Synth(\EQHP2, [\frq, 100 ],~eqGrp);
+
+~eq39.set(\in, ~toNoiseEq, \out , ~toNoiseCom /*\val, 400, \quant, 8, \gain, (-10),,\frq, 120,\val5,1800,\shelf2,1.6,\gain5,(-8),\val4,3000,\shelf,1.6,\gain4,(-12)*/,\frq, 100,/*\vol,0.1,\val5,2500,\shelf2,1.5,\gain5,(-19),\amp,0.06*/);
+~comp39=Synth(\compS, [\ctrl,~kbus ],~compGrp);
+~comp39.set(\thr,0.8 ,\sB, 1.03,\sA, 1/2,\atk ,0.0242, \rel ,0.0968, \in, ~toNoiseCom ,\out,~toNoiseLimit);
 
 // ~ampMod= Synth(\ampO,[\in, ~hitStereo,\out,~bus25],~stereoGrp);
 
-/*~mix39= Synth(\limitertoMixer[\c39,1,\in, ~toNoiseLimit,\gain,40,\out,~toNoiseStereo],~compGrp6);
-~mix39.set(\gain,15.7,/*\gainMod,~fusible2*/);*/
-~stereo39=Synth(\pan2,[\dur,9999,\in,~toNoiseStereo,\out,~toKbGate,/*\spread,0.6*/], ~extraGrp);*/
+~mix39= Synth(\limiterStoMixer,[\c39,1,\in, ~toNoiseLimit,\gain,40,\out,~toCom2],~limitGrp);
+~mix39.set(\gain,23,/*\gainMod,~fusible2*/);
+// ~stereo39=Synth(\pan2,[\dur,9999,\in,~toNoiseStereo,\out,~toKbGate,/*\spread,0.6*/], ~extraGrp);
 
 /*~stereo39.free*/
 

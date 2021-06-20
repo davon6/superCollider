@@ -675,6 +675,9 @@ Pseq([
 
 		Pseq([
 Ppar([
+
+		Pbind(\instrument, \playBufS, \dur, Pseq([30/1],1),\buf, ~pad6, \tS, t.beatDur,\out,~toNoiseEq),
+
 	Pbind(\instrument, \gateS,\dur, Pseq([30/1],1), \tS,  0.39550810372374,\group, ~gateGrp11,\in,~tofinalRythm,\out,~toCom),
 
 

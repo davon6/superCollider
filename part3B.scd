@@ -6500,3 +6500,48 @@ Pbind(\instrument, \playBuf10, \buf ,~charmin,\out,0/*~toExtraFx*/
  ~mixingExtra.set(\vol, 1.75,/*\gain,(-6.9),\quant,1.98*/\out,0);//1.82
 
 
+	/////paddd
+
+	10.do({{FreeVerb.ar(SinOsc.ar(
+	Saw.kr(Rand(0.01,2000)).range(0,100)+
+	Rand(0.01,2000),phase: Rand(0.001,6),mul: Rand(0.001,0.5)),Rand(0.05,0.9), Rand(0.05,0.9),Rand(0.05,0.9) )!2}.play})
+
+
+
+~pad3=Buffer.read( s,"/Users/davidmignot/Music/SuperCollider Recordings/E/pad3.aiff");
+
+// ~pad4=Buffer.read( s,"/Users/davidmignot/Music/SuperCollider Recordings/E/pad4.aiff");
+~pad5=Buffer.read( s,"/Users/davidmignot/Music/SuperCollider Recordings/E/pad5.aiff");
+
+ s.record(path:"/Users/davidmignot/Music/SuperCollider Recordings/E/pad5.aiff",numChannels:2,/*duration:t.beatDur*64*/);
+
+
+Routine({
+({PlayBuf.ar(2,~pad5,VarSaw.kr(0.084/16,0).range(0.3,4),loop: 1)*0.1}.play);
+
+	wait(0.16);
+
+
+ s.record(path:"/Users/davidmignot/Music/SuperCollider Recordings/E/pad6.aiff",numChannels:2,duration:t.beatDur*64);
+
+}).play
+
+~pad6=Buffer.read( s,"/Users/davidmignot/Music/SuperCollider Recordings/E/pad4.aiff");
+
+({PlayBuf.ar(2,~pad6)}.play);
+
+13.do({{FreeVerb.ar(SinOsc.ar(
+/*	Saw.kr(Rand(0.01,2000)).range(0,100)+*/
+	Rand(0.01,2000),phase: Rand(0.001,6),mul: Rand(0.001,0.5)),Rand(0.05,0.9), Rand(0.05,0.9),Rand(0.05,0.9) )!2}.play})
+
+
+
+Pbind(\instrument, \playBufS, \dur, Pseq([64/1],inf),\buf, ~pad6, \tS, t.beatDur).play(t)
+
+
+Pbind(\instrument, \playBufS, \dur, Pseq([30/1],inf),\buf, ~pad6, \tS, t.beatDur,\out,~toNoiseEq).play(t)
+
+
+
+
+
