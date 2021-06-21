@@ -242,6 +242,8 @@ s.sync;
 	~limitBus1= Bus.audio(s,1);
 	~limitBus12= Bus.audio(s,1);
 
+	~bassFi= Bus.audio(s,1);
+
 	~downSLi= Bus.audio(s,1);
 
 	~bigRiToFil1= Bus.audio(s,1);
@@ -660,7 +662,7 @@ s.sync;
 	~shiftComp2=  Bus.audio(s,1);
 	~filKick= Bus.audio(s,1);
 	~filKB= Bus.audio(s,2);
-	~filKB2= Bus.audio(s,1);
+	~filKB2= Bus.audio(s,2);
 
 	~filK2= Bus.audio(s,1);
 
@@ -1016,12 +1018,12 @@ s.sync;
 		trig/*Dust.kr(4.0)*/,startPos: start,loop: 1/*,doneAction: dA*/)/** EnvGen.kr(Env([0,1,1,0],[0,dur,0]))*/);}).add;
 
 
-	SynthDef(\shap,{|in, out, vl1=80, vl2=0,vl3=0, dA1 =0,tS=1|
+	SynthDef(\shap,{|in, out, vl1=(-9800), vl2=0,vl3=0, dA1 =0,tS=1|
 	var halfBeat, shap;
 
 	halfBeat = t.beatDur * 0.5;
 
-		shap = EnvGen.ar(Env([vl1,vl2],[halfBeat,halfBeat],4),timeScale: tS,doneAction:dA1);
+		shap = EnvGen.ar(Env([vl1,vl2],[halfBeat,halfBeat],3),timeScale: tS,doneAction:dA1);
 
 	Out.ar(out, shap);
 
@@ -1163,7 +1165,8 @@ LFNoise0.kr(~hz1beat).range(0.1,0.0)/*,0.02)*/
 
 
 
-SynthDef(\kick, {
+
+/*SynthDef(\kick, {
 	arg amp=0.2,out=0;
 	var sig, env, envF;
 
@@ -1187,8 +1190,66 @@ EnvGen.ar(
 	sig = sig * amp.dbamp  ;
 	// sig = Pan2.ar(sig);
 	Out.ar(out, sig);
-}).add;
+}).add;*/
 
+
+/*this
+
+	SynthDef(\kick, {
+	arg amp=0.2,out=0;
+	var sig, env, envF;
+
+	envF = EnvGen.ar(
+		Env(
+			[117.midicps,64.midicps,114,26,0,0],
+			[0.0063,0.018,0.152,0,0.4],
+			[-8.4,-3,-2]
+		)
+	);
+
+	env =
+
+EnvGen.ar(
+		Env([ 0.050 , 0.13,   0.02 ,  0.418,0.1,0],
+			[ 0.00602 , 0.0082,   0.04  , 0.08 , 0.06  ],[-0.96,0.5,-8.8,3.12,-6]),doneAction:2);
+	//-2.6 can be zero
+
+	sig = SinOsc.ar(envF, mul: env);
+
+	sig = sig * amp.dbamp  ;
+	// sig = Pan2.ar(sig);
+	Out.ar(out, sig);
+}).add;*/
+
+
+
+//or this
+
+			SynthDef(\kick, {
+	arg amp=0.2,out=0;
+	var sig, env, envF;
+
+	envF = EnvGen.ar(
+		Env(
+			[117.midicps,64.midicps,114,26,0,0],
+			[0.0063,0.018,0.152,0,0.4],
+			[-8.4,-3,-2]
+		)
+	);
+
+	env =
+
+EnvGen.ar(
+		Env([ 0.050 , 0.13,   0.02 ,  0.348,0.2,0],
+			[ 0.00602 , 0.0082,   0.02  , 0.13 , 0.06  ],[-0.96,0.5,-5.6,3.12,-6]),doneAction:2);
+	//-2.6 can be zero
+
+	sig = SinOsc.ar(envF, mul: env);
+
+	sig = sig * amp.dbamp  ;
+	// sig = Pan2.ar(sig);
+	Out.ar(out, sig);
+}).add;
 
 
 
@@ -1231,7 +1292,7 @@ EnvGen.ar(
 
 			sig.round(2**(-8))
 
-			,envF+lpf - In.ar(bus, 1)),envF+lpf - In.ar(bus, 1));
+			,envF+lpf /*- In.ar(bus, 1)*/),envF+lpf/* - In.ar(bus, 1)*/);
 
 		sig = sig * amp.dbamp* env;
 		Out.ar(out, Pan2.ar(sig));
@@ -2507,7 +2568,7 @@ SynthDef(\sequ,{|value, dur, in=0, out=0, vlAtk=0, vlDec=1,vlSub=1,vlSub2=1, vlR
 	) }).add;
 
 
-	SynthDef(\rien,{|dur=1|EnvGen.kr(Env.step(times:[ dur,0]),timeScale: t.beatDur,doneAction: 2)}).add;
+	SynthDef(\rien,{|dur=1|EnvGen.kr(Env.step([1,0],[ dur,0]),timeScale: t.beatDur,doneAction: 2)}).add;
 
 
 
@@ -2834,7 +2895,7 @@ Routine({
 
 Ppar([
 
-	~bassShap,
+		// ~bassShap,
 	Pbind(\instrument, \bass,
 		\dur, Pseq([4/1],1),\lpf,100,
 		\midinote, 28, \bus, ~bassShapB,
@@ -2880,7 +2941,8 @@ Pbind(\instrument ,\EQHP2 ,\in,~bassEq, \out,0, \frq, 20.6,\vol,1,
 
 
 (
-~compGrp=Group.new;
+~filterGrp=Group.new;
+~compGrp=Group.after(~filterGrp);
 ~limitGrp=Group.after(~compGrp);
 ~stereoGrp=Group.after(~limitGrp);
 ~recGrp2=Group.after(~stereoGrp);
@@ -2893,21 +2955,27 @@ Ppar([
 			// Pbind(\instrument, \playBuf, \dur,  Pseq([1/1],inf), \tS,  0.39550810372374,\buf,~k2,\out,~limitKick,\start,00),
 			Pseq([Pbindf(~kick,\out,~limitKick)],inf),
 	Pbind( \instrument, \playBufXG, \impulse, 0.003 ,\dur,    Pseq([1/4],inf), \tS,  0.39550810372374,
-	\start,0,\type,Pseq([\rest,\note,\note,\note],inf),\buf,~b4,\out,~comFuzz ,\loopy,0, \decT,0.9/*0.7*/,\vlDec,1,\vlSub,Pkey(\vlDec),\vlSub2,Pkey(\vlDec),/*\subsT ,Pseq([0,0.1,0.2,0.3],inf),*/\start,2800)
+	\start,0,\type,Pseq([\rest,\note,\note,\note],inf),\buf,~b4,\out,~bassFi ,\loopy,0, \decT,0.9/*0.7*/,\vlDec,1,\vlSub,Pkey(\vlDec),\vlSub2,Pkey(\vlDec),/*\subsT ,Pseq([0,0.1,0.2,0.3],inf),*/\start,2800)
 
-],1)
+],1),
 
-
+Pseq([~bassShap],inf),
 ],1).play(t);
+
+
+
+	~bassFilter= Synth(\filter,[\in, ~bassFi,\out,~comFuzz,\freqFil,10000,\qf,0.7,\which,0,\busMod,~bassShapB],~filterGrp);
+
+
 ~comp=Synth(\comp, [\ctrl, ~kbus ],~compGrp);
 ~comp.set(\thr,0.2 ,\sB, 1.034,\sA, 1/2,\atk ,0.0242, \rel ,0.0968, \gain,1,\in, ~comFuzz,\out,~limitBass);
 
 ~limK=Synth(\limitertoMixer,[\c45,1,\in, ~limitKick, \gain,1,\out,~kToPan],~limitGrp);
-~limK.set(\gain,200.5);
+~limK.set(\gain,222.5);
 ~limB=Synth(\limitertoMixer,[\c46,1,\in, ~limitBass, \gain,68,\out,~kToPan],~limitGrp);
-~limB.set(\gain,167.2);
+~limB.set(\gain,180.2);
 
-~kbPan2 = Synth(\pan2,[ \in,~ kToPan,\out,0],~stereoGrp);
+~kbPan2 = Synth(\pan2,[ \in,~kToPan,\out,0],~stereoGrp);
 
 	wait(0.162);
 
@@ -2960,10 +3028,10 @@ Routine({
 
 Ppar([
 
-	~bassShap,
+		// ~bassShap,
 	Pbind(\instrument, \bass,
 		\dur, Pseq([4/1],1),\lpf,100,
-		\midinote, 28, \bus, ~bassShapB,
+		\midinote, 28,/* \bus, ~bassShapB,*/
 		\atk, 0,
 		\rel, t.beatDur *0.9988,
 		\rel2, t.beatDur/4 * 0.0012,

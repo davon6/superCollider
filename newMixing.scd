@@ -636,7 +636,7 @@ Pbindef(\testPa, \start,65263)
 ~comp36=Synth(\comp, [\ctrl, ~kbus],~compGrp);
 ~comp36.set(\thr,0.85 ,\sB, 1.036,\sA, 1/2,\atk ,0.0242, \rel ,0.0968, \gain,5,\in, ~shiftComp, \out,~shiftLimit );
 ~mix36= Synth(\limitertoMixer,[\c33,1,\in,~shiftLimit ,\gain,6,\out,~shiftStereo],~limitGrp);
-~mix36.set(\gain,72);
+~mix36.set(\gain,55);
 ~stereo36=Synth(\stereo,[ \dur, 9999, \in, ~shiftStereo ,\spread,0.4 , \out,~extraComp], ~stereoGrp );
 
 
@@ -794,7 +794,7 @@ Pbind(\instrument, \playBuf,  \tS,  0.39550810372374,\buf,~snare,\type, Pseq([\r
 
 
 ~mix34= Synth(\limitertoMixer,[\c34,1,\in, ~snareLimit,\gain,40,\out,~toPan2],~limitGrp);
-~mix34.set(\gain,40);
+~mix34.set(\gain,37.4);
 ~pan34=Synth( \pan2,[\in, ~toPan2,\out, /*~tofinalRythm*/  ~toKbGate], ~stereoGrp);
 
 // ~eq40.free
@@ -815,6 +815,7 @@ Pbind(\instrument, \playBuf,  \tS,  0.39550810372374,\buf,~snare,\type, Pseq([\r
 ~fil39= Synth(\filter, [\in,~toNoise,\out,~toNoiseEq,\freqFil,400,\busMod, ~bus23,\which,0,\qf,0.4],~eqGrp);
 */
 
+//to eq
 ~eq39= Synth(\EQHP2, [\frq, 100 ],~eqGrp);
 
 ~eq39.set(\in, ~toNoiseEq, \out , ~toNoiseCom /*\val, 400, \quant, 8, \gain, (-10),,\frq, 120,\val5,1800,\shelf2,1.6,\gain5,(-8),\val4,3000,\shelf,1.6,\gain4,(-12)*/,\frq, 100,/*\vol,0.1,\val5,2500,\shelf2,1.5,\gain5,(-19),\amp,0.06*/);
@@ -823,8 +824,8 @@ Pbind(\instrument, \playBuf,  \tS,  0.39550810372374,\buf,~snare,\type, Pseq([\r
 
 // ~ampMod= Synth(\ampO,[\in, ~hitStereo,\out,~bus25],~stereoGrp);
 
-~mix39= Synth(\limiterStoMixer,[\c39,1,\in, ~toNoiseLimit,\gain,40,\out,~toCom2],~limitGrp);
-~mix39.set(\gain,23,/*\gainMod,~fusible2*/);
+~mix39= Synth(\limiterStoMixer,[\c39,1,\in, ~toNoiseLimit,\gain,40,\out, ~hiCom/*~toCom2*/],~limitGrp);
+~mix39.set(\gain,21,/*\gainMod,~fusible2*/);
 // ~stereo39=Synth(\pan2,[\dur,9999,\in,~toNoiseStereo,\out,~toKbGate,/*\spread,0.6*/], ~extraGrp);
 
 /*~stereo39.free*/
@@ -855,14 +856,16 @@ Pbind(\instrument, \playBuf,  \tS,  0.39550810372374,\buf,~snare,\type, Pseq([\r
 //that one
 	\val5,164.81375, \quant5,2.4, \gain5,(-15)],~eqGrp0);*/
 
+~bassFilter= Synth(\filter,[\in, ~bassFi,\out,~comFuzz,\freqFil,10000,\qf,0.7,\which,0,\busMod,~bassShapB],~filterGrp);
+
+
 ~comp=Synth(\comp, [\ctrl, ~kbus ],~compGrp);
 ~comp.set(\thr,0.2 ,\sB, 1.034,\sA, 1/2,\atk ,0.0242, \rel ,0.0968, \gain,1,\in, ~comFuzz,\out,~limitBass);
 
-
 ~limK=Synth(\limitertoMixer,[\c45,1,\in, ~limitKick, \gain,1,\out,~kToPan],~limitGrp);
-~limK.set(\gain,200.5);
+~limK.set(\gain,222.5);
 ~limB=Synth(\limitertoMixer,[\c46,1,\in, ~limitBass, \gain,68,\out,~kToPan],~limitGrp);
-~limB.set(\gain,167.2);
+~limB.set(\gain,180.2);
 
 
 
@@ -1111,7 +1114,7 @@ Pbind(\instrument, \playBuf,  \tS,  0.39550810372374,\buf,~snare,\type, Pseq([\r
 
 
 ~pan2K5	=Synth( \pan2,[ \in,~kbToPan5,\out,0 ],~stereoGrp);
-~pan2K4=Synth( \pan2,[ \in,~kbToPan4,\out,~toFilRise ],~stereoGrp);
+~pan2K4=Synth( \pan2,[ \in,~kbToPan4,\out,~filKB2 ],~stereoGrp);
 ~revKick2=Synth(\reverbMad, [\roomsize, 38, \revtime, 14.85, \damping, 0.1, \inputbw, 0.39, \drylevel, -8, \earlylevel, -9, \taillevel, 10 ,\in,~revKck2,\out, ],~revGrp);
 ~revKick=Synth(\reverbModu, [\mix,0,\room, 0, \damp, 0,\in,~kickRv,\out,~filKick,\mixMod,~mixM,\roomMod,~roomM,\dampMod,~dampM],~revGrp);
 ~flangSna= Synth( \flanger1,[ \in,~snareFlang, \out,~distoPercBg, \flangefreq,0.01005859375,\fdback,-0.8,\ph,5.6],~phaserGrp);
@@ -1125,7 +1128,7 @@ Pbind(\instrument, \playBuf,  \tS,  0.39550810372374,\buf,~snare,\type, Pseq([\r
 ~del10=Synth(\del10,[\in,~toDelay10,\decT,t.beatDur*4,\out,~hiCom],~delayGrp);
 ~del10X=Synth(\del10,[\in,~toDelay10b,\decT,t.beatDur*4/*0.7772*/,\out,~toCom/*~tofinalRythm*/],~dispatchGrp2/*~delayGrp*/);
 
-~del10Z=Synth(\del10,[\in,~toDelay10c,\decT,1.5544,\out,~toCom],~delayGrp);
+~del10Z=Synth(\del10,[\in,~toDelay10c,\decT,1.5544,\out,~toCom2],~delayGrp);
 
 
 /*
@@ -1178,7 +1181,7 @@ Pbind(\instrument, \playBuf,  \tS,  0.39550810372374,\buf,~snare,\type, Pseq([\r
 
 ~hitCompression= Synth(\comp10,[\ctrl, ~hiCom],~compGrp8);
 
-~hitCompression.set(\in, ~toCom3,  \out ,~toExtraComp2,\thr, 0.05, \sB, 1, \sA ,-43, \atk, 0.05, \rel, 0.1);
+~hitCompression.set(\in, ~toCom3,  \out ,~toExtraComp2,\thr, 0.05, \sB, 1, \sA ,-60, \atk, 0.05, \rel, 0.1);
 
 
 
