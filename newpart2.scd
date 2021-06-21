@@ -226,13 +226,13 @@ Pseq([ Pseq([8/1],1)],1)  ,Pseq([ Pseq([4/1],1)],1)   ,Pseq([Pseq([16/1],1) ,Pse
 
 
 
-		/*Pseq([
+		Pseq([
 
 	Pbind(\instrument,\gate2, \in ,~toKbGate, \group,~lfoGrp, \tS,  0.39550810370174,\dur, Pseq([16/1],1),\type,\rest),
 			~hitPart1,~hitPart2,~hitPart3,~hitPart4
 
 
-		],1),*/
+		],1),
 
 		/*Pbind(\instrument,\gateS, \dur,9999,\vlSub, 1, \vlSub2,Pkey(\vlSub),\in,~vocToDispatch,\out,0,\group, ~kbGate,\tS, 0.39550810372374),*/
 
@@ -262,7 +262,7 @@ Pbind(\instrument,\gate, \tS,  0.39550810370174,\vlSub, 1, \vlSub2,Pkey(\vlSub),
 			Pbind(\instrument,\gate, \tS,  0.39550810370174,\in,	~bgGate,\out,~bgComp,\group, ~gateGrp12,\type, \rest ,  \dur ,Pseq([4/1],1) ,\vlAtk,0.2,\atkT,0.25,\relT,0.25,\decT,0.5,\atckC,6, \relC,-6,\vlRel,0.2),
 
 
-		Pbind(\instrument,\gate,\vlSub, 1, \vlSub2,Pkey(\vlSub), \tS,  0.39550810370174,\in,	~bgGate,\out,~bgComp,\group, ~gateGrp12,\type, Pseq([         Pseq([\rest ,  \rest,\rest,\rest,\rest,\rest,/*!*/\rest,\note,\rest,\note ],1)  ],inf),  \dur, Pseq([Pseq([256/1],1), Pseq([64/1],1),
+		Pbind(\instrument,\gate,\vlSub, 1, \vlSub2,Pkey(\vlSub), \tS,  0.39550810370174,\in,	~bgGate,\out,~bgComp,\group, ~gateGrp12,\type, Pseq([         Pseq([\rest ,  \rest,\rest,\rest,\rest,\rest,/*!*/\rest,\rest,\rest,\rest,\rest,\note ],1)  ],inf),  \dur, Pseq([Pseq([256/1],1), Pseq([64/1],1),
 				Pseq([32/1],2),Pseq([64/1],2) ],inf)),
 
 

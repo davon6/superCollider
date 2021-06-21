@@ -167,7 +167,7 @@ f = { |n=14, min=0, max=11| (min..max).scramble.keep(n) };
 (
 	~mont =0;
 
-~bobo=300;
+~bobo=220;
 ~crv=12;
 ~as=1676373; ~tram=3659560;~gram=373706; ~pick=285965;
 ~bool=True;
@@ -607,18 +607,18 @@ Pbind(\instrument, \filter, \freqFil,100,\dur,inf, \in,~hpK,\which,2,\busMod, ~b
 /*	Pbind(\instrument, \playBuf,  \tS,  0.39550810372374,	\buf,~snare,\type,
 		Pwrand([Pseq([\note ,\rest,\rest,\rest],1), Pseq([\rest ,\rest,\rest,\rest],1) ],[2,1,32].normalizeSum,inf)  ,\dA,Pseq([0.25],inf),\dur, Pseq([1/2], inf),\out,~snareEQ),*/
 Pseq([
-/*Pbind(\instrument, \playBuf,  \tS,  0.39550810372374,\buf,~snare,
+Pbind(\instrument, \playBuf,  \tS,  0.39550810372374,\buf,~snare,
 		\type,
-		Pseq([	Pseq([\rest],8),
+		Pseq([	Pseq([\rest],32),
 
- Pseq([\rest,\rest,\rest,\rest ,\rest,\rest,\rest,\rest,\rest,\rest,\rest,\rest,\rest,\rest,\rest,\rest ],1),
+ Pseq([\rest,\rest,\rest,\rest ,\rest,\rest,\rest,\rest,\rest,\rest,\rest,\rest,\rest,\rest,\rest,\rest ],2),
 
 
 Pseq([\rest ,\rest,\note,\rest,\rest,\rest,\rest,\rest,\rest,\rest,\rest,\rest,\rest,\rest,\rest,\rest,
 	   \rest ,\rest,\rest,\rest,\rest,\rest,\rest,\rest,\rest,\rest,\rest,\rest,\rest,\rest,\rest,\rest,
 	   \rest ,\rest,\note,\rest,  \rest,\rest,\rest,\rest,\rest,\rest,\rest,\rest,\rest,\rest,\rest,\rest,
 	    \rest ,\rest,\note,\rest, \rest,\rest,\rest,\rest,\rest,\rest,\rest,\rest,\rest,\rest,\rest,\rest
-					],1),
+					],2),
 
 
 		Pseq([\rest ,\rest,\note,\rest,  \rest,\rest,\rest,\rest,  \rest, \rest,\rest,\rest,  \rest,\rest,\rest,\rest,],1),
@@ -628,13 +628,15 @@ Pseq([\rest ,\rest,\note,\rest,\rest,\rest,\rest,\rest,\rest,\rest,\rest,\rest,\
 
 
 Pseq([\rest ,\rest,\note,\rest  ,\rest,\rest,\note,\rest,  \rest,\rest,\note,\rest,  \rest,\rest,\note,\rest,
-					],1),
+
+					\rest ,\rest,\note,\rest  ,\rest,\rest,\note,\rest,  \rest,\rest,\note,\rest,  \rest,\rest,\rest,\rest,
+					],2),
 
  ],1)
 
 
-	,\dur, Pseq([1/2], 40) ,\out,~snareEQ,
-	\dA,Pseq([  Pseq([1],64), Pseq([0.5],64)].scramble,inf)),*/
+	,\dur, Pseq([1/2], 288) ,\out,~snareEQ,
+	\dA,Pseq([  Pseq([1],64), Pseq([0.5],64)].scramble,inf)),
 
 Pseq([
 
@@ -645,27 +647,27 @@ Pseq([
 		\type,
 				Pseq([\rest,\rest,\note,\rest,\rest,\rest,\note,\rest,\rest,\rest,\note,\rest,\rest,\rest,\note,\rest],inf),
 
-	\dur, Pseq([1/2],128) ,\out,~snareEQ,
+	\dur, Pseq([1/2],256) ,\out,~snareEQ,
 	\dA,Pseq([  Pseq([1],128), Pseq([0.5],128)],inf)),
 
 
 
 
-			Pbind(\instrument, \playBuf,  \tS,  0.39550810372374,\buf,~snare, \type,\rest,\dur,Pseq([64/2],1),),
+			Pbind(\instrument, \playBuf,  \tS,  0.39550810372374,\buf,~snare, \type,\rest,\dur,Pseq([256/2],1),),
 
 
 
-	 Pbind(\instrument, \playBuf, \buf, ~clap,\vl,1,\tS,t.beatDur,\dur,Pseq([1/2],64),\loopy,0,\type, Pseq([\rest,\rest,\note,\rest ],inf),\out,~clapEq),
+	 Pbind(\instrument, \playBuf, \buf, ~clap,\vl,1,\tS,t.beatDur,\dur,Pseq([1/2],256),\loopy,0,\type, Pseq([\rest,\rest,\note,\rest ],inf),\out,~clapEq),
 
 
 					Pbind(\instrument, \playBuf,  \tS,  0.39550810372374,\buf,~snare,
 		\type,Pseq([\rest,\rest,\note,\rest,\rest,\rest,\note,\rest,\rest,\rest,\note,\rest,\rest,\rest,\note,\rest],inf)
 
 
-	,\dur, Pseq([1/2],64) ,\out,~snareEQ,
+	,\dur, Pseq([1/2],256) ,\out,~snareEQ,
 	\dA,Pseq([  Pseq([1],128), Pseq([0.5],128)],inf)),
 
-			Pbind(\instrument, \playBuf,  \tS,  0.39550810372374,\buf,~snare, \type,\rest,\dur,Pseq([64/2],2),)
+			Pbind(\instrument, \playBuf,  \tS,  0.39550810372374,\buf,~snare, \type,\rest,\dur,Pseq([512/2],2),)
 
 
 		],inf),
@@ -842,7 +844,12 @@ Pbind(\instrument,\gate2, \in ,~toKbGate, \group,~kbGate, \tS,  0.39550810372374
 
 			Pbind(\instrument,\gate2, \in ,~toKbGate, \group,~kbGate, \tS,  0.39550810372374,\dur, Pseq([16/1],1)),
 
-			Pbind(\instrument,\gate2, \in ,~toKbGate, \group,~kbGate, \tS,  0.39550810372374,\dur, Pseq([16/1],1)),
+			Pseq([
+Pbind(\instrument,\gate2, \in ,~toKbGate, \group,~kbGate, \tS,  0.39550810372374,\dur, Pseq([15/1],1)),
+
+					Pbind(\instrument, \playBuf, \impulse, 0.003 ,\dur,Pseq([1/1],1), \tS,  0.39550810372374,\buf,~k2,\out, ~kbToPan2,\loopy,0,\start,0,\vl,1.76),
+
+			].scramble,1),
 
 				/*Pseq([
 	Pbind(\instrument,\gate2, \in ,~toKbGate, \group, ~kbGate, \tS,  0.39550810372374,
