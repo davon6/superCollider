@@ -79,6 +79,9 @@ f = { |n=14, min=0, max=11| (min..max).scramble.keep(n) };
 
  ~pad2= Buffer.read(s,"/Users/davidmignot/Music/SuperCollider Recordings/E/pad2.aiff");
 
+~revHity= Buffer.read(s,"/Users/davidmignot/Music/SuperCollider Recordings/E/reverbHit.aiff");
+
+
 ~one = ~leTout2.numFrames/ 256 * 240.rand;
 ~two = ~leTout2.numFrames/ 256 * 240.rand;
 ~troi= ~leTout2.numFrames/ 256 * 240.rand;
@@ -166,7 +169,7 @@ f = { |n=14, min=0, max=11| (min..max).scramble.keep(n) };
 
 (
 	~mont =0;
-
+~boba=1;
 ~bobo=220;
 ~crv=12;
 ~as=1676373; ~tram=3659560;~gram=373706; ~pick=285965;
@@ -283,7 +286,7 @@ f = { |n=14, min=0, max=11| (min..max).scramble.keep(n) };
 
 
 ~kbGate= Group.after(~stereoGr7);
-~recGrp3= Group.after(~compGrp7);
+~recGrp3= Group.after(~kbGate);
 
 
 
@@ -714,7 +717,7 @@ Pseq([
 Ppar([
 
 Pbind(\instrument, \playBufS,  \tS,  0.39550810372374,\buf,~kRise,\dur, Pseq([16/1], 1),\out, ~filKBX),
-Pbind(\instrument,\blank, \in,~kSRise,\out,0,\dur,Pseq([16/1], 1),\group,~kbGate)
+Pbind(\instrument,\blank, \in,~kSRise,\out,0,\dur,Pseq([16/1], 1),\group,~recGrp3)
 
 ],1)
 
@@ -737,7 +740,17 @@ Pbind(\instrument,\blank, \in,~kSRise,\out,0,\dur,Pseq([16/1], 1),\group,~kbGate
 
 	Pbind( \instrument, \playBufXG, \impulse, 0.003 ,\dur,    Pseq([1/4],1024), \tS,  0.39550810372374,
 	\start,0,\type,Pseq([\rest,\note,\note,\note],inf),\buf,~b4,\out,~bassFi ,\loopy,0, \decT,0.8/*0.7*/,\vlDec,1,\vlSub,Pkey(\vlDec),\vlSub2,Pkey(\vlDec),\subsT ,Pseq([0,0.1,0.12,0.18],inf),\start,2800)
-		],inf),
+		],16),
+
+
+		Pseq([
+	Pbind( \instrument, \playBufXG, \impulse, 0.003 ,\dur,    Pseq([1/4],1024), \tS,  0.39550810372374,
+		\start,0,\type,Pseq([\rest,\note,\note,\note],inf),\buf,~b3  ,\out,~bassFi ,\loopy,0, \decT,0.7,\vlDec,1,\vlSub,Pkey(\vlDec),\vlSub2,Pkey(\vlDec),\subsT ,Pseq([0,0.1,0.2,0.3],inf),\start,2800),
+
+
+	Pbind( \instrument, \playBufXG, \impulse, 0.003 ,\dur,    Pseq([1/4],2048), \tS,  0.39550810372374,
+	\start,0,\type,Pseq([\rest,\note,\note,\note],inf),\buf,~b4,\out,~bassFi ,\loopy,0, \decT,0.8/*0.7*/,\vlDec,1,\vlSub,Pkey(\vlDec),\vlSub2,Pkey(\vlDec),\subsT ,Pseq([0,0.1,0.12,0.18],inf),\start,2800)
+		],16),
 	],1),
 
 

@@ -636,7 +636,7 @@ Pbindef(\testPa, \start,65263)
 ~comp36=Synth(\comp, [\ctrl, ~kbus],~compGrp);
 ~comp36.set(\thr,0.85 ,\sB, 1.036,\sA, 1/2,\atk ,0.0242, \rel ,0.0968, \gain,5,\in, ~shiftComp, \out,~shiftLimit );
 ~mix36= Synth(\limitertoMixer,[\c33,1,\in,~shiftLimit ,\gain,6,\out,~shiftStereo],~limitGrp);
-~mix36.set(\gain,55);
+~mix36.set(\gain,46.8);
 ~stereo36=Synth(\stereo,[ \dur, 9999, \in, ~shiftStereo ,\spread,0.4 , \out,~extraComp], ~stereoGrp );
 
 
@@ -654,7 +654,7 @@ Pbindef(\testPa, \start,65263)
 ~comp37=Synth(\compMod, [\ctrl, ~kbus],~compGrp);
 ~comp37.set(\thr,0.33 ,\sB, 1.240,\sA, 1/2,\atk ,0.0242, \rel ,0, \relMod,~bus28,\gain,1,\in, ~shiftComp2, \out,~shiftLimit2 );
 ~mix37= Synth(\limitertoMixer,[\c35,1,\in,~shiftLimit2 ,\gain,6,\out,~shiftStereo2],~limitGrp);
-~mix37.set(\gain,109.5);
+~mix37.set(\gain,91.5);
 ~stereo37=Synth(\stereo,[ \dur, 9999, \in, ~shiftStereo2 ,\spread,1 , \out,~extraComp], ~stereoGrp );
 // ~stereo37.set(\out,0)
 //STEREO BROKEN
@@ -824,8 +824,8 @@ Pbind(\instrument, \playBuf,  \tS,  0.39550810372374,\buf,~snare,\type, Pseq([\r
 
 // ~ampMod= Synth(\ampO,[\in, ~hitStereo,\out,~bus25],~stereoGrp);
 
-~mix39= Synth(\limiterStoMixer,[\c39,1,\in, ~toNoiseLimit,\gain,40,\out, ~hiCom/*~toCom2*/],~limitGrp);
-~mix39.set(\gain,21,/*\gainMod,~fusible2*/);
+~mix39= Synth(\limiterStoMixer,[\c39,1,\in, ~toNoiseLimit,\gain,40,\out, ~toCom2],~limitGrp);
+~mix39.set(\gain,15,/*\gainMod,~fusible2*/);
 // ~stereo39=Synth(\pan2,[\dur,9999,\in,~toNoiseStereo,\out,~toKbGate,/*\spread,0.6*/], ~extraGrp);
 
 /*~stereo39.free*/
@@ -863,7 +863,7 @@ Pbind(\instrument, \playBuf,  \tS,  0.39550810372374,\buf,~snare,\type, Pseq([\r
 ~comp.set(\thr,0.2 ,\sB, 1.034,\sA, 1/2,\atk ,0.0242, \rel ,0.0968, \gain,1,\in, ~comFuzz,\out,~limitBass);
 
 ~limK=Synth(\limitertoMixer,[\c45,1,\in, ~limitKick, \gain,1,\out,~kToPan],~limitGrp);
-~limK.set(\gain,222.5);
+~limK.set(\gain,225);
 ~limB=Synth(\limitertoMixer,[\c46,1,\in, ~limitBass, \gain,68,\out,~kToPan],~limitGrp);
 ~limB.set(\gain,180.2);
 
@@ -973,7 +973,7 @@ Pbind(\instrument, \playBuf,  \tS,  0.39550810372374,\buf,~snare,\type, Pseq([\r
 ~comp21.set(\thr,0.9 ,\sB, 1.015,\sA, 1/2,\atk ,0.0242, \rel ,0.0968,\gain,10, \in,~slideEq2  , \out,~slideBusToLimit2);
 ~mix21= Synth(\limitertoMixer,[\c21,1,\in, ~slideBusToLimit2,\gain,45,\out,~toStereoRise],~recGrp0);
 
- ~mix21.set(\gain,10);
+ ~mix21.set(\gain,20);
 
 ~stereoBG=Synth(\stereoO,[\in,~toStereoRise ,\out,~toShift],~extra2);
 ~stereoBG.set(\spread,0.8,\center,0,\dlt1,0,\dlt2,0,\decT,0.0242, \mxDel,1,);
@@ -982,8 +982,8 @@ Pbind(\instrument, \playBuf,  \tS,  0.39550810372374,\buf,~snare,\type, Pseq([\r
 
 
 
-
-
+~rHit= Synth(\EQHP96, [\frq, 100 ,\in,~revHitEq,\out,~hitComp],~eqGrp0);
+ ~rHit.set(\vol,0.6);
 
 //hit
 // ~eqHit.free
@@ -1040,7 +1040,7 @@ Pbind(\instrument, \playBuf,  \tS,  0.39550810372374,\buf,~snare,\type, Pseq([\r
 ~comp43= Synth(\comp, [\ctrl, ~kbus],~compGrp);
 ~comp43.set(\thr,0.5 ,\sB, 1.065,\sA, 1/2,\atk ,0.0484, \rel ,0.0968,\gain,120,\in, ~bigRiToComp , \out,~bigRiToLimit);
 ~mix43= Synth(\limitertoMixer,[\c43,1,\in, ~bigRiToLimit, \gain,40,\out,~bigRiToStereo],~limitGrp);
-~mix43.set( \gain,20.1);
+~mix43.set( \gain,14.1);
 ~stereo43= Synth(\stereoO,[  \in, ~bigRiToStereo   ,\out,~extraComp, ], ~stereoGrp);
 ~stereo43.set(\spread,0.6,\center,0,\dlt1,0.2,\dlt2,0.35,\decT,0.3872, \mxDel,1);
 /*~stereo43.set(\out,~toCom);*/
@@ -1115,7 +1115,7 @@ Pbind(\instrument, \playBuf,  \tS,  0.39550810372374,\buf,~snare,\type, Pseq([\r
 
 ~pan2K5	=Synth( \pan2,[ \in,~kbToPan5,\out,0 ],~stereoGrp);
 ~pan2K4=Synth( \pan2,[ \in,~kbToPan4,\out,~filKB2 ],~stereoGrp);
-~revKick2=Synth(\reverbMad, [\roomsize, 38, \revtime, 14.85, \damping, 0.1, \inputbw, 0.39, \drylevel, -8, \earlylevel, -9, \taillevel, 10 ,\in,~revKck2,\out, ],~revGrp);
+~revKick2=Synth(\reverbMad, [\roomsize, 38, \revtime, 14.85, \damping, 0.1, \inputbw, 0.39, \drylevel, -8, \earlylevel, -9, \taillevel, 10 ,\in,~revKck2,\out,0 ],~revGrp);
 ~revKick=Synth(\reverbModu, [\mix,0,\room, 0, \damp, 0,\in,~kickRv,\out,~filKick,\mixMod,~mixM,\roomMod,~roomM,\dampMod,~dampM],~revGrp);
 ~flangSna= Synth( \flanger1,[ \in,~snareFlang, \out,~distoPercBg, \flangefreq,0.01005859375,\fdback,-0.8,\ph,5.6],~phaserGrp);
 ~fKick= Synth(\filter, [\which,0,\busMod, ~bus29, \in,~filKick,\out,~kbToPan3,\qf,0.7,\freqFil,100],~delayGrp);
@@ -1123,12 +1123,12 @@ Pbind(\instrument, \playBuf,  \tS,  0.39550810372374,\buf,~snare,\type, Pseq([\r
 ///////
 
 
-~slidy=Synth(\filter10, [\freqFil,100, \busMod,~bus34,\qf,0.5,\in,~toSlide,\out,~toCom],~filterGrp);
+~slidy=Synth(\filter10, [\freqFil,100, \busMod,~bus34,\qf,0.5,\in,~toSlide,\out,~toExtraComp2],~filterGrp);
 
 ~del10=Synth(\del10,[\in,~toDelay10,\decT,t.beatDur*4,\out,~hiCom],~delayGrp);
 ~del10X=Synth(\del10,[\in,~toDelay10b,\decT,t.beatDur*4/*0.7772*/,\out,~toCom/*~tofinalRythm*/],~dispatchGrp2/*~delayGrp*/);
 
-~del10Z=Synth(\del10,[\in,~toDelay10c,\decT,1.5544,\out,~toCom2],~delayGrp);
+~del10Z=Synth(\del10,[\in,~toDelay10c,\decT,1.5544,\out,~toExtraComp2],~delayGrp);
 
 
 /*

@@ -265,6 +265,8 @@ s.sync;
 
 	~eqRi= Bus.audio(s,1);
 
+	~revHitEq= Bus.audio(s,1);
+
 	~toEq2 = Bus.audio(s,2);
 	~toLim = Bus.audio(s,2);
 	~to4bar= Bus.audio(s,2);
@@ -1225,7 +1227,7 @@ EnvGen.ar(
 
 //or this
 
-			SynthDef(\kick, {
+		/*	SynthDef(\kick, {
 	arg amp=0.2,out=0;
 	var sig, env, envF;
 
@@ -1240,8 +1242,35 @@ EnvGen.ar(
 	env =
 
 EnvGen.ar(
-		Env([ 0.050 , 0.13,   0.02 ,  0.348,0.2,0],
-			[ 0.00602 , 0.0082,   0.02  , 0.13 , 0.06  ],[-0.96,0.5,-5.6,3.12,-6]),doneAction:2);
+		Env([ 0.050 , 0.12,   0.02 ,  0.348,0.2,0],
+			[ 0.00602 , 0.0082,   0.08  , 0.1 , 0.06  ],[-0.96,0.5,-5.6,3.12,-6]),doneAction:2);
+	//-2.6 can be zero
+
+	sig = SinOsc.ar(envF, mul: env);
+
+	sig = sig * amp.dbamp  ;
+	// sig = Pan2.ar(sig);
+	Out.ar(out, sig);
+}).add;*/
+
+
+			SynthDef(\kick, {
+	arg amp=0.2,out=0;
+	var sig, env, envF;
+
+	envF = EnvGen.ar(
+		Env(
+			[117.midicps,64.midicps,114,26,0,0],
+			[0.0063,0.011,0.1008,0,0.4],
+			[-8.4,-3,-2]
+		)
+	);
+
+	env =
+
+EnvGen.ar(
+		Env([ 0.050 , 0.12,   0.02 ,  0.348,0.2,0],
+			[ 0.00602 , 0.0082,   0.09  , 0.04 , 0.06  ],[0.66,0.5,-5.6,3.12,-6]),doneAction:2);
 	//-2.6 can be zero
 
 	sig = SinOsc.ar(envF, mul: env);
@@ -1421,7 +1450,7 @@ EnvGen.ar(
 	SynthDef(\rise, {
 	arg freq=659.26, mRatio=1, cRatio=1,
 	index=1, iScale=5, ic_atk=4, ic_rel=(-4),
-	amp=2, rel=3, pan=0, f1,f2,f3, vlAtk=0,atk=0, dec=0,atkE=0  ,dur ,out =0 ,tS=1 ,moduR,moduS,fS=0, fR=0,atk2=0.05;
+	amp=2, rel=3, pan=0, f1,f2,f3, vlAtk=0,atk=0, dec=0,atkE=0  ,dur ,out =0 ,tS=1 ,moduR,moduS,fS=0, fR=0,atk2=0.05 ,dec2   =0.932;
 	var car, mod, env, iEnv, mod2;
 	iEnv = EnvGen.kr(
 		Env(
@@ -1430,7 +1459,7 @@ EnvGen.ar(
 			[ic_atk, ic_rel]//atkC was 10
 		),timeScale: tS,doneAction:2
 	);
-		env = EnvGen.kr(Env([0,1,1,0],[dur*atk2,dur*0.932,0,dur*0.018]/*[dur*0.01,dur*0.97,0,dur*0.02]*/,[16,0,0-16]),timeScale: tS,doneAction: 2);
+		env = EnvGen.kr(Env([0,1,1,0],[dur*atk2,dur*dec2,0,dur*0.018]/*[dur*0.01,dur*0.97,0,dur*0.02]*/,[16,0,0-16]),timeScale: tS,doneAction: 2);
 	mod2 = SinOsc.ar(freq/10*f3, mul:freq/10 *iEnv);
 
 	mod = SinOsc.ar(freq * f2 + mod2
@@ -1805,7 +1834,7 @@ timeScale: tS,	doneAction:2);
         ))}).add;
 
 
-		SynthDef(\reverbMad, {
+		/*SynthDef(\reverbMad, {
 		|out=0, roomsize, revtime, damping, inputbw, spread = 15, drylevel, earlylevel,damp,room,mix
     taillevel, amp=0.3,maxRoomsize,wet=0.4,in =0,wF =0, spread2=0, level=1, center=0.0, multi = 2, mod|
 
@@ -1844,7 +1873,22 @@ timeScale: tS,	doneAction:2);
 
 		)
 
-	}).add;
+	}).add;*/
+
+
+	SynthDef(\reverbMad, {
+		|out=0, roomsize, revtime, damping, inputbw, spread = 15, drylevel, earlylevel,damp,room,mix
+    taillevel, amp=0.3,maxRoomsize,wet=0.4,in =0,wF =0, spread2=0, level=1, center=0.0, multi = 2, mod|
+
+	var a ,input;
+
+		input =In.ar(in,1);
+
+		a = Resonz.ar(input, 1294.5373184   *   [8,16,32],0.01	).sum * 10;
+
+    Out.ar(    out, GVerb.ar( a, roomsize, revtime , damping, inputbw, spread, drylevel.dbamp, earlylevel.dbamp,
+            taillevel.dbamp, roomsize,0.3) + input)
+}).add;
 
 
 	SynthDef(\reverbMad2, {
@@ -2694,7 +2738,9 @@ SynthDef(\sequ,{|value, dur, in=0, out=0, vlAtk=0, vlDec=1,vlSub=1,vlSub2=1, vlR
 
 }.add;
 
-	SynthDef(\blank,{|out=0,in,dur|ReplaceOut.ar(out,In.ar(in,2))*EnvGen.kr(Env.step([1,0],[dur,0]),timeScale: t.beatDur,doneAction: 2)}).add;
+	SynthDef(\blank,{|out=0,in,dur|
+
+		ReplaceOut.ar(out,In.ar(in,2)   )*EnvGen.kr(Env.step([1,0],[dur,0]),timeScale: t.beatDur,doneAction: 2)}).add;
 
 	SynthDef(\flanger1, {arg flangefreq=0.3, fdback=0.3,in,tS=1,dur,out=0,flangMod,ph=0;
 
@@ -2941,11 +2987,11 @@ Pbind(\instrument ,\EQHP2 ,\in,~bassEq, \out,0, \frq, 20.6,\vol,1,
 
 
 (
-~filterGrp=Group.new;
+/*~filterGrp=Group.new;
 ~compGrp=Group.after(~filterGrp);
 ~limitGrp=Group.after(~compGrp);
 ~stereoGrp=Group.after(~limitGrp);
-~recGrp2=Group.after(~stereoGrp);
+~recGrp2=Group.after(~stereoGrp);*/
 Routine({
 
 Ppar([
@@ -2959,7 +3005,7 @@ Ppar([
 
 ],1),
 
-Pseq([~bassShap],inf),
+		Pseq([~bassShap],inf),
 ],1).play(t);
 
 
@@ -2971,9 +3017,9 @@ Pseq([~bassShap],inf),
 ~comp.set(\thr,0.2 ,\sB, 1.034,\sA, 1/2,\atk ,0.0242, \rel ,0.0968, \gain,1,\in, ~comFuzz,\out,~limitBass);
 
 ~limK=Synth(\limitertoMixer,[\c45,1,\in, ~limitKick, \gain,1,\out,~kToPan],~limitGrp);
-~limK.set(\gain,222.5);
+~limK.set(\gain,218);
 ~limB=Synth(\limitertoMixer,[\c46,1,\in, ~limitBass, \gain,68,\out,~kToPan],~limitGrp);
-~limB.set(\gain,180.2);
+~limB.set(\gain,182.2);
 
 ~kbPan2 = Synth(\pan2,[ \in,~kToPan,\out,0],~stereoGrp);
 
