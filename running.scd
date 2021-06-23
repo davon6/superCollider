@@ -671,6 +671,8 @@ s.sync;
 	~filK2= Bus.audio(s,1);
 
 
+	~riseF= Bus.audio(s,1);
+
 
 
 
@@ -1323,6 +1325,8 @@ EnvGen.ar(
 
 
 
+
+
 SynthDef(\kick, {
 	arg amp=0.2,out=0;
 	var sig, env, envF;
@@ -1330,16 +1334,16 @@ SynthDef(\kick, {
 	envF = EnvGen.ar(
 		Env(
 			[117.midicps,64.midicps,114,26,0,0],
-			[0.0063,t.beatDur/32,t.beatDur/4,0],
-			[-8.4,-1,-2]
+			[0.006,t.beatDur/32,t.beatDur/4,0],
+			[-8.4,-2,-2]
 		)
 	);
 
 	env =
 
 EnvGen.ar(
-		Env([ 0.050 , 0.1,   0.01 ,  0.342,0.0,0],
-			[ 0.00602 , 0.0032,   0.008  , t.beatDur/4 , 0.001  ],[0.66,0.5,-1.6,1.2,8]),doneAction:2);
+		Env([ 0.044 , 0.085,   0.01 ,  0.342,0.0,0],
+			[ 0.00602 , 0.0032,   0.008  , t.beatDur/4 , 0.001  ],[0.66,1.5,-1.6,1.2,8]),doneAction:2);
 	//-2.6 can be zero
 
 	sig = SinOsc.ar(envF, mul: env);
@@ -1349,9 +1353,6 @@ EnvGen.ar(
 	Out.ar(out, sig);
 
 }).add;
-
-
-
 
 
 
@@ -3105,9 +3106,10 @@ Ppar([
 ~comp=Synth(\comp, [\ctrl, ~kbus ],~compGrp);
 ~comp.set(\thr,0.2 ,\sB, 1.034,\sA, 1/2,\atk ,0.0242, \rel ,0.0968, \gain,1,\in, ~comFuzz,\out,~limitBass);
 ~limK=Synth(\limitertoMixer,[\c45,1,\in, ~limitKick, \gain,1,\out,~kToPan],~limitGrp);
-~limK.set(\gain,222.7);
+~limK.set(\gain,234.7);
 	~limB=Synth(\limitertoMixer,[\c46,1,\in, ~limitBass, \gain,68,\out,~kToPan],~limitGrp);
-	~limB.set(\gain,208);
+	~limB.set(\gain,212.2);
+
 
 ~kbPan2 = Synth(\pan2,[ \in,~kToPan,\out,0],~stereoGrp);
 

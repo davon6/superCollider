@@ -8921,3 +8921,99 @@ Routine({
 
 
 	~revHity.play
+
+
+
+
+
+~recGrp3=Group.new;
+~mixa = Synth(\gateS, [\in,~toShift/*~hiCom*//*~extraComp*//*~toGate102*//*~finGran*//*~no3*//*~toKbGate*//*~toFilRise*//*~toCom*//*~toExtraFx*//*~absoFinalGate*//*~tofinalRythm*/,\dur, 9999] ,~recGrp3);
+
+
+
+Pseq([~bra1 ,~bra2, ~bra3, ~bra4],2).play(t)
+
+
+Pseq([~bra3,~bra1 ,~bra4,~bra2],1).play(t)
+
+
+~leTout.play
+
+
+
+~bra3.play(t)
+
+
+ Pseq([
+Pseq([
+		Pbind(\instrument, \playBuf10, \buf ,~leTout,\out,~toShift, \start,Pfunc({~leTout.numFrames/192* 182}),\loopy,0,\tS,0.39550810372374,\dur,
+	Pseq([1/8],8),\type,Pseq([\note,\rest],inf)),
+		Pbind(\instrument, \playBuf10, \buf ,~leTout,\out,~toShift, \start,Pfunc({~leTout.numFrames/192* 182}),\loopy,0,\tS,0.39550810372374,\dur,
+	Pseq([1/4],4),\type,Pseq([\rest,\rest],inf)),
+			Pbind(\instrument, \playBuf10, \buf ,~leTout,\out,~toShift, \start,Pfunc({~leTout.numFrames/192* 182}),\loopy,0,\tS,0.39550810372374,\dur,
+	Pseq([1/1],1)),
+	Pbind(\instrument, \playBuf10, \buf ,~leTout,\out,~toShift, \start,Pfunc({~leTout.numFrames/192* 182}),\loopy,0,\tS,0.39550810372374,\dur,
+	Pseq([1/2],2),\type,Pseq([\note,\rest],inf)),
+
+			Pbind(\instrument, \playBuf10, \buf ,~leTout,\out,~toShift, \start,Pfunc({~leTout.numFrames/192* 182}),\loopy,0,\tS,0.39550810372374,\dur,
+	Pseq([1/8],8),\type,Pseq([\note,\rest],inf)),
+		Pbind(\instrument, \playBuf10, \buf ,~leTout,\out,~toShift, \start,Pfunc({~leTout.numFrames/192* 182}),\loopy,0,\tS,0.39550810372374,\dur,
+	Pseq([1/4],4),\type,Pseq([\rest,\rest],inf)),
+			Pbind(\instrument, \playBuf10, \buf ,~leTout,\out,~toShift, \start,Pfunc({~leTout.numFrames/192* 182}),\loopy,0,\tS,0.39550810372374,\dur,
+	Pseq([1/1],1)),
+	Pbind(\instrument, \playBuf10, \buf ,~leTout,\out,~toShift, \start,Pfunc({~leTout.numFrames/192* 182}),\loopy,0,\tS,0.39550810372374,\dur,
+	Pseq([1/2],2),\type,Pseq([\note,\rest],inf)),
+
+			Pbind(\instrument, \playBuf10, \buf ,~leTout,\out,~toShift, \start,Pfunc({~leTout.numFrames/192* 182}),\loopy,0,\tS,0.39550810372374,\dur,
+	Pseq([1/8],8),\type,Pseq([\note,\rest],inf)),
+		Pbind(\instrument, \playBuf10, \buf ,~leTout,\out,~toShift, \start,Pfunc({~leTout.numFrames/192* 182}),\loopy,0,\tS,0.39550810372374,\dur,
+	Pseq([1/4],4),\type,Pseq([\note,\rest],inf)),
+			Pbind(\instrument, \playBuf10, \buf ,~leTout,\out,~toShift, \start,Pfunc({~leTout.numFrames/192* 182}),\loopy,0,\tS,0.39550810372374,\dur,
+	Pseq([1/1],1)),
+	Pbind(\instrument, \playBuf10, \buf ,~leTout,\out,~toShift, \start,Pfunc({~leTout.numFrames/192* 182}),\loopy,0,\tS,0.39550810372374,\dur,
+	Pseq([1/2],2),\type,Pseq([\note,\rest],inf)),
+
+
+
+
+],1),
+		Pbind(\instrument, \playBuf10, \buf ,~leTout,\out,~toShift, \start,Pfunc({~leTout.numFrames/192* 182}),\loopy,0,\tS,0.39550810372374,\dur,
+	Pseq([4/1],1),),
+
+],1).play(t,quant:1)
+
+
+
+
+~bra3= Pseq([
+Pseq([
+		Pbind(\instrument, \playBuf10, \buf ,~leTout,\out,~toShift, \start,Pfunc({~leTout.numFrames/192* 88}),\loopy,0,\tS,0.39550810372374,\dur,
+	Pseq([1/8],8),\type,Pseq([\note,\rest],inf)),
+
+
+
+Pbind(\instrument, \playBuf10, \buf ,~leTout,\out,~toShift, \start,Pfunc({~leTout.numFrames/192* 88}),\loopy,0,\tS,0.39550810372374,\dur,
+	Pseq([1/4],4),\type,Pseq([\note,\rest],inf)),
+
+			Pbind(\instrument, \playBuf10, \buf ,~leTout,\out,~toShift, \start,Pfunc({~leTout.numFrames/192* 88}),\loopy,0,\tS,0.39550810372374,\dur,
+	Pseq([1/1],1)),
+
+
+	Pbind(\instrument, \playBuf10, \buf ,~leTout,\out,~toShift, \start,Pfunc({~leTout.numFrames/192* 88}),\loopy,0,\tS,0.39550810372374,\dur,
+	Pseq([1/2],2),\type,Pseq([\note,\rest],inf)),
+
+/*Pbind(\instrument, \playBuf10, \buf ,~leTout,\out,0, \start,~leTout.numFrames/192* 71,\loopy,0,\tS,0.39550810372374,\dur,
+		Pseq([1/4],4)),*/
+
+
+],3),
+		Pbind(\instrument, \playBuf10, \buf ,~leTout,\out,~toShift, \start,Pfunc({~leTout.numFrames/192* 88}),\loopy,0,\tS,0.39550810372374,\dur,
+	Pseq([4/1],1),),
+
+],1).play(t,quant:1)
+
+
+
+
+
+Pbind(\instrument, \playBuf10, \buf ,~leTout2,\out,0,\loopy,0,\tS,t.beatDur,\dur,Pseq([32/1],1),\start,~leTout2.numFrames/4).play(t)

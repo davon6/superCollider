@@ -122,7 +122,9 @@ Pseq([ Pseq([8/1],1)],1)  ,Pseq([ Pseq([4/1],1)],1)   ,Pseq([Pseq([16/1],1) ,Pse
 
 		Pbind(\instrument, \playBuf10, \buf ,~leTout,\out,~toExtraFx ,\loopy,0,\tS,t.beatDur,\dur,Pseq([128/1],1)),
 		Pbind(\instrument, \playBuf10, \buf ,~rising,\out,~toExtraFx ,\loopy,0,\tS,t.beatDur,\dur,Pseq([32/1],1)),
-		Pbind(\instrument, \playBuf, \buf ,~pad2,\out,~slideBus2 ,\loopy,0,\tS,t.beatDur,\dur,Pseq([16/1],2),\type,Pseq([\note,\rest,\rest],inf)),
+	/*	Pbind(\instrument, \playBuf, \buf ,~pad2,\out,~slideBus2 ,\loopy,0,\tS,t.beatDur,\dur,Pseq([16/1],2),\type,Pseq([\note,\note,\rest],inf)),*/
+
+					Pbind(\instrument, \playBuf, \buf ,~pad2,\out,~slideBus2 ,\loopy,0,\tS,t.beatDur,\dur,Pseq([32/1],1))
 
 
 				],1),
@@ -135,12 +137,7 @@ Pseq([ Pseq([8/1],1)],1)  ,Pseq([ Pseq([4/1],1)],1)   ,Pseq([Pseq([16/1],1) ,Pse
 			Ppar([
 
 
-			Pseq([
-			Pbind(\instrument, \playBuf10, \buf ,~leTout,\out,~toCom ,\loopy,0,\tS,t.beatDur,\dur,Pseq([64/1],1),\start,~leTout.numFrames/3*2),
 
-							/*Pbind(\instrument, \playBuf10, \buf ,~vap,\out,~toExtraFx ,\loopy,0,\tS,t.beatDur,\dur,Pseq([64/1],1),\start,~leTout.numFrames/3*2)*/
-
-			],1),
 
 		Pseq([
 
@@ -149,20 +146,22 @@ Pseq([ Pseq([8/1],1)],1)  ,Pseq([ Pseq([4/1],1)],1)   ,Pseq([Pseq([16/1],1) ,Pse
 				// Pbind(\instrument, \playBuf10, \buf ,~ped,\out,~toShift ,\loopy,0,\tS,t.beatDur,\dur,Pseq([64/1],1),\start,0 /*~ped.numFrames/2*/),
 /*~part3a,*/
 
-				Pbind(\instrument, \playBuf10, \buf ,~leTout2,\out,~toShift,\loopy,0,\tS,t.beatDur,\dur,Pseq([64/1],1),\start,0,\type,\rest),
+									Pbind(\instrument, \playBuf10, \buf ,~leTout,\out,~toCom ,\loopy,0,\tS,t.beatDur,\dur,Pseq([64/1],1),\start,~leTout.numFrames/3*2),
+				/*Pbind(\instrument, \playBuf10, \buf ,~leTout2,\out,~toShift,\loopy,0,\tS,t.beatDur,\dur,Pseq([64/1],1),\start,0,\type,\rest),*/
 
-	Pbind(\instrument, \playBuf10, \buf ,~ped,\out,~toShift,\loopy,0,\tS,t.beatDur,\dur,Pseq([64/1],1),\start,0),
+					// Pbind(\instrument, \playBuf10, \buf ,~ped,\out,~toShift,\loopy,0,\tS,t.beatDur,\dur,Pseq([64/1],1),\start,0),
 
+						Pbind(\instrument, \playBuf10, \buf ,~leTout2,\out,~toShift,\loopy,0,\tS,t.beatDur,\dur,Pseq([64/1],1),\start,\start,~leTout2.numFrames/256*8),
 
 			Pbind(\instrument, \playBuf10, \buf ,~leTout,\out,~toShift,\loopy,0,\tS,t.beatDur,\dur,Pseq([64/1],1),\start,0,\type,\rest ),
 			/*	Above is removed replace by new -- randon ele with delay
 				123-4   1234-5    12345-6*/
 
 
-				Pbind(\instrument, \playBuf10, \type,\rest,\buf ,~leTout2,\out,~toShift,\loopy,0,\tS,t.beatDur,\dur,Pseq([32/1],1),\start,~leTout.numFrames/4*2),
+				Pbind(\instrument, \playBuf10, \type,\rest,\buf ,~leTout2,\out,~toShift,\loopy,0,\tS,t.beatDur,\dur,Pseq([32/1],1),\start,0),
 
 
-			Pbind(\instrument, \playBuf10, \buf ,~leTout2,\out,~toShift,\loopy,0,\tS,t.beatDur,\dur,Pseq([32/1],1),\start,~leTout2.numFrames/4),
+			Pbind(\instrument, \playBuf10, \buf ,~leTout2,\out,~toShift,\loopy,0,\tS,t.beatDur,\dur,Pseq([32/1],1),\start,~leTout2.numFrames/4+ 151876.0),
 		],1),
 
 	],1),
@@ -171,7 +170,9 @@ Pseq([ Pseq([8/1],1)],1)  ,Pseq([ Pseq([4/1],1)],1)   ,Pseq([Pseq([16/1],1) ,Pse
 
 		Pseq([
 
-				~part3a,
+				// ~part3a,
+
+				~part3eb
 				// Pbind(\instrument, \playBuf10, \buf,~ped,\out,~toShift ,\loopy,0,\tS,t.beatDur,\dur,Pseq([64/1],1),\start,0),
 			~part3e,
 			Pbind(\instrument, \playBuf10, \buf ,~leTout2,\out,0,\loopy,0,\tS,t.beatDur,\dur,Pseq([128/1],1),\start,0,\type,\rest),
@@ -263,8 +264,8 @@ Pseq([ Pseq([8/1],1)],1)  ,Pseq([ Pseq([4/1],1)],1)   ,Pseq([Pseq([16/1],1) ,Pse
 
 		Pseq([
 
-	Pbind(\instrument,\gate2, \in ,~toKbGate, \group,~lfoGrp, \tS,  0.39550810370174,\dur, Pseq([16/1],1),\type,\rest),
-			~hitPart1,~hitPart2,~hitPart3,~hitPart4
+			Pbind(\instrument,\gate2, \in ,~toKbGate, \group,~lfoGrp, \tS,  0.39550810370174,\dur, Pseq([16/1],1),\type,\rest),
+	~hitPart1,~hitPart2,~hitPart3,~hitPart4
 
 
 		],1),
@@ -305,51 +306,11 @@ Pbind(\instrument,\gate, \tS,  0.39550810370174,\vlSub, 1, \vlSub2,Pkey(\vlSub),
 				\vlAtk,0,\atkT,0.05,\relT,0.25,\decT,0.70,\atckC,6, \relC,-6,\vlRel,0,\decC,(-9))
 
 
-		/*	Pbind(\instrument,\gate,\in,	~bgGate,\out,~bgDisto,\group, ~granuGrp,\type,Pseq([\note,\rest  ,\rest,\rest,\rest,\rest,\rest,\rest  ].scramble,2)  ,  \dur, Pseq([16/1],16),
-				\vlAtk,0,\atkT,0.05,\relT,0.25,\decT,0.70,\atckC,6, \relC,-6,\vlRel,0,\decC,(-9))*/
-
 		],1),
 
 
 
-		// Pbind(\instrument,\gateS,\in, ~toExtraComp ,\out, 0,\group,~recGrp3,\dur, Pseq([1024/1],1),\tS,t.beatDur),
-		/*Pseq([
 
-			//3*64+16
-		Pbind(\instrument,\gateS,\in,~toExtraComp  ,\out,  0 ,\group,~kbGate,\dur, Pseq([208/1],1),\tS,t.beatDur),
-		Pbind(\instrument,\comp1010P,\sB,1.5,\sA,1/4, \thr,0.8, \ctrl,~bigRiToStereo ,\tS,t.beatDur,\dur,Pseq([64/1],1),\in,~toExtraComp,\out, 0,\group,~kbGate),
-			//for downshifter
-				Pbind(\instrument,\comp1010P,/*\sB,1,\sA,0.3, \thr,1,*/ \sB,1.5,\sA,1/4, \thr,0.8,\ctrl,~downStereo ,\tS,t.beatDur,\dur,Pseq([64/1],1),\in,~toExtraComp,\out, 0,\group,~kbGate),
-
-			// 34*16
-		Pbind(\instrument,\gateS,\in,~toExtraComp  ,\out,  0  	,\group,~kbGate, \dur,Pseq([64/1],1),\tS,t.beatDur),
-
-			//for shift 2
-			Pbind(\instrument,\comp1010P,\sB,1.5,\sA,1/4, \thr,0.8,\ctrl,~shiftStereo ,\tS,t.beatDur,\dur,Pseq([64/1],1),\in,~toExtraComp,\out, 0,\group,~kbGate),
-			//for shift 3
-			Pbind(\instrument,\comp1010P,\sB,1.5,\sA,1/4, \thr,0.8, \ctrl,~shiftStereo2 ,\tS,t.beatDur,\dur,Pseq([64/1],1),\in,~toExtraComp,\out, 0,\group,~kbGate),
-
-			Pbind(\instrument,\gateS,\in,~toExtraComp  ,\out,  0  	,\group,~kbGate, \dur,Pseq([192/1],1),\tS,t.beatDur),
-
-
-			Pbind(\instrument,\gateS,\in,~toExtraComp  ,\out,  0  	,\group,~kbGate, \dur,Pseq([127/1],1),\tS,t.beatDur,\type,\rest),
-
-
-				Pbind(\instrument,\gateS,\in,~toExtraComp  ,\out,  0  	,\group,~kbGate, \dur,Pseq([32/1],1),\tS,t.beatDur),
-
-			//for trippy
-			Pbind(\instrument,\comp1010P,\sB,1.5,\sA,1/4, \thr,0.8,\ctrl,~riTriptoStereo ,\tS,t.beatDur,\dur,Pseq([32/1],1),\in,~toExtraComp,\out, 0,\group,~kbGate),
-			Pbind(\instrument,\gateS,\in, ~toExtraComp ,\out, 0,\group,~kbGate,\dur, Pseq([128/1],1),\tS,t.beatDur),
-			// 8*16 +1
-			//bigrises no2
-			Pbind(\instrument,\comp1010P,\sB,1.5,\sA,1/4, \thr,0.8, \ctrl,~bigRiToStereo2 ,\tS,t.beatDur,\dur,Pseq([64/1],1),\in,~toExtraComp,\out, 0,\group,~kbGate),
-
-		],1)*/
-
-
-		/*208+64+64+544+32+129+64=1105
-
-1105-1024*/
 
 
 
