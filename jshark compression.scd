@@ -70,7 +70,10 @@ s.waitForBoot {
 };
 )
 
-
+~fakeSidechain.set(\clampLevel,0.4)
+~fakeSidechain.set(\clamp,0.05)
+~fakeSidechain.set(\relax,0.1)
+~fakeSidechain.set(\thresh,0.05)
 
 // stop:
 ~pad.type_(\off).play;

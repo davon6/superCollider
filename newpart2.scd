@@ -98,13 +98,107 @@ Pseq([ Pseq([8/1],1)],1)  ,Pseq([ Pseq([4/1],1)],1)   ,Pseq([Pseq([16/1],1) ,Pse
 
 		Pseq([
 				Pbind(\instrument,\gate2, \in ,~toKbGate, \group,~lfoGrp, \tS,  0.39550810370174,\dur, Pseq([16/1],1),\type,\rest),
-		Pseq([
 
 
+			Ppar([
 
-				Pbind(\instrument, \playBuf10, \buf ,~charmin,\out,~toExtraFx,\type,Pseq([\note,\rest].scramble,inf)
+
+				Pseq([
+				Pbind(\instrument, \playBuf10, \buf ,~charmin,\out,~toFilBefShift,\type,Pseq([\note,\rest].scramble,inf)
 					,\loopy,0,\tS,0.39550810372374,\dur,Pseq([4/1],16),\start,Pfunc({~charmin.numFrames/64*(64.rand)})),
 
+					Pseq([~bra3b,~bra1 ,~bra4,~bra2,
+
+						~bra3,~bra1 ,~bra4,~bra2],1),
+					~part3a
+
+				],1),
+
+				Pseq([
+
+					// Pbind(\instrument, \playBuf10, \buf ,~vap,\out,~toExtraFx ,\loopy,0,\tS,t.beatDur,\dur,Pseq([64/1],1)),
+					Pbind(\instrument, \playBuf10, \buf ,~vap,\out,~toExtraFx,\type,Pseq([\note,\rest].scramble,inf)
+					,\loopy,0,\tS,0.39550810372374,\dur,Pseq([4/1],16),\start,Pfunc({~vap.numFrames/64*(64.rand)})),
+
+		Pbind(\instrument, \playBuf10, \buf ,~leTout,\out,~toExtraFx ,\loopy,0,\tS,t.beatDur,\dur,Pseq([128/1],1)),
+		Pbind(\instrument, \playBuf10, \buf ,~rising,\out,~toExtraFx ,\loopy,0,\tS,t.beatDur,\dur,Pseq([32/1],1)),
+		Pbind(\instrument, \playBuf, \buf ,~pad2,\out,~slideBus2 ,\loopy,0,\tS,t.beatDur,\dur,Pseq([16/1],2),\type,Pseq([\note,\rest,\rest],inf)),
+
+
+				],1),
+			],1),
+
+
+
+				//above can be better , need to audio prrocess
+
+			Ppar([
+
+
+			Pseq([
+			Pbind(\instrument, \playBuf10, \buf ,~leTout,\out,~toCom ,\loopy,0,\tS,t.beatDur,\dur,Pseq([64/1],1),\start,~leTout.numFrames/3*2),
+
+							/*Pbind(\instrument, \playBuf10, \buf ,~vap,\out,~toExtraFx ,\loopy,0,\tS,t.beatDur,\dur,Pseq([64/1],1),\start,~leTout.numFrames/3*2)*/
+
+			],1),
+
+		Pseq([
+
+	/*		Pbind(\instrument, \playBuf10, \buf ,~ped,\out,~toShift,\loopy,0,\tS,t.beatDur,\dur,Pseq([64/1],1)),*/
+				// Pbind(\instrument, \playBuf10, \buf , ~vap,\out,~toShift ,\loopy,0,\tS,t.beatDur,\dur,Pseq([64/1],1)),
+				// Pbind(\instrument, \playBuf10, \buf ,~ped,\out,~toShift ,\loopy,0,\tS,t.beatDur,\dur,Pseq([64/1],1),\start,0 /*~ped.numFrames/2*/),
+/*~part3a,*/
+
+				Pbind(\instrument, \playBuf10, \buf ,~leTout2,\out,~toShift,\loopy,0,\tS,t.beatDur,\dur,Pseq([64/1],1),\start,0,\type,\rest),
+
+	Pbind(\instrument, \playBuf10, \buf ,~ped,\out,~toShift,\loopy,0,\tS,t.beatDur,\dur,Pseq([64/1],1),\start,0),
+
+
+			Pbind(\instrument, \playBuf10, \buf ,~leTout,\out,~toShift,\loopy,0,\tS,t.beatDur,\dur,Pseq([64/1],1),\start,0,\type,\rest ),
+			/*	Above is removed replace by new -- randon ele with delay
+				123-4   1234-5    12345-6*/
+
+
+				Pbind(\instrument, \playBuf10, \type,\rest,\buf ,~leTout2,\out,~toShift,\loopy,0,\tS,t.beatDur,\dur,Pseq([32/1],1),\start,~leTout.numFrames/4*2),
+
+
+			Pbind(\instrument, \playBuf10, \buf ,~leTout2,\out,~toShift,\loopy,0,\tS,t.beatDur,\dur,Pseq([32/1],1),\start,~leTout2.numFrames/4),
+		],1),
+
+	],1),
+
+
+
+		Pseq([
+
+				~part3a,
+				// Pbind(\instrument, \playBuf10, \buf,~ped,\out,~toShift ,\loopy,0,\tS,t.beatDur,\dur,Pseq([64/1],1),\start,0),
+			~part3e,
+			Pbind(\instrument, \playBuf10, \buf ,~leTout2,\out,0,\loopy,0,\tS,t.beatDur,\dur,Pseq([128/1],1),\start,0,\type,\rest),
+		],1),
+
+		Pseq([
+				Ppar([
+				Pseq([
+				/*		~part3a*/
+
+						Pbind(\instrument, \playBuf10, \buf ,~charmin,\out,~toShift,\loopy,0,\tS,t.beatDur,\dur,
+							Pseq([Pseq([96/1],1),Pseq([32/1 ],1)],1),
+
+
+							\type,Pseq([\note,\note],inf)),
+
+
+			~part3e,
+				~part3a
+				],1),
+					Pseq([
+
+					 Pbind(\instrument, \playBuf10, \buf,~ped,\out,~toExtraFx ,\loopy,0,\tS,t.beatDur,\dur,Pseq([64/1],1),\start,~ped.numFrames/2),
+
+						Pbind(\instrument, \playBuf10, \buf ,~leTout,\out,~toExtraFx,\loopy,0,\tS,t.beatDur,\dur,Pseq([64/1],1),\start,~leTout.numFrames/3*2),
+				Pbind(\instrument, \playBuf10, \buf ,~leTout2,\out,~toExtraFx,\loopy,0,\tS,t.beatDur,\dur,Pseq([128/1],1),\start,~leTout2.numFrames/4*2),
+],1),
 
 				/*Pseq([
 					Pbind(\instrument, \playBuf10, \buf ,~charmin,\out,~toExtraFx
@@ -113,82 +207,7 @@ Pseq([ Pseq([8/1],1)],1)  ,Pseq([ Pseq([4/1],1)],1)   ,Pseq([Pseq([16/1],1) ,Pse
 					Pbind(\instrument, \playBuf10, \buf ,~charmin,\out,~toExtraFx,\type,\rest
 					,\loopy,0,\tS,0.39550810372374,\dur,Pseq([2/1],1),\start,Pfunc({~charmin.numFrames/64*(64.rand)}))
 				].scramble,8),*/
-
-
-
-				Pseq([~bra1 ,~bra2, ~bra3, ~bra4].scramble,1),
-
-			~part3a,
-				// Pbind(\instrument, \playBuf10, \buf ,~leTout,\out,~toShift ,\loopy,0,\tS,t.beatDur,\dur,Pseq([64/1],1)),\
-
-
-
-
-
-
-
-
-				// Pbind(\instrument, \playBuf10, \buf ,~leTout,\out,~toShift,\loopy,0,\tS,t.beatDur,\dur,Pseq([64/1],1)),
-			/*Pbind(\instrument, \playBuf10, \buf ,~leTout2,\out,~toShift,\loopy,0,\tS,t.beatDur,\dur,Pseq([64/1],1)),*/
-
-			// Pbind(\instrument, \playBuf10, \buf ,~leTout,\out,~toShift,\loopy,0,\tS,t.beatDur,\dur,Pseq([64/1],1),\start,~leTout.numFrames/3 ),
-
-				//below was removed for above
-					Ppar([
-
-			Pbind(\instrument, \playBuf10, \buf ,~rising,\out,~toShift ,\loopy,0,\tS,t.beatDur,\dur,Pseq([32/1],1)),
-
-
-					Pbind(\instrument, \playBuf, \buf ,~pad2,\out,~slideBus2 ,\loopy,0,\tS,t.beatDur,\dur,Pseq([16/1],2),/*\type,Pseq([\note,\note,\rest],inf)*/),
-
-			/*Pbind(\instrument, \gateS,\in,~toGateRise,\group,~dispatchGrp2,\dur,	Pseq([16/1],2),	\tS,t.beatDur, \out,Pseq([~tofinalRythm,~toShift],inf))*/
-				],1)
-
-
-
-				//above can be better , need to audio prrocess
-		],1),
-
-		Pseq([
-			Pbind(\instrument, \playBuf10, \buf ,~leTout,\out,~toShift,\loopy,0,\tS,t.beatDur,\dur,Pseq([64/1],1),\start,~leTout.numFrames/3),
-	/*		Pbind(\instrument, \playBuf10, \buf ,~ped,\out,~toShift,\loopy,0,\tS,t.beatDur,\dur,Pseq([64/1],1)),*/
-				// Pbind(\instrument, \playBuf10, \buf , ~vap,\out,~toShift ,\loopy,0,\tS,t.beatDur,\dur,Pseq([64/1],1)),
-				// Pbind(\instrument, \playBuf10, \buf ,~ped,\out,~toShift ,\loopy,0,\tS,t.beatDur,\dur,Pseq([64/1],1),\start,0 /*~ped.numFrames/2*/),
-/*~part3a,*/
-
-				Pbind(\instrument, \playBuf10, \buf ,~leTout2,\out,~toShift,\loopy,0,\tS,t.beatDur,\dur,Pseq([64/1],1),\start,0),
-
-
-			Pbind(\instrument, \playBuf10, \buf ,~leTout,\out,~toShift,\loopy,0,\tS,t.beatDur,\dur,Pseq([64/1],1),\start,~leTout.numFrames/3*3,\type,\rest ),
-			/*	Above is removed replace by new -- randon ele with delay
-				123-4   1234-5    12345-6*/
-
-
-				Pbind(\instrument, \playBuf10, \type,\rest,\buf ,~leTout2,\out,~toShift,\loopy,0,\tS,t.beatDur,\dur,Pseq([32/1],1),\start,~leTout.numFrames/4*2),
-
-
-			Pbind(\instrument, \playBuf10, \buf ,~leTout2,\out,~toShift,\loopy,0,\tS,t.beatDur,\dur,Pseq([32/1],1),\start,~leTout.numFrames/4*2.5),
-		],1),
-
-
-
-
-
-		Pseq([
-
-			Pbind(\instrument, \playBuf10, \buf,~ped,\out,~toShift ,\loopy,0,\tS,t.beatDur,\dur,Pseq([64/1],1),\start,0),
-			~part3e,
-			Pbind(\instrument, \playBuf10, \buf ,~leTout2,\out,0,\loopy,0,\tS,t.beatDur,\dur,Pseq([128/1],1),\start,0,\type,\rest),
-		],1),
-
-		Pseq([
-		/*	~part3e,*/
-				Pbind(\instrument, \playBuf10, \buf ,~charmin,\out,~toExtraFx,\loopy,0,\tS,t.beatDur,\dur,Pseq([64/1],1)),
-
-			Pbind(\instrument, \playBuf10, \buf ,~leTout2,\out,~toShift,\loopy,0,\tS,t.beatDur,\dur,Pseq([64/1],1),\start,~leTout.numFrames/4),
-			~part3e,
-				~part3a
-
+],1),
 		],1),
 	],1),
 
@@ -216,11 +235,14 @@ Pseq([ Pseq([8/1],1)],1)  ,Pseq([ Pseq([4/1],1)],1)   ,Pseq([Pseq([16/1],1) ,Pse
 
 
 
-	Pbind(\instrument,\shift10,\bus,~bus33,\in, ~toShift ,\out,~toExtraFx,\dur,Pseq([16/1],inf),\group, ~granuGrp),
-
-
-		Pbind(\instrument, \tantra, \in,~toExtraFx, \wT,Pfunc({3.rand}), \dur,Pseq([4/1],inf),\group, ~granuGrp,\out,~toCom2/*~toDelay10b*/,\type,Pwrand(
+		Pbind(\instrument, \tantra, \in,~toExtraFx, \wT,Pfunc({3.rand}), \dur,Pseq([4/1],inf),\group, ~lfoGrp2,\out,~toShift/*~toDelay10b*/,\type,Pwrand(
 		[\note,\rest],[1,7].normalizeSum,inf)),
+
+
+
+	Pbind(\instrument,\shift10,\bus,~bus33,\in, ~toShift ,\out,~toCom2,\dur,Pseq([16/1],inf),\group, ~granuGrp),
+
+
 
 	Pwrand([
 
