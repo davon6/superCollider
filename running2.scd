@@ -74,7 +74,7 @@ f = { |n=14, min=0, max=11| (min..max).scramble.keep(n) };
 ~noise =  Buffer.read(s,"/Users/davidmignot/Music/SuperCollider Recordings/E/noiseHIt.aiff");
 ~kRise=Buffer.read(s,"/Users/davidmignot/Music/SuperCollider Recordings/E/kickRise.aiff");
 ~crushed=Buffer.read(s,"/Users/davidmignot/Music/SuperCollider Recordings/E/crushed.aiff");
-
+~riPow =  Buffer.read(s,"/Users/davidmignot/Music/SuperCollider Recordings/E/riPow.aiff");
 ~pad6=Buffer.read( s,"/Users/davidmignot/Music/SuperCollider Recordings/E/pad4.aiff");
 
  ~pad2= Buffer.read(s,"/Users/davidmignot/Music/SuperCollider Recordings/E/pad2.aiff");
@@ -660,7 +660,19 @@ Pseq([
 
 
 
-	 Pbind(\instrument, \playBuf, \buf, ~clap,\vl,1,\tS,t.beatDur,\dur,Pseq([1/2],256),\loopy,0,\type, Pseq([\rest,\rest,\note,\rest ],inf),\out,~clapEq),
+				 Pbind(\instrument, \playBuf, \buf, ~clap,\vl,1,\tS,t.beatDur,\dur,Pseq([1/2],64),\loopy,0,\type, Pseq([\rest,\rest,\note,\rest  ,\rest,\rest,\rest,\rest,  \rest,\rest,\rest,\rest, \rest,\rest,\rest,\rest,
+
+				\rest,\note,\rest,\rest ,\rest,\rest,\rest,\rest	,\rest,\note,\rest,\rest,\rest,\rest,\rest,\rest,
+
+				\rest,\note,\rest,\rest, \rest,\note,\rest,\rest ,\rest,\note,\rest,\rest ,\rest,\note,\rest,\rest,
+				\rest,\note,\rest,\rest, \rest,\note,\rest,\rest ,\rest,\note,\rest,\rest ,\rest,\note,\rest,\rest,
+
+			],1)
+
+
+				,\out,~clapEq),
+
+	 Pbind(\instrument, \playBuf, \buf, ~clap,\vl,1,\tS,t.beatDur,\dur,Pseq([1/2],192),\loopy,0,\type, Pseq([\rest,\rest,\note,\rest ],inf),\out,~clapEq),
 
 
 					Pbind(\instrument, \playBuf,  \tS,  0.39550810372374,\buf,~snare,
@@ -742,17 +754,27 @@ Pbind(\instrument,\blank, \in,~kSRise,\out,~toKbGate,\dur,Pseq([16/1], 1),\group
 		\start,0,\type,Pseq([\rest,\note,\note,\note],inf),\buf,~b3  ,\out,~bassFi ,\loopy,0, \decT,0.7,\vlDec,1,\vlSub,Pkey(\vlDec),\vlSub2,Pkey(\vlDec),\subsT ,Pseq([0,0.1,0.2,0.3],inf),\start,4100),
 
 
-	Pbind( \instrument, \playBufXG, \impulse, 0.003 ,\dur,    Pseq([1/4],384), \tS,  0.39550810372374,
-	\start,0,\type,Pseq([\rest,\note,\note,\note],inf),\buf,~b4,\out,~bassFi ,\loopy,0, \decT,0.8/*0.7*/,\vlDec,1,\vlSub,Pkey(\vlDec),\vlSub2,Pkey(\vlDec),\subsT ,Pseq([0,0.1,0.12,0.18],inf),\start,4100)
+/*	Pbind( \instrument, \playBufXG, \impulse, 0.003 ,\dur,    Pseq([1/4],384), \tS,  0.39550810372374,
+	\start,0,\type,Pseq([\rest,\note,\note,\note],inf),\buf,~b4,\out,~bassFi ,\loopy,0, \decT,0.8/*0.7*/,\vlDec,1,\vlSub,Pkey(\vlDec),\vlSub2,Pkey(\vlDec),\subsT ,Pseq([0,0.1,0.12,0.18],inf),\start,4100)*/
+
+
+				Pbind( \instrument, \playBufXG, \impulse, 0.003 ,\dur,    Pseq([1/4],384), \tS,  0.39550810372374,
+		\start,0,\type,Pseq([\rest,\note,\note,\note],inf),\buf,~b4  ,\out,~bassFi ,\loopy,0, \decT,
+				Pseq([0,0.7,0.8,0.9],inf),\vlDec,1,\vlSub,Pkey(\vlDec),\vlSub2,Pkey(\vlDec)/*,\subsT ,Pseq([0,0.1,0.2,0.3],inf)*/,\start,4100),
 		],1),
+
 
 
 		Pseq([
 
 
 
-	Pbind( \instrument, \playBufXG, \impulse, 0.003 ,\dur,    Pseq([1/4],1024), \tS,  0.39550810372374,
-	\start,0,\type,Pseq([\rest,\note,\note,\note],inf),\buf,~b4,\out,~bassFi ,\loopy,0, \decT,0.8/*0.7*/,\vlDec,1,\vlSub,Pkey(\vlDec),\vlSub2,Pkey(\vlDec),\subsT ,Pseq([0,0.1,0.12,0.18],inf),\start,4100),
+/*	Pbind( \instrument, \playBufXG, \impulse, 0.003 ,\dur,    Pseq([1/4],1024), \tS,  0.39550810372374,
+	\start,0,\type,Pseq([\rest,\note,\note,\note],inf),\buf,~b4,\out,~bassFi ,\loopy,0, \decT,0.8/*0.7*/,\vlDec,1,\vlSub,Pkey(\vlDec),\vlSub2,Pkey(\vlDec),\subsT ,Pseq([0,0.1,0.12,0.18],inf),\start,4100),*/
+
+			Pbind( \instrument, \playBufXG, \impulse, 0.003 ,\dur,    Pseq([1/4],1024), \tS,  0.39550810372374,
+		\start,0,\type,Pseq([\rest,\note,\note,\note],inf),\buf,~b4  ,\out,~bassFi ,\loopy,0, \decT,
+				Pseq([0,0.7,0.8,0.9],inf),\vlDec,1,\vlSub,Pkey(\vlDec),\vlSub2,Pkey(\vlDec)/*,\subsT ,Pseq([0,0.1,0.2,0.3],inf)*/,\start,4100),
 
 			Pbind( \instrument, \playBufXG, \impulse, 0.003 ,\dur,    Pseq([1/4],512), \tS,  0.39550810372374,
 		\start,0,\type,Pseq([\rest,\note,\note,\note],inf),\buf,~b3  ,\out,~bassFi ,\loopy,0, \decT,0.7,\vlDec,1,\vlSub,Pkey(\vlDec),\vlSub2,Pkey(\vlDec),\subsT ,Pseq([0,0.1,0.2,0.3],inf),\start,4100),
@@ -764,8 +786,13 @@ Pbind(\instrument,\blank, \in,~kSRise,\out,~toKbGate,\dur,Pseq([16/1], 1),\group
 		\start,0,\type,Pseq([\rest,\note,\note,\note],inf),\buf,~b3  ,\out,~bassFi ,\loopy,0, \decT,0.7,\vlDec,1,\vlSub,Pkey(\vlDec),\vlSub2,Pkey(\vlDec),\subsT ,Pseq([0,0.1,0.2,0.3],inf),\start,4100),
 
 
-	Pbind( \instrument, \playBufXG, \impulse, 0.003 ,\dur,    Pseq([1/4],2048), \tS,  0.39550810372374,
-	\start,0,\type,Pseq([\rest,\note,\note,\note],inf),\buf,~b4,\out,~bassFi ,\loopy,0, \decT,0.8/*0.7*/,\vlDec,1,\vlSub,Pkey(\vlDec),\vlSub2,Pkey(\vlDec),\subsT ,Pseq([0,0.1,0.12,0.18],inf),\start,4100)
+
+	/*Pbind( \instrument, \playBufXG, \impulse, 0.003 ,\dur,    Pseq([1/4],2048), \tS,  0.39550810372374,
+	\start,0,\type,Pseq([\rest,\note,\note,\note],inf),\buf,~b4,\out,~bassFi ,\loopy,0, \decT,0.8/*0.7*/,\vlDec,1,\vlSub,Pkey(\vlDec),\vlSub2,Pkey(\vlDec),\subsT ,Pseq([0,0.1,0.12,0.18],inf),\start,4100)*/
+
+			Pbind( \instrument, \playBufXG, \impulse, 0.003 ,\dur,    Pseq([1/4],2048), \tS,  0.39550810372374,
+		\start,0,\type,Pseq([\rest,\note,\note,\note],inf),\buf,~b4  ,\out,~bassFi ,\loopy,0, \decT,
+				Pseq([0,0.7,0.8,0.9],inf),\vlDec,1,\vlSub,Pkey(\vlDec),\vlSub2,Pkey(\vlDec)/*,\subsT ,Pseq([0,0.1,0.2,0.3],inf)*/,\start,4100),
 		],1),
 	],1),
 

@@ -480,6 +480,7 @@ Pbindef(\testPa, \start,65263)
 
 
 
+
 ~eq23=Synth(\EQHP96, [ \frq, 100 ], ~eqGrp0);
 ~eq23.set( \in,   ~hit2ToEq,\out,~hit2ToStereo   ,\val4,3000,\shelf,1.6, \gain4,(-12),\vol,2.12,\frq, 200);
 ~pan23=Synth(\pan2, [\in, ~hit2ToStereo, \out,~hiCom/*~toCom*/], ~stereoGrp);
@@ -863,9 +864,9 @@ Pbind(\instrument, \playBuf,  \tS,  0.39550810372374,\buf,~snare,\type, Pseq([\r
 ~comp.set(\thr,0.2 ,\sB, 1.043,\sA, 1/2,\atk ,0.0242, \rel ,0.0968, \gain,1,\in, ~comFuzz,\out,~limitBass);
 
 ~limK=Synth(\limitertoMixer,[\c45,1,\in, ~limitKick, \gain,1,\out,~kToPan],~limitGrp);
-~limK.set(\gain,234.7);
+~limK.set(\gain,224.7);
 	~limB=Synth(\limitertoMixer,[\c46,1,\in, ~limitBass, \gain,68,\out,~kToPan],~limitGrp);
-	~limB.set(\gain,212.2);
+	~limB.set(\gain,209);
 
 
 
@@ -1025,12 +1026,6 @@ Pbind(\instrument, \playBuf,  \tS,  0.39550810372374,\buf,~snare,\type, Pseq([\r
 
 
 
-
-
-
-
-
-
 // ~eq43.free
 ~disto43=Synth( \disto,[ \in, ~bigRiToDisto , \out,~bigRiToEnv ], ~distoGrp);
 ~fil11= Synth( \filter,[ \in,~bigRiToEnv ,\out,~bigRiToEq,\which, 0, \busMod, ~bus17,\qf,0.67,\freqFil,100],~filterGrp );
@@ -1060,6 +1055,17 @@ Pbind(\instrument, \playBuf,  \tS,  0.39550810372374,\buf,~snare,\type, Pseq([\r
 ~mix44.set( \gain,7.3);
 ~stereo44= Synth(\stereoO,[  \in, ~bigRiToStereo2   ,\out,~extraComp, ], ~stereoGrp);
 ~stereo44.set(\spread,1,\center,0.3,\dlt1,0.41,\dlt2,0.35,\decT,0.0968, \mxDel,1);
+
+
+
+
+
+~riPEq=Synth(\EQHP96, [\frq, 100,\out, 0,\in,~riPowEq],~eqGrp0);
+~riPEq.set(\vol,0.000482,\out,~downComp2);
+
+
+
+
 
 // ~part5Eq2.free
 ~part5Eq2=Synth(\EQHP96, [\in,~downEq2,\out,~downRev2],~eqGrp0);
@@ -1214,6 +1220,6 @@ Pbind(\instrument, \playBuf,  \tS,  0.39550810372374,\buf,~snare,\type, Pseq([\r
 /*~compUlti.set(\out,~eqBus10)*/
 
 ~mixingUlti = Synth(\EQHP10D, [\in, ~eqBus10, \frq, 100,\vol, 2.2,\out2,~fusible2,\out,0 /*\val,4000,\quant,1.98,\gain,(-6.8)*/], ~finalEq);
- ~mixingUlti.set(\vol, 1.9546,/*\gain,(-6.9),\quant,1.98*/);//1.82
+ ~mixingUlti.set(\vol, 2.0716,/*\gain,(-6.9),\quant,1.98*/);//1.82
 
 				// ~mixingUlti.free

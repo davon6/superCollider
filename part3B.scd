@@ -9017,3 +9017,339 @@ Pbind(\instrument, \playBuf10, \buf ,~leTout,\out,~toShift, \start,Pfunc({~leTou
 
 
 Pbind(\instrument, \playBuf10, \buf ,~leTout2,\out,0,\loopy,0,\tS,t.beatDur,\dur,Pseq([32/1],1),\start,~leTout2.numFrames/4).play(t)
+
+
+	//
+
+
+
+	Ppar([
+
+Pbind(\instrument, \lfo13,\tS, 0.39550810372374, \dur, Pseq([64/1],inf),\out,~mod2,\rL,0 ,\rH,500,\modu,
+
+		0.001875/**4*/,\ph,1.42),
+
+
+
+Pbind(\instrument,\rise,\dur,Pseq([64/1],inf), \vlAtk,0,\f1, 0.004 , \f2,0.001, \f3,0.00001,  \ic_atk,-1,\index,151,\mRatio,5,\out ,0/*~flanToDisto2*/,\tS, 0.39550810372374,\atk,1,\moduS,~mod2, \fS,1 ),
+
+
+],1).play(t)
+
+
+
+
+
+
+
+Ppar([
+
+Pbind(\instrument, \lfo13,\tS, 0.39550810372374, \dur, Pseq([64/1],inf),\out,~mod2,\rL,0 ,\rH,500,\modu,
+
+		0.001875/**4*/,\ph,1.42),
+
+
+
+Pbind(\instrument,\rise,\dur,Pseq([64/1],inf), \vlAtk,0,\f1, 1 , \f2,0.4, \f3,0,  \ic_atk,-1,\index,3,\mRatio,1,\out ,0/*~flanToDisto2*/,\tS, 0.39550810372374,\atk,1,\moduS,~mod2, \fS,0 ),
+
+
+],1).play(t)
+
+
+
+
+Pbind(\instrument,\rise,\dur,Pseq([16/1],1), \vlAtk,0,\f1, 1 , \f2,0, \f3,0.00001,  \ic_atk,-3,\index,1,\mRatio,5,\out ,0,\tS, 0.39550810372374,\atk,1,\moduS,~mod2, \fS,1 ,\freq,300).play(t)
+
+
+
+//
+Ppar([
+
+Pbind(\instrument, \lfo13,\tS, 0.39550810372374, \dur, Pseq([64/1],inf),\out,~mod2,\rL,0 ,\rH,500,\val,
+
+		0.001875/**4*/,\ph,1.42),
+
+
+
+	Pbind(\instrument,\rise,\dur,Pseq([64/1],inf), \vlAtk,0,\f1, 1 , \f2,0, \f3,0.00001,  \ic_atk,-1,\index,0.3,\mRatio,50,\out ,0/*~flanToDisto2*/,\tS, 0.39550810372374,\atk,1,\moduS,~mod2, \fS,0 ,\freq,[300,340,280]).play(t)
+
+
+],1).play(t)
+
+
+
+	Pbind(\instrument,\rise,\dur,Pseq([128/1],inf), \vlAtk,0,\f1, 1 , \f2,0, \f3,0.00001,  \ic_atk,-1,\index,0.3,\mRatio,50,\out ,0/*~flanToDisto2*/,\tS, 0.39550810372374,\dec,1,\moduS,~mod2, \fS,0 ,\freq,[300,340,280]).play(t)
+
+
+
+
+
+
+SynthDef(\rise, {
+	arg freq=659.26, mRatio=1, cRatio=1,
+	index=1, iScale=5, ic_atk=4, ic_rel=(-4),
+	amp=2, rel=3, pan=0, f1,f2,f3, vlAtk=0,atk=0, dec=0,atkE=0  ,dur ,out =0 ,tS=1 ,moduR,moduS,fS=0, fR=0,atk2=0.05 ,dec2   =0.932;
+	var car, mod, env, iEnv, mod2;
+	iEnv = EnvGen.kr(
+		Env(
+			[vlAtk, index*iScale, index],//middle was 10
+			[dur*atk, dur* dec],
+			[ic_atk, ic_rel]//atkC was 10
+		),timeScale: tS,doneAction:2
+	);
+		env = EnvGen.kr(Env([0,1,1,0],[dur*atk2,dur*dec2,0,dur*0.018]/*[dur*0.01,dur*0.97,0,dur*0.02]*/,[16,0,0-16]),timeScale: tS,doneAction: 2);
+	mod2 = SinOsc.ar(freq/10*f3, mul:freq/10 *iEnv);
+
+	mod = SinOsc.ar(freq * f2 + mod2
+			 + (In.kr(moduR,1)* EnvGen.kr(Env.adsr(sustainLevel: 1,releaseTime: 0.1),fR ))
+
+			, mul:freq * mRatio * iEnv);
+
+//car = SinOsc.ar(freq * f1 + mod) * env * amp;
+	car  = LeakDC.ar(Shaper.ar(~tfBuf,SinOsc.ar(freq * f1 + mod + (In.kr(moduS,1)* EnvGen.kr(Env.adsr(sustainLevel: 1,releaseTime: 0.1),fS )))))* env * amp;
+	/*car = Pan2.ar(car, pan);*/
+	Out.ar(out, car);
+}).add;
+
+
+Ppar([
+
+Pbind(\instrument, \lfo13,\tS, 0.39550810372374, \dur, Pseq([64/1],inf),\out,~mod2,\rL,0 ,\rH,500,\val,
+
+		0.001875/**4*/,\ph,1.42),
+
+
+
+	Pbind(\instrument,\rise,\dur,Pseq([128/1],inf), \vlAtk,0,\f1, 1 , \f2,0, \f3,0.00001,  \ic_atk,-1,\index,0.3,\mRatio,50,\out ,0/*~flanToDisto2*/,\tS, 0.39550810372374,\atk,1,\moduS,~mod2, \fS,0.0001 ,\freq,[300,340,280]/2),
+
+
+],1).play(t)
+
+
+Routine({
+
+	Pbind(\instrument,\rise,\dur,Pseq([64/1],inf), \vlAtk,0,\f1, 1 , \f2,0, \f3,0.00001,  \ic_atk,-1,\index,0.3,\mRatio,50,\out ,0/*~flanToDisto2*/,\tS, 0.39550810372374,\atk,1,\moduS,~mod2, \fS,0 ,\freq,[300,340,280]).play(t);
+
+	wait(0.16);
+
+s.record(path:"/Users/davidmignot/Music/SuperCollider Recordings/E/risy.aiff",numChannels:1,duration:t.beatDur*64);
+
+}).play(t)
+
+
+~risy = Buffer.read(s,"/Users/davidmignot/Music/SuperCollider Recordings/E/risy.aiff");
+
+
+~riPow =  Buffer.read(s,"/Users/davidmignot/Music/SuperCollider Recordings/E/riPow.aiff");
+
+~riPow.play
+
+~eqGrp0=Group.new
+Pbind(\instrument, \playBuf, \buf,~riPow,\tS,t.beatDur,\dur, Pseq([64/1],1),\out,~riPowEq).play(t)
+
+
+~riPEq=Synth(\EQHP96, [\frq, 100,\out, 0,\in,~riPowEq],~eqGrp0);
+~riPEq.set(\vol,0.14);
+
+
+Pbind(\instrument, \playBuf, \buf,~risy,\tS,t.beatDur,\dur, Pseq([16/1],1)).play(t)
+
+Pbind(\instrument, \playBuf, \buf,~risy,\tS,t.beatDur,\dur, Pseq([16/1],1)).play(t)
+
+Routine({
+
+{PlayBuf.ar(1,~risy)}.play;
+	wait(t.beatDur/2);
+
+{PlayBuf.ar(1,~risy,1.2)}.play;
+	wait(t.beatDur/2);
+	{PlayBuf.ar(1,~risy,1.4)}.play;
+	wait(t.beatDur/2);
+
+{PlayBuf.ar(1,~risy,1.6)}.play;
+
+}).play
+
+
+
+{GrainBuf.ar(1,dur: 5,sndbuf: 75)}.play;
+
+
+Routine({
+
+{GrainBuf.ar(1,1,dur: t.beatDur*10,sndbuf: ~risy)}.play;
+	wait(t.beatDur);
+
+{GrainBuf.ar(1,1,dur: t.beatDur*10,sndbuf: ~risy,rate: 1.2)}.play;
+	wait(t.beatDur);
+{GrainBuf.ar(1,1,dur: t.beatDur*10,sndbuf: ~risy,rate: 1.4)}.play;
+	wait(t.beatDur);
+
+{GrainBuf.ar(1,1,dur: t.beatDur*10,sndbuf: ~risy,rate: 1.6)}.play;
+		wait(t.beatDur/2);
+	{GrainBuf.ar(1,1,dur: t.beatDur*5,sndbuf: ~risy,rate: 1.8)}.play;
+		wait(t.beatDur/2);
+		{GrainBuf.ar(1,1,dur: t.beatDur*5,sndbuf: ~risy,rate: 1.8)}.play;
+
+}).play
+
+
+
+
+
+~rik=0.02;
+
+(
+Routine({
+
+
+{GrainBuf.ar(1,1,dur: t.beatDur*10,sndbuf: ~risy)}.play;
+
+	wait(0.16);
+	s.record(path:"/Users/davidmignot/Music/SuperCollider Recordings/E/riPow.aiff",numChannels:1,duration:t.beatDur*64);
+
+
+	wait(t.beatDur-0.16);
+
+
+	{GrainBuf.ar(1,1,dur: t.beatDur*10,sndbuf: ~risy,rate: 1.02)}.play;
+	wait(t.beatDur);
+
+	{GrainBuf.ar(1,1,dur: t.beatDur*10,sndbuf: ~risy,rate: 1.04)}.play;
+	wait(t.beatDur);
+
+	{GrainBuf.ar(1,1,dur: t.beatDur*10,sndbuf: ~risy,rate: 1.06)}.play;
+	wait(t.beatDur);
+
+	{GrainBuf.ar(1,1,dur: t.beatDur*10,sndbuf: ~risy,rate: 1.08)}.play;
+	wait(t.beatDur);
+
+	{GrainBuf.ar(1,1,dur: t.beatDur*10,sndbuf: ~risy,rate: 1.1)}.play;
+	wait(t.beatDur);
+	{GrainBuf.ar(1,1,dur: t.beatDur*10,sndbuf: ~risy,rate: 1.12)}.play;
+	wait(t.beatDur);
+	{GrainBuf.ar(1,1,dur: t.beatDur*10,sndbuf: ~risy,rate: 1.14)}.play;
+	wait(t.beatDur);
+	{GrainBuf.ar(1,1,dur: t.beatDur*10,sndbuf: ~risy,rate: 1.16)}.play;
+	wait(t.beatDur);
+	{GrainBuf.ar(1,1,dur: t.beatDur*10,sndbuf: ~risy,rate: 1.18)}.play;
+	wait(t.beatDur);
+	{GrainBuf.ar(1,1,dur: t.beatDur*10,sndbuf: ~risy,rate: 1.2)}.play;
+	wait(t.beatDur);
+	{GrainBuf.ar(1,1,dur: t.beatDur*10,sndbuf: ~risy,rate: 1.22)}.play;
+	wait(t.beatDur);
+	{GrainBuf.ar(1,1,dur: t.beatDur*10,sndbuf: ~risy,rate: 1.24)}.play;
+	wait(t.beatDur);
+	{GrainBuf.ar(1,1,dur: t.beatDur*10,sndbuf: ~risy,rate: 1.26)}.play;
+	wait(t.beatDur);
+	{GrainBuf.ar(1,1,dur: t.beatDur*10,sndbuf: ~risy,rate: 1.28)}.play;
+	wait(t.beatDur);
+	{GrainBuf.ar(1,1,dur: t.beatDur*10,sndbuf: ~risy,rate: 1.30)}.play;
+	wait(t.beatDur);
+	{GrainBuf.ar(1,1,dur: t.beatDur*10,sndbuf: ~risy,rate: 1.32)}.play;
+	wait(t.beatDur);
+	{GrainBuf.ar(1,1,dur: t.beatDur*10,sndbuf: ~risy,rate: 1.34)}.play;
+	wait(t.beatDur);
+
+	{GrainBuf.ar(1,1,dur: t.beatDur*10,sndbuf: ~risy,rate: 1.36)}.play;
+	wait(t.beatDur);
+
+	{GrainBuf.ar(1,1,dur: t.beatDur*10,sndbuf: ~risy,rate: 1.38)}.play;
+	wait(t.beatDur);
+
+	{GrainBuf.ar(1,1,dur: t.beatDur*10,sndbuf: ~risy,rate: 1.4)}.play;
+	wait(t.beatDur);
+
+	{GrainBuf.ar(1,1,dur: t.beatDur*10,sndbuf: ~risy,rate: 1.42)}.play;
+	wait(t.beatDur);
+	{GrainBuf.ar(1,1,dur: t.beatDur*10,sndbuf: ~risy,rate: 1.44)}.play;
+	wait(t.beatDur);
+	{GrainBuf.ar(1,1,dur: t.beatDur*10,sndbuf: ~risy,rate: 1.46)}.play;
+	wait(t.beatDur);
+	{GrainBuf.ar(1,1,dur: t.beatDur*10,sndbuf: ~risy,rate: 1.48)}.play;
+	wait(t.beatDur);
+	{GrainBuf.ar(1,1,dur: t.beatDur*10,sndbuf: ~risy,rate: 1.50)}.play;
+	wait(t.beatDur);
+	{GrainBuf.ar(1,1,dur: t.beatDur*10,sndbuf: ~risy,rate: 1.52)}.play;
+	wait(t.beatDur);
+	{GrainBuf.ar(1,1,dur: t.beatDur*10,sndbuf: ~risy,rate: 1.54)}.play;
+	wait(t.beatDur);
+	{GrainBuf.ar(1,1,dur: t.beatDur*10,sndbuf: ~risy,rate: 1.56)}.play;
+	wait(t.beatDur);
+	{GrainBuf.ar(1,1,dur: t.beatDur*10,sndbuf: ~risy,rate: 1.58)}.play;
+	wait(t.beatDur);
+	{GrainBuf.ar(1,1,dur: t.beatDur*10,sndbuf: ~risy,rate: 1.6)}.play;
+	wait(t.beatDur);
+	{GrainBuf.ar(1,1,dur: t.beatDur*10,sndbuf: ~risy,rate: 1.62)}.play;
+	wait(t.beatDur);
+	{GrainBuf.ar(1,1,dur: t.beatDur*10,sndbuf: ~risy,rate: 1.64)}.play;
+
+	{GrainBuf.ar(1,1,dur: t.beatDur*10,sndbuf: ~risy,rate: 1.66)}.play;
+	wait(t.beatDur);
+
+	{GrainBuf.ar(1,1,dur: t.beatDur*10,sndbuf: ~risy,rate: 1.68)}.play;
+	wait(t.beatDur);
+
+	{GrainBuf.ar(1,1,dur: t.beatDur*10,sndbuf: ~risy,rate: 1.70)}.play;
+	wait(t.beatDur);
+
+	{GrainBuf.ar(1,1,dur: t.beatDur*10,sndbuf: ~risy,rate: 1.72)}.play;
+	wait(t.beatDur);
+
+	{GrainBuf.ar(1,1,dur: t.beatDur*10,sndbuf: ~risy,rate: 1.74)}.play;
+	wait(t.beatDur);
+	{GrainBuf.ar(1,1,dur: t.beatDur*10,sndbuf: ~risy,rate: 1.76)}.play;
+	wait(t.beatDur);
+	{GrainBuf.ar(1,1,dur: t.beatDur*10,sndbuf: ~risy,rate: 1.78)}.play;
+	wait(t.beatDur);
+	{GrainBuf.ar(1,1,dur: t.beatDur*10,sndbuf: ~risy,rate: 1.8)}.play;
+	wait(t.beatDur);
+	{GrainBuf.ar(1,1,dur: t.beatDur*10,sndbuf: ~risy,rate: 1.82)}.play;
+	wait(t.beatDur);
+	{GrainBuf.ar(1,1,dur: t.beatDur*10,sndbuf: ~risy,rate: 1.84)}.play;
+	wait(t.beatDur);
+	{GrainBuf.ar(1,1,dur: t.beatDur*10,sndbuf: ~risy,rate: 1.86)}.play;
+	wait(t.beatDur);
+	{GrainBuf.ar(1,1,dur: t.beatDur*10,sndbuf: ~risy,rate: 1.88)}.play;
+	wait(t.beatDur);
+	{GrainBuf.ar(1,1,dur: t.beatDur*10,sndbuf: ~risy,rate: 1.9)}.play;
+	wait(t.beatDur);
+	{GrainBuf.ar(1,1,dur: t.beatDur*10,sndbuf: ~risy,rate: 1.92)}.play;
+	wait(t.beatDur);
+	{GrainBuf.ar(1,1,dur: t.beatDur*10,sndbuf: ~risy,rate: 1.94)}.play;
+	wait(t.beatDur);
+	{GrainBuf.ar(1,1,dur: t.beatDur*10,sndbuf: ~risy,rate: 1.96)}.play;
+wait(t.beatDur);
+
+
+	{GrainBuf.ar(1,1,dur: t.beatDur*10,sndbuf: ~risy,rate: 1.98)}.play;
+	wait(t.beatDur);
+	{GrainBuf.ar(1,1,dur: t.beatDur*10,sndbuf: ~risy,rate: 2)}.play;
+	wait(t.beatDur);
+	{GrainBuf.ar(1,1,dur: t.beatDur*10,sndbuf: ~risy,rate: 2.02)}.play;
+	wait(t.beatDur);
+	{GrainBuf.ar(1,1,dur: t.beatDur*10,sndbuf: ~risy,rate: 2.04)}.play;
+	wait(t.beatDur);
+	{GrainBuf.ar(1,1,dur: t.beatDur*10,sndbuf: ~risy,rate: 2.06)}.play;
+	wait(t.beatDur);
+	{GrainBuf.ar(1,1,dur: t.beatDur*10,sndbuf: ~risy,rate:2.08)}.play;
+	wait(t.beatDur);
+	{GrainBuf.ar(1,1,dur: t.beatDur*10,sndbuf: ~risy,rate: 2.1)}.play;
+	wait(t.beatDur);
+	{GrainBuf.ar(1,1,dur: t.beatDur*10,sndbuf: ~risy,rate: 2.12)}.play;
+	wait(t.beatDur);
+	{GrainBuf.ar(1,1,dur: t.beatDur*10,sndbuf: ~risy,rate: 2.14)}.play;
+	wait(t.beatDur);
+	{GrainBuf.ar(1,1,dur: t.beatDur*10,sndbuf: ~risy,rate: 2.16)}.play;
+	wait(t.beatDur);
+	{GrainBuf.ar(1,1,dur: t.beatDur*10,sndbuf: ~risy,rate: 2.18)}.play;
+	wait(t.beatDur);
+	{GrainBuf.ar(1,1,dur: t.beatDur*10,sndbuf: ~risy,rate: 2.2)}.play;
+
+
+
+
+}).play
+
+)
+
