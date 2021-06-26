@@ -1,0 +1,2813 @@
+(
+Server.killAll;
+Pdef.all.do(_.clear);
+Pbindef.all.do(_.clear);
+Pbind.free;
+Pbindf.free;
+~bass.free;
+Bus.free;
+)
+
+(
+s.options.memSize = 2097152 ;
+Server.default.options.numOutputBusChannels = 60;
+Server.default.options.sampleRate =  48000;
+Server.default.options.outDevice_("Audient iD14");
+s.options.numAudioBusChannels=3000;
+)
+
+Server.default.options.outDevice_("External Headphones");
+Server.default.options.outDevice_("BlackHole 2ch","Built-in Output");
+
+Server.default.options.outDevice_("MacBook Air Speakers");
+
+Server.default.options.outDevice_("30108121");
+
+ServerOptions.outDevices;
+/*({SinOsc.ar}.play)*/
+
+(
+ s.waitForBoot({
+
+	var numSegs;
+
+	~bpm = 151.703592;
+	~hz1beat = ~bpm * 16/60/32;
+	~hz1Oct = ~bpm * 16/30;
+	~hzQbeat = ~hz1beat/4;
+	~hzHbeat = ~hzQbeat/4;
+	~hz8Oct = ~hz1beat * 2048;
+
+	FreqScope.new;
+	s.meter;
+	s.plotTree;
+	s.scope;
+
+	s.sync;
+	"buff init".postln;
+
+// tempo wanted
+
+	t = TempoClock.new(~bpm/60).permanent_(true);
+
+	//necessary for the buffer of the shaper to work
+	~tf = Env([-0.8,0,0.8],[1,1],[8,-8]).asSignal(1025);
+	~tf = ~tf.asWavetableNoWrap;
+
+	s.sync;
+
+	~tfBuf = Buffer.loadCollection(s, ~tf);
+
+	s.sync;
+
+	//this section initialize the shaper
+	"no of seg".postln;
+	numSegs= rrand(1,2).postln;
+
+
+	~tf = Env(
+		(({rrand(0.0,0.01).postln}!(numSegs+1)) * [1,-1]).scramble,
+		{exprand(1,20).postln}!numSegs,
+		{rrand(-20,20).postln}!numSegs
+	).asSignal(1025);
+
+
+	~tf = ~tf + (
+		Signal.sineFill(
+			1025,
+			[1,/* 1/4, 1/6,*/ 1/2],
+			{rrand(0,2pi)}!16
+		) / 4
+	);
+
+	// ~tf.plot
+	~tf = ~tf.normalize;
+	~tfBuf.loadCollection(~tf.asWavetableNoWrap);
+	~b = Buffer.alloc(s, 2048);
+	~sig = Signal.newClear(1024);
+
+	"Shaper init".postln;
+
+s.sync;
+
+//more complex trigonometric expression
+	~sig.waveFill({
+		arg x, y, i;
+		sin(x.squared) + cos(x.sqrt).abs;
+	}, 0, 2pi);
+
+	// ~sig.plot
+
+	~wtx = ~sig.asWavetable;
+	~b.loadCollection(~wtx);
+
+	~k = Buffer.alloc(s, s.sampleRate *0.3872,1);
+
+	// ~k = Buffer.alloc(s, s.sampleRate *999,1);
+	~k2 = Buffer.alloc(s, s.sampleRate *1,1);
+
+	~b3 = Buffer.alloc(s, s.sampleRate *5,1);
+	~b4= Buffer.alloc(s, s.sampleRate *5,1);
+	~b5= Buffer.alloc(s, s.sampleRate *5,1);
+
+	~e = Buffer.alloc(s, s.sampleRate *   t.beatDur*4 ,1);
+	~f = Buffer.alloc(s, s.sampleRate *  t.beatDur*4);
+	~e2 = Buffer.alloc(s, s.sampleRate *   t.beatDur*4,1);
+	~f2 = Buffer.alloc(s, s.sampleRate *  t.beatDur*4);
+	~delay = Buffer.alloc(s, 48000 * 3, 2);
+	~delayX = Buffer.alloc(s, 48000 * 3, 2);
+	~delay2 = Buffer.alloc(s, 48000 * 3, 2);
+	~delay3 = Buffer.alloc(s, 48000 * 3, 2);
+	~delay6= Buffer.alloc(s, 48000 * 3, 2);
+	b = Buffer.alloc(s, 44100 * 2, 2);
+	~b2 = Buffer.alloc(s,48000,1);
+	~bufBg = Buffer.alloc(s,s.sampleRate*60,10 );
+	~temp= Buffer.alloc(s,s.sampleRate*2,1);
+
+	s.sync;
+
+	~fPo = { |x, y| sin(x) - (sin(y) * log(x * x + 1)) / 10 };
+
+
+
+	~church =	Pbind(\instrument,\reverb, \dur,inf,\roomsize, 80, \revtime, 4.85, \damping, 0.41, \inputbw, 0.19, \drylevel, -3, \earlylevel, -9, \taillevel, -11 );
+
+	~churcx =[\roomsize, 80, \revtime, 4.85, \damping, 0.41, \inputbw, 0.19, \drylevel, -3, \earlylevel, -9, \taillevel, -2 ];
+
+	~rLong =	[\roomsize, 41, \revtime, Pseq([1/1],inf), \damping, 0.31, \inputbw, 0.7, \drylevel, -0, \earlylevel, -15, \taillevel, -9];
+
+
+	~quickFi =[\room, 0.2, \mix,0.115, \damp, 0.41];
+	~rShor = [\room, 0.25, \mix,0.3, \damp, 0.1];
+	~rLon =	[\room, 0.5, \mix,0.3, \damp, 0.2];
+	~mChu = [\room, 0.8, \mix,0.5, \damp, 0.7];
+
+
+	~revRnd = [~quickFi,~rShor,~rLon];
+
+	~dispatchBus = Bus.audio(s,1);
+
+	~micBus = Bus.audio(s,1);
+	~ptrBus = Bus.audio(s,1);
+	~ptrBus2 = Bus.audio(s,1);
+	~ptrBus3 = Bus.audio(s,1);
+	~distoPercu= Bus.audio(s,1);
+	~part2Fuzz= Bus.audio(s,10);
+	~part2Fuzz2= Bus.audio(s,10);
+
+	~toCom2= Bus.audio(s,10);
+	~toCom3= Bus.audio(s,10);
+
+	~toSlide= Bus.audio(s,10);
+
+	~ktoPan2= Bus.audio(s,1);
+
+	~hiCom= Bus.audio(s,10);
+
+	~revBus1= Bus.audio(s,1);
+	~revBus2= Bus.audio(s,1);
+	~comBus1= Bus.audio(s,1);
+	~comBus2= Bus.audio(s,1);
+	~comBus3= Bus.audio(s,2);
+	~comBus5= Bus.audio(s,2);
+	~limitBus1= Bus.audio(s,1);
+	~limitBus12= Bus.audio(s,1);
+
+	~bassFi= Bus.audio(s,1);
+
+	~downSLi= Bus.audio(s,1);
+
+	~bigRiToFil1= Bus.audio(s,1);
+	~bigRiToFil2= Bus.audio(s,1);
+
+	~toComp10= Bus.audio(s,10);
+	~toFx= Bus.audio(s,10);
+
+	~toExtraComp= Bus.audio(s,10);
+	~toExtraComp2= Bus.audio(s,10);
+
+	~toGateRise= Bus.audio(s,10);
+
+	~riPowEq= Bus.audio(s,1);
+
+	~limitBus2= Bus.audio(s,1);
+	~sterBus1= Bus.audio(s,1);
+	~sterBus2= Bus.audio(s,1);
+	~sterBus5= Bus.audio(s,2);
+	~sterBus6= Bus.audio(s,2);
+
+	~eqRi= Bus.audio(s,1);
+
+	~revHitEq= Bus.audio(s,1);
+
+	~toEq2 = Bus.audio(s,2);
+	~toLim = Bus.audio(s,2);
+	~to4bar= Bus.audio(s,2);
+	~bgSfil= Bus.audio(s,1);
+	~toStereoRise = Bus.audio(s,1);
+	~percuStereo= Bus.audio(s,1);
+	~gateBus = Bus.audio(s,1);
+	~gateBusB = Bus.audio(s,1);
+	~gateBus2 = Bus.audio(s,1);
+	~gateRnd = Bus.audio(s,1);
+	~gateMelo = Bus.audio(s,1);
+	~revBus4 = Bus.audio(s,1);
+	~comBus4= Bus.audio(s,1);
+	~part2Limit4= Bus.audio(s,1);
+	~sterBus4= Bus.audio(s,1);
+	~eqBus4 = Bus.audio(s,1);
+	~part2ToPhas = Bus.audio(s,1);
+	~part2ToG= Bus.audio(s,2);
+	~part2ToEq = Bus.audio(s,1);
+	~snareComp= Bus.audio(s,1);
+	~buildUpG=Bus.audio(s,1);
+	~snareFlang=Bus.audio(s,1);
+	~toShift=Bus.audio(s,10);
+
+	~toFilBefShift=Bus.audio(s,10);
+
+	~extraComp=Bus.audio(s,10);
+	~extraEq=Bus.audio(s,10);
+
+	~toNoise=Bus.audio(s,1);
+	~toNoiseEq=Bus.audio(s,2);
+	~toNoiseCom=Bus.audio(s,2);
+	~toNoiseLimit=Bus.audio(s,2);
+	~toNoiseStereo=Bus.audio(s,2);
+
+	~limitKick=Bus.audio(s,1);
+	~limitBass=Bus.audio(s,1);
+
+	~kiasDisto= Bus.audio(s,2);
+	~kiasEq= Bus.audio(s,2);
+	~kiasRev= Bus.audio(s,2);
+	~kiasComp= Bus.audio(s,2);
+
+	~abcEq=Bus.audio(s,2);
+	~abcRev=Bus.audio(s,2);
+	~abcComp=Bus.audio(s,2);
+	~abcStereo=Bus.audio(s,2);
+	~clapEq=Bus.audio(s,1);
+	~clapComp=Bus.audio(s,1);
+	~claplimit=Bus.audio(s,1);
+	~clapPan2=Bus.audio(s,1);
+
+	~kSRise=Bus.audio(s,2);
+
+
+	~flopped=Bus.audio(s,10);
+
+	~bgGate= Bus.audio(s,1);
+	~bgComp= Bus.audio(s,1);
+	~bgEqu= Bus.audio(s,1);
+	~bgLimite= Bus.audio(s,1);
+	~bgStereoO= Bus.audio(s,1);
+
+	~bgDisto= Bus.audio(s,1);
+	~shiftPlay= Bus.audio(s,1);
+	~shiftDisto= Bus.audio(s,1);
+	~shiftEq= Bus.audio(s,1);
+	~shiftRev= Bus.audio(s,1);
+	~shiftComp= Bus.audio(s,1);
+	~shiftLimit= Bus.audio(s,1);
+	~shiftStereo= Bus.audio(s,1);
+	~shiftGate= Bus.audio(s,1);
+
+	~toDelay10 = Bus.audio(s,10);
+
+	~toDelay10b = Bus.audio(s,10);
+
+	~toDelay10c = Bus.audio(s,10);
+
+	~gateSeqBus = Bus.audio(s,1);
+	~gateSeqRnd = Bus.audio(s,1);
+	~delayToLimit= Bus.audio(s,2);
+	~gateRise = Bus.audio(s,10);
+	~delayToEq= Bus.audio(s,2);
+	~toKbGate= Bus.audio(s,2);
+	~gateBus3= Bus.audio(s,1);
+	~stetoSnaCom1 = Bus.audio(s,10);
+	~eqBus10= Bus.audio(s,10);
+	~eqBus310= Bus.audio(s,2);
+	~kickHatEq = Bus.audio(s,2);
+	~kickHatEq2 = Bus.audio(s,2);
+	~bassEq = Bus.audio(s,2);
+	~phaseBus = Bus.audio(s,1);
+
+	~kbToPan3= Bus.audio(s,1);
+	~kbToPan4= Bus.audio(s,1);
+	~kbToPan5= Bus.audio(s,1);
+
+	~kickRv = Bus.audio(s,1);
+
+	~delToStereo= Bus.audio(s,2);
+	~bangLimit= Bus.audio(s,10);
+	~slideBusToStereo= Bus.audio(s,1);
+	~bgBus = Bus.audio(s,2);
+	~part2Slide2= Bus.audio(s,1);
+	~part2SEq2= Bus.audio(s,1);
+	~part2SRev2= Bus.audio(s,1);
+	~part2SComp2= Bus.audio(s,2);
+	~part2SLimit2= Bus.audio(s,2);
+	~part2SStereo2= Bus.audio(s,2);
+	~halfAbso21  = Bus.audio(s,10);
+	~halfAbso22  = Bus.audio(s,10);
+	~toExtraFx=Bus.audio(s,10);
+	~main1GToG= Bus.audio(s,1);
+	~main1GToG2= Bus.audio(s,1);
+	~main1GToG3= Bus.audio(s,1);
+
+
+	~percGate=Bus.audio(s,10);
+
+
+	~hitEq= Bus.audio(s,1);
+	~hitRev= Bus.audio(s,1);
+	~hitComp= Bus.audio(s,1);
+	~hitLimit= Bus.audio(s,1);
+	~hitStereo= Bus.audio(s,1);
+	~hitStereoX= Bus.audio(s,1);
+
+
+	~bigRiToDisto2= Bus.audio(s,1);
+	~bigRiToEnv2= Bus.audio(s,1);
+	~bigRiToEq2= Bus.audio(s,1);
+	~bigRiToRev2= Bus.audio(s,1);
+	~bigRiToComp2= Bus.audio(s,1);
+	~bigRiToLimit2= Bus.audio(s,1);
+	~bigRiToStereo2= Bus.audio(s,1);
+
+	~tofinalRythm= Bus.audio(s,10);
+
+	~tofinalRythm2= Bus.audio(s,10);
+
+		~tofinalRythm3= Bus.audio(s,10);
+
+	~tam= Bus.audio(s,2);
+	~tamFil= Bus.audio(s,2);
+	~tamEq= Bus.audio(s,2);
+	~tamComp= Bus.audio(s,2);
+	~tamLimit= Bus.audio(s,2);
+
+
+	~downSG2= Bus.audio(s,1);
+	~downdel= Bus.audio(s,1);
+	~downDisto2= Bus.audio(s,1);
+	~downFil2= Bus.audio(s,1);
+	~downEq2= Bus.audio(s,1);
+	~downRev2= Bus.audio(s,1);
+	~downComp2= Bus.audio(s,1);
+	~downLimit2= Bus.audio(s,1);
+	~downStereo2= Bus.audio(s,1);
+
+	~downSG= Bus.audio(s,2);
+	~downDisto= Bus.audio(s,1);
+	~downEq= Bus.audio(s,1);
+	~downRev= Bus.audio(s,1);
+	~downComp= Bus.audio(s,1);
+	~downLimit= Bus.audio(s,1);
+	~downStereo= Bus.audio(s,1);
+
+	//????
+	~perchLimiToG= Bus.audio(s,2);
+	~perchLimiToG2= Bus.audio(s,2);
+	~perchLimiToG3= Bus.audio(s,2);
+	~perchLimiToG4= Bus.audio(s,2);
+	~perchLimiToG5= Bus.audio(s,2);
+	~perchLimiToG6= Bus.audio(s,2);
+	~perchLimiToG7= Bus.audio(s,2);
+	~perchLimiToG8= Bus.audio(s,2);
+	~perchLimiToG9= Bus.audio(s,2);
+	~perchLimiToG10= Bus.audio(s,2);
+	~perchLimiToG11= Bus.audio(s,2);
+	~perchLimiToG12= Bus.audio(s,2);
+
+	~eqPercBg= Bus.audio(s,1);
+	~distoPercBg= Bus.audio(s,1);
+	~reverbPercBg= Bus.audio(s,1);
+	~compPercBg= Bus.audio(s,1);
+	~limitPercBg= Bus.audio(s,1);
+	~stereoPercBg= Bus.audio(s,1);
+
+
+	~riToEq2= Bus.audio(s,1);
+	~riToRev2= Bus.audio(s,1);
+	~riToComp2= Bus.audio(s,1);
+	~riToLimit2= Bus.audio(s,1);
+	~riToStereo2= Bus.audio(s,1);
+	~riToEq3= Bus.audio(s,1);
+	~riToRev3= Bus.audio(s,1);
+	~riToComp3= Bus.audio(s,1);
+	~riToLimit3= Bus.audio(s,1);
+	~riToStereo3= Bus.audio(s,1);
+	~bellFlang3= Bus.audio(s,1);
+	~bellFlang4= Bus.audio(s,1);
+	~kbToPan2= Bus.audio(s,1);
+	~kToPan= Bus.audio(s,1);
+	~bgFil = Bus.audio(s,1);
+	~bgFil2= Bus.audio(s,1);
+	~bgCom = Bus.audio(s,1);
+	~bgLimit = Bus.audio(s,1);
+	~bgStereo = Bus.audio(s,1);
+	~no2= Bus.audio(s,10);
+	~no2Eq= Bus.audio(s,1);
+	~part2Slide= Bus.audio(s,1);
+	~part2SEq= Bus.audio(s,1);
+	~part2SRev= Bus.audio(s,1);
+	~part2SComp = Bus.audio(s,2);
+	~part2SLimit = Bus.audio(s,2);
+	~part2SStereo = Bus.audio(s,2);
+	~no2ToRev = Bus.audio(s,1);
+	~no2ToCom = Bus.audio(s,1);
+	~no2ToLimit = Bus.audio(s,1);
+	~no2ToStereo = Bus.audio(s,1);
+	~toEq = Bus.audio(s,1);
+	~bellFlang= Bus.audio(s,1);
+	~bgFil22= Bus.audio(s,1);
+	~bgCom2 = Bus.audio(s,1);
+	~bgLimit2 = Bus.audio(s,10);
+	~bgBus2= Bus.audio(s,10);
+	~bgStereo2 = Bus.audio(s,1);
+	~bgStereo2 = Bus.audio(s,2);
+	~eqBg10 = Bus.audio(s,1);
+	~finGran = Bus.audio(s,10);
+
+	~bgFilX= Bus.audio(s,1);
+
+	~stereoHat= Bus.audio(s,1);
+	~stereoCymb= Bus.audio(s,1);
+	~limitC= Bus.audio(s,1);
+	~limitHat= Bus.audio(s,1);
+	~eqBg = Bus.audio(s,1);
+	~outDisto = Bus.audio(s,3);
+	~distoPerch2= Bus.audio(s,1);
+	~eqPerch2= Bus.audio(s,1);
+	~revPerch2= Bus.audio(s,1);
+	~comPerch2= Bus.audio(s,1);
+	~limitPerch2= Bus.audio(s,1);
+	~bellFlang2= Bus.audio(s,2);
+	~flanToDisto2= Bus.audio(s,1);
+	~flanToEq2= Bus.audio(s,1);
+	~flanToRev2= Bus.audio(s,1);
+	~flanToComp2= Bus.audio(s,1);
+	~flanToLimit2= Bus.audio(s,1);
+	~flanToStereo2= Bus.audio(s,1);
+
+	~filKBX= Bus.audio(s,2);
+
+	~part2G = Bus.audio(s,1);
+	~part2G2 = Bus.audio(s,1);
+	~part2G3 = Bus.audio(s,1);
+	~part2Limit= Bus.audio(s,2);
+	~part2Limit2= Bus.audio(s,2);
+	~part2Limit3= Bus.audio(s,2);
+	~absoFinalGate= Bus.audio(s,10);
+	~absoFinalGate2= Bus.audio(s,10);
+	~absoFinalGate3= Bus.audio(s,10);
+	~absoFinalGate4= Bus.audio(s,10);
+	~absoFinalGate5= Bus.audio(s,10);
+	~absoFinalGate6= Bus.audio(s,10);
+	~absoFinalGate7= Bus.audio(s,10);
+	~absoFinalGate8= Bus.audio(s,10);
+
+	~buildupDisto= Bus.audio(s,1);
+	~buildupEq= Bus.audio(s,1);
+	~buildupRev= Bus.audio(s,1);
+	~buildupComp= Bus.audio(s,1);
+	~buildupLimit= Bus.audio(s,1);
+	~buildupStereo= Bus.audio(s,1);
+	~buildupSter= Bus.audio(s,1);
+	~trippyGate= Bus.audio(s,1);
+
+
+	~riToEq= Bus.audio(s,1);
+	~riToComp= Bus.audio(s,1);
+	~riToDisto= Bus.audio(s,1);
+	~riToDisto2= Bus.audio(s,1);
+	~riToDisto3= Bus.audio(s,1);
+	~riToEnv2= Bus.audio(s,1);
+	~riToEnv3= Bus.audio(s,1);
+	~riToLimit= Bus.audio(s,1);
+	~riToRev  = Bus.audio(s,1);
+	~riToStereo = Bus.audio(s,1);
+	~flanToEq= Bus.audio(s,1);
+	~flanToComp= Bus.audio(s,1);
+	~flanToDisto= Bus.audio(s,1);
+	~flanToLimit= Bus.audio(s,1);
+	~flanToRev  = Bus.audio(s,1);
+	~flanToStereo  = Bus.audio(s,1);
+	~bigRiToEnv= Bus.audio(s,1);
+	~bigRiToEq= Bus.audio(s,1);
+	~bigRiToComp= Bus.audio(s,1);
+	~bigRiToDisto= Bus.audio(s,1);
+	~bigRiToLimit= Bus.audio(s,1);
+	~bigRiToRev  = Bus.audio(s,1);
+	~bigRiToStereo  = Bus.audio(s,1);
+	~bigRiToRevXten = Bus.audio(s,2);
+
+	~filterBus = Bus.audio(s,1);
+	~filterBus2 = Bus.audio(s,1);
+	~filterRnd = Bus.audio(s,1);
+	~distoBus1 = Bus.audio(s,1);
+	~distoBus4 = Bus.audio(s,1);
+	~eqBass = Bus.audio(s,2);
+	~filterPass1= Bus.audio(s,1);
+	~eqPass1= Bus.audio(s,1);
+	~revPass1= Bus.audio(s,1);
+	~compPass1= Bus.audio(s,1);
+	~limitPass1= Bus.audio(s,1);
+	~stereoPass1= Bus.audio(s,1);
+	~filterPass2= Bus.audio(s,1);
+	~eqPass2= Bus.audio(s,1);
+	~revPass2= Bus.audio(s,1);
+	~compPass2= Bus.audio(s,1);
+	~limitPass2= Bus.audio(s,1);
+	~stereoPass2= Bus.audio(s,1);
+	~filterPass3= Bus.audio(s,1);
+	~eqPass3= Bus.audio(s,1);
+	~revPass3= Bus.audio(s,1);
+	~compPass3= Bus.audio(s,1);
+	~limitPass3= Bus.audio(s,1);
+	~stereoPass3= Bus.audio(s,1);
+
+	~eqPass4= Bus.audio(s,1);
+	~eqPass5= Bus.audio(s,1);
+	~eqPass6= Bus.audio(s,1);
+	~eqPass7= Bus.audio(s,1);
+
+	~delayBus = Bus.audio(s,1);
+	~delayBus2= Bus.audio(s,1);
+	~reverbBus = Bus.audio(s,1);
+	~reverbBus2 = Bus.audio(s,1);
+	~reverbBus3 = Bus.audio(s,1);
+	~reverbSquelch = Bus.audio(s,1);
+	~reverbMelo = Bus.audio(s,1);
+	~dumSnaEq= Bus.audio(s,1);
+	~dumSnaLimit= Bus.audio(s,1);
+	~revDelay= Bus.audio(s,2);
+	~comDelay = Bus.audio(s,2);
+	~limitDelay= Bus.audio(s,2);
+	~riToGate= Bus.audio(s,10);
+	~riToGate2= Bus.audio(s,10);
+	~riToGate3= Bus.audio(s,10);
+	~stereoBus1 = Bus.audio(s,1);
+	~stereoBus2 = Bus.audio(s,2);
+	~stereoBus3 = Bus.audio(s,2);
+	~stereoBus4 = Bus.audio(s,2);
+	~stereoBus3b= Bus.audio(s,2);
+	~comSquelch = Bus.audio(s,2);
+	~comFuzz = Bus.audio(s,1);
+	~comFuzzy = Bus.audio(s,1);
+	~comFuzz2 = Bus.audio(s,2);
+	~comFuzz3 = Bus.audio(s,2);
+	~comBusHat = Bus.audio(s,1);
+	~comBusCymb = Bus.audio(s,1);
+	~comSnaGrpBus = Bus.audio(s,2);
+	~comSnaGrpBus2 = Bus.audio(s,10);
+	~limitFuzz = Bus.audio(s,1);
+	~limitFuzz2 = Bus.audio(s,2);
+	~limitFuzz3 = Bus.audio(s,2);
+	~limitRnd = Bus.audio(s,2);
+	~limitSquelch = Bus.audio(s,2);
+	~delayEq= Bus.audio(s,2);
+	~limitRkick = Bus.audio(s,1);
+
+	~riTriptoDisto = Bus.audio(s, 1);
+	~riTriptoEq = Bus.audio(s, 1);
+	~riTriptoRev = Bus.audio(s, 1);
+	~riTriptoComp = Bus.audio(s, 1);
+	~riTriptoLimit = Bus.audio(s, 1);
+	~riTriptoStereo = Bus.audio(s, 1);
+
+	~noiseToMixA= Bus.audio(s, 2);
+	~noiseToMixB= Bus.audio(s, 2);
+	~noiseToMixC= Bus.audio(s, 2);
+	~noiseToMixD= Bus.audio(s, 2);
+	~vocalBus= Bus.audio(s,1);
+	~vocToEq = Bus.audio(s,1);
+	~vocToRev  = Bus.audio(s,1);
+	~vocToFil =  Bus.audio(s,1);
+	~vocToComp =  Bus.audio(s,1);
+	~vocToLimit  =  Bus.audio(s,1);
+	~vocToStereo=  Bus.audio(s,1);
+	~vocToDispatch=  Bus.audio(s,10);
+
+	~shiftPlay2=  Bus.audio(s,1);
+	~shiftDisto2=  Bus.audio(s,1);
+	~shiftEq2=  Bus.audio(s,1);
+	~shiftRev2=  Bus.audio(s,1);
+	~shiftLimit2=  Bus.audio(s,1);
+	~shiftStereo2=  Bus.audio(s,1);
+	~shiftComp2=  Bus.audio(s,1);
+	~filKick= Bus.audio(s,1);
+	~filKB= Bus.audio(s,2);
+	~filKB2= Bus.audio(s,2);
+
+	~filK2= Bus.audio(s,1);
+	~riseF= Bus.audio(s,1);
+
+	~kbus = Bus.audio(s,1);
+	~kbus2 = Bus.audio(s,1);
+	~snBus = Bus.audio(s,1);
+
+	~noiseRev =  Bus.audio(s,2);
+	~newBus1=  Bus.audio(s,2);
+	~newBus2=  Bus.audio(s,2);
+	~fusible1 = Bus.audio(s,1);
+	~toGateX =  Bus.audio(s,2);
+	~toGateX2 =  Bus.audio(s,2);
+	~eqPerch =  Bus.audio(s,1);
+	~revPerch =  Bus.audio(s,1);
+	~comPerch=  Bus.audio(s,2);
+	~limitPerch=  Bus.audio(s,2);
+	~stereoPerch=  Bus.audio(s,1);
+	~stereoPerch2=  Bus.audio(s,2);
+	~toGate10 =  Bus.audio(s,10);
+	~toGate102  =  Bus.audio(s,10);
+	~eqBus1=  Bus.audio(s,1);
+	~eqBus2=  Bus.audio(s,1);
+	~eqBus2x=  Bus.audio(s,1);
+	~eqBus3=  Bus.audio(s,1);
+	~eqNoise =  Bus.audio(s,2);
+	 ~eqDs =  Bus.audio(s,1);
+	~filterNoise  =  Bus.audio(s,1);
+	~outFil =Bus.audio(s,1);
+	~toRecord=Bus.audio(s,1);
+	~toRecord2=Bus.audio(s,2);
+	~dead=Bus.audio(s,1);
+	~noiseToComp=Bus.audio(s,2);
+	~noiseToLimit=Bus.audio(s,2);
+	~noiseToStereo=Bus.audio(s,2);
+	~deadS=Bus.audio(s,2);
+	~dead10=Bus.audio(s,10);
+	~rndBus=Bus.audio(s,10);
+	~rythmFil=Bus.audio(s,10);
+	~rythmFilEQ=Bus.audio(s,10);
+	~rythmComp=Bus.audio(s,10);
+	~rythmLimit=Bus.audio(s,10);
+	~toCom = Bus.audio(s,10);
+	~no1 = Bus.audio(s,10);
+	~no1b = Bus.audio(s,10);
+	~fusible = Bus.audio(s,10);
+	~dipatchKB = Bus.audio(s,2);
+	~dipatchKB2 = Bus.audio(s,2);
+	~stereoK= Bus.audio(s,1);
+	~rollingK = Bus.audio(s,10);
+
+	~no41= Bus.audio(s,10);
+	~no51= Bus.audio(s,10);
+	~rollingKS= Bus.audio(s,1);
+
+	~revKck2= Bus.audio(s,1);
+
+	~slideComp= Bus.audio(s,1);
+
+	~lpK=Bus.audio(s,1);
+	~hpK=Bus.audio(s,1);
+	~bpK=Bus.audio(s,1);
+	~riToEnv=Bus.audio(s,1);
+	~no4ToGate=Bus.audio(s,1);
+	~no4ToGate2=Bus.audio(s,1);
+	~new10 =Bus.audio(s,10);
+	~again =Bus.audio(s,10);
+	~again2 =Bus.audio(s,10);
+	~bigRiLastEq=Bus.audio(s,10);
+	~filterBou=Bus.audio(s,1);
+	~newCOn=Bus.audio(s,10);
+	~newCOn2=Bus.audio(s,10);
+	~comBusHat2=  Bus.audio(s,1);
+	~comBusCymb2=  Bus.audio(s,1);
+	~limitRkick2=  Bus.audio(s,1);
+	~stetoSnaCom12=  Bus.audio(s,10);
+	~comFuzz22=  Bus.audio(s,10);
+	~eqBus102=  Bus.audio(s,10);
+	~toLimitlast = Bus.audio(s,10);
+	~distoBus43 =  Bus.audio(s,1);
+	~filterBus23=  Bus.audio(s,1);
+	~eqBus23=  Bus.audio(s,1);
+	~gateBus23=  Bus.audio(s,1);
+	~reverbBus23=  Bus.audio(s,1);
+	~micBus23=  Bus.audio(s,1);
+	~micBus33=  Bus.audio(s,1);
+	~comFuzz23=  Bus.audio(s,1);
+	~limitFuzz23=  Bus.audio(s,1);
+	~stereoBus23=  Bus.audio(s,1);
+	~no3=  Bus.audio(s,10);
+	~ptrBus23=Bus.audio(s,1);
+	~ptrBus33=Bus.audio(s,1);
+	~stereoBus14=  Bus.audio(s,2);
+	~limitFuzz4=  Bus.audio(s,2);
+	~comFuzz4=  Bus.audio(s,2);
+	~reverbBus4=  Bus.audio(s,2);
+	~slideBus2=  Bus.audio(s,1);
+	~slideBus=  Bus.audio(s,1);
+	~slideBusToLimit=  Bus.audio(s,1);
+	~slideBusToLimit2=  Bus.audio(s,1);
+	~slideEq=  Bus.audio(s,1);
+	~slideEq2=  Bus.audio(s,1);
+	~outTolimit=  Bus.audio(s,3);
+	~hitRev2=  Bus.audio(s,1);
+	~hitComp2=  Bus.audio(s,1);
+	~hitLimit2=  Bus.audio(s,1);
+	~hitEq2=  Bus.audio(s,1);
+	~snareEQ=  Bus.audio(s,1);
+	~snareLimit=  Bus.audio(s,1);
+	~percuEq=  Bus.audio(s,1);
+	~percuRev=  Bus.audio(s,1);
+	~percuLimit=  Bus.audio(s,1);
+	~percuCom=  Bus.audio(s,1);
+	~percuComb=  Bus.audio(s,2);
+	~percuCom2=  Bus.audio(s,10);
+	~percuFil=  Bus.audio(s,1);
+	~cymbalEq=  Bus.audio(s,1);
+	~hatEq=  Bus.audio(s,1);
+	~toPan2= Bus.audio(s,1);
+	~toPan3= Bus.audio(s,1);
+	~toShifter= Bus.audio(s,1);
+	~toEqFlo= Bus.audio(s,1);
+	~toGateFlo= Bus.audio(s,1);
+	~toReverbFlo= Bus.audio(s,1);
+	~toCompFlo=  Bus.audio(s,2);
+	~toLimitFlo=  Bus.audio(s,2);
+	~toStereoFlo=  Bus.audio(s,2);
+	~risesGate=  Bus.audio(s,10);
+	~part2RiDisto=  Bus.audio(s,2);
+	~part2RiFilter=  Bus.audio(s,2);
+	~part2RiEq=  Bus.audio(s,2);
+	~part2RiRev=  Bus.audio(s,2);
+	~part2RiComp=  Bus.audio(s,2);
+	~part2RiComp2=  Bus.audio(s,10);
+	~part2RiLimit=  Bus.audio(s,2);
+	~part2RiStereo=  Bus.audio(s,2);
+
+	~gateComp =  Bus.audio(s,10);
+
+	~hit2ToEq=  Bus.audio(s,1);
+	~hit2ToStereo=  Bus.audio(s,1);
+
+	~trippyGate=  Bus.audio(s,1);
+
+	~toFilRise=  Bus.audio(s,2);
+	~fusible2=  Bus.audio(s,1);
+	~gateBou=  Bus.audio(s,1);
+	~flanToFilter2=  Bus.audio(s,1);
+	s.sync;
+
+	~bus1 = Bus.control(s,1);
+	~bus2 = Bus.control(s,1);
+	~bus3 = Bus.control(s,1);
+	~bus4 = Bus.control(s,1);
+	~bus5 = Bus.control(s,1);
+	~bus6 = Bus.control(s,1);
+	~bus7 = Bus.control(s,1);
+	~bus8 = Bus.control(s,1);
+	~bus9 = Bus.control(s,1);
+	~bus10 = Bus.control(s,1);
+	~bus11 = Bus.control(s,1);
+	~bus12 = Bus.control(s,1);
+	~bus13 = Bus.control(s,1);
+	~bus14 = Bus.control(s,1);
+	~bus15 = Bus.control(s,1);
+	~bus16 = Bus.control(s,1);
+	~bus17 = Bus.control(s,1);
+	~bus18 = Bus.control(s,1);
+	~bus19 = Bus.control(s,1);
+	~bus20 = Bus.control(s,1);
+	~bus21 = Bus.control(s,1);
+	~bus22 = Bus.control(s,1);
+	~bus23 = Bus.control(s,1);
+	~bus24 = Bus.control(s,1);
+	~bus25 = Bus.control(s,1);
+	~bus26 = Bus.control(s,1);
+	~bus27 = Bus.control(s,1);
+	~bus28= Bus.control(s,1);
+
+	~bus29= Bus.control(s,1);
+	~bus30= Bus.control(s,1);
+	~bus31= Bus.control(s,1);
+	~bus32= Bus.control(s,1);
+	~bus33= Bus.control(s,1);
+	~bus34= Bus.control(s,1);
+	~bus35= Bus.control(s,1);
+
+	~bassShapB = Bus.control(s,1);
+
+	~mixM= Bus.control(s,1);
+	~roomM= Bus.control(s,1);
+	~dampM= Bus.control(s,1);
+
+	~mod1= Bus.control(s,1);
+	~mod2= Bus.control(s,1);
+	~mod3= Bus.control(s,1);
+	~mod4= Bus.control(s,1);
+	~mod5= Bus.control(s,1);
+	~seqBus= Bus.control(s,1);
+
+	s.sync;
+
+
+
+	SynthDef(\playBuf ,{|out = 0,start=0, trig= 0.002, dur, buf,rte=1 , tS=1, loopy=1,	decT=1, subsT=0,vl=1 ,dA=1|Out.ar(out,PlayBuf.ar(1,buf,rte ,trig, start, loopy)*
+	EnvGen.kr(Env([0,vl,vl,vl,0],[0,dur*decT*dA,dur* subsT]),timeScale: tS,doneAction: 2)
+
+	);}).add;
+
+
+
+	SynthDef(\playBufS2 ,{|out = 0,start=0, trig= 0.002, dur, buf,rte=1 , tS=1, loopy=1,	decT=1, subsT=0,vl=1 ,dA=1 |Out.ar(out,PlayBuf.ar(2,buf,rte , trig , start, loopy)*
+	EnvGen.kr(Env([0,vl,vl,vl,0],[0,dur*decT*dA,dur* subsT]),timeScale: tS,doneAction: 2)
+
+	);}).add;
+
+
+	SynthDef(\playBufMod ,{|out = 0,start=0, trig= 0.002, dur, buf, dA=2,rte=1 , tS=1, loopy=1,	decT=1, subsT=0 ,modP |Out.ar(out,PlayBuf.ar(1,buf,
+		rte+ In.kr(modP) ,
+		trig, start, loopy)*
+	EnvGen.kr(Env([0,1,1,1,0],[0,dur*decT,dur* subsT]),timeScale: tS,doneAction: 2)
+
+	);}).add;
+
+
+	SynthDef(\playBuf10 ,{|out = 0,start=0, trig= 0.002, dur, buf, dA=2, tS=1, loopy=1,vl=1,rte=1|Out.ar(out,PlayBuf.ar(10,buf,rte, trig, start, loopy )* EnvGen.kr(Env([0,vl,vl,0],[0,dur,0]),timeScale: tS,doneAction: 2));}).add;
+
+/*on hold
+	SynthDef(\playBuf10Mod ,{|out = 0,start=0, trig= 0.002, dur, buf, dA=2, tS=1, loopy=1,vl=1,rte=1|Out.ar(out,PlayBuf.ar(10,buf,rte,trigger:
+		trig/*Dust.kr(4.0)*/,startPos: MouseX.kr(0, ~leTout.numFrames  )+start,loop: loopy/*,doneAction: dA*/)* EnvGen.kr(Env([0,vl,vl,0],[0,dur,0]),timeScale: tS,doneAction: 2));}).add;*/
+
+
+		SynthDef(\playB10 ,{|out = 0,start=0, impulse= 0.002, dur, buf, dA=2, tS=1, loopy=1,vl=1|Out.ar(out,PlayBuf.ar(10,buf,trigger:
+		Impulse.kr(impulse),startPos: start,loop: loopy))}).add;
+
+
+	SynthDef(\playBuf10N ,{|out = 0,start=0, trig= 0.002, dur, buf, dA=2, tS=1, loopy=1,vl=1,in|Out.ar(~fusible,PlayBuf.ar(10,buf,trig, start, loopy)* EnvGen.kr(Env([0,vl,vl,0],[0,dur,0]),timeScale: tS,doneAction: 2));
+
+	Out.ar(out,In.ar( in, 10));}).add;
+
+
+	SynthDef(\playBuf1N ,{|out = 0,start=0, trig= 0.002, dur, buf, dA=2, tS=1, loopy=1,vl=1,in|Out.ar(~fusible1,PlayBuf.ar(1,buf,trig, start, loopy)* EnvGen.kr(Env([0,vl,vl,0],[0,dur,0]),timeScale: tS,doneAction: 2));
+
+	Out.ar(out,In.ar( in, 10));}).add;
+
+
+	SynthDef(\playBufXs ,{|out = 0,start, trig, dur, amp=1,buf, dA=0, loo=1,impulse=0.001|Out.ar(out,PlayBuf.ar(1,buf,trigger:
+		Impulse.kr(impulse),startPos: start,loop:loo,doneAction: dA)*amp);}).add;
+
+	SynthDef(\playBufXsS ,{|out = 0,start, trig, dur, amp=1,buf, dA=0, loo=1,impulse=0.001|Out.ar(out,PlayBuf.ar(2,buf,trigger:
+		Impulse.kr(impulse),startPos: start,loop:loo,doneAction: dA)*amp);}).add;
+
+
+
+	SynthDef(\playBufXG ,{|out = 0,start, trig, dur, amp=1,buf, dA=2, loo=0,tS=1,impulse=0.001,rte=1
+		vlAtk =0,vlDec=1 ,vlSub=1 ,vlSub2=1,vlRel=0,atkT=0,decT=1,subsT=0,relT=0,atckC=0,decC=0,relC=0,gateSub=0|Out.ar(out,PlayBuf.ar(1,buf,rte,trigger:
+		Impulse.kr(impulse* (60/~bpm),mul: amp),startPos: start,loop:loo,doneAction: 2)
+
+		* EnvGen.kr(Env([vlAtk,vlDec,vlSub,vlSub2,vlRel],
+			[dur * atkT,dur* decT-(dur*gateSub),dur * subsT,dur *relT],
+			[atckC,decC,0,relC]),timeScale: tS, doneAction:2)
+
+	);}).add;
+
+
+	SynthDef(\playBufXGMod ,{|out = 0,start, trig, dur, amp=1,buf, dA=2, loo=0,tS=1,impulse=0.001,rte=1,busMod
+		vlAtk =0,vlDec=1 ,vlSub=1 ,vlSub2=1,vlRel=0,atkT=0,decT=1,subsT=0,relT=0,atckC=0,decC=0,relC=0,gateSub=0|Out.ar(out,PlayBuf.ar(1,buf,rte+In.kr(busMod),trigger:
+		Impulse.kr(impulse* (60/~bpm),mul: amp),startPos: start,loop:loo,doneAction: 2)
+
+		* EnvGen.kr(Env([vlAtk,vlDec,vlSub,vlSub2,vlRel],
+			[dur * atkT,dur* decT-(dur*gateSub),dur * subsT,dur *relT],
+			[atckC,decC,0,relC]),timeScale: tS, doneAction:2)
+
+	);}).add;
+
+
+		SynthDef(\playBufXGMod2 ,{|out = 0,start, trig, dur, amp=1,buf, dA=2, loo=0,tS=1,impulse=0.001,rte=1,busMod
+		vlAtk =0,vlDec=1 ,vlSub=1 ,vlSub2=1,vlRel=0,atkT=0,decT=1,subsT=0,relT=0,atckC=0,decC=0,relC=0,gateSub=0|Out.ar(out,PlayBuf.ar(1,buf,rte+MouseY.kr(0.1,2.6),trigger:
+		Impulse.kr(impulse* (60/~bpm),mul: amp),startPos: start,loop:loo,doneAction: 2)
+
+		* EnvGen.kr(Env([vlAtk,vlDec,vlSub,vlSub2,vlRel],
+			[dur * atkT,dur* decT-(dur*gateSub),dur * subsT,dur *relT],
+			[atckC,decC,0,relC]),timeScale: tS, doneAction:2)
+
+	);}).add;
+
+
+	SynthDef(\playBufXG ,{|out = 0,start, trig, dur, amp=1,buf, loo=0,tS=1,impulse=0.001,rte=1
+		vlAtk =0,vlDec=1 ,vlSub=1 ,vlSub2=1,vlRel=0,atkT=0,decT=1,subsT=0,relT=0,atckC=0,decC=0,relC=0,gateSub=0,dA=2|Out.ar(out,PlayBuf.ar(1,buf,rte,trigger:
+		Impulse.kr(impulse/** (60/~bpm),mul: amp*/),startPos: start,loop:loo,doneAction: dA)
+
+		* EnvGen.kr(Env([vlAtk,vlDec,vlSub,vlSub2,vlRel],
+			[dur * atkT,dur* decT-(dur*gateSub),dur * subsT,dur *relT],
+			[atckC,decC,0,relC]),timeScale: tS, doneAction:2)
+
+	);}).add;
+
+	SynthDef(\playBufXG2 ,{|out = 0,start, trig, dur, amp=1,buf, dA=2, loo=0,tS=1,impulse=0.001,rte=1
+		vlAtk =0,vlDec=1 ,vlSub=1 ,vlSub2=1,vlRel=0,atkT=0,decT=1,subsT=0,relT=0,atckC=0,decC=0,relC=0|Out.ar(out,PlayBuf.ar(2,buf,rte,trigger:
+		Impulse.kr(impulse* (60/~bpm),mul: amp),startPos: start,loop:loo,doneAction: 2)
+
+		* EnvGen.kr(Env([vlAtk,vlDec,vlSub,vlSub2,vlRel],
+			[dur * atkT,dur* decT,dur * subsT,dur *relT],
+			[atckC,decC,0,relC]),timeScale: tS, doneAction:2)
+
+	);}).add;
+
+
+	SynthDef(\playBufXGMod ,{|out = 0,start, trig, dur, amp=1,buf, dA=2, loo=0,tS=1,impulse=0.001,rte=1
+		vlAtk =0,vlDec=1 ,vlSub=1 ,vlSub2=1,vlRel=0,atkT=0,decT=1,subsT=0,relT=0,atckC=0,decC=0,relC=0,busMod|Out.ar(out,PlayBuf.ar(1,buf,rte+ In.kr(busMod),trigger:
+		Impulse.kr(impulse* (60/~bpm),mul: amp),startPos: start,loop:loo,doneAction: 2)
+
+		* EnvGen.kr(Env([vlAtk,vlDec,vlSub,vlSub2,vlRel],
+			[dur * atkT,dur* decT,dur * subsT,dur *relT],
+			[atckC,decC,0,relC]),timeScale: tS, doneAction:2)
+
+	);}).add;
+
+
+/*	SynthDef(\playBufXG10 ,{|out = 0,start, trig, dur, amp=1,buf, dA=2, loo=0,tS=1,impulse=0.001,
+		vlAtk =0,vlDec=1 ,vlSub=1 ,vlSub2=1,vlRel=0,atkT=0,decT=1,subsT=0,relT=0,atckC=0,decC=0,relC=0|Out.ar(out,PlayBuf.ar(10,buf,trigger:
+		Impulse.kr(impulse* (60/~bpm),mul: amp),startPos: start,loop:loo,doneAction: 2)
+
+		* EnvGen.kr(Env([vlAtk,vlDec,vlSub,vlSub2,vlRel],
+			[dur * atkT,dur* decT,dur * subsT,dur *relT],
+			[atckC,decC,0,relC]),timeScale: tS, doneAction:2)
+
+	);}).add;*/
+
+
+
+
+
+
+	SynthDef(\playBufX2 ,{|out = 0,start=0, trig, dur, amp=1,buf, dA=2, loo=0,tS=1,impulse=0.001,vl=1|Out.ar(out,PlayBuf.ar(1,buf,trigger:
+		Impulse.kr(impulse* (60/~bpm),mul: amp),startPos: start,loop:loo,doneAction: 2)*
+	EnvGen.kr(Env([0,vl,vl,0],[0,dur,0]),timeScale: tS,doneAction: 2));
+	}).add;
+
+
+	/*SynthDef(\playBufX1 ,{|out = 0,start, trig, dur, buf, dA=2, loo=0,tS=1,impulse=0.001|Out.ar(out,PlayBuf.ar(1,buf,trigger:
+		Impulse.kr(impulse),startPos: start,loop:loo,doneAction: 2));}).add;*/
+
+
+	SynthDef(\playBuf2 ,{|out = 0,start=0, trig=0.002, dur, buf, dA=2|Out.ar(out,PlayBuf.ar(2, buf,trigger:
+		trig/*Dust.kr(4.0)*/,startPos: start,loop: 1/*,doneAction: dA*/)/** EnvGen.kr(Env([0,1,1,0],[0,dur,0]))*/);}).add;
+
+
+	SynthDef(\shap,{|in, out, vl1=(-9800), vl2=0,vl3=0, dA1 =0,tS=1,crv=6|
+	var halfBeat, shap;
+
+	halfBeat = t.beatDur * 0.5;
+
+		shap = EnvGen.kr(Env([vl1,vl2],[halfBeat,halfBeat],crv),timeScale: tS,doneAction:dA1);
+
+	Out.kr(out, shap);
+
+	}).add;
+
+	SynthDef(\ampO,{|out=0,in|Out.kr(out,Amplitude.kr(In.ar(in)).linlin(0,0.0304096,1,0))}).add;
+
+
+
+	SynthDef(\lfo1, {|out,ph, val=1, dur,tS=1|Out.kr(out,
+/*	SinOsc.kr(Select.kr(val,
+			[    ~hz1beat, ~hzHbeat/*,0.321875*/	])
+
+			* SinOsc.kr(~hzHbeat*2).range(~hz1beat.neg, ~hz1beat)).range(~hz8Oct, ~hz1Oct)*/
+
+
+	SinOsc.kr(Select.kr(LFNoise2.ar(~hz1beat).range(0,3).round(1),
+		[    ~hz1beat/4,~hz1beat,~hz1beat,~hzHbeat,/*~hz1beat *4*/ /*,~hzHbeat*4   */  /*,0.321875*/	]
+		)    *  SinOsc.kr(~hzHbeat*4).range((~hz1beat.neg),~hz1beat),ph).range(~hz8Oct/16,~hz1Oct/4)
+
+
+		*EnvGen.kr(Env.step([1,0],[dur,0]),timeScale: tS,doneAction: 2))}).add;
+
+
+	SynthDef(\lfo12, {|out, val=1,ph, dur,tS=1|Out.kr(out,
+LFNoise0.kr(~hz1beat).range(0.1,0.0)/*,0.02)*/
+		+SinOsc.kr(SelectX.kr(LFNoise0.kr(~hz1beat*4).range(0,1).round(1),[~hz1beat,~hz1beat*4,~hz1beat*16]),ph).range(0.2,0.00)
+*EnvGen.kr(Env.step([0.08,0],[dur,0]),timeScale: tS,doneAction: 2))}).add;
+
+	SynthDef(\lfo13, {|out, dur,ph, val = (~hzQbeat), rL=1,rH=0.4,tS=1 | Out.kr(out,SinOsc.ar(val,ph).range(rL,rH)
+*EnvGen.kr(Env.step([1,0],[dur,0]),timeScale: tS,doneAction: 2))}).add;
+
+	SynthDef(\lfo13T, {|out, dur,ph, val = (~hzQbeat), rL=1,rH=0.4,tS=1 | Out.kr(out,LFTri.ar(val,ph).range(rL,rH)
+*EnvGen.kr(Env.step([1,0],[dur,0]),timeScale: tS,doneAction: 2))}).add;
+
+	SynthDef(\lfo14, {|out, val, dur,tS=1| Out.kr(out, EnvGen.kr(Env.step([val,0],[dur,0]),timeScale: tS,doneAction: 2))}).add;
+
+	SynthDef(\lfo15, {|out, val, dur,tS=1|Out.kr(out,  SinOsc.kr( ~hz1beat/4).range(~hz1beat*64, ~hz1beat*1024)
+		*EnvGen.kr(Env.step([1,0],[dur,0]),timeScale: tS,doneAction: 2))}).add;
+
+	SynthDef(\lfoSaw, {|out, val, dur,tS=1,ph =0,gte=(-4)|Out.kr(out,
+
+		Saw.ar(/*MouseY.kr(0.24,20.6)*/SinOsc.ar(0.0025,ph).range(0.24,20.6)
+
+			,-1,-0.4).range(-1,0).lincurve(-1,2,5,-3,gte)* EnvGen.kr(Env.step([1,0],[dur,0]),timeScale: tS,doneAction: 2)
+	)}).add;
+
+	SynthDef(\lfoPulse, {|out, val, dur,tS=1,ph =0,gte=(-4),frq=1,wdth=0.5|Out.kr(out,
+
+		LFPulse.kr(/*frq*/
+			LFNoise0.kr(1.2875).range(0.0001,20.6)
+
+			/*MouseY.kr(0.001,32) */ ,width:In.kr(wdth,1)/*MouseX.kr(0.4,1).poll */)* EnvGen.kr(Env.step([1,0],[dur,0]),timeScale: tS,doneAction: 2)
+	)}).add;
+
+
+	SynthDef(\lfoStep, {|out, val, dur,tS=1,ph =0,gte=(-4),frq=1,wdth=0.5,lS,hS|Out.kr(out,
+		EnvGen.kr(Env.step([val],[dur]),timeScale: tS,doneAction: 2)
+	)}).add;
+
+
+
+	SynthDef(\lfoSin, {|out, val, dur,tS=1,ph =0,gte=(-4),frq=1,wdth=0.5|Out.kr(out,
+
+	Osc.ar(~b.bufnum, LFNoise0.kr(1.2875/4).range(0.08046875,1.2875) ).range(0.7,1)
+
+		* EnvGen.kr(Env.step([1,1],[dur,0]),timeScale: tS,doneAction: 2)
+	)}).add;
+
+
+
+	SynthDef(\envSli, {|fc1=0.95,fc2=0.05  out, val1=20, val2=20000,  dur,tS=1, crv =7|Out.kr(out,
+	EnvGen.kr(Env([val1,val2],[dur*fc1,dur*fc2],crv ),timeScale: tS,doneAction: 2)
+	)}).add;
+
+
+	SynthDef(\envSli2, {|out,val, val0 ,val1=20, val2=20000,  dur,tS=1, crv =7,crv2|Out.kr(out,
+		EnvGen.kr(Env([ val0 ,val1,val2],[dur*0.9,dur*0.41,dur*0.09],[crv,crv2] ),timeScale: tS,doneAction: 2)
+	)}).add;
+
+
+	SynthDef(\lfo2, {|out, val=1, dur,tS=1|Out.kr(out,
+
+		LFNoise1.kr(~hz1beat).range(0.10,0.0)/*,0.02)*/
+		+SinOsc.kr(SelectX.kr(LFNoise0.kr(~hz1beat*4).range(0,1).round(1),[~hz1beat,~hz1beat*4,~hz1beat*16])).range(0.06,0.00)
+
+		*EnvGen.kr(Env.step([1,0],[dur,0]),timeScale: tS,doneAction: 2))}).add;
+
+	SynthDef(\lfo,{|out, vl1, vl2, dur, tim = 0.0484, crv =(-12)|
+		Out.kr(out,VarLag.kr( Line.kr(vl1, vl2, dur, doneAction: 2),tim,crv));}).add;
+
+	SynthDef(\lfo3,{|out,tS=1| Out.kr(out ,EnvGen.kr(Env([143,0],[0.4,0],-30),timeScale: tS,doneAction: 2))}).add;
+
+
+	SynthDef(\lfo2,{|out, out2, out3, riseT, flatT, dur, vl=0.0000000095262251, vl2=0, vl3=0|
+
+		var flat =  0.0000000095262251,acti = 0.01005859375, scaRi = (-10.4), phR = 15;
+
+		riseT = t.beatDur* 16*4;
+		flatT = t.beatDur* 48* 4;
+
+		Out.kr(out,Line.kr(vl,vl,dur,doneAction: 2));
+		Out.kr(out2,Line.kr(vl2,vl2,dur,doneAction: 2));
+		Out.kr(out3,Line.kr(vl3,vl3,dur,doneAction: 2));
+
+
+	}).add;
+
+
+
+SynthDef(\kick, {
+	arg amp=0.2,out=0;
+	var sig, env, envF;
+
+	envF = EnvGen.ar(
+		Env(
+			[117.midicps,64.midicps,114,26,0,0],
+			[0.004,t.beatDur/32,t.beatDur/4,0],
+			[-8.4,-2,-2]
+		)
+	);
+
+	env =
+
+EnvGen.ar(
+		Env([ 0.056 , 0.085,   0.01 ,  0.342,0.0,0],
+			[ 0.00602 , 0.0016,   0.008  , t.beatDur/4 , 0.001  ],[0.66,1.5,-1.6,1.2,8]),doneAction:2);
+	//-2.6 can be zero
+
+	sig = SinOsc.ar(envF, mul: env);
+
+	sig = sig * amp.dbamp  ;
+	// sig = Pan2.ar(sig);
+	Out.ar(out, sig);
+
+}).add;
+
+
+
+		SynthDef(\bass,{
+		arg freq=41.2, dure=1, amp=0.5,
+		atkcrv=1, relcrv=5,
+		atk=0, rel=0.8, lpf=100, out = 0, bus, dur,cho=0,rel2,relcrv2,envF,relcrv3,vlDec=0.6,vlDecF=0,vlDecFx=1080, vlDecFx2=0;
+
+		var sig, env, lvlBa;
+
+		env = EnvGen.kr(
+			Env(
+				[1,0],
+			[rel,rel2],
+				[atkcrv,relcrv,relcrv2]
+			),
+			timeScale: t.beatDur,doneAction:2
+		);
+
+		envF = EnvGen.kr(
+			Env(
+				[vlDecFx,vlDecFx2],
+				[rel],
+				[atkcrv,relcrv2]
+			),
+			timeScale: t.beatDur,doneAction:2
+		);
+		sig =Saw.ar(freq,mul: -1,add: -0.4).lincurve(-1,1,-1,1,-7);
+		sig = LPF.ar(LPF.ar(
+
+			sig.round(2**(-8))
+
+			,envF+lpf /*- In.ar(bus, 1)*/),envF+lpf/* - In.ar(bus, 1)*/);
+
+		sig = sig * amp.dbamp* env;
+		Out.ar(out, Pan2.ar(sig));
+	}).add;
+
+
+
+
+	s.sync;
+
+		SynthDef.new(\percussion, {
+	arg carHz=500, modHz=1899.3343179398, modAmp=0, atk=0, rel=1, amp=0.2, pan=0,rel2=1,out=0, latch = 6000, crv1, crv1b, mulMod, stereoL=0, stereoR=0, dA1=2, dA2=2,atk2=0,tS=1;
+	var car, mod, env, car2, mod2,env2,sig;
+
+	env = EnvGen.kr(Env.perc(atk, rel,1,crv1),timeScale: tS, doneAction:dA1);
+
+	env2 = EnvGen.kr(Env.perc(atk, rel2, 1, crv1b),timeScale: tS, doneAction:dA2);
+
+	mod = SinOsc.ar(modHz, mul:mulMod);
+	car = SinOsc.ar(carHz + mod) * env * 0.05;
+
+	car2 = WhiteNoise.ar(modAmp) * env2 ;
+
+		sig =  Latch.ar(tanh(car+car2),Impulse.ar(latch));
+
+		Out.ar(out, sig /*.dup*/);
+}).add;
+
+
+	SynthDef.new(\snare, {
+		arg carHz=500, modHz=100, modAmp=1691, modAmp2=0.321875, atk=0, atk2=0, rel=1, amp=0.2, pan=0,rel2=2,out=0,latch=12000, da1=2, da2=2, crv1=(-3),crv2 = (-2) , noiLv  =0.321875, tS=1,atkC=0;
+	var car, mod, env, car2, mod2,env2, sig;
+
+	env = EnvGen.kr(Env.perc(atk, rel,curve:crv1), timeScale: tS,doneAction:da1);
+
+		env2 = EnvGen.kr(Env.perc(atk2, rel2, 1,[atkC, crv2]),timeScale: tS, doneAction:da2);
+
+	mod = SinOsc.ar(modHz, mul:modAmp);
+	car = SinOsc.ar(carHz + mod) * env * modAmp2;
+
+	car2 = BrownNoise.ar(noiLv) * env2 ;
+
+	sig = car+car2;
+
+	Out.ar(out,sig.clip(-41.2,41.2) * amp.dbamp);
+
+}).add;
+
+
+
+	SynthDef(\wNoise, {
+
+		arg in=0, mix=0.2, amp = (-20), dec =0,sub2 =3, valStart= 10000,valEnd =100, wFil=1, pan =0, durF =3,out =0,atk=0, tS=1,dA=0,dA2=0,dur,amp2=0,crv=(-2),dwn=0,amp3=1;
+	var env,dry, wet, sig,env2, ori;
+
+		env = EnvGen.kr(Env([dwn,amp.dbamp,amp2],[atk,dec,0],[3,crv]),timeScale: tS,doneAction:2);
+
+	sig = SelectX.ar(wFil,[
+			LPF.ar(WhiteNoise.ar(env),XLine.kr(valStart,valEnd,durF,doneAction: dA)),
+
+			HPF.ar(WhiteNoise.ar(env),XLine.kr(valStart,valEnd,durF)),
+
+			BHiPass4.ar(LPF.ar(WhiteNoise.ar(0.03),EnvGen.kr(Env([0,10000],[3],3))),EnvGen.kr(Env([0,10000],[dur],3),timeScale: tS,doneAction:dA2),0.2);
+	]);
+
+
+	Out.ar(out, sig   /*.dup*/ *amp.dbamp *amp3;
+
+    )
+}).add;
+
+
+	SynthDef(\wNoise2, {
+
+		arg in=0, mix=0.2, amp = (-20), dec =0,sub2 =3, valStart= 10000,valEnd =100, wFil=1, pan =0, durF =3,out =0,atk=0, tS=1,dA=0,dA2=0,dur,amp2=0;
+	var env,dry, wet, sig,env2, ori;
+
+		env = EnvGen.kr(Env([0,amp.dbamp,amp2],[dur*atk,dur*dec,0],[3,-2]),timeScale: tS,doneAction:2);
+
+	sig = /* SelectX.ar(wFil,[
+			LPF.ar(WhiteNoise.ar(env),XLine.kr(valStart,valEnd,durF,doneAction: dA))*/
+
+		HPF.ar(WhiteNoise.ar(env),XLine.kr(valStart,valEnd,durF,doneAction: dA));   	/*,
+
+			BHiPass4.ar(LPF.ar(WhiteNoise.ar(0.03),EnvGen.kr(Env([0,10000],[3],3))),EnvGen.kr(Env([0,10000],[dur],3),timeScale: tS,doneAction:dA2),0.2);
+	]);*/
+
+/*sig = Pan2.ar( sig , pan);*///0 was pan
+
+	Out.ar(out, sig   /*.dup*/ *env;//* env2 //
+
+    )
+}).add;
+
+
+
+"side events init".postln;
+
+	SynthDef(\kiasmosPad, {arg freq = 440, out = 0, amp = 1, atk= 0.01, rel= 0.01,tS=1,dur;
+    var carriers, modulators, mix, verb, filter, env, filterEnv;
+    freq = freq + [0, Rand(1,4)];
+    carriers = [SinOsc, Saw, Pulse].collect(_.ar(freq));
+    modulators = carriers.collect {|c| SinOsc.kr(rrand(0.0322,1.0)*0.0647)};
+    mix = Mix(carriers * modulators) * 0.15;
+    verb = FreeVerb.ar(mix)/*+sig*/;
+
+	filterEnv = EnvGen.kr(Env([3600, 220], dur, \exp), doneAction: Done.freeSelf);
+	env = EnvGen.kr(Env([0, 1, 1, 0], [atk, dur - atk - rel, rel], [4,-4]));
+
+	filter = LPF.ar(verb, filterEnv);
+	Out.ar(out, filter * env * amp* EnvGen.kr(Env.step([1,1],[dur,0],4),timeScale: tS,doneAction:0));
+}).add;
+
+
+	SynthDef(\abc, {|freq=432,out=0,tS=1|Out.ar(out,Saw.ar([freq,freq-50],mul: EnvGen.kr(Env.perc(releaseTime: 0.3872),timeScale: tS,doneAction: 2)).round(2**(-16)))}).add;
+
+
+	SynthDef(\rise, {
+	arg freq=659.26, mRatio=1, cRatio=1,
+	index=1, iScale=5, ic_atk=4, ic_rel=(-4),
+	amp=2, rel=3, pan=0, f1,f2,f3, vlAtk=0,atk=0, dec=0,atkE=0  ,dur ,out =0 ,tS=1 ,moduR,moduS,fS=0, fR=0,atk2=0.05 ,dec2   =0.932;
+	var car, mod, env, iEnv, mod2;
+	iEnv = EnvGen.kr(
+		Env(
+			[vlAtk, index*iScale, index],
+			[dur*atk, dur* dec],
+			[ic_atk, ic_rel]//atkC was 10
+		),timeScale: tS,doneAction:2
+	);
+		env = EnvGen.kr(Env([0,1,1,0],[dur*atk2,dur*dec2,0,dur*0.018],[16,0,0-16]),timeScale: tS,doneAction: 2);
+	mod2 = SinOsc.ar(freq/10*f3, mul:freq/10 *iEnv);
+
+	mod = SinOsc.ar(freq * f2 + mod2
+			 + (In.kr(moduR,1)* EnvGen.kr(Env.adsr(sustainLevel: 1,releaseTime: 0.1),fR ))
+
+			, mul:freq * mRatio * iEnv);
+
+//car = SinOsc.ar(freq * f1 + mod) * env * amp;
+	car  = LeakDC.ar(Shaper.ar(~tfBuf,SinOsc.ar(freq * f1 + mod + (In.kr(moduS,1)* EnvGen.kr(Env.adsr(sustainLevel: 1,releaseTime: 0.1),fS )))))* env * amp;
+	/*car = Pan2.ar(car, pan);*/
+	Out.ar(out, car);
+}).add;
+
+SynthDef(\trippyRise, {|out=0, ph=0,dur,tS=1|
+	var r = /*  MouseX.kr(0, 20.6); */  SinOsc.ar(~hz1beat/32,ph).range(0, 20.6);
+	// stereo expansion
+	var phi = LFSaw.ar([44.1, 42.2], -1).range(0, 2pi);
+	var x = r * cos(phi);
+	var y = r * sin(phi);
+		Out.ar(out,/*Limiter.ar(*/~fPo.(x, y)/*, 0.2)*/*  EnvGen.kr(Env([0,1,1,0],[dur*0.05 ,dur*0.90,0,dur*0.05],[9,0,0-9]),timeScale: tS,doneAction: 2))
+}).add;
+
+
+
+SynthDef(\shiftX, {|in, out=0, frq=0,mult=0,rte=1|Out.ar(out, FreqShift.ar(In.ar(in, 1),freq:
+		[frq,frq+5000*rte,frq-8000*rte],mul: [1,mult,mult]
+
+	)!2);}).add;
+
+
+//below dur can be factored to change mod
+	SynthDef(\shift, {|in, out, freq,boo, freq2, factor =1, factor2, factor3, vlPE =27.1366666667,vlPE2=0.2, crvEP = (-2), dcPE = 0.129066666667, dur,
+		vlPE3,vlPE33,crvEP2, dA=0, dA2=0, dA3=0|
+
+
+		Out.ar(out, FreqShift.ar(In.ar(in, 1)/*.sign*/,
+
+
+			freq:SinOsc.ar(0.3).range(-100,100)
+        ));
+	}).add;
+
+
+		SynthDef(\shiftEx, {|in, out, freq,boo, freq2, factor =1, factor2, factor3, vlPE =27.1366666667,vlPE2=0.2, crvEP = (-2), dcPE = 0.129066666667, dur,
+		vlPE3,vlPE33,crvEP2, dA=0, dA2=0, dA3=0, triMod=0.08046875  |
+
+
+		Out.ar(out, FreqShift.ar(In.ar(in, 1)/*.sign*/,
+
+			/*freq:  freq2+    In.kr( boo, 1)  +   (EnvGen.kr(Env([vlPE,vlPE2],[dur/*dcPE*/,0],crvEP),doneAction: dA)*factor2)
+*/
+			freq:LFTri.ar(triMod/*1.2875/16*/).range(-400,400)
+   ));
+	}).add;
+
+
+		SynthDef(\shiftExG, {|in, out, freq,boo, freq2, factor =1, factor2, factor3, vlPE =27.1366666667,vlPE2=0.2, crvEP = (-2), dcPE = 0.129066666667, dur,
+		vlPE3,vlPE33,crvEP2, dA=0, dA2=0, dA3=0, triMod=0.08046875,vl=1,tS=1,hS=400  |
+
+
+		Out.ar(out, FreqShift.ar(In.ar(in, 1)/*.sign*/,
+
+			/*freq:  freq2+    In.kr( boo, 1)  +   (EnvGen.kr(Env([vlPE,vlPE2],[dur/*dcPE*/,0],crvEP),doneAction: dA)*factor2)
+*/
+			freq:LFTri.ar(triMod/*1.2875/16*/).range(-400,hS)
+   )* EnvGen.kr(Env([0,vl,vl,0],[0,dur,0],4),timeScale: tS,doneAction:2));
+	}).add;
+
+
+
+	SynthDef(\shift2, {|in, out, freq, dur, tS=1
+		vlPE3,vlPE33,crvEP2, dA=0, dA2=0, dA3=0,vl=1|
+
+
+		Out.ar(out, FreqShift.ar(In.ar(in, 2)/*.sign*/,
+freq         )* EnvGen.kr(Env([0,vl,vl,0],[0.055,dur-0.055,0],4),timeScale: tS,doneAction:2))}).add;
+
+
+
+
+	SynthDef(\shift10, {|in, out, freq, dur,vl=1,bus|
+
+		Out.ar(out, FreqShift.ar(In.ar(in, 10),In.kr(bus  ) )
+			* EnvGen.kr(Env.step([vl,0],[dur,0]),timeScale: t.beatDur,doneAction:2))}).add;
+
+
+
+		SynthDef(\shift1, {|in, out, freq, dur,vl=1,bus|
+
+		Out.ar(out, FreqShift.ar(In.ar(in, 1),In.kr(bus  ) )
+			* EnvGen.kr(Env.step([vl,0],[dur,0]),timeScale: t.beatDur,doneAction:2))}).add;
+
+
+
+	SynthDef(\filter,{|out=0, in, busMod, bus7, which, factor3=1, rqLPF=0.5 freqFil=0, qf =0, qf2=0|
+
+		var lp, bp, hp, sig;
+
+		sig = In.ar(in,1);
+
+		lp = BLowPass4.ar(sig , freqFil+ In.kr(busMod, 1) ,qf +In.kr(rqLPF));
+
+		bp = BBandPass.ar(sig,freqFil+ In.kr(busMod, 1) *factor3  ,qf2 +0.26);
+
+		hp = BHiPass4.ar(sig, freqFil+ In.kr(busMod, 1),/*0.6 */ qf2+In.kr(bus7, 1));
+
+		sig = SelectX.ar(which, [lp, bp,hp,sig]);
+
+		Out.ar(out, sig);
+	}).add;
+
+
+	SynthDef(\filterG,{|out=0, in, busMod, bus7, which, factor3=1, rqLPF=0.5 freqFil=0, qf =0, qf2=0|
+
+		var lp, bp, hp, sig;
+
+		sig = In.ar(in,1);
+
+		lp = BLowPass4.ar(sig , freqFil+ In.kr(busMod, 1)+ MouseX.kr(40,22000) ,qf +In.kr(rqLPF));
+
+		bp = BBandPass.ar(sig,freqFil+ MouseX.kr(40,20000)  ,qf2 +0.26);
+
+		hp = BHiPass4.ar(sig, freqFil+ In.kr(busMod, 1)+ MouseX.kr(40,22000),/*0.6 */ qf2 +In.kr(bus7, 1));
+
+		sig = SelectX.ar(which, [lp, bp,hp,sig]);
+
+		Out.ar(out, sig);
+	}).add;
+
+
+	SynthDef(\filterGS,{|out=0, in, busMod, bus7, which, factor3=1, rqLPF=0.5 freqFil=0, qf =0, qf2=0|
+
+		var lp, bp, hp, sig;
+
+		sig = In.ar(in,1);
+
+		lp = BLowPass4.ar(sig , freqFil+ In.kr(busMod, 1)+ MouseX.kr(40,22000) ,qf +In.kr(rqLPF));
+
+		bp = BBandPass.ar(sig,freqFil+ In.kr(busMod, 1) *factor3 + MouseX.kr(40,12000) ,qf2 );
+
+		hp = BHiPass4.ar(sig, freqFil+ In.kr(busMod, 1)+ MouseX.kr(40,22000),/*0.6 */ qf2 +In.kr(bus7, 1));
+
+		sig = SelectX.ar(which, [lp, bp,hp,sig]);
+
+		Out.ar(out, sig);
+	}).add;
+
+	SynthDef(\filterX,{|out=0, in, busMod, bus7, which, factor3=1, rqLPF=0.5 freqFil=0, qf =0, qf2=0,tS=1,dur|
+
+		var lp, bp, hp, sig;
+
+		sig = In.ar(in,2);
+
+		lp = BLowPass4.ar(sig , freqFil+ In.kr(busMod, 1) ,qf +In.kr(rqLPF));
+
+		bp = BPF.ar(sig,freqFil+ In.kr(busMod, 1) *factor3  ,qf2 +0.26);
+
+		hp = BHiPass4.ar(sig, freqFil+ In.kr(busMod, 1),/*0.6 */ qf2 +In.kr(bus7, 1));
+
+		sig = SelectX.ar(which, [lp, bp,hp,sig]);
+
+		Out.ar(out, sig*EnvGen.kr(Env.step([1,0],[dur,0]),timeScale: tS,doneAction:2) );
+	}).add;
+
+	SynthDef(\filterS,{|out=0, in, busMod, bus7, which, factor3=1, rqLPF=0.5, freqFil=0, qf =0, qf2=0 |
+
+		var lp, bp, hp, sig;
+
+		sig = In.ar(in,2);
+
+		lp = BLowPass4.ar(sig , freqFil+ In.kr(busMod, 1) ,qf +In.kr(rqLPF));
+
+		bp = BPF.ar(sig,freqFil+In.kr(busMod, 1) *factor3  ,qf2 +0.26);
+
+		hp = BHiPass4.ar(sig, freqFil+ In.kr(busMod, 1),/*0.6 */ qf2 +In.kr(bus7, 1));
+
+		sig = SelectX.ar(which, [lp, bp,hp,sig]);
+
+		Out.ar(out, sig);
+	}).add;
+
+
+	SynthDef(\filter10,{|out=0, in, busMod, bus7, which, factor3=1, rqLPF=0.5, freqFil=0, qf =0, qf2=0 |
+
+		var lp, bp, hp, sig;
+
+		sig = In.ar(in,10);
+
+		lp = BLowPass4.ar(sig , freqFil+ In.kr(busMod, 1) ,qf +In.kr(rqLPF));
+
+		bp = BPF.ar(sig,freqFil+In.kr(busMod, 1) *factor3  ,qf2 +0.26);
+
+		hp = BHiPass4.ar(sig, freqFil+ In.kr(busMod, 1),/*0.6 */ qf2+In.kr(bus7, 1));
+
+		sig = SelectX.ar(which, [lp, bp,hp,sig]);
+
+		Out.ar(out, sig);
+	}).add;
+
+
+	SynthDef(\phaser,{|in, out, rate, value, dur maxDlT =0.0968,decT=1,amp=0.4,tS=1,ph=0| Out.ar(out, In.ar(in,1)+ AllpassN.ar(In.ar(in,1) ,maxDlT,SinOsc.kr(value,ph,0.01,0.01),decT)*amp* EnvGen.kr(Env.step([1,0],[dur,0]),timeScale: tS,doneAction: 2)   );}).add;
+
+
+	SynthDef(\disto, {|out=0,in, hpf= 81.41|Out.ar(out, In.ar(in,1).round(2**(-16)));}).add;
+
+	SynthDef(\distoS, {|out=0,in|Out.ar(out, In.ar(in,2).round(2**(-16)));}).add;
+
+	SynthDef(\disto3, {|out=0,in, gain=1|Out.ar(out, In.ar(in,3).round(2**(-16))*gain);}).add;
+
+
+	SynthDef(\gate,{|in, out=0, vlAtk=0, vlDec=1,vlSub=0, vlRel=0, atkT=0, decT=1, subsT=0, relT=0, atckC=0, decC=0, relC=0, bus1, bus2, dur,relSu=0,vlSub2=0,tS =1|
+	var env =   In.ar(in, 1) *    EnvGen.kr(Env(
+			[vlAtk,vlDec                  ,vlSub ,vlSub2,vlRel,0],
+			[dur * atkT ,dur * decT  -(dur*relSu) /*- In.kr(bus1, 1)*/  , dur * subsT-relSu,dur* relT],
+			[atckC,decC ,0     ,relC]),    //decC- (In.kr(bus2, 1)
+
+		timeScale: tS,	doneAction:2);
+		Out.ar(out, env);
+}).add;
+
+	SynthDef(\gate3,{|in, out=0, vlAtk=0, vlDec=1,vlSub=1,vlSub2=1 vlRel=0, atkT=0, decT=1, subsT=0, relT=0, atckC=0, decC=0, relC=0, bus1, bus2, dur,relSu=0,tS =1|
+	var env = In.ar(in, 3) *    EnvGen.kr(Env(
+			[vlAtk,vlDec                  ,vlSub ,vlSub2,vlRel,0],
+			[dur * atkT ,dur * decT  -relSu  , dur * subsT-relSu,dur* relT],
+			[atckC,decC ,0     ,relC]),
+
+timeScale: tS,	doneAction:2);
+
+		Out.ar(out, env);
+}).add;
+
+
+	SynthDef(\gateS,{|in, out=0, vlAtk=0, vlDec=1,vlSub=1,vlSub2=1 vlRel=0, atkT=0, decT=1, subsT=0, relT=0, atckC=0, decC=0, relC=0, bus1, bus2, dur,relSu=0,tS =1|
+	var env;
+
+	env =   In.ar(in, 10) *    EnvGen.kr(Env(
+			[vlAtk,vlDec                  ,vlSub ,vlSub2,vlRel,0],
+			[dur * atkT ,dur * decT  -relSu  , dur * subsT-relSu,dur* relT],
+			[atckC,decC ,0     ,relC]),
+
+timeScale: tS,	doneAction:2);
+
+		Out.ar(out, env);
+}).add;
+
+
+	SynthDef(\gateSD,{|in, out=0,out2, vlAtk=0, vlDec=1,vlSub=1,vlSub2=1 vlRel=0, atkT=0, decT=1, subsT=0, relT=0, atckC=0, decC=0, relC=0, bus1, bus2, dur,relSu=0,tS =1|
+	var env;
+
+	env =   In.ar(in, 10) *    EnvGen.kr(Env(
+			[vlAtk,vlDec                  ,vlSub ,vlSub2,vlRel,0],
+			[dur * atkT ,dur * decT  -relSu  , dur * subsT-relSu,dur* relT],
+			[atckC,decC ,0     ,relC]),
+
+timeScale: tS,	doneAction:2);
+
+		Out.ar(out, env);
+
+		Out.ar(out2, env);
+}).add;
+
+
+	SynthDef(\gate2,{|in, out=0, vlAtk=0, vlDec=1,vlSub=1,vlSub2=1 vlRel=0, atkT=0, decT=1, subsT=0, relT=0, atckC=0, decC=0, relC=0, bus1, bus2, dur,relSu=0,tS =1|
+	var env;
+
+	env =   In.ar(in, 2) *    EnvGen.kr(Env(
+			[vlAtk,vlDec                  ,vlSub ,vlSub2,vlRel,0],
+			[dur * atkT ,dur * decT  -relSu  , dur * subsT-relSu,dur* relT],
+			[atckC,decC ,0     ,relC]),
+
+timeScale: tS,	doneAction:2);
+
+		Out.ar(out, env);
+}).add;
+
+
+	SynthDef(\gateX,{|in, out=0,busMod|Out.ar(out,  In.ar(in, 2)* In.kr(busMod))}).add;
+
+
+	SynthDef(\gateX2,{|in, out=0,tS=1,busMod,dur|Out.ar(out,  In.ar(in, 2)* In.kr(busMod)* EnvGen.kr(Env.step([1,1],[dur,0]),timeScale: tS,doneAction: 2))}).add;
+
+	SynthDef.new(\ptr, {
+		arg out=0, buf=0,dec=1 ;
+		var sig;
+		sig = Phasor.ar(0, BufRateScale.kr(buf), 0, BufFrames.kr(buf));
+		Out.ar(out, sig);
+	}).add;
+
+	SynthDef.new(\rec, {
+		arg ptrIn=0, micIn=0, buf=0, dec = 1;
+		var ptr, sig;
+		ptr = In.ar(ptrIn, 1);
+		sig = In.ar(micIn, 1);
+		BufWr.ar(sig, buf, ptr);
+	}).add;
+
+		SynthDef.new(\gran, {
+		arg amp=1, buf =0, out=0,pitchRte=1,duration=8,impulse = 1.2875,pos=0, dur,vlAtk =0,vlDec=1 ,vlSub=1 ,vlSub2=1,vlRel=0,atkT=0,decT=1,subsT=0,relT=0,atckC=0,decC=0,relC=0,tS=1;
+
+		var env = EnvGen.kr(Env([vlAtk,vlDec,vlSub,vlSub2,vlRel],
+			[dur * atkT,dur* decT,dur * subsT,dur *relT],
+			[atckC,decC,0,relC]),timeScale: tS, doneAction:2);
+
+		Out.ar(out, GrainBuf.ar(1,Impulse.ar(impulse),duration ,buf,pitchRte,pos,mul: amp)* env );
+	}).add;
+
+
+	SynthDef.new(\granLive, {
+		arg amp=1, buf =0, out=0,pitchRte=1,duration=8,impulse = 1.2875,pos=0, dur,vlAtk =0,vlDec=1 ,vlSub=1 ,vlSub2=1,vlRel=0,atkT=0,decT=1,subsT=0,relT=0,atckC=0,decC=0,relC=0,tS=1;
+
+	Out.ar(out, GrainBuf.ar(1,Impulse.ar(MouseX.kr(20.6,0.08)),duration,buf,MouseX.kr(0.01,10),pos,mul: amp) );
+	}).add;
+
+	SynthDef.new(\granLiveA, {
+		arg amp=1, buf =0, out=0,pitchRte=1,duration=8,impulse = 1.2875,pos=0, dur,vlAtk =0,vlDec=1 ,vlSub=1 ,vlSub2=1,vlRel=0,atkT=0,decT=1,subsT=0,relT=0,atckC=0,decC=0,relC=0,tS=1;
+
+	Out.ar(out, GrainBuf.ar(1,Impulse.ar(Line.kr(0.08,20.6,dur,doneAction: 2)),duration,buf,    Line.kr(10,0.01,dur,doneAction: 2),pos,mul: amp)* EnvGen.kr(Env.step([1,1],[dur,0]),timeScale: tS,doneAction:2) );
+	}).add;
+
+	SynthDef(\reverb, {
+		|out=0,in,damp,room,mix|
+    Out.ar(    out,
+		 FreeVerb.ar(  In.ar(in,1),
+            mix, // mix 0-1
+            room, // room 0-1
+            damp // damp 0-1 duh
+        ))}).add;
+
+
+
+	SynthDef(\reverbModu, {
+		|out=0,in,damp,room,mix,dur,tS=1,mixMod,roomMod,dampMod|
+    Out.ar(    out,
+		 FreeVerb.ar(  In.ar(in,1),
+				mix+In.kr(mixMod), // mix 0-1
+            room+In.kr(roomMod), // room 0-1
+            damp+In.kr(dampMod) // damp 0-1 duh
+        ))}).add;
+
+
+	SynthDef(\reverbMad, {
+		|out=0, roomsize, revtime, damping, inputbw, spread = 15, drylevel, earlylevel,damp,room,mix
+    taillevel, amp=0.3,maxRoomsize,wet=0.4,in =0,wF =0, spread2=0, level=1, center=0.0, multi = 2, mod|
+
+	var a ,input;
+
+		input =In.ar(in,1);
+
+		a = Resonz.ar(input, 1294.5373184   *   [8,16,32],0.01	).sum * 10;
+
+    Out.ar(    out, GVerb.ar( a, roomsize, revtime , damping, inputbw, spread, drylevel.dbamp, earlylevel.dbamp,
+            taillevel.dbamp, roomsize,0.3) + input)
+}).add;
+
+
+	SynthDef(\reverbMad2, {
+		|out=0,in,  roomsize, revtime, damping, inputbw, drylevel, earlylevel,damp,room,taillevel,spread=15|
+
+	var a ,input;
+
+		input =In.ar(in,2);
+
+		a = Resonz.ar(input, 1294.5373184 *   [8,16,32],0.01).sum * 10;
+
+    Out.ar(    out,GVerb.ar(a, roomsize,revtime , damping,inputbw,spread,drylevel.dbamp, earlylevel.dbamp,taillevel.dbamp,roomsize,0.3)+ input)}).add;
+
+	"reverb init".postln;
+
+	SynthDef(\del, {|out=0, in, decT=1.5544,delT=0.2|Out.ar(out,AllpassL.ar(In.ar(in,1),delaytime: delT,decaytime: decT))}).add;
+
+
+	SynthDef(\del10, {|out=0, in, decT=1.5544|Out.ar(out,AllpassL.ar(In.ar(in,10),decaytime: decT))}).add;
+
+
+	SynthDef(\del10T, {|out=0, in, decT=1.5544,dur|Out.ar(out,AllpassL.ar(In.ar(in,10),decaytime: decT)*
+		 EnvGen.kr(Env.step([1,0],[dur,0]),timeScale: t.beatDur,doneAction:2))
+	}).add;
+
+	SynthDef(\pingD, { |out = 0, bufnum = 0, dur, feedback = 0.5, delayTime = 0.3, in /*stereoL =0.00555, stereoR =0, dec=0.5, amp =1*/ |
+    var left;
+
+		left =	In.ar(in,1);
+
+    Out.ar(out ,PingPong.ar(bufnum, [left,left], delayTime, feedback, 1))
+	}).add;
+
+
+	SynthDef(\pingD10, { |out = 0, bufnum = 0, dur, feedback = 0.5, delayTime = 0.3, in  |
+    var left =	Mix.ar(In.ar(in,10));
+
+    Out.ar(out ,PingPong.ar(bufnum, [left,left], delayTime, feedback, 1))
+	}).add;
+
+
+	SynthDef(\pingDS, { |out = 0, bufnum = 0, dur, feedback = 0.5, delayTime = 0.3, in  |
+    var left =	In.ar(in,2);
+
+    Out.ar(out ,PingPong.ar(bufnum, left, delayTime, feedback, 1))
+	}).add;
+
+
+	SynthDef(\pingDSX, { |out = 0, bufnum = 0, dur, feedback = 0.5, delayTime = 0.3, in, tS=1 |
+    var left;
+
+		left =	Mix.ar(In.ar(in,2));
+
+		Out.ar(out ,PingPong.ar(bufnum, [left,left], delayTime, feedback, 3)
+		* EnvGen.kr(Env.step([1,1],[dur,0],4),timeScale: tS,doneAction:2) )
+	}).add;
+
+
+/*	SynthDef(\comb, {|out=0, in ,maxDel, delayT,decT|
+		Out.ar(out, CombN.ar(In.ar(in,1),maxDel, delayT,decT))}).add;*/
+
+SynthDef(\comb, {|out=0, in ,maxDel, delayT,decT=6.1952,amp=0.09|
+		Out.ar(out, /*CombN.ar(In.ar(in,1),0.7744/*MouseX.kr(0.01,2)*/,MouseY.kr(0.001,0.6), decT ,amp)*/
+			CombN.ar(In.ar(in,2),delaytime:
+	LFNoise1.kr(2.575).range(0.001,2)
+			/*	MouseY.kr(0.001,0.6)*/,decaytime:-0.2)
+			)}).add;
+
+
+	SynthDef(\comb2, {|out=0, in ,maxDel=0.7744, delayT,decT=6.1952,amp=0.09| // reverse for fun was 0.001,0.6)
+		Out.ar(out, BufCombN.ar(~b2.bufnum, In.ar(in,2),/*maxDel/*MouseX.kr(0.01,2)*/,*/MouseY.kr(0.6,0.001), decT ,amp))}).add;
+
+
+	SynthDef(\comb1, {|out=0, in ,maxDel=0.7744, delayT,decT=6.1952,amp=0.09| // reverse for fun was 0.001,0.6)
+		Out.ar(out, BufCombN.ar(~b2.bufnum, In.ar(in,1),/*MouseY.kr(0.6,0.001)*/MouseX.kr(0.024,0)+ SinOsc.kr(MouseY.kr(20,0),phase: 3,add: 0).range(0.000000001, 0.001), decT ,amp))}).add;
+
+
+	SynthDef(\comb1, {|out=0, in ,maxDel=0.7744, delayT,decT=6.1952,amp=0.09,tS=1,dur| // reverse for fun was 0.001,0.6)
+		Out.ar(out, BufCombN.ar(~b2.bufnum, In.ar(in,1),/*MouseY.kr(0.6,0.001)*/
+
+			delayT+ MouseX.kr(0.024,0)/*+ SinOsc.kr(MouseY.kr(20,0),phase: 3,add: 0).range(0.000000001, 0.001)*/,
+
+			decT ,amp)* EnvGen.kr(Env.step([1,1],[dur,0]),timeScale: tS,doneAction:2) )}).add;
+
+		SynthDef(\comb1, {|out=0, in ,maxDel=0.7744, delayT,decT=6.1952,amp=0.09,tS=1,dur,multi=0| // reverse for fun was 0.001,0.6)
+		Out.ar(out, BufCombN.ar(~b2.bufnum, In.ar(in,1),/*MouseY.kr(0.6,0.001)*/
+
+			/*[delayT+ MouseX.kr(0.024,0),  delayT+ MouseX.kr(0.024,0)+0.00001392889167817/*,    delayT+ MouseX.kr(0.024,0)+0.05*/]*/
+
+			[delayT+ MouseY.kr(0.024,0),  delayT+ MouseY.kr(0.024,0)+0.00001392889167817,    delayT+ MouseX.kr(0.024,0)-0.00001692889167817]
+
+
+			/*+ SinOsc.kr(MouseY.kr(20,0),phase: 3,add: 0).range(0.000000001, 0.001)*/,
+
+
+
+			decT ,[amp,multi,multi])!2* EnvGen.kr(Env.step([1,1],[dur,0]),timeScale: tS,doneAction:2) )}).add;
+
+
+	SynthDef(\comb1, {|out=0, in ,maxDel=0.7744, delayT,decT=6.1952,amp=0.09,tS=1,dur,multi=0,f1=0,f2=0,f3=0,fx=0,busMod,fr=0,modS,modT,modSa,modR |
+		Out.ar(out, BufCombN.ar(~b2.bufnum, In.ar(in,1),/*MouseY.kr(0.6,0.001)*/
+
+			/*[delayT+ MouseX.kr(0.024,0),  delayT+ MouseX.kr(0.024,0)+0.00001392889167817/*,    delayT+ MouseX.kr(0.024,0)+0.05*/]*/
+
+		delayT+ MouseY.kr(0.024,0)  /*[delayT+ MouseY.kr(0.024,0),  delayT+ MouseY.kr(0.024,0)+0.00001392889167817,    delayT+ MouseX.kr(0.024,0)-0.00001692889167817]*/
+
+			+ (In.kr(busMod,1)*fx)
+
+				+ (SinOsc.kr(modS/*MouseY.kr(20,0)*/,phase: 3,add: 0).range(0.000000001, 0.001)* f1)
+				+ (LFTri.kr(modT).range(0.000000001, 0.001) *f2)
+				+ (Saw.kr(modSa).range(0.000000001, 0.001) * f3)
+				+ (LFDNoise0.kr(modR).range(0.0008,0.00008)*fr)
+			// (LFDNoise0.kr(modR).range(0.000000001,0.001)*fr)
+			/*(LFDNoise0.kr(modR).range(-0.0000008,-0.00000008)*fr)*/
+
+
+			,decT ,amp/* + MouseY.kr(0.5,0)*/ +MouseX.kr(0,-0.63))   /*[amp,multi,multi])!2*//** EnvGen.kr(Env.step([1,1],[dur,0]),timeScale: tS,doneAction:2) */)}).add;
+
+
+	// BufCombN.ar(b.bufnum, WhiteNoise.ar(0.01), XLine.kr(0.0001, 0.01, 20), -0.2) }.play;
+	SynthDef(\combX, {|out=0, in ,maxDel, delayT,decT=3,dur, tS=1,modu,factor=0,factor2=0|
+		Out.ar(out, CombN.ar(In.ar(in,1),1.5488/*MouseX.kr(0.01,2)*/,/*VarLag.kr(delayT,0.04)*/delayT+ MouseY.kr(0.001,0.6)
+			+ (In.kr(modu,1)*EnvGen.kr(Env.adsr(sustainLevel: 1,releaseTime: 0.1),factor ))+(In.kr(~seqBus,1)* factor2)
+			,decT,0.09)* EnvGen.kr(Env.step([1,1],[dur,0]),timeScale: tS,doneAction:2) )}).add;
+
+
+	SynthDef(\combS, {|out=0, in ,maxDel, delayT,decT,dur, tS=1,amp=1|
+		Out.ar(out, CombN.ar(In.ar(in,2),/*MouseX.kr(0.01,2)*/maxDel, delayT /*MouseY.kr(0.01,2)*/,decT/*3*/,amp)* EnvGen.kr(Env.step([1,1],[dur,0]),timeScale: tS,doneAction:2) )}).add;
+
+	SynthDef(\reverbS, {
+		|out=0, roomsize, revtime, damping, inputbw, spread = 15, drylevel, earlylevel,
+    taillevel,maxRoomsize,wet=0.4,in =0,wF =0, spread2=0, level=1, center=0.0, multi = 2,mix,room,damp|
+
+	var a ,input;
+		input =In.ar(in,2);
+
+		a = Resonz.ar(		Array.fill(4, input), 1294.5373184 *   [8,16,32],0.01/*wet*/).sum * 10;
+    Out.ar(    out, /*GVerb.ar( a,roomsize,revtime,damping,inputbw, spread,drylevel.dbamp,earlylevel.dbamp,taillevel.dbamp,roomsize+1,0.3)+a)*/
+FreeVerb.ar(
+			  In.ar(in,2),
+            mix, // mix 0-1
+            room, // room 0-1
+            damp // damp 0-1 duh
+		))
+
+}).add;
+
+	"reverb init".postln;
+
+	//the compressor received for control a signal going on channel that never goes to zero (renamed ghost)
+	SynthDef(\comp, {|in, ctrl, out= 0, dec  , thr  =0.01 ,sB = 1, sA = (1/4), atk = 0.001, rel = 0.04 , gain=1|
+
+		Out.ar(out, Compander.ar(In.ar(in,1) , In.ar(ctrl,1)  , thresh: thr, slopeBelow: sB, slopeAbove: sA, clampTime: atk, relaxTime: rel)* gain );
+	}).add;
+
+	SynthDef(\compS, {|in, ctrl, out= 0, dec  , thr  =0.01 ,sB = 1, sA = (1/4), atk = 0.001, rel = 0.04 , gain=1,relMod|
+
+		Out.ar(out, Compander.ar(In.ar(in,2) , In.ar(ctrl,1)  , thresh: thr, slopeBelow: sB, slopeAbove: sA, clampTime: atk, relaxTime: rel)* gain );
+	}).add;
+
+	SynthDef(\compMod, {|in, ctrl, out= 0, dec  , thr  =0.01 ,sB = 1, sA = (1/4), atk = 0.001, rel = 0.04 , gain=1,relMod|
+
+		Out.ar(out, Compander.ar(In.ar(in,1) , In.ar(ctrl,1)  , thresh: thr, slopeBelow: sB, slopeAbove: sA, clampTime: atk, relaxTime: rel+In.kr(relMod))* gain );
+	}).add;
+
+	SynthDef(\compSX, {|in, ctrl, out= 0, dec  , thr  =0.01 ,sB = 1, sA = (1/4), atk = 0.001, rel = 0.04 , gain=1,tS=1,dur|
+
+		Out.ar(out, Compander.ar(In.ar(in,2) , In.ar(ctrl,1)  , thresh: thr, slopeBelow: sB, slopeAbove: sA, clampTime: atk, relaxTime: rel)* gain * EnvGen.kr(Env.step([1,0],[dur,0]),timeScale: tS,doneAction:2))}).add;
+
+
+
+	SynthDef(\EQHP2, {|out=0, in, val, quant, gain,frq=100, vol =0.05, val2,quant2, gain2,val3,quant3, gain3,val4, gain4, shelf,val5,quant5, gain5,val6,shelf2, gain6,val7,quant7, gain7| Out.ar(out,
+
+		HPF.ar(HPF.ar(HPF.ar(HPF.ar(HPF.ar(HPF.ar(HPF.ar(HPF.ar( BLowShelf.ar(  BPeakEQ.ar( BPeakEQ.ar(BHiShelf.ar(BPeakEQ.ar(
+			BPeakEQ.ar(	BPeakEQ.ar(In.ar(in, 2),val,quant, gain),val2,quant2, gain2),val3,quant3, gain3),val4,shelf, gain4),val5,quant5, gain5),val7,quant7, gain7),val6,shelf2, gain6),
+
+		frq),frq),frq),frq),frq),frq),frq),frq)* vol)};).add;
+
+
+		SynthDef(\EQHPDyna, {|out=0, in, val, quant, gain,frq=100, vol =0.05, val2,quant2, gain2,valD,quantD,ctrl| Out.ar(out,
+
+		HPF.ar(HPF.ar(HPF.ar(HPF.ar(HPF.ar(HPF.ar(HPF.ar(HPF.ar(
+			BPeakEQ.ar(
+		BPeakEQ.ar(	BPeakEQ.ar(In.ar(in, 1),val,quant, gain),val2,quant2, gain2)
+				,valD,quantD,
+				Amplitude.ar(In.ar(ctrl,1)).linlin(0, 0.003, 0, -12)/*.poll*/)
+
+			,
+		frq),frq),frq),frq),frq),frq),frq),frq)* vol)};).add;
+
+
+/*warning*/
+//POTENTIAL GLITCH IN FURTE SET VOL TO 1
+	SynthDef(\EQHP96, {|out=0, in, val, quant, gain,frq=100, vol =0.05, val2,quant2, gain2,val3,shelf, gain3,val4,quant3, gain4,val5,quant5, gain5, val6,shelf2, gain6| Out.ar(out,
+
+		HPF.ar(HPF.ar(HPF.ar(HPF.ar(HPF.ar(HPF.ar(HPF.ar(HPF.ar(BLowShelf.ar(	BHiShelf.ar( 	BPeakEQ.ar(
+			BPeakEQ.ar(	BPeakEQ.ar(In.ar(in, 1),val,quant, gain),val2,quant2, gain2),val3,quant3, gain3),val4,shelf, gain4),val5,shelf2, gain5),
+
+		frq),frq),frq),frq),frq),frq),frq),frq)* vol)};).add;
+
+	SynthDef(\EQHP96Mod, {|out=0, in, val, quant, gain,frq=100, vol =0.05, val2,quant2, gain2,val3,shelf, gain3,val4,quant3, gain4,val5,quant5, gain5, val6,shelf2, gain6,gainMod,amp=1| Out.ar(out,
+
+		HPF.ar(HPF.ar(HPF.ar(HPF.ar(HPF.ar(HPF.ar(HPF.ar(HPF.ar(BLowShelf.ar(	BHiShelf.ar( 	BPeakEQ.ar(
+			BPeakEQ.ar(	BPeakEQ.ar(In.ar(in, 1),val,quant, gain),val2,quant2, gain2),val3,quant3, gain3),val4,shelf, gain4),val5,shelf2, gain5),
+
+		frq),frq),frq),frq),frq),frq),frq),frq)*  In.ar(gainMod).linlin(0, 0.003,amp, 0).poll)};).add;
+
+	SynthDef(\gateVol,{|out=0,gainMod,amp=0.4,in,dur|Out.ar(out,In.ar(in, 10)*EnvGen.kr(Env.step([In.ar(gainMod).linlin(0, 0.003,amp, 0).poll,0],[dur,0],),timeScale: t.beatDur,doneAction: 2))}).add;
+
+
+SynthDef(\EQHP10, {|out=0, in, val, quant, gain, val2, quant2, gain2 frq=100, vol =1| Out.ar(out,
+
+		HPF.ar(HPF.ar(HPF.ar(HPF.ar(HPF.ar(HPF.ar(HPF.ar(HPF.ar(HPF.ar(HPF.ar(In.ar(in, 10) ,frq),frq),frq),frq),frq),frq),frq),frq),frq),frq)* vol)};).add;
+
+
+	SynthDef(\EQHP10D, {|out=0,out2,frq2=2800, in, val, quant, gain, val2, quant2, gain2 frq=100, vol =1| Out.ar(out,
+
+		HPF.ar(HPF.ar(HPF.ar(HPF.ar(HPF.ar(HPF.ar(HPF.ar(HPF.ar(HPF.ar(HPF.ar(In.ar(in, 10) ,frq),frq),frq),frq),frq),frq),frq),frq),frq),frq)* vol);
+
+	Out.ar(out2,HPF.ar(HPF.ar(HPF.ar(HPF.ar(HPF.ar(HPF.ar(HPF.ar(HPF.ar(HPF.ar(HPF.ar(Mix.ar(In.ar(in, 10)) ,frq2),frq2),frq2),frq2),frq2),frq2),frq2),frq2),frq2),frq2)* vol)};
+
+	).add;
+
+
+	"compression init".postln;
+
+	SynthDef(\limiter, {|in, out = 0,gain=1,vol =1, du =0.01,rel=0.8, atk =0.01 ,thr= 0.001,sB =1,sA= 0.05|
+
+		Out.ar(out , CompanderD.ar(In.ar(in,1),thr, sB ,sA, atk, rel)* gain;)
+	}).add;
+
+
+	SynthDef(\limiterS, {|in, out = 0,gain=1,vol =1, du =0.01,rel=0.8, atk =0.01 ,thr= 0.001,sB =1,sA= 0.05|
+
+		Out.ar(out , CompanderD.ar( In.ar(in,2),thr, sB ,sA, atk, rel)* gain;)
+	}).add;
+
+
+	// Out.ar(0,RMS.ar(sig).ampdb.round(0.1).poll(label:"bass db :")* [0,0,1])
+
+	SynthDef(\limiterStoMixer, {|in, out = 0,gain=1,vol =1, du =0.01,rel=0.8, atk =0.01 ,thr= 0.001,sB =1,sA= 0.05,
+		c1=0,c2=0,c3=0,c4=0,c5=0,c6 =0,c7 =0,c8 =0,c9 =0,c10 =0,c11 =0,c12 =0,c13 =0,c14 =0,c15 =0,c16=0,c17=0,c18=0,c19=0,c20 =0,c21=0,c22=0,c23=0,c24=0,c25=0,c26=0,name,c27=0,c28=0,c29=0,c30=0,c31=0,c32=0,c33=0,c34=0,c35=0,c36=0,c37=0,c38=0,c39=0,c40=0,
+		c41=0,c42=0,c43=0,c44=0,c45=0,c46=0,c47=0,c48=0,c49=0,c50=0,c51=0,c52=0,c53=0,c54=0,c55=0,c56=0,c57=0,c58=0,c59=0,c60=0|
+
+		Out.ar(out , CompanderD.ar( In.ar(in,2),thr, sB ,sA, atk, rel)* gain;);
+
+		Out.ar( 0,  CompanderD.ar( In.ar(in,2),thr, sB ,sA, atk, rel)* gain * [0,0,c2,c3,c4,c5,c6,c7,c8,c9,c10,c11,c12,c13,c14,c15,c16,c17,c18,c19,c20,c21,c22,c23,c24,c25,c26,c27,c28,c29,c30,c31,c32,c33,c34,c35,c36,c37,c38,c39,c40,c41,c42,c43,c44,c45,c46,c47,c48,c49,c50,c51,c52,c53,c54,c55,c56,c57,c58,c59,c60]);
+
+
+	/*	Out.ar(0,RMS.ar(CompanderD.ar( In.ar(in,2),thr, sB ,sA, atk, rel)* gain ).ampdb.round(0.1).poll(label:name.poll)* [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1]);*/
+	}).add;
+
+
+	SynthDef(\limitertoMixer, {|in, out = 0,gain=1,vol =1, du =0.01,rel=0.8, atk =0.01 ,thr= 0.001,sB =1,sA= 0.05,
+		c1=0,c2=0,c3=0,c4=0,c5=0,c6 =0,c7 =0,c8 =0,c9 =0,c10 =0,c11 =0,c12 =0,c13 =0,c14 =0,c15 =0,c16=0,c17=0,c18=0,c19=0,c20 =0,c21=0,c22=0,c23=0,c24=0,c25=0,c26=0,name,c27=0,c28=0,c29=0,c30=0,c31=0,c32=0,c33=0,c34=0,c35=0,c36=0,c37=0,c38=0,c39=0,c40=0,
+		c41=0,c42=0,c43=0,c44=0,c45=0,c46=0,c47=0,c48=0,c49=0,c50=0,c51=0,c52=0,c53=0,c54=0,c55=0,c56=0,c57=0,c58=0,c59=0,c60=0|
+
+		Out.ar(out , CompanderD.ar( In.ar(in,2),thr, sB ,sA, atk, rel)* gain;);
+
+		Out.ar( 0,  CompanderD.ar( In.ar(in,2),thr, sB ,sA, atk, rel)* gain * [0,0,c2,c3,c4,c5,c6,c7,c8,c9,c10,c11,c12,c13,c14,c15,c16,c17,c18,c19,c20,c21,c22,c23,c24,c25,c26,c27,c28,c29,c30,c31,c32,c33,c34,c35,c36,c37,c38,c39,c40,c41,c42,c43,c44,c45,c46,c47,c48,c49,c50,c51,c52,c53,c54,c55,c56,c57,c58,c59,c60]);
+
+	}).add;
+
+
+
+	SynthDef(\limitertoMixerMod, {|in, out = 0,gain=1,vol =1, du =0.01,rel=0.8, atk =0.01 ,thr= 0.001,sB =1,sA= 0.05,
+		c1=0,c2=0,c3=0,c4=0,c5=0,c6 =0,c7 =0,c8 =0,c9 =0,c10 =0,c11 =0,c12 =0,c13 =0,c14 =0,c15 =0,c16=0,c17=0,c18=0,c19=0,c20 =0,c21=0,c22=0,c23=0,c24=0,c25=0,c26=0,name,c27=0,c28=0,c29=0,c30=0,c31=0,c32=0,c33=0,c34=0,c35=0,c36=0,c37=0,c38=0,c39=0,c40=0,
+		c41=0,c42=0,c43=0,c44=0,c45=0,c46=0,c47=0,c48=0,c49=0,c50=0,c51=0,c52=0,c53=0,c54=0,c55=0,c56=0,c57=0,c58=0,c59=0,c60=0,gainMod|
+
+		Out.ar(out , CompanderD.ar( In.ar(in,2),thr, sB ,sA, atk, rel)* (gain * In.ar(gainMod).linlin(0, 0.003, 1, 0).poll ));
+
+		Out.ar( 0,  CompanderD.ar( In.ar(in,2),thr, sB ,sA, atk, rel)* gain * [0,0,c2,c3,c4,c5,c6,c7,c8,c9,c10,c11,c12,c13,c14,c15,c16,c17,c18,c19,c20,c21,c22,c23,c24,c25,c26,c27,c28,c29,c30,c31,c32,c33,c34,c35,c36,c37,c38,c39,c40,c41,c42,c43,c44,c45,c46,c47,c48,c49,c50,c51,c52,c53,c54,c55,c56,c57,c58,c59,c60]);
+
+	}).add;
+
+
+	SynthDef(\limiter10toMixer, {|in, out = 0,gain=1,vol =1, du =0.01,rel=0.8, atk =0.01 ,thr= 0.001,sB =1,sA= 0.05,
+		c1=0,c2=0,c3=0,c4=0,c5=0,c6 =0,c7 =0,c8 =0,c9 =0,c10 =0,c11 =0,c12 =0,c13 =0,c14 =0,c15 =0, c16=0,c17=0,c18=0,c19=0,c20 =0,c21=0,name|
+
+		Out.ar(out , CompanderD.ar( In.ar(in,10),thr, sB ,sA, atk, rel)* gain;);
+
+		Out.ar( 0,  CompanderD.ar( In.ar(in,10),thr, sB ,sA, atk, rel)* gain * [0,0,c2,c3,c4,c5,c6,c7,c8,c9,c10,c11,c12,c13,c14,c15,c16,c17,c18,c19,c20,c21]);
+
+		/*Out.ar(0,RMS.ar(CompanderD.ar( In.ar(in,10),thr, sB ,sA, atk, rel)* gain ).ampdb.round(0.1).poll(label:name.poll)* [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1]);*/
+	}).add;
+
+
+	SynthDef(\playBuf10NToMixer ,{|out = 0,start, trig= 0.002, dur, buf, dA=2, tS=1, loopy=1,vl=1,in,c1=0,c2=0,c3=0,c4=0,c5=0,c6 =0,c7 =0,c8 =0,c9 =0,c10 =0,c11 =0,c12 =0,c13 =0,c14 =0,c15 =0,c16=0,c17=0,c18=0,c19=0,c20 =0,c21=0 ,name|
+
+		Out.ar(~fusible,PlayBuf.ar(10,buf,trigger:
+		trig/*Dust.kr(4.0)*/,startPos: start,loop: loopy/*,doneAction: dA*/)* EnvGen.kr(Env([0,vl,vl,0],[0,dur,0]),timeScale: tS,doneAction: 2));
+
+	Out.ar(out,In.ar( in, 10));
+
+	Out.ar(0,PlayBuf.ar(10,buf,trigger:
+		trig/*Dust.kr(4.0)*/,startPos: start,loop: loopy/*,doneAction: dA*/)* [0,0,c2,c3,c4,c5,c6,c7,c8,c9,c10,c11,c12,c13,c14,c15,c16,c17,c18,c19,c20,c21]* EnvGen.kr(Env([0,vl,vl,0],[0,dur,0]),timeScale: tS,doneAction: 2));
+
+/*	Out.ar(0,RMS.ar(In.ar( in, 10)).ampdb.round(0.1).poll(label:name.poll )* [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1]);*/
+	}).add;
+
+SynthDef(\playBuf2ToMixer ,{|out = 0,start, trig= 0.002, dur, buf, dA=2, tS=1, loopy=1,vl=1,in,c1=0,c2=0,c3=0,c4=0,c5=0,c6 =0,c7 =0,c8 =0,c9 =0,c10 =0,c11 =0,c12 =0,c13 =0,c14 =0,c15 =0,c16=0,c17=0,c18=0,c19=0,c20 =0,c21=0 ,name|
+
+		Out.ar(~fusible,PlayBuf.ar(2,buf,trigger:
+		trig/*Dust.kr(4.0)*/,startPos: start,loop: loopy/*,doneAction: dA*/)* EnvGen.kr(Env([0,vl,vl,0],[0,dur,0]),timeScale: tS,doneAction: 2));
+
+	Out.ar(out,In.ar( in, 10));
+
+	Out.ar(0,PlayBuf.ar(2,buf,trigger:
+		trig/*Dust.kr(4.0)*/,startPos: start,loop: loopy/*,doneAction: dA*/)* [0,0,c2,c3,c4,c5,c6,c7,c8,c9,c10,c11,c12,c13,c14,c15,c16,c17,c18,c19,c20,c21]* EnvGen.kr(Env([0,vl,vl,0],[0,dur,0]),timeScale: tS,doneAction: 2));
+
+/*	Out.ar(0,RMS.ar(In.ar( in, 10)).ampdb.round(0.1).poll(label:name.poll )* [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1]);*/
+	}).add;
+	SynthDef(\limiter10, {|in, out = 0,gain=1,vol =1, du =0.01,rel=0.8, atk =0.01 ,thr= 0.001,sB =1,sA= 0.05|
+
+		Out.ar(out , CompanderD.ar( In.ar(in,10),thr, sB ,sA, atk, rel)* gain;)
+	}).add;
+
+
+	"limiter init".postln;
+/*.ampdb
+	.dbamp*/
+
+SynthDef(\volAna,{|in=0|RMS.ar( In.ar(in)).ampdb.round(0.1).poll(label:" db" )}).add;
+
+
+
+
+
+	SynthDef(\stereo,{|out=0, in, spread=0, level=1, center=0.0,dur,atkT=0,crvA=0,tS=1|
+
+		Out.ar(out,
+			Splay.arFill(10,
+				{In.ar(in, 1)}
+			/*	{(In.ar(in, 10).flop) }*/
+				,spread,level,center)* EnvGen.kr(Env([0,1,1,0],[atkT,dur,0],[crvA,0]),timeScale: tS,doneAction: 2)
+
+		);
+	}).add;
+
+
+
+		SynthDef(\stereoO,{|out=0, in, spread=0, level=1, center=0.0,dlt1=0.3,dlt2=0.4,decT=2, mxDel=1|
+
+		Out.ar(out,Splay.ar({
+
+			CombN.ar(
+				In.ar(in, 1), mxDel, [dlt1,dlt2], decT)
+
+	},spread,level,center))}).add;
+
+
+	SynthDef(\stereoO10,{|out=0, in, spread=0, level=1, center=0.0,dlt1=0.3,dlt2=0.4,decT=2, mxDel=1|
+
+		Out.ar(out,Splay.ar({
+
+			CombN.ar(
+				Mix.ar(In.ar(in, 10).flop)
+
+				, mxDel, [dlt1,dlt2], decT)
+
+	},spread,level,center))}).add;
+
+
+/*	SynthDef(\stereo10,{|out=0, in, spread=0, level=1, center=0.0,dur,atkT=0,crvA=0,tS=1|
+
+		Out.ar(out,
+			Splay.arFill(10,
+				{ In.ar(in, 2)}
+				,spread,level,center)* EnvGen.kr(Env([0,1,1,0],[atkT,dur,0],[crvA,0]),timeScale: tS,doneAction: 2)
+			//EnvGen.kr(Env.step([1],[dur]),doneAction: 2)
+		);
+	}).add;*/
+
+
+	SynthDef(\stereoW,{|out=0, in, spread=0, level=1, center=0.0,dur,atkT=0,crvA=0,tS=1|
+
+		Out.ar(out,
+			Splay.arFill(2,
+				{ In.ar(in, 2)}
+				,spread,level,center)* EnvGen.kr(Env([0,1,1,0],[atkT,dur,0],[crvA,0]),timeScale: tS,doneAction: 2)
+			//EnvGen.kr(Env.step([1],[dur]),doneAction: 2)
+		);
+	}).add;
+
+
+	SynthDef(\stereoS,{|out=0, in, spread=0, level=1, center=0.0,dur,modPan,atkT=0,decT=1,crvA=0,tS=1|
+
+		Out.ar(out,
+			Splay.ar(
+				{Mix.ar(In.ar(in, 2))}
+				,spread,level,center/*+ In.kr(modPan)*/)
+			* EnvGen.kr(Env([0,1,1,0],[dur* atkT,dur*decT,0],[crvA,0]),timeScale: tS,doneAction: 2)
+			//EnvGen.kr(Env.step([1],[dur]),doneAction: 2)
+		);
+	}).add;
+
+
+	SynthDef(\stereoX,{|out=0, in, spread=0, level=1, center=0.0,dur,modPan,atkT=0,decT=1,crvA=0,tS=1|
+
+		Out.ar(out,
+			Splay.arFill(10,
+				{	Mix.ar(In.ar(in, 2))}
+				,spread,level,center+ In.kr(modPan))
+			* EnvGen.kr(Env([0,1,1,0],[dur* atkT,dur*decT,0],[crvA,0]),timeScale: tS,doneAction: 2)
+			//EnvGen.kr(Env.step([1],[dur]),doneAction: 2)
+		);
+	}).add;
+
+
+	SynthDef(\stereoX1,{|out=0, in, spread=0, level=1, center=0.0,dur,modPan,atkT=0,decT=1,crvA=0,tS=1,vlSub=1|
+
+		Out.ar(out,
+			Splay.arFill(10,
+				In.ar(in, 1)
+				,spread,level,center+ In.kr(modPan))
+			* EnvGen.kr(Env([0,1,vlSub,0],[dur* atkT,dur*decT,0],[crvA,0]),timeScale: tS,doneAction: 2)
+			//EnvGen.kr(Env.step([1],[dur]),doneAction: 2)
+		);
+	}).add;
+
+
+
+
+	SynthDef(\stereoS2,{|out=0, in, spread=0, level=1, center=0.0,dur,modPan,atkT=0,crvA=0,tS=1|
+
+		Out.ar(out,
+			Splay.arFill(10,
+					{	Mix.ar(In.ar(in, 2))}
+				,spread,level, center+ In.kr(modPan))
+			* EnvGen.kr(Env([0,1,1,0],[atkT,dur,0],[crvA,0]),timeScale: tS,doneAction: 2)
+			//EnvGen.kr(Env.step([1],[dur]),doneAction: 2)
+		);
+	}).add;
+
+
+	SynthDef(\brokenStereo,{|out=0, in, bus1, bus2,tS,dur,spread=1, center=0|
+
+		Out.ar(out,
+			Splay.arFill(10,
+					{	Mix.ar(In.ar(in, 2))}
+				,spread,1, [center+ In.kr(bus1),  center+ In.kr(bus2)]       )
+			* EnvGen.kr(Env.step([1,1],[dur,0]),timeScale: tS,doneAction: 2)
+			//,doneAction: 2)
+		);
+	}).add;
+
+	SynthDef(\comp10, {|in, ctrl, out= 0, dec  , thr  =0.01 ,sB = 1, sA = (1/4), atk = 0.001, rel = 0.04 , gain=1, dur,tS=1|
+
+		Out.ar(out, Compander.ar(In.ar(in,10) , In.ar(ctrl,1)  , thresh: thr, slopeBelow: sB, slopeAbove: sA, clampTime: atk, relaxTime: rel)* gain)}).add;
+
+
+		SynthDef(\comp10Duo, {|in, in2, ctrl, out= 0, dec  , thr  =0.01 ,sB = 1, sA = (1/4), atk = 0.001, rel = 0.04 , gain=1, dur,tS=1|
+
+		Out.ar(out, Compander.ar(In.ar(in,10)+In.ar(in2,10) , In.ar(ctrl,1)  , thresh: thr, slopeBelow: sB, slopeAbove: sA, clampTime: atk, relaxTime: rel)* gain)}).add;
+
+
+	SynthDef(\comp1010P, {|in, ctrl, out= 0, dec  , thr  =0.01 ,sB = 1, sA = (1/4), atk = 0.001, rel = 0.04 , gain=1, dur,tS=1|
+
+		Out.ar(out, Compander.ar(In.ar(in,10) , In.ar(ctrl,10)  , thresh: thr, slopeBelow: sB, slopeAbove: sA, clampTime: atk, relaxTime: rel)* gain* EnvGen.kr(Env.step([1,1],[dur,0]),timeScale: t.beatDur,doneAction:2))}).add;
+
+
+	SynthDef(\comp1010, {|in, ctrl, out= 0, dec  , thr  =0.01 ,sB = 1, sA = (1/4), atk = 0.001, rel = 0.04 , gain=1, dur,tS=1|
+
+		Out.ar(out, Compander.ar(In.ar(in,10) , In.ar(ctrl,10)  , thresh: thr, slopeBelow: sB, slopeAbove: sA, clampTime: atk, relaxTime: rel)* gain)}).add;
+
+
+	SynthDef(\comp10P, {|in, ctrl, out= 0, dec  , thr  =0.01 ,sB = 1, sA = (1/4), atk = 0.001, rel = 0.04 , gain=1, dur,tS=1|
+
+		Out.ar(out, Compander.ar(In.ar(in,10) , In.ar(ctrl,1)/*.neg */ , thresh: thr, slopeBelow: sB, slopeAbove: sA, clampTime: atk, relaxTime: rel)* gain* EnvGen.kr(Env.step([1,1],[dur,0]),timeScale: tS,doneAction:2))}).add;
+
+
+
+	SynthDef(\sinModul,{|modu, busMod,hS=2200,lS=(-40),dur,tS=1,out,ph=0|Out.kr(out, SinOsc.kr(modu+ In.kr(busMod),ph).range(lS,hS)
+		* EnvGen.kr(Env.step([1,1],[dur,0]),timeScale: tS,doneAction: 2))}).add;
+
+SynthDef(\ranModul,{|modu, busMod,lS=0, hS=4200,dur,tS=1,out|Out.kr(out,LFDNoise0.kr(modu+ In.kr(busMod)).range(lS,hS)
+			* EnvGen.kr(Env.step([1,1],[dur,0]),timeScale: tS,doneAction: 2))}).add;
+
+	SynthDef(\triModul,{|ph=0,modu, busMod,hS=1200,lS=(-40),dur,tS=1,out|Out.kr(out, LFTri.kr(modu+ In.kr(busMod),ph).range(lS,hS)* EnvGen.kr(Env.step([1,1],[dur,0]),timeScale: tS,doneAction: 2))}).add;
+
+	//SAFETY VERSION WITH NO BUSSES
+SynthDef(\sinModulC,{|modu, busMod,hS=2200,lS=(-40),dur,tS=1,out|Out.kr(out, SinOsc.kr(modu).range(lS,hS)
+		* EnvGen.kr(Env.step([1,1],[dur,0]),timeScale: tS,doneAction: 2))}).add;
+
+SynthDef(\ranModulC,{|modu, busMod,lS=0, hS=4200,dur,tS=1,out|Out.kr(out,LFDNoise0.kr(modu).range(lS,hS)
+			* EnvGen.kr(Env.step([1,1],[dur,0]),timeScale: tS,doneAction: 2))}).add;
+
+	SynthDef(\triModulC,{|modu, busMod,hS=1200,lS=(-40),dur,tS=1,out|Out.kr(out, LFTri.kr(modu).range(lS,hS)* EnvGen.kr(Env.step([1,1],[dur,0]),timeScale: tS,doneAction: 2))}).add;
+
+	SynthDef(\squaModul,{|modu, busMod,wdth=0.5,hS=1200,lS=0|Out.kr(busMod,Pulse.kr(modu,wdth).range(lS,hS) )}).add;
+SynthDef(\sawModul,{|modu, busMod,hS|Out.kr(busMod, Saw.kr(modu).range(-40,hS))}).add;
+
+
+	SynthDef(\fmX, {
+		arg freq= 659.26, freq2=200,freq3=200, mRatio=1, cRatio=0,  amp=1.5, sineRate = 0.0000000095262251,  sineRangeLow=0, pitch = 0, phRise= 0 ,out=0, eFreq =0 , phFm=8, bus2,bus3,bus4,busBP,bus6, bus7, bus8, busSR, busSS, busSP, gra=0.5,lvlDec=1,factor=0, factor2 =0 ,factorx=0, factorx2 =0,factorxx=0, factorxx2 =0  , rqLPF =0.5, factor3 =1, decE= 0.1936, dur, gain =50,gate=1,pan=0, modu,modu2, multi=0, multi2=0,modux=0,moduxx=0,fmCtrl=1;
+
+	var car, mod, mod2, iEnv, sig, filRte,env;
+
+		env = EnvGen.kr(Env.adsr,gate,doneAction: 2);
+
+	iEnv = EnvGen.kr(
+			Env.new(
+
+			[1, 1 * 5, 1 * 5,4.8],
+			[0,0.000000000001,        (dur  ),      0.0000000001],
+			[4, 4,(-4)]
+		));
+
+	//second level of modulation
+	mod2 = SinOsc.ar(freq/10+ (In.kr(moduxx,1)* EnvGen.kr(Env.adsr(sustainLevel: 1,releaseTime: 0.1),factorxx ))+(In.kr(~seqBus,1)* factorxx2), mul:freq/10 *iEnv /*In.kr( gra, 1)*/ );
+
+	//first level of modulation
+
+		mod = SinOsc.ar( MouseX.kr( freq * mRatio + mod2 )
+
+			 * SinOsc.kr(sineRate,phRise).range([sineRangeLow])+ (In.kr(modux,1)* EnvGen.kr(Env.adsr(sustainLevel: 1,releaseTime: 0.1),factorx )), mul:
+
+		 MouseY.kr(freq/2,  freq * mRatio *iEnv)
+		);
+
+	//my carrier is a mess but bring interesting outputs
+
+		car =SinOsc.ar(
+
+			(In.kr(modu,1)* EnvGen.kr(Env.adsr(sustainLevel: 1,releaseTime: 0.1),factor ))+(In.kr(~seqBus,1)* factor2)+
+
+		SelectX.ar(fmCtrl  ,[In.ar(~phaseBus,1),mod])   +( freq * cRatio )+ 0.00502929687 );
+
+	sig = Shaper.ar(~tfBuf,   car);
+
+	sig  = LeakDC.ar(sig);
+
+	Out.ar(out, sig    * amp     *env);
+}).add;
+
+	/*SynthDef(\fmX, {
+		arg freq= 659.26, freq2=200,freq3=200, mRatio=1, cRatio=0,  amp=1.5, sineRate = 0.0000000095262251,  sineRangeLow=0, pitch = 0, phRise= 0 ,out=0, eFreq =0 , phFm=8, bus2,bus3,bus4,busBP,bus6, bus7, bus8, busSR, busSS, busSP, gra=0.5,lvlDec=1,factor=0, factor2 =0 ,factorx=0, factorx2 =0,factorxx=0, factorxx2 =0  /*,vlPE =27.1366666667,vlPE2=0.2,dcPE = 0.129066666667*/, rqLPF =0.5, factor3 =1, decE= 0.1936, dur, gain =50/*, crvEP = (-2)*/,gate=1,pan=0, modu,modu2, multi=0, multi2=0,modux=0,moduxx=0,fmCtrl=1;
+
+	var car, mod, mod2, iEnv, sig, filRte,env;
+
+		env = EnvGen.kr(Env.adsr,gate,doneAction: 2);
+
+	iEnv = EnvGen.kr(
+			Env.new(
+
+			[1, 1 * 5, 1 * 5,4.8],
+			[0,0.000000000001,        (/*decE*/ dur/*30000*/   ),      0.0000000001],
+			[4, 4,(-4)]
+		));
+
+	//second level of modulation
+	mod2 = SinOsc.ar(freq/10+ (In.kr(moduxx,1)* EnvGen.kr(Env.adsr(sustainLevel: 1,releaseTime: 0.1),factorxx ))+(In.kr(~seqBus,1)* factorxx2), mul:freq/10 *iEnv /*In.kr( gra, 1)*/ );
+
+	//first level of modulation
+
+		// mod = SinOsc.ar(MouseX.kr(0,freq * mRatio + mod2), mul:freq * mRatio * iEnv);
+
+		mod = SinOsc.ar( [MouseX.kr( freq * mRatio + mod2 ),
+	 MouseX.kr( freq * mRatio + mod2 )-30,
+		MouseX.kr( freq * mRatio + mod2 )+50 ]
+
+		/*	SinOsc.kr(In.kr(~bus2, 1),In.kr(~bus3, 1)).range([In.kr(~bus11, 1)]), mul:*/
+
+			 * SinOsc.kr(sineRate,phRise).range([sineRangeLow])+ (In.kr(modux,1)* EnvGen.kr(Env.adsr(sustainLevel: 1,releaseTime: 0.1),factorx ))/*+(In.kr(~seqBusx,1)* factorx2)*/, mul:
+
+			/*(*/     /* [ */ MouseY.kr(freq/2,  freq * mRatio *iEnv) /*In.kr( gra, 1) */
+		/*	,MouseY.kr(164.815,  659.26 * mRatio *iEnv)* multi2
+			,MouseY.kr(164.815,  659.26 * mRatio *iEnv)* multi2  ]*/
+
+
+			/*) *   In.kr( gra, 1)*/
+
+		);
+
+	//my carrier is a mess but bring interesting outputs
+
+		car =SinOsc.ar(/* ( +*/
+
+			(In.kr(modu,1)* EnvGen.kr(Env.adsr(sustainLevel: 1,releaseTime: 0.1),factor ))+(In.kr(~seqBus,1)* factor2)+
+
+			//remove this line as shwon to decrease sound quality so I left it / HERE CHNAGE THE SOUND
+			/*SelectX.ar(SinOsc.kr(0.0020,phFm).range(0,1),[SinOsc.ar(0),mod])*/
+		SelectX.ar(fmCtrl   /*SinOsc.kr((0.00502929687/2/2),phFm).range(0,1)*/,[In.ar(~phaseBus,1)/*SinOsc.ar(0)*/,mod])           /*    +*/
+			/*[0.00502929687, 0.00502929687-30, 0.00502929687 +50]*/
+
+
+			/*freq*/
+			/*)*/ +( freq * cRatio )+ 0.00502929687
+
+			//pitch envelope
+			/*+  (EnvGen.kr(Env([vlPE,vlPE2],[dcPE,0],crvEP))*factor2)*/
+			//extra pitch modulation
+			/*+ pitch +  (In.kr(bus4, 1)/factor)  */         ,mul: [1,
+			multi
+			,multi  ]   );
+
+
+	/*	car2 =SinOsc.ar((In.kr(modu,1)* EnvGen.kr(Env.adsr(sustainLevel: 1,releaseTime: 0.1),factor ))+(In.kr(~seqBus,1)* factor2)+
+		SelectX.ar(fmCtrl   ,[In.ar(~phaseBus,1)/*SinOsc.ar(0)*/,mod])            +( freq2 * cRatio )+ 0.00502929687
+    ,mul: 1   );
+
+		car3 =SinOsc.ar((In.kr(modu,1)* EnvGen.kr(Env.adsr(sustainLevel: 1,releaseTime: 0.1),factor ))+(In.kr(~seqBus,1)* factor2)+
+		SelectX.ar(fmCtrl   ,[In.ar(~phaseBus,1)/*SinOsc.ar(0)*/,mod])            +( freq3 * cRatio )+ 0.00502929687
+    ,mul: 1   );*/
+
+	//transform signal through the shaper
+
+	sig = Shaper.ar(~tfBuf,   car);
+
+	sig  = LeakDC.ar(sig);
+
+	// sig = Splay.arFill(2,sig,spread: 0);
+	Out.ar(out, sig /* !2*/   * amp     *env/** EnvGen.kr(Env.adsr(0.1), gate)*/);
+}).add;
+*/
+
+	SynthDef(\fader, { |in, out, level = 1, pan = 0|
+		var sig = In.ar(in, 10) * level;
+		Out.ar(out, Balance2.ar(sig[0], sig[1], pan))
+	}).add;
+
+	SynthDef(\fakeSidechain, { |out, sideBus, thresh = 0.05,
+		clamp = 0.05, clampLevel = 0.2, relax = 0.08,amp=0.78|
+		var sig = In.ar(out, 10);
+		var side = In.ar(sideBus, 2).sum;
+		var level = Amplitude.ar(side, 0.01, 0.1);
+		var gate = level > thresh;
+		var eg = EnvGen.ar(Env([1, clampLevel, 1], [clamp, relax], releaseNode: 1), gate);
+		ReplaceOut.ar(out, sig * eg*0.86);
+			}).add;
+
+	SynthDef(\filterModu,{|out=0, in, filMod=600,filMod2=500,qf=0.5,qf2=0.5,  which=0, filFreq2 =0, filFreq =0|
+
+		var lp,hp, sig;
+
+		sig = In.ar(in,1);
+
+		lp = Resonz.ar(sig , filFreq2+ filMod ,qf);
+
+	hp = BHiPass4.ar(sig, filFreq +filMod,qf2)*0.24;
+
+		sig = SelectX.ar(which, [lp, hp]);
+
+	/*Out.ar(out,Resonz.ar( sig,filMod ,qf));*/
+	Out.ar(out,sig);
+	}).add;
+
+
+	SynthDef(\filterModu2,{|out=0, in, filMod=600,filMod2=500,qf=0.5,qf2=0.5,  which=0, filFreq =0|
+
+		var lp,hp, sig;
+
+		sig = In.ar(in,1);
+
+		lp = Resonz.ar(sig , filFreq+ filMod ,qf);
+
+	hp = BHiPass4.ar(sig, filFreq +filMod,qf2)*0.24;
+
+		sig = SelectX.ar(which, [lp, sig, hp]);
+
+	/*Out.ar(out,Resonz.ar( sig,filMod ,qf));*/
+	Out.ar(out,sig);
+	}).add;
+
+SynthDef(\sequ,{|value, dur, in=0, out=0, vlAtk=0, vlDec=1,vlSub=1,vlSub2=1, vlRel=0, atkT=0, decT=1, subsT=0, relT=0, atckC=0, decC=0, relC=0, bus1, bus2|
+
+
+	Out.kr(out,EnvGen.kr(Env.step([value],[dur]),doneAction: 2)   ) }).add;
+
+
+
+	SynthDef(\pan2,{|out=0,in,amp=1|Out.ar(out, Pan2.ar(In.ar(in))*amp)}).add;
+
+	SynthDef(\filterU, {|out=0,in,  hFrq=900,lFrq=300 ,qfH = 0.822379, qlL = 0.504212|Out.ar(out, BLowPass4.ar(   BHiPass4.ar(  In.ar(in,1) , hFrq , qfH), lFrq
+		/*MouseX.kr(20,22000)*/,qlL )) }).add;
+
+	SynthDef(\filterU, {|out=0,in,  hFrq=900, hFrq2=900,lFrq=300,lFrq2=300 ,qfH = 0.822379, qfH2=0.6,qlL = 0.504212,qlL2=0.4|Out.ar(out,
+
+	/*BLowPass4.ar(  */ BLowPass4.ar( BLowPass.ar(
+			BHiPass4.ar(  BHiPass4.ar(
+				In.ar(in,1)
+				, hFrq2 , qfH) 	, hFrq , qfH2)
+	, lFrq,qlL ) ,lFrq2 ,qlL2 )
+
+	) }).add;
+
+
+	SynthDef(\rien,{|dur=1|EnvGen.kr(Env.step([1,0],[ dur,0]),timeScale: t.beatDur,doneAction: 2)}).add;
+
+
+
+	SynthDef(\recLoop){|buf=0,out=0,recording = 1,in = (~toRecord)|
+		var input =  Mix.ar(In.ar(in,1));
+	// Timer measures times between triggers
+	// Changed emits a trigger when recording changes value
+	// Gate updates recEnd only when not recording
+	// BufSampleRate because Timer measures seconds and we need samples instead
+	var recEnd = Gate.kr(
+		Timer.kr(Changed.kr(recording)),
+		1-recording
+	)*BufSampleRate.ir(buf);
+
+	// record buf from start to end
+	// run only when recording
+	// jump to start when recording is started
+    var rec = RecordBuf.ar(input,buf,run:recording,loop:0,trigger:recording);
+
+	var play = LoopBuf.ar(1,buf,1,
+		// when gate is positive: loop,
+		// when gate is negative: play normally
+		// (don't loop when recEnd is still at 0)
+		gate:recEnd>1,
+		startPos:0,
+		startLoop:0,
+		endLoop:recEnd
+	);
+		/*Out.ar(0,HPF.ar(input,100));*/
+		Out.ar(0,BHiPass4.ar(play),100);
+		/*Out.ar(0,play);*/
+}.add;
+
+
+
+		SynthDef(\recLoopS){|buf=0,in=0,out=0,recording = 1|
+	var input = In.ar(in/*~toRecord2*/,2);
+	// Timer measures times between triggers
+	// Changed emits a trigger when recording changes value
+	// Gate updates recEnd only when not recording
+	// BufSampleRate because Timer measures seconds and we need samples instead
+	var recEnd = Gate.kr(
+		Timer.kr(Changed.kr(recording)),
+		1-recording
+	)*BufSampleRate.ir(buf);
+
+	// record buf from start to end
+	// run only when recording
+	// jump to start when recording is started
+    var rec = RecordBuf.ar(input,buf,run:recording,loop:0,trigger:recording);
+
+	var play = LoopBuf.ar(2,buf,1,
+		// when gate is positive: loop,
+		// when gate is negative: play normally
+		// (don't loop when recEnd is still at 0)
+		gate:recEnd>1,
+		startPos:0,
+		startLoop:0,
+		endLoop:recEnd
+	);
+		/*Out.ar(0,HPF.ar(input,100));*/
+		//Out.ar(0,BHiPass4.ar(play),100);
+		Out.ar(0,play);
+}.add;
+
+
+		SynthDef(\recLoop10){|buf=0,in=0,out=0,recording = 1|
+	var input = In.ar(in/*~toRecord2*/,10);
+	// Timer measures times between triggers
+	// Changed emits a trigger when recording changes value
+	// Gate updates recEnd only when not recording
+	// BufSampleRate because Timer measures seconds and we need samples instead
+	var recEnd = Gate.kr(
+		Timer.kr(Changed.kr(recording)),
+		1-recording
+	)*BufSampleRate.ir(buf);
+
+	// record buf from start to end
+	// run only when recording
+	// jump to start when recording is started
+    var rec = RecordBuf.ar(input,buf,run:recording,loop:0,trigger:recording);
+
+	var play = LoopBuf.ar(10,buf,1,
+		// when gate is positive: loop,
+		// when gate is negative: play normally
+		// (don't loop when recEnd is still at 0)
+		gate:recEnd>1,
+		startPos:0,
+		startLoop:0,
+		endLoop:recEnd
+	);
+		Out.ar(0,HPF.ar(input,100));
+	Out.ar(~dead10,play);
+}.add;
+
+
+
+		SynthDef(\recLoop102){|buf=0,in=0,out=0,recording = 1|
+	var input = In.ar(in/*~toRecord2*/,10);
+	// Timer measures times between triggers
+	// Changed emits a trigger when recording changes value
+	// Gate updates recEnd only when not recording
+	// BufSampleRate because Timer measures seconds and we need samples instead
+	var recEnd = Gate.kr(
+		Timer.kr(Changed.kr(recording)),
+		1-recording
+	)*BufSampleRate.ir(buf);
+
+	// record buf from start to end
+	// run only when recording
+	// jump to start when recording is started
+    var rec = RecordBuf.ar(input,buf,run:recording,loop:0,trigger:recording);
+
+	var play = LoopBuf.ar(10,buf,1,
+		// when gate is positive: loop,
+		// when gate is negative: play normally
+		// (don't loop when recEnd is still at 0)
+		gate:recEnd>1,
+		startPos:0,
+		startLoop:0,
+		endLoop:recEnd
+	);
+
+}.add;
+
+	SynthDef(\blank,{|out=0,in,dur|
+
+		ReplaceOut.ar(out,In.ar(in,2)   )*EnvGen.kr(Env.step([1,0],[dur,0]),timeScale: t.beatDur,doneAction: 2)}).add;
+
+	SynthDef(\flanger1, {arg flangefreq=0.3, fdback=0.3,in,tS=1,dur,out=0,flangMod,ph=0;
+
+		var input, effect;
+
+		input=In.ar(in,1);
+
+		input= input+ LocalIn.ar(1);
+
+		effect= DelayN.ar(input,0.02,SinOsc.kr(flangefreq,ph,0.005,0.005)); //max delay of 20msec
+
+		LocalOut.ar(fdback*effect);
+
+		//LocalOut.ar(fdback*BPF.ar(effect,MouseX.kr(1000,10000),0.1)); //alternative with filter in the feedback loop
+
+		Out.ar(out,effect /** EnvGen.kr(Env.step([1,1],[dur,0]),timeScale: tS,doneAction: 2)*/);
+	}).add;
+
+		SynthDef(\flanger1Mod, {arg flangefreq=0.3, fdback=0.3,in,tS=1,dur,out=0,flangMod,ph=0;
+
+		var input, effect;
+
+		input=In.ar(in,1);
+
+		input= input+ LocalIn.ar(1);
+
+		effect= DelayN.ar(input,0.02,SinOsc.kr(flangefreq+In.kr(flangMod),ph,0.005,0.005)); //max delay of 20msec
+
+		LocalOut.ar(fdback*effect);
+
+		//LocalOut.ar(fdback*BPF.ar(effect,MouseX.kr(1000,10000),0.1)); //alternative with filter in the feedback loop
+
+		Out.ar(out,effect /** EnvGen.kr(Env.step([1,1],[dur,0]),timeScale: tS,doneAction: 2)*/);
+	}).add;
+
+
+
+	SynthDef(\flanger, {arg flangefreq=0.3, fdback=0.3,in,tS=1,dur,out=0;
+
+		var input, effect;
+
+		input=In.ar(in,2);
+
+		input= input+ LocalIn.ar(2);
+
+		effect= DelayN.ar(input,0.02,SinOsc.kr(flangefreq,0,0.005,0.005)); //max delay of 20msec
+
+		LocalOut.ar(fdback*effect);
+
+		//LocalOut.ar(fdback*BPF.ar(effect,MouseX.kr(1000,10000),0.1)); //alternative with filter in the feedback loop
+
+		Out.ar(out,effect /** EnvGen.kr(Env.step([1,1],[dur,0]),timeScale: tS,doneAction: 2)*/);
+	}).add;
+
+	SynthDef(\lim,{|out=0,ml=0.1|Out.ar(out,Balance.ar(In.ar(~outTolimit),SinOsc.ar(mul: ml)))}).add;
+
+	SynthDef(\lim2,{|out=0,ml=0.2,in|Out.ar(out,Balance.ar(In.ar(in,2),SinOsc.ar(mul: ml)))}).add;
+
+	SynthDef(\lim10,{|out=0,ml=0.2,in|Out.ar(out,Balance.ar(In.ar(in,10),SinOsc.ar(mul: ml)))}).add;
+
+	SynthDef(\tantra,{|out=0,wT=0,in,dur|Out.ar(out,SelectX.ar(wT,[
+
+	PingPong.ar(~delay3.bufnum,Mix.ar( In.ar(in,10) )!2,0.38)*0.21,
+	FreqShift.ar(In.ar(in,10),  LFNoise0.kr(5.15).range(-2041.2,3020.6)),
+	FreeVerb.ar( In.ar(in,10), 0.9,0.9,0.7),
+
+])* EnvGen.kr(Env.step([1,0],[dur,0]),timeScale: t.beatDur*2,doneAction: 2))}).add;
+
+
+s.sync;
+
+	~kick =	Pbind(\instrument, \kick,\dur, Pseq([1/1],1),\amp,(-10),\out,0);
+
+	~bassShap = Pbind(\instrument, \shap, \dur,Pseq([1/1],1),\dA1,2,\out,~bassShapB, \tS, 0.39550810372374);
+
+
+});
+
+
+
+)
+
+
+//percussion record new
+
+(Routine({
+
+	Pbind(\instrument, \percussion ,\dur,Pseq([1/4],1 ),\carHz, 525.12070612224.rrand(0.01),\modHz,11899.3343179398.rrand(0.001),\modAmp, 0.12875.rrand(0.000001).postln ,\amp,1,\rel,0.3872,\rel2,0.0968,\latch,8000,\stereoL, 0.00555, \crv1,  (-14.4).rrand(-1), \crv1b,(-4), \mulMod, 1691,\dA1,0, \dA2,0,\out, 0).play(t);
+
+	wait(0.160005);
+
+	 s.record(path:"/Users/davidmignot/Music/SuperCollider Recordings/E/cymbal.aiff",numChannels:1,duration:0.4);
+
+}).play;)
+
+
+(Routine({
+
+	Pbind(\instrument,\percussion,\dur,Pseq([1/4], 1),\atk, 0,\rel,0.0968,\rel2,0.02420,\amp,1, \crv1, (-3), \crv1b, (-5), \modHz, exprand(500,10000).postln, \mulMod, rrand(100, 500).postln, \carHz, exprand(20,10000), \modAmp, 0.12875, \latch, 18500, \stereoR, 0.007,\dA1,2, \dA2,0,\out,0).play(t);
+
+	wait(0.162);
+
+	 s.record(path:"/Users/davidmignot/Music/SuperCollider Recordings/E/hat.aiff",numChannels:1,duration:0.4);
+}).play;)
+
+
+(Routine({
+
+	Pbind(\instrument, \snare,\carHz, 41.2 ,\atk, 0.00502929687,\rel, 0.0968,\rel2, 0.7744,\dur, Pseq([1/2], 1),\amp,1, \crv1,(-8),\crv2,(-7)   ,\out,0, \atk,t.beatDur * 0.02, \atk2,Pkey(\atk),  \da1,0    ).play(t);
+
+	wait(0.1505);
+
+	s.record(path:"/Users/davidmignot/Music/SuperCollider Recordings/E/snare.aiff",numChannels:1,duration:0.8);
+}).play;)
+
+
+
+
+
+(Routine({
+
+Pbind(\instrument, \percussion,\dur,Pseq([1/4],1 ),\carHz,Pfunc({ 525.12070612224.rrand(0.01)}),\modHz,Pfunc({ 11899.3343179398.rrand(0.001)}),\modAmp,Pfunc({  0.12875.rrand(0.000001)}) ,\amp,(-17.5),\rel,Pseq([1/1],inf),\rel2,Pseq([1/4],inf),\latch,8000,\stereoL, 0.00555, \crv1, Pfunc({  (-14.4).rrand(-1)}), \crv1b,(-4), \mulMod, 1691,\out, 0/*~hit2ToEq*/).play(t);
+
+	wait(0.16);
+
+	s.record(path:"/Users/davidmignot/Music/SuperCollider Recordings/E/hit2.aiff",numChannels:1,duration:0.8);
+}).play;)
+
+
+
+
+(Routine({
+
+
+		Pbind(\instrument, \percussion, \dur,Pseq([8/1],1 ),\carHz, Pfunc({1050.12070612224.rrand(150)}),\modHz,Pfunc({9334.3179398.rrand(0.1)}),\modAmp,Pfunc({ 0.00875.rrand(0.0001)}) ,\amp,1,\rel,4.5544,\rel2,4.242,\stereoL, 0.00555, \crv1,  (-7.4), \crv1b,(-42), \mulMod, 901,\out,0/*~bellFlang*/,\latch,8900,\atk,0.01,\atk2,Pfunc({0.3.rrand(0.01)}),\tS, 0.39550810372374).play(t);
+
+
+	wait(0.151);
+
+	s.record(path:"/Users/davidmignot/Music/SuperCollider Recordings/E/bell.aiff",numChannels:1,duration:1);
+}).play;)
+
+
+
+
+
+	Pbind(\instrument, \percussion, \dur,Pseq([3/1],1 ),\carHz, Pfunc({1050.12070612224.rrand(150)}),\modHz,Pfunc({9334.3179398.rrand(0.1)}),\modAmp,Pfunc({ 0.00875.rrand(0.0001)}) ,\amp,1,\rel,4.5544,\rel2,4.242,\stereoL, 0.00555, \crv1,  (-7.4), \crv1b,(-42), \mulMod, 901,\out,~flanToDisto,\latch,8900,\atk,0.01,\atk2,Pfunc({0.3.rrand(0.01)})),
+
+
+~cymb= Buffer.read(s,"/Users/davidmignot/Music/SuperCollider Recordings/E/cymbal.aiff");
+
+~hat= Buffer.read(s,"/Users/davidmignot/Music/SuperCollider Recordings/E/hat.aiff");
+
+~snare= Buffer.read(s,"/Users/davidmignot/Music/SuperCollider Recordings/E/snare.aiff");
+
+~hit2= Buffer.read(s,"/Users/davidmignot/Music/SuperCollider Recordings/E/hit2.aiff");
+
+~bell1= Buffer.read(s,"/Users/davidmignot/Music/SuperCollider Recordings/E/bell.aiff");
+
+
+~cymb.plot;~hat.plot;~snare.plot;~hit2.plot;~bell1.plot;
+
+
+~hat.play
+
+
+//ale
+
+
+	s.record(path:"/Users/davidmignot/Music/SuperCollider Recordings/E/zing.aiff",numChannels:1,duration:t.beatDur*16);
+
+
+(Routine({
+
+	~kick.play(t);
+
+
+
+		wait(0.2482);
+
+	s.record(path:"/Users/davidmignot/Music/SuperCollider Recordings/E/kick.aiff",numChannels:1,duration:t.beatDur);
+}).play;)
+
+
+~k2=Buffer.read(s,"/Users/davidmignot/Music/SuperCollider Recordings/E/kick.aiff")
+
+
+~k2.plot
+
+(//BASS ALONE
+
+~eqGrp=Group.new;
+~compGrp=Group.after(~eqGrp);
+~stereoGrp=Group.after(~compGrp);
+
+~recGrp2=Group.after(~stereoGrp);
+Routine({
+
+Ppar([
+
+		// ~bassShap,
+	Pbind(\instrument, \bass,
+		\dur, Pseq([4/1],1),\lpf,100,
+		\midinote, 28, \bus, ~bassShapB,
+		\atk, 0,
+		\rel, t.beatDur *0.9988,
+		\rel2, t.beatDur/4 * 0.0012,
+
+		\vlDecFx,3800,/*\vlDecF,400,*/
+		\atkcrv, -2,
+		\relcrv, -2,\relcrv2, -9, \relcrv3, -6
+		,\amp,(-6/*-1*/)/*(-13)*/,\out,~bassEq
+	),
+
+Pbind(\instrument ,\EQHP2 ,\in,~bassEq, \out,0, \frq, 20.6,\vol,1,
+
+
+	\val7,329.6275,\quant7,1.8 ,\gain7,(-2),
+			\val,659.255, \quant,1.96, \gain,(-19),
+\val2,1318.51, \quant2,2.2, \gain2,(-9),
+		\val3,2637.02, \quant3,2.1, \gain3,(-17),
+
+
+
+
+
+//that one
+	\val5,164.81375, \quant5,2.4, \gain5,(-13),\group,~eqGrp)
+
+
+
+],1).play(t);
+	wait(0.212);
+
+	s.record(path:"/Users/davidmignot/Music/SuperCollider Recordings/E/bass.aiff",numChannels:1,duration:t.beatDur);
+}).play;)
+
+~b3=Buffer.read(s,"/Users/davidmignot/Music/SuperCollider Recordings/E/bass.aiff")
+~b3.plot
+~k2.plot
+
+~kb1.plot
+
+
+
+(
+~filterGrp=Group.new;
+~compGrp=Group.after(~filterGrp);
+~limitGrp=Group.after(~compGrp);
+~stereoGrp=Group.after(~limitGrp);
+~recGrp2=Group.after(~stereoGrp);
+Routine({
+
+Ppar([
+	Pseq([Pbindf(~kick,\out,~kbus)],inf),
+Ppar([
+
+			// Pbind(\instrument, \playBuf, \dur,  Pseq([1/1],inf), \tS,  0.39550810372374,\buf,~k2,\out,~limitKick,\start,00),
+			Pseq([Pbindf(~kick,\out,~limitKick)],inf),
+
+
+	/*Pbind( \instrument, \playBufXG, \impulse, 0.003 ,\dur,    Pseq([1/4],inf), \tS,  0.39550810372374,
+	\start,0,\type,Pseq([\rest,\note,\note,\note],inf),\buf,~b4,\out,~bassFi ,\loopy,0, \decT,0.9/*0.7*/,\vlDec,1,\vlSub,Pkey(\vlDec),\vlSub2,Pkey(\vlDec),/*\subsT ,Pseq([0,0.1,0.2,0.3],inf),*/\start,4100)*/
+
+	Pbind( \instrument, \playBufXG, \impulse, 0.003 ,\dur,    Pseq([1/4],inf), \tS,  0.39550810372374,
+		\start,0,\type,Pseq([\rest,\note,\note,\note],inf),\buf,~b4  ,\out,~bassFi ,\loopy,0, \decT,
+				Pseq([0,0.7,0.8,0.9],inf)
+
+
+
+				,\vlDec,1,\vlSub,Pkey(\vlDec),\vlSub2,Pkey(\vlDec)/*,\subsT ,Pseq([0,0.1,0.2,0.3],inf)*/,\start,4100),
+],1),
+
+		// Pseq([~bassShap],inf),
+
+			Pbind(\instrument, \shap, \dur,Pseq([1/1],inf),\dA1,2,\out,~bassShapB, \crv, 6,\tS, 0.39550810372374)
+
+
+
+
+
+],1).play(t);
+
+
+
+	~bassFilter= Synth(\filter,[\in, ~bassFi,\out,~comFuzz,\freqFil,4000,\qf,0.8,\which,0,\busMod,~bassShapB],~filterGrp);
+
+
+~comp=Synth(\comp, [\ctrl, ~kbus ],~compGrp);
+~comp.set(\thr,0.2 ,\sB, 1.034,\sA, 1/2,\atk ,0.0242, \rel ,0.0968, \gai,1,\in, ~comFuzz,\out,~limitBass);
+~limK=Synth(\limitertoMixer,[\c45,1,\in, ~limitKick, \gain,1,\out,~kToPan],~limitGrp);
+~limK.set(\gain,224.7);
+	~limB=Synth(\limitertoMixer,[\c46,1,\in, ~limitBass, \gain,68,\out,~kToPan],~limitGrp);
+	~limB.set(\gain,209);
+
+
+~kbPan2 = Synth(\pan2,[ \in,~kToPan,\out,0],~stereoGrp);
+
+	wait(0.162);
+
+	// s.record(path:"/Users/davidmignot/Music/SuperCollider Recordings/E/kB.aiff",numChannels:2,duration:t.beatDur*24);
+}).play(t,quant:1))
+
+
+~limK.free;
+~limB.free;
+~kb1.plot
+~kick.play
+/*~kb1=Buffer.read(s,"/Users/davidmignot/Music/SuperCollider Recordings/E/bacup/kB.aiff")*/
+
+~kb1=Buffer.read(s,"/Users/davidmignot/Music/SuperCollider Recordings/E/kB.aiff")
+~kb1.plot
+~k2.plot
+~b3.play
+~kb=Pbind(\instrument, \playBufS, \dur,  Pseq([10/1],inf), \tS,  t.beatDur,\buf,~kb1,\loopy,0,\start,1,\vl,1).play(t)
+
+
+(
+Routine({
+
+
+Pbind(\instrument, \trippyRise, \dur,  Pseq([64/1],1)/*,   \ph, Pfunc({ 6.00.rand})*/,\tS, 0.39550810372374, \out,/*~trippyGate*/0 ).play(t);
+
+
+	wait(0.152);
+
+	// s.record(path:"/Users/davidmignot/Music/SuperCollider Recordings/E/trippy.aiff",numChannels:1,duration:t.beatDur*64);
+}).play;)
+
+
+~trippy=Buffer.read(s,"/Users/davidmignot/Music/SuperCollider Recordings/E/trippy.aiff");
+
+
+({PlayBuf.ar(2,~elec,startPos: 4500000)}.play)
+
+~elec=Buffer.read(s,"/Users/davidmignot/Downloads/10-Electrypnose_-_Give_Me_Some_Fun.wav");
+
+
+(//BASS ALONE
+
+~eqGrp=Group.new;
+~compGrp=Group.after(~eqGrp);
+~stereoGrp=Group.after(~compGrp);
+
+~recGrp2=Group.after(~stereoGrp);
+Routine({
+
+Ppar([
+
+		// ~bassShap,
+	Pbind(\instrument, \bass,
+		\dur, Pseq([4/1],1),\lpf,100,
+		\midinote, 28,/* \bus, ~bassShapB,*/
+		\atk, 0,
+		\rel, t.beatDur *0.9988,
+		\rel2, t.beatDur/4 * 0.0012,
+
+		\vlDecFx,3800,\vlDecFx2,600,
+		\atkcrv, -2,
+		\relcrv, -2,\relcrv2, -9, \relcrv3, -6
+		,\amp,(-6/*-1*/)/*(-13)*/,\out,~bassEq
+	),
+
+
+Pbind(\instrument ,\EQHP2 ,\in,~bassEq, \out,0, \frq, 20.6,\vol,1,
+
+
+				\val7,329.6275,\quant7,1.8 ,\gain7,(-2),
+			\val,659.255, \quant,1.96, \gain,(-19),
+\val2,1318.51, \quant2,2.2, \gain2,(-9),
+		\val3,2637.02, \quant3,2.1, \gain3,(-17),
+
+
+
+//that one
+	\val5,164.81375, \quant5,2.4, \gain5,(-13),\group,~eqGrp)
+
+
+
+],1).play(t);
+	wait(0.212);
+
+	s.record(path:"/Users/davidmignot/Music/SuperCollider Recordings/E/bass2.aiff",numChannels:1,duration:t.beatDur);
+}).play;)
+~b4.plot
+~b4=Buffer.read(s,"/Users/davidmignot/Music/SuperCollider Recordings/E/bass2.aiff");
