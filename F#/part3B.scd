@@ -9353,3 +9353,106 @@ wait(t.beatDur);
 
 )
 
+
+	///newww
+
+
+	SynthDef(\fmX, {
+		arg freq= 659.26, freq2=200,freq3=200, mRatio=1, cRatio=0,  amp=1.5, sineRate = 0.0000000095262251,  sineRangeLow=0, pitch = 0, phRise= 0 ,out=0, eFreq =0 , phFm=8, bus2,bus3,bus4,busBP,bus6, bus7, bus8, busSR, busSS, busSP, gra=0.5,lvlDec=1,factor=0, factor2 =0 ,factorx=0, factorx2 =0,factorxx=0, factorxx2 =0  , rqLPF =0.5, factor3 =1, decE= 0.1936, dur, gain =50,gate=1,pan=0, modu,modu2, multi=0, multi2=0,modux=0,moduxx=0,fmCtrl=1,secBus;
+
+	var car, mod, mod2, iEnv, sig, filRte,env;
+
+	env = EnvGen.kr(Env([1,0],[dur,0]),timeScale: t.beatDur,doneAction: 2);
+
+	iEnv = EnvGen.kr(
+			Env.new(
+
+			[1, 1 * 5, 1 * 5,4.8],
+			[0,0.000000000001,        (/*dur*/ 9999 ),      0.0000000001],
+			[4, 4,(-4)]
+		),timeScale: t.beatDur);
+
+	//second level of modulation
+	mod2 = SinOsc.ar(/*freq*/66.midicps/10+ (In.kr(moduxx,1)* EnvGen.kr(Env.adsr(sustainLevel: 1,releaseTime: 0.1),factorxx ))+(In.kr(~seqBus,1)* factorxx2), mul:freq/10 *iEnv /*In.kr( gra, 1)*/ );
+
+	//first level of modulation
+
+		mod = SinOsc.ar( MouseX.kr( 66.midicps/*freq*/ * mRatio + mod2 )
+
+			 * SinOsc.kr(sineRate,phRise).range([sineRangeLow])+ (In.kr(modux,1)* EnvGen.kr(Env.adsr(sustainLevel: 1,releaseTime: 0.1),factorx )), mul:
+
+		 MouseY.kr(0,  freq * mRatio *iEnv)
+		);
+
+	//my carrier is a mess but bring interesting outputs
+
+		car =SinOsc.ar(freq+
+
+			(In.kr(modu,1)* EnvGen.kr(Env.adsr(sustainLevel: 1,releaseTime: 0.1),factor ))+
+		/*(In.kr(secBus,1)* factor2)+*/
+
+		SelectX.ar(fmCtrl  ,[In.ar(~phaseBus,1),mod])  /* +( freq * cRatio )*//*+ freq*//*76.midicps*/ /*0.00502929687*/ );
+
+	sig = Shaper.ar(~tfBuf,   car);
+
+	sig  = LeakDC.ar(sig);
+
+	Out.ar(out, sig    * amp     *env);
+}).add;
+
+
+Pbind(\instrument,\lfoStep, \val, Pfunc({ 72.rrand(83).midicps  }), \dur,Pseq([1/4],inf),\out,~bus2).play(t)
+
+
+Pbind(\instrument,\fmX,\dur,Pseq([100/4],inf),\freq, Prand([ 87.midicps,108.midicps,  66.midicps, 121.midicps, 118.midicps,  125.midicps,116.midicps],inf) ).play(t)
+
+
+	Synth(\fmX, [\secBus,~bus2,\factor2,1],)
+
+
+
+	////next
+
+
+	SynthDef(\fmX, {
+	arg freq= 659.26, freq2=200,freq3=200, mRatio=1, cRatio=0,  amp=1.5, sineRate = 0.0000000095262251,  sineRangeLow=0, pitch = 0, phRise= 0 ,out=0, eFreq =0 , phFm=8, bus2,bus3,bus4,busBP,bus6, bus7, bus8, busSR, busSS, busSP, gra=0.5,lvlDec=1,factor=0, factor2 =0 ,factorx=0, factorx2 =0,factorxx=0, factorxx2 =0  , rqLPF =0.5, factor3 =1, decE= 0.1936, dur, gain =50,gate=1,pan=0, modu,modu2, multi=0, multi2=0,modux=0,moduxx=0,fmCtrl=1,secBus,crv=(-3);
+
+	var car, mod, mod2, iEnv, sig, filRte,env;
+
+	env = EnvGen.kr(Env([1,0],[dur,0],crv),timeScale: t.beatDur,doneAction: 2);
+
+	/*iEnv = EnvGen.kr(
+			Env.new(
+
+			[1, 1 * 5, 1 * 5,4.8],
+			[0,0.000000000001,        (/*dur*/ 9999 ),      0.0000000001],
+			[4, 4,(-4)]
+		),timeScale: t.beatDur);*/
+
+	//second level of modulation
+	mod2 = SinOsc.ar(66.midicps/10, mul:MouseY.kr(66.midicps/10) );
+
+	//first level of modulation
+
+	mod = SinOsc.ar( MouseX.kr(66.midicps+mod2), mul:MouseY.kr(66.midicps));
+
+	//my carrier is a mess but bring interesting outputs
+
+		car =SinOsc.ar(freq+mod);
+
+	sig = Shaper.ar(~tfBuf,   car);
+
+	sig  = LeakDC.ar(sig);
+
+	Out.ar(out, sig    * amp     *env);
+}).add;
+
+
+Pbind(\instrument,\lfoStep, \val, Pfunc({ 72.rrand(83).midicps  }), \dur,Pseq([1/4],inf),\out,~bus2).play(t)
+
+
+Pbind(\instrument,\fmX,\dur,Pseq([1/4],inf),\freq, Prand([ 87.midicps,108.midicps,  66.midicps, 121.midicps, 118.midicps,  125.midicps,116.midicps],inf),\crv,Pfunc({-6.rrand(-1)}) ).play(t)
+
+
+	Synth(\fmX, [\secBus,~bus2,\factor2,1],)
+

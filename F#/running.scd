@@ -31,7 +31,7 @@ ServerOptions.outDevices;
 
 	var numSegs;
 
-	~bpm = 151.703592;
+	~bpm = 147;
 	~hz1beat = ~bpm * 16/60/32;
 	~hz1Oct = ~bpm * 16/30;
 	~hzQbeat = ~hz1beat/4;
@@ -1013,9 +1013,10 @@ LFNoise0.kr(~hz1beat).range(0.1,0.0)/*,0.02)*/
 	)}).add;
 
 
-	SynthDef(\lfoStep, {|out, val, dur,tS=1,ph =0,gte=(-4),frq=1,wdth=0.5,lS,hS|Out.kr(out,
-		EnvGen.kr(Env.step([val],[dur]),timeScale: tS,doneAction: 2)
+	SynthDef(\lfoStep, {|out, val, dur,ph =0,gte=(-4),frq=1,wdth=0.5,lS,hS|Out.kr(out,
+		EnvGen.kr(Env.step([val],[dur]),timeScale: t.beatDur,doneAction: 2)
 	)}).add;
+
 
 
 
@@ -2103,7 +2104,7 @@ SynthDef(\sawModul,{|modu, busMod,hS|Out.kr(busMod, Saw.kr(modu).range(-40,hS))}
 
 
 	SynthDef(\fmX, {
-		arg freq= 659.26, freq2=200,freq3=200, mRatio=1, cRatio=0,  amp=1.5, sineRate = 0.0000000095262251,  sineRangeLow=0, pitch = 0, phRise= 0 ,out=0, eFreq =0 , phFm=8, bus2,bus3,bus4,busBP,bus6, bus7, bus8, busSR, busSS, busSP, gra=0.5,lvlDec=1,factor=0, factor2 =0 ,factorx=0, factorx2 =0,factorxx=0, factorxx2 =0  , rqLPF =0.5, factor3 =1, decE= 0.1936, dur, gain =50,gate=1,pan=0, modu,modu2, multi=0, multi2=0,modux=0,moduxx=0,fmCtrl=1;
+		arg freq= 659.26, freq2=200,freq3=200, mRatio=1, cRatio=0,  amp=1.5, sineRate = 0.0000000095262251,  sineRangeLow=0, pitch = 0, phRise= 0 ,out=0, eFreq =0 , phFm=8, bus2,bus3,bus4,busBP,bus6, bus7, bus8, busSR, busSS, busSP, gra=0.5,lvlDec=1,factor=0, factor2 =0 ,factorx=0, factorx2 =0,factorxx=0, factorxx2 =0  , rqLPF =0.5, factor3 =1, decE= 0.1936, dur, gain =50,gate=1,pan=0, modu,modu2, multi=0, multi2=0,modux=0,moduxx=0,fmCtrl=1,secBus;
 
 	var car, mod, mod2, iEnv, sig, filRte,env;
 
@@ -2133,9 +2134,9 @@ SynthDef(\sawModul,{|modu, busMod,hS|Out.kr(busMod, Saw.kr(modu).range(-40,hS))}
 
 		car =SinOsc.ar(
 
-			(In.kr(modu,1)* EnvGen.kr(Env.adsr(sustainLevel: 1,releaseTime: 0.1),factor ))+(In.kr(~seqBus,1)* factor2)+
+			(In.kr(modu,1)* EnvGen.kr(Env.adsr(sustainLevel: 1,releaseTime: 0.1),factor ))+(In.kr(secBus,1)* factor2)+
 
-		SelectX.ar(fmCtrl  ,[In.ar(~phaseBus,1),mod])   +( freq * cRatio )+ 0.00502929687 );
+		SelectX.ar(fmCtrl  ,[In.ar(~phaseBus,1),mod])  /* +( freq * cRatio )*/+ 0.00502929687 );
 
 	sig = Shaper.ar(~tfBuf,   car);
 
