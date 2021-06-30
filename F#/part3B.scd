@@ -9586,3 +9586,37 @@ Pbind(\instrument, \playBuf, \buf, ~snComp, \dur, Pseq([4/1],1),\amp,0.14),
 		Pbind( \instrument, \playBuf, \impulse, 0.003 ,\dur,    Pseq([1/4],inf),
 \type,Pseq([\rest,\note,\note,\note],inf),\buf,~b4  ,\out,0 ,\loopy,0, \decT,
 				Pseq([0,0.7,0.8,0.9],inf),\start,0).play(t)
+
+
+
+
+
+	Pseq([
+
+		// Pseq([~kick],16),
+
+		Pbind(\instrument, \kick,\amp,(-10),\dur, Pseq([1/1],2),\type,Pseq([\note,\rest],inf)),
+
+	Prand([
+
+		Prand([
+
+Pbind(\instrument, \kick,\amp,(-10),\dur, Pseq([1/4],8),\type,Pseq([\note,\note,\note,\note,\rest,\rest,\rest,\rest].scramble,inf)),
+
+Pbind(\instrument, \kick,\amp,(-10),\dur, Pseq([1/4],8),\type,Pseq([\note,\note,\note,\note,\rest,\rest,\rest,\rest].scramble,inf)),
+Pbind(\instrument, \kick,\amp,(-10),\dur, Pseq([1/4],8),\type,Pseq([\note,\note,\note,\note,\rest,\rest,\rest,\rest].scramble,inf)),
+		Pbind(\instrument, \kick,\amp,(-10),\dur, Pseq([1/4],8),\type,Pseq([\note,\note,\note,\note,\rest,\rest,\rest,\rest].scramble,inf))],1),
+
+
+
+
+		Prand([
+
+Pbind(\instrument, \kick,\amp,(-10),\dur, Pseq([1/8],2),\type,Pseq([\note,\note,/*\note,\note,\rest,\rest,*/\rest,\rest].scramble,inf)),
+
+Pbind(\instrument, \kick,\amp,(-10),\dur, Pseq([1/8],2),\type,Pseq([\note,\note/*,\note,\note,\rest,\rest*/,\rest,\rest].scramble,inf)),
+Pbind(\instrument, \kick,\amp,(-10),\dur, Pseq([1/8],2),\type,Pseq([\note,\note/*,\note,\note,\rest,\rest*/,\rest,\rest].scramble,inf)),
+		Pbind(\instrument, \kick,\amp,(-10),\dur, Pseq([1/8],2),\type,Pseq([\note,\note,/*\note,\note,\rest,\rest,*/\rest,\rest].scramble,inf))],8)],7)
+
+
+	],32).play(t)

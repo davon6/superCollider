@@ -891,12 +891,11 @@ s.sync;
 
 
 	SynthDef(\playBuf ,{|out = 0,start, trig, dur, amp=1,buf, loo=0,tS=1,impulse=0.001,rte=1
-		vlAtk =0,vlDec=1 ,vlSub=1 ,vlSub2=1,vlRel=0,atkT=0,decT=1,subsT=0,relT=0,atkC=0,decC=0,relC=0,gateSub=0,dA=2|Out.ar(out,PlayBuf.ar(1,buf,rte,trigger:
-			/*Impulse.kr(*/impulse/** (60/~bpm),mul: amp)*/,startPos: start,loop:loo,doneAction: dA)
+		vlAtk =0,vlDec=1 ,vlSub=1 ,vlSub2=1,vlRel=0,atkT=0,decT=1,subsT=0,relT=0,atkC=0,decC=0,relC=0,gateSub=0,dA=0|Out.ar(out,PlayBuf.ar(1,buf,rte,trigger:impulse,startPos: start,loop:loo,doneAction: dA)
 
 		* EnvGen.kr(Env([vlAtk,vlDec,vlSub,vlSub2,vlRel],
 			[dur * atkT,dur* decT-(dur*gateSub),dur * subsT,dur *relT],
-			[atkC,decC,0,relC]),timeScale: t.beatDur, doneAction:2)
+			[atkC,decC,0,relC]),timeScale: t.beatDur, doneAction:2)* amp
 
 	);}).add;
 
@@ -1789,6 +1788,22 @@ FreeVerb.ar(
 		frq),frq),frq),frq),frq),frq),frq),frq)* vol)};).add;
 
 
+
+
+
+	SynthDef(\EQHP2LP, {|out=0, in, val, quant, gain,frq=100,frq2=3310, vol =0.05, val2,quant2, gain2,val3,quant3, gain3,val4, gain4, shelf,val5,quant5, gain5,val6,shelf2, gain6,val7,quant7, gain7| Out.ar(out,
+
+
+			LPF.ar(LPF.ar(LPF.ar(LPF.ar(LPF.ar(LPF.ar(LPF.ar(LPF.ar(
+		HPF.ar(HPF.ar(HPF.ar(HPF.ar(HPF.ar(HPF.ar(HPF.ar(HPF.ar(
+
+			BLowShelf.ar(  BPeakEQ.ar( BPeakEQ.ar(BHiShelf.ar(BPeakEQ.ar(
+			BPeakEQ.ar(	BPeakEQ.ar(In.ar(in, 2),val,quant, gain),val2,quant2, gain2),val3,quant3, gain3),val4,shelf, gain4),val5,quant5, gain5),val7,quant7, gain7),val6,shelf2, gain6),
+
+		frq),frq),frq),frq),frq),frq),frq),frq)
+			,frq2),frq2),frq2),frq2),frq2),frq2),frq2),frq2)* vol)};).add;
+
+
 		SynthDef(\EQHPDyna, {|out=0, in, val, quant, gain,frq=100, vol =0.05, val2,quant2, gain2,valD,quantD,ctrl| Out.ar(out,
 
 		HPF.ar(HPF.ar(HPF.ar(HPF.ar(HPF.ar(HPF.ar(HPF.ar(HPF.ar(
@@ -2629,41 +2644,45 @@ Ppar([
 		// ~bassShap,
 	Pbind(\instrument, \bass,
 		\dur, Pseq([4/1],1),\lpf,100,
-		\midinote, 28, \bus, ~bassShapB,
+			// \midinote, 30.midicps,
+
+
+			\freq, 30.midicps*(432/440),
+
+
+			\bus, ~bassShapB,
 		\atk, 0,
-		\rel, t.beatDur *0.9988,
+		\rel, t.beatDur/2 *0.9988,
 		\rel2, t.beatDur/4 * 0.0012,
 
-		\vlDecFx,3800,/*\vlDecF,400,*/
+		\vlDecFx,114.midicps*(432/440),
 		\atkcrv, -2,
 		\relcrv, -2,\relcrv2, -9, \relcrv3, -6
 		,\amp,(-6/*-1*/)/*(-13)*/,\out,~bassEq
 	),
 
-Pbind(\instrument ,\EQHP2 ,\in,~bassEq, \out,0, \frq, 20.6,\vol,1,
+Pbind(\instrument ,\EQHP2LP ,\in,~bassEq, \out,0, \frq, 18.midicps*(432/440),\vol,1,
 
 
-	\val7,329.6275,\quant7,1.8 ,\gain7,(-2),
-			\val,659.255, \quant,1.96, \gain,(-19),
-\val2,1318.51, \quant2,2.2, \gain2,(-9),
-		\val3,2637.02, \quant3,2.1, \gain3,(-17),
-
-
+				\val7,66.midicps*(432/440),\quant7,1.8 ,\gain7,(-2),
+			\val,78.midicps*(432/440), \quant,1.96, \gain,(-21),
+\val2,90.midicps*(432/440), \quant2,2.2, \gain2,(-9),
+		\val3,102.midicps*(432/440), \quant3,2.1, \gain3,(-14),
 
 
 
 //that one
-	\val5,164.81375, \quant5,2.4, \gain5,(-13),\group,~eqGrp)
+	\val5,54.midicps*(432/440), \quant5,2.4, \gain5,(-13),\group,~eqGrp)
 
 
 
 ],1).play(t);
-	wait(0.212);
+	wait(0.16);
 
-	s.record(path:"/Users/davidmignot/Music/SuperCollider Recordings/E/bass.aiff",numChannels:1,duration:t.beatDur);
+	s.record(path:"/Users/davidmignot/Music/SuperCollider Recordings/F#/1/bass.aiff",numChannels:1,duration:t.beatDur);
 }).play;)
 
-~b3=Buffer.read(s,"/Users/davidmignot/Music/SuperCollider Recordings/E/bass.aiff")
+~b3=Buffer.read(s,"/Users/davidmignot/Music/SuperCollider Recordings/F#/1/bass.aiff")
 ~b3.plot
 ~k2.plot
 
@@ -2690,18 +2709,17 @@ Ppar([
 	/*Pbind( \instrument, \playBufXG, \impulse, 0.003 ,\dur,    Pseq([1/4],inf), \tS,  0.39550810372374,
 	\start,0,\type,Pseq([\rest,\note,\note,\note],inf),\buf,~b4,\out,~bassFi ,\loopy,0, \decT,0.9/*0.7*/,\vlDec,1,\vlSub,Pkey(\vlDec),\vlSub2,Pkey(\vlDec),/*\subsT ,Pseq([0,0.1,0.2,0.3],inf),*/\start,4100)*/
 
-	Pbind( \instrument, \playBuf, \impulse, 0.003 ,\dur,    Pseq([1/4],inf), \tS,  0.39550810372374,
+/*	Pbind( \instrument, \playBuf, \impulse, 0.003 ,\dur,    Pseq([1/4],inf),
 \type,Pseq([\rest,\note,\note,\note],inf),\buf,~b4  ,\out,0 ,\loopy,0, \decT,
-				Pseq([0,0.7,0.8,0.9],inf)
+				Pseq([0,0.7,0.8,0.9],inf),\start,4100),*/
 
-
-
-				,\vlDec,1,\vlSub,Pkey(\vlDec),\vlSub2,Pkey(\vlDec)/*,\subsT ,Pseq([0,0.1,0.2,0.3],inf)*/,\start,4100),
+				Pbind(\instrument, \playBuf, \buf, ~b4, \dur, Pseq([1/4],inf),\amp,1,\type,Pseq([\rest,\note,\note,\note],inf), \decT,	Pseq([0,0.78,0.86,0.9 ],inf),\start,0,\out,~bassFi)
+			//Pseq([0,0.58,0.66,0.84 ],inf)
 ],1),
 
 		// Pseq([~bassShap],inf),
 
-			Pbind(\instrument, \shap, \dur,Pseq([1/1],inf),\dA1,2,\out,~bassShapB, \crv, 6,\tS, 0.39550810372374)
+		Pbind(\instrument, \shap, \dur,Pseq([1/1],inf),\dA1,2,\out,~bassShapB, \crv, (-6),\tS, 0.39550810372374)
 
 
 
@@ -2715,14 +2733,14 @@ Ppar([
 
 
 ~comp=Synth(\comp, [\ctrl, ~kbus ],~compGrp);
-~comp.set(\thr,0.2 ,\sB, 1.034,\sA, 1/2,\atk ,0.0242, \rel ,0.0968, \gai,1,\in, ~comFuzz,\out,~limitBass);
-~limK=Synth(\limitertoMixer,[\c45,1,\in, ~limitKick, \gain,1,\out,0/*~kToPan*/],~limitGrp);
-~limK.set(\gain,224.7);
+~comp.set(\thr,0.2 ,\sB, 1.036,\sA, 1/2,\atk ,t.beatDur/16, \rel ,t.beatDur/4, \gain,1,\in, ~comFuzz,\out,~limitBass);
+~limK=Synth(\limitertoMixer,[\c45,1,\in, ~limitKick, \gain,1,\out,~kToPan],~limitGrp);
+~limK.set(\gain,154.7);
 	~limB=Synth(\limitertoMixer,[\c46,1,\in, ~limitBass, \gain,68,\out,~kToPan],~limitGrp);
-	~limB.set(\gain,209);
+	~limB.set(\gain,204);
 
 
-	// ~kbPan2 = Synth(\pan2,[ \in,~kToPan,\out,0],~stereoGrp);
+	~kbPan2 = Synth(\pan2,[ \in,~kToPan,\out,0],~stereoGrp);
 
 	wait(0.162);
 
@@ -2739,7 +2757,7 @@ Ppar([
 ~kb1=Buffer.read(s,"/Users/davidmignot/Music/SuperCollider Recordings/E/kB.aiff")
 ~kb1.plot
 ~k2.plot
-~b3.play
+~b3.plot
 ~kb=Pbind(\instrument, \playBufS, \dur,  Pseq([10/1],inf), \tS,  t.beatDur,\buf,~kb1,\loopy,0,\start,1,\vl,1).play(t)
 Pseq([Pbindf(~kick,\out,0)],inf).play(t)
 
@@ -2778,37 +2796,37 @@ Ppar([
 		// ~bassShap,
 	Pbind(\instrument, \bass,
 		\dur, Pseq([4/1],1),\lpf,100,
-		\midinote, 28,/* \bus, ~bassShapB,*/
+			\freq, 30.midicps*(432/440),
 		\atk, 0,
-		\rel, t.beatDur *0.9988,
+		\rel, t.beatDur/2 *0.9988,
 		\rel2, t.beatDur/4 * 0.0012,
 
-		\vlDecFx,3800,\vlDecFx2,600,
+		\vlDecFx,102.midicps*(432/440),
 		\atkcrv, -2,
 		\relcrv, -2,\relcrv2, -9, \relcrv3, -6
 		,\amp,(-6/*-1*/)/*(-13)*/,\out,~bassEq
 	),
 
 
-Pbind(\instrument ,\EQHP2 ,\in,~bassEq, \out,0, \frq, 20.6,\vol,1,
+Pbind(\instrument ,\EQHP2LP ,\in,~bassEq, \out,0, \frq, 18.midicps*(432/440),\vol,1,
 
 
-				\val7,329.6275,\quant7,1.8 ,\gain7,(-2),
-			\val,659.255, \quant,1.96, \gain,(-19),
-\val2,1318.51, \quant2,2.2, \gain2,(-9),
-		\val3,2637.02, \quant3,2.1, \gain3,(-17),
+				\val7,66.midicps*(432/440),\quant7,1.8 ,\gain7,(-2),
+			\val,78.midicps*(432/440), \quant,1.96, \gain,(-21),
+\val2,90.midicps*(432/440), \quant2,2.2, \gain2,(-9),
+		\val3,102.midicps*(432/440), \quant3,2.1, \gain3,(-14),
 
 
 
 //that one
-	\val5,164.81375, \quant5,2.4, \gain5,(-13),\group,~eqGrp)
+	\val5,54.midicps*(432/440), \quant5,2.4, \gain5,(-13),\group,~eqGrp,\dur, inf)
 
 
 
 ],1).play(t);
-	wait(0.212);
+	wait(0.16);
 
-	s.record(path:"/Users/davidmignot/Music/SuperCollider Recordings/E/bass2.aiff",numChannels:1,duration:t.beatDur);
+	s.record(path:"/Users/davidmignot/Music/SuperCollider Recordings/F#/1/bass2.aiff",numChannels:1,duration:t.beatDur);
 }).play;)
 ~b4.plot
-~b4=Buffer.read(s,"/Users/davidmignot/Music/SuperCollider Recordings/E/bass2.aiff");
+~b4=Buffer.read(s,"/Users/davidmignot/Music/SuperCollider Recordings/F#/1/bass2.aiff");
