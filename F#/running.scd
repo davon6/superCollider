@@ -2713,7 +2713,7 @@ Ppar([
 \type,Pseq([\rest,\note,\note,\note],inf),\buf,~b4  ,\out,0 ,\loopy,0, \decT,
 				Pseq([0,0.7,0.8,0.9],inf),\start,4100),*/
 
-				Pbind(\instrument, \playBuf, \buf, ~b4, \dur, Pseq([1/4],inf),\amp,1,\type,Pseq([\rest,\note,\note,\note],inf), \decT,	Pseq([0,0.78,0.86,0.9 ],inf),\start,0,\out,~bassFi)
+				Pbind(\instrument, \playBuf, \buf, ~b4, \dur, Pseq([1/4],inf),\amp,1,\type,Pseq([\rest,\note,\note,\note],inf), \decT,	Pseq([0,0.8,0.86,0.92 ],inf),\start,0,\out,~bassFi)
 			//Pseq([0,0.58,0.66,0.84 ],inf)
 ],1),
 
