@@ -9429,20 +9429,20 @@ Pbind(\instrument,\fmX,\dur,Pseq([100/4],inf),\freq, Prand([ 87.midicps,108.midi
 			[dur * atkT,dur* decT-(dur*gateSub),dur * subsT,dur *relT],
 			[atkC,decC,0,relC]),timeScale: t.beatDur, doneAction:2);
 
-	/*iEnv = EnvGen.kr(
+	iEnv = EnvGen.kr(
 			Env.new(
 
 			[1, 1 * 5, 1 * 5,4.8],
-			[0,0.000000000001,        (/*dur*/ 9999 ),      0.0000000001],
+			[0,0.000000000001,        (dur  ),      0.0000000001],
 			[4, 4,(-4)]
-		),timeScale: t.beatDur);*/
+		));
 
 	//second level of modulation
-	mod2 = SinOsc.ar(66.midicps/10, mul:MouseY.kr(66.midicps/10) );
+		mod2 = SinOsc.ar(MouseX.kr(78.midicps*(432/440)/10), mul:MouseY.kr(78.midicps*(432/440)/10 * iEnv));
 
 	//first level of modulation
 
-	mod = SinOsc.ar( MouseX.kr(66.midicps+mod2), mul:MouseY.kr(66.midicps));
+			mod = SinOsc.ar( MouseX.kr(78.midicps*(432/440)+mod2), mul:MouseY.kr(78.midicps*(432/440)* iEnv));
 
 	//my carrier is a mess but bring interesting outputs
 
@@ -9461,6 +9461,7 @@ Pbind(\instrument,\lfoStep, \val, Pfunc({ 72.rrand(83).midicps  }), \dur,Pseq([1
 
 Pbind(\instrument,\fmX,\dur,Pseq([1/4],inf),\freq, Prand([ 87.midicps,108.midicps,  66.midicps, 121.midicps, 118.midicps,  125.midicps,116.midicps],inf),\crv,Pfunc({-6.rrand(-1)}) ).play(t)
 
+	//here
 Pbind(\instrument,\fmX,\dur,Pseq([1/4],inf),\freq, Prand([ 87.midicps,108.midicps,  66.midicps, 121.midicps, 118.midicps,  125.midicps,116.midicps],inf),
 		\vlSub,Pfunc({0.9.exprand(0.02,1)}),\vlSub2,Pkey(\vlSub),\atkT,Pfunc({0.2.exprand(0.01)}),
 	\decT,Pfunc({0.2.exprand(0.8)}),
@@ -9469,6 +9470,66 @@ Pbind(\instrument,\fmX,\dur,Pseq([1/4],inf),\freq, Prand([ 87.midicps,108.midicp
 	\atkC,Pfunc({4.exprand(1,1)}),
 	\decC,Pfunc({-6.exprand(-0.1)}),
 				\relC,Pfunc({-8.exprand(-2,1)}),\vlAtk ,Pfunc({0.01.exprand(0.001)}),\vlRel,Pkey(\vlAtk)).play(t,quant:1)
+
+
+
+
+		Pbind(\instrument,\fmX,\dur,Pseq([1/4],inf),\freq, Prand([ 99.midicps,120.midicps,  78.midicps, 133.midicps, 130.midicps,  137.midicps,128.midicps],inf),
+		\vlSub,Pfunc({0.9.exprand(0.02,1)}),\vlSub2,Pkey(\vlSub),\atkT,Pfunc({0.2.exprand(0.01)}),
+	\decT,Pfunc({0.4.exprand(0.8)}),
+	\subsT,Pfunc({0.3.exprand(0.2)}),
+	\relT,Pfunc({0.52.exprand(0.1,1)}),
+	\atkC,Pfunc({4.exprand(1,1)}),
+	\decC,Pfunc({-6.exprand(-0.1)}),
+				\relC,Pfunc({-8.exprand(-2,1)}),\vlAtk ,Pfunc({0.01.exprand(0.001)}),\vlRel,Pkey(\vlAtk)).play(t,quant:1)
+
+
+	Pbind(\instrument,\fmX,\dur,Pseq([1/4],inf),\freq,  54.midicps,
+		\vlSub,Pfunc({0.9.exprand(0.02,1)}),\vlSub2,Pkey(\vlSub),\atkT,Pfunc({0.2.exprand(0.01)}),
+	\decT,Pfunc({0.4.exprand(0.8)}),
+	\subsT,Pfunc({0.3.exprand(0.2)}),
+	\relT,Pfunc({0.52.exprand(0.1,1)}),
+	\atkC,Pfunc({4.exprand(1,1)}),
+	\decC,Pfunc({-6.exprand(-0.1)}),
+				\relC,Pfunc({-8.exprand(-2,1)}),\vlAtk ,Pfunc({0.01.exprand(0.001)}),\vlRel,Pkey(\vlAtk)).play(t,quant:1)
+
+
+	Pbind(\instrument,\fmX,\dur,Pseq([1/4],inf),\freq, Prand([ 75.midicps,96.midicps,  54.midicps, 109.midicps, 106.midicps,  113.midicps,104.midicps],inf),
+		\vlSub,Pfunc({0.9.exprand(0.02,1)}),\vlSub2,Pkey(\vlSub),\atkT,Pfunc({0.2.exprand(0.01)}),
+	\decT,Pfunc({0.2.exprand(0.8)}),
+	\subsT,Pfunc({0.3.exprand(0.2)}),
+	\relT,Pfunc({0.52.exprand(0.1,1)}),
+	\atkC,Pfunc({4.exprand(1,1)}),
+	\decC,Pfunc({-6.exprand(-0.1)}),
+				\relC,Pfunc({-8.exprand(-2,1)}),\vlAtk ,Pfunc({0.01.exprand(0.001)}),\vlRel,Pkey(\vlAtk)).play(t,quant:1)
+
+	//til here
+
+	Pbind(\instrument,\fmX,\dur,Pseq([1/4],inf),\freq, Prand([ 87.midicps*(432/440),108.midicps*(432/440),  66.midicps*(432/440), 121.midicps*(432/440), 118.midicps*(432/440),  125.midicps*(432/440),116.midicps*(432/440),99.midicps*(432/440),120.midicps*(432/440),  78.midicps*(432/440), 133.midicps*(432/440), 130.midicps*(432/440),  137.midicps*(432/440),128.midicps*(432/440), 75.midicps*(432/440),96.midicps*(432/440),  54.midicps*(432/440), 109.midicps*(432/440), 106.midicps*(432/440),  113.midicps*(432/440),104.midicps*(432/440)],inf),
+		\vlSub,Pfunc({0.9.exprand(0.16,1)}),\vlSub2,Pkey(\vlSub),\atkT,Pfunc({0.2.exprand(0.01)}),
+	\decT,Pfunc({0.2.exprand(0.8)}),
+	\subsT,Pfunc({0.3.exprand(0.2)}),
+	\relT,Pfunc({0.52.exprand(0.1,1)}),
+	\atkC,Pfunc({4.exprand(1,1)}),
+	\decC,Pfunc({-6.exprand(-0.1)}),
+				\relC,Pfunc({-8.exprand(-2,1)}),\vlAtk ,Pfunc({0.01.exprand(0.001)}),\vlRel,Pkey(\vlAtk)).play(t,quant:1)
+
+
+
+
+
+	Pbind(\instrument,\fmX,\dur,Pseq([1/4],inf),\freq, Prand([99.midicps*(432/440),120.midicps*(432/440),  78.midicps*(432/440), 133.midicps*(432/440), 130.midicps*(432/440)/*,  137.midicps*(432/440)*/,128.midicps*(432/440)],inf),
+		\vlSub,Pfunc({0.9.exprand(0.16,1)}),\vlSub2,Pkey(\vlSub),\atkT,Pfunc({0.12.exprand(0.01)}),
+	\decT,Pfunc({0.2.exprand(0.8)}),
+	\subsT,Pfunc({0.3.exprand(0.2)}),
+	\relT,Pfunc({0.52.exprand(0.1,1)}),
+	\atkC,Pfunc({4.exprand(1,1)}),
+	\decC,Pfunc({-6.exprand(-0.1)}),
+				\relC,Pfunc({-8.exprand(-2,1)}),\vlAtk ,Pfunc({0.01.exprand(0.001)}),\vlRel,Pkey(\vlAtk)).play(t,quant:1)
+
+
+
+
 
 
 
@@ -9489,6 +9550,19 @@ Pbind(\instrument,\fmX,\dur,Pseq([1/4],inf),\freq, Prand([ 87.midicps,108.midicp
 	\atkC,Pfunc({4.exprand(1,1)}),
 	\decC,Pfunc({-6.exprand(-0.1)}),
 				\relC,Pfunc({-8.exprand(-2,1)}),\vlAtk ,Pfunc({0.01.exprand(0.001)}),\vlRel,Pkey(\vlAtk))],inf).play(t,quant:1)
+
+
+
+
+		Pbind(\instrument,\fmX,\dur,Pseq([1/4],inf),\freq, Prand([ 99.midicps,120.midicps,  78.midicps, 133.midicps, 130.midicps,  137.midicps,128.midicps],inf),
+		\vlSub,Pfunc({0.9.exprand(0.02,1)}),\vlSub2,Pkey(\vlSub),\atkT,Pfunc({0.2.exprand(0.01)}),
+	\decT,Pfunc({0.4.exprand(0.8)}),
+	\subsT,Pfunc({0.3.exprand(0.2)}),
+	\relT,Pfunc({0.52.exprand(0.1,1)}),
+	\atkC,Pfunc({4.exprand(1,1)}),
+	\decC,Pfunc({-6.exprand(-0.1)}),
+				\relC,Pfunc({-8.exprand(-2,1)}),\vlAtk ,Pfunc({0.01.exprand(0.001)}),\vlRel,Pkey(\vlAtk)).play(t,quant:1)
+
 
 
 	Synth(\fmX, [\secBus,~bus2,\factor2,1],)
@@ -9609,14 +9683,24 @@ Pbind(\instrument, \kick,\amp,(-10),\dur, Pseq([1/4],8),\type,Pseq([\note,\note,
 
 
 
+		Pseq([
 
-		Prand([
+				Pbind(\instrument, \kick,\amp,(-10),\dur, Pseq([1/1],1),\type,Pseq([\note,\note,/*\note,\note,\rest,\rest,*/\rest,\rest].scramble,inf)),
 
-Pbind(\instrument, \kick,\amp,(-10),\dur, Pseq([1/8],2),\type,Pseq([\note,\note,/*\note,\note,\rest,\rest,*/\rest,\rest].scramble,inf)),
+				Pbind(\instrument, \kick,\amp,(-10),\dur, Pseq([1/2],2),\type,Pseq([\note,/*\note,*//*\note,\note,\rest,\rest,\rest,*/\rest].scramble,inf))
+			].scramble,1)
+	/*	Prand([
 
-Pbind(\instrument, \kick,\amp,(-10),\dur, Pseq([1/8],2),\type,Pseq([\note,\note/*,\note,\note,\rest,\rest*/,\rest,\rest].scramble,inf)),
-Pbind(\instrument, \kick,\amp,(-10),\dur, Pseq([1/8],2),\type,Pseq([\note,\note/*,\note,\note,\rest,\rest*/,\rest,\rest].scramble,inf)),
-		Pbind(\instrument, \kick,\amp,(-10),\dur, Pseq([1/8],2),\type,Pseq([\note,\note,/*\note,\note,\rest,\rest,*/\rest,\rest].scramble,inf))],8)],7)
+Pbind(\instrument, \kick,\amp,(-10),\dur, Pseq([1/1],2),\type,Pseq([\note,\note,/*\note,\note,\rest,\rest,*/\rest,\rest].scramble,inf)),
+
+				Pbind(\instrument, \kick,\amp,(-10),\dur, Pseq([1/2],4),\type,Pseq([\note,/*\note,*//*\note,\note,\rest,\rest,\rest,*/\rest].scramble,inf))
+
+/*Pbind(\instrument, \kick,\amp,(-10),\dur, Pseq([1/8],2),\type,Pseq([\note,\note/*,\note,\note,\rest,\rest*/,\rest,\rest].scramble,inf)),*/
+/*Pbind(\instrument, \kick,\amp,(-10),\dur, Pseq([1/8],2),\type,Pseq([\note,\note/*,\note,\note,\rest,\rest*/,\rest,\rest].scramble,inf)),
+		Pbind(\instrument, \kick,\amp,(-10),\dur, Pseq([1/8],2),\type,Pseq([\note,\note,/*\note,\note,\rest,\rest,*/\rest,\rest].scramble,inf))*/],1)*/
 
 
-	],32).play(t)
+		],7)
+
+
+	],4).play(t)
