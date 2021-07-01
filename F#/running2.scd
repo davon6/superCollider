@@ -47,8 +47,10 @@ f = { |n=14, min=0, max=11| (min..max).scramble.keep(n) };
 
 ~leTout =  Buffer.read(s,"/Users/davidmignot/Music/SuperCollider Recordings/E/stem1.aiff");
 ~leTout2 =  Buffer.read(s,"/Users/davidmignot/Music/SuperCollider Recordings/E/stem2.aiff");
-~cymb= Buffer.read(s,"/Users/davidmignot/Music/SuperCollider Recordings/E/cymbal.aiff");
-~hat= Buffer.read(s,"/Users/davidmignot/Music/SuperCollider Recordings/E/hat.aiff");
+
+~cymb= Buffer.read(s,"/Users/davidmignot/Music/SuperCollider Recordings/F#/1/cymbal.aiff");
+~hat= Buffer.read(s,"/Users/davidmignot/Music/SuperCollider Recordings/F#/1/hat.aiff");
+~hat.plot
 ~snare= Buffer.read(s,"/Users/davidmignot/Music/SuperCollider Recordings/E/snare.aiff");
 ~hit2= Buffer.read(s,"/Users/davidmignot/Music/SuperCollider Recordings/E/hit2.aiff");
 ~bell1= Buffer.read(s,"/Users/davidmignot/Music/SuperCollider Recordings/E/bell.aiff");

@@ -33,10 +33,6 @@ ServerOptions.outDevices;
 
 	~bpm = 147;
 	~hz1beat = ~bpm * 16/60/32;
-	~hz1Oct = ~bpm * 16/30;
-	~hzQbeat = ~hz1beat/4;
-	~hzHbeat = ~hzQbeat/4;
-	~hz8Oct = ~hz1beat * 2048;
 
 	FreqScope.new;
 	s.meter;
@@ -146,6 +142,29 @@ s.sync;
 	~revRnd = [~quickFi,~rShor,~rLon];
 
 	~dispatchBus = Bus.audio(s,1);
+
+	~toComp10 =Bus.audio(s,10);
+	~rythmLimit=Bus.audio(s,10);
+	~flopped=Bus.audio(s,10);
+	~toCom=Bus.audio(s,10);
+	~hiCom=Bus.audio(s,10);
+
+	~comFuzz22=Bus.audio(s,10);
+	~toKbGate=Bus.audio(s,10);
+
+	~kbus=Bus.audio(s,1);
+	~snBus=Bus.audio(s,1);
+
+	~cymbalEq=Bus.audio(s,1);~comBusCymb=Bus.audio(s,1);~limitCymb=Bus.audio(s,1);~stereoCymb=Bus.audio(s,1);
+	~comBusHat=Bus.audio(s,1);~limitHat=Bus.audio(s,1);~hatEq=Bus.audio(s,1);~stereoHat=Bus.audio(s,1);
+
+	~snareEQ=Bus.audio(s,1);~snareComp=Bus.audio(s,1);~snareComp=Bus.audio(s,1);~snareLimit=Bus.audio(s,1);~toPan2=Bus.audio(s,1);
+
+	~bassFi=Bus.audio(s,1);~comFuzz=Bus.audio(s,1);~limitBass=Bus.audio(s,1);~limitKick=Bus.audio(s,1);~kToPan=Bus.audio(s,1);
+
+	~hitEq=Bus.audio(s,1);~hitRev=Bus.audio(s,1);~hitComp=Bus.audio(s,1);~hitLimit=Bus.audio(s,1);~hitStereo=Bus.audio(s,1);
+
+	~bigRiToDisto=Bus.audio(s,1);~bigRiToEnv=Bus.audio(s,1);~bigRiToEq=Bus.audio(s,1);~bigRiToRev;=Bus.audio(s,1);~bigRiToComp=Bus.audio(s,1);~bigRiToLimit=Bus.audio(s,1);~bigRiToStereo=Bus.audio(s,1);
 
 
 	s.sync;
@@ -361,26 +380,6 @@ s.sync;
 	SynthDef(\ampO,{|out=0,in|Out.kr(out,Amplitude.kr(In.ar(in)).linlin(0,0.0304096,1,0))}).add;
 
 
-
-	SynthDef(\lfo1, {|out,ph, val=1, dur,tS=1|Out.kr(out,
-/*	SinOsc.kr(Select.kr(val,
-			[    ~hz1beat, ~hzHbeat/*,0.321875*/	])
-
-			* SinOsc.kr(~hzHbeat*2).range(~hz1beat.neg, ~hz1beat)).range(~hz8Oct, ~hz1Oct)*/
-
-
-	SinOsc.kr(Select.kr(LFNoise2.ar(~hz1beat).range(0,3).round(1),
-		[    ~hz1beat/4,~hz1beat,~hz1beat,~hzHbeat,/*~hz1beat *4*/ /*,~hzHbeat*4   */  /*,0.321875*/	]
-		)    *  SinOsc.kr(~hzHbeat*4).range((~hz1beat.neg),~hz1beat),ph).range(~hz8Oct/16,~hz1Oct/4)
-
-
-		*EnvGen.kr(Env.step([1,0],[dur,0]),timeScale: tS,doneAction: 2))}).add;
-
-
-	SynthDef(\lfo12, {|out, val=1,ph, dur,tS=1|Out.kr(out,
-LFNoise0.kr(~hz1beat).range(0.1,0.0)/*,0.02)*/
-		+SinOsc.kr(SelectX.kr(LFNoise0.kr(~hz1beat*4).range(0,1).round(1),[~hz1beat,~hz1beat*4,~hz1beat*16]),ph).range(0.2,0.00)
-*EnvGen.kr(Env.step([0.08,0],[dur,0]),timeScale: tS,doneAction: 2))}).add;
 
 	SynthDef(\lfo13, {|out, dur,ph, val = (~hzQbeat), rL=1,rH=0.4,tS=1 | Out.kr(out,SinOsc.ar(val,ph).range(rL,rH)
 *EnvGen.kr(Env.step([1,0],[dur,0]),timeScale: tS,doneAction: 2))}).add;
@@ -1040,13 +1039,6 @@ timeScale: tS,	doneAction:2);
 	}).add;
 
 
-	SynthDef(\pingD10, { |out = 0, bufnum = 0, dur, feedback = 0.5, delayTime = 0.3, in  |
-    var left =	Mix.ar(In.ar(in,10));
-
-    Out.ar(out ,PingPong.ar(bufnum, [left,left], delayTime, feedback, 1))
-	}).add;
-
-
 	SynthDef(\pingDS, { |out = 0, bufnum = 0, dur, feedback = 0.5, delayTime = 0.3, in  |
     var left =	In.ar(in,2);
 
@@ -1308,32 +1300,6 @@ SynthDef(\EQHP10, {|out=0, in, val, quant, gain, val2, quant2, gain2 frq=100, vo
 		/*Out.ar(0,RMS.ar(CompanderD.ar( In.ar(in,10),thr, sB ,sA, atk, rel)* gain ).ampdb.round(0.1).poll(label:name.poll)* [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1]);*/
 	}).add;
 
-
-/*	SynthDef(\playBuf10NToMixer ,{|out = 0,start, trig= 0.002, dur, buf, dA=2, tS=1, loopy=1,vl=1,in,c1=0,c2=0,c3=0,c4=0,c5=0,c6 =0,c7 =0,c8 =0,c9 =0,c10 =0,c11 =0,c12 =0,c13 =0,c14 =0,c15 =0,c16=0,c17=0,c18=0,c19=0,c20 =0,c21=0 ,name|
-
-		Out.ar(~fusible,PlayBuf.ar(10,buf,trigger:
-		trig/*Dust.kr(4.0)*/,startPos: start,loop: loopy/*,doneAction: dA*/)* EnvGen.kr(Env([0,vl,vl,0],[0,dur,0]),timeScale: tS,doneAction: 2));
-
-	Out.ar(out,In.ar( in, 10));
-
-	Out.ar(0,PlayBuf.ar(10,buf,trigger:
-		trig/*Dust.kr(4.0)*/,startPos: start,loop: loopy/*,doneAction: dA*/)* [0,0,c2,c3,c4,c5,c6,c7,c8,c9,c10,c11,c12,c13,c14,c15,c16,c17,c18,c19,c20,c21]* EnvGen.kr(Env([0,vl,vl,0],[0,dur,0]),timeScale: tS,doneAction: 2));
-
-/*	Out.ar(0,RMS.ar(In.ar( in, 10)).ampdb.round(0.1).poll(label:name.poll )* [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1]);*/
-	}).add;*/
-
-/*SynthDef(\playBuf2ToMixer ,{|out = 0,start, trig= 0.002, dur, buf, dA=2, tS=1, loopy=1,vl=1,in,c1=0,c2=0,c3=0,c4=0,c5=0,c6 =0,c7 =0,c8 =0,c9 =0,c10 =0,c11 =0,c12 =0,c13 =0,c14 =0,c15 =0,c16=0,c17=0,c18=0,c19=0,c20 =0,c21=0 ,name|
-
-		Out.ar(~fusible,PlayBuf.ar(2,buf,trigger:
-		trig/*Dust.kr(4.0)*/,startPos: start,loop: loopy/*,doneAction: dA*/)* EnvGen.kr(Env([0,vl,vl,0],[0,dur,0]),timeScale: tS,doneAction: 2));
-
-	Out.ar(out,In.ar( in, 10));
-
-	Out.ar(0,PlayBuf.ar(2,buf,trigger:
-		trig/*Dust.kr(4.0)*/,startPos: start,loop: loopy/*,doneAction: dA*/)* [0,0,c2,c3,c4,c5,c6,c7,c8,c9,c10,c11,c12,c13,c14,c15,c16,c17,c18,c19,c20,c21]* EnvGen.kr(Env([0,vl,vl,0],[0,dur,0]),timeScale: tS,doneAction: 2));
-
-/*	Out.ar(0,RMS.ar(In.ar( in, 10)).ampdb.round(0.1).poll(label:name.poll )* [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1]);*/
-	}).add;*/
 	SynthDef(\limiter10, {|in, out = 0,gain=1,vol =1, du =0.01,rel=0.8, atk =0.01 ,thr= 0.001,sB =1,sA= 0.05|
 
 		Out.ar(out , CompanderD.ar( In.ar(in,10),thr, sB ,sA, atk, rel)* gain;)
@@ -1713,128 +1679,6 @@ SynthDef(\sequ,{|value, dur, in=0, out=0, vlAtk=0, vlDec=1,vlSub=1,vlSub2=1, vlR
 
 
 
-	SynthDef(\recLoop){|buf=0,out=0,recording = 1,in = (~toRecord)|
-		var input =  Mix.ar(In.ar(in,1));
-	// Timer measures times between triggers
-	// Changed emits a trigger when recording changes value
-	// Gate updates recEnd only when not recording
-	// BufSampleRate because Timer measures seconds and we need samples instead
-	var recEnd = Gate.kr(
-		Timer.kr(Changed.kr(recording)),
-		1-recording
-	)*BufSampleRate.ir(buf);
-
-	// record buf from start to end
-	// run only when recording
-	// jump to start when recording is started
-    var rec = RecordBuf.ar(input,buf,run:recording,loop:0,trigger:recording);
-
-	var play = LoopBuf.ar(1,buf,1,
-		// when gate is positive: loop,
-		// when gate is negative: play normally
-		// (don't loop when recEnd is still at 0)
-		gate:recEnd>1,
-		startPos:0,
-		startLoop:0,
-		endLoop:recEnd
-	);
-		/*Out.ar(0,HPF.ar(input,100));*/
-		Out.ar(0,BHiPass4.ar(play),100);
-		/*Out.ar(0,play);*/
-}.add;
-
-
-
-		SynthDef(\recLoopS){|buf=0,in=0,out=0,recording = 1|
-	var input = In.ar(in/*~toRecord2*/,2);
-	// Timer measures times between triggers
-	// Changed emits a trigger when recording changes value
-	// Gate updates recEnd only when not recording
-	// BufSampleRate because Timer measures seconds and we need samples instead
-	var recEnd = Gate.kr(
-		Timer.kr(Changed.kr(recording)),
-		1-recording
-	)*BufSampleRate.ir(buf);
-
-	// record buf from start to end
-	// run only when recording
-	// jump to start when recording is started
-    var rec = RecordBuf.ar(input,buf,run:recording,loop:0,trigger:recording);
-
-	var play = LoopBuf.ar(2,buf,1,
-		// when gate is positive: loop,
-		// when gate is negative: play normally
-		// (don't loop when recEnd is still at 0)
-		gate:recEnd>1,
-		startPos:0,
-		startLoop:0,
-		endLoop:recEnd
-	);
-		/*Out.ar(0,HPF.ar(input,100));*/
-		//Out.ar(0,BHiPass4.ar(play),100);
-		Out.ar(0,play);
-}.add;
-
-
-		SynthDef(\recLoop10){|buf=0,in=0,out=0,recording = 1|
-	var input = In.ar(in/*~toRecord2*/,10);
-	// Timer measures times between triggers
-	// Changed emits a trigger when recording changes value
-	// Gate updates recEnd only when not recording
-	// BufSampleRate because Timer measures seconds and we need samples instead
-	var recEnd = Gate.kr(
-		Timer.kr(Changed.kr(recording)),
-		1-recording
-	)*BufSampleRate.ir(buf);
-
-	// record buf from start to end
-	// run only when recording
-	// jump to start when recording is started
-    var rec = RecordBuf.ar(input,buf,run:recording,loop:0,trigger:recording);
-
-	var play = LoopBuf.ar(10,buf,1,
-		// when gate is positive: loop,
-		// when gate is negative: play normally
-		// (don't loop when recEnd is still at 0)
-		gate:recEnd>1,
-		startPos:0,
-		startLoop:0,
-		endLoop:recEnd
-	);
-		Out.ar(0,HPF.ar(input,100));
-	Out.ar(~dead10,play);
-}.add;
-
-
-
-		SynthDef(\recLoop102){|buf=0,in=0,out=0,recording = 1|
-	var input = In.ar(in/*~toRecord2*/,10);
-	// Timer measures times between triggers
-	// Changed emits a trigger when recording changes value
-	// Gate updates recEnd only when not recording
-	// BufSampleRate because Timer measures seconds and we need samples instead
-	var recEnd = Gate.kr(
-		Timer.kr(Changed.kr(recording)),
-		1-recording
-	)*BufSampleRate.ir(buf);
-
-	// record buf from start to end
-	// run only when recording
-	// jump to start when recording is started
-    var rec = RecordBuf.ar(input,buf,run:recording,loop:0,trigger:recording);
-
-	var play = LoopBuf.ar(10,buf,1,
-		// when gate is positive: loop,
-		// when gate is negative: play normally
-		// (don't loop when recEnd is still at 0)
-		gate:recEnd>1,
-		startPos:0,
-		startLoop:0,
-		endLoop:recEnd
-	);
-
-}.add;
-
 	SynthDef(\blank,{|out=0,in,dur|
 
 		ReplaceOut.ar(out,In.ar(in,2)   )*EnvGen.kr(Env.step([1,0],[dur,0]),timeScale: t.beatDur,doneAction: 2)}).add;
@@ -2099,22 +1943,13 @@ Ppar([
 	Pseq([Pbindf(~kick,\out,~kbus)],inf),
 Ppar([
 
-			// Pbind(\instrument, \playBuf, \dur,  Pseq([1/1],inf), \tS,  0.39550810372374,\buf,~k2,\out,~limitKick,\start,00),
 			Pseq([Pbindf(~kick,\out,~limitKick)],inf),
 
-
-	/*Pbind( \instrument, \playBufXG, \impulse, 0.003 ,\dur,    Pseq([1/4],inf), \tS,  0.39550810372374,
-	\start,0,\type,Pseq([\rest,\note,\note,\note],inf),\buf,~b4,\out,~bassFi ,\loopy,0, \decT,0.9/*0.7*/,\vlDec,1,\vlSub,Pkey(\vlDec),\vlSub2,Pkey(\vlDec),/*\subsT ,Pseq([0,0.1,0.2,0.3],inf),*/\start,4100)*/
-
-/*	Pbind( \instrument, \playBuf, \impulse, 0.003 ,\dur,    Pseq([1/4],inf),
-\type,Pseq([\rest,\note,\note,\note],inf),\buf,~b4  ,\out,0 ,\loopy,0, \decT,
-				Pseq([0,0.7,0.8,0.9],inf),\start,4100),*/
 
 				Pbind(\instrument, \playBuf, \buf, ~b4, \dur, Pseq([1/4],inf),\amp,1,\type,Pseq([\rest,\note,\note,\note],inf), \decT,	Pseq([0,0.8,0.86,0.92 ],inf),\start,0,\out,~bassFi)
 			//Pseq([0,0.58,0.66,0.84 ],inf)
 ],1),
 
-		// Pseq([~bassShap],inf),
 
 		Pbind(\instrument, \shap, \dur,Pseq([1/1],inf),\dA1,2,\out,~bassShapB, \crv, (-6),\tS, 0.39550810372374)
 

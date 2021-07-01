@@ -11,9 +11,9 @@
 
 ~comp10Ry=Synth( \comp10, [\in,~toComp10,\out,~rythmLimit],~compGrp);
 ~comp10Ry.set(\thr,0.6 ,\sB, 1.04,\sA, 1/2,\atk ,0.0242, \rel ,0.0968,\gain,1);
-~mix32=	Synth( \limiter10toMixer,[\c32,1,\dur, inf, \in,~rythmLimit,\out,/*~toKbGate*/~flopped, \gain,22,], ~limitGrp);
+~mix32=	Synth( \limiter10toMixer,[\c32,1,\dur, inf, \in,~rythmLimit,\out,~flopped, \gain,22,], ~limitGrp);
 ~mix32.set(\gain,14.6);
-~flopd = 	Synth(\stereoO10, [ \in,~flopped,\out,~toCom/*~rythmComp*/],~stereoGrp);
+~flopd = 	Synth(\stereoO10, [ \in,~flopped,\out,~toCom],~stereoGrp);
 ~flopd.set(\spread,0,\center,0,\dlt1,0.05,\dlt2,0,\decT,0, \mxDel,0);
 
 
@@ -24,9 +24,9 @@
 ~eq31=Synth(\EQHP96, [\frq, 3000, \in, ~cymbalEq,\out , ~comBusCymb, \vol,4],~eqGrp);
 ~eq31.set(\val, 5000,\quant, 1, \gain,(-15),\val2,0,\quant2,0, \gain2,0, \val3,0,\quant3,0, \gain3,0,\val4,0,\shelf,0, \gain4,0,\out , ~comBusCymb);
 ~comp31=Synth(\comp,[\ctrl, ~kbus,],~compGrp);
-~comp31.set(\thr,0.3 ,\sB, 1.05,\sA, 1/2,\atk ,0.0242, \rel ,0.0968,\gain,3.5,\in, ~comBusCymb , \out,~limitC);
-~mix31= Synth(\limitertoMixer,[\c50,1,\in, ~limitC,\gain,20,\out,~stereoCymb],~limitGrp);
- ~mix31.set(\gain,14,\in, ~limitC,\out,~stereoCymb);
+~comp31.set(\thr,0.3 ,\sB, 1.05,\sA, 1/2,\atk ,0.0242, \rel ,0.0968,\gain,3.5,\in, ~comBusCymb , \out,~limitCymb);
+~mix31= Synth(\limitertoMixer,[\c50,1,\in, ~limitCymb,\gain,20,\out,~stereoCymb],~limitGrp);
+ ~mix31.set(\gain,14,\in, ~limitCymb,\out,~stereoCymb);
 ~sterCymb=Synth(\stereoO,[\in,~stereoCymb,\out,~comFuzz22],~stereoGrp);
 ~sterCymb.set(\spread,1,\center,1,\dlt1,0.4045,\dlt2,0.4,\decT,0.0242, \mxDel,1);
 
@@ -82,13 +82,13 @@ Pbind(\instrument, \playBuf,  \tS,  0.39550810372374,\buf,~snare,\type, Pseq([\r
 
 // ~eq40.free
 // Pbind(\instrument, \playBuf, \buf, ~clap,\vl,1,\tS,t.beatDur,\dur,Pseq([1/2],inf),\loopy,0,\type, Pseq([\rest,\rest,\note,\rest ],inf),\out,~clapEq).play(t,quant:2)
-~eq40 = Synth(\EQHP96, [\frq, 100 ],~eqGrp);
+/*~eq40 = Synth(\EQHP96, [\frq, 100 ],~eqGrp);
 ~eq40.set(\in, ~clapEq, \out , ~clapComp,\frq, 140,\val, 2000, \quant, 1, \gain,(-8), \val5,1100,\shelf2,1.1,\gain5,(-18),\val4,6000,\shelf,1.1,\gain4,(-16));
 ~comp40=Synth(\comp, [\ctrl,~kbus ],~compGrp);
 ~comp40.set(\thr,0.28 ,\sB, 1.04,\sA, 1/2,\atk ,0.0242, \rel ,0.0968, \in, ~clapComp ,\out,~claplimit);
 ~mix40= Synth(\limitertoMixer,[\c34,1,\in, ~claplimit,\gain,40,\out,~clapPan2],~limitGrp);
 ~mix40.set(\gain,45.9);
-~pan40=Synth( \pan2,[\in, ~clapPan2,\out,  ~toKbGate], ~stereoGrp);
+~pan40=Synth( \pan2,[\in, ~clapPan2,\out,  ~toKbGate], ~stereoGrp);*/
 
 
 
@@ -148,8 +148,8 @@ Pbind(\instrument, \playBuf,  \tS,  0.39550810372374,\buf,~snare,\type, Pseq([\r
 
 
 
-~rHit= Synth(\EQHP96, [\frq, 100 ,\in,~revHitEq,\out,~hitLimit],~eqGrp0);
-~rHit.set(\vol,0.63,\val4,3000,\shelf,1.6,\gain4,(-18));
+/*~rHit= Synth(\EQHP96, [\frq, 100 ,\in,~revHitEq,\out,~hitLimit],~eqGrp0);
+~rHit.set(\vol,0.63,\val4,3000,\shelf,1.6,\gain4,(-18));*/
 
 //hit
 // ~eqHit.free
@@ -165,9 +165,9 @@ Pbind(\instrument, \playBuf,  \tS,  0.39550810372374,\buf,~snare,\type, Pseq([\r
 
 
 
-// ~eqHit2.free
+/*// ~eqHit2.free
 ~eqHit2 = Synth(\EQHP96, [\frq, 100 ],~eqGrp0);
-~eqHit2.set(\in,~hitEq2,\out,~hitStereoX,\val4,2600,\shelf,1,\gain4,(-19),\val,1850,\quant,1,\gain,(-12),\vol,0.7);
+~eqHit2.set(\in,~hitEq2,\out,~hitStereoX,\val4,2600,\shelf,1,\gain4,(-19),\val,1850,\quant,1,\gain,(-12),\vol,0.7);*/
 
 
 
