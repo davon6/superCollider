@@ -214,6 +214,8 @@ Pbind(\instrument, \playBuf,  \tS,  0.39550810372374,\buf,~snare,\type, Pseq([\r
 // ~mixa.set(\in,~limitSquelch);
  ~mix30.set(\gain,21);
 
+~stereo30= Synth(\stereoS,[\dur, 9999, \in, ~stereoBus3b   ,\out,~toCom,\spread,1, ], ~stereoGrp4),
+
 
 ~finaldelay=Synth(\del , [\in, ~delayBus2,\out,~delayToLimit],~extraDelay);
 ~delayFx =  Synth(\limiterS, [\in,~delayToLimit, \gain,40,\out , ~delayEq],~compGrp4);
