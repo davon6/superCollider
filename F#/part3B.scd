@@ -9663,6 +9663,83 @@ Pbind(\instrument, \playBuf, \buf, ~snComp, \dur, Pseq([4/1],1),\amp,0.14),
 
 
 
+	SynthDef(\playBufS ,{|out = 0,start, trig, dur, amp=10,buf, loo=0,impulse=0.001,rte=1,tS=1
+		vlAtk =0,vlDec=1 ,vlSub=1 ,vlSub2=1,vlRel=0,atkT=0,decT=1,subsT=0,relT=0,atkC=0,decC=0,relC=0,gateSub=0,dA=0|Out.ar(out,PlayBuf.ar(2,buf,rte,trigger:impulse,startPos: start,loop:loo,doneAction: dA)
+
+	/*	* EnvGen.kr(Env([vlAtk,vlDec,vlSub,vlSub2,vlRel],
+			[dur * atkT,dur* decT-(dur*gateSub),dur * subsT,dur *relT],
+			[atkC,decC,0,relC]),timeScale: tS, doneAction:2)*/  /* * amp*/
+
+	);}).add
+
+
+Ppar([
+Pbind(\instrument, \playBufS, \buf,~kass,\dur, Pseq([2/1],1) ,\start,0),
+
+	~kick],1).play(t)
+
+
+Pbind(\instrument, \wNoise,\dur, Pseq([8/1],1),\dec ,Pkey(\dur),\amp,(-5),\out,0,\wFil,0,\valStart,900,\valEnd,1000,\durF,8*t.beatDur,\dA,0,\out,~hitEq, \tS,  0.39550810372374).play(t)
+
+
+
+
+Ppar([
+
+Pbind(\instrument, \playBufS,  \tS,  0.39550810372374,\buf,~kRise,\dur, Pseq([16/1], 1),\out, ~filKBX),
+
+
+
+	Pbind(\instrument,\blank, \in,~toKbGate,\out,0,\dur,Pseq([1/4], 1),\group,~recGrp3).play(t,quant:1)
+
+
+	Pseq([
+				Pbind(\instrument,\blank, \in,~toKbGate,\out,0,\dur,Pseq([1/4], 1),\group,~recGrp3),
+Pbind(\instrument, \playBufS, \buf,~kass,\dur, Pseq([3/4],1) ,\start,0),
+
+		Ppar([
+Pbind(\instrument, \wNoise,\dur, Pseq([8/1],1),\dec ,Pkey(\dur),\amp,(-5),\out,0,\wFil,0,\valStart,900,\valEnd,1000,\durF,8*t.beatDur,\dA,0,\out,0/*~hitEq*/, \tS,  0.39550810372374)
+
+
+],1).play(t,quant:1)
+
+
+
+
+
+
+
+			// Pbind(\instrument,\blank, \in,~t,\out,~toKbGate,\dur,Pseq([16/1], 1),\group,~recGrp3)
+
+
+
+],1)
+
+
+Ppar([
+	//watch doublon
+	Pseq([Pbindf(~kick,\out,~kbus)],inf),
+
+Ppar([
+
+			Pseq([Pbindf(~kick,\out,~limitKick)],inf),
+
+
+				Pbind(\instrument, \playBuf, \buf, ~b4, \dur, Pseq([1/4],inf),\amp,1,\type,Pseq([\rest,\note,\note,\note],inf), \decT,	Pseq([0,0.8,0.86,0.92 ],inf),\start,0,\out,~bassFi)
+			//Pseq([0,0.58,0.66,0.84 ],inf)
+],1),
+
+
+		Pbind(\instrument, \shap, \dur,Pseq([1/1],inf),\dA1,2,\out,~bassShapB, \crv, (-6),\tS, 0.39550810372374),
+	// Pbind(\instrument,\gate2, \in ,~toKbGate, \group,~kbGate ,\dur, 9999)
+
+],1).play(t,quant:1);
+
+	Pbind(\instrument,\blank, \in,3400,\out,~limitBass,\dur,Pseq([9/4], 5),\group,~recGrp3).play(t,quant:1)
+Pbind(\instrument,\gate2, \in ,~toKbGate, \group,~kbGate ,\dur, Pseq([1/1],1)).play(t,quant:1)
+Pbind(\instrument,\gate2, \in ,~toKbGate, \group,~kbGate ,\dur, Pseq([64/1],1)).play(t,quant:1)
+
+
 
 
 	Pseq([

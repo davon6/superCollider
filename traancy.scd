@@ -14,13 +14,25 @@ SynthDef(\blo,{|out=0,freq=432,fre2=0,freq3=1|Out.ar(out,Resonz.ar(  Saw.ar([fre
 Pbind(\instrument,\blo,\dur,Pseq([1/8],inf),\freq,Pseq([402,216,318,402,402,216,318,402,472,402,216,318,],inf),\type,Pseq([\note,\note,\note,\note,\rest,\note,\note,\note,\note,\note,\note,\note],inf),\fre2,Pseq([Pseq([0],12),Pseq([10],12),Pseq([0],12),Pseq([0],12)],inf)).play
 
 
+
+
+Pseq([
+
+
+
+	Pbind(\instrument,\blo,\dur,Pseq([1/8],384),\freq,Pseq([66.midicps,69.midicps,70.midicps],inf),\type,Pseq([\note,\rest,\note,\rest,\note,\rest,\note,\rest,\note,\rest,\note,\rest],inf),\fre2,Pseq([Pseq([0],1),Pseq([0],1),Pseq([0],1),Pseq([30],1)],inf),\freq3,Prand([1,1,2,1].scramble,inf)),
+
 Pseq([
 
 Pbind(\instrument,\blo,\dur,Pseq([1/8],128),\freq,Pseq([65.midicps,68.midicps,69.midicps],inf),\type,Pseq([\note,\rest,\note,\rest,\note,\rest,\note,\rest,\note,\rest,\note,\rest],inf),\fre2,Pseq([Pseq([0],1),Pseq([0],1),Pseq([0],1),Pseq([30],1)],inf),\freq3,Pseq([1,1,2].scramble,inf)),
 
 
 
-	Pbind(\instrument,\blo,\dur,Pseq([1/8],128),\freq,Pseq([66.midicps,69.midicps,70.midicps],inf),\type,Pseq([\note,\rest,\note,\rest,\note,\rest,\note,\rest,\note,\rest,\note,\rest],inf),\fre2,Pseq([Pseq([0],1),Pseq([0],1),Pseq([0],1),Pseq([30],1)],inf),\freq3,Prand([1,1,2,1].scramble,inf))],inf).play(t)
+	Pbind(\instrument,\blo,\dur,Pseq([1/8],128),\freq,Pseq([66.midicps,69.midicps,70.midicps],inf),\type,Pseq([\note,\rest,\note,\rest,\note,\rest,\note,\rest,\note,\rest,\note,\rest],inf),\fre2,Pseq([Pseq([0],1),Pseq([0],1),Pseq([0],1),Pseq([30],1)],inf),\freq3,Prand([1,1,2,1].scramble,inf))],inf)],1)
+
+
+
+.play(t,quant:1)
 
 
 

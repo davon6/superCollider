@@ -27,62 +27,17 @@ f = { |n=14, min=0, max=11| (min..max).scramble.keep(n) };
 ~bufSnoopy.play
 
 (
-~vocal  = Buffer.read(s,"/Users/davidmignot/Documents/REAPER Media/03-thEnd-consolidated.wav");
-// ~audio3 = Buffer.read(s,"/Users/davidmignot/Documents/REAPER Media/02-consolidated-03.wav");
-~audio3 = Buffer.read(s,"/Users/davidmignot/Documents/REAPER Media/03-thEnd-consolidated-01.wav");
-~buf=Buffer.read(s,"/Users/davidmignot/Music/SuperCollider Recordings/E/src1.aiff");
-
-~bufSnoopy=Buffer.read(s,"/Users/davidmignot/Music/SuperCollider Recordings/E/src1F.aiff");
-~bufSnoopy2=Buffer.read(s,"/Users/davidmignot/Music/SuperCollider Recordings/E/src1F2.aiff");
-
-~lpPrec2 =  Buffer.read(s,"/Users/davidmignot/Music/SuperCollider Recordings/E/LPL.aiff");
-~lpPrec =  Buffer.read(s,"/Users/davidmignot/Music/SuperCollider Recordings/E/HPL.aiff");
-~lpPrec3= Buffer.read(s,"/Users/davidmignot/Music/SuperCollider Recordings/E/BPL.aiff");
-~fkAr= Buffer.read(s,"/Users/davidmignot/Music/SuperCollider Recordings/E/fkAr.aiff");
-~kb2Test= Buffer.read(s,"/Users/davidmignot/Music/SuperCollider Recordings/E/idea.aiff");
-~pad= Buffer.read(s,"/Users/davidmignot/Music/SuperCollider Recordings/E/pad.aiff");
-~funkPerc= Buffer.read(s,"/Users/davidmignot/Music/SuperCollider Recordings/E/funkPerc.aiff");
-
-~funkPerc2= Buffer.read(s,"/Users/davidmignot/Music/SuperCollider Recordings/E/funkPerc2.aiff",);
-
-~leTout =  Buffer.read(s,"/Users/davidmignot/Music/SuperCollider Recordings/E/stem1.aiff");
-~leTout2 =  Buffer.read(s,"/Users/davidmignot/Music/SuperCollider Recordings/E/stem2.aiff");
 
 ~cymb= Buffer.read(s,"/Users/davidmignot/Music/SuperCollider Recordings/F#/1/cymbal.aiff");
 ~hat= Buffer.read(s,"/Users/davidmignot/Music/SuperCollider Recordings/F#/1/hat.aiff");
 
 ~snare= Buffer.read(s,"/Users/davidmignot/Music/SuperCollider Recordings/E/snare.aiff");
 
-~hit2= Buffer.read(s,"/Users/davidmignot/Music/SuperCollider Recordings/E/hit2.aiff");
-~bell1= Buffer.read(s,"/Users/davidmignot/Music/SuperCollider Recordings/E/bell.aiff");
-~kb1=Buffer.read(s,"/Users/davidmignot/Music/SuperCollider Recordings/E/kB.aiff");
-~k2=Buffer.read(s,"/Users/davidmignot/Music/SuperCollider Recordings/E/kick.aiff");
-~b3=Buffer.read(s,"/Users/davidmignot/Music/SuperCollider Recordings/E/bass.aiff");
-~trippy=Buffer.read(s,"/Users/davidmignot/Music/SuperCollider Recordings/E/trippy.aiff");
-~audio4=Buffer.read(s,"/Users/davidmignot/Music/SuperCollider Recordings/E/bg.aiff");
-~charmin=  Buffer.read(s,"/Users/davidmignot/Music/SuperCollider Recordings/E/elec.aiff");
-~lpPrec32= Buffer.read(s,"/Users/davidmignot/Music/SuperCollider Recordings/E/BPLX.aiff");
+~b3=Buffer.read(s,"/Users/davidmignot/Music/SuperCollider Recordings/F#/1/bass.aiff");
 
-~lpPrec33= Buffer.read(s,"/Users/davidmignot/Music/SuperCollider Recordings/E/BPLX2.aiff");
 
-~b4=Buffer.read(s,"/Users/davidmignot/Music/SuperCollider Recordings/E/bass2.aiff");
-~rise1=Buffer.read(s,"/Users/davidmignot/Music/SuperCollider Recordings/E/rise1.aiff");
+~b4=Buffer.read(s,"/Users/davidmignot/Music/SuperCollider Recordings/F#/1/bass2.aiff");
 
-~ped= Buffer.read(s,"/Users/davidmignot/Music/SuperCollider Recordings/E/pedonk.aiff");
-~vap  = Buffer.read(s,"/Users/davidmignot/Music/SuperCollider Recordings/E/vap.aiff");
-~rising  = Buffer.read(s,"/Users/davidmignot/Music/SuperCollider Recordings/E/rising.aiff");
-~voc= Buffer.read(s,"/Users/davidmignot/Music/SuperCollider Recordings/E/voc.aiff");
-~clap =Buffer.read(s,"/Users/davidmignot/Music/SuperCollider Recordings/E/clap.aiff");
-~bssBrkF =  Buffer.read(s,"/Users/davidmignot/Music/SuperCollider Recordings/E/bassBrkF.aiff");
-~noise =  Buffer.read(s,"/Users/davidmignot/Music/SuperCollider Recordings/E/noiseHIt.aiff");
-~kRise=Buffer.read(s,"/Users/davidmignot/Music/SuperCollider Recordings/E/kickRise.aiff");
-~crushed=Buffer.read(s,"/Users/davidmignot/Music/SuperCollider Recordings/E/crushed.aiff");
-~riPow =  Buffer.read(s,"/Users/davidmignot/Music/SuperCollider Recordings/E/riPow.aiff");
-~pad6=Buffer.read( s,"/Users/davidmignot/Music/SuperCollider Recordings/E/pad4.aiff");
-
- ~pad2= Buffer.read(s,"/Users/davidmignot/Music/SuperCollider Recordings/E/pad2.aiff");
-
-~revHity= Buffer.read(s,"/Users/davidmignot/Music/SuperCollider Recordings/E/revHit2.aiff");
 
 
 ~one = ~leTout2.numFrames/ 256 * 240.rand;
@@ -102,11 +57,9 @@ f = { |n=14, min=0, max=11| (min..max).scramble.keep(n) };
 ~ouai2=~leTout2.numFrames/256* (220.rand);
 
 
-~bangVar = (~leTout.numFrames/ 256 * 145.rand);
+
 ~first=  ~leTout2.numFrames/ 256 * 222.rrand(1);
 		 ~second= ~leTout2.numFrames/ 256 * 222.rrand(1);
-~noiseFrq = 3000.rrand(180); ~noiseFrq2 = 3000.rrand(180); ~noiseFrq3 = 3000.rrand(180); ~noiseFrq4 = 2500.rrand(180);
-
 
 
 )
