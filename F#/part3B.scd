@@ -9794,4 +9794,5 @@ Pbind(\instrument, \kick,\amp,(-10),\dur, Pseq([1/1],2),\type,Pseq([\note,\note,
 		SinOsc.kr((-14).midicps,4.6).range(10,20000))
 	}.play)
 
-	
+
+	({Saw.ar(0.3+SinOsc.kr(MouseX.kr(0.3,50)).range(0.1,7000))}.play)
