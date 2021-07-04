@@ -596,7 +596,7 @@ a=Prand([
 Pbind(\instrument, \percussion ,\dur,Pseq([1/4],4 ),\carHz, Pfunc({525.12070612224.rrand(0.01)}),\modHz,Pfunc({11899.3343179398.rrand(0.001)}),\modAmp, Pfunc({0.12875.rrand(0.000001)}) ,\amp,3,\rel,Pseq([1/4],inf),\rel2,Pseq([1/16],inf),\latch,8000,\stereoL, 0.00555, \crv1, Pfunc({ (-14.4).rrand(-1)}), \crv1b,(-4).rand, \mulMod, 1691,\out,   ~record1),
 
 
-	Pbind(\instrument, \playBufS,\dur, Pseq([1/4],1),\buf,~conga,\tS,0.39550810372374,\rte,    Pfunc({1.6.rrand(0.4)}),\start,61600,\out,~record2,\vl,0.72),
+		Pbind(\instrument,\percussion,\dur,Pseq([1/2], 1),\atk, 0,\rel,t.beatDur/2,\rel2,t.beatDur/4,\amp,-1, \crv1, Pfunc({(-3).rand}), \crv1b,Pfunc({ (-5).rand}), \modHz, Pfunc({exprand(500,10000)}), \mulMod, Pfunc({rrand(100, 500)}), \carHz, Pfunc({exprand(20,10000)}), \modAmp, Pfunc({0.12875.rand}), \latch, 18500, \stereoR, 0.007,\out,~record2),
 
 
 Pbind(\instrument,\percussion,\dur,Pseq([1/4], 2),\atk, 0,\rel,0.04840,\rel2,0.02420,\amp,-1, \crv1, Pfunc({(-3).rand}), \crv1b,Pfunc({ (-5).rand}), \modHz, Pfunc({exprand(500,10000)}), \mulMod, Pfunc({rrand(100, 500)}), \carHz, Pfunc({exprand(20,10000)}), \modAmp, Pfunc({0.12875.rand}), \latch, 18500, \stereoR, 0.007,\out,~record3)
@@ -604,7 +604,7 @@ Pbind(\instrument,\percussion,\dur,Pseq([1/4], 2),\atk, 0,\rel,0.04840,\rel2,0.0
 
 	wait(0.16);
 
-	 s.record(path:"/Users/davidmignot/Music/SuperCollider Recordings/F#/1/funkPerc2.aiff",numChannels:2,duration:t.beatDur*16)
+	 s.record(path:"/Users/davidmignot/Music/SuperCollider Recordings/F#/1/funkPerc.aiff",numChannels:1,duration:t.beatDur*16)
 
 }).play
 

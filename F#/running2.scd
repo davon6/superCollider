@@ -27,6 +27,7 @@ f = { |n=14, min=0, max=11| (min..max).scramble.keep(n) };
 ~bufSnoopy.play
 
 (
+	~perc=Buffer.read(s,	"/Users/davidmignot/Music/SuperCollider Recordings/F#/1/funkPerc.aiff")
 
 ~cymb= Buffer.read(s,"/Users/davidmignot/Music/SuperCollider Recordings/F#/1/cymbal.aiff");
 ~hat= Buffer.read(s,"/Users/davidmignot/Music/SuperCollider Recordings/F#/1/hat.aiff");

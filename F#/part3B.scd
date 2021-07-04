@@ -9781,3 +9781,17 @@ Pbind(\instrument, \kick,\amp,(-10),\dur, Pseq([1/1],2),\type,Pseq([\note,\note,
 
 
 	],4).play(t)
+
+
+
+			~perc=Buffer.read(s,	"/Users/davidmignot/Music/SuperCollider Recordings/F#/1/funkPerc.aiff")
+
+	Pbind(\instrument,\playBuf,	\buf,~perc,\dur, Pseq([1.5/1],8),\start,~perc.numFrames/16*(14.rand)).play(t,quant:1)
+
+	{SinOsc.kr((-14).midicps,4.6).range(10,20000)}.plot(duration:0.3)
+
+	({BLowPass4.ar( PlayBuf.ar(1,~perc,Line.kr(6,0.1,t.beatDur),~perc.numFrames/16*(14.rand)),
+		SinOsc.kr((-14).midicps,4.6).range(10,20000))
+	}.play)
+
+	
