@@ -9737,9 +9737,17 @@ Ppar([
 
 		// Pbind(\instrument,\blank, \in,3400,\out,~limitBass,\dur,Pseq([9/4], 5),\group,~recGrp3).play(t,quant:1)
 Pbind(\instrument,\gate2, \in ,~toKbGate, \group,~kbGate ,\dur, Pseq([1/1],1)).play(t,quant:1)
-Pbind(\instrument,\gate2, \in ,~toKbGate, \group,~kbGate ,\dur, Pseq([64/1],1)).play(t,quant:1)
 
-		Pbind(\instrument,\blankF ,\dur,Pseq([64/1],1),\in,~toKbGate,\out,~toKbGate, \group,~kbGate).play(t,quant:1)
+
+		Pseq([
+		Ppar([
+Pbind(\instrument,\gate2, \in ,~toKbGate, \group,~kbGate ,\dur, Pseq([64/1],1)),
+
+	Pbind(\instrument,\blankF ,\dur,Pseq([64/1],1),\in,~toKbGate,\out,~toKbGate,\group,~kbGate)],1)
+
+		Pbind(\instrument,\gate2, \in ,~toKbGate, \group,~kbGate ,\dur, Pseq([192/1],1))
+
+		],1).play(t,quant:1)
 
 
 	Pseq([
@@ -9847,3 +9855,26 @@ Pseq([
 
 
 		Pbind(\instrument,\gate2, \in ,~toKbGate, \group,~kbGate ,\dur, Pseq([14/1],1))],1).play(t,quant:1)
+
+
+	Routine({
+
+
+		({SinOsc.ar(78.midicps*(432/440)*SinOsc.kr(230),mul: EnvGen.kr(Env.perc(attackTime: 0,releaseTime: t.beatDur*2,curve: -12)))*0.3}.play);
+		~snare.play;
+
+		({BLowPass.ar(WhiteNoise.ar(0.4),
+	EnvGen.kr(Env([3520,1318],[t.beatDur/2,0],-8),doneAction: 2),0.5)*EnvGen.kr(Env([1,0,0.8,0,0.8,0,0.4,0],[0.01,0,0.01,0,0.01,0,0.37],-4))
+	}.play);
+
+			wait(0.16);
+
+
+			s.record(s,path:"/Users/davidmignot/Music/SuperCollider Recordings/F#/1/snare2.aiff",numChannels:1,duration:t.beatDur*2);
+
+		}).play
+
+		~snare2=Buffer.read(s,"/Users/davidmignot/Music/SuperCollider Recordings/F#/1/snare2.aiff");
+
+
+		~snare2.plot
