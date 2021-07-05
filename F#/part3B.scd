@@ -9735,11 +9735,11 @@ Ppar([
 
 ],1).play(t,quant:1);
 
-	Pbind(\instrument,\blank, \in,3400,\out,~limitBass,\dur,Pseq([9/4], 5),\group,~recGrp3).play(t,quant:1)
+		// Pbind(\instrument,\blank, \in,3400,\out,~limitBass,\dur,Pseq([9/4], 5),\group,~recGrp3).play(t,quant:1)
 Pbind(\instrument,\gate2, \in ,~toKbGate, \group,~kbGate ,\dur, Pseq([1/1],1)).play(t,quant:1)
 Pbind(\instrument,\gate2, \in ,~toKbGate, \group,~kbGate ,\dur, Pseq([64/1],1)).play(t,quant:1)
 
-
+		Pbind(\instrument,\blankF ,\dur,Pseq([64/1],1),\in,~toKbGate,\out,~toKbGate, \group,~kbGate).play(t,quant:1)
 
 
 	Pseq([
@@ -9786,13 +9786,64 @@ Pbind(\instrument, \kick,\amp,(-10),\dur, Pseq([1/1],2),\type,Pseq([\note,\note,
 
 			~perc=Buffer.read(s,	"/Users/davidmignot/Music/SuperCollider Recordings/F#/1/funkPerc.aiff")
 
-	Pbind(\instrument,\playBuf,	\buf,~perc,\dur, Pseq([1.5/1],8),\start,~perc.numFrames/16*(14.rand)).play(t,quant:1)
+	Pbind(\instrument,\playBuf,	\buf,~perc,\dur, Pseq([1.5/1],42),\start,~perc.numFrames/16* /*(14.rand.postln)*/ 9).play(t,quant:1)
+
 
 	{SinOsc.kr((-14).midicps,4.6).range(10,20000)}.plot(duration:0.3)
 
 	({BLowPass4.ar( PlayBuf.ar(1,~perc,Line.kr(6,0.1,t.beatDur),~perc.numFrames/16*(14.rand)),
-		SinOsc.kr((-14).midicps,4.6).range(10,20000))
+		SinOsc.kr((-14).midicps*(432/440),4.6).range(10,20000))
 	}.play)
 
 
+		({BLowPass4.ar(
+			Decimator.ar(
+			Saw.ar((-30).midicps*(432/440) +SinOsc.kr(MouseX.kr(0.3,50)).range(0.1,3000))
+			+
+			Saw.ar((-27).midicps*(432/440) +SinOsc.kr(MouseX.kr(0.3,50)).range(0.1,3000))
+			+
+			Saw.ar((-25).midicps*(432/440) +SinOsc.kr(MouseX.kr(0.3,50)).range(0.1,3000)),
+
+
+
+			SinOsc.kr(~hz1beat/3,1.4).range(448000,400),SinOsc.kr(~hz1beat/3,1.4).range(36,8)),
+	SinOsc.kr(~hz1beat/3,4.6).range(10,20000))
+			*0.05!2
+	}.play)
+
+
+
+
+		({Decimator.ar(
+			Saw.ar((-30).midicps*(432/440) +SinOsc.kr(MouseX.kr(0.3,50)).range(0.1,3000))
+			+
+			Saw.ar((-27).midicps*(432/440) +SinOsc.kr(MouseX.kr(0.3,50)).range(0.1,3000))
+			+
+			Saw.ar((-25).midicps*(432/440) +SinOsc.kr(MouseX.kr(0.3,50)).range(0.1,3000)),
+
+
+
+			SinOsc.kr(~hz1beat/3,1.4).range(448000,400),SinOsc.kr(~hz1beat/3,1.4).range(36,8))
+
+
+	}.play)
+
+
+Routine({
+
+			s.record(path:"/Users/davidmignot/Music/SuperCollider Recordings/F#/1/zipSLi.aiff",numChannels:1,duration:t.beatDur*64);
+
+
+
+		}).play(t,quant:1)
+
 	({Saw.ar(0.3+SinOsc.kr(MouseX.kr(0.3,50)).range(0.1,7000))}.play)
+
+Pseq([
+
+	Pbind(\instrument, \playBufS, \buf,~k2, \dur,Pseq([1/4],1))	,
+			Pbind(\instrument, \playBufS, \buf,~bassD, \dur,Pseq([7/4],1)),
+
+
+
+		Pbind(\instrument,\gate2, \in ,~toKbGate, \group,~kbGate ,\dur, Pseq([14/1],1))],1).play(t,quant:1)
