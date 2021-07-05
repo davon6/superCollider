@@ -40,7 +40,7 @@ f = { |n=14, min=0, max=11| (min..max).scramble.keep(n) };
 ~b4=Buffer.read(s,"/Users/davidmignot/Music/SuperCollider Recordings/F#/1/bass2.aiff");
 
 ~k2=Buffer.read(s,"/Users/davidmignot/Music/SuperCollider Recordings/F#/1/kick.aiff");
-
+~k2.plot
 
 ~bassD=Buffer.read(s,"/Users/davidmignot/Music/SuperCollider Recordings/F#/1/bassTw.aiff");
 
@@ -309,7 +309,7 @@ Ppar([~boost, ~kb],1).play(t,quant:1)
 	Pbind(\instrument,\playBuf,	\buf,~snare2,\dur, Pseq([1/2],inf),\type,Pseq([\rest,\rest,\note,\rest],inf),\out,~snBus),
 
 
-	Pbind(\instrument, \playBuf, \buf,~cymb,\type,Pseq([ Pseq(~rythmL,256),Pseq([ \rest],256),
+	Pbind(\instrument, \playBuf, \buf,~cymb,\type,Pseq([ Pseq(~rythmL,64),Pseq([ \rest],256),
 		Pseq([Pseq(~rythm1,1),Pseq(~rythm2,1),],4),Pseq([Pseq(~rythm3,1),Pseq(~rythm4,1),],4),
 
 

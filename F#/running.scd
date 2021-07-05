@@ -2037,13 +2037,13 @@ Ppar([
 ~comp.set(\thr,0.2 ,\sB, 1.036,\sA, 1/2,\atk ,t.beatDur/16, \rel ,t.beatDur/4, \gain,1,\in, ~comFuzz,\out,~limitBass);
 ~limK=Synth(\limitertoMixer,[\c45,1,\in, ~limitKick, \gain,1,\out,~kToPan],~limitGrp);
 ~limK.set(\gain,154.7);
-	~limB=Synth(\limitertoMixer,[\c46,1,\in, ~limitBass, \gain,68,\out,~kToPan],~limitGrp);
-	~limB.set(\gain,204);
+	/*~limB=Synth(\limitertoMixer,[\c46,1,\in, ~limitBass, \gain,68,\out,~kToPan],~limitGrp);
+	~limB.set(\gain,204);*/
 
 
 	~kbPan2 = Synth(\pan2,[ \in,~kToPan,\out,0],~stereoGrp);
 
-	wait(0.162);
+	wait(0.36);
 
 	// s.record(path:"/Users/davidmignot/Music/SuperCollider Recordings//F#/1/kick.aiff",numChannels:2,duration:t.beatDur*1.3);
 }).play(t,quant:1))
