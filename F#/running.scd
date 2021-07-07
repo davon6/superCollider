@@ -1746,8 +1746,8 @@ SynthDef(\sequ,{|value, dur, in=0, out=0, vlAtk=0, vlDec=1,vlSub=1,vlSub2=1, vlR
 
 		ReplaceOut.ar(out,
 			Select.ar(wF,
-				[LPF.ar(In.ar(in,2), SinOsc.kr(~hz1beat/64,4.6).range(100,1200)),
-					BHiPass4.ar(In.ar(in,2), SinOsc.kr(~hz1beat/32,4.6).range(10,4000))])
+				[LPF.ar(In.ar(in,2), SinOsc.kr(~hz1beat/64,4.6).range(100,1800)),
+					BHiPass4.ar(In.ar(in,2), SinOsc.kr(~hz1beat/32,4.6).range(1000,4000))])
 				*EnvGen.kr(Env.step([1,0],[dur,0]),timeScale: t.beatDur,doneAction: 2))}).add;
 
 

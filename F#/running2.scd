@@ -71,12 +71,12 @@ f = { |n=14, min=0, max=11| (min..max).scramble.keep(n) };
 
 
 (
-	~mont =0;
+/*	~mont =0;
 ~boba=1;
 ~bobo=220;
 ~crv=12;
 ~as=1676373; ~tram=3659560;~gram=373706; ~pick=285965;
-~bool=True;
+~bool=True;*/
 
 
 ~lfoGrp  = Group.new;
@@ -309,15 +309,20 @@ Ppar([~boost, ~kb],1).play(t,quant:1)
 	Pbind(\instrument,\playBuf,	\buf,~snare2,\dur, Pseq([1/2],inf),\type,Pseq([\rest,\rest,\note,\rest],inf),\out,~snBus),
 
 
-	Pbind(\instrument, \playBuf, \buf,~cymb,\type,Pseq([ Pseq(~rythmL,32),Pseq([ \rest],256),
+	Pbind(\instrument, \playBuf, \buf,~cymb,\type,Pseq([ Pseq(~rythmL,30),Pseq([ \rest],258),
 		Pseq([Pseq(~rythm1,1),Pseq(~rythm2,1),],4),Pseq([Pseq(~rythm3,1),Pseq(~rythm4,1),],4),
 
-		Pseq([Pseq(~rythmL,1024)],inf)],1),\dur,Pseq([1/4],inf ),\out,    ~cymbalEq),
+		Pseq(~rythmL,32),
+
+
+		Pseq([ \rest],inf),
+
+		],1),\dur,Pseq([1/4],inf ),\out,    ~cymbalEq),
 
 
 
 	Pbind(\instrument,\playBuf,	\buf,~snare2,\dur, Pseq([1/2],inf),\type,Pseq([\rest,\rest,\note,\rest],inf),\out,~snareEQ,
-		\vlDec,Pseq([Pseq([\note],128),Pseq([\rest],384),Pseq([\note],512)],inf),
+		\vlDec,Pseq([Pseq([\note],128),Pseq([\rest],256),Pseq([\note],128),Pseq([\rest],inf)],inf),
 		\vlSub,Pkey(\vlDec) ,\vlSub2,Pkey(\vlDec)),
 
 
@@ -325,7 +330,7 @@ Ppar([~boost, ~kb],1).play(t,quant:1)
 
 		\type, Pseq([Pseq([ \note],256) , Pseq([ \rest],256) ,
 
-			Pseq([ Pseq([ \note],1024),Pseq([\rest],256)],inf)],1)),
+			Pseq([ Pseq([ \note],1024),Pseq([\rest],inf)],inf)],1)),
 
 
 
