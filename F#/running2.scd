@@ -35,12 +35,12 @@ f = { |n=14, min=0, max=11| (min..max).scramble.keep(n) };
 ~snare= Buffer.read(s,"/Users/davidmignot/Music/SuperCollider Recordings/F#/1/snare.aiff");
 
 ~b3=Buffer.read(s,"/Users/davidmignot/Music/SuperCollider Recordings/F#/1/bass.aiff");
-
+	~snare2=Buffer.read(s,"/Users/davidmignot/Music/SuperCollider Recordings/F#/1/snare2.aiff");
 
 ~b4=Buffer.read(s,"/Users/davidmignot/Music/SuperCollider Recordings/F#/1/bass2.aiff");
 
 ~k2=Buffer.read(s,"/Users/davidmignot/Music/SuperCollider Recordings/F#/1/kick.aiff");
-~k2.plot
+
 
 ~bassD=Buffer.read(s,"/Users/davidmignot/Music/SuperCollider Recordings/F#/1/bassTw.aiff");
 
@@ -309,12 +309,12 @@ Ppar([~boost, ~kb],1).play(t,quant:1)
 	Pbind(\instrument,\playBuf,	\buf,~snare2,\dur, Pseq([1/2],inf),\type,Pseq([\rest,\rest,\note,\rest],inf),\out,~snBus),
 
 
-	Pbind(\instrument, \playBuf, \buf,~cymb,\type,Pseq([ Pseq(~rythmL,64),Pseq([ \rest],256),
+	Pbind(\instrument, \playBuf, \buf,~cymb,\type,Pseq([ Pseq(~rythmL,32),Pseq([ \rest],256),
 		Pseq([Pseq(~rythm1,1),Pseq(~rythm2,1),],4),Pseq([Pseq(~rythm3,1),Pseq(~rythm4,1),],4),
 
-
-
 		Pseq([Pseq(~rythmL,1024)],inf)],1),\dur,Pseq([1/4],inf ),\out,    ~cymbalEq),
+
+
 
 	Pbind(\instrument,\playBuf,	\buf,~snare2,\dur, Pseq([1/2],inf),\type,Pseq([\rest,\rest,\note,\rest],inf),\out,~snareEQ,
 		\vlDec,Pseq([Pseq([\note],128),Pseq([\rest],384),Pseq([\note],512)],inf),

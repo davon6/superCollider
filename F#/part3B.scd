@@ -9739,26 +9739,52 @@ Ppar([
 		// Pbind(\instrument,\blank, \in,3400,\out,~limitBass,\dur,Pseq([9/4], 5),\group,~recGrp3).play(t,quant:1)
 Pbind(\instrument,\gate2, \in ,~toKbGate, \group,~kbGate ,\dur, Pseq([1/1],1)).play(t,quant:1)
 
+	Ppar([
+			~kb,	Pbind(\instrument,\gate2, \in ,~toKbGate, \group,~kbGate ,\dur, Pseq([64/1],1))],1).play(t,quant:1)
+
+
 Ppar([
 			~kb,
 
 		Pseq([
 		Ppar([
-Pbind(\instrument,\gate2, \in ,~toKbGate, \group,~kbGate ,\dur, Pseq([64/1],1)),
-
-	Pbind(\instrument,\blankF ,\dur,Pseq([64/1],1),\in,~toKbGate,\out,~toKbGate,\group,~kbGate)],1),
-
-		Pbind(\instrument,\gate2, \in ,~toKbGate, \group,~kbGate ,\dur, Pseq([48/1],1)),
-
-				Ppar([
-					Pbind(\instrument, \playBufS, \buf,~k2,\dur, Pseq([1/1],1) ,\start,0)
-
-					Pbind(\instrument, \rien ,\dur, Pseq([16/1],1)) ],1),
+					Pbind(\instrument,\gate2, \in ,~toKbGate, \group,~kbGate ,\dur, Pseq([64/1],1)),
+					Pbind(\instrument,\blankF ,\dur,Pseq([64/1],1),\in,~toKbGate,\out,~toKbGate,\group,~kbGate)],1),
 
 
-		Pbind(\instrument,\gate2, \in ,~toKbGate, \group,~kbGate ,\dur, Pseq([15/1],1)),
+				Pbind(\instrument,\gate2, \in ,~toKbGate, \group,~kbGate ,\dur, Pseq([48/1],1)),
+				Pbind(\instrument, \playBufS, \buf,~k2,\dur, Pseq([1/1],1) ,\start,0),
+				Pbind(\instrument, \rien ,\dur, Pseq([14/1],1)),
+				Pbind(\instrument, \playBufS, \buf,~k2,\dur, Pseq([1/1],1) ,\rte,(-1),\start,10000)
 
+
+				Pbind(\instrument,\gate2, \in ,~toKbGate, \group,~kbGate ,\dur, Pseq([15/1],1)),
 				Pbind(\instrument, \playBufS, \buf,~k2,\dur, Pseq([1/2],2) ,\start,0),
+
+				Pbind(\instrument,\gate2, \in ,~toKbGate, \group,~kbGate ,\dur, Pseq([8/1],1))
+				Pbind(\instrument, \playBufS, \buf,~k2,\dur, Pseq([1/2],1) ,\rte,(-1),\start,10000),
+				Pbind(\instrument, \playBufS, \buf,~k2,\dur, Pseq([1/2],1) ,\start,0),
+				Pbind(\instrument,\gate2, \in ,~toKbGate, \group,~kbGate ,\dur, Pseq([6/1],1)),
+				Pbind(\instrument, \playBufS, \buf,~k2,\dur, Pseq([1/1],1) ,\start,0),
+
+				Pbind(\instrument, \playBufS, \buf,~k2,\dur, Pseq([1/1],1) ,\start,0),
+				Pbind(\instrument,\gate2, \in ,~toKbGate, \group,~kbGate ,\dur, Pseq([15/1],1)),
+
+				Pbind(\instrument,\gate2, \in ,~toKbGate, \group,~kbGate ,\dur, Pseq([12/1],1)),
+				Pbind(\instrument, \playBufS, \buf,~k2,\dur, Pseq([2/1],2) ,\start,0),
+
+
+				Pbind(\instrument,\gate2, \in ,~toKbGate, \group,~kbGate ,\dur, Pseq([32/1],1)),
+				Pbind(\instrument, \rien ,\dur, Pseq([2/1],1)),
+				Pbind(\instrument,\gate2, \in ,~toKbGate, \group,~kbGate ,\dur, Pseq([12/1],1))
+				Pbind(\instrument, \rien ,\dur, Pseq([2/1],1)),
+				Ppar([
+
+					Pbind(\instrument, \playBufS, \buf,~k2,\dur,Pseq([ Pseq([1/2],4),Pseq([1/4],8) ,Pseq([1/8],16)],1),\start,0),
+					Pbind(\instrument,\blankF ,\dur,Pseq([16/1],1),\in,~toKbGate,\out,~toKbGate,\group,~kbGate,\wF,1)
+
+				],1)
+
 
 
 
