@@ -9679,7 +9679,7 @@ Pseq([
 Pbind(\instrument, \playBufS, \buf,~kass,\dur, Pseq([7/4],1) ,\start,0),
 
 
-Pbind(\instrument, \wNoise,\dur, Pseq([8/1],1),\dec ,Pkey(\dur),\amp,(-5),\out,0,\wFil,0,\valStart,900,\valEnd,1000,\durF,8*t.beatDur,\dA,0,\out,0/*~hitEq*/, \tS,  0.39550810372374)
+		Pbind(\instrument, \wNoise,\dur, Pseq([8/1],1),\dec ,Pkey(\dur),\amp,(-5),\out,0,\wFil,0,\valStart,1000,\valEnd,1400,\durF,8*t.beatDur,\dA,0,\out,0/*~hitEq*/, \tS,  0.39550810372374).play(t,quant:1)
 
 	],1).play(t)
 
@@ -9794,6 +9794,39 @@ Ppar([
 
 
 			/*Pbind(\instrument,\gate2, \in ,~toKbGate, \group,~kbGate ,\dur, Pseq([176/1],1))*/
+
+		],1)],1).play(t,quant:1)
+
+
+		Ppar([
+			~kb,
+
+		Pseq([
+
+				Pbind(\instrument, \playBufS, \buf,~k2,\dur, Pseq([1/4],1)),
+				Pbind(\instrument, \playBufS, \buf,~kass,\dur, Pseq([7/4],1)),
+				Ppar([
+					Pbind(\instrument, \playBuf, \buf, ~noise, \dur, Pseq([8/1],1),\out,~hitEq),
+					Pbind(\instrument,\gate2, \in ,~toKbGate, \group,~kbGate ,\dur, Pseq([12/1],1)),
+				]),
+				Pbind(\instrument, \playBufS, \buf,~k2,\dur, Pseq([1/4],1)),
+				Pbind(\instrument, \playBufS, \buf,~kass,\dur, Pseq([7/4],1),\start,89000),
+
+
+				Ppar([
+				Pbind(\instrument,\gate2, \in ,~toKbGate, \group,~kbGate ,\dur, Pseq([15/1],1)),
+				Pbind(\instrument, \playBuf, \buf, ~noise, \dur, Pseq([1/1],1),\out,~hitEq),
+				]),
+				Pbind(\instrument, \playBufS, \buf,~k2,\dur, Pseq([1/1],1)),
+
+				Ppar([
+					Pbind(\instrument, \playBuf, \buf, ~noise, \dur, Pseq([1/2],1),\out,~hitEq),
+					Pbind(\instrument,\gate2, \in ,~toKbGate, \group,~kbGate ,\dur, Pseq([15/1],1)),
+				]),
+				Pbind(\instrument, \playBufS, \buf,~k2,\dur, Pseq([1/1],1)),
+				Pbind(\instrument,\gate2, \in ,~toKbGate, \group,~kbGate ,\dur, Pseq([14/1],1)),
+				Pbind(\instrument, \playBufS, \buf,~k2,\dur, Pseq([2/1],1)),
+
 
 		],1)],1).play(t,quant:1)
 
@@ -9944,3 +9977,19 @@ Pseq([
 	~bgRev.play
 
 		~bgRev=Buffer.read(s,"/Users/davidmignot/Music/SuperCollider Recordings/F#/1/RevBg.aiff");
+
+
+		Routine({
+
+
+			Pbind(\instrument, \wNoise,\dur, Pseq([16/1],1),\dec ,Pkey(\dur),\amp,(-5),\out,0,\wFil,0,\valStart,900,\valEnd,1000,\durF,8*t.beatDur,\dA,0,\out,0/*~hitEq*/, \tS,  0.39550810372374).play(t);
+
+			wait(0.16);
+
+			s.record(s,path:"/Users/davidmignot/Music/SuperCollider Recordings/F#/1/noise.aiff",numChannels:1,duration:t.beatDur*16);
+
+		}).play(t,quant:1)
+
+		Pseq([Pbindf(~kick,\out,~kbus)],inf).play(t,quant:1)
+		Pbind(\instrument, \playBuf, \buf, ~noise, \dur, Pseq([16/2],1),\out,~hitEq).play(t)
+			

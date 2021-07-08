@@ -20,6 +20,21 @@
 
 
 
+/*~rHit= Synth(\EQHP96, [\frq, 100 ,\in,~revHitEq,\out,~hitLimit],~eqGrp0);
+~rHit.set(\vol,0.63,\val4,3000,\shelf,1.6,\gain4,(-18));*/
+
+//hit
+// ~eqHit.free
+~eqHit = Synth(\EQHP96, [\frq, 200 ],~eqGrp0);
+~eqHit.set(\in,~hitEq,\out,~hitRev);
+~revHit= Synth( \reverb ,~revRnd[0],~revGrp);~revHit.set(\in,~hitRev, \out,~hitComp);
+~compHit=Synth(\comp, [\ctrl, ~kbus,\in,~hitComp,\out, ~hitLimit ],~compGrp);
+~compHit.set(\thr,0.19 ,\sB, 1.04,\sA, 1/2,\atk ,0.0242, \rel ,0.0968,\out,~hitLimit );
+~limitHit =Synth(\limitertoMixer,[ \in,~hitLimit,\out,~hitStereo],~limitGrp);
+~limitHit.set(\gain,70.3);
+~panHit=Synth(\pan2, [\in, ~hitStereo, \out,0/*~hiCom*/], ~stereoGrp);
+
+
 ~bassFilter= Synth(\filter,[\in, ~bassFi,\out,~comFuzz,\freqFil,9800,\qf,0.8,\which,0,\busMod,~bassShapB],~filterGrp);
 
 
@@ -149,20 +164,6 @@ Pbind(\instrument, \playBuf,  \tS,  0.39550810372374,\buf,~snare,\type, Pseq([\r
 
 
 
-
-/*~rHit= Synth(\EQHP96, [\frq, 100 ,\in,~revHitEq,\out,~hitLimit],~eqGrp0);
-~rHit.set(\vol,0.63,\val4,3000,\shelf,1.6,\gain4,(-18));*/
-
-//hit
-// ~eqHit.free
-~eqHit = Synth(\EQHP96, [\frq, 200 ],~eqGrp0);
-~eqHit.set(\in,~hitEq,\out,~hitRev,\val,260,\quant,1,\gain,(-15),\val2,650,\quant,1,\gain,(-23),\val4,2800, \shelf,1.2,\gain4,(-18.5));
-~revHit= Synth( \reverb ,~revRnd[0],~revGrp);~revHit.set(\in,~hitRev, \out,~hitComp);
-~compHit=Synth(\comp, [\ctrl, ~kbus,\in,~hitComp,\out, ~hitLimit ],~compGrp);
-~compHit.set(\thr,0.19 ,\sB, 1.04,\sA, 1/2,\atk ,0.0242, \rel ,0.0968,\out,~hitLimit );
-~limitHit =Synth(\limitertoMixer,[ \in,~hitLimit,\out,~hitStereo],~limitGrp);
-~limitHit.set(\gain,40.3);
-~panHit=Synth(\pan2, [\in, ~hitStereo, \out,0/*~hiCom*/], ~stereoGrp);
 
 
 

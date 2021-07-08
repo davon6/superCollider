@@ -489,7 +489,7 @@ SynthDef(\kick, {
 
 	envF = EnvGen.ar(
 		Env(
-			[117.midicps,64.midicps,114,26,0,0],
+				[119.midicps*(432/440),66.midicps*(432/440),47.midicps*(432/440),18.midicps*(432/440),0,0],
 			[0.004,t.beatDur/32,t.beatDur/4,0],
 			[-8.4,-2,-2]
 		)
