@@ -5731,7 +5731,7 @@ Ppar([
 
 	Pbind(\instrument, \wNoise,\dur, Pseq([4/1],1),\dec ,Pkey(\dur),\amp,(-5),\wFil,0,\valStart,900,\valEnd,1000,\durF,Pkey(\dur),\out,~hitEq, \tS,  0.39550810372374,\group,~lfoGrp).play(t);
 
-		wait(0.16);
+		wait(0.21);
 
 		 s.record(path:"/Users/davidmignot/Music/SuperCollider Recordings/E/noiseHIt.aiff",numChannels:10,duration:t.beatDur*4);
 
@@ -9812,7 +9812,6 @@ Ppar([
 				Pbind(\instrument, \playBufS, \buf,~k2,\dur, Pseq([1/4],1)),
 				Pbind(\instrument, \playBufS, \buf,~kass,\dur, Pseq([7/4],1),\start,89000),
 
-
 				Ppar([
 				Pbind(\instrument,\gate2, \in ,~toKbGate, \group,~kbGate ,\dur, Pseq([15/1],1)),
 				Pbind(\instrument, \playBuf, \buf, ~noise, \dur, Pseq([1/1],1),\out,~hitEq),
@@ -9824,52 +9823,62 @@ Ppar([
 					Pbind(\instrument,\gate2, \in ,~toKbGate, \group,~kbGate ,\dur, Pseq([15/1],1)),
 				]),
 				Pbind(\instrument, \playBufS, \buf,~k2,\dur, Pseq([1/1],1)),
+
 				Pbind(\instrument,\gate2, \in ,~toKbGate, \group,~kbGate ,\dur, Pseq([14/1],1)),
 				Pbind(\instrument, \playBufS, \buf,~k2,\dur, Pseq([2/1],1)),
 
 
+				Pbind(\instrument,\gate2, \in ,~toKbGate, \group,~kbGate ,\dur, Pseq([12/1],1)),
+				Pbind(\instrument, \playBufS, \buf,~k2,\dur,Pseq([ Pseq([2/1],1), Pseq([1/1],1) ,Pseq([1/2],2)    ],1)),
+
+				Pbind(\instrument,\gate2, \in ,~toKbGate, \group,~kbGate ,\dur, Pseq([4/1],1)),
+				Pbind(\instrument, \playBufS, \buf,~k2,\dur, Pseq([1/2],1)  ),
+				Pbind(\instrument, \playBufS, \buf,~k2,\dur, Pseq([1/2],1) ,\rte,(-1),\start,10000),
+				Pbind(\instrument, \playBufS, \buf,~k2,\dur, Pseq([1/1],1)  ),
+				Pbind(\instrument,\gate2, \in ,~toKbGate, \group,~kbGate ,\dur, Pseq([6/1],1)),
+				Pbind(\instrument, \playBufS, \buf,~k2,\dur, Pseq([1/1],4)  ),
+
+
+				Pbind(\instrument,\gate2, \in ,~toKbGate, \group,~kbGate ,\dur, Pseq([6/1],1)),
+				Pbind(\instrument, \playBufS, \buf,~k2,\dur, Pseq([1/1],2)  ),
+					Pbind(\instrument,\gate2, \in ,~toKbGate, \group,~kbGate ,\dur, Pseq([8/1],1)),
+
+				Pbind(\instrument, \playBufS, \buf,~k2,\dur, Pseq([2/1],1)),
+				Pbind(\instrument,\gate2, \in ,~toKbGate, \group,~kbGate ,\dur, Pseq([13/1],1)),
+				Pbind(\instrument, \playBufS, \buf,~k2,\dur,Pseq([1/2],2) ),
+
+				Ppar([
+					Pbind(\instrument, \playBuf, \buf, ~noise, \dur, Pseq([8/1],1),\out,~hitEq),
+					//WATCH OUT COMPRESS BASS HIT + VOLUME NO GOOD
+					Pbind(\instrument, \playBuf, \buf,~bassL, \dur, Pseq([56/1],1),\out,~hitEq),
+					Pseq([
+						Pbind(\instrument, \playBufS,\buf,~k2,\dur, Pseq([1/1],2),\type,Pseq([\note,\rest],inf)),
+
+						Prand([
+
+							Prand([
+
+								Pbind(\instrument, \playBufS,\buf,~k2,\dur, Pseq([1/4],8),\type,Pseq([\note,\note,\note,\note,\rest,\rest,\rest,\rest].scramble,inf)),
+								Pbind(\instrument,\playBufS,\buf,~k2,\dur, Pseq([1/4],8),\type,Pseq([\note,\note,\note,\note,\rest,\rest,\rest,\rest].scramble,inf)),
+								Pbind(\instrument,\playBufS,\buf,~k2,\dur, Pseq([1/4],8),\type,Pseq([\note,\note,\note,\note,\rest,\rest,\rest,\rest].scramble,inf)),
+								Pbind(\instrument,\playBufS,\buf,~k2,\dur, Pseq([1/4],8),\type,Pseq([\note,\note,\note,\note,\rest,\rest,\rest,\rest].scramble,inf))],1),
+
+
+
+							Pseq([
+
+								Pbind(\instrument, \playBufS,\buf,~k2,\dur, Pseq([1/1],1),\type,Pseq([\note,\note,\rest,\rest].scramble,inf)),
+								Pbind(\instrument, \playBufS,\buf,~k2,\dur, Pseq([1/2],2),\type,Pseq([\note,\rest].scramble,inf))
+							].scramble,1)
+
+						],7)
+					],4),
+				],1),
+
 		],1)],1).play(t,quant:1)
 
 
-	Pseq([
 
-		// Pseq([~kick],16),
-
-		Pbind(\instrument, \kick,\amp,(-10),\dur, Pseq([1/1],2),\type,Pseq([\note,\rest],inf)),
-
-	Prand([
-
-		Prand([
-
-Pbind(\instrument, \kick,\amp,(-10),\dur, Pseq([1/4],8),\type,Pseq([\note,\note,\note,\note,\rest,\rest,\rest,\rest].scramble,inf)),
-
-Pbind(\instrument, \kick,\amp,(-10),\dur, Pseq([1/4],8),\type,Pseq([\note,\note,\note,\note,\rest,\rest,\rest,\rest].scramble,inf)),
-Pbind(\instrument, \kick,\amp,(-10),\dur, Pseq([1/4],8),\type,Pseq([\note,\note,\note,\note,\rest,\rest,\rest,\rest].scramble,inf)),
-		Pbind(\instrument, \kick,\amp,(-10),\dur, Pseq([1/4],8),\type,Pseq([\note,\note,\note,\note,\rest,\rest,\rest,\rest].scramble,inf))],1),
-
-
-
-		Pseq([
-
-				Pbind(\instrument, \kick,\amp,(-10),\dur, Pseq([1/1],1),\type,Pseq([\note,\note,/*\note,\note,\rest,\rest,*/\rest,\rest].scramble,inf)),
-
-				Pbind(\instrument, \kick,\amp,(-10),\dur, Pseq([1/2],2),\type,Pseq([\note,/*\note,*//*\note,\note,\rest,\rest,\rest,*/\rest].scramble,inf))
-			].scramble,1)
-	/*	Prand([
-
-Pbind(\instrument, \kick,\amp,(-10),\dur, Pseq([1/1],2),\type,Pseq([\note,\note,/*\note,\note,\rest,\rest,*/\rest,\rest].scramble,inf)),
-
-				Pbind(\instrument, \kick,\amp,(-10),\dur, Pseq([1/2],4),\type,Pseq([\note,/*\note,*//*\note,\note,\rest,\rest,\rest,*/\rest].scramble,inf))
-
-/*Pbind(\instrument, \kick,\amp,(-10),\dur, Pseq([1/8],2),\type,Pseq([\note,\note/*,\note,\note,\rest,\rest*/,\rest,\rest].scramble,inf)),*/
-/*Pbind(\instrument, \kick,\amp,(-10),\dur, Pseq([1/8],2),\type,Pseq([\note,\note/*,\note,\note,\rest,\rest*/,\rest,\rest].scramble,inf)),
-		Pbind(\instrument, \kick,\amp,(-10),\dur, Pseq([1/8],2),\type,Pseq([\note,\note,/*\note,\note,\rest,\rest,*/\rest,\rest].scramble,inf))*/],1)*/
-
-
-		],7)
-
-
-	],4).play(t)
 
 
 
@@ -9984,7 +9993,7 @@ Pseq([
 
 			Pbind(\instrument, \wNoise,\dur, Pseq([16/1],1),\dec ,Pkey(\dur),\amp,(-5),\out,0,\wFil,0,\valStart,900,\valEnd,1000,\durF,8*t.beatDur,\dA,0,\out,0/*~hitEq*/, \tS,  0.39550810372374).play(t);
 
-			wait(0.16);
+			wait(0.21);
 
 			s.record(s,path:"/Users/davidmignot/Music/SuperCollider Recordings/F#/1/noise.aiff",numChannels:1,duration:t.beatDur*16);
 
@@ -9992,4 +10001,51 @@ Pseq([
 
 		Pseq([Pbindf(~kick,\out,~kbus)],inf).play(t,quant:1)
 		Pbind(\instrument, \playBuf, \buf, ~noise, \dur, Pseq([16/2],1),\out,~hitEq).play(t)
+
+
+
+
+		{ DynKlank.ar(`[[LFNoise0.kr(~hz1beat/0.75).range(100,800),LFNoise0.kr(~hz1beat/0.75).range(800,3000),LFNoise0.kr(~hz1beat/0.75).range(100,3000),LFNoise0.kr(~hz1beat/0.75).range(100,3000)], nil, [4, 4, 4, 4]], Impulse.ar(~hz1beat/0.75, 0, 0.1))*0.2 }.play;
+
+
+	{ DynKlank.ar(`[[
+			VarLag.kr( LFNoise0.kr(~hz1beat/0.75).range(100,800),t.beatDur/1.00001,-46)
+			,VarLag.kr(LFNoise0.kr(~hz1beat/0.75).range(800,3000),t.beatDur/1.00001,-46)
+			,VarLag.kr(LFNoise0.kr(~hz1beat/0.75).range(100,3000),t.beatDur/1.00001,-46)
+			,VarLag.kr(LFNoise0.kr(~hz1beat/0.75).range(100,3000),t.beatDur/1.00001,-46)
+
+		], nil, [4, 4, 4, 4]], Impulse.ar(~hz1beat/0.75, 0, 0.1))*0.2 }.play;
+
+
+		{ DynKlank.ar(`[[
+			VarLag.kr( LFNoise0.kr(~hz1beat/1.5).range(100,800),t.beatDur*0.00001,-46)
+			,VarLag.kr(LFNoise0.kr(~hz1beat/1.5).range(800,3000),t.beatDur*0.00001,-46)
+			,VarLag.kr(LFNoise0.kr(~hz1beat/1.5).range(100,3000),t.beatDur*0.00001,-46)
+			,VarLag.kr(LFNoise0.kr(~hz1beat/1.5).range(100,3000),t.beatDur*0.00001,-46)
+
+		], nil, [4, 4, 4, 4]], Impulse.ar(~hz1beat/1.5, 0, 0.1))*0.2 }.play;
+
+		//better
+
+		Routine({
+		q=	{ DynKlank.ar(`[[
+			VarLag.kr( LFNoise0.kr(~hz1beat/1.5).range(100,800),t.beatDur*0.00001,46)
+			,VarLag.kr(LFNoise0.kr(~hz1beat/1.5).range(800,3000),t.beatDur*0.00001,46)
+			,VarLag.kr(LFNoise0.kr(~hz1beat/1.5).range(100,3000),t.beatDur*0.00001,46)
+			,VarLag.kr(LFNoise0.kr(~hz1beat/1.5).range(100,3000),t.beatDur*0.00001,46)
+
+		], nil, [4, 4, 4, 4]], Impulse.ar(~hz1beat/1.5, 0, 0.1))*0.2 }.play;
+
+		({FreqShift.ar( PingPong.ar(~delay6,In.ar(0,2),0.3,0.35),MouseX.kr(-100,100))}.play(target: q, addAction: \addAfter));
+			wait(0.2);
+
+			s.record(s,path:"/Users/davidmignot/Music/SuperCollider Recordings/F#/1/larme.aiff",numChannels:1,duration:t.beatDur*68);
+		}).play(t,quant:1)
+
+			~larme=Buffer.read(s,"/Users/davidmignot/Music/SuperCollider Recordings/F#/1/larme.aiff");
+
+
+~larme.play
+
+			{ DynKlank.ar(`[[LFNoise0.kr(~hz1beat*0.75).range(100,800),LFNoise0.kr(~hz1beat*0.75).range(800,3000),LFNoise0.kr(~hz1beat*0.75).range(100,3000),LFNoise0.kr(~hz1beat*0.75).range(100,3000)], nil, [4, 4, 4, 4]], Impulse.ar(~hz1beat, 0, 0.1))*0.2 }.play;
 			

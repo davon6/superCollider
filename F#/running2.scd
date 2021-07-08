@@ -36,13 +36,13 @@ f = { |n=14, min=0, max=11| (min..max).scramble.keep(n) };
 
 ~b3=Buffer.read(s,"/Users/davidmignot/Music/SuperCollider Recordings/F#/1/bass.aiff");
 	~snare2=Buffer.read(s,"/Users/davidmignot/Music/SuperCollider Recordings/F#/1/snare2.aiff");
-
+~larme=Buffer.read(s,"/Users/davidmignot/Music/SuperCollider Recordings/F#/1/larme.aiff");
 ~b4=Buffer.read(s,"/Users/davidmignot/Music/SuperCollider Recordings/F#/1/bass2.aiff");
 
 ~k2=Buffer.read(s,"/Users/davidmignot/Music/SuperCollider Recordings/F#/1/kick.aiff");
 
 ~kass= Buffer.read(s, "/Users/davidmignot/Music/SuperCollider Recordings/F#/1/bassTw.aiff");
-
+~bassL=Buffer.read(s,"/Users/davidmignot/Music/SuperCollider Recordings/F#/1/bassL.aiff");
 ~bassD=Buffer.read(s,"/Users/davidmignot/Music/SuperCollider Recordings/F#/1/bassTw.aiff");
 
 ~noise=Buffer.read(s,"/Users/davidmignot/Music/SuperCollider Recordings/F#/1/noise.aiff");
@@ -318,30 +318,46 @@ Ppar([~boost, ~kb],1).play(t,quant:1)
 		Pseq([Pseq(~rythm1,1),Pseq(~rythm2,1),],4),Pseq([Pseq(~rythm3,1),Pseq(~rythm4,1),],4),Pseq(~rythmL,64),*/
 
 
-		Pseq(~rythmL,256),
+		Pseq(~rythmL,1024),
 		Pseq([ \rest],inf),
 
 		],1),\dur,Pseq([1/4],inf ),\out,    ~cymbalEq),
 
 
-
+Pseq([
 	Pbind(\instrument,\playBuf,	\buf,~snare2,\dur, Pseq([1/2],inf),\type,Pseq([\rest,\rest,\note,\rest],inf),\out,~snareEQ,
 		\vlDec,Pseq([
 			// Pseq([\note],128),Pseq([\rest],256),Pseq([\note],128),
+		Pseq([\note],128),],1),
+
+		\vlSub,Pkey(\vlDec) ,\vlSub2,Pkey(\vlDec),
+		\decT,Pseq([ /*Pseq([1],512), */Pseq([0.5],128)   ],1)),
+
+		//WILL NEED ANOTHER AUDIO PROCESS PATH
+		Pseq([
+		Pbind(\instrument, \playBuf, \buf, ~snComp, \dur, Pseq([4/1],1),\amp,0.14),
 
 
-	Pseq([\note],512),
+		Pbind(\instrument, \playBuf, \buf, ~snComp, \dur, Pseq([1/4],48),\start,Pfunc({~snComp.numFrames/4*(3.rand)}),\loo,0,\amp,0.14)],4),
 
-			Pseq([\rest],inf)
-		],inf),
 
-		\vlSub,Pkey(\vlDec) ,\vlSub2,Pkey(\vlDec)),
+			Pbind(\instrument,\playBuf,	\buf,~snare2,\dur, Pseq([1/2],inf),\type,Pseq([\rest,\rest,\note,\rest],inf),\out,~snareEQ,
+		\vlDec,Pseq([
+
+		Pseq([\rest],64),Pseq([\note],64),],1),
+
+		\vlSub,Pkey(\vlDec) ,\vlSub2,Pkey(\vlDec),
+			\decT,1)
+
+
+
+	],1),
 
 
 	Pbind(\instrument, \playBuf,\buf,~hat,\dur,Pseq([1/4], inf) ,\vlDec,Pfunc({1.00.rrand(0.8)}),\vlSub,Pkey(\vlDec), \vlSub2,Pkey(\vlDec),\out,~comBusHat,
 
 		\type, Pseq([
-			// Pseq([ \note],256) , Pseq([ \rest],256), Pseq([ Pseq([ \note],1024),
+			// Pseq([ \note],256) , Pseq([ \rest],256),  Pseq([ \note],512),
 
 			 Pseq([ \note],1024),
 

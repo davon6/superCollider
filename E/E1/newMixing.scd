@@ -995,7 +995,7 @@ Pbind(\instrument, \playBuf,  \tS,  0.39550810372374,\buf,~snare,\type, Pseq([\r
 ~compHit.set(\thr,0.19 ,\sB, 1.04,\sA, 1/2,\atk ,0.0242, \rel ,0.0968,\out,~hitLimit );
 ~limitHit =Synth(\limitertoMixer,[ \in,~hitLimit,\out,~hitStereo],~limitGrp);
 ~limitHit.set(\gain,40.3);
-~panHit=Synth(\pan2, [\in, ~hitStereo, \out,~hiCom], ~stereoGrp);
+~panHit=Synth(\pan2, [\in, ~hitStereo, \out,0/*~hiCom*/], ~stereoGrp);
 
 /*~stereoHit= Synth(\stereoO,[\in, ~hitStereo,\out,~toCom], ~stereoGrp);
 ~stereoHit.set(\spread,1,\center,0.8,\dlt1,0.3,\dlt2,0.5,\decT,0.0968, \mxDel,1);*/

@@ -2196,3 +2196,61 @@ Pbind(\instrument ,\EQHP2LP2 ,\in,~bassEq, \out,0, \frq, 18.midicps*(432/440),\v
 
 ({PlayBuf.ar(2,~kass)}.play)
 Pbind(\instrument, \playBufS, \buf,~kass.bufnum,\dur, Pseq([182/1],1) ,\start,0).play(t)
+
+
+
+
+
+(//BASS ALONE
+
+~eqGrp=Group.new;
+~compGrp=Group.after(~eqGrp);
+~stereoGrp=Group.after(~compGrp);
+
+~recGrp2=Group.after(~stereoGrp);
+Routine({
+
+Ppar([
+
+		// ~bassShap,
+	Pbind(\instrument, \bass,
+		\dur, Pseq([4096/1],1),\lpf,100,
+			// \midinote, 30.midicps,
+
+
+			\freq, 27.midicps*(432/440),
+
+
+			\bus, ~bassShapB,
+		\atk, 0,
+		\rel, t.beatDur*4096 *0.9988,
+		\rel2, t.beatDur * 0.0012,
+
+		\vlDecFx,114.midicps*(432/440),
+		\atkcrv, -2,
+		\relcrv, -2,\relcrv2, -9, \relcrv3, -6
+		,\amp,(-6/*-1*/)/*(-13)*/,\out,~bassEq
+	),
+
+Pbind(\instrument ,\EQHP2LP ,\in,~bassEq, \out,0, \frq, 18.midicps*(432/440),\vol,1,\dur,inf,
+
+
+				\val7,66.midicps*(432/440),\quant7,1.8 ,\gain7,(-2),
+			\val,78.midicps*(432/440), \quant,1.96, \gain,(-21),
+\val2,90.midicps*(432/440), \quant2,2.2, \gain2,(-9),
+		\val3,102.midicps*(432/440), \quant3,2.1, \gain3,(-14),
+
+
+
+//that one
+	\val5,54.midicps*(432/440), \quant5,2.4, \gain5,(-13),\group,~eqGrp)
+
+
+
+],1).play(t);
+	wait(0.16);
+
+	s.record(path:"/Users/davidmignot/Music/SuperCollider Recordings/F#/1/bassL.aiff",numChannels:1,duration:t.beatDur*64);
+}).play;)
+~bassL.play
+~bassL=Buffer.read(s,"/Users/davidmignot/Music/SuperCollider Recordings/F#/1/bassL.aiff"); 

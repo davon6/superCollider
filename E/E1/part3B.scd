@@ -5731,13 +5731,13 @@ Ppar([
 
 	Pbind(\instrument, \wNoise,\dur, Pseq([4/1],1),\dec ,Pkey(\dur),\amp,(-5),\wFil,0,\valStart,900,\valEnd,1000,\durF,Pkey(\dur),\out,~hitEq, \tS,  0.39550810372374,\group,~lfoGrp).play(t);
 
-		wait(0.16);
+		wait(0.38);
 
 		 s.record(path:"/Users/davidmignot/Music/SuperCollider Recordings/E/noiseHIt.aiff",numChannels:10,duration:t.beatDur*4);
 
 	}).play(t,quant:1)
 
-	~noise.play
+	~noise.plot
 
 	~noise =  Buffer.read(s,"/Users/davidmignot/Music/SuperCollider Recordings/E/noiseHIt.aiff")
 
