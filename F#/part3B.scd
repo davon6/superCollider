@@ -9673,14 +9673,19 @@ Pbind(\instrument, \playBuf, \buf, ~snComp, \dur, Pseq([4/1],1),\amp,0.14),
 	);}).add
 
 
-Ppar([
-Pbind(\instrument, \playBufS, \buf,~kass,\dur, Pseq([2/1],1) ,\start,0),
+Pseq([
+		Pbind(\instrument, \playBufS, \buf,~k2,\dur, Pseq([1/4],1) ,\start,0),
 
-	~kick],1).play(t)
+Pbind(\instrument, \playBufS, \buf,~kass,\dur, Pseq([7/4],1) ,\start,0),
 
-	Pbind(\instrument, \playBufS, \buf,~k2,\dur, Pseq([1/2],2) ,\start,0)
 
-Pbind(\instrument, \wNoise,\dur, Pseq([8/1],1),\dec ,Pkey(\dur),\amp,(-5),\out,0,\wFil,0,\valStart,900,\valEnd,1000,\durF,8*t.beatDur,\dA,0,\out,~hitEq, \tS,  0.39550810372374).play(t)
+Pbind(\instrument, \wNoise,\dur, Pseq([8/1],1),\dec ,Pkey(\dur),\amp,(-5),\out,0,\wFil,0,\valStart,900,\valEnd,1000,\durF,8*t.beatDur,\dA,0,\out,0/*~hitEq*/, \tS,  0.39550810372374)
+
+	],1).play(t)
+
+
+
+Pbind(\instrument, \wNoise,\dur, Pseq([8/1],1),\dec ,Pkey(\dur),\amp,(-5),\out,0,\wFil,0,\valStart,900,\valEnd,1000,\durF,8*t.beatDur,\dA,0,\out,0/*~hitEq*/, \tS,  0.39550810372374).play(t)
 
 
 
@@ -9702,7 +9707,7 @@ Pbind(\instrument, \playBufS, \buf,~kass,\dur, Pseq([3/4],1) ,\start,0),
 Pbind(\instrument, \wNoise,\dur, Pseq([8/1],1),\dec ,Pkey(\dur),\amp,(-5),\out,0,\wFil,0,\valStart,900,\valEnd,1000,\durF,8*t.beatDur,\dA,0,\out,0/*~hitEq*/, \tS,  0.39550810372374)
 
 
-],1).play(t,quant:1)
+],1)
 
 
 
@@ -9714,7 +9719,7 @@ Pbind(\instrument, \wNoise,\dur, Pseq([8/1],1),\dec ,Pkey(\dur),\amp,(-5),\out,0
 
 
 
-],1)
+],1).play(t,quant:1)
 
 
 Ppar([
@@ -9748,14 +9753,14 @@ Ppar([
 
 		Pseq([
 		Ppar([
-					Pbind(\instrument,\gate2, \in ,~toKbGate, \group,~kbGate ,\dur, Pseq([64/1],1)),
-					Pbind(\instrument,\blankF ,\dur,Pseq([64/1],1),\in,~toKbGate,\out,~toKbGate,\group,~kbGate)],1),
+				Pbind(\instrument,\gate2, \in ,~toKbGate, \group,~kbGate ,\dur, Pseq([64/1],1)),
+				Pbind(\instrument,\blankF ,\dur,Pseq([64/1],1),\in,~toKbGate,\out,~toKbGate,\group,~kbGate)],1),
 
 
 				Pbind(\instrument,\gate2, \in ,~toKbGate, \group,~kbGate ,\dur, Pseq([48/1],1)),
 				Pbind(\instrument, \playBufS, \buf,~k2,\dur, Pseq([1/1],1) ,\start,0),
 				Pbind(\instrument, \rien ,\dur, Pseq([14/1],1)),
-				Pbind(\instrument, \playBufS, \buf,~k2,\dur, Pseq([1/1],1) ,\rte,(-1),\start,10000),
+				Pbind(\instrument, \playBufS, \buf,~k2,\dur, Pseq([1/1],1) /*,\rte,(-1),\start,10000*/),
 
 
 				Pbind(\instrument,\gate2, \in ,~toKbGate, \group,~kbGate ,\dur, Pseq([15/1],1)),
@@ -9780,8 +9785,8 @@ Ppar([
 				Pbind(\instrument, \rien ,\dur, Pseq([2/1],1)),
 				Ppar([
 
-					Pbind(\instrument, \playBufS, \buf,~k2,\dur,Pseq([ Pseq([1/2],4),Pseq([1/4],8) ,Pseq([1/8],16)],1),\start,0),
-					Pbind(\instrument,\blankF ,\dur,Pseq([16/1],1),\in,0,\out,0,\group,~kbGate,\wF,1)
+				Pbind(\instrument, \playBufS, \buf,~k2,\dur,Pseq([ Pseq([1/2],4),Pseq([1/4],8) ,Pseq([1/8],16)],1),\start,0),
+				Pbind(\instrument,\blankF ,\dur,Pseq([16/1],1),\in,0,\out,0,\group,~kbGate,\wF,1)
 
 				],1)
 
@@ -9921,3 +9926,21 @@ Pseq([
 
 
 		~snare2.plot
+
+
+
+	({ GVerb.ar(FreeVerb.ar(
+		BLowPass4.ar(
+		Saw.ar(SinOsc.kr(~hz1beat/64,4.6).range(-10,-5)-MouseX.kr(-42,42).midicps*(432/440))
+			,MouseX.kr(10,4000))
+
+	),88,14,0.1)*0.2}.play)
+
+
+	Routine({
+		s.record(s,path:"/Users/davidmignot/Music/SuperCollider Recordings/F#/1/RevBg.aiff",numChannels:1,duration:t.beatDur*64);
+
+		}).play(t,quant:1)
+	~bgRev.play
+
+		~bgRev=Buffer.read(s,"/Users/davidmignot/Music/SuperCollider Recordings/F#/1/RevBg.aiff");

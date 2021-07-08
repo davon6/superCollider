@@ -28,7 +28,7 @@ f = { |n=14, min=0, max=11| (min..max).scramble.keep(n) };
 
 (
 	~perc=Buffer.read(s,	"/Users/davidmignot/Music/SuperCollider Recordings/F#/1/funkPerc.aiff");
-
+~bgRev=Buffer.read(s,"/Users/davidmignot/Music/SuperCollider Recordings/F#/1/RevBg.aiff");
 ~cymb= Buffer.read(s,"/Users/davidmignot/Music/SuperCollider Recordings/F#/1/cymbal.aiff");
 ~hat= Buffer.read(s,"/Users/davidmignot/Music/SuperCollider Recordings/F#/1/hat.aiff");
 
@@ -41,21 +41,22 @@ f = { |n=14, min=0, max=11| (min..max).scramble.keep(n) };
 
 ~k2=Buffer.read(s,"/Users/davidmignot/Music/SuperCollider Recordings/F#/1/kick.aiff");
 
+~kass= Buffer.read(s, "/Users/davidmignot/Music/SuperCollider Recordings/F#/1/bassTw.aiff");
 
 ~bassD=Buffer.read(s,"/Users/davidmignot/Music/SuperCollider Recordings/F#/1/bassTw.aiff");
 
-~one = ~leTout2.numFrames/ 256 * 240.rand;
+/*~one = ~leTout2.numFrames/ 256 * 240.rand;
 ~two = ~leTout2.numFrames/ 256 * 240.rand;
-~troi= ~leTout2.numFrames/ 256 * 240.rand;
+~troi= ~leTout2.numFrames/ 256 * 240.rand;*/
 
 
 ~rythm1=[\rest,\rest,\rest,\rest ,\rest,\rest ,\note, \rest].scramble; ~rythm2=[\rest,\rest,\rest,\rest ,\rest,\note ,\note, \rest].scramble; ~rythm3=[\rest,\rest,\rest,\rest ,\rest,\rest ,\note, \rest].scramble; ~rythm4=[\rest,\rest,\rest,\note ,\note,\note ,\note, \rest].scramble;
 	~rythmL = [\rest,\rest,\note,\note ,\rest,\note ,\note, \rest].scramble;
 
-~start = ~start =~fkAr.numFrames.rrand(215000)-215000;
+// ~start = ~start =~fkAr.numFrames.rrand(215000)-215000;
 
 
-
+/*
 
 ~ouai=~leTout2.numFrames/256* (220.rand);
 ~ouai2=~leTout2.numFrames/256* (220.rand);
@@ -63,7 +64,7 @@ f = { |n=14, min=0, max=11| (min..max).scramble.keep(n) };
 
 
 ~first=  ~leTout2.numFrames/ 256 * 222.rrand(1);
-		 ~second= ~leTout2.numFrames/ 256 * 222.rrand(1);
+		 ~second= ~leTout2.numFrames/ 256 * 222.rrand(1);*/
 
 
 )
@@ -312,7 +313,7 @@ Ppar([~boost, ~kb],1).play(t,quant:1)
 	Pbind(\instrument, \playBuf, \buf,~cymb,\type,Pseq([ Pseq(~rythmL,30),Pseq([ \rest],258),
 		Pseq([Pseq(~rythm1,1),Pseq(~rythm2,1),],4),Pseq([Pseq(~rythm3,1),Pseq(~rythm4,1),],4),
 
-		Pseq(~rythmL,32),
+		Pseq(~rythmL,64),
 
 
 		Pseq([ \rest],inf),

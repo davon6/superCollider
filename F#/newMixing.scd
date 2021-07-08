@@ -29,7 +29,7 @@
 ~limK=Synth(\limitertoMixer,[\c45,1,\in, ~limitKick, \gain,1,\out,~kToPan],~limitGrp);
 ~limK.set(\gain,154.7);
 ~limB=Synth(\limitertoMixer,[\c46,1,\in, ~limitBass, \gain,68,\out,~kToPan],~limitGrp);
-~limB.set(\gain,204);
+~limB.set(\gain,254);
 
 ~kbPan2 = Synth(\pan2,[ \in,~kToPan,\out,~toKbGate],~stereoGrp);
 
@@ -94,7 +94,7 @@ Pbind(\instrument, \playBuf,  \tS,  0.39550810372374,\buf,~snare,\type, Pseq([\r
 
 
 ~mix34= Synth(\limitertoMixer,[\c34,1,\in, ~snareLimit,\gain,40,\out,~toPan2],~limitGrp);
-~mix34.set(\gain,219.4);
+~mix34.set(\gain,149.4);
 ~pan34=Synth( \pan2,[\in, ~toPan2,\out, /*~tofinalRythm*/  ~toKbGate], ~stereoGrp);
 
 // ~eq40.free

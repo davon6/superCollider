@@ -155,6 +155,8 @@ s.sync;
 	~kbus=Bus.audio(s,1);
 	~snBus=Bus.audio(s,1);
 
+	~bassEq=Bus.audio(s,1);
+
 	~cymbalEq=Bus.audio(s,1);~comBusCymb=Bus.audio(s,1);~limitCymb=Bus.audio(s,1);~stereoCymb=Bus.audio(s,1);
 	~comBusHat=Bus.audio(s,1);~limitHat=Bus.audio(s,1);~hatEq=Bus.audio(s,1);~stereoHat=Bus.audio(s,1);
 
@@ -571,7 +573,7 @@ EnvGen.ar(
 			),
 			timeScale: t.beatDur,doneAction:2
 		);
-		sig =Saw.ar(freq -MouseY.kr(27.midicps*(432/440)),mul: -1,add: -0.4).lincurve(-1,1,-1,1,-7);
+		sig =Saw.ar(MouseY.kr(27.midicps*(432/440),30.midicps*(432/440)),mul: -1,add: -0.4).lincurve(-1,1,-1,1,-7);
 		sig = LPF.ar(LPF.ar(
 
 			sig.round(2**(-8))
@@ -1240,7 +1242,7 @@ FreeVerb.ar(
 			BPeakEQ.ar(	BPeakEQ.ar(In.ar(in, 2),val,quant, gain),val2,quant2, gain2),val3,quant3, gain3),val4,shelf, gain4),val5,quant5, gain5),val7,quant7, gain7),val6,shelf2, gain6),
 
 		frq),frq),frq),frq),frq),frq),frq),frq)
-			,MouseX.kr(40,20000)),MouseX.kr(40,20000)),MouseX.kr(40,20000)),MouseX.kr(40,20000)),MouseX.kr(40,20000)),MouseX.kr(40,20000)),MouseX.kr(40,20000)),MouseX.kr(40,20000))
+			,MouseX.kr(40,3310)),MouseX.kr(40,3310)),MouseX.kr(40,3310)),MouseX.kr(40,3310)),MouseX.kr(40,3310)),MouseX.kr(40,3310)),MouseX.kr(40,3310)),MouseX.kr(40,3310))
 
 
 		* vol)};).add;
@@ -1540,7 +1542,7 @@ SynthDef(\ranModulC,{|modu, busMod,lS=0, hS=4200,dur,tS=1,out|Out.kr(out,LFDNois
 SynthDef(\sawModul,{|modu, busMod,hS|Out.kr(busMod, Saw.kr(modu).range(-40,hS))}).add;
 
 
-	SynthDef(\fmX, {
+	/*SynthDef(\fmX, {
 		arg freq= 659.26, freq2=200,freq3=200, mRatio=1, cRatio=0,  amp=1.5, sineRate = 0.0000000095262251,  sineRangeLow=0, pitch = 0, phRise= 0 ,out=0, eFreq =0 , phFm=8, bus2,bus3,bus4,busBP,bus6, bus7, bus8, busSR, busSS, busSP, gra=0.5,lvlDec=1,factor=0, factor2 =0 ,factorx=0, factorx2 =0,factorxx=0, factorxx2 =0  , rqLPF =0.5, factor3 =1, decE= 0.1936, dur, gain =50,gate=1,pan=0, modu,modu2, multi=0, multi2=0,modux=0,moduxx=0,fmCtrl=1,secBus;
 
 	var car, mod, mod2, iEnv, sig, filRte,env;
@@ -1580,7 +1582,7 @@ SynthDef(\sawModul,{|modu, busMod,hS|Out.kr(busMod, Saw.kr(modu).range(-40,hS))}
 	sig  = LeakDC.ar(sig);
 
 	Out.ar(out, sig    * amp     *env);
-}).add;
+}).add;*/
 
 	/*SynthDef(\fmX, {
 		arg freq= 659.26, freq2=200,freq3=200, mRatio=1, cRatio=0,  amp=1.5, sineRate = 0.0000000095262251,  sineRangeLow=0, pitch = 0, phRise= 0 ,out=0, eFreq =0 , phFm=8, bus2,bus3,bus4,busBP,bus6, bus7, bus8, busSR, busSS, busSP, gra=0.5,lvlDec=1,factor=0, factor2 =0 ,factorx=0, factorx2 =0,factorxx=0, factorxx2 =0  /*,vlPE =27.1366666667,vlPE2=0.2,dcPE = 0.129066666667*/, rqLPF =0.5, factor3 =1, decE= 0.1936, dur, gain =50/*, crvEP = (-2)*/,gate=1,pan=0, modu,modu2, multi=0, multi2=0,modux=0,moduxx=0,fmCtrl=1;
@@ -1804,12 +1806,12 @@ SynthDef(\sequ,{|value, dur, in=0, out=0, vlAtk=0, vlDec=1,vlSub=1,vlSub2=1, vlR
 
 		Out.ar(out,effect /** EnvGen.kr(Env.step([1,1],[dur,0]),timeScale: tS,doneAction: 2)*/);
 	}).add;
-
+/*
 	SynthDef(\lim,{|out=0,ml=0.1|Out.ar(out,Balance.ar(In.ar(~outTolimit),SinOsc.ar(mul: ml)))}).add;
 
 	SynthDef(\lim2,{|out=0,ml=0.2,in|Out.ar(out,Balance.ar(In.ar(in,2),SinOsc.ar(mul: ml)))}).add;
 
-	SynthDef(\lim10,{|out=0,ml=0.2,in|Out.ar(out,Balance.ar(In.ar(in,10),SinOsc.ar(mul: ml)))}).add;
+	SynthDef(\lim10,{|out=0,ml=0.2,in|Out.ar(out,Balance.ar(In.ar(in,10),SinOsc.ar(mul: ml)))}).add;*/
 
 	SynthDef(\tantra,{|out=0,wT=0,in,dur|Out.ar(out,SelectX.ar(wT,[
 
@@ -2039,8 +2041,8 @@ Ppar([
 ~comp.set(\thr,0.2 ,\sB, 1.036,\sA, 1/2,\atk ,t.beatDur/16, \rel ,t.beatDur/4, \gain,1,\in, ~comFuzz,\out,~limitBass);
 ~limK=Synth(\limitertoMixer,[\c45,1,\in, ~limitKick, \gain,1,\out,~kToPan],~limitGrp);
 ~limK.set(\gain,154.7);
-	/*~limB=Synth(\limitertoMixer,[\c46,1,\in, ~limitBass, \gain,68,\out,~kToPan],~limitGrp);
-	~limB.set(\gain,204);*/
+	~limB=Synth(\limitertoMixer,[\c46,1,\in, ~limitBass, \gain,68,\out,~kToPan],~limitGrp);
+	~limB.set(\gain,254);
 
 
 	~kbPan2 = Synth(\pan2,[ \in,~kToPan,\out,0],~stereoGrp);
@@ -2183,7 +2185,7 @@ Pbind(\instrument ,\EQHP2LP2 ,\in,~bassEq, \out,0, \frq, 18.midicps*(432/440),\v
 ],1).play(t);
 	wait(0.16);
 
-	// s.record(path:"/Users/davidmignot/Music/SuperCollider Recordings/F#/1/bassTw.aiff",numChannels:2,duration:t.beatDur*16);
+	s.record(path:"/Users/davidmignot/Music/SuperCollider Recordings/F#/1/bassTw.aiff",numChannels:2,duration:t.beatDur*16);
 }).play;)
 
 
