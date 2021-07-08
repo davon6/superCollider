@@ -9964,8 +9964,8 @@ Pseq([
 
 	({ GVerb.ar(FreeVerb.ar(
 		BLowPass4.ar(
-		Saw.ar(SinOsc.kr(~hz1beat/64,4.6).range(-10,-5)-MouseX.kr(-42,42).midicps*(432/440))
-			,MouseX.kr(10,4000))
+		Saw.ar(SinOsc.kr(~hz1beat/32,4.6).range(-10,-5)-MouseX.kr(-42,42).midicps*(432/440))
+			,MouseX.kr(10,4000),0.4)
 
 	),88,14,0.1)*0.2}.play)
 
