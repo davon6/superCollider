@@ -35,10 +35,10 @@ f = { |n=14, min=0, max=11| (min..max).scramble.keep(n) };
 ~snare= Buffer.read(s,"/Users/davidmignot/Music/SuperCollider Recordings/F#/1/snare.aiff");
 
 ~b3=Buffer.read(s,"/Users/davidmignot/Music/SuperCollider Recordings/F#/1/bass.aiff");
-	~snare2=Buffer.read(s,"/Users/davidmignot/Music/SuperCollider Recordings/F#/1/snare2.aiff");
+~snare2=Buffer.read(s,"/Users/davidmignot/Music/SuperCollider Recordings/F#/1/snare2.aiff");
 ~larme=Buffer.read(s,"/Users/davidmignot/Music/SuperCollider Recordings/F#/1/larme.aiff");
 ~b4=Buffer.read(s,"/Users/davidmignot/Music/SuperCollider Recordings/F#/1/bass2.aiff");
-
+~snComp = Buffer.read(s, "/Users/davidmignot/Music/SuperCollider Recordings/F#/1/snareComp.aiff");
 ~k2=Buffer.read(s,"/Users/davidmignot/Music/SuperCollider Recordings/F#/1/kick.aiff");
 
 ~kass= Buffer.read(s, "/Users/davidmignot/Music/SuperCollider Recordings/F#/1/bassTw.aiff");
@@ -325,7 +325,7 @@ Ppar([~boost, ~kb],1).play(t,quant:1)
 
 
 Pseq([
-	Pbind(\instrument,\playBuf,	\buf,~snare2,\dur, Pseq([1/2],inf),\type,Pseq([\rest,\rest,\note,\rest],inf),\out,~snareEQ,
+	Pbind(\instrument,\playBuf,	\buf,~snare2,\dur, Pseq([1/2],128 /*TO CHANGE*/),\type,Pseq([\rest,\rest,\note,\rest],inf),\out,~snareEQ,
 		\vlDec,Pseq([
 			// Pseq([\note],128),Pseq([\rest],256),Pseq([\note],128),
 		Pseq([\note],128),],1),
@@ -341,9 +341,9 @@ Pseq([
 		Pbind(\instrument, \playBuf, \buf, ~snComp, \dur, Pseq([1/4],48),\start,Pfunc({~snComp.numFrames/4*(3.rand)}),\loo,0,\amp,0.14)],4),
 
 
-			Pbind(\instrument,\playBuf,	\buf,~snare2,\dur, Pseq([1/2],inf),\type,Pseq([\rest,\rest,\note,\rest],inf),\out,~snareEQ,
+			Pbind(\instrument,\playBuf,	\buf,~snare2,\dur, Pseq([1/2],640),\type,Pseq([\rest,\rest,\note,\rest],inf),\out,~snareEQ,
 		\vlDec,Pseq([
-
+Pseq([\rest],128),
 		Pseq([\rest],64),Pseq([\note],64),],1),
 
 		\vlSub,Pkey(\vlDec) ,\vlSub2,Pkey(\vlDec),
