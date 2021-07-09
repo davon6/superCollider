@@ -333,7 +333,7 @@ Pseq([
 	Pbind(\instrument,\playBuf,	\buf,~snare2,\dur, Pseq([1/2],128 /*TO CHANGE*/),\type,Pseq([\rest,\rest,\note,\rest],inf),\out,~snareEQ,
 		\vlDec,Pseq([
 			// Pseq([\note],128),Pseq([\rest],256),Pseq([\note],128),
-		Pseq([\note],128),],1),
+		Pseq([\rest],64),],1),
 
 		\vlSub,Pkey(\vlDec) ,\vlSub2,Pkey(\vlDec),
 		\decT,Pseq([ /*Pseq([1],512), */Pseq([0.5],128)   ],1)),
@@ -345,6 +345,7 @@ Pseq([
 
 		Pbind(\instrument, \playBuf, \buf, ~snComp, \dur, Pseq([1/4],48),\start,Pfunc({~snComp.numFrames/4*(3.rand)}),\loo,0,\amp,0.14)],4),
 
+		Pbind(\instrument,\playBuf,	\buf,~snare,\dur, Pseq([1/2],64),\type,Pseq([\rest,\rest,\note,\rest],inf),\out,0,\decT,0.52),
 
 			Pbind(\instrument,\playBuf,	\buf,~snare2,\dur, Pseq([1/2],640),\type,Pseq([\rest,\rest,\note,\rest],inf),\out,~snareEQ,
 		\vlDec,Pseq([

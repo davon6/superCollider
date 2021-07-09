@@ -9852,26 +9852,28 @@ Ppar([
 
 				Ppar([
 					Pbind(\instrument, \playBuf, \buf, ~noise, \dur, Pseq([8/1],1),\out,~hitEq),
-					//WATCH OUT COMPRESS BASS HIT + VOLUME NO GOOD
-					Pbind(\instrument, \playBuf, \buf,~bassL, \dur, Pseq([56/1],1),\out,~hitEq),
+					Pbind(\instrument, \playBuf, \buf,~bassL, \dur, Pseq([64/1],1),\out,~comFuzz2),
+
+					Pbind(\instrument, \gateS, \out,0,\in, ~k2G,  \dur, Pseq([64/1],1),\group,~lfoGrp),
+
 					Pseq([
-						Pbind(\instrument, \playBufS,\buf,~k2,\dur, Pseq([1/1],2),\type,Pseq([\note,\rest],inf)),
+						Pbind(\instrument, \playBufS,\buf,~k2,\dur, Pseq([1/1],2),\type,Pseq([\note,\rest],inf),\out,~k2G),
 
 						Prand([
 
 							Prand([
 
-								Pbind(\instrument, \playBufS,\buf,~k2,\dur, Pseq([1/4],8),\type,Pseq([\note,\note,\note,\note,\rest,\rest,\rest,\rest].scramble,inf)),
-								Pbind(\instrument,\playBufS,\buf,~k2,\dur, Pseq([1/4],8),\type,Pseq([\note,\note,\note,\note,\rest,\rest,\rest,\rest].scramble,inf)),
-								Pbind(\instrument,\playBufS,\buf,~k2,\dur, Pseq([1/4],8),\type,Pseq([\note,\note,\note,\note,\rest,\rest,\rest,\rest].scramble,inf)),
-								Pbind(\instrument,\playBufS,\buf,~k2,\dur, Pseq([1/4],8),\type,Pseq([\note,\note,\note,\note,\rest,\rest,\rest,\rest].scramble,inf))],1),
+								Pbind(\instrument, \playBufS,\buf,~k2,\dur, Pseq([1/4],8),\type,Pseq([\note,\note,\note,\note,\rest,\rest,\rest,\rest].scramble,inf),\out,~k2G),
+								Pbind(\instrument,\playBufS,\buf,~k2,\dur, Pseq([1/4],8),\type,Pseq([\note,\note,\note,\note,\rest,\rest,\rest,\rest].scramble,inf),\out,~k2G),
+								Pbind(\instrument,\playBufS,\buf,~k2,\dur, Pseq([1/4],8),\type,Pseq([\note,\note,\note,\note,\rest,\rest,\rest,\rest].scramble,inf),\out,~k2G),
+								Pbind(\instrument,\playBufS,\buf,~k2,\dur, Pseq([1/4],8),\type,Pseq([\note,\note,\note,\note,\rest,\rest,\rest,\rest].scramble,inf),\out,~k2G)],1),
 
 
 
 							Pseq([
 
-								Pbind(\instrument, \playBufS,\buf,~k2,\dur, Pseq([1/1],1),\type,Pseq([\note,\note,\rest,\rest].scramble,inf)),
-								Pbind(\instrument, \playBufS,\buf,~k2,\dur, Pseq([1/2],2),\type,Pseq([\note,\rest].scramble,inf))
+								Pbind(\instrument, \playBufS,\buf,~k2,\dur, Pseq([1/1],1),\type,Pseq([\note,\note,\rest,\rest].scramble,inf),\out,~k2G),
+								Pbind(\instrument, \playBufS,\buf,~k2,\dur, Pseq([1/2],2),\type,Pseq([\note,\rest].scramble,inf),\out,~k2G)
 							].scramble,1)
 
 						],7)
@@ -10134,3 +10136,11 @@ p=({FreeVerb.ar(In.ar(0,2),SinOsc.kr(~hz1beat/8,4.6).range(0.3,0.78),0.9)}.play(
 
 ({PlayBuf.ar(2,~bruise,1)*0.1}.play)
 ~bruise.play
+
+
+
+		Ppar([
+
+	Pbind(\instrument, \playBufS,\buf,~k2,\dur, Pseq([1/1],inf),\out,~k2G),
+	Pbind(\instrument, \playBuf, \buf,~bassL, \dur, Pseq([64/1],inf),\out,~comFuzz2),
+	Pbind(\instrument, \gateS, \out,0,\in, ~k2G,  \dur, Pseq([64/1],inf),\group,~lfoGrp)],1).play(t)

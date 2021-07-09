@@ -49,6 +49,14 @@
 ~kbPan2 = Synth(\pan2,[ \in,~kToPan,\out,~toKbGate],~stereoGrp);
 
 
+
+
+~comp2=Synth(\comp, [\ctrl, ~k2G ],~compGrp);
+~comp2.set(\thr,0.05, \sB, 1, \sA ,-0.85,\atk ,0.0242, \rel ,t.beatDur/4.4, \gain,1,\in, ~comFuzz2,\out,~limitBass2);
+~limB2=Synth(\limitertoMixer,[\c46,1,\in, ~limitBass2, \gain,68,\out,~k2ToPan],~limitGrp);
+~limB2.set(\gain,254,\out,~k2ToPan);
+~kbPanX = Synth(\pan2,[ \in,~k2ToPan,\out,0],~stereoGrp);
+
 //PERCUSSIONS
 // ~eq31.free
 /*Pbind(\instrument, \playBuf,  \tS,  0.39550810372374,\buf,~cymb,\type,Pseq([Pseq([Pseq(~rythm1,1),Pseq(~rythm2,1),],4),Pseq([Pseq(~rythm3,1),Pseq(~rythm4,1),],4),Pseq(~rythmL, 224 /*32*/),Pseq(~rythmL, 256),Pseq([\rest],256) ],inf),\dur,Pseq([1/4],inf ),\stereoL, 0.00555,\out,    ~cymbalEq).play(t,quant:1)*/

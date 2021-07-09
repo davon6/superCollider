@@ -171,6 +171,8 @@ s.sync;
 
 	~record1=Bus.audio(s,1);~record2=Bus.audio(s,1);~record3=Bus.audio(s,1);
 
+	~k2G=Bus.audio(s,2);~comFuzz2=Bus.audio(s,1);~limitBass2=Bus.audio(s,1);~k2ToPan=Bus.audio(s,1);
+
 
 	s.sync;
 
