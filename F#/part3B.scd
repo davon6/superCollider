@@ -9641,14 +9641,26 @@ Pbind(\instrument, \playBuf, \buf, ~snare, \dur, Pseq([1/8],16),\type,Pseq([\not
 
 	~snComp = Buffer.read(s, "/Users/davidmignot/Music/SuperCollider Recordings/F#/1/snareComp.aiff");
 
+	~snDec=1;
+
+~snDec=0.6;
 	Pseq([
 Pbind(\instrument, \playBuf, \buf, ~snComp, \dur, Pseq([4/1],1),\amp,0.14),
 
 
-		Pbind(\instrument, \playBuf, \buf, ~snComp, \dur, Pseq([1/4],48),\start,Pfunc({~snComp.numFrames/4*(3.rand)}),\loo,0,\amp,0.14)],8).play(t,quant:1);
+		Pbind(\instrument, \playBuf, \buf, ~snComp, \dur, Pseq([1/4],48),\start,Pfunc({~snComp.numFrames/4*(3.rand)}),\loo,0,\amp,0.14
+	)],8).play(t,quant:1);
 
 	Pseq([~kick],inf).play(t,quant:1)
 
+		if(~snDec==0.6,{
+			True;},
+			{False;});
+
+Pfunc({
+			if(~snDec.postln==0.1,{
+				~snDec=1;~snDec=~snDec-0.1},
+			{~snDec=~snDec-0.2});
 
 
 
@@ -10259,7 +10271,7 @@ Pbind(\instrument, \playBuf, \buf, ~bNoi, \dur,Pseq([2/1],inf), \type,Pseq([\res
 			*0.2!2
 		}.play)
 
-
+//goudie
 		({GVerb.ar(BLowPass4.ar(
 			SinOsc.ar(EnvGen.kr(Env([0,126.midicps*(432/440),30.midicps*(432/440),126.midicps*(432/440),0],[0.02,0,0.2,0],[0,0,4,0])),mul:EnvGen.kr(
 
@@ -10267,21 +10279,46 @@ Pbind(\instrument, \playBuf, \buf, ~bNoi, \dur,Pseq([2/1],inf), \type,Pseq([\res
 
 			EnvGen.kr(Env([126.midicps*(432/440),66.midicps*(432/440),-18.midicps*(432/440)],
 			[t.beatDur*2,0,t.beatDur*0.9,0],
-				[-6,7,0]))),48,7,0.4,0.9,maxroomsize: 78,taillevel: (0.5))
-			*0.2!2
+				[-6,7,0])),0.86),18,t.beatDur*16,0.21,0.9,maxroomsize: 78,earlyreflevel: 0.1,taillevel: (-0.1))
+			*0.1!2
 		}.play)
 
 
-
-
-	({ GVerb.ar(FreeVerb.ar(
-		BLowPass4.ar(
+			({BLowPass4.ar(
 			SinOsc.ar(EnvGen.kr(Env([0,126.midicps*(432/440),30.midicps*(432/440),126.midicps*(432/440),0],[0.02,0,0.2,0],[0,0,4,0])),mul:EnvGen.kr(
 
 			Env.perc(releaseTime: t.beatDur/2)) ),
 
 			EnvGen.kr(Env([126.midicps*(432/440),66.midicps*(432/440),-18.midicps*(432/440)],
 			[t.beatDur*2,0,t.beatDur*0.9,0],
-				[-6,7,0])))
+				[-6,7,0]),doneAction: 2),0.86)
+			*0.1!2
+		}.play)
 
-	), 41, 3, 0.31,  0.7,  -0, -15,-9)*0.2}.play)
+
+
+
+
+		SynthDef(\goutte,{|out=0,frq2=30,t3=0.9,c1=(-6),t1=0.02|Out.ar(0,
+			BLowPass4.ar(
+			SinOsc.ar(EnvGen.kr(Env([0,126.midicps*(432/440),30.midicps*(432/440),126.midicps*(432/440),0],[0.02,0,0.2,0],[0,0,4,0])),mul:EnvGen.kr(
+
+			Env.perc(releaseTime: t.beatDur/2)) ),
+
+			EnvGen.kr(Env([126.midicps*(432/440),66.midicps*(432/440),-18.midicps*(432/440)],
+			[t.beatDur*2,0,t.beatDur*0.9,0],
+				[-6,7,0]),doneAction: 2))
+			*0.2!2)
+		}).play;
+
+
+
+		Pbind(\instrument,\goutte,\dur, Pseq([2/1],inf),\frq2,Pfunc({27.rrand(40)}),\t3,Pfunc({(t.beatDur/16).rrand(t.beatDur/4)}),\c1,Pfunc({(-12).rrand(2)}),\t1,Pfunc({0.06.rrand(0.02).postln})).play(t,quant:1)
+
+
+
+
+
+
+
+		

@@ -162,7 +162,7 @@ s.sync;
 
 	~snareEQ=Bus.audio(s,1);~snareComp=Bus.audio(s,1);~snareLimit=Bus.audio(s,1);~toPan2=Bus.audio(s,1);
 
-	~snareEQ2=Bus.audio(s,1);~snareComp2=Bus.audio(s,1);~snareLimit2=Bus.audio(s,1);~toPanSn2=Bus.audio(s,2);
+	~snareEQ2=Bus.audio(s,1);~snareComp2=Bus.audio(s,1);~snareLimit2=Bus.audio(s,1);~toPanSn2=Bus.audio(s,1);
 
 	~bassFi=Bus.audio(s,1);~comFuzz=Bus.audio(s,1);~limitBass=Bus.audio(s,1);~limitKick=Bus.audio(s,1);~kToPan=Bus.audio(s,1);
 
@@ -1970,10 +1970,10 @@ Ppar([
 
 			\bus, ~bassShapB,
 		\atk, 0,
-		\rel, t.beatDur/2 *0.9988,
+		\rel, t.beatDur/2 *1,
 		\rel2, t.beatDur/4 * 0.0012,
 
-		\vlDecFx,114.midicps*(432/440),
+		\vlDecFx,114.midicps*(432/440),\vlDecFx2,42.midicps*(432/440),
 		\atkcrv, -2,
 		\relcrv, -2,\relcrv2, -9, \relcrv3, -6
 		,\amp,(-6/*-1*/)/*(-13)*/,\out,~bassEq
@@ -1995,7 +1995,7 @@ Pbind(\instrument ,\EQHP2LP ,\in,~bassEq, \out,0, \frq, 18.midicps*(432/440),\vo
 
 
 ],1).play(t);
-	wait(0.16);
+	wait(0.15);
 
 	s.record(path:"/Users/davidmignot/Music/SuperCollider Recordings/F#/1/bass.aiff",numChannels:1,duration:t.beatDur);
 }).play;)
@@ -2023,8 +2023,12 @@ Ppar([
 			Pseq([Pbindf(~kick,\out,~limitKick)],inf),
 
 
-				Pbind(\instrument, \playBuf, \buf, ~b4, \dur, Pseq([1/4],inf),\amp,1,\type,Pseq([\rest,\note,\note,\note],inf), \decT,	Pseq([0,0.8,0.86,0.92 ],inf),\start,0,\out,~bassFi)
-			//Pseq([0,0.58,0.66,0.84 ],inf)
+				/*Pbind(\instrument, \playBuf, \buf, ~b4, \dur, Pseq([1/4],inf),\amp,1,\type,Pseq([\rest,\note,\note,\note],inf), \decT,	Pseq([0,0.8,0.86,0.92 ],inf),\start,0,\out,~bassFi)*/
+
+
+
+			Pbind(\instrument, \playBuf, \buf, ~b3, \dur, Pseq([1/4],inf),\amp,1,\type,Pseq([\rest,\note,\note,\note],inf), \decT,	Pseq([0,0.86,0.88,0.9 ],inf),\start,0,\out,~bassFi)
+
 ],1),
 
 

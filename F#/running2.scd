@@ -342,14 +342,14 @@ Pseq([
 
 		//WILL NEED ANOTHER AUDIO PROCESS PATH
 		Pseq([
-		Pbind(\instrument, \playBuf, \buf, ~snComp, \dur, Pseq([4/1],1),\amp,0.14,\out,~snareEQ2),
+		Pbind(\instrument, \playBuf, \buf, ~snComp, \dur, Pseq([4/1],1),\amp,0.14,\out,~snareEQ2,\amp,0.14,),
 
 
-		Pbind(\instrument, \playBuf, \buf, ~snComp, \dur, Pseq([1/4],48),\start,Pfunc({~snComp.numFrames/4*(3.rand)}),\loo,~snareEQ2,\amp,0.14)],4),
+			Pbind(\instrument, \playBuf, \buf, ~snComp, \dur, Pseq([1/4],48),\start,Pfunc({~snComp.numFrames/4*(3.rand)}),\loo,~snareEQ2,\amp,0.14,\decT,Pseq([1,0.8,0.6,0.4],inf))],4),
 
 		Pbind(\instrument,\playBuf,	\buf,~snare,\dur, Pseq([1/2],64),\type,Pseq([\rest,\rest,\note,\rest],inf),\out,~snareEQ2,\decT,0.52),
 
-			Pbind(\instrument,\playBuf,	\buf,~snare2,\dur, Pseq([1/2],640),\type,Pseq([\rest,\rest,\note,\rest],inf),\out,~snareEQ,
+			Pbind(\instrument,\playBuf,	\buf,~snare2,\dur, Pseq([1/2],640),\type,Pseq([\rest,\rest,\note,\rest],inf),\out,~snareEQ,\amp,0.14,
 		\vlDec,Pseq([
 Pseq([\rest],128),
 		Pseq([\rest],64),Pseq([\note],64),],1),
@@ -375,7 +375,9 @@ Ppar([
 
 			Pseq([Pbindf(~kick,\out,~limitKick)],inf),
 
-				Pbind(\instrument, \playBuf, \buf, ~b4, \dur, Pseq([1/4],inf),\amp,1,\type,Pseq([\rest,\note,\note,\note],inf), \decT,	Pseq([0,0.8,0.86,0.92 ],inf),\start,0,\out,~bassFi)
+		Pbind(\instrument, \playBuf, \buf, ~b3, \dur, Pseq([1/4],inf),\amp,1,\type,Pseq([\rest,\note,\note,\note],inf),  \decT,	Pseq([0,0.86,0.88,0.9 ],inf),\start,0,\out,~bassFi),
+
+				/*Pbind(\instrument, \playBuf, \buf, ~b4, \dur, Pseq([1/4],inf),\amp,1,\type,Pseq([\rest,\note,\note,\note],inf), \decT,	Pseq([0,0.8,0.86,0.92 ],inf),\start,0,\out,~bassFi)*/
 
 ],1),
 
