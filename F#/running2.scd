@@ -28,7 +28,12 @@ f = { |n=14, min=0, max=11| (min..max).scramble.keep(n) };
 
 (
 	~perc=Buffer.read(s,	"/Users/davidmignot/Music/SuperCollider Recordings/F#/1/funkPerc.aiff");
+
+
 ~bgRev=Buffer.read(s,"/Users/davidmignot/Music/SuperCollider Recordings/F#/1/RevBg.aiff");
+~larme=Buffer.read(s,"/Users/davidmignot/Music/SuperCollider Recordings/F#/1/larme.aiff");
+~bruise = Buffer.read(s,"/Users/davidmignot/Music/SuperCollider Recordings/F#/1/bruise.aiff");
+
 ~cymb= Buffer.read(s,"/Users/davidmignot/Music/SuperCollider Recordings/F#/1/cymbal.aiff");
 ~hat= Buffer.read(s,"/Users/davidmignot/Music/SuperCollider Recordings/F#/1/hat.aiff");
 
@@ -36,7 +41,7 @@ f = { |n=14, min=0, max=11| (min..max).scramble.keep(n) };
 
 ~b3=Buffer.read(s,"/Users/davidmignot/Music/SuperCollider Recordings/F#/1/bass.aiff");
 ~snare2=Buffer.read(s,"/Users/davidmignot/Music/SuperCollider Recordings/F#/1/snare2.aiff");
-~larme=Buffer.read(s,"/Users/davidmignot/Music/SuperCollider Recordings/F#/1/larme.aiff");
+
 ~b4=Buffer.read(s,"/Users/davidmignot/Music/SuperCollider Recordings/F#/1/bass2.aiff");
 ~snComp = Buffer.read(s, "/Users/davidmignot/Music/SuperCollider Recordings/F#/1/snareComp.aiff");
 ~k2=Buffer.read(s,"/Users/davidmignot/Music/SuperCollider Recordings/F#/1/kick.aiff");

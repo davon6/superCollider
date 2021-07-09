@@ -10047,17 +10047,17 @@ Pseq([
 
 		Routine({
 		q=	{ DynKlank.ar(`[[
-			VarLag.kr( LFNoise0.kr(~hz1beat/1.5).range(100,800),t.beatDur*0.00001,46)
-			,VarLag.kr(LFNoise0.kr(~hz1beat/1.5).range(800,3000),t.beatDur*0.00001,46)
-			,VarLag.kr(LFNoise0.kr(~hz1beat/1.5).range(100,3000),t.beatDur*0.00001,46)
-			,VarLag.kr(LFNoise0.kr(~hz1beat/1.5).range(100,3000),t.beatDur*0.00001,46)
+			VarLag.kr( LFNoise0.kr(~hz1beat/1.5).range(100,800),t.beatDur*0.00002,46)
+			,VarLag.kr(LFNoise0.kr(~hz1beat/1.5).range(800,3000),t.beatDur*0.00002,46)
+			,VarLag.kr(LFNoise0.kr(~hz1beat/1.5).range(100,3000),t.beatDur*0.00002,46)
+			,VarLag.kr(LFNoise0.kr(~hz1beat/1.5).range(100,3000),t.beatDur*0.00002,46)
 
 		], nil, [4, 4, 4, 4]], Impulse.ar(~hz1beat/1.5, 0, 0.1))*0.2 }.play;
 
-		({FreqShift.ar( PingPong.ar(~delay6,In.ar(0,2),0.3,0.35),MouseX.kr(-100,100))}.play(target: q, addAction: \addAfter));
+			({FreqShift.ar( PingPong.ar(~delay,In.ar(0,2),0.35,0.35),SinOsc.kr(~hz1beat/4,1.6).range(-100,100))}.play(target: q, addAction: \addAfter));
 			wait(0.2);
 
-			s.record(s,path:"/Users/davidmignot/Music/SuperCollider Recordings/F#/1/larme.aiff",numChannels:1,duration:t.beatDur*68);
+			s.record(s,path:"/Users/davidmignot/Music/SuperCollider Recordings/F#/1/larme.aiff",numChannels:2,duration:t.beatDur*68);
 		}).play(t,quant:1)
 
 			~larme=Buffer.read(s,"/Users/davidmignot/Music/SuperCollider Recordings/F#/1/larme.aiff");
@@ -10066,4 +10066,71 @@ Pseq([
 ~larme.play
 
 			{ DynKlank.ar(`[[LFNoise0.kr(~hz1beat*0.75).range(100,800),LFNoise0.kr(~hz1beat*0.75).range(800,3000),LFNoise0.kr(~hz1beat*0.75).range(100,3000),LFNoise0.kr(~hz1beat*0.75).range(100,3000)], nil, [4, 4, 4, 4]], Impulse.ar(~hz1beat, 0, 0.1))*0.2 }.play;
-			
+
+
+
+		Routine({
+q=({
+
+	BLowPass4.ar(
+
+	Saw.ar(EnvGen.kr(Env.step([78.midicps*(432/440),90.midicps*(432/440)],[t.beatDur*16,t.beatDur/4],190)),
+				EnvGen.kr(Env([1,1],[t.beatDur*16,t.beatDur/4],90),doneAction: 2)),
+		EnvGen.kr(Env([66.midicps*(432/440),114.midicps*(432/440),60],[t.beatDur*16,t.beatDur/4,t.beatDur/16],190),doneAction: 2)+
+		SinOsc.kr(~hz1beat,1.6).range(30.midicps*(432/440),78.midicps*(432/440)),0.6
+	)*0.1*[1,0]
+
+}.play);
+
+r=({FreeVerb.ar(In.ar(0,2),SinOsc.kr(~hz1beat/8,4.6).range(0.3,0.78),0.9)}.play(target: q, addAction: \addAfter));
+
+
+({FreqShift.ar( AllpassL.ar(In.ar(0,2),t.beatDur,0.35),SinOsc.kr(~hz1beat/16,1.6).range(-100,100))}.play(target: r, addAction: \addAfter));
+
+
+
+w=({
+
+	BLowPass4.ar(
+
+	Saw.ar(EnvGen.kr(Env.step([76.midicps*(432/440),88.midicps*(432/440)],[t.beatDur*12,t.beatDur/4],190)),
+				EnvGen.kr(Env([1,1],[t.beatDur*12,t.beatDur/4],90),doneAction: 2)),
+		EnvGen.kr(Env([66.midicps*(432/440),114.midicps*(432/440),60],[t.beatDur*12,t.beatDur/4,t.beatDur/16],190),doneAction: 2)+
+		SinOsc.kr(~hz1beat,1.6).range(30.midicps*(432/440),78.midicps*(432/440)),0.6
+	)*0.1*[0,1]
+
+}.play);
+
+u=({FreeVerb.ar(In.ar(0,2),SinOsc.kr(~hz1beat/8,4.6).range(0.3,0.78),0.9)}.play(target:w, addAction: \addAfter));
+
+
+({FreqShift.ar( AllpassL.ar(In.ar(0,2),t.beatDur,0.35),SinOsc.kr(~hz1beat/16,1.6).range(-100,100))}.play(target: u, addAction: \addAfter));
+
+y=({
+
+	BLowPass4.ar(
+
+	Saw.ar(EnvGen.kr(Env.step([72.midicps*(432/440),84.midicps*(432/440)],[t.beatDur*8,t.beatDur/4],190)),
+				EnvGen.kr(Env([1,1],[t.beatDur*8,t.beatDur/4],90),doneAction: 2)),
+		EnvGen.kr(Env([66.midicps*(432/440),114.midicps*(432/440),60],[t.beatDur*8,t.beatDur/4,t.beatDur/16],190),doneAction: 2)+
+		SinOsc.kr(~hz1beat,1.6).range(30.midicps*(432/440),78.midicps*(432/440)),0.6
+	)*0.1*[1,1]
+
+}.play);
+
+p=({FreeVerb.ar(In.ar(0,2),SinOsc.kr(~hz1beat/8,4.6).range(0.3,0.78),0.9)}.play(target:y, addAction: \addAfter));
+
+
+({FreqShift.ar( AllpassL.ar(In.ar(0,2),t.beatDur,0.35),SinOsc.kr(~hz1beat/16,1.6).range(-100,100))}.play(target: p, addAction: \addAfter));
+
+	wait(0.2);
+
+
+			s.record(s,path:"/Users/davidmignot/Music/SuperCollider Recordings/F#/1/bruise.aiff",numChannels:2,duration:t.beatDur*68);
+		}).play(t,quant:1)
+
+
+~bruise = Buffer.read(s,"/Users/davidmignot/Music/SuperCollider Recordings/F#/1/bruise.aiff");
+
+({PlayBuf.ar(2,~bruise,1)*0.1}.play)
+~bruise.play
