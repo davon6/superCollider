@@ -459,11 +459,11 @@ Synth(\filterG, [\in,~eqBus2x , \which,1,\qf2,0.3],~filterGrp))
 ~filterGrp = Group.new;
 ~delGrp =Group.after(~filterGrp);
 ~combGrp=Group.after(~delGrp);
-~recGrp2=Group.after(~combGrp);)
+~recGrp2=Group.after(~combGrp););
 (
 Ppar([
 
-	Pbind(\instrument, \playBuf,\dur,1/16, \rte,Pfunc({4.rrand(0.1)}), \tS,  0.39550810372374,\buf,~snare,\out,~percuStereo,\dA,0.1,
+	Pbind(\instrument, \playBuf,\dur,1/16, \rte,Pfunc({4.rrand(0.1)}), \tS,  0.39550810372374,\buf,~snare,\out,1,\dA,0.1,
 		\type, Pseq([\note,\note,\note,\note,\rest,\rest,\rest,\rest,
 			\note,\note,\note,\note,\rest,\rest,\rest,\rest,
 			\note,\note,\note,\note,
@@ -474,11 +474,11 @@ Ppar([
 		],inf)
 	)
 	,
-	Pbind(\instrument, \filterGS,\which,1, \in,~percuStereo ,\out,~part2SRev, \group, ~filterGrp,\qf2,0.08,\dur ,inf),
+	Pbind(\instrument, \filterGS,\which,1, \in,1/*~percuStereo*/ ,\out,2/*~part2SRev*/, \group, ~filterGrp,\qf2,0.08,\dur ,inf),
 
 
-	Pbind(\instrument,\pingD, \in,~part2SRev,  \bufnum,~delay, \feedback,0.65 ,\group, ~delGrp,\dur, inf,\out,~limitBus1),
-	Pbind(\instrument, \comb,\which,1, \in,~limitBus1,\group, ~combGrp,\qf2,0.1,\dur ,inf),
+	Pbind(\instrument,\pingD, \in,2,  \bufnum,~delay, \feedback,0.65 ,\group, ~delGrp,\dur, inf,\out,3/*~limitBus1*/),
+	Pbind(\instrument, \comb,\which,1, \in,3/*~limitBus1*/,\group, ~combGrp,\qf2,0.1,\dur ,inf),
 
 	// Pbind(\instrument,\recLoopS,\buf,~fkAr,\recording,1, \in,0,\group,~recGrp2,\dur,inf),
 

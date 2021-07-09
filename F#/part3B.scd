@@ -10165,3 +10165,123 @@ Routine({
 ~bNoi.play
 
 Pbind(\instrument, \playBuf, \buf, ~bNoi, \dur,Pseq([2/1],inf), \type,Pseq([\rest,\note],inf)).play(t,quant:1)
+
+
+		({
+	BBandPass.ar(
+	Saw.ar(
+	EnvGen.kr(Env(
+		[90.midicps*(432/440), 42.midicps*(432/440),  71.midicps*(432/440), 78.midicps*(432/440),30.midicps*(432/440),119.midicps*(432/440)],
+		[t.beatDur/3,0,t.beatDur*2,t.beatDur*5.66666667,t.beatDur*32,t.beatDur*24],
+		[-3,0,9,-5,8])),0.1)+
+(
+	Saw.ar(
+	EnvGen.kr(Env(
+		[92.midicps*(432/440), 32.midicps*(432/440),  73.midicps*(432/440), 80.midicps*(432/440),32.midicps*(432/440),121.midicps*(432/440)],
+		[t.beatDur/3,0,t.beatDur*2,t.beatDur*5.66666667,t.beatDur*32,t.beatDur*24],
+		[-3,0,9,-5,8]))
+		)*EnvGen.kr(Env([0,1,0.1],[t.beatDur*4,t.beatDur* 41.2,0,t.beatDur*24],[8,0,18]))),
+
+		MouseX.kr(18.midicps*(432/440),126.midicps*(432/440)),0.5
+
+
+)}.play)
+
+		({SinOsc.ar(EnvGen.kr(Env([126.midicps*(432/440),66.midicps*(432/440),-18.midicps*(432/440)],
+			[t.beatDur*2,0,t.beatDur*0.9,0],
+			[-6,7,0])))
+		}.play)
+
+
+
+
+		({BLowPass4.ar( Saw.ar(78.midicps*(432/440)),
+
+			EnvGen.kr(Env([126.midicps*(432/440),66.midicps*(432/440),-18.midicps*(432/440)],
+			[t.beatDur*1,t.beatDur*5.6,t.beatDur*15,0],
+			[-6,7,0])))
+		}.play)
+
+
+
+
+		({BBandPass.ar( Saw.ar(6.midicps*(432/440)),
+
+			MouseX.kr(10,10000),0.4)
+		}.play)
+
+		({PlayBuf.ar(2,~k2,(-2),startPos: 90000)*0.1}.play)
+
+
+
+		({BLowPass4.ar(
+			FreeVerb.ar(SinOsc.ar(EnvGen.kr(Env([0,126.midicps*(432/440),30.midicps*(432/440),126.midicps*(432/440),0],[0.02,0,0.2,0],[0,0,4,0])),mul:EnvGen.kr(
+
+			Env.perc(releaseTime: t.beatDur/2)) ),0.07,0.82,0.4),
+
+			EnvGen.kr(Env([126.midicps*(432/440),66.midicps*(432/440),-18.midicps*(432/440)],
+			[t.beatDur*2,0,t.beatDur*0.9,0],
+				[-6,7,0])))
+			*0.2!2
+		}.play)
+
+
+			({FreeVerb.ar(BLowPass4.ar(
+			SinOsc.ar(EnvGen.kr(Env([0,126.midicps*(432/440),30.midicps*(432/440),126.midicps*(432/440),0],[0.02,0,0.2,0],[0,0,4,0])),mul:EnvGen.kr(
+
+			Env.perc(releaseTime: t.beatDur/2)) ),
+
+			EnvGen.kr(Env([126.midicps*(432/440),66.midicps*(432/440),-18.midicps*(432/440)],
+			[t.beatDur*2,0,t.beatDur*0.9,0],
+				[-6,7,0]))),0.07,0.82,0.4)
+			*0.2!2
+		}.play)
+
+
+({
+			FreeVerb.ar(SinOsc.ar(EnvGen.kr(Env([0,126.midicps*(432/440),30.midicps*(432/440),126.midicps*(432/440),0],[0.02,0,0.2,0],[0,0,4,0])),mul:EnvGen.kr(
+
+			Env.perc(releaseTime: t.beatDur/2)) ),0.07,0.82,0.4)
+
+
+			*0.2!2
+		}.play)
+
+
+({FreeVerb.ar(BLowPass4.ar(
+			SinOsc.ar(EnvGen.kr(Env([0,126.midicps*(432/440),30.midicps*(432/440),126.midicps*(432/440),0],[0.02,0,0.2,0],[0,0,4,0])),mul:EnvGen.kr(
+
+			Env.perc(releaseTime: t.beatDur/2)) ),
+
+			EnvGen.kr(Env([126.midicps*(432/440),66.midicps*(432/440),-18.midicps*(432/440)],
+			[t.beatDur*2,0,t.beatDur*0.9,0],
+				[-6,7,0]))),0.1,0.9,2)
+			*0.2!2
+		}.play)
+
+
+		({GVerb.ar(BLowPass4.ar(
+			SinOsc.ar(EnvGen.kr(Env([0,126.midicps*(432/440),30.midicps*(432/440),126.midicps*(432/440),0],[0.02,0,0.2,0],[0,0,4,0])),mul:EnvGen.kr(
+
+			Env.perc(releaseTime: t.beatDur/2)) ),
+
+			EnvGen.kr(Env([126.midicps*(432/440),66.midicps*(432/440),-18.midicps*(432/440)],
+			[t.beatDur*2,0,t.beatDur*0.9,0],
+				[-6,7,0]))),48,7,0.4,0.9,maxroomsize: 78,taillevel: (0.5))
+			*0.2!2
+		}.play)
+
+
+
+
+	({ GVerb.ar(FreeVerb.ar(
+		BLowPass4.ar(
+			SinOsc.ar(EnvGen.kr(Env([0,126.midicps*(432/440),30.midicps*(432/440),126.midicps*(432/440),0],[0.02,0,0.2,0],[0,0,4,0])),mul:EnvGen.kr(
+
+			Env.perc(releaseTime: t.beatDur/2)) ),
+
+			EnvGen.kr(Env([126.midicps*(432/440),66.midicps*(432/440),-18.midicps*(432/440)],
+			[t.beatDur*2,0,t.beatDur*0.9,0],
+				[-6,7,0])))
+
+	), 41, 3, 0.31,  0.7,  -0, -15,-9)*0.2}.play)
