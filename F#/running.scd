@@ -160,7 +160,9 @@ s.sync;
 	~cymbalEq=Bus.audio(s,1);~comBusCymb=Bus.audio(s,1);~limitCymb=Bus.audio(s,1);~stereoCymb=Bus.audio(s,1);
 	~comBusHat=Bus.audio(s,1);~limitHat=Bus.audio(s,1);~hatEq=Bus.audio(s,1);~stereoHat=Bus.audio(s,1);
 
-	~snareEQ=Bus.audio(s,1);~snareComp=Bus.audio(s,1);~snareComp=Bus.audio(s,1);~snareLimit=Bus.audio(s,1);~toPan2=Bus.audio(s,1);
+	~snareEQ=Bus.audio(s,1);~snareComp=Bus.audio(s,1);~snareLimit=Bus.audio(s,1);~toPan2=Bus.audio(s,1);
+
+	~snareEQ2=Bus.audio(s,1);~snareComp2=Bus.audio(s,1);~snareLimit2=Bus.audio(s,1);~toPanSn2=Bus.audio(s,2);
 
 	~bassFi=Bus.audio(s,1);~comFuzz=Bus.audio(s,1);~limitBass=Bus.audio(s,1);~limitKick=Bus.audio(s,1);~kToPan=Bus.audio(s,1);
 

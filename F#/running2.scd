@@ -52,6 +52,8 @@ f = { |n=14, min=0, max=11| (min..max).scramble.keep(n) };
 
 ~noise=Buffer.read(s,"/Users/davidmignot/Music/SuperCollider Recordings/F#/1/noise.aiff");
 
+~bNoi =Buffer.read(s,"/Users/davidmignot/Music/SuperCollider Recordings//F#/1/blopN.aiff");
+
 /*~one = ~leTout2.numFrames/ 256 * 240.rand;
 ~two = ~leTout2.numFrames/ 256 * 240.rand;
 ~troi= ~leTout2.numFrames/ 256 * 240.rand;*/
@@ -340,12 +342,12 @@ Pseq([
 
 		//WILL NEED ANOTHER AUDIO PROCESS PATH
 		Pseq([
-		Pbind(\instrument, \playBuf, \buf, ~snComp, \dur, Pseq([4/1],1),\amp,0.14),
+		Pbind(\instrument, \playBuf, \buf, ~snComp, \dur, Pseq([4/1],1),\amp,0.14,\out,~snareEQ2),
 
 
-		Pbind(\instrument, \playBuf, \buf, ~snComp, \dur, Pseq([1/4],48),\start,Pfunc({~snComp.numFrames/4*(3.rand)}),\loo,0,\amp,0.14)],4),
+		Pbind(\instrument, \playBuf, \buf, ~snComp, \dur, Pseq([1/4],48),\start,Pfunc({~snComp.numFrames/4*(3.rand)}),\loo,~snareEQ2,\amp,0.14)],4),
 
-		Pbind(\instrument,\playBuf,	\buf,~snare,\dur, Pseq([1/2],64),\type,Pseq([\rest,\rest,\note,\rest],inf),\out,0,\decT,0.52),
+		Pbind(\instrument,\playBuf,	\buf,~snare,\dur, Pseq([1/2],64),\type,Pseq([\rest,\rest,\note,\rest],inf),\out,~snareEQ2,\decT,0.52),
 
 			Pbind(\instrument,\playBuf,	\buf,~snare2,\dur, Pseq([1/2],640),\type,Pseq([\rest,\rest,\note,\rest],inf),\out,~snareEQ,
 		\vlDec,Pseq([

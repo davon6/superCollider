@@ -109,7 +109,7 @@ Pbind(\instrument, \playBuf,  \tS,  0.39550810372374,\buf,~snare,\type, Pseq([\r
 
 //~eq34.free
 ~eq34= Synth(\EQHP96, [\frq, 220 ],~eqGrp);
-~eq34.set(\in, ~snareEQ, \val, 400, \quant, 8, \gain, (-10), \out , ~snareComp,\frq, 120,\val5,1800,\shelf2,1.6,\gain5,(-8),\val4,3000,\shelf,1.2,\gain4,(-12));
+~eq34.set(\in, ~snareEQ, \val, 400, \quant, 8, \gain, (-10), \out , ~snareComp,\frq, 120,);
 
 
 ~comp34=Synth(\comp, [\ctrl,~kbus ],~compGrp);
@@ -118,19 +118,20 @@ Pbind(\instrument, \playBuf,  \tS,  0.39550810372374,\buf,~snare,\type, Pseq([\r
 
 ~mix34= Synth(\limitertoMixer,[\c34,1,\in, ~snareLimit,\gain,40,\out,~toPan2],~limitGrp);
 ~mix34.set(\gain,149.4);
-~pan34=Synth( \pan2,[\in, ~toPan2,\out, /*~tofinalRythm*/  ~toKbGate], ~stereoGrp);
-
-// ~eq40.free
-// Pbind(\instrument, \playBuf, \buf, ~clap,\vl,1,\tS,t.beatDur,\dur,Pseq([1/2],inf),\loopy,0,\type, Pseq([\rest,\rest,\note,\rest ],inf),\out,~clapEq).play(t,quant:2)
-/*~eq40 = Synth(\EQHP96, [\frq, 100 ],~eqGrp);
-~eq40.set(\in, ~clapEq, \out , ~clapComp,\frq, 140,\val, 2000, \quant, 1, \gain,(-8), \val5,1100,\shelf2,1.1,\gain5,(-18),\val4,6000,\shelf,1.1,\gain4,(-16));
-~comp40=Synth(\comp, [\ctrl,~kbus ],~compGrp);
-~comp40.set(\thr,0.28 ,\sB, 1.04,\sA, 1/2,\atk ,0.0242, \rel ,0.0968, \in, ~clapComp ,\out,~claplimit);
-~mix40= Synth(\limitertoMixer,[\c34,1,\in, ~claplimit,\gain,40,\out,~clapPan2],~limitGrp);
-~mix40.set(\gain,45.9);
-~pan40=Synth( \pan2,[\in, ~clapPan2,\out,  ~toKbGate], ~stereoGrp);*/
+~pan34=Synth( \pan2,[\in, ~toPan2,\out, ~toKbGate], ~stereoGrp);
 
 
+
+
+~eq34= Synth(\EQHP96, [\frq, 220 ],~eqGrp);
+~eq34.set(\in, ~snareEQ2, \val, 400, \quant, 8, \gain, (-10), \out , ~snareComp2,\frq, 120);
+
+~comp34=Synth(\comp, [\ctrl,~kbus ],~compGrp);
+~comp34.set(\thr,0.88 ,\sB, 1.04,\sA, 1/2,\atk ,0.0242, \rel ,0.1936, \in, ~snareComp2 ,\out,~snareLimit2,\gain,14);
+
+~mix34= Synth(\limitertoMixer,[\c34,1,\in, ~snareLimit2,\gain,40,\out,~toPanSn2],~limitGrp);
+~mix34.set(\gain,149.4);
+~pan34=Synth( \pan2,[\in, ~toPanSn2,\out, ~toKbGate], ~stereoGrp);
 
 
 

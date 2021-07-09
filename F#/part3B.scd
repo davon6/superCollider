@@ -10144,3 +10144,24 @@ p=({FreeVerb.ar(In.ar(0,2),SinOsc.kr(~hz1beat/8,4.6).range(0.3,0.78),0.9)}.play(
 	Pbind(\instrument, \playBufS,\buf,~k2,\dur, Pseq([1/1],inf),\out,~k2G),
 	Pbind(\instrument, \playBuf, \buf,~bassL, \dur, Pseq([64/1],inf),\out,~comFuzz2),
 	Pbind(\instrument, \gateS, \out,0,\in, ~k2G,  \dur, Pseq([64/1],inf),\group,~lfoGrp)],1).play(t)
+
+
+
+
+Routine({
+({BLowPass4.ar( WhiteNoise.ar(0.3),
+	EnvGen.kr(Env([128.midicps*(432/440),102.midicps*(432/440),30.midicps*(432/440)],[t.beatDur*0.01,t.beatDur*0.99,0],[-5,6]),doneAction: 2))
+}.play);
+
+	wait(0.2);
+
+	s.record(path:"/Users/davidmignot/Music/SuperCollider Recordings//F#/1/blopN.aiff",numChannels:1,duration:t.beatDur*1.3);
+
+}).play(t,quant:1)
+
+
+~bNoi =Buffer.read(s,"/Users/davidmignot/Music/SuperCollider Recordings//F#/1/blopN.aiff")
+
+~bNoi.play
+
+Pbind(\instrument, \playBuf, \buf, ~bNoi, \dur,Pseq([2/1],inf), \type,Pseq([\rest,\note],inf)).play(t,quant:1)
