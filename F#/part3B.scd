@@ -9919,6 +9919,8 @@ Ppar([
 	Pbind(\instrument,\playBuf,	\buf,~perc,\dur, Pseq([1.5/1],42),\start,~perc.numFrames/16* /*(14.rand.postln)*/ 9).play(t,quant:1)
 
 
+				Pbind(\instrument,\playBuf,	\buf,~perc,\dur, Pseq([2/1],1),\start,~perc.numFrames/16* (14.rand.postln) ).play(t,quant:1)
+
 	{SinOsc.kr((-14).midicps,4.6).range(10,20000)}.plot(duration:0.3)
 
 	({BLowPass4.ar( PlayBuf.ar(1,~perc,Line.kr(6,0.1,t.beatDur),~perc.numFrames/16*(14.rand)),
@@ -10320,5 +10322,16 @@ Pbind(\instrument, \playBuf, \buf, ~bNoi, \dur,Pseq([2/1],inf), \type,Pseq([\res
 
 
 
+({FreeVerb.ar(Decimator.ar(
+	BBandPass.ar( FreeVerb.ar(
+	/*LFPulse.ar(78.midicps)+
+		LFPulse.ar(81.midicps)*/
+LFPulse.ar(78.midicps*(432/440)-MouseY.kr(0,38))+
+		LFPulse.ar(81.midicps*(432/440)-MouseY.kr(0,38))
 
+		,0.1,0.9,0.9),MouseX.kr(1300,2000),0.4),MouseY.kr(3000,48000),MouseY.kr(12,36))
+	,0.5,0.8)!2*0.1}.play)
+
+			({Saw.ar(42.midicps*(432/440)-MouseY.kr(0,38))
+				+Saw.ar(45.midicps*(432/440)-MouseY.kr(0,38))*0.1!2}.play)
 		
