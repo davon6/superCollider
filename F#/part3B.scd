@@ -10334,4 +10334,8 @@ LFPulse.ar(78.midicps*(432/440)-MouseY.kr(0,38))+
 
 			({Saw.ar(42.midicps*(432/440)-MouseY.kr(0,38))
 				+Saw.ar(45.midicps*(432/440)-MouseY.kr(0,38))*0.1!2}.play)
+
+
+
+			({Decimator.ar( Saw.ar(LFNoise0.kr(~hz1beat*8).range(140,3600)),3000,4)!2*0.1}.play)
 		

@@ -840,6 +840,24 @@ freq         )* EnvGen.kr(Env([0,vl,vl,0],[0.055,dur-0.055,0],4),timeScale: tS,d
 		Out.ar(out, sig);
 	}).add;
 
+
+	SynthDef(\filterGS,{|out=0, in, busMod, bus7, which, factor3=1, rqLPF=0.5  freqFil=10, qf =0.5, qf2=0.5 |
+
+		var lp, bp, hp, sig;
+
+		sig = In.ar(in,2);
+
+		lp = BLowPass4.ar(sig , freqFil+ In.kr(busMod, 1)+ MouseX.kr(40,22000) ,qf +In.kr(rqLPF));
+
+		bp = BBandPass.ar(sig,freqFil+ In.kr(busMod, 1)  + MouseX.kr(40,12000) ,qf2 );
+
+		hp = BHiPass4.ar(sig, freqFil+ In.kr(busMod, 1)+ MouseX.kr(40,22000), qf2 +In.kr(bus7, 1));
+
+		sig = SelectX.ar(which, [lp, bp,hp,sig]);
+
+		Out.ar(out, sig);
+	}).add;
+
 	SynthDef(\filterX,{|out=0, in, busMod, bus7, which, factor3=1, rqLPF=0.5 freqFil=0, qf =0, qf2=0,tS=1,dur|
 
 		var lp, bp, hp, sig;
@@ -2175,7 +2193,7 @@ Ppar([
 	),
 
 
-Pbind(\instrument ,\EQHP2LP2 ,\in,~bassEq, \out,0, \frq, 18.midicps*(432/440),\vol,1,
+Pbind(\instrument ,\EQHP2 ,\in,~bassEq, \out,~k2G, \frq, 18.midicps*(432/440),\vol,1,
 
 
 				\val7,66.midicps*(432/440),\quant7,1.8 ,\gain7,(-2),
@@ -2186,14 +2204,17 @@ Pbind(\instrument ,\EQHP2LP2 ,\in,~bassEq, \out,0, \frq, 18.midicps*(432/440),\v
 
 
 //that one
-	\val5,54.midicps*(432/440), \quant5,2.4, \gain5,(-13),\group,~eqGrp,\dur, inf)
+	\val5,54.midicps*(432/440), \quant5,2.4, \gain5,(-13),\group,~eqGrp,\dur, inf),
+
+
+		Pbind(\instrument , \filterGS,\in,~k2G,\which,1,\group,~compGrp,\dur, inf)
 
 
 
 ],1).play(t);
 	wait(0.16);
 
-	s.record(path:"/Users/davidmignot/Music/SuperCollider Recordings/F#/1/bassTw.aiff",numChannels:2,duration:t.beatDur*16);
+	// s.record(path:"/Users/davidmignot/Music/SuperCollider Recordings/F#/1/bassTw.aiff",numChannels:2,duration:t.beatDur*16);
 }).play;)
 
 
