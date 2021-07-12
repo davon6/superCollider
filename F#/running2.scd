@@ -27,6 +27,8 @@ f = { |n=14, min=0, max=11| (min..max).scramble.keep(n) };
 ~bufSnoopy.play
 
 (
+
+~kbLol=Buffer.read(s,"/Users/davidmignot/Music/SuperCollider Recordings//F#/1/kbLol.aiff");
 	~perc=Buffer.read(s,	"/Users/davidmignot/Music/SuperCollider Recordings/F#/1/funkPerc.aiff");
 
 
@@ -345,7 +347,7 @@ Pseq([
 		Pbind(\instrument, \playBuf, \buf, ~snComp, \dur, Pseq([4/1],1),\amp,0.14,\out,~snareEQ2,\amp,0.14,),
 
 
-			Pbind(\instrument, \playBuf, \buf, ~snComp, \dur, Pseq([1/4],48),\start,Pfunc({~snComp.numFrames/4*(3.rand)}),\loo,~snareEQ2,\amp,0.14,\decT,Pseq([1,0.8,0.6,0.4],inf))],4),
+			Pbind(\instrument, \playBuf, \buf, ~snComp, \dur, Pseq([1/4],48),\start,Pfunc({~snComp.numFrames/4*(3.rand)}),\out,~snareEQ2,\amp,0.14,\decT,Pseq([1,0.8,0.6,0.4],inf))],4),
 
 		Pbind(\instrument,\playBuf,	\buf,~snare,\dur, Pseq([1/2],64),\type,Pseq([\rest,\rest,\note,\rest],inf),\out,~snareEQ2,\decT,0.52),
 

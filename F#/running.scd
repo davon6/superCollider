@@ -164,7 +164,7 @@ s.sync;
 
 	~snareEQ2=Bus.audio(s,1);~snareComp2=Bus.audio(s,1);~snareLimit2=Bus.audio(s,1);~toPanSn2=Bus.audio(s,1);
 
-	~bassFi=Bus.audio(s,1);~comFuzz=Bus.audio(s,1);~limitBass=Bus.audio(s,1);~limitKick=Bus.audio(s,1);~kToPan=Bus.audio(s,1);
+	~bassFi=Bus.audio(s,1);~comFuzz=Bus.audio(s,1);~limitBass=Bus.audio(s,1);~limitKick=Bus.audio(s,1);~kToPan=Bus.audio(s,1);~bassCru=Bus.audio(s,1);
 
 	~hitEq=Bus.audio(s,1);~hitRev=Bus.audio(s,1);~hitComp=Bus.audio(s,1);~hitLimit=Bus.audio(s,1);~hitStereo=Bus.audio(s,1);
 
@@ -174,6 +174,10 @@ s.sync;
 	~record1=Bus.audio(s,1);~record2=Bus.audio(s,1);~record3=Bus.audio(s,1);
 
 	~k2G=Bus.audio(s,2);~comFuzz2=Bus.audio(s,1);~limitBass2=Bus.audio(s,1);~k2ToPan=Bus.audio(s,1);
+
+	~leadExpPan=Bus.audio(s,1);
+
+	~bgTempBus=Bus.audio(s,2);
 
 
 	s.sync;
@@ -829,11 +833,11 @@ freq         )* EnvGen.kr(Env([0,vl,vl,0],[0.055,dur-0.055,0],4),timeScale: tS,d
 
 		sig = In.ar(in,1);
 
-		lp = BLowPass4.ar(sig , freqFil+ In.kr(busMod, 1)+ MouseX.kr(40,22000) ,qf +In.kr(rqLPF));
+		lp = BLowPass4.ar(sig , freqFil+ In.kr(busMod, 1)+ MouseX.kr(40,22000) ,qf );
 
 		bp = BBandPass.ar(sig,freqFil+ In.kr(busMod, 1)  + MouseX.kr(40,12000) ,qf2 );
 
-		hp = BHiPass4.ar(sig, freqFil+ In.kr(busMod, 1)+ MouseX.kr(40,22000), qf2 +In.kr(bus7, 1));
+		hp = BHiPass4.ar(sig, freqFil+ In.kr(busMod, 1)+ MouseX.kr(40,22000), qf2 );
 
 		sig = SelectX.ar(which, [lp, bp,hp,sig]);
 
@@ -1397,7 +1401,7 @@ SynthDef(\volAna,{|in=0|RMS.ar( In.ar(in)).ampdb.round(0.1).poll(label:" db" )})
 
 
 
-
+	SynthDef(\crusher,{|out=0,in,rte=48000,bts=24|Out.ar(out,Decimator.ar(In.ar(in),rte,bts))}).add;
 
 	SynthDef(\stereo,{|out=0, in, spread=0, level=1, center=0.0,dur,atkT=0,crvA=0,tS=1|
 
@@ -2000,7 +2004,7 @@ Ppar([
 Pbind(\instrument ,\EQHP2LP ,\in,~bassEq, \out,0, \frq, 18.midicps*(432/440),\vol,1,
 
 
-				\val7,66.midicps*(432/440),\quant7,1.8 ,\gain7,(-2),
+				\val7,66.midicps*(432/440),\quant7,1.8 ,\gain7,(-8),
 			\val,78.midicps*(432/440), \quant,1.96, \gain,(-21),
 \val2,90.midicps*(432/440), \quant2,2.2, \gain2,(-9),
 		\val3,102.midicps*(432/440), \quant3,2.1, \gain3,(-14),
@@ -2008,7 +2012,7 @@ Pbind(\instrument ,\EQHP2LP ,\in,~bassEq, \out,0, \frq, 18.midicps*(432/440),\vo
 
 
 //that one
-	\val5,54.midicps*(432/440), \quant5,2.4, \gain5,(-13),\group,~eqGrp)
+/*	\val5,54.midicps*(432/440), \quant5,2.4, \gain5,(-13),*/\group,~eqGrp)
 
 
 
@@ -2019,6 +2023,7 @@ Pbind(\instrument ,\EQHP2LP ,\in,~bassEq, \out,0, \frq, 18.midicps*(432/440),\vo
 }).play;)
 
 ~b3=Buffer.read(s,"/Users/davidmignot/Music/SuperCollider Recordings/F#/1/bass.aiff")
+~b3=Buffer.read(s,"/Users/davidmignot/Music/SuperCollider Recordings/F#/1/bakup/bass.aiff")
 ~b3.plot
 ~k2.plot
 
@@ -2045,7 +2050,7 @@ Ppar([
 
 
 
-			Pbind(\instrument, \playBuf, \buf, ~b3, \dur, Pseq([1/4],inf),\amp,1,\type,Pseq([\rest,\note,\note,\note],inf), \decT,	Pseq([0,0.86,0.88,0.9 ],inf),\start,0,\out,~bassFi)
+			Pbind(\instrument, \playBuf, \buf, ~b3, \dur, Pseq([1/4],inf),\amp,1,\type,Pseq([\rest,\note,\note,\note],inf), \decT,	Pseq([0,0.82,0.84,0.86 ],inf),\start,0,\out,~bassFi)
 
 ],1),
 
@@ -2068,7 +2073,7 @@ Ppar([
 ~limK=Synth(\limitertoMixer,[\c45,1,\in, ~limitKick, \gain,1,\out,~kToPan],~limitGrp);
 ~limK.set(\gain,154.7);
 	~limB=Synth(\limitertoMixer,[\c46,1,\in, ~limitBass, \gain,68,\out,~kToPan],~limitGrp);
-	~limB.set(\gain,254);
+	~limB.set(\gain,237);
 
 
 	~kbPan2 = Synth(\pan2,[ \in,~kToPan,\out,0],~stereoGrp);
