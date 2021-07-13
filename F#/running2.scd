@@ -323,8 +323,8 @@ Ppar([~boost, ~kb],1).play(t,quant:1)
 
 	Pbind(\instrument, \playBuf, \buf,~cymb,\type,Pseq([
 
-		/*Pseq(~rythmL,30),Pseq([ \rest],258),
-		Pseq([Pseq(~rythm1,1),Pseq(~rythm2,1),],4),Pseq([Pseq(~rythm3,1),Pseq(~rythm4,1),],4),Pseq(~rythmL,64),*/
+		Pseq(~rythmL,30),Pseq([ \rest],258),
+		Pseq([Pseq(~rythm1,1),Pseq(~rythm2,1),],4),Pseq([Pseq(~rythm3,1),Pseq(~rythm4,1),],4),Pseq(~rythmL,64),
 
 
 		Pseq(~rythmL,1024),
@@ -334,13 +334,13 @@ Ppar([~boost, ~kb],1).play(t,quant:1)
 
 
 Pseq([
-	Pbind(\instrument,\playBuf,	\buf,~snare2,\dur, Pseq([1/2],128 /*TO CHANGE*/),\type,Pseq([\rest,\rest,\note,\rest],inf),\out,~snareEQ,
+	Pbind(\instrument,\playBuf,	\buf,~snare2,\dur, Pseq([1/2],576 /*TO CHANGE*/),\type,Pseq([\rest,\rest,\note,\rest],inf),\out,~snareEQ,
 		\vlDec,Pseq([
-			// Pseq([\note],128),Pseq([\rest],256),Pseq([\note],128),
+				Pseq([\note],128),Pseq([\rest],256),Pseq([\note],128),
 		Pseq([\rest],64),],1),
 
 		\vlSub,Pkey(\vlDec) ,\vlSub2,Pkey(\vlDec),
-		\decT,Pseq([ /*Pseq([1],512), */Pseq([0.5],128)   ],1)),
+		\decT,Pseq([ /*Pseq([1],512), */Pseq([0.5],inf)   ],1)),
 
 		//WILL NEED ANOTHER AUDIO PROCESS PATH
 		Pseq([
@@ -367,7 +367,7 @@ Pseq([\rest],128),
 	Pbind(\instrument, \playBuf,\buf,~hat,\dur,Pseq([1/4], inf) ,\vlDec,Pfunc({1.00.rrand(0.8)}),\vlSub,Pkey(\vlDec), \vlSub2,Pkey(\vlDec),\out,~comBusHat,
 
 		\type, Pseq([
-			// Pseq([ \note],256) , Pseq([ \rest],256),  Pseq([ \note],512),
+			Pseq([ \note],256) , Pseq([ \rest],256),  Pseq([ \note],512),
 
 			 Pseq([ \note],1024),
 

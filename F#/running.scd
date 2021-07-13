@@ -447,7 +447,7 @@ s.sync;
 
 	Osc.ar(~b.bufnum, LFNoise0.kr(1.2875/4).range(0.08046875,1.2875) ).range(0.7,1)
 
-		* EnvGen.kr(Env.step([1,1],[dur,0]),timeScale:  t.beatDur,doneAction: 2)
+		* EnvGen.kr(Env.step([1,0],[dur,0]),timeScale:  t.beatDur,doneAction: 2)
 	)}).add;
 
 
@@ -697,7 +697,7 @@ EnvGen.ar(
 	env = EnvGen.kr(Env([0, 1, 1, 0], [atk, dur - atk - rel, rel], [4,-4]));
 
 	filter = LPF.ar(verb, filterEnv);
-	Out.ar(out, filter * env * amp* EnvGen.kr(Env.step([1,1],[dur,0],4),timeScale: tS,doneAction:0));
+	Out.ar(out, filter * env * amp* EnvGen.kr(Env.step([1,0],[dur,0],4),timeScale: tS,doneAction:0));
 }).add;
 
 
@@ -994,7 +994,7 @@ timeScale:  t.beatDur,	doneAction:2);
 	SynthDef(\gateX,{|in, out=0,busMod|Out.ar(out,  In.ar(in, 2)* In.kr(busMod))}).add;
 
 
-	SynthDef(\gateX2,{|in, out=0,busMod,dur|Out.ar(out,  In.ar(in, 2)* In.kr(busMod)* EnvGen.kr(Env.step([1,1],[dur,0]),timeScale:  t.beatDur,doneAction: 2))}).add;
+	SynthDef(\gateX2,{|in, out=0,busMod,dur|Out.ar(out,  In.ar(in, 2)* In.kr(busMod)* EnvGen.kr(Env.step([1,0],[dur,0]),timeScale:  t.beatDur,doneAction: 2))}).add;
 
 	SynthDef.new(\ptr, {
 		arg out=0, buf=0,dec=1 ;
@@ -1031,7 +1031,7 @@ timeScale:  t.beatDur,	doneAction:2);
 	SynthDef.new(\granLiveA, {
 		arg amp=1, buf =0, out=0,pitchRte=1,duration=8,impulse = 1.2875,pos=0, dur,vlAtk =0,vlDec=1 ,vlSub=1 ,vlSub2=1,vlRel=0,atkT=0,decT=1,subsT=0,relT=0,atkC=0,decC=0,relC=0,tS=1;
 
-	Out.ar(out, GrainBuf.ar(1,Impulse.ar(Line.kr(0.08,20.6,dur,doneAction: 2)),duration,buf,    Line.kr(10,0.01,dur,doneAction: 2),pos,mul: amp)* EnvGen.kr(Env.step([1,1],[dur,0]),timeScale: tS,doneAction:2) );
+	Out.ar(out, GrainBuf.ar(1,Impulse.ar(Line.kr(0.08,20.6,dur,doneAction: 2)),duration,buf,    Line.kr(10,0.01,dur,doneAction: 2),pos,mul: amp)* EnvGen.kr(Env.step([1,0],[dur,0]),timeScale: tS,doneAction:2) );
 	}).add;
 
 	SynthDef(\reverb, {
@@ -1115,7 +1115,7 @@ timeScale:  t.beatDur,	doneAction:2);
 		left =	Mix.ar(In.ar(in,2));
 
 		Out.ar(out ,PingPong.ar(bufnum, [left,left], delayTime, feedback, 3)
-		* EnvGen.kr(Env.step([1,1],[dur,0],4),timeScale:  t.beatDur,doneAction:2) )
+		* EnvGen.kr(Env.step([1,0],[dur,0],4),timeScale:  t.beatDur,doneAction:2) )
 	}).add;
 
 
@@ -1143,7 +1143,7 @@ SynthDef(\comb, {|out=0, in ,maxDel, delayT,decT=6.1952,amp=0.09|
 
 			delayT+ MouseX.kr(0.024,0)/*+ SinOsc.kr(MouseY.kr(20,0),phase: 3,add: 0).range(0.000000001, 0.001)*/,
 
-			decT ,amp)* EnvGen.kr(Env.step([1,1],[dur,0]),timeScale: tS,doneAction:2) )}).add;
+			decT ,amp)* EnvGen.kr(Env.step([1,0],[dur,0]),timeScale: tS,doneAction:2) )}).add;
 
 		SynthDef(\comb1, {|out=0, in ,maxDel=0.7744, delayT,decT=6.1952,amp=0.09,tS=1,dur,multi=0| // reverse for fun was 0.001,0.6)
 		Out.ar(out, BufCombN.ar(~b2.bufnum, In.ar(in,1),/*MouseY.kr(0.6,0.001)*/
@@ -1157,7 +1157,7 @@ SynthDef(\comb, {|out=0, in ,maxDel, delayT,decT=6.1952,amp=0.09|
 
 
 
-			decT ,[amp,multi,multi])!2* EnvGen.kr(Env.step([1,1],[dur,0]),timeScale: tS,doneAction:2) )}).add;
+			decT ,[amp,multi,multi])!2* EnvGen.kr(Env.step([1,0],[dur,0]),timeScale: tS,doneAction:2) )}).add;
 
 
 	SynthDef(\comb1, {|out=0, in ,maxDel=0.7744, delayT,decT=6.1952,amp=0.09,tS=1,dur,multi=0,f1=0,f2=0,f3=0,fx=0,busMod,fr=0,modS,modT,modSa,modR |
@@ -1184,11 +1184,11 @@ SynthDef(\comb, {|out=0, in ,maxDel, delayT,decT=6.1952,amp=0.09|
 	SynthDef(\combX, {|out=0, in ,maxDel, delayT,decT=3,dur, tS=1,modu,factor=0,factor2=0|
 		Out.ar(out, CombN.ar(In.ar(in,1),1.5488/*MouseX.kr(0.01,2)*/,/*VarLag.kr(delayT,0.04)*/delayT+ MouseY.kr(0.001,0.6)
 			+ (In.kr(modu,1)*EnvGen.kr(Env.adsr(sustainLevel: 1,releaseTime: 0.1),factor ))+(In.kr(~seqBus,1)* factor2)
-			,decT,0.09)* EnvGen.kr(Env.step([1,1],[dur,0]),timeScale: tS,doneAction:2) )}).add;
+			,decT,0.09)* EnvGen.kr(Env.step([1,0],[dur,0]),timeScale: tS,doneAction:2) )}).add;
 
 
 	SynthDef(\combS, {|out=0, in ,maxDel, delayT,decT,dur, tS=1,amp=1|
-		Out.ar(out, CombN.ar(In.ar(in,2),/*MouseX.kr(0.01,2)*/maxDel, delayT /*MouseY.kr(0.01,2)*/,decT/*3*/,amp)* EnvGen.kr(Env.step([1,1],[dur,0]),timeScale: tS,doneAction:2) )}).add;
+		Out.ar(out, CombN.ar(In.ar(in,2),/*MouseX.kr(0.01,2)*/maxDel, delayT /*MouseY.kr(0.01,2)*/,decT/*3*/,amp)* EnvGen.kr(Env.step([1,0],[dur,0]),timeScale: tS,doneAction:2) )}).add;
 
 	SynthDef(\reverbS, {
 		|out=0, roomsize, revtime, damping, inputbw, spread = 15, drylevel, earlylevel,
@@ -1516,7 +1516,7 @@ SynthDef(\volAna,{|in=0|RMS.ar( In.ar(in)).ampdb.round(0.1).poll(label:" db" )})
 			Splay.arFill(10,
 					{	Mix.ar(In.ar(in, 2))}
 				,spread,1, [center+ In.kr(bus1),  center+ In.kr(bus2)]       )
-			* EnvGen.kr(Env.step([1,1],[dur,0]),timeScale:  t.beatDur,doneAction: 2)
+			* EnvGen.kr(Env.step([1,0],[dur,0]),timeScale:  t.beatDur,doneAction: 2)
 			//,doneAction: 2)
 		);
 	}).add;
@@ -1533,7 +1533,7 @@ SynthDef(\volAna,{|in=0|RMS.ar( In.ar(in)).ampdb.round(0.1).poll(label:" db" )})
 
 	SynthDef(\comp1010P, {|in, ctrl, out= 0, dec  , thr  =0.01 ,sB = 1, sA = (1/4), atk = 0.001, rel = 0.04 , gain=1, dur,tS=1|
 
-		Out.ar(out, Compander.ar(In.ar(in,10) , In.ar(ctrl,10)  , thresh: thr, slopeBelow: sB, slopeAbove: sA, clampTime: atk, relaxTime: rel)* gain* EnvGen.kr(Env.step([1,1],[dur,0]),timeScale: t.beatDur,doneAction:2))}).add;
+		Out.ar(out, Compander.ar(In.ar(in,10) , In.ar(ctrl,10)  , thresh: thr, slopeBelow: sB, slopeAbove: sA, clampTime: atk, relaxTime: rel)* gain* EnvGen.kr(Env.step([1,0],[dur,0]),timeScale: t.beatDur,doneAction:2))}).add;
 
 
 	SynthDef(\comp1010, {|in, ctrl, out= 0, dec  , thr  =0.01 ,sB = 1, sA = (1/4), atk = 0.001, rel = 0.04 , gain=1, dur,tS=1|
@@ -1543,26 +1543,26 @@ SynthDef(\volAna,{|in=0|RMS.ar( In.ar(in)).ampdb.round(0.1).poll(label:" db" )})
 
 	SynthDef(\comp10P, {|in, ctrl, out= 0, dec  , thr  =0.01 ,sB = 1, sA = (1/4), atk = 0.001, rel = 0.04 , gain=1, dur,tS=1|
 
-		Out.ar(out, Compander.ar(In.ar(in,10) , In.ar(ctrl,1)/*.neg */ , thresh: thr, slopeBelow: sB, slopeAbove: sA, clampTime: atk, relaxTime: rel)* gain* EnvGen.kr(Env.step([1,1],[dur,0]),timeScale: tS,doneAction:2))}).add;
+		Out.ar(out, Compander.ar(In.ar(in,10) , In.ar(ctrl,1)/*.neg */ , thresh: thr, slopeBelow: sB, slopeAbove: sA, clampTime: atk, relaxTime: rel)* gain* EnvGen.kr(Env.step([1,0],[dur,0]),timeScale: tS,doneAction:2))}).add;
 
 
 
 	SynthDef(\sinModul,{|modu, busMod,hS=2200,lS=(-40),dur,tS=1,out,ph=0|Out.kr(out, SinOsc.kr(modu+ In.kr(busMod),ph).range(lS,hS)
-		* EnvGen.kr(Env.step([1,1],[dur,0]),timeScale:  t.beatDur,doneAction: 2))}).add;
+		* EnvGen.kr(Env.step([1,0],[dur,0]),timeScale:  t.beatDur,doneAction: 2))}).add;
 
 SynthDef(\ranModul,{|modu, busMod,lS=0, hS=4200,dur,tS=1,out|Out.kr(out,LFDNoise0.kr(modu+ In.kr(busMod)).range(lS,hS)
-			* EnvGen.kr(Env.step([1,1],[dur,0]),timeScale:  t.beatDur,doneAction: 2))}).add;
+			* EnvGen.kr(Env.step([1,0],[dur,0]),timeScale:  t.beatDur,doneAction: 2))}).add;
 
-	SynthDef(\triModul,{|ph=0,modu, busMod,hS=1200,lS=(-40),dur,tS=1,out|Out.kr(out, LFTri.kr(modu+ In.kr(busMod),ph).range(lS,hS)* EnvGen.kr(Env.step([1,1],[dur,0]),timeScale: tS,doneAction: 2))}).add;
+	SynthDef(\triModul,{|ph=0,modu, busMod,hS=1200,lS=(-40),dur,tS=1,out|Out.kr(out, LFTri.kr(modu+ In.kr(busMod),ph).range(lS,hS)* EnvGen.kr(Env.step([1,0],[dur,0]),timeScale: tS,doneAction: 2))}).add;
 
 	//SAFETY VERSION WITH NO BUSSES
 SynthDef(\sinModulC,{|modu, busMod,hS=2200,lS=(-40),dur,tS=1,out|Out.kr(out, SinOsc.kr(modu).range(lS,hS)
-		* EnvGen.kr(Env.step([1,1],[dur,0]),timeScale:  t.beatDur,doneAction: 2))}).add;
+		* EnvGen.kr(Env.step([1,0],[dur,0]),timeScale:  t.beatDur,doneAction: 2))}).add;
 
 SynthDef(\ranModulC,{|modu, busMod,lS=0, hS=4200,dur,tS=1,out|Out.kr(out,LFDNoise0.kr(modu).range(lS,hS)
-			* EnvGen.kr(Env.step([1,1],[dur,0]),timeScale:  t.beatDur,doneAction: 2))}).add;
+			* EnvGen.kr(Env.step([1,0],[dur,0]),timeScale:  t.beatDur,doneAction: 2))}).add;
 
-	SynthDef(\triModulC,{|modu, busMod,hS=1200,lS=(-40),dur,tS=1,out|Out.kr(out, LFTri.kr(modu).range(lS,hS)* EnvGen.kr(Env.step([1,1],[dur,0]),timeScale:  t.beatDur,doneAction: 2))}).add;
+	SynthDef(\triModulC,{|modu, busMod,hS=1200,lS=(-40),dur,tS=1,out|Out.kr(out, LFTri.kr(modu).range(lS,hS)* EnvGen.kr(Env.step([1,0],[dur,0]),timeScale:  t.beatDur,doneAction: 2))}).add;
 
 	SynthDef(\squaModul,{|modu, busMod,wdth=0.5,hS=1200,lS=0|Out.kr(busMod,Pulse.kr(modu,wdth).range(lS,hS) )}).add;
 SynthDef(\sawModul,{|modu, busMod,hS|Out.kr(busMod, Saw.kr(modu).range(-40,hS))}).add;

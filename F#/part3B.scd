@@ -10527,7 +10527,7 @@ SinOsc.kr(MouseY.kr(0.024,5.15),4.6).range(0.008,0.02)
 			~panGrp= Group.after(~compGrp);
 
 			Ppar([
-				Pbind(\instrument, \playBufS, \buf, ~bgTemp, \dur, Pseq([64/1],inf),\out,~bgTempBus,\vlDec, 0.2,\vlSub,Pkey(\vlDec),\vlSub2,Pkey(\vlDec)),
+				Pbind(\instrument, \playBufS, \buf,~bgRev /*~larme*//*~bgTemp*/, \dur, Pseq([64/1],inf),\out,~bgTempBus,\vlDec, 0.2,\vlSub,Pkey(\vlDec),\vlSub2,Pkey(\vlDec)),
 
 Prand([
 				Pbind(\instrument, \playBuf, \buf, ~zipSeq, \dur, Pseq([1/8],32),\start,Pfunc({~zipSeq.numFrames/32*(31.rand)+2020}),\out,~leadExpPan,\amp,2,\decT,Pseq([1,1,1,1],inf),\type,Pseq([\note,\rest],inf)),
@@ -10538,7 +10538,7 @@ Prand([
 
 			~compu=Synth(\compS, [\in,~bgTempBus, \ctrl, ~leadExpPan],~compGrp);
 
-			~compu.set(\thr, 0.05, \sB, 1, \sA ,-400, \atk,   t.beatDur/16, \rel,   t.beatDur/4);
+			~compu.set(\thr, 0.1, \sB, 1, \sA ,-400, \atk,   t.beatDur/16, \rel,   t.beatDur/4);
 
 			~pani=Synth(\pan2, [ \in,~leadExpPan, \out,0],~panGrp);
 
