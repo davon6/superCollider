@@ -177,7 +177,7 @@ s.sync;
 
 	~leadExpPan=Bus.audio(s,1);
 
-	~bgTempBus=Bus.audio(s,2);
+	~bgTempBus=Bus.audio(s,1);
 
 
 	s.sync;
@@ -1016,7 +1016,7 @@ timeScale:  t.beatDur,	doneAction:2);
 
 		var env = EnvGen.kr(Env([vlAtk,vlDec,vlSub,vlSub2,vlRel],
 			[dur * atkT,dur* decT,dur * subsT,dur *relT],
-			[atkC,decC,0,relC]),timeScale: tS, doneAction:2);
+			[atkC,decC,0,relC]),timeScale: t.beatDur, doneAction:2);
 
 		Out.ar(out, GrainBuf.ar(1,Impulse.ar(impulse),duration ,buf,pitchRte,pos,mul: amp)* env );
 	}).add;
@@ -1232,12 +1232,7 @@ FreeVerb.ar(
 
 
 
-	SynthDef(\EQHP2, {|out=0, in, val, quant, gain,frq=100, vol =0.05, val2,quant2, gain2,val3,quant3, gain3,val4, gain4, shelf,val5,quant5, gain5,val6,shelf2, gain6,val7,quant7, gain7| Out.ar(out,
 
-		HPF.ar(HPF.ar(HPF.ar(HPF.ar(HPF.ar(HPF.ar(HPF.ar(HPF.ar( BLowShelf.ar(  BPeakEQ.ar( BPeakEQ.ar(BHiShelf.ar(BPeakEQ.ar(
-			BPeakEQ.ar(	BPeakEQ.ar(In.ar(in, 2),val,quant, gain),val2,quant2, gain2),val3,quant3, gain3),val4,shelf, gain4),val5,quant5, gain5),val7,quant7, gain7),val6,shelf2, gain6),
-
-		frq),frq),frq),frq),frq),frq),frq),frq)* vol)};).add;
 
 
 
@@ -1298,6 +1293,27 @@ FreeVerb.ar(
 
 		HPF.ar(HPF.ar(HPF.ar(HPF.ar(HPF.ar(HPF.ar(HPF.ar(HPF.ar(BLowShelf.ar(	BHiShelf.ar( 	BPeakEQ.ar(
 			BPeakEQ.ar(	BPeakEQ.ar(In.ar(in, 1),val,quant, gain),val2,quant2, gain2),val3,quant3, gain3),val4,shelf, gain4),val5,shelf2, gain5),
+
+		frq),frq),frq),frq),frq),frq),frq),frq)* vol)};).add;
+
+
+	SynthDef(\EQHP96S, {|out=0, in, val, quant, gain,frq=100, vol =0.05, val2,quant2, gain2,val3,shelf, gain3,val4,quant3, gain4,val5,quant5, gain5, val6,shelf2, gain6| Out.ar(out,
+
+		HPF.ar(HPF.ar(HPF.ar(HPF.ar(HPF.ar(HPF.ar(HPF.ar(HPF.ar(BLowShelf.ar(	BHiShelf.ar( 	BPeakEQ.ar(
+			BPeakEQ.ar(	BPeakEQ.ar(In.ar(in, 2),val,quant, gain),val2,quant2, gain2),val3,quant3, gain3),val4,shelf, gain4),val5,shelf2, gain5),
+
+		frq),frq),frq),frq),frq),frq),frq),frq)* vol)};).add;
+
+
+
+
+
+
+
+	SynthDef(\EQHP2, {|out=0, in, val, quant, gain,frq=100, vol =0.05, val2,quant2, gain2,val3,quant3, gain3,val4, gain4, shelf,val5,quant5, gain5,val6,shelf2, gain6,val7,quant7, gain7| Out.ar(out,
+
+		HPF.ar(HPF.ar(HPF.ar(HPF.ar(HPF.ar(HPF.ar(HPF.ar(HPF.ar( BLowShelf.ar(  BPeakEQ.ar( BPeakEQ.ar(BHiShelf.ar(BPeakEQ.ar(
+			BPeakEQ.ar(	BPeakEQ.ar(In.ar(in, 2),val,quant, gain),val2,quant2, gain2),val3,quant3, gain3),val4,shelf, gain4),val5,quant5, gain5),val7,quant7, gain7),val6,shelf2, gain6),
 
 		frq),frq),frq),frq),frq),frq),frq),frq)* vol)};).add;
 
@@ -1424,6 +1440,16 @@ SynthDef(\volAna,{|in=0|RMS.ar( In.ar(in)).ampdb.round(0.1).poll(label:" db" )})
 				In.ar(in, 1), mxDel, [dlt1,dlt2], decT)
 
 	},spread,level,center))}).add;
+
+
+	/*SynthDef(\stereoO,{|out=0, in, spread=0, level=1, center=0.0,dlt1=0.3,dlt2=0.4,decT=2, mxDel=1|
+
+		Out.ar(out,Splay.arFill(2,{
+
+			CombN.ar(
+				In.ar(in, 1), mxDel, [dlt1,dlt2], decT)
+
+	},spread,level,center))}).add;*/
 
 
 	SynthDef(\stereoO10,{|out=0, in, spread=0, level=1, center=0.0,dlt1=0.3,dlt2=0.4,decT=2, mxDel=1|
@@ -2050,7 +2076,7 @@ Ppar([
 
 
 
-			Pbind(\instrument, \playBuf, \buf, ~b3, \dur, Pseq([1/4],inf),\amp,1,\type,Pseq([\rest,\note,\note,\note],inf), \decT,	Pseq([0,0.82,0.84,0.86 ],inf),\start,0,\out,~bassFi)
+			Pbind(\instrument, \playBuf, \buf, ~b4, \dur, Pseq([1/4],inf),\amp,1,\type,Pseq([\rest,\note,\note,\note],inf), \decT,	Pseq([0,0.82,0.84,0.86 ],inf),\start,0,\out,~bassFi)
 
 ],1),
 
@@ -2147,7 +2173,7 @@ Ppar([
 Pbind(\instrument ,\EQHP2LP ,\in,~bassEq, \out,0, \frq, 18.midicps*(432/440),\vol,1,
 
 
-				\val7,66.midicps*(432/440),\quant7,1.8 ,\gain7,(-2),
+				\val7,66.midicps*(432/440),\quant7,1.8 ,\gain7,(-8),
 			\val,78.midicps*(432/440), \quant,1.96, \gain,(-21),
 \val2,90.midicps*(432/440), \quant2,2.2, \gain2,(-9),
 		\val3,102.midicps*(432/440), \quant3,2.1, \gain3,(-14),
@@ -2155,7 +2181,7 @@ Pbind(\instrument ,\EQHP2LP ,\in,~bassEq, \out,0, \frq, 18.midicps*(432/440),\vo
 
 
 //that one
-	\val5,54.midicps*(432/440), \quant5,2.4, \gain5,(-13),\group,~eqGrp,\dur, inf)
+	\val5,54.midicps*(432/440), \quant5,2.4, \gain5,(-5),\group,~eqGrp,\dur, inf)
 
 
 

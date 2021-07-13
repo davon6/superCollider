@@ -10385,6 +10385,19 @@ Pbind(\instrument, \playBuf, \buf, ~bNoi, \dur,Pseq([2/1],inf), \type,Pseq([\res
 
 
 
+			({BLowPass4.ar(
+			SinOsc.ar(EnvGen.kr(Env([0,126.midicps*(432/440),30.midicps*(432/440),126.midicps*(432/440),0],[t.beatDur*12,0,0.2,0],[7,0,4,0])),mul:EnvGen.kr(
+
+			Env.perc(releaseTime: t.beatDur*12,curve: 3)) ),
+
+			EnvGen.kr(Env([126.midicps*(432/440),66.midicps*(432/440),-18.midicps*(432/440)],
+			[t.beatDur*12,0,t.beatDur*0.3,0],
+				[6,7,0]),doneAction: 2),0.86)
+			*0.1!2
+		}.play)
+
+
+
 
 
 
@@ -10503,7 +10516,7 @@ SinOsc.kr(MouseY.kr(0.024,5.15),4.6).range(0.008,0.02)
 			}).play(t,quant:1)
 			~bgTemp=Buffer.read(s, "/Users/davidmignot/Music/SuperCollider Recordings//F#/1/bgX.aiff");
 			~hpL=Buffer.read(s,"/Users/davidmignot/Music/SuperCollider Recordings/E/E1/HPL.aiff");
-
+~bgTemp.play
 	~compGrp=Group.new;
 			~gateGrp= Group.after(~compGrp);
 
@@ -10525,20 +10538,22 @@ SinOsc.kr(MouseY.kr(0.024,5.15),4.6).range(0.008,0.02)
 
 			~compGrp=Group.new;
 			~panGrp= Group.after(~compGrp);
-
+/*~bruise
+	~larme
+			~bgRev*/
 			Ppar([
-				Pbind(\instrument, \playBufS, \buf,~bgRev /*~larme*//*~bgTemp*/, \dur, Pseq([64/1],inf),\out,~bgTempBus,\vlDec, 0.2,\vlSub,Pkey(\vlDec),\vlSub2,Pkey(\vlDec)),
+				Pbind(\instrument, \playBufS, \buf,/*~bgRev*/ ~larme/*~bgTemp*/, \dur, Pseq([64/1],inf),\out,~bgTempBus,\vlDec, 0.9,\vlSub,Pkey(\vlDec),\vlSub2,Pkey(\vlDec)),
 
 Prand([
 				Pbind(\instrument, \playBuf, \buf, ~zipSeq, \dur, Pseq([1/8],32),\start,Pfunc({~zipSeq.numFrames/32*(31.rand)+2020}),\out,~leadExpPan,\amp,2,\decT,Pseq([1,1,1,1],inf),\type,Pseq([\note,\rest],inf)),
 
-					Pbind(\instrument, \playBuf, \buf, ~zipSeq, \dur, Pseq([1/1],1),\start,Pfunc({~zipSeq.numFrames/16*(15.rand)}),\out,~leadExpPan,\amp,2,\decT,Pseq([1,0.9,0.8,0.8],inf))],inf)],1).play(t,quant:1);
+					Pbind(\instrument, \playBuf, \buf, ~zipSeq, \dur, Pseq([1/1],1),\start,Pfunc({~zipSeq.numFrames/16*(15.rand)}),\out,~leadExpPan,\amp,2)],inf)],1).play(t,quant:1);
 
 
 
 			~compu=Synth(\compS, [\in,~bgTempBus, \ctrl, ~leadExpPan],~compGrp);
 
-			~compu.set(\thr, 0.1, \sB, 1, \sA ,-400, \atk,   t.beatDur/16, \rel,   t.beatDur/4);
+			~compu.set(\thr, 0.1, \sB, 1, \sA ,-30, \atk,   t.beatDur/16, \rel,   t.beatDur/4);
 
 			~pani=Synth(\pan2, [ \in,~leadExpPan, \out,0],~panGrp);
 
@@ -10556,4 +10571,14 @@ Prand([
 
 	output
 }.play;)
+
+
+
+
+	~panGrp=Group.new
+
+	Pbind(\instrument, \gran ,\buf,~perc,\dur, Pfunc({4.00.rand}), \impulse,Pfunc({30.midicps*(432/440).rand}),\pos,Pfunc({1.00.rand}),\duration, Pfunc({8.00.rrand(t.beatDur/16)}),\pitchRte,Pfunc({8.00.rrand(-2)}),\out,~leadExpPan).play(t,quant:1);
+
+
+	~pani=Synth(\pan2, [ \in,~leadExpPan, \out,0],~panGrp);
 

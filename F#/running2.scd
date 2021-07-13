@@ -126,19 +126,19 @@ f = { |n=14, min=0, max=11| (min..max).scramble.keep(n) };
 ~compGrp6 = Group.after(~stereoGrp5);
 ~extraGrp = Group.after(~compGrp6);
 
-~kickgroup1 = Group.after(~extraGrp);
+/*~kickgroup1 = Group.after(~extraGrp);
 	~kickgroup = Group(~kickgroup1);
 ~padgroup1 = Group.after(~kickgroup1);
-	~padgroup = Group(~padgroup1);
+	~padgroup = Group(~padgroup1);*/
 
-~compGrp8= Group.after(~padgroup1);
+~compGrp8= Group.after(~extraGrp);
 
-~kickgroup2 = Group.after(~compGrp8);
+/*~kickgroup2 = Group.after(~compGrp8);
 	~kickgroup3 = Group(~kickgroup2);
 ~padgroup2 = Group.after(~kickgroup2);
-	~padgroup3 = Group(~padgroup2);
+	~padgroup3 = Group(~padgroup2);*/
 
-~finalComp= Group.after(~padgroup2);
+~finalComp= Group.after(~compGrp8);
 ~finalEq= Group.after(~finalComp);
 
 
@@ -377,7 +377,7 @@ Ppar([
 
 			Pseq([Pbindf(~kick,\out,~limitKick)],inf),
 
-		Pbind(\instrument, \playBuf, \buf, ~b3, \dur, Pseq([1/4],inf),\amp,1,\type,Pseq([\rest,\note,\note,\note],inf),  \decT,	Pseq([0,0.86,0.88,0.9 ],inf),\start,0,\out,~bassFi),
+		Pbind(\instrument, \playBuf, \buf, ~b4, \dur, Pseq([1/4],inf),\amp,1,\type,Pseq([\rest,\note,\note,\note],inf),   \decT,	Pseq([0,0.82,0.84,0.86 ],inf),\start,0,\out,~bassFi),
 
 				/*Pbind(\instrument, \playBuf, \buf, ~b4, \dur, Pseq([1/4],inf),\amp,1,\type,Pseq([\rest,\note,\note,\note],inf), \decT,	Pseq([0,0.8,0.86,0.92 ],inf),\start,0,\out,~bassFi)*/
 
