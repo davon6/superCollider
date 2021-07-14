@@ -10574,11 +10574,28 @@ Prand([
 
 
 
+			[val],[dur \lfoStep
 
-	~panGrp=Group.new
+	~limGrp=Group.new;
+	~filterGrp=Group.after(~limGrp);
+	~eqGrp=Group.after(~filterGrp);
+	~revGrp=Group.after(~eqGrp);
+	~panGrp=Group.after(~revGrp);
 
-	Pbind(\instrument, \gran ,\buf,~perc,\dur, Pfunc({4.00.rand}), \impulse,Pfunc({30.midicps*(432/440).rand}),\pos,Pfunc({1.00.rand}),\duration, Pfunc({8.00.rrand(t.beatDur/16)}),\pitchRte,Pfunc({8.00.rrand(-2)}),\out,~leadExpPan).play(t,quant:1);
+Ppar([
+	Pbind(\instrument, \gran ,\buf,~perc,\dur, Pfunc({4.00.rand}), \impulse,Pfunc({30.midicps*(432/440).rand}),\pos,Pfunc({1.00.rand}),\duration, Pfunc({8.00.rrand(t.beatDur/16)}),\pitchRte,Pfunc({8.00.rrand(-2)}),\out,~bgTempBus),
+
+	Pbind(\instrument,	\reverbG,\dur, Pfunc({4.00.rand}), \mix,Pfunc({1.rrand(0.01)}),\room,Pfunc({1.rrand(0.01)}),\damp,Pfunc({1.rrand(0.01)}),\out,~leadExpPan,\in,~record3,\group, ~revGrp)],1).play(t,quant:1);
+
+				~limy=Synth(\lim,[\in,~bgTempBus,\out,~record1],~limGrp);
+
+				~filty= Synth(\filterGT,[\in,~record1, \out,~record2,\qf,0.4,],~filterGrp);
+
+				~eqy=Synth(\EQHP96,[\in,~record2,\out,~record3,\vol,0.7],~eqGrp);
+
+
 
 
 	~pani=Synth(\pan2, [ \in,~leadExpPan, \out,0],~panGrp);
+
 

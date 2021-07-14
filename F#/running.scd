@@ -436,7 +436,7 @@ s.sync;
 	)}).add;
 
 
-	SynthDef(\lfoStep, {|out, val, dur,ph =0,gte=(-4),frq=1,wdth=0.5,lS,hS|Out.kr(out,
+	SynthDef(\lfoStep, {|out, val, dur|Out.kr(out,
 		EnvGen.kr(Env.step([val],[dur]),timeScale: t.beatDur,doneAction: 2)
 	)}).add;
 
@@ -829,7 +829,7 @@ freq         )* EnvGen.kr(Env([0,vl,vl,0],[0.055,dur-0.055,0],4),timeScale: tS,d
 
 	SynthDef(\filterG,{|out=0, in, busMod, bus7, which, factor3=1, rqLPF=0.5  freqFil=10, qf =0.5, qf2=0.5 |
 
-		var lp, bp, hp, sig;
+		var lp, bp, hp, sig,notch;
 
 		sig = In.ar(in,1);
 
@@ -839,7 +839,29 @@ freq         )* EnvGen.kr(Env([0,vl,vl,0],[0.055,dur-0.055,0],4),timeScale: tS,d
 
 		hp = BHiPass4.ar(sig, freqFil+ In.kr(busMod, 1)+ MouseX.kr(40,22000), qf2 );
 
-		sig = SelectX.ar(which, [lp, bp,hp,sig]);
+		notch = Notch.ar(sig, freqFil+ MouseX.kr(40,12000) ,qf );
+
+		sig = SelectX.ar(which, [lp, bp,hp,notch]);
+
+		Out.ar(out, sig);
+	}).add;
+
+
+	SynthDef(\filterGT,{|out=0, in, busMod, bus7, which, factor3=1, rqLPF=0.5  freqFil=10, qf =0.5, qf2=0.5 |
+
+		var lp, bp, hp, sig,notch;
+
+		sig = In.ar(in,1);
+
+		lp = BLowPass4.ar(sig , freqFil+ In.kr(busMod, 1)+ MouseX.kr(40,22000) ,qf );
+
+		bp = BBandPass.ar(sig,freqFil+ In.kr(busMod, 1)  + MouseX.kr(40,12000) ,qf2 );
+
+		hp = BHiPass4.ar(sig, freqFil+ In.kr(busMod, 1)+ MouseX.kr(40,22000), qf2 );
+
+		notch = Notch.ar(sig, freqFil+ MouseX.kr(40,12000) ,qf );
+
+		sig = SelectX.ar(MouseY.kr(0,3).round(0.01).poll, [lp, bp,hp,notch]);
 
 		Out.ar(out, sig);
 	}).add;
@@ -1206,6 +1228,13 @@ FreeVerb.ar(
             damp // damp 0-1 duh
 		))
 
+}).add;
+
+
+	SynthDef(\reverbG, {|out=0, in,mix,room,damp,dur/*,mixB*/|
+		Out.ar(    out, FreeVerb.ar( In.ar(in), mix/*+In.kr(mixB)*/, room, damp )
+		*EnvGen.kr(Env.step([1,0],[dur,0]),timeScale: t.beatDur,doneAction: 2)
+		)
 }).add;
 
 	"reverb init".postln;
@@ -1858,9 +1887,9 @@ SynthDef(\sequ,{|value, dur, in=0, out=0, vlAtk=0, vlDec=1,vlSub=1,vlSub2=1, vlR
 
 		Out.ar(out,effect /** EnvGen.kr(Env.step([1,1],[dur,0]),timeScale: tS,doneAction: 2)*/);
 	}).add;
-/*
-	SynthDef(\lim,{|out=0,ml=0.1|Out.ar(out,Balance.ar(In.ar(~outTolimit),SinOsc.ar(mul: ml)))}).add;
 
+	SynthDef(\lim,{|out=0,ml=0.1,in|Out.ar(out,Balance.ar(In.ar(in),SinOsc.ar(mul: ml)))}).add;
+/*
 	SynthDef(\lim2,{|out=0,ml=0.2,in|Out.ar(out,Balance.ar(In.ar(in,2),SinOsc.ar(mul: ml)))}).add;
 
 	SynthDef(\lim10,{|out=0,ml=0.2,in|Out.ar(out,Balance.ar(In.ar(in,10),SinOsc.ar(mul: ml)))}).add;*/
