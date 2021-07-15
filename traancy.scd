@@ -1,5 +1,5 @@
 SynthDef(\blo,{|out=0,freq=432,fre2=0,freq3=1,dur|Out.ar(out,Resonz.ar(  Saw.ar([freq,freq+9]
-	+EnvGen.kr(Env([-7],[dur],-6),timeScale: t.beatDur)+fre2*freq3,EnvGen.kr(Env.perc(attackTime: 0.03,releaseTime:MouseY.kr(t.beatDur,t.beatDur/32)/* [0.12,0.125]*/),doneAction: 2)),MouseX.kr(190,3500),4)*0.07)}).add;
+	+EnvGen.kr(Env([-7],[dur],-6),timeScale: t.beatDur)+fre2*freq3,EnvGen.kr(Env.perc(attackTime: 0.03,releaseTime:MouseY.kr(t.beatDur,t.beatDur/32)/* [0.12,0.125]*/),doneAction: 2)),MouseX.kr(190,3500),4)*0.1)}).add;
 
 
 SynthDef(\blo,{|out=0,freq=432,fre2=0,freq3=1|Out.ar(out,Resonz.ar(  Saw.ar([freq,freq+9]+fre2*freq3,EnvGen.kr(Env.step(times: [0.12,
