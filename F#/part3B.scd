@@ -9615,18 +9615,18 @@ Pbind(\instrument, \playBuf, \buf, ~snare, \dur, Pseq([1/8],16),\type,Pseq([\not
 	Pseq([
 
 
-	Pbind(\instrument, \playBuf, \buf, ~snare, \dur, Pseq([1/2],1)),
+	Pbind(\instrument, \playBuf, \buf, ~perco, \dur, Pseq([1/2],1)),
 
-	Pbind(\instrument, \playBuf, \buf, ~snare, \dur, Pseq([1/8],7), \type,Pseq([\note,\rest,\note,\rest,\rest,\rest,\rest],inf)),
+	Pbind(\instrument, \playBuf, \buf, ~perco, \dur, Pseq([1/8],7), \type,Pseq([\note,\rest,\note,\rest,\rest,\rest,\rest],inf)),
 
-	Pbind(\instrument, \playBuf, \buf, ~snare, \dur, Pseq([1/4],1)),
+	Pbind(\instrument, \playBuf, \buf, ~perco, \dur, Pseq([1/4],1)),
 
 
-	Pbind(\instrument, \playBuf, \buf, ~snare, \dur, Pseq([1/8],5), \type,Pseq([\rest,\rest,\rest,\note,\rest],inf)),
+	Pbind(\instrument, \playBuf, \buf, ~perco, \dur, Pseq([1/8],5), \type,Pseq([\rest,\rest,\rest,\note,\rest],inf)),
 
-	Pbind(\instrument, \playBuf, \buf, ~snare, \dur, Pseq([1/4],3), \type,Pseq([\note,\rest,\note],inf)),
+	Pbind(\instrument, \playBuf, \buf, ~perco, \dur, Pseq([1/4],3), \type,Pseq([\note,\rest,\note],inf)),
 
-	Pbind(\instrument, \playBuf, \buf, ~snare, \dur, Pseq([1/8],8), \type,Pseq([\rest,\rest,\rest,\note,\rest,\rest,\rest,\rest],inf))
+	Pbind(\instrument, \playBuf, \buf, ~perco, \dur, Pseq([1/8],8), \type,Pseq([\rest,\rest,\rest,\note,\rest,\rest,\rest,\rest],inf))
 
 
 
@@ -9634,21 +9634,23 @@ Pbind(\instrument, \playBuf, \buf, ~snare, \dur, Pseq([1/8],16),\type,Pseq([\not
 
 		wait(0.16);
 
-			s.record(path:"/Users/davidmignot/Music/SuperCollider Recordings/F#/1/snareComp.aiff",numChannels:1,duration:t.beatDur*4);
+			s.record(path:"/Users/davidmignot/Music/SuperCollider Recordings/F#/1/percoComp.aiff",numChannels:1,duration:t.beatDur*4);
 
 	}).play
 
 
 	~snComp = Buffer.read(s, "/Users/davidmignot/Music/SuperCollider Recordings/F#/1/snareComp.aiff");
 
+	~peComp = Buffer.read(s, "/Users/davidmignot/Music/SuperCollider Recordings/F#/1/percoComp.aiff");
+~peComp.plot
 	~snDec=1;
 
 ~snDec=0.6;
 	Pseq([
-Pbind(\instrument, \playBuf, \buf, ~snComp, \dur, Pseq([4/1],1),\amp,0.14),
+Pbind(\instrument, \playBuf, \buf, ~peComp, \dur, Pseq([4/1],1),\amp,7),
 
 
-		Pbind(\instrument, \playBuf, \buf, ~snComp, \dur, Pseq([1/4],48),\start,Pfunc({~snComp.numFrames/4*(3.rand)}),\loo,0,\amp,0.14
+		Pbind(\instrument, \playBuf, \buf, ~peComp, \dur, Pseq([1/4],48),\start,Pfunc({~snComp.numFrames/4*(3.rand)}),\loo,0,\amp,7
 	)],8).play(t,quant:1);
 
 	Pseq([~kick],inf).play(t,quant:1)
@@ -10112,7 +10114,7 @@ Pseq([
 	/*)*/,88,14,0.1)*0.2}.play)
 
 
-//yes
+//yes en repeat
 
 			({ GVerb.ar(/*FreeVerb.ar(*/
 		BLowPass4.ar(
@@ -10150,7 +10152,7 @@ Pseq([
 				SinOsc.ar(
 					90.midicps*(432/440)
 
-							+SinOsc.ar(78.midicps*(432/440) +SinOsc.ar(78.midicps*(432/440)/10,mul:78.midicps*(432/440)/10*5),mul:66.midicps*(432/440)*74 )),MouseY.kr(50,9600),0.88))!2*0.1}.play)
+							+SinOsc.ar(78.midicps*(432/440) +SinOsc.ar(78.midicps*(432/440)/10,mul:78.midicps*(432/440)/10*5),mul:66.midicps*(432/440)*74 )),MouseY.kr(450,9600),0.93))!2*0.1}.play)
 
 
 
@@ -10820,4 +10822,29 @@ SynthDef(\lazer,{|out=0,dur,val=102|Out.ar(out,
 
 
 				Pbind(\instrument,\lazer,\dur,Pseq([1/8 ],inf),\type,Pseq([\note,\rest],inf),\val,54).play(t);
+
+
+
+				Routine({
+
+
+			s.record(s,path:"/Users/davidmignot/Music/SuperCollider Recordings/F#/1/percHi.aiff",numChannels:1,duration:t.beatDur);
+
+	wait(0.03);
+({SinOsc.ar(EnvGen.kr(Env([90.midicps,42.midicps],[t.beatDur/8,0],[0,0]),doneAction: 2),mul:
+	EnvGen.kr(Env([1,0],[t.beatDur/32,0],[-1,0]),doneAction: 2)
+	+WhiteNoise.ar(EnvGen.kr(Env([1,0],[t.beatDur/64,0],[-1,0]),doneAction: 0))
+)}.play);
+
+
+/*	wait(0.1);*/
+
+
+		}).play(t,quant:1)
+
+
+~perco=Buffer.read(s,"/Users/davidmignot/Music/SuperCollider Recordings/F#/1/percHi.aiff");
+
+
+~perco.play
 			
