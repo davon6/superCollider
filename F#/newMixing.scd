@@ -20,10 +20,12 @@
 ~limit3N2=Synth(\limiterStoMixer,[ \in,~limit3N1B2,\out,~comp3N2B2],~limitGrp);
 ~limit3N2.set(\gain,20);
 
+~compu=Synth(\compS, [\in,~comp3N2B2, \ctrl, ~stereo3N1B],~compGrp2);
+~compu.set(\thr, 0.1, \sB, 1, \sA ,-30, \atk,   t.beatDur/16, \rel,   t.beatDur/4);
+
 
 ~eq3N3 = Synth(\EQHP96, [\frq, 100 ],~eqGrp);
 ~eq3N3.set(\in,~eqN3B,\out,~revN3B);
-
 ~rev3N3= Synth( \reverb ,~revRnd[1],~revGrp);~rev3N3.set(\in,~revN3B, \out,~compN3B,\mix,0.13);
 ~comp3N3=Synth(\comp, [\ctrl, ~kbus,\in,~compN3B,\out, ~limitN3B ],~compGrp);
 ~comp3N3.set(\thr,0.6 ,\sB, 1.04,\sA, 1/2,\atk ,t.beatDur/16, \rel ,t.beatDur/4,\out, );
