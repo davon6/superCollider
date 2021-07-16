@@ -15,7 +15,6 @@ Pbind(\instrument,\blo,\dur,Pseq([1/8],inf),\freq,Pseq([402,216,318,402,402,216,
 
 
 
-
 Pseq([
 
 
@@ -32,8 +31,20 @@ Pbind(\instrument,\blo,\dur,Pseq([1/8],128),\freq,Pseq([65.midicps,68.midicps,69
 
 
 
-.play(t,quant:1)
+.play(t,quant:1);
 
+
+Routine({
+
+
+
+s.record(s,path:"/Users/davidmignot/Music/SuperCollider Recordings/F#/1/trancy.aiff",numChannels:1,duration:t.beatDur*64);
+
+}).play(t,quant:1)
+
+~trancy.play
+
+~trancy=Buffer.read(s,"/Users/davidmignot/Music/SuperCollider Recordings/F#/1/trancy.aiff")
 
 
 Pbind(\instrument,\blo,\dur,Pseq([1/8],inf),\freq,Pseq([402,216,310,402,402,216,310,402,420,402,216,310,],inf),\type,Pseq([\note,\note,\note,\note,\note,\note,\note,\note,\note,\note,\note,\note],inf),\fre2,Pseq([Pseq([0],12),Pseq([97],1),Pseq([0],11),Pseq([27],1),Pseq([0],11),Pseq([0],12),],inf)).play

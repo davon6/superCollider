@@ -147,7 +147,7 @@ SynthDef(\example, {arg flangefreq=0.3, fdback=(-0.934),in,tS=1,dur,out=0,flangM
 	({Saw.ar(0.3)}.scope)
 
 
-
+Routine({
 
 //spoaceship
 SynthDef(\example, {arg flangefreq=0.3, fdback=(-0.7),in,tS=1,dur,out=0,flangMod,ph=6,busFl;
@@ -191,8 +191,14 @@ FreeVerb.ar(
 			   /** EnvGen.kr(Env.step([1,1],[dur,0]),timeScale: tS,doneAction: 2)*/);
 	}).play;
 
+	wait(0.16);
 
 
+				s.record(path:"/Users/davidmignot/Music/SuperCollider Recordings/F#/1/landing.aiff",numChannels:1,duration:t.beatDur*64);
 
+			}).play(t,quant:1)
+
+~landing=Buffer.read(s,"/Users/davidmignot/Music/SuperCollider Recordings/F#/1/landing.aiff")
+~landing.play
 ({BBandPass.ar(WhiteNoise.ar(0.5),MouseY.kr(100,4000),0.4)}.play)
 

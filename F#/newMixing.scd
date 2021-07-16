@@ -1,5 +1,4 @@
 
-
 ~eq3N1 = Synth(\EQHP96, [\frq, 100 ],~eqGrp);
 ~eq3N1.set(\in,~eq3N1B,\out,~rev3N1B);
 ~rev3N1= Synth( \reverb ,~revRnd[0],~revGrp);~rev3N1.set(\in,~rev3N1B, \out,~comp3N1B,\mix,0.05,\room,0.12,\damp,0.1);
@@ -9,8 +8,6 @@
 ~limit3N1.set(\gain,22);
 ~stereo3N1=Synth(\stereoO, [\in,~stereo3N1B , \out,0/*~hiCom*/], ~stereoGrp);
 ~stereo3N1.set(\spread,0,\center,0,\dlt1,0,\dlt2,0,\decT,0, \mxDel,0);
-
-
 
 ~eq3N2 = Synth(\EQHP96S, [\frq, 100 ],~eqGrp);
 ~eq3N2.set(\in,~eq3N1B2,\out,~comp3N1B2);
@@ -22,6 +19,7 @@
 
 ~compu=Synth(\compS, [\in,~comp3N2B2, \ctrl, ~stereo3N1B],~compGrp2);
 ~compu.set(\thr, 0.1, \sB, 1, \sA ,-30, \atk,   t.beatDur/16, \rel,   t.beatDur/4);
+
 
 
 ~eq3N3 = Synth(\EQHP96, [\frq, 100 ],~eqGrp);

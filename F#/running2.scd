@@ -28,6 +28,8 @@ f = { |n=14, min=0, max=11| (min..max).scramble.keep(n) };
 
 (
 
+~trancy=Buffer.read(s,"/Users/davidmignot/Music/SuperCollider Recordings/F#/1/trancy.aiff");
+~landing=Buffer.read(s,"/Users/davidmignot/Music/SuperCollider Recordings/F#/1/landing.aiff");
 ~kbLol=Buffer.read(s,"/Users/davidmignot/Music/SuperCollider Recordings//F#/1/kbLol.aiff");
 	~perc=Buffer.read(s,	"/Users/davidmignot/Music/SuperCollider Recordings/F#/1/funkPerc.aiff");
 

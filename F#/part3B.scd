@@ -10086,6 +10086,73 @@ Pseq([
 
 		~snare2.plot
 
+				({ GVerb.ar(/*FreeVerb.ar(*/
+		BLowPass4.ar(
+		Saw.ar(SinOsc.kr(~hz1beat/1,4.6).range(-10,-5)-MouseX.kr(-42,42).midicps*(432/440))
+			,MouseX.kr(10,4000),0.4)
+
+	/*)*/,88,14,0.1)*0.2}.play)
+
+
+
+
+				({ GVerb.ar(/*FreeVerb.ar(*/
+		BLowPass4.ar(
+	SinOsc.ar(EnvGen.ar(
+		Env(
+				[119.midicps*(432/440),66.midicps*(432/440),47.midicps*(432/440),18.midicps*(432/440),0,0],
+			[0.004,t.beatDur/32,t.beatDur/4,0],
+			[-8.4,-2,-2]
+		)
+	), mul: EnvGen.ar(
+		Env([ 0.056 , 0.085,   0.01 ,  0.342,0.0,0],
+			[ 0.00602 , 0.0016,   0.008  , t.beatDur/4 , 0.001  ],[0.66,1.5,-1.6,1.2,8]),doneAction:0));
+			,MouseX.kr(10,4000),0.4)
+
+	/*)*/,88,14,0.1)*0.2}.play)
+
+
+//yes
+
+			({ GVerb.ar(/*FreeVerb.ar(*/
+		BLowPass4.ar(
+	Saw.ar(EnvGen.ar(
+		Env(
+				[119.midicps*(432/440),66.midicps*(432/440),47.midicps*(432/440),18.midicps*(432/440),0,0],
+			[0.004,t.beatDur/32,t.beatDur/4,0],
+			[-8.4,-2,-2]
+		)
+	), mul: EnvGen.ar(
+		Env([ 0.056 , 0.085,   0.01 ,  0.342,0.0,0],
+			[ 0.00602 , 0.0016,   0.8  , t.beatDur/4 , 0.001  ],[0.66,1.5,-1.6,1.2,8]),doneAction:0));
+			,MouseX.kr(10,4000),0.4)
+
+	/*)*/,10,41,0.9)*3}.play)
+
+		//weird
+			({/*BHiPass4.ar(*/SinOsc.ar(78.midicps
+
+				,SinOsc.kr(0.04 *SinOsc.kr(78.midicps/10,mul:78.midicps/10),mul:78.midicps ).range(10,300))/*,MouseY.kr(50,5000),0.6)*/!2*0.1}.play)
+
+
+			({BHiPass4.ar(SinOsc.ar(6000
+
+				,SinOsc.kr(0.04 *SinOsc.kr(50,mul:50),mul:50 ).range(10,300)),MouseY.kr(50,5000),0.6)!2}.play)
+
+
+				({SinOsc.ar(6000,SinOsc.kr(0.04 *SinOsc.kr(50,mul:50),mul:50 ).range(10,300))!2}.play)
+
+
+//enfin
+			({
+				FreeVerb.ar(
+				BLowPass4.ar(
+				SinOsc.ar(
+					90.midicps*(432/440)
+
+							+SinOsc.ar(78.midicps*(432/440) +SinOsc.ar(78.midicps*(432/440)/10,mul:78.midicps*(432/440)/10*5),mul:66.midicps*(432/440)*74 )),MouseY.kr(50,9600),0.88))!2*0.1}.play)
+
+
 
 
 	({ GVerb.ar(FreeVerb.ar(
@@ -10736,4 +10803,21 @@ SynthDef(\lazer,{|out=0,dur,val=102|Out.ar(out,
 
 
 
-		
+		SynthDef(\lazer,{|out=0,dur,val=102|Out.ar(out,
+
+		BLowPass4.ar(
+	BLowPass4.ar(
+							Saw.ar(EnvGen.kr(Env([In.kr(~bus3).midicps*(430/440),54.midicps*(430/440)],[(dur*MouseY.kr(0.5,4)),0]),timeScale: t.beatDur)),
+		EnvGen.kr(Env([18000,660,3130],[(dur*MouseY.kr(0.5,4)),0]),timeScale: t.beatDur),0.5)
+		,30+ In.kr(~bus2),0.8)*0.1*EnvGen.kr(Env.step([1,0],[(dur*MouseY.kr(0.5,4)),0]),timeScale: t.beatDur,doneAction: 2)
+					)
+}).add;
+
+				o={Out.kr(~bus2,SinOsc.kr(~hz1beat/4, 1.6).range(1680,6800));
+					Out.kr(~bus3,SinOsc.kr(~hz1beat/2, 4.6).range(102,90));
+				}.play;
+
+
+
+				Pbind(\instrument,\lazer,\dur,Pseq([1/8 ],inf),\type,Pseq([\note,\rest],inf),\val,54).play(t);
+			
