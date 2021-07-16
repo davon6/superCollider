@@ -1,24 +1,52 @@
 
 
-~eq3N1B ~rev3N1B ~comp3N1B ~limit3N1B ~stereo3N1B
-
 ~eq3N1 = Synth(\EQHP96, [\frq, 100 ],~eqGrp);
 ~eq3N1.set(\in,~eq3N1B,\out,~rev3N1B);
-~rev3N1= Synth( \reverb ,~revRnd[0],~revGrp);~rev3N1.set(\in,~rev3N1B, \out,~comp3N1B);
+~rev3N1= Synth( \reverb ,~revRnd[0],~revGrp);~rev3N1.set(\in,~rev3N1B, \out,~comp3N1B,\mix,0.05,\room,0.12,\damp,0.1);
 ~comp3N1=Synth(\comp, [\ctrl, ~kbus,\in,~comp3N1B,\out, ~limit3N1B ],~compGrp);
 ~comp3N1.set(\thr,0.6 ,\sB, 1.04,\sA, 1/2,\atk ,t.beatDur/16, \rel ,t.beatDur/4,\out, );
 ~limit3N1=Synth(\limitertoMixer,[ \in,~limit3N1B,\out,~stereo3N1B],~limitGrp);
-~limit3N1.set(\gain,40);
+~limit3N1.set(\gain,22);
 ~stereo3N1=Synth(\stereoO, [\in,~stereo3N1B , \out,0/*~hiCom*/], ~stereoGrp);
+~stereo3N1.set(\spread,0,\center,0,\dlt1,0,\dlt2,0,\decT,0, \mxDel,0);
+
+
 
 ~eq3N2 = Synth(\EQHP96S, [\frq, 100 ],~eqGrp);
-~eq3N2.set(\in,~eq3N1B,\out,~rev3N1B);
-~rev3N2= Synth( \reverbS ,~revRnd[0],~revGrp);~rev3N2.set(\in,~rev3N1B, \out,~comp3N1B);
-~comp3N2=Synth(\comp, [\ctrl, ~kbus,\in,~comp3N1B,\out, ~limit3N1B ],~compGrp);
+~eq3N2.set(\in,~eq3N1B2,\out,~comp3N1B2);
+/*~rev3N2= Synth( \reverbS ,~revRnd[0],~revGrp);~rev3N2.set(\in,~rev3N1B2, \out,~comp3N1B2);*/
+~comp3N2=Synth(\compS, [\ctrl, ~kbus,\in,~comp3N1B2,\out, ~limit3N1B2 ],~compGrp);
 ~comp3N2.set(\thr,0.6 ,\sB, 1.04,\sA, 1/2,\atk ,t.beatDur/16, \rel ,t.beatDur/4,\out, );
-~limit3N2=Synth(\limiterStoMixer,[ \in,~limit3N1B,\out,~stereo3N1B],~limitGrp);
-~limit3N2.set(\gain,40);
-~stereo3N2=Synth(\stereoO, [\in,~stereo3N1B , \out,0/*~hiCom*/], ~stereoGrp);
+~limit3N2=Synth(\limiterStoMixer,[ \in,~limit3N1B2,\out,~comp3N2B2],~limitGrp);
+~limit3N2.set(\gain,20);
+
+
+~eq3N3 = Synth(\EQHP96, [\frq, 100 ],~eqGrp);
+~eq3N3.set(\in,~eqN3B,\out,~revN3B);
+
+~rev3N3= Synth( \reverb ,~revRnd[1],~revGrp);~rev3N3.set(\in,~revN3B, \out,~compN3B,\mix,0.13);
+~comp3N3=Synth(\comp, [\ctrl, ~kbus,\in,~compN3B,\out, ~limitN3B ],~compGrp);
+~comp3N3.set(\thr,0.6 ,\sB, 1.04,\sA, 1/2,\atk ,t.beatDur/16, \rel ,t.beatDur/4,\out, );
+~limit3N3=Synth(\limitertoMixer,[ \in,~limitN3B,\out,~stereoN3B],~limitGrp);
+~limit3N3.set(\gain,22);
+~stereo3N3=Synth(\stereoO, [\in,~stereoN3B , \out,0/*~hiCom*/], ~stereoGrp);
+~stereo3N3.set(\spread,0,\center,0,\dlt1,0,\dlt2,0,\decT,0, \mxDel,0);
+
+
+~eq3N4 = Synth(\EQHP96, [\frq, 100 ],~eqGrp);
+~eq3N4.set(\in,~eqN4B,\out,~compN4B,\vol,0.4);
+// ~rev3N4= Synth( \reverb ,~revRnd[0],~revGrp);~revN4.set(\in,~revN4B, \out,0,\mix,0.05,\room,0.12,\damp,0.1);
+~comp3N4=Synth(\comp, [\ctrl, ~kbus,\in,~compN4B,\out, ~limitN4B ],~compGrp);
+~comp3N4.set(\thr,0.6 ,\sB, 1.04,\sA, 1/2,\atk ,t.beatDur/16, \rel ,t.beatDur/4,\out, );
+~limit3N4=Synth(\limitertoMixer,[ \in,~limitN4B,\out,~comp2],~limitGrp);
+~limit3N4.set(\gain,15);
+
+~compu2=Synth(\comp, [\in,~comp2, \ctrl,~stereoN3B ,\out,~stereoN4B],~compGrp2);
+~compu2.set(\thr, 0.1, \sB, 1, \sA ,-30, \atk,   t.beatDur/16, \rel,   t.beatDur/4);
+
+~stereo3N4=Synth(\stereoO, [\in,~stereoN4B , \out,0/*~hiCom*/], ~stereoGrp);
+~stereo3N4.set(\spread,0,\center,0,\dlt1,0.3,\dlt2,0.2,\decT,0.4, \mxDel,0);
+
 
 
 

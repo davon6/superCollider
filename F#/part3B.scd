@@ -9972,7 +9972,7 @@ Routine({
 
 
 				~zip=Buffer.read(s,"/Users/davidmignot/Music/SuperCollider Recordings/F#/1/zipSLi.aiff")
-
+~zip.plot
 
 		/*	SynthDef(\ploc,{|out=0,frq=(-30),dur|Out.ar(0,Decimator.ar(
 			Saw.ar((frq).midicps*(432/440) +SinOsc.kr(MouseX.kr(0.3,50)).range(0.1,3000))
@@ -9991,9 +9991,6 @@ Routine({
 		}).add;*/
 
 			Pbind(\instrument,\ploc,\frq,Prand([30,33,35,37,39],inf),\dur,Pseq([1/2],4),\out,0).play(t)
-
-
-			Pbind(\instrument,\playBuf,\buf,~zip,\dur,Pseq([1/2],inf),\out,).play(t)
 
 
 		~filterGrp=Group.new;
@@ -10024,7 +10021,7 @@ Routine({
 
 			~filRe =Synth(\filterG,[\in,~hitEq,\which,2],~filterGrp);
 
-				wait(0.2);
+				wait(0.16);
 
 				s.record(path:"/Users/davidmignot/Music/SuperCollider Recordings/F#/1/zipSeq.aiff",numChannels:1,duration:t.beatDur*64);
 
@@ -10032,7 +10029,7 @@ Routine({
 
 			~zipSeq=Buffer.read(s,"/Users/davidmignot/Music/SuperCollider Recordings/F#/1/zipSeq.aiff");
 
-
+			~zipSeq.plot(duration:0.0001)
 
 			Pbind(\instrument, \playBuf, \buf, ~zip, \dur, Pseq([1/2],inf),\out,~hitEq).play(t)
 
@@ -10534,7 +10531,7 @@ SinOsc.kr(MouseY.kr(0.024,5.15),4.6).range(0.008,0.02)
 
 
 ~bgTemp=Buffer.read(s, "/Users/davidmignot/Music/SuperCollider Recordings//F#/1/bgX.aiff");
-				~zipSeq=Buffer.read(s,|"/Users/davidmignot/Music/SuperCollider Recordings/F#/1/zipSeq.aiff");
+				~zipSeq=Buffer.read(s,"/Users/davidmignot/Music/SuperCollider Recordings/F#/1/zipSeq.aiff");
 
 			~compGrp=Group.new;
 			~panGrp= Group.after(~compGrp);
@@ -10542,24 +10539,24 @@ SinOsc.kr(MouseY.kr(0.024,5.15),4.6).range(0.008,0.02)
 	~larme
 			~bgRev*/
 			Ppar([
-				Pbind(\instrument, \playBufS, \buf,/*~bgRev*/ ~larme/*~bgTemp*/, \dur, Pseq([64/1],inf),\out,~bgTempBus,\vlDec, 0.9,\vlSub,Pkey(\vlDec),\vlSub2,Pkey(\vlDec)),
+				Pbind(\instrument, \playBufS, \buf,/*~bgRev*/ ~larme/*~bgTemp*/, \dur, Pseq([64/1],inf),\out,~eq3N1B2,\vlDec, 0.9,\vlSub,Pkey(\vlDec),\vlSub2,Pkey(\vlDec)),
 
 Prand([
-				Pbind(\instrument, \playBuf, \buf, ~zipSeq, \dur, Pseq([1/8],32),\start,Pfunc({~zipSeq.numFrames/32*(31.rand)+2020}),\out,~leadExpPan,\amp,2,\decT,Pseq([1,1,1,1],inf),\type,Pseq([\note,\rest],inf)),
+				Pbind(\instrument, \playBuf, \buf, ~zipSeq, \dur, Pseq([1/8],32),\start,Pfunc({~zipSeq.numFrames/32*(31.rand)+3000}),\out,~eq3N1B,\amp,2,\decT,Pseq([1,1,1,1],inf),\type,Pseq([\note,\rest],inf)),
 
-					Pbind(\instrument, \playBuf, \buf, ~zipSeq, \dur, Pseq([1/1],1),\start,Pfunc({~zipSeq.numFrames/16*(15.rand)}),\out,~leadExpPan,\amp,2)],inf)],1).play(t,quant:1);
+					Pbind(\instrument, \playBuf, \buf, ~zipSeq, \dur, Pseq([1/1],1),\start,Pfunc({~zipSeq.numFrames/16*(15.rand)}),\out,~eq3N1B,\amp,2)],inf)],1).play(t,quant:1);
 
 
 
-			~compu=Synth(\compS, [\in,~bgTempBus, \ctrl, ~leadExpPan],~compGrp);
+			~compu=Synth(\compS, [\in,~comp3N2B2, \ctrl, ~stereo3N1B],~compGrp2);
 
 			~compu.set(\thr, 0.1, \sB, 1, \sA ,-30, \atk,   t.beatDur/16, \rel,   t.beatDur/4);
 
-			~pani=Synth(\pan2, [ \in,~leadExpPan, \out,0],~panGrp);
+			// ~pani=Synth(\pan2, [ \in,~eq3N1B, \out,0],~panGrp);
 
 
 
-
+			Pseq([Pbindf(~kick,\out,~kbus)],inf).play(t,quant:1)
 
 
 
@@ -10569,35 +10566,68 @@ Prand([
 	~filterGrp=Group.after(~limGrp);
 	~eqGrp=Group.after(~filterGrp);
 	~revGrp=Group.after(~eqGrp);
-	~panGrp=Group.after(~revGrp);
+				~compGrp=Group.after(~revGrp);
+	~panGrp=Group.after(~compGrp);
 
 
-				Pbind(\instrument,\fmX,\dur,Pseq([1/4],inf),\freq,Prand([78.midicps*(432/440), 81.midicps*(432/440),  82.midicps*(432/440)],inf) ,\cRatio,Prand([1,2,0.5],inf),
-		\vlSub,Pfunc({0.9.exprand(0.16,1)}),\vlSub2,Pkey(\vlSub),\atkT,Pfunc({0.12.exprand(0.01)}),
+				Pbind(\instrument,\fmX,\dur,Pseq([1/4],inf),\freq,Prand([78.midicps*(432/440), 81.midicps*(432/440),  82.midicps*(432/440)],inf) ,\cRatio,Prand([1,2,0.5],inf),\vlDec,2,
+		\vlSub,Pfunc({1.9.exprand(0.16,1)}),\vlSub2,Pkey(\vlSub),\atkT,Pfunc({0.12.exprand(0.01)}),
 	\decT,Pfunc({0.2.exprand(0.8)}),
 	\subsT,Pfunc({0.3.exprand(0.2)}),
 	\relT,Pfunc({0.52.exprand(0.1,1)}),
 	\atkC,Pfunc({4.exprand(1,1)}),
 	\decC,Pfunc({-6.exprand(-0.1)}),
 					\relC,Pfunc({-8.exprand(-2,1)}),\vlAtk ,Pfunc({0.01.exprand(0.001)}),\vlRel,Pkey(\vlAtk),\type,Pseq([\note,\note,\note,\note,\note,\note,\note,\note,
-\rest,\rest,\rest,\rest,\rest,\rest,\rest,\rest,\rest,\rest],inf),\out,~leadExpPan).play(t,quant:1);
+\rest,\rest,\rest,\rest,\rest,\rest,\rest,\rest,\rest,\rest],inf),\out,~eqN3B).play(t,quant:1);
 
 Ppar([
 	Pbind(\instrument, \gran ,\buf,~perc,\dur, Pfunc({4.00.rand}), \impulse,Pfunc({30.midicps*(432/440).rand}),\pos,Pfunc({1.00.rand}),\duration, Pfunc({4.00.rrand(t.beatDur/16)}),\pitchRte,Pfunc({8.00.rrand(-2)}),\out,~bgTempBus),
 
-	Pbind(\instrument,	\reverbG,\dur, Pfunc({4.00.rand}), \mix,Pfunc({1.rrand(0.01)}),\room,Pfunc({1.rrand(0.01)}),\damp,Pfunc({1.rrand(0.01)}),\out,~leadExpPan,\in,~record3,\group, ~revGrp)],1).play(t,quant:1);
+	Pbind(\instrument,	\reverbG,\dur, Pfunc({4.00.rand}), \mix,Pfunc({1.rrand(0.01)}),\room,Pfunc({1.rrand(0.01)}),\damp,Pfunc({1.rrand(0.01)}),\out,0,\in,~record3,\group, ~revGrp)],1).play(t,quant:1);
+
+
 
 				~limy=Synth(\lim,[\in,~bgTempBus,\out,~record1,\ml,0.4],~limGrp);
+
+
+
+			~compu2.set(\thr, 0.1, \sB, 1, \sA ,-30, \atk,   t.beatDur/16, \rel,   t.beatDur/4);
 
 				~filty= Synth(\filterGT,[\in,~record1, \out,~record2,\qf,0.4,],~filterGrp);
 
 				~eqy=Synth(\EQHP96,[\in,~record2,\out,~record3,\vol,0.7],~eqGrp);
 
+				~compu2=Synth(\comp, [\in,~leadExpPan, \ctrl,~fmXB ,\out,~leadExpPan2],~compGrp2);
+
+~pani2=Synth(\pan2, [ \in,~fmXB, \out,0],~panGrp);
+
+	~pani=Synth(\pan2, [ \in,~leadExpPan2, \out,0],~panGrp);
 
 
+				Routine({
 
-	~pani=Synth(\pan2, [ \in,~leadExpPan, \out,0],~panGrp);
+						s.record(path:"/Users/davidmignot/Music/SuperCollider Recordings/F#/1/variet.aiff",numChannels:1,duration:t.beatDur*64);
 
+				}).play(t,quant:1)
+
+				~vari = Buffer.read(s,"/Users/davidmignot/Music/SuperCollider Recordings/F#/1/variet.aiff");
+			~vari.play
+
+Ppar([
+				Pbind(\instrument,\fmX,\dur,Pseq([1/4],inf),\freq,Prand([78.midicps*(432/440), 81.midicps*(432/440),  82.midicps*(432/440)],inf) ,\cRatio,Prand([1,2,0.5],inf),\vlDec,2,
+		\vlSub,Pfunc({1.9.exprand(0.16,1)}),\vlSub2,Pkey(\vlSub),\atkT,Pfunc({0.12.exprand(0.01)}),
+	\decT,Pfunc({0.2.exprand(0.8)}),
+	\subsT,Pfunc({0.3.exprand(0.2)}),
+	\relT,Pfunc({0.52.exprand(0.1,1)}),
+	\atkC,Pfunc({4.exprand(1,1)}),
+	\decC,Pfunc({-6.exprand(-0.1)}),
+					\relC,Pfunc({-8.exprand(-2,1)}),\vlAtk ,Pfunc({0.01.exprand(0.001)}),\vlRel,Pkey(\vlAtk),\type,Pseq([\note,\note,\note,\note,\note,\note,\note,\note,
+							\rest,\rest,\rest,\rest,\rest,\rest,\rest,\rest,\rest,\rest],inf),\out,~eqN3B),
+
+
+					Pbind(\instrument, \playBuf,\buf,~vari,\dur,Pseq([64/1],1),\out,~eqN4B)],1).play(t,quant:1);
+
+				Pseq([Pbindf(~kick,\out,~kbus)],inf).play(t,quant:1)
 
 				Pbind(\instrument, \gran ,\buf,~perc,\dur, 0.05, \impulse,Pfunc({30.midicps*(432/440).rand}),\pos,Pfunc({1.00.rand}),\duration, Pkey(\dur),\pitchRte,1,\out,0).play(t)
 
@@ -10662,9 +10692,48 @@ Ppar([
 				AllpassL.ar(Saw.ar(0.2*SinOsc.kr(16).range(
 								LFNoise2.kr(0.4).range(0.001,5)
 								,3)),delaytime: 0.08,decaytime: 0.4),
-						SinOsc.kr(~hz1beat/2).range(240,1400),0.7),MouseY.kr(4000,10000),7)
+						SinOsc.kr(~hz1beat/4).range(240,1400),0.7),MouseY.kr(4000,10000),7)
 
-						,0.3,0.7,0.1), 0.3, [0.3,0.4], 1))*0.014)!2)*5.7}.play)
+						,0.3,0.6,0.1), 0.3, [0.3,0.4], 1))*0.014)!2)*5.7}.play)
+
+
+
+
+SynthDef(\lazer,{|out=0,dur,val=102|Out.ar(out,
+
+		BLowPass4.ar(
+	BLowPass4.ar(
+							Saw.ar(EnvGen.kr(Env([In.kr(~bus3).midicps*(430/440),54.midicps*(430/440)],[(dur*MouseY.kr(0.5,4)),0]),timeScale: t.beatDur)),
+		EnvGen.kr(Env([18000,660,3130],[(dur*MouseY.kr(0.5,4)),0]),timeScale: t.beatDur),0.5)
+		,30+ In.kr(~bus2),0.8)*0.1*EnvGen.kr(Env.step([1,0],[(dur*MouseY.kr(0.5,4)),0]),timeScale: t.beatDur,doneAction: 2)
+					)
+}).add;
+
+				o={Out.kr(~bus2,SinOsc.kr(~hz1beat/4, 1.6).range(1680,14800));
+					Out.kr(~bus3,SinOsc.kr(~hz1beat/2, 4.6).range(102,90));
+				}.play;
+
+
+
+
+
+
+				Routine({
+	Pbind(\instrument,\lazer,\dur,Pseq([1/8 ],inf),\type,Pseq([\note,\rest],inf),\val,54).play(t);
+					wait(0.16);
+
+
+
+				s.record(path:"/Users/davidmignot/Music/SuperCollider Recordings/F#/1/beam.aiff",numChannels:1,duration:t.beatDur*64);
+
+			}).play(t,quant:1)
+
+
+				~beam=Buffer.read(s,"/Users/davidmignot/Music/SuperCollider Recordings/F#/1/beam.aiff");
+
+
+				Pbind(\instrument, \playBuf, \buf,~beam,\dur, Pseq([64/1],1),\amp,1).play(t,quant:1)
+
 
 
 		

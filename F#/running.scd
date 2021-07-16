@@ -177,8 +177,20 @@ s.sync;
 
 	~leadExpPan=Bus.audio(s,1);
 
+	~leadExpPan2=Bus.audio(s,1);
+				~fmXB =Bus.audio(s,1);
+
 	~bgTempBus=Bus.audio(s,1);
 
+
+
+~eq3N1B =Bus.audio(s,1);~rev3N1B=Bus.audio(s,1); ~comp3N1B=Bus.audio(s,1); ~limit3N1B=Bus.audio(s,1); ~stereo3N1B=Bus.audio(s,1);
+
+~eq3N1B2 =Bus.audio(s,2);/*~rev3N1B2=Bus.audio(s,1); */~comp3N1B2=Bus.audio(s,2); ~limit3N1B2=Bus.audio(s,2); /*~stereo3N1B2=Bus.audio(s,1);*/~comp3N2B2=Bus.audio(s,2);
+
+~eqN3B=Bus.audio(s,1);~revN3B=Bus.audio(s,1);~compN3B=Bus.audio(s,1);~limitN3B=Bus.audio(s,1);~stereoN3B=Bus.audio(s,1);
+
+~eqN4B=Bus.audio(s,1);/*~revN4B=Bus.audio(s,1);*/~compN4B=Bus.audio(s,1);~limitN4B=Bus.audio(s,1);~stereoN4B=Bus.audio(s,1);~comp2=Bus.audio(s,1);
 
 	s.sync;
 

@@ -31,6 +31,9 @@ f = { |n=14, min=0, max=11| (min..max).scramble.keep(n) };
 ~kbLol=Buffer.read(s,"/Users/davidmignot/Music/SuperCollider Recordings//F#/1/kbLol.aiff");
 	~perc=Buffer.read(s,	"/Users/davidmignot/Music/SuperCollider Recordings/F#/1/funkPerc.aiff");
 
+~beam=Buffer.read(s,"/Users/davidmignot/Music/SuperCollider Recordings/F#/1/beam.aiff");
+
+~zipSeq=Buffer.read(s,"/Users/davidmignot/Music/SuperCollider Recordings/F#/1/zipSeq.aiff");
 
 ~bgRev=Buffer.read(s,"/Users/davidmignot/Music/SuperCollider Recordings/F#/1/RevBg.aiff");
 ~larme=Buffer.read(s,"/Users/davidmignot/Music/SuperCollider Recordings/F#/1/larme.aiff");
@@ -113,12 +116,15 @@ f = { |n=14, min=0, max=11| (min..max).scramble.keep(n) };
 
 ~shifGrp= Group.after(~limitGrp);
 
-~stereoGrp = Group.after(~shifGrp);
+~compGrp2 = Group.after(~shifGrp);
+
+~stereoGrp = Group.after(~compGrp2);
+
 
 ~extraDelay= Group.after(~stereoGrp);
 ~extraRev= Group.after(~extraDelay);
 
-~eqGrp3=Group.after(~compGrp5);
+~eqGrp3=Group.after(~extraRev);
 
 ~dynaEq= Group.after(~eqGrp3);
 
