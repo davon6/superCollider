@@ -10150,7 +10150,7 @@ Pseq([
 				FreeVerb.ar(
 				BLowPass4.ar(
 				SinOsc.ar(
-					90.midicps*(432/440)
+					88.midicps*(432/440)
 
 							+SinOsc.ar(78.midicps*(432/440) +SinOsc.ar(78.midicps*(432/440)/10,mul:78.midicps*(432/440)/10*5),mul:66.midicps*(432/440)*74 )),MouseY.kr(450,9600),0.93))!2*0.1}.play)
 
@@ -10708,23 +10708,24 @@ Ppar([
 
 
 
-				SynthDef(\bug,{|out=0,rte=3000/*(~hz1beat*8)*/,val,dur,bts=4|Out.ar(out,Decimator.ar( Saw.ar(
+				SynthDef(\bug,{|out=0,rte=3000/*(~hz1beat*8)*/,val,dur,bts=4|Out.ar(out,Decimator.ar( SinOsc.ar(
 					// LFNoise0.kr(rte).range(140,3600)
 					EnvGen.kr(Env.step([val,0],[dur,0]),timeScale: t.beatDur,doneAction: 2)
 					/*val,EnvGen.kr(Env([1,0],[dur,0],[dur, */
-				),rte,bts)*0.1)}).add;
+				),rte,bts)*0.05)}).add;
 
 
 				Pbind(\instrument, \bug,\dur,Pfunc({0.5.rrand(0.01)}) ,\val,Pfunc({3600.00.exprand(140)}) ,
 					// \rte,480000,\bts,36
-					\rte,Pfunc({48000.rrand(100)}),\bts,Pfunc({36.rrand(1)})
+					\rte,Pfunc({18000.rrand(100)}),\bts,Pfunc({30.rrand(1)})
 				).play(t)
 
-				Pbind(\instrument, \bug,\dur,Pfunc({0.5.rrand(0.01)}) ,\val,Pfunc({3600.00.exprand(140)})).play(t)
+				/*Pbind(\instrument, \bug,\dur,Pfunc({0.5.rrand(0.01)}) ,\val,Pfunc({3600.00.exprand(140)})).play(t)
 
 				Pbind(\instrument, \bug,\dur,Pfunc({0.4.rrand(0.01)}) ,\val,Pfunc({3600.00.exprand(100)}) ,
 					\rte,Pfunc({48000.rrand(100)}),\bts,Pfunc({36.rrand(1)}),\out,0/*~record1*/
-				).play(t)
+				).play(t)*/
+
 
 
 	~delayGrp=Group.new
