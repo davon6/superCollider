@@ -9926,11 +9926,18 @@ Ppar([
 	{SinOsc.kr((-14).midicps,4.6).range(10,20000)}.plot(duration:0.3)
 
 			//for start
+			Routine({
 	({BLowPass4.ar( PlayBuf.ar(1,~perc,Line.kr(6,0.1,t.beatDur),~perc.numFrames/16*(14.rand)),
 		SinOsc.kr((-14).midicps*(432/440),4.6).range(10,20000))
-	}.play)
+	}.play);
+				wait(0.18);
+				s.record(path:"/Users/davidmignot/Music/SuperCollider Recordings/F#/1/percFlush.aiff",numChannels:1,duration:t.beatDur*8);
 
+	}).play
 
+			~percFlu=Buffer.read(s,"/Users/davidmignot/Music/SuperCollider Recordings/F#/1/percFlush.aiff")
+
+~percFlu.play
 		({BLowPass4.ar(
 			Decimator.ar(
 			Saw.ar((-30).midicps*(432/440) +SinOsc.kr(MouseX.kr(0.3,50)).range(0.1,3000))
@@ -10116,6 +10123,7 @@ Pseq([
 
 //yes en repeat
 
+			Routine({
 			({ GVerb.ar(/*FreeVerb.ar(*/
 		BLowPass4.ar(
 	Saw.ar(EnvGen.ar(
@@ -10129,20 +10137,50 @@ Pseq([
 			[ 0.00602 , 0.0016,   0.8  , t.beatDur/4 , 0.001  ],[0.66,1.5,-1.6,1.2,8]),doneAction:0));
 			,MouseX.kr(10,4000),0.4)
 
-	/*)*/,10,41,0.9)*3}.play)
+	/*)*/,10,41,0.9)*3}.play);
+				wait(0.18);
+
+				s.record(s,path:"/Users/davidmignot/Music/SuperCollider Recordings/F#/1/cyBlo.aiff",numChannels:1,duration:t.beatDur*16);
+
+		}).play;
+
+
+			~cyBlock=Buffer.read(s, "/Users/davidmignot/Music/SuperCollider Recordings/F#/1/cyBlo.aiff");
+	~cyBlock.play
+
 
 		//weird
+			Routine({
 			({/*BHiPass4.ar(*/SinOsc.ar(78.midicps
 
-				,SinOsc.kr(0.04 *SinOsc.kr(78.midicps/10,mul:78.midicps/10),mul:78.midicps ).range(10,300))/*,MouseY.kr(50,5000),0.6)*/!2*0.1}.play)
+				,SinOsc.kr(0.04 *SinOsc.kr(78.midicps/10,mul:78.midicps/10),mul:78.midicps ).range(10,300))/*,MouseY.kr(50,5000),0.6)*/!2*0.1}.play);
+
+				wait(0.18);
+
+				s.record(s,path:"/Users/davidmignot/Music/SuperCollider Recordings/F#/1/greDa.aiff",numChannels:1,duration:t.beatDur*32);
+
+		}).play;
+
+			~greDa=Buffer.read(s,			"/Users/davidmignot/Music/SuperCollider Recordings/F#/1/greDa.aiff");
+
+~greDa.play
+	({SinOsc.ar(6000,SinOsc.kr(0.04 *SinOsc.kr(50,mul:50),mul:50 ).range(10,300))!2}.play);
 
 
+
+
+				Routine({
 			({BHiPass4.ar(SinOsc.ar(6000
 
-				,SinOsc.kr(0.04 *SinOsc.kr(50,mul:50),mul:50 ).range(10,300)),MouseY.kr(50,5000),0.6)!2}.play)
+				,SinOsc.kr(0.04 *SinOsc.kr(50,mul:50),mul:50 ).range(10,300)),MouseY.kr(50,15000),0.6)!2}.play);
 
+				wait(0.18);
 
-				({SinOsc.ar(6000,SinOsc.kr(0.04 *SinOsc.kr(50,mul:50),mul:50 ).range(10,300))!2}.play)
+				s.record(s,path:"/Users/davidmignot/Music/SuperCollider Recordings/F#/1/flicky.aiff",numChannels:1,duration:t.beatDur*16);
+
+		}).play;
+
+			~flicky=Buffer.read(s,	"/Users/davidmignot/Music/SuperCollider Recordings/F#/1/flicky.aiff");
 
 
 //enfin
@@ -10152,7 +10190,20 @@ Pseq([
 				SinOsc.ar(
 					88.midicps*(432/440)
 
-							+SinOsc.ar(78.midicps*(432/440) +SinOsc.ar(78.midicps*(432/440)/10,mul:78.midicps*(432/440)/10*5),mul:66.midicps*(432/440)*74 )),MouseY.kr(450,9600),0.93))!2*0.1}.play)
+							+SinOsc.ar(78.midicps*(432/440) +SinOsc.ar(78.midicps*(432/440)/10,mul:78.midicps*(432/440)/10*5),mul:66.midicps*(432/440)*74 )),MouseY.kr(450,9600),0.93))!2*0.6}.play)
+
+
+
+
+
+				({
+				FreeVerb.ar(
+				BLowPass4.ar(
+				SinOsc.ar(
+					88.midicps*(432/440)
+
+							+SinOsc.ar(78.midicps*(432/440) +SinOsc.ar(78.midicps*(432/440)/10,mul:78.midicps*(432/440)/10*5),mul:66.midicps*(432/440)*74 )),MouseY.kr(450,9600),0.93))!2*0.6}.play)
+
 
 
 

@@ -27,9 +27,17 @@ f = { |n=14, min=0, max=11| (min..max).scramble.keep(n) };
 ~bufSnoopy.play
 
 (
+
+
+~percFlu=Buffer.read(s,"/Users/davidmignot/Music/SuperCollider Recordings/F#/1/percFlush.aiff")
+~cyBlock=Buffer.read(s, "/Users/davidmignot/Music/SuperCollider Recordings/F#/1/cyBlo.aiff");
+~flicky=Buffer.read(s,	"/Users/davidmignot/Music/SuperCollider Recordings/F#/1/flicky.aiff");
+
+
+
 	~peComp = Buffer.read(s, "/Users/davidmignot/Music/SuperCollider Recordings/F#/1/percoComp.aiff");
 
-
+~greDa=Buffer.read(s,			"/Users/davidmignot/Music/SuperCollider Recordings/F#/1/greDa.aiff");
 	~vari = Buffer.read(s,"/Users/davidmignot/Music/SuperCollider Recordings/F#/1/variet.aiff");
 
 ~trancy=Buffer.read(s,"/Users/davidmignot/Music/SuperCollider Recordings/F#/1/trancy.aiff");
