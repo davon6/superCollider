@@ -11072,15 +11072,22 @@ p.set(\spread,0,\center,0,\dlt1,0.07,\dlt2,0.06,\decT,t.beatDur, \mxDel,8);
 							+SinOsc.ar(78.midicps*(432/440) +SinOsc.ar(78.midicps*(432/440)/10,mul:78.midicps*(432/440)/10*5),mul:66.midicps*(432/440)*74 )),8400,1,(-7)))}.play);
 
 		c= Synth(\filterGb,[\in,~record2, \out,~record3,\qf2,0.1,\which,2],a,\addAfter);
-u.free
+/*u.free*/
 u=Synth(\EQHP96,[\in,~record3,\out,~record1,\vol,0.7],c,\addAfter);
 u.set(\val4,16200, \shelf, 1.2,\gain4,(-15),\vol,0.2);
 
 i=Synth(\reverb,[\in,~record1,\out,~record4],u,\addAfter);
 i.set(\mix,0.1,\room,0.6,\damp,0.7);
 
-p=Synth(\stereoO, [\in,~record4 , \out,0/*~hiCom*/], i,\addAfter);
+p=Synth(\stereoO, [\in,~record4 , \out,~record5], i,\addAfter);
 p.set(\spread,0,\center,0,\dlt1,0.4,\dlt2,0.38,\decT,t.beatDur, \mxDel,8);
+
+				~grp=Group.after(p);
+Prand([
+					Pbind(\instrument,\gateS, \dur,Pseq([1/8],8),\type,Pseq([\note,/*\rest*/],inf),\in,~record5, \out,0,\group,~grp ),
+
+					/*	Pbind(\instrument,\gateS,\dur,Pseq([1/1],1),\in,~record5, \out,0,\group,~grp ),	*/
+			],inf).play(t,quant:1)
 
 
 	s.record(path:"/Users/davidmignot/Music/SuperCollider Recordings/F#/1/leadHP2.aiff",numChannels:2);
@@ -11110,8 +11117,74 @@ p.set(\spread,1,\center,0,\dlt1,0.001,\dlt2,0.003,\decT,t.beatDur/4, \mxDel,8);
 
 				// s.record(path:"/Users/davidmignot/Music/SuperCollider Recordings/F#/1/.aiff",numChannels:2);
 
+			u=Synth(\EQHP96,[\in,~record3,\out,~record1,\vol,0.7]/*,a,\addAfter*/);
+u.set(\val5,3500, \shelf2, 1.2,\gain5,(-18),\vol,1.7);
+
+i=Synth(\reverb,[\in,~record1,\out,~record4],u,\addAfter);
+i.set(\mix,0.2,\room,0.1,\damp,0.7);
+
+p=Synth(\stereoO, [\in,~record4 , \out,0/*~hiCom*/], i,\addAfter);
+p.set(\spread,1,\center,0,\dlt1,0.1,\dlt2,0.06,\decT,t.beatDur/4, \mxDel,8);
 
 
+
+
+
+
+		//for start
+			Routine({
+					s.record(path:"/Users/davidmignot/Music/SuperCollider Recordings/F#/1/percFlush.aiff",numChannels:2,duration:t.beatDur*8);
+
+	a= ({Out.ar(~record3,BLowPass4.ar( PlayBuf.ar(1,~perc,Line.kr(3,0.2,t.beatDur),~perc.numFrames/16*(14.rand)),
+						SinOsc.kr((-14).midicps*(432/440),4.6).range(130,20000)))}.play(target:u,addAction:\addBefore));
+
+
+
+
+
+				}).play;
+
+
+
+
+	}).play
+~percFlu.play
+			~percFlu=Buffer.read(s,"/Users/davidmignot/Music/SuperCollider Recordings/F#/1/percFlush.aiff")
+
+
+				({BLowPass4.ar( PlayBuf.ar(1,~perc,Line.kr(3,0.2,t.beatDur),~perc.numFrames/16*(14.rand)),
+		SinOsc.kr((-14).midicps*(432/440),4.6).range(190,20000))
+	}.play);
+~gateGrp =Group.new
+			Pseq([
+		Pseq([
+
+			Pbind(\instrument,\playBufS, \buf,	~percFlu,\dur,Pseq([2.5/1],1)),
+			Pbind(\instrument,\rien,\dur,Pseq([5.5/1],1))
+		],2),
+
+		Pbind(\instrument,\playBufS, \buf,	~percFlu,\dur,Pseq([4/1],1),\start,0),
+			Ppar([
+
+			Pbind(\instrument,\playBufS, \buf,	~lHP2,\dur,Pseq([4/1],1),\start,32600,\vlDec,0.15,
+					\vlSub,Pkey(\vlDec),\vlSub2,Pkey(\vlDec),\out,~gateB1),
+				Pbind(\instrument,\gateS,\dur,Pseq([ Pseq([2.125/1 ],1),Pseq([1/8 ],7),Pseq([ 1/1],1)],1),\in,~gateB1, \out,0,\type,Pseq([\note,Pseq([\rest,\note],8)],1),\group,~gateGrp),
+
+		],1)	],1).play(t,quant:1)
+
+
+		Pbind(\instrument,\playBufS, \buf,	~perc,\dur,Pseq([4/1],1),\start,0),
+
+		Pbind(\instrument,\playBufS, \buf,	~lHP2,\dur,Pseq([4/1],1),\start,7200)
+		.play(t,quant:1)
 
 ({BiPanB2.ar( PlayBuf.ar(1,~var2,loop: 1),MouseX.kr(80,6700),0.6)}.play)
+
+
+		~lBP.play
+			~lBP=Buffer.read(s,"/Users/davidmignot/Music/SuperCollider Recordings/F#/1/leadBP.aiff");
+~lHP=Buffer.read(s,"/Users/davidmignot/Music/SuperCollider Recordings/F#/1/leadHP.aiff");
+~lHP2=Buffer.read(s,"/Users/davidmignot/Music/SuperCollider Recordings/F#/1/leadHP2.aiff");
+~lLP=Buffer.read(s,"/Users/davidmignot/Music/SuperCollider Recordings/F#/1/leadLP.aiff");
+
 			
