@@ -1,3 +1,8 @@
+//voute premiere bass shape
+//mouseX on qf2 for powering final dump
+
+
+
 (
 Server.killAll;
 Pdef.all.do(_.clear);
@@ -171,7 +176,10 @@ s.sync;
 	~bigRiToDisto=Bus.audio(s,1);~bigRiToEnv=Bus.audio(s,1);~bigRiToEq=Bus.audio(s,1);~bigRiToRev=Bus.audio(s,1);~bigRiToComp=Bus.audio(s,1);~bigRiToLimit=Bus.audio(s,1);~bigRiToStereo=Bus.audio(s,1);
 
 
-	~record1=Bus.audio(s,1);~record2=Bus.audio(s,1);~record3=Bus.audio(s,1);
+	~record1=Bus.audio(s,1);~record2=Bus.audio(s,1);~record3=Bus.audio(s,1);~record4=Bus.audio(s,1);
+
+
+		~record1S=Bus.audio(s,2);~record2S=Bus.audio(s,2);~record3S=Bus.audio(s,2);
 
 	~k2G=Bus.audio(s,2);~comFuzz2=Bus.audio(s,1);~limitBass2=Bus.audio(s,1);~k2ToPan=Bus.audio(s,1);
 
@@ -406,12 +414,12 @@ s.sync;
 		trig/*Dust.kr(4.0)*/,startPos: start,loop: 1/*,doneAction: dA*/)/** EnvGen.kr(Env([0,1,1,0],[0,dur,0]))*/);}).add;
 
 
-	SynthDef(\shap,{|in, out, vl1=(-9800), vl2=0,vl3=0, dA1 =0,crv=6|
+	SynthDef(\shap,{|in, out, vl1=(-3000), vl2=0,vl3=0, dA1 =0,crv=6|
 	var halfBeat, shap;
 
-	halfBeat = t.beatDur * 0.5;
 
-		shap = EnvGen.kr(Env([vl1,vl2],[halfBeat,halfBeat],crv),timeScale:  t.beatDur,doneAction:dA1);
+
+		shap = EnvGen.kr(Env([vl1,vl2],[0.5,0.5],crv),timeScale:  t.beatDur,doneAction:dA1);
 
 	Out.kr(out, shap);
 
@@ -503,7 +511,7 @@ s.sync;
 
 
 
-SynthDef(\kick, {
+/*SynthDef(\kick, {
 	arg amp=0.2,out=0;
 	var sig, env, envF;
 
@@ -528,7 +536,41 @@ EnvGen.ar(
 	// sig = Pan2.ar(sig);
 	Out.ar(out, sig);
 
+}).add;*/
+
+SynthDef(\kick, {
+	arg amp=0.2,out=0;
+	var sig, env, envF;
+
+	envF = EnvGen.ar(
+		Env(
+				[119.midicps*(432/440),66.midicps*(432/440),47.midicps*(432/440),6.midicps*(432/440),0,0],
+			[0.004,t.beatDur/32,t.beatDur*0.45,0],
+			[-7.6,-2,-2.4]
+		)
+	);
+
+	env =
+
+EnvGen.ar(
+		Env([ 0.019 , 0.085,   0.01 ,  0.242,0.25,0],
+			[ 0.00602 , 0.0016,   0.008  , t.beatDur*0.25 , t.beatDur*0.1  ],[0.66,1.5,-1.6,1.2,8]),doneAction:2);
+	//-2.6 can be zero
+
+	sig = SinOsc.ar(envF, mul: env);
+
+	sig = sig * amp.dbamp  ;
+	// sig = Pan2.ar(sig);
+	Out.ar(out, sig);
+
 }).add;
+
+
+
+
+
+
+
 
 
 
@@ -828,11 +870,11 @@ freq         )* EnvGen.kr(Env([0,vl,vl,0],[0.055,dur-0.055,0],4),timeScale: tS,d
 
 		sig = In.ar(in,1);
 
-		lp = BLowPass4.ar(sig , freqFil+ In.kr(busMod, 1) ,qf +In.kr(rqLPF));
+		lp = BLowPass4.ar(sig , freqFil+ In.kr(busMod, 1) ,qf );
 
 		bp = BBandPass.ar(sig,freqFil+ In.kr(busMod, 1)  ,qf2);
 
-		hp = BHiPass4.ar(sig, freqFil+ In.kr(busMod, 1), qf2+In.kr(bus7, 1));
+		hp = BHiPass4.ar(sig, freqFil+ In.kr(busMod, 1), qf2);
 
 		sig = SelectX.ar(which, [lp, bp,hp,sig]);
 
@@ -845,11 +887,31 @@ freq         )* EnvGen.kr(Env([0,vl,vl,0],[0.055,dur-0.055,0],4),timeScale: tS,d
 
 		sig = In.ar(in,1);
 
-		lp = BLowPass4.ar(sig , freqFil+ In.kr(busMod, 1)+ MouseX.kr(40,22000) ,qf );
+		lp = BLowPass4.ar(sig , freqFil+ In.kr(busMod, 1)+ MouseX.kr(40,18000) ,qf );
 
 		bp = BBandPass.ar(sig,freqFil+ In.kr(busMod, 1)  + MouseX.kr(40,12000) ,qf2 );
 
-		hp = BHiPass4.ar(sig, freqFil+ In.kr(busMod, 1)+ MouseX.kr(40,22000), qf2 );
+		hp = BHiPass4.ar(sig, freqFil+ In.kr(busMod, 1)+ MouseX.kr(40,18000), qf2 );
+
+		notch = Notch.ar(sig, freqFil+ MouseX.kr(40,12000) ,qf );
+
+		sig = SelectX.ar(which, [lp, bp,hp,notch]);
+
+		Out.ar(out, sig);
+	}).add;
+
+
+		SynthDef(\filterGb,{|out=0, in, busMod, bus7, which, factor3=1, rqLPF=0.5  freqFil=10, qf =0.5, qf2=0.5 |
+
+		var lp, bp, hp, sig,notch;
+
+		sig = In.ar(in,1);
+
+		lp = BLowPass4.ar(sig , freqFil+ In.kr(busMod, 1)+ MouseX.kr(40,20000) ,qf );
+
+		bp = BBandPass.ar(sig,freqFil+ In.kr(busMod, 1)  + MouseX.kr(40,12000) ,qf2 );
+
+		hp = BHiPass4.ar(sig, freqFil+ In.kr(busMod, 1)+ MouseX.kr(40,18000), qf2 + MouseY.kr(0.3,0.8) );
 
 		notch = Notch.ar(sig, freqFil+ MouseX.kr(40,12000) ,qf );
 
@@ -865,11 +927,11 @@ freq         )* EnvGen.kr(Env([0,vl,vl,0],[0.055,dur-0.055,0],4),timeScale: tS,d
 
 		sig = In.ar(in,1);
 
-		lp = BLowPass4.ar(sig , freqFil+ In.kr(busMod, 1)+ MouseX.kr(40,22000) ,qf );
+		lp = BLowPass4.ar(sig , freqFil+ In.kr(busMod, 1)+ MouseX.kr(40,18000) ,qf );
 
 		bp = BBandPass.ar(sig,freqFil+ In.kr(busMod, 1)  + MouseX.kr(40,12000) ,qf2 );
 
-		hp = BHiPass4.ar(sig, freqFil+ In.kr(busMod, 1)+ MouseX.kr(40,22000), qf2 );
+		hp = BHiPass4.ar(sig, freqFil+ In.kr(busMod, 1)+ MouseX.kr(40,18000), qf2 );
 
 		notch = Notch.ar(sig, freqFil+ MouseX.kr(40,12000) ,qf );
 
@@ -1917,7 +1979,7 @@ SynthDef(\sequ,{|value, dur, in=0, out=0, vlAtk=0, vlDec=1,vlSub=1,vlSub2=1, vlR
 
 s.sync;
 
-	~kick =	Pbind(\instrument, \kick,\dur, Pseq([1/1],1),\amp,(-10),\out,0);
+	~kick =	Pbind(\instrument, \kick,\dur, Pseq([1/2],2),\amp,(-10),\out,0,\type,Pseq([\note,\rest],inf));
 
 	~bassShap = Pbind(\instrument, \shap, \dur,Pseq([1/1],1),\dA1,2,\out,~bassShapB, \tS, 0.39550810372374);
 
@@ -2108,7 +2170,8 @@ Routine({
 
 Ppar([
 	Pseq([Pbindf(~kick,\out,~kbus)],inf),
-Ppar([
+		Pbind(\instrument, \shap, \dur,Pseq([1/1],inf),\dA1,2,\out,~bassShapB, \crv, (2)),
+
 
 			Pseq([Pbindf(~kick,\out,~limitKick)],inf),
 
@@ -2117,12 +2180,14 @@ Ppar([
 
 
 
-			Pbind(\instrument, \playBuf, \buf, ~b4, \dur, Pseq([1/4],inf),\amp,1,\type,Pseq([\rest,\note,\note,\note],inf), \decT,	Pseq([0,0.82,0.84,0.86 ],inf),\start,0,\out,~bassFi)
+		Pbind(\instrument, \playBuf, \buf, ~b4, \dur, Pseq([1/4],inf),\amp,1,\type,Pseq([\rest,\note,\note,\note],inf), \decT,/*0.99  */  Pseq([1,0.92,0.94,0.96 ],inf)
 
-],1),
+			/*Pseq([1,0.9,0.94,0.98 ],inf)*/,\start,0,\out,~bassFi,\vlDec,Pseq([0,0.612,1,1],inf),/*\vlSub,Pkey(\vlDec),\vlSub2,Pkey(\vlDec)*/\decC,5),
 
 
-		Pbind(\instrument, \shap, \dur,Pseq([1/1],inf),\dA1,2,\out,~bassShapB, \crv, (-6),\tS, 0.39550810372374)
+
+
+
 
 
 
@@ -2131,16 +2196,15 @@ Ppar([
 ],1).play(t);
 
 
-
-	~bassFilter= Synth(\filter,[\in, ~bassFi,\out,~comFuzz,\freqFil,4000,\qf,0.8,\which,0,\busMod,~bassShapB],~filterGrp);
+	~bassFilter= Synth(\filter,[\in, ~bassFi,\out,~comFuzz,\freqFil,4000,\qf,1,\which,0,\busMod,~bassShapB],~filterGrp);
 
 
 ~comp=Synth(\comp, [\ctrl, ~kbus ],~compGrp);
-~comp.set(\thr,0.2 ,\sB, 1.036,\sA, 1/2,\atk ,t.beatDur/16, \rel ,t.beatDur/4, \gain,1,\in, ~comFuzz,\out,~limitBass);
+~comp.set(\thr,0.2 ,\sB, 1.037,\sA, 1/2,\atk ,t.beatDur/16, \rel ,t.beatDur/4, \gain,1,\in, ~comFuzz,\out,~limitBass);
 ~limK=Synth(\limitertoMixer,[\c45,1,\in, ~limitKick, \gain,1,\out,~kToPan],~limitGrp);
-~limK.set(\gain,154.7);
-	~limB=Synth(\limitertoMixer,[\c46,1,\in, ~limitBass, \gain,68,\out,~kToPan],~limitGrp);
-	~limB.set(\gain,237);
+~limK.set(\gain,154.9);
+~limB=Synth(\limitertoMixer,[\c46,1,\in, ~limitBass, \gain,68,\out,~kToPan],~limitGrp);
+	~limB.set(\gain,212);
 
 
 	~kbPan2 = Synth(\pan2,[ \in,~kToPan,\out,0],~stereoGrp);
@@ -2151,6 +2215,7 @@ Ppar([
 }).play(t,quant:1))
 
 
+Pseq([Pbindf(~kick,\out,~kbus)],inf).play(t,quant:1)
 ~limK.free;
 ~limB.free;
 ~kb1.plot
@@ -2201,11 +2266,11 @@ Ppar([
 		\dur, Pseq([4/1],1),\lpf,100,
 			\freq, 30.midicps*(432/440),
 		\atk, 0,
-		\rel, t.beatDur/2 *0.9988,
-		\rel2, t.beatDur/4 * 0.0012,
+		\rel, t.beatDur *0.9988,
+		\rel2, t.beatDur/16 * 0.0012,
 
 		\vlDecFx,102.midicps*(432/440),
-		\atkcrv, -2,
+		\atkcrv, -4,
 		\relcrv, -2,\relcrv2, -9, \relcrv3, -6
 		,\amp,(-6/*-1*/)/*(-13)*/,\out,~bassEq
 	),
@@ -2217,12 +2282,12 @@ Pbind(\instrument ,\EQHP2LP ,\in,~bassEq, \out,0, \frq, 18.midicps*(432/440),\vo
 				\val7,66.midicps*(432/440),\quant7,1.8 ,\gain7,(-8),
 			\val,78.midicps*(432/440), \quant,1.96, \gain,(-21),
 \val2,90.midicps*(432/440), \quant2,2.2, \gain2,(-9),
-		\val3,102.midicps*(432/440), \quant3,2.1, \gain3,(-14),
+		\val3,102.midicps*(432/440), \quant3,2.1, \gain3,(-12.6),
 
 
 
 //that one
-	\val5,54.midicps*(432/440), \quant5,2.4, \gain5,(-5),\group,~eqGrp,\dur, inf)
+	\val5,54.midicps*(432/440), \quant5,2.4, \gain5,(-9.2),\group,~eqGrp,\dur, inf)
 
 
 

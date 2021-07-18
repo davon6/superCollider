@@ -29,25 +29,29 @@ f = { |n=14, min=0, max=11| (min..max).scramble.keep(n) };
 (
 
 
-~percFlu=Buffer.read(s,"/Users/davidmignot/Music/SuperCollider Recordings/F#/1/percFlush.aiff")
+~percFlu=Buffer.read(s,"/Users/davidmignot/Music/SuperCollider Recordings/F#/1/percFlush.aiff");
 ~cyBlock=Buffer.read(s, "/Users/davidmignot/Music/SuperCollider Recordings/F#/1/cyBlo.aiff");
 ~flicky=Buffer.read(s,	"/Users/davidmignot/Music/SuperCollider Recordings/F#/1/flicky.aiff");
 
 
 
-	~peComp = Buffer.read(s, "/Users/davidmignot/Music/SuperCollider Recordings/F#/1/percoComp.aiff");
+~peComp = Buffer.read(s, "/Users/davidmignot/Music/SuperCollider Recordings/F#/1/percoComp.aiff");
 
-~greDa=Buffer.read(s,			"/Users/davidmignot/Music/SuperCollider Recordings/F#/1/greDa.aiff");
-	~vari = Buffer.read(s,"/Users/davidmignot/Music/SuperCollider Recordings/F#/1/variet.aiff");
+~greDa=Buffer.read(s,"/Users/davidmignot/Music/SuperCollider Recordings/F#/1/greDa.aiff");
+~vari = Buffer.read(s,"/Users/davidmignot/Music/SuperCollider Recordings/F#/1/variet.aiff");
 
 ~trancy=Buffer.read(s,"/Users/davidmignot/Music/SuperCollider Recordings/F#/1/trancy.aiff");
 ~landing=Buffer.read(s,"/Users/davidmignot/Music/SuperCollider Recordings/F#/1/landing.aiff");
 ~kbLol=Buffer.read(s,"/Users/davidmignot/Music/SuperCollider Recordings//F#/1/kbLol.aiff");
+~bgIndu=Buffer.read(s,"/Users/davidmignot/Music/SuperCollider Recordings/F#/1/bgIndu.aiff");
+~bug=Buffer.read(s,"/Users/davidmignot/Music/SuperCollider Recordings/F#/1/bug.aiff");
+
 	~perc=Buffer.read(s,	"/Users/davidmignot/Music/SuperCollider Recordings/F#/1/funkPerc.aiff");
 
 ~beam=Buffer.read(s,"/Users/davidmignot/Music/SuperCollider Recordings/F#/1/beam.aiff");
-
 ~zipSeq=Buffer.read(s,"/Users/davidmignot/Music/SuperCollider Recordings/F#/1/zipSeq.aiff");
+
+~zippy=Buffer.read(s,"/Users/davidmignot/Music/SuperCollider Recordings/F#/1/zipSLi.aiff");
 
 ~bgRev=Buffer.read(s,"/Users/davidmignot/Music/SuperCollider Recordings/F#/1/RevBg.aiff");
 ~larme=Buffer.read(s,"/Users/davidmignot/Music/SuperCollider Recordings/F#/1/larme.aiff");
@@ -405,9 +409,11 @@ Ppar([
 
 			Pseq([Pbindf(~kick,\out,~limitKick)],inf),
 
-		Pbind(\instrument, \playBuf, \buf, ~b4, \dur, Pseq([1/4],inf),\amp,1,\type,Pseq([\rest,\note,\note,\note],inf),   \decT,	Pseq([0,0.82,0.84,0.86 ],inf),\start,0,\out,~bassFi),
+	/*	Pbind(\instrument, \playBuf, \buf, ~b4, \dur, Pseq([1/4],inf),\amp,1,\type,Pseq([\rest,\note,\note,\note],inf),   \decT,	Pseq([0,0.82,0.84,0.86 ],inf),\start,0,\out,~bassFi),*/
 
 				/*Pbind(\instrument, \playBuf, \buf, ~b4, \dur, Pseq([1/4],inf),\amp,1,\type,Pseq([\rest,\note,\note,\note],inf), \decT,	Pseq([0,0.8,0.86,0.92 ],inf),\start,0,\out,~bassFi)*/
+
+			Pbind(\instrument, \playBuf, \buf, ~b4, \dur, Pseq([1/4],inf),\amp,1,\type,Pseq([\rest,\note,\note,\note],inf), \decT,0.99 	 Pseq([1,0.92,0.94,0.96 ],inf),\start,0,\out,~bassFi,\vlDec,Pseq([0,0.612,1,1],inf),/*\vlSub,Pkey(\vlDec),\vlSub2,Pkey(\vlDec)*/\decC,5),
 
 ],1),
 

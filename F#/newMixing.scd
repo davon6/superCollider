@@ -89,12 +89,15 @@
 
 
 ~comp=Synth(\comp, [\ctrl, ~kbus ],~compGrp);
-~comp.set(\thr,0.2 ,\sB, 1.043,\sA, 1/2,\atk ,0.0242, \rel ,0.0968, \gain,1,\in, ~comFuzz,\out,~limitBass);
+~comp.set(\thr,0.2 ,\sB, 1.037,\sA, 1/2,\atk ,t.beatDur/16, \rel ,t.beatDur/4, \gain,1,\in, ~comFuzz,\out,~limitBass);
 
 ~limK=Synth(\limitertoMixer,[\c45,1,\in, ~limitKick, \gain,1,\out,~kToPan],~limitGrp);
-~limK.set(\gain,154.7);
+~limK.set(\gain,154.9);
 ~limB=Synth(\limitertoMixer,[\c46,1,\in, ~limitBass, \gain,68,\out,~kToPan],~limitGrp);
-~limB.set(\gain,254);
+	~limB.set(\gain,212);
+
+
+
 
 ~kbPan2 = Synth(\pan2,[ \in,~kToPan,\out,~toKbGate],~stereoGrp);
 
@@ -109,16 +112,16 @@
 
 //PERCUSSIONS
 // ~eq31.free
-/*Pbind(\instrument, \playBuf,  \tS,  0.39550810372374,\buf,~cymb,\type,Pseq([Pseq([Pseq(~rythm1,1),Pseq(~rythm2,1),],4),Pseq([Pseq(~rythm3,1),Pseq(~rythm4,1),],4),Pseq(~rythmL, 224 /*32*/),Pseq(~rythmL, 256),Pseq([\rest],256) ],inf),\dur,Pseq([1/4],inf ),\stereoL, 0.00555,\out,    ~cymbalEq).play(t,quant:1)*/
+/*Pbind(\instrument, \playBuf,  \tS,  0.39550810372374,\buf,~cymb,\type,Pseq(~rythmL, inf),\dur,Pseq([1/4],inf ),\stereoL, 0.00555,\out,    ~cymbalEq).play(t,quant:1)*/
 
 ~eq31=Synth(\EQHP96, [\frq, 3000, \in, ~cymbalEq,\out , ~comBusCymb, \vol,4],~eqGrp);
-~eq31.set(\val, 5000,\quant, 1, \gain,(-15),\val2,0,\quant2,0, \gain2,0, \val3,0,\quant3,0, \gain3,0,\val4,0,\shelf,0, \gain4,0,\out , ~comBusCymb);
+~eq31.set(\val, 4100,\quant, 1.4, \gain,(-10),\val2,0,\quant2,0, \gain2,0, \val3,0,\quant3,0, \gain3,0,\val4,0,\shelf,0, \gain4,0,\out , ~comBusCymb);
 ~comp31=Synth(\comp,[\ctrl, ~kbus,],~compGrp);
 ~comp31.set(\thr,0.3 ,\sB, 1.05,\sA, 1/2,\atk ,0.0242, \rel ,0.0968,\gain,3.5,\in, ~comBusCymb , \out,~limitCymb);
 ~mix31= Synth(\limitertoMixer,[\c50,1,\in, ~limitCymb,\gain,20,\out,~stereoCymb],~limitGrp);
- ~mix31.set(\gain,6,\in, ~limitCymb,\out,~stereoCymb);
-~sterCymb=Synth(\stereoO,[\in,~stereoCymb,\out,~comFuzz22],~stereoGrp);
-~sterCymb.set(\spread,1,\center,1,\dlt1,0.4045,\dlt2,0.4,\decT,0.0242, \mxDel,1);
+ ~mix31.set(\gain,4.1,\in, ~limitCymb,\out,~stereoCymb);
+~sterCymb=Synth(\stereoO,[\in,~stereoCymb,\out,0/*~comFuzz22*/],~stereoGrp);
+~sterCymb.set(\spread,1,\center,1,\dlt1,0.23,\dlt2,0.2,\decT,t.beatDur/16, \mxDel,1);
 
 //group name chelou for dynaEq
 
@@ -142,11 +145,11 @@
 
 // Synth(\EQHP96, [\frq, 3000 ,\in, ~hatEq,  \out,0,\vol,0.5,\ctrl,~fusible2 ,\valD,3100, \quantD,8],~dynaEq);
 
-~eq33.set(\out , ~stereoHat,\vol,5);
+~eq33.set(\out , ~stereoHat,\vol,2.594);
 
 
 ~sterHat=Synth(\stereoO,[\in,~stereoHat,\out,~comFuzz22],~stereoGr7);
-~sterHat.set(\spread,0,\center,0,\dlt1,0.01,\dlt2,0.5,\decT,0.0121, \mxDel,1,\out,~comFuzz22);
+~sterHat.set(\spread,0,\center,0,\dlt1,0.21,\dlt2,0.1,\decT,t.beatDur/16, \mxDel,1,\out,0);
 
 
 ~percuComp =Synth(\comp10, [\ctrl,~snBus ,   \in, ~comFuzz22 ,\out,~toKbGate],~compGrp8);
@@ -159,7 +162,7 @@ Pbind(\instrument, \playBuf,  \tS,  0.39550810372374,\buf,~snare,\type, Pseq([\r
 
 //~eq34.free
 ~eq34= Synth(\EQHP96, [\frq, 220 ],~eqGrp);
-~eq34.set(\in, ~snareEQ, \val, 400, \quant, 8, \gain, (-10), \out , ~snareComp,\frq, 120,);
+~eq34.set(\in, ~snareEQ, \val, 6400, \quant, 8, \gain, (-8), \out , ~snareComp,\frq, 140,\val5,870,\shelf2,1.1,\gain5,(-9));
 
 
 ~comp34=Synth(\comp, [\ctrl,~kbus ],~compGrp);
@@ -167,8 +170,8 @@ Pbind(\instrument, \playBuf,  \tS,  0.39550810372374,\buf,~snare,\type, Pseq([\r
 
 
 ~mix34= Synth(\limitertoMixer,[\c34,1,\in, ~snareLimit,\gain,40,\out,~toPan2],~limitGrp);
-~mix34.set(\gain,149.4);
-~pan34=Synth( \pan2,[\in, ~toPan2,\out, ~toKbGate], ~stereoGrp);
+~mix34.set(\gain,20.8);
+~pan34=Synth( \pan2,[\in, ~toPan2,\out, 0/*~toKbGate*/], ~stereoGrp);
 
 
 
