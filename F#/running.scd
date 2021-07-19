@@ -1,8 +1,4 @@
-//voute premiere bass shape
-//mouseX on qf2 for powering final dump
-
-
-
+//rez sur \filterGS
 (
 Server.killAll;
 Pdef.all.do(_.clear);
@@ -191,6 +187,9 @@ s.sync;
 				~fmXB =Bus.audio(s,1);
 
 	~bgTempBus=Bus.audio(s,1);
+
+
+	~compBud1=Bus.audio(s,2);~compBud2=Bus.audio(s,2);
 
 
 
@@ -949,11 +948,13 @@ freq         )* EnvGen.kr(Env([0,vl,vl,0],[0.055,dur-0.055,0],4),timeScale: tS,d
 
 		sig = In.ar(in,2);
 
-		lp = BLowPass4.ar(sig , freqFil+ In.kr(busMod, 1)+ MouseX.kr(40,22000) ,qf +In.kr(rqLPF));
+		// lp = Resonz.ar(sig , freqFil+ In.kr(busMod, 1)+ MouseX.kr(270,3500) ,qf +In.kr(rqLPF));
+
+		lp = BLowPass4.ar(sig , freqFil+ In.kr(busMod, 1)+ MouseX.kr(40,18000) ,qf +In.kr(rqLPF));
 
 		bp = BBandPass.ar(sig,freqFil+ In.kr(busMod, 1)  + MouseX.kr(40,12000) ,qf2 );
 
-		hp = BHiPass4.ar(sig, freqFil+ In.kr(busMod, 1)+ MouseX.kr(40,22000), qf2 +In.kr(bus7, 1));
+		hp = BHiPass4.ar(sig, freqFil+ In.kr(busMod, 1)+ MouseX.kr(40,18000), qf2 +In.kr(bus7, 1));
 
 		sig = SelectX.ar(which, [lp, bp,hp,sig]);
 
@@ -1200,10 +1201,22 @@ timeScale:  t.beatDur,	doneAction:2);
 	}).add;
 
 
-	SynthDef(\pingDS, { |out = 0, bufnum = 0, dur, feedback = 0.5, delayTime = 0.3, in  |
-    var left =	In.ar(in,2);
 
-    Out.ar(out ,PingPong.ar(bufnum, left, delayTime, feedback, 1))
+	/*SynthDef(\pingDMod, { |out = 0, bufnum = 0, dur, feedback = 0.5, delayTime = 0.3, in /*stereoL =0.00555, stereoR =0, dec=0.5, amp =1*/ |
+    var left;
+
+		left =	In.ar(in,1);
+
+		Out.ar(out ,PingPong.ar(bufnum, [left,left], MouseX.kr(t.beatDur, t.beatDur/16), MouseY.kr(0.8,0.1), 1))
+	}).add;*/
+
+
+
+
+	SynthDef(\pingDS, { |out = 0, bufnum = 0, dur, feedback = 0.5, delayTime = 0.3, in  |
+    var left =	Mix.ar(In.ar(in,2));
+
+		Out.ar(out ,PingPong.ar(bufnum, [left,left], delayTime, feedback, 1))
 	}).add;
 
 
