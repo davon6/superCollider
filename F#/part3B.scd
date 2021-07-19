@@ -11205,41 +11205,49 @@ Pseq([
 
 
 
+Ppar([
+	Pseq([
+				Pbind(\instrument,\playBufS, \buf,	~percFlu,\dur,Pseq([2/1],1),\out,0),
+				Pbind(\instrument,\rien,\dur,Pseq([1.75/1],1)),
+				Pbind(\instrument,\playBufS,\buf,~leadBP2,\dur,Pseq([4.25/1],1),\start,9670,\decT,0.65,\atkT,0.25,\atkC,6,\relT,0.1,\relC,(-3.5),\out,0,\vlDec,0.4,\vlSub,Pkey(\vlDec),\vlSub2,Pkey(\vlDec))],1),
 
-		Ppar([
-		Pbind(\instrument,\playBufS, \buf,	~percFlu,\dur,Pseq([2/1],1)),
-
-Pbind(\instrument,\playBufS, \buf,	~trancy4,\dur,Pseq([16/1],1),\decT,0.4,\subT,0.3,\relT,0.3,\vlDec,0.7,\vlSub,0.4,\vlSub2,0.4,\relC,(-6))
+				Pseq([
+				Pbind(\instrument,\playBufS, \buf,	~trancy4,\dur,Pseq([12/1],1),\decT,0.4,\subT,0.3,\relT,0.3,\vlDec,0.7,\vlSub,0.4,\vlSub2,0.4,\relC,(-6),\out,0)],1)
 
 ],1)],1).play(t,quant:1)
 
 
 
 
-
+~compGrp=Group.new;
 
 
 Ppar([
 	Pseq([
-				Pbind(\instrument,\playBufS, \buf,	~percFlu,\dur,Pseq([2/1],1)),
+				Pbind(\instrument,\playBufS, \buf,	~percFlu,\dur,Pseq([2/1],1),\out,0),
 				Pbind(\instrument,\rien,\dur,Pseq([1.75/1],1)),
-				Pbind(\instrument,\playBufS,\buf,~leadBP2,\dur,Pseq([4.25/1],1),\start,9670,\decT,0.65,\atkT,0.25,\atkC,6,\relT,0.1,\relC,(-3.5))],1),
+				Pbind(\instrument,\playBufS,\buf,~leadBP2,\dur,Pseq([4.25/1],1),\start,9670,\decT,0.65,\atkT,0.25,\atkC,6,\relT,0.1,\relC,(-3.5),\out,0,\vlDec,0.4,\vlSub,Pkey(\vlDec),\vlSub2,Pkey(\vlDec))],1),
 
 				Pseq([
-				Pbind(\instrument,\playBufS, \buf,	~trancy4,\dur,Pseq([16/1],1),\decT,0.4,\subT,0.3,\relT,0.3,\vlDec,0.7,\vlSub,0.4,\vlSub2,0.4,\relC,(-6))],1)
+				Pbind(\instrument,\playBufS, \buf,	~trancy4,\dur,Pseq([12/1],1),\decT,0.4,\subT,0.3,\relT,0.3,\vlDec,0.7,\vlSub,0.4,\vlSub2,0.4,\relC,(-6),\out,0)],1)
 
 ],1).play(t,quant:1)
 
 
 
-			~compu2=Synth(\comp, [\in,~compBud1, \ctrl, ,\out,~leadExpPan2],~compGrp2);
+			~compu3=Synth(\compS, [\in,~compBud1, \ctrl,~compBud2 ,\out,0],~compGrp);
 
-// ~compu2.set(\thr, 0.1, \sB, 1, \sA ,-30, \atk,   t.beatDur/16, \rel,   t.beatDur/4);
+		~compu3.set(\thr, 0.1, \sB, 1, \sA ,-30, \atk,   t.beatDur/16, \rel,   t.beatDur/4);
 
 
-		~compu2=Synth(\comp, [\in,~compBud2, \ctrl, ,\out,~leadExpPan2],~compGrp2);
+		~compu4=Synth(\compS, [\in,~compBud2, \ctrl,~compBud1 ,\out,0],~compGrp);
 
-// ~compu2.set(\thr, 0.1, \sB, 1, \sA ,-30, \atk,   t.beatDur/16, \rel,   t.beatDur/4);
+		~compu4.set(\thr, 0.1, \sB, 1, \sA ,-30, \atk,   t.beatDur/16, \rel,   t.beatDur/4);
+
+
+		~compu5=Synth(\compS, [\in,~compBud1, \ctrl,~compBud1 ,\out,0],~compGrp);
+
+		~compu5.set(\thr, 0.1, \sB, 1, \sA ,-30, \atk,   t.beatDur/16, \rel,   t.beatDur/4);
 
 
 
@@ -11371,3 +11379,18 @@ Routine({
 		a=({Out.ar(~record2,PlayBuf.ar(1,~vario,loop: 1))}.play(target:c, addAction:\addBefore));
 		wait(0.18);
 		s.record(path:"/Users/davidmignot/Music/SuperCollider Recordings/F#/1/varYD.aiff",numChannels:2,duration:t.beatDur*64);}).play(t,quant:1)
+
+
+		//oiseau
+
+		({BHiPass4.ar( PinkNoise.ar(1)+Saw.ar(MouseY.kr(40,15999),0.5),MouseY.kr(40,15999),0.12)}.play)
+
+
+
+({BHiPass4.ar(/* PinkNoise.ar(1)+*/Saw.ar(MouseY.kr(40,15999),0.5),MouseY.kr(40,15999),0.12)*0.4}.play)
+
+
+
+({PingPong.ar(~delay, BHiPass4.ar( GrayNoise.ar(1)+Saw.ar(MouseY.kr(40,9000),0.5),MouseY.kr(40,15999),0.12)!2,0.3,0.8)*0.2}.play)
+
+		///

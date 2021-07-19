@@ -189,7 +189,7 @@ s.sync;
 	~bgTempBus=Bus.audio(s,1);
 
 
-	~compBud1=Bus.audio(s,2);~compBud2=Bus.audio(s,2);
+	~compBud1=Bus.audio(s,2);~compBud2=Bus.audio(s,2);~compBud3=Bus.audio(s,2);
 
 
 
@@ -1356,14 +1356,14 @@ FreeVerb.ar(
 
 
 
-	SynthDef(\EQHP2LP, {|out=0, in, val, quant, gain,frq=100,frq2=3310, vol =0.05, val2,quant2, gain2,val3,quant3, gain3,val4, gain4, shelf,val5,quant5, gain5,val6,shelf2, gain6,val7,quant7, gain7| Out.ar(out,
+SynthDef(\EQHP2LP, {|out=0, in, val, quant, gain,frq=100,frq2=3310, vol =0.05, val2,quant2, gain2,val3,quant3, gain3,val4, gain4, quant4,val5,quant5, gain5,val6,shelf2, gain6,val7,quant7, gain7| Out.ar(out,
 
 
 			LPF.ar(LPF.ar(LPF.ar(LPF.ar(LPF.ar(LPF.ar(LPF.ar(LPF.ar(
 		HPF.ar(HPF.ar(HPF.ar(HPF.ar(HPF.ar(HPF.ar(HPF.ar(HPF.ar(
 
-			BLowShelf.ar(  BPeakEQ.ar( BPeakEQ.ar(BHiShelf.ar(BPeakEQ.ar(
-			BPeakEQ.ar(	BPeakEQ.ar(In.ar(in, 2),val,quant, gain),val2,quant2, gain2),val3,quant3, gain3),val4,shelf, gain4),val5,quant5, gain5),val7,quant7, gain7),val6,shelf2, gain6),
+			BLowShelf.ar(  BPeakEQ.ar( BPeakEQ.ar(BPeakEQ.ar(BPeakEQ.ar(
+			BPeakEQ.ar(	BPeakEQ.ar(In.ar(in, 2),val,quant, gain),val2,quant2, gain2),val3,quant3, gain3),val4,quant4, gain4),val5,quant5, gain5),val7,quant7, gain7),val6,shelf2, gain6),
 
 		frq),frq),frq),frq),frq),frq),frq),frq)
 			,frq2),frq2),frq2),frq2),frq2),frq2),frq2),frq2)* vol)};).add;
@@ -2148,6 +2148,9 @@ Ppar([
 Pbind(\instrument ,\EQHP2LP ,\in,~bassEq, \out,0, \frq, 18.midicps*(432/440),\vol,1,
 
 
+
+			// \val5,42.midicps*(432/440),\quant5,1.8 ,\gain5,(-11),
+
 				\val7,66.midicps*(432/440),\quant7,1.8 ,\gain7,(-8),
 			\val,78.midicps*(432/440), \quant,1.96, \gain,(-21),
 \val2,90.midicps*(432/440), \quant2,2.2, \gain2,(-9),
@@ -2219,7 +2222,7 @@ Ppar([
 ~limK=Synth(\limitertoMixer,[\c45,1,\in, ~limitKick, \gain,1,\out,~kToPan],~limitGrp);
 ~limK.set(\gain,154.9);
 ~limB=Synth(\limitertoMixer,[\c46,1,\in, ~limitBass, \gain,68,\out,~kToPan],~limitGrp);
-	~limB.set(\gain,212);
+	~limB.set(\gain,216);
 
 
 	~kbPan2 = Synth(\pan2,[ \in,~kToPan,\out,0],~stereoGrp);
@@ -2293,7 +2296,7 @@ Ppar([
 
 Pbind(\instrument ,\EQHP2LP ,\in,~bassEq, \out,0, \frq, 18.midicps*(432/440),\vol,1,
 
-
+\val4,42.midicps*(432/440),\quant4,1.8 ,\gain4,(-11),
 				\val7,66.midicps*(432/440),\quant7,1.8 ,\gain7,(-8),
 			\val,78.midicps*(432/440), \quant,1.96, \gain,(-21),
 \val2,90.midicps*(432/440), \quant2,2.2, \gain2,(-9),
