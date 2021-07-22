@@ -89,13 +89,10 @@
 
 
 ~comp=Synth(\comp, [\ctrl, ~kbus ],~compGrp);
-~comp.set(\thr,0.2 ,\sB, 1.037,\sA, 1/2,\atk ,t.beatDur/16, \rel ,t.beatDur/4, \gain,1,\in, ~comFuzz,\out,~limitBass);
-
-~limK=Synth(\limitertoMixer,[\c45,1,\in, ~limitKick, \gain,1,\out,~kToPan],~limitGrp);
-~limK.set(\gain,154.9);
+~comp.set(\thr,0.3 ,\sB, 1.037,\sA, 1/2,\atk ,t.beatDur/16, \rel ,t.beatDur/4, \gain,1,\in, ~comFuzz,\out,~limitBass);
+~limK.set(\gain,151.9);
 ~limB=Synth(\limitertoMixer,[\c46,1,\in, ~limitBass, \gain,68,\out,~kToPan],~limitGrp);
-	~limB.set(\gain,212);
-
+	~limB.set(\gain,213.735);
 
 
 
@@ -114,8 +111,15 @@
 // ~eq31.free
 /*Pbind(\instrument, \playBuf,  \tS,  0.39550810372374,\buf,~cymb,\type,Pseq(~rythmL, inf),\dur,Pseq([1/4],inf ),\stereoL, 0.00555,\out,    ~cymbalEq).play(t,quant:1)*/
 
+
 ~eq31=Synth(\EQHP96, [\frq, 3000, \in, ~cymbalEq,\out , ~comBusCymb, \vol,4],~eqGrp);
-~eq31.set(\val, 4100,\quant, 1.4, \gain,(-10),\val2,0,\quant2,0, \gain2,0, \val3,0,\quant3,0, \gain3,0,\val4,0,\shelf,0, \gain4,0,\out , ~comBusCymb);
+~eq31.set(\val, 4100,\quant, 1.4, \gain,(-10),\val2,0,\quant2,0, \gain2,0, \val3,0,\quant3,0, \gain3,0,\val4,0,\shelf,0, \gain4,0,\out , ~stereoCymb);
+
+
+~panCymb=Synth(\pan2,[\in,~stereoCymb,\out,0/*~comFuzz22*/],~stereoGrp);
+
+
+
 ~comp31=Synth(\comp,[\ctrl, ~kbus,],~compGrp);
 ~comp31.set(\thr,0.3 ,\sB, 1.05,\sA, 1/2,\atk ,0.0242, \rel ,0.0968,\gain,3.5,\in, ~comBusCymb , \out,~limitCymb);
 ~mix31= Synth(\limitertoMixer,[\c50,1,\in, ~limitCymb,\gain,20,\out,~stereoCymb],~limitGrp);
@@ -141,11 +145,16 @@
 ~mix33.set(\gain,31.2,\out,~hatEq);
 
 // ~eq33.free
+
+
 ~eq33=Synth(\EQHPDyna, [\frq, 3000 ,\in, ~hatEq,  \out,~stereoHat,\vol,0.5,\ctrl,~fusible2 ,\valD,3100, \quantD,8],~dynaEq2);
 
 // Synth(\EQHP96, [\frq, 3000 ,\in, ~hatEq,  \out,0,\vol,0.5,\ctrl,~fusible2 ,\valD,3100, \quantD,8],~dynaEq);
 
-~eq33.set(\out , ~stereoHat,\vol,2.594);
+~eq33.set(\out , ~stereoHat,\vol,/*2.594*/120);
+
+
+~panHat=Synth(\pan2,[\in,~stereoHat,\out,0/*~comFuzz22*/],~stereoGr7);
 
 
 ~sterHat=Synth(\stereoO,[\in,~stereoHat,\out,~comFuzz22],~stereoGr7);

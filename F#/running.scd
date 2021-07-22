@@ -1,4 +1,13 @@
-//rez sur \filterGS
+
+
+//The Bone Collector (Original Motion Picture Soundtrack)
+//utilise the glitchy beep to make nano breaks
+//ainsi que le zip one
+//more lead delayed
+//plus  d'envelopement in and out of the zone
+//scandelaous stabs
+//trompettte papa
+
 (
 Server.killAll;
 Pdef.all.do(_.clear);
@@ -156,6 +165,8 @@ s.sync;
 
 	~kbus=Bus.audio(s,1);
 	~snBus=Bus.audio(s,1);
+
+	~gateBus1=Bus.audio(s,2);
 
 	~bassEq=Bus.audio(s,1);
 
@@ -1144,6 +1155,18 @@ timeScale:  t.beatDur,	doneAction:2);
 
 
 
+	SynthDef(\reverbMod, {
+		|out=0,in,damp,room,mix|
+    Out.ar(    out,
+		 FreeVerb.ar(  In.ar(in,1),
+				MouseY.kr( 0.1,0.6), // mix 0-1
+            room, // room 0-1
+            damp // damp 0-1 duh
+        ))}).add;
+
+
+
+
 	SynthDef(\reverbModu, {
 		|out=0,in,damp,room,mix,dur,tS=1,mixMod,roomMod,dampMod|
     Out.ar(    out,
@@ -1338,6 +1361,15 @@ FreeVerb.ar(
 
 		Out.ar(out, Compander.ar(In.ar(in,2) , In.ar(ctrl,1)  , thresh: thr, slopeBelow: sB, slopeAbove: sA, clampTime: atk, relaxTime: rel)* gain );
 	}).add;
+
+
+	SynthDef(\compSG, {|in, ctrl, out= 0, dec  , thr  =0.01 ,sB = 1, sA = (1/4), atk = 0.001, rel = 0.04 , gain=1,dur|
+
+		Out.ar(out, Compander.ar(In.ar(in,2) , In.ar(ctrl,2)  , thresh: thr, slopeBelow: sB, slopeAbove: sA, clampTime: atk, relaxTime: rel) *EnvGen.kr(Env.step([gain,0],[dur,0]),timeScale: t.beatDur,doneAction: 2));
+	}).add;
+
+
+
 
 	SynthDef(\compMod, {|in, ctrl, out= 0, dec  , thr  =0.01 ,sB = 1, sA = (1/4), atk = 0.001, rel = 0.04 , gain=1,relMod|
 
@@ -2198,7 +2230,7 @@ Ppar([
 
 
 
-		Pbind(\instrument, \playBuf, \buf, ~b4, \dur, Pseq([1/4],inf),\amp,1,\type,Pseq([\rest,\note,\note,\note],inf), \decT,/*0.99  */  Pseq([1,0.92,0.94,0.96 ],inf)
+		Pbind(\instrument, \playBuf, \buf, ~b4, \dur, Pseq([1/4],inf),\amp,1,\type,Pseq([\rest,\note,\note,\note],inf), \decT,/*0.99  */  Pseq([1,0.9,0.93,0.96 ],inf)
 
 			/*Pseq([1,0.9,0.94,0.98 ],inf)*/,\start,0,\out,~bassFi,\vlDec,Pseq([0,0.612,1,1],inf),/*\vlSub,Pkey(\vlDec),\vlSub2,Pkey(\vlDec)*/\decC,5),
 
@@ -2218,11 +2250,13 @@ Ppar([
 
 
 ~comp=Synth(\comp, [\ctrl, ~kbus ],~compGrp);
-~comp.set(\thr,0.2 ,\sB, 1.037,\sA, 1/2,\atk ,t.beatDur/16, \rel ,t.beatDur/4, \gain,1,\in, ~comFuzz,\out,~limitBass);
+~comp.set(\thr,0.3 ,\sB, 1.037,\sA, 1/2,\atk ,t.beatDur/16, \rel ,t.beatDur/4, \gain,1,\in, ~comFuzz,\out,~limitBass);
+	/*
+	~comp.set(\thr,0.3 ,\sB, 1.037,\sA, 1/2,\atk ,t.beatDur/2048, \rel ,t.beatDur/16, \gain,1,\in, ~comFuzz,\out,~limitBass);*/
 ~limK=Synth(\limitertoMixer,[\c45,1,\in, ~limitKick, \gain,1,\out,~kToPan],~limitGrp);
-~limK.set(\gain,154.9);
+~limK.set(\gain,151.9);
 ~limB=Synth(\limitertoMixer,[\c46,1,\in, ~limitBass, \gain,68,\out,~kToPan],~limitGrp);
-	~limB.set(\gain,216);
+	~limB.set(\gain,213.735);
 
 
 	~kbPan2 = Synth(\pan2,[ \in,~kToPan,\out,0],~stereoGrp);
@@ -2298,7 +2332,7 @@ Pbind(\instrument ,\EQHP2LP ,\in,~bassEq, \out,0, \frq, 18.midicps*(432/440),\vo
 
 \val4,42.midicps*(432/440),\quant4,1.8 ,\gain4,(-11),
 				\val7,66.midicps*(432/440),\quant7,1.8 ,\gain7,(-8),
-			\val,78.midicps*(432/440), \quant,1.96, \gain,(-21),
+			\val,78.midicps*(432/440), \quant,1.76, \gain,(-13.3),
 \val2,90.midicps*(432/440), \quant2,2.2, \gain2,(-9),
 		\val3,102.midicps*(432/440), \quant3,2.1, \gain3,(-12.6),
 

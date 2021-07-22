@@ -413,7 +413,7 @@ Ppar([
 
 				/*Pbind(\instrument, \playBuf, \buf, ~b4, \dur, Pseq([1/4],inf),\amp,1,\type,Pseq([\rest,\note,\note,\note],inf), \decT,	Pseq([0,0.8,0.86,0.92 ],inf),\start,0,\out,~bassFi)*/
 
-			Pbind(\instrument, \playBuf, \buf, ~b4, \dur, Pseq([1/4],inf),\amp,1,\type,Pseq([\rest,\note,\note,\note],inf), \decT,0.99 	 Pseq([1,0.92,0.94,0.96 ],inf),\start,0,\out,~bassFi,\vlDec,Pseq([0,0.612,1,1],inf),/*\vlSub,Pkey(\vlDec),\vlSub2,Pkey(\vlDec)*/\decC,5),
+			Pbind(\instrument, \playBuf, \buf, ~b4, \dur, Pseq([1/4],inf),\amp,1,\type,Pseq([\rest,\note,\note,\note],inf), \decT,0.99 	 Pseq([1,0.9,0.93,0.96 ],inf),\start,0,\out,~bassFi,\vlDec,Pseq([0,0.612,1,1],inf),/*\vlSub,Pkey(\vlDec),\vlSub2,Pkey(\vlDec)*/\decC,5),
 
 ],1),
 
