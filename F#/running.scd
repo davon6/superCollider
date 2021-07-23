@@ -8,6 +8,10 @@
 //scandelaous stabs
 //trompettte papa
 
+//next full on with ~perc par petite dose
+//1.5 looped
+//bass crashing fat
+
 (
 Server.killAll;
 Pdef.all.do(_.clear);
