@@ -2,11 +2,11 @@
 
 ~b2 = Buffer.alloc(s,48000,1);
 
-SynthDef(\example, {arg flangefreq=0.3, fdback=(-0.9),in,tS=1,dur,out=0,flangMod,ph=4.6;
+SynthDef(\example, {arg flangefreq=0.3, fdback=(-1),in,tS=1,dur,out=0,flangMod,ph=4.6;
 
 		var input, effect;
 
-	input=  Saw.ar( 60).range(5,100);
+	input=  Saw.ar(MouseY.kr(28.midicps*(432/440), 30.midicps*(432/440))).range(5,100);
 
 		input= input+ LocalIn.ar(1);
 
@@ -26,7 +26,7 @@ SynthDef(\example, {arg flangefreq=0.3, fdback=(-0.9),in,tS=1,dur,out=0,flangMod
 		SinOsc.kr(MouseY.kr(0.024,0.6),1.6).range(0.0008,0.02)
 		,-0.5)
 
-			,SinOsc.kr(MouseY.kr(0.3,10)).range(20000,800),0.9	)
+			,SinOsc.kr(MouseY.kr(0.3,10)).range(20000,300),0.9	)
 
 
 			*0.0008  !2 /** EnvGen.kr(Env.step([1,1],[dur,0]),timeScale: tS,doneAction: 2)*/);
@@ -202,3 +202,56 @@ FreeVerb.ar(
 ~landing.play
 ({BBandPass.ar(WhiteNoise.ar(0.5),MouseY.kr(100,4000),0.4)}.play)
 
+
+
+
+// PBind(\instrument, \lfo13, \out,~bus1, \val, 0.11, \ph,6,).play(t,quant:1)
+
+o={Out.kr(~bus1,SinOsc.kr(0.11,6,0.005,0.005))}.play
+
+// SinOsc.ar(val,ph).range(rL,rH)    rL=1,rH=0.4
+
+//acier
+SynthDef(\example, {arg flangefreq=0.3, fdback=(-0.934),in,tS=1,dur,out=0,flangMod,ph=6,busFl,vlAtk=0, vlDec=1,vlSub=0,vlSub2=0, vlRel=0, atkT=0, decT=1, subsT=0, relT=0, atkC=0, decC=0, relC=0;
+
+		var input, effect;
+
+	input=  Saw.ar( 30.midicps*(432/440),
+
+		// EnvGen.kr(Env.perc(releaseTime: t.beatDur/4,curve: -8)));
+
+		  EnvGen.kr(Env(
+			[vlAtk,vlDec                  ,/*vlSub*/MouseY.kr(0,1) ,/*vlSub2*/MouseY.kr(0,1),vlRel,0],
+			[dur * atkT ,dur * decT *MouseY.kr(0,1)   , dur * subsT,dur* relT],
+			[atkC,decC ,0     ,relC]),
+
+		timeScale:  t.beatDur,	));
+
+		input= input+ LocalIn.ar(1);
+
+		effect= DelayN.ar(input,0.02,
+
+		//that one
+		// SinOsc.kr(0.11,ph,0.005,0.005)
+
+		In.kr( ~bus1)
+
+	);
+
+		LocalOut.ar(fdback*effect);
+
+	Out.ar(out,
+
+/*FreqShift.ar(*/
+			effect
+		/*	,Saw.kr(0.07).range(0,70))*/
+
+		*0.2!2
+			   /** EnvGen.kr(Env.step([1,1],[dur,0]),timeScale: tS,doneAction: 2)*/);
+	}).add;
+
+
+Pbind(\instrument, \example,\dur, Pseq([4/1],inf)).play(t,quant:1)
+
+
+({Saw.ar(300,EnvGen.kr(Env([1,1],[999,0]),levelScale:  MouseY.kr(0,1) ))*0.1}.play)

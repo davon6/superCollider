@@ -103,8 +103,8 @@
 
 ~comp2=Synth(\comp, [\ctrl, ~k2G ],~compGrp);
 ~comp2.set(\thr,0.05, \sB, 1, \sA ,-0.85,\atk ,0.0242, \rel ,t.beatDur/4.4, \gain,1,\in, ~comFuzz2,\out,~limitBass2);
-~limB2=Synth(\limitertoMixer,[\c46,1,\in, ~limitBass2, \gain,68,\out,~k2ToPan],~limitGrp);
-~limB2.set(\gain,254,\out,~k2ToPan);
+~limB2=Synth(\limitertoMixer,[\c46,1,\in, ~comFuzz2, \gain,68,\out,~k2ToPan],~limitGrp);
+~limB2.set(\gain,213.735);
 ~kbPanX = Synth(\pan2,[ \in,~k2ToPan,\out,0],~stereoGrp);
 
 //PERCUSSIONS

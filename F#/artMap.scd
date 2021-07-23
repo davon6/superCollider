@@ -604,7 +604,7 @@ Pbind(\instrument,\percussion,\dur,Pseq([1/4], 2),\atk, 0,\rel,0.04840,\rel2,0.0
 
 	wait(0.16);
 
-	 s.record(path:"/Users/davidmignot/Music/SuperCollider Recordings/F#/1/funkPerc.aiff",numChannels:1,duration:t.beatDur*16)
+	 s.record(path:"/Users/davidmignot/Music/SuperCollider Recordings/F#/1/funkPercX.aiff",numChannels:2,duration:t.beatDur*16)
 
 }).play
 

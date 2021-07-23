@@ -10750,6 +10750,41 @@ Ppar([
 				),rte,bts)*0.05)}).add;
 
 
+					SynthDef(\bug,{|out=0,rte=3000/*(~hz1beat*8)*/,val,dur,bts=4,val2,val3,val4,
+					 mxDel, dlt1,dlt2, decT,spread,level=1,center|Out.ar(out,
+
+					Splay.ar({
+							CombN.ar(
+					BHiPass4.ar(
+					Decimator.ar( Saw.ar(
+					// LFNoise0.kr(rte).range(140,3600)
+					EnvGen.kr(Env.step([val,0],[dur,0]),timeScale: t.beatDur,doneAction: 2),
+					EnvGen.kr(Env.step([val3,0],[dur,0]),timeScale: t.beatDur,doneAction: 2),
+					/*val,EnvGen.kr(Env([1,0],[dur,0],[dur, */
+				)+
+
+				BLowPass4.ar( WhiteNoise.ar(val4),val2)
+
+						,rte,bts),  MouseY.kr(40,3700),0.5)
+		 ,mxDel, [dlt1,dlt2], decT)
+
+				},spread,level,center)*0.05)}).add;
+
+
+				Pbind(\instrument, \bug,\dur,1/*Pseq([0.25,0.25,0.1250,0.1250,0.1250,0.1250,0.1250,0.1250,0.1250,0.1250,0.1250,0.1250,0.1250],inf) */,\val,Pfunc({680.exprand(140)}) ,/*\type,Pseq([\note,\note,Pseq([\note,\rest],inf)],inf),*/
+					// \rte,480000,\bts,36
+					\val2,Pfunc({18000.rrand(100)}),\val3,Pfunc({1.00.rand}),
+					\rte,Pfunc({18000.rrand(100)}),\bts,Pfunc({30.rrand(1)}),\val4,Pfunc({0.50.rand}),
+					\mxDel,t.beatDur*2, \dlt1,Pfunc({0.06.rand}),\dlt2, Pfunc({0.06.rand}),\decT,/*Pfunc({(t.beatDur*2).rand})*/0,\spread,Pfunc({1.00.rand}),\center,Pfunc({0.80.rrand(-0.8)}),
+				).play(t,quant:1)
+
+
+					s.record(path:"/Users/davidmignot/Music/SuperCollider Recordings/F#/1/glitchySaw4.aiff");
+
+
+
+
+
 				Pbind(\instrument, \bug,\dur,Pfunc({0.5.rrand(0.01)}) ,\val,Pfunc({3600.00.exprand(140)}) ,
 					// \rte,480000,\bts,36
 					\rte,Pfunc({18000.rrand(100)}),\bts,Pfunc({30.rrand(1)})
@@ -10849,7 +10884,9 @@ Routine({
 	Decimator.ar( DynKlank.ar(`[[LFNoise0.kr(1.4).range(100,800),LFNoise0.kr(1.4).range(800,3000),LFNoise0.kr(1.4).range(100,3000),LFNoise0.kr(1.4).range(100,3000)], nil, [4, 4, 4, 4]], Impulse.ar(1.4, 0, 0.1),freqscale: 2,decayscale: 6),MouseX.kr(1000,48000),20),0.5,0.9)!2 *0.08}.play;
 
 
-							({Decimator.ar( Saw.ar(LFNoise0.kr(~hz1beat*8).range(140,3600)),3000,4)!2*0.1}.play)
+							({Decimator.ar( Saw.ar(LFNoise0.kr(~hz1beat*8).range(10,1000)),3000,4)!2*0.1}.play);
+
+				s.record(path:"/Users/davidmignot/Music/SuperCollider Recordings/F#/1/glitchySaw.aiff");
 
 //crakle
 
@@ -11732,3 +11769,47 @@ x=Synth(\pan2, [\in,~record2 , \out,0/*~hiCom*/], v,\addAfter);
 
 
 		s.record(s,path:"/Users/davidmignot/Music/SuperCollider Recordings/F#/1/beamSt.aiff",numChannels:2);
+
+
+
+
+
+		{BLowPass4.ar( Formants.ar(MouseX.kr(30,40), Vowel(\o, \bass),0.5),MouseY.kr(40,5000),0.6) * 0.1 }.play
+
+
+
+
+
+			Ppar([
+			// Pbind(\instrument, \playBuf, \buf, ~noise, \dur, Pseq([8/1],1),\out,~hitEq),
+			// Pbind(\instrument, \playBuf, \buf,~bassL, \dur, Pseq([64/1],1),\out,~comFuzz2),
+
+					Pbind(\instrument, \gateS, \out,0,\in, ~k2G,  \dur, Pseq([64/1],1),\group,~lfoGrp),
+
+					Pseq([
+						Pbind(\instrument, \playBufS,\buf,~k2,\dur, Pseq([1/1],2),\type,Pseq([\note,\rest],inf),\out,~k2G),
+
+						Prand([
+
+							Prand([
+
+								Pbind(\instrument, \playBufS,\buf,~k2,\dur, Pseq([1/4],8),\type,Pseq([\note,\note,\note,\note,\rest,\rest,\rest,\rest].scramble,inf),\out,~k2G),
+								Pbind(\instrument,\playBufS,\buf,~k2,\dur, Pseq([1/4],8),\type,Pseq([\note,\note,\note,\note,\rest,\rest,\rest,\rest].scramble,inf),\out,~k2G),
+								Pbind(\instrument,\playBufS,\buf,~k2,\dur, Pseq([1/4],8),\type,Pseq([\note,\note,\note,\note,\rest,\rest,\rest,\rest].scramble,inf),\out,~k2G),
+								Pbind(\instrument,\playBufS,\buf,~k2,\dur, Pseq([1/4],8),\type,Pseq([\note,\note,\note,\note,\rest,\rest,\rest,\rest].scramble,inf),\out,~k2G)],1),
+
+
+
+							Pseq([
+
+								Pbind(\instrument, \playBufS,\buf,~k2,\dur, Pseq([1/1],1),\type,Pseq([\note,\note,\rest,\rest].scramble,inf),\out,~k2G),
+								Pbind(\instrument, \playBufS,\buf,~k2,\dur, Pseq([1/2],2),\type,Pseq([\note,\rest].scramble,inf),\out,~k2G)
+							].scramble,1)
+
+						],7)
+					],4),
+		],1).play(t,quant:1)
+
+
+
+		Pbind(\instrument, \playBuf, \buf,~bassL, \dur, Pseq([64/1],1),\out,~comFuzz2).play(t,quant:1)
