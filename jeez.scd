@@ -79,7 +79,7 @@ SynthDef(\example, {arg flangefreq=0.3, fdback=(-0.9),in,tS=1,dur,out=0,flangMod
 
 		input= input+ LocalIn.ar(1);
 
-		effect= DelayN.ar(input,0.02,SinOsc.kr(MouseY.kr(0.084/16,1.5),ph,0.005,0.005));
+		effect= DelayN.ar(input,0.02,SinOsc.kr(MouseY.kr(0.084/8,1.5),ph,0.005,0.005));
 
 		LocalOut.ar(fdback*effect);
 
@@ -103,6 +103,7 @@ SynthDef(\example, {arg flangefreq=0.3, fdback=(-0.9),in,tS=1,dur,out=0,flangMod
 
 
 
+	s.record(path:"/Users/davidmignot/Music/SuperCollider Recordings/F#/1/buildup2.aiff");
 
 
 

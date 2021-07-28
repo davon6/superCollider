@@ -10823,16 +10823,22 @@ Routine({
 		}.play)
 
 
-			({BLowPass4.ar(
+			({Out.ar(~record1, BLowPass4.ar(
 			SinOsc.ar(EnvGen.kr(Env([0,126.midicps*(432/440),30.midicps*(432/440),126.midicps*(432/440),0],[0.02,0,0.2,0],[0,0,4,0])),mul:EnvGen.kr(
 
 			Env.perc(releaseTime: t.beatDur/2)) ),
 
 			EnvGen.kr(Env([126.midicps*(432/440),66.midicps*(432/440),-18.midicps*(432/440)],
 			[t.beatDur*2,0,t.beatDur*0.9,0],
-				[-6,7,0]),doneAction: 2),0.86)
+						[-6,7,0]),doneAction: 2),0.86))
 			*0.1!2
-		}.play)
+				}.play(target:p,addAction:\addBefore))
+
+				p=Synth(\stereoO, [\in,~record1 , \out,0/*~hiCom*/]);
+p.set(\spread,1,\center,0,\dlt1,0.1,\dlt2,0.1009,\decT,t.beatDur/4, \mxDel,8);
+
+
+					s.record(path:"/Users/davidmignot/Music/SuperCollider Recordings/F#/1/goutteS.aiff");
 
 
 
@@ -11121,7 +11127,7 @@ i=Synth(\reverb,[\in,~record1,\out,~record4],u,\addAfter);
 i.set(\mix,0.3,\room,0.8,\damp,0.9);
 
 p=Synth(\stereoO, [\in,~record4 , \out,0/*~hiCom*/], i,\addAfter);
-p.set(\spread,0,\center,0,\dlt1,0.073,\dlt2,0.08,\decT,t.beatDur/8, \mxDel,8);
+p.set(\spread,0,\center,0,\dlt1,0.073,\dlt2,0.075,\decT,t.beatDur/8, \mxDel,8);
 
 
 s.record(path:"/Users/davidmignot/Music/SuperCollider Recordings/F#/1/leadBP.aiff",numChannels:2);
@@ -11193,6 +11199,8 @@ p=Synth(\stereoO, [\in,~record4 , \out,0/*~record5*/], i,\addAfter);
 p.set(\spread,0,\center,0,\dlt1,0.4,\dlt2,0.38,\decT,t.beatDur, \mxDel,8);
 
 
+
+
 p=Synth(\stereoO, [\in,~record4 , \out,0/*~record5*/], i,\addAfter);
 p.set(\spread,0,\center,0,\dlt1,0.4,\dlt2,0.38,\decT,t.beatDur, \mxDel,8);
 
@@ -11206,7 +11214,7 @@ Prand([
 			],inf).play(t,quant:1)
 
 
-	s.record(path:"/Users/davidmignot/Music/SuperCollider Recordings/F#/1/leadHP2.aiff",numChannels:2);
+				s.record(path:"/Users/davidmignot/Music/SuperCollider Recordings/F#/1/leadHP2.aiff",numChannels:2);
 
 
 				~leadHp2=Buffer.read(s,			"/Users/davidmignot/Music/SuperCollider Recordings/F#/1/leadHP2.aiff")
@@ -11389,7 +11397,7 @@ BBandPass.ar(
 					SinOsc.ar(
 					66.midicps*(432/440)
 
-							+SinOsc.ar(78.midicps*(432/440) +SinOsc.ar(77.midicps*(432/440)/10,mul:41.midicps*(432/440)/10*5),mul:90.midicps*(432/440)*74 ))*    EnvGen.kr(Env(
+							+SinOsc.ar(78.midicps*(432/440) +SinOsc.ar(77.midicps*(432/440)/10,mul:41.midicps*(432/440)/10*5),mul:90.midicps*(432/440)*74 )).round(2**(-16))*    EnvGen.kr(Env(
 			[vlAtk,vlDec                  ,vlSub ,vlSub2,vlRel,0],
 			[dur * atkT ,dur * decT  -(dur*relSu) /*- In.kr(bus1, 1)*/  , dur * subsT-relSu,dur* relT],
 			[atkC,decC ,0     ,relC]),    //decC- (In.kr(bus2, 1)
@@ -11813,3 +11821,251 @@ x=Synth(\pan2, [\in,~record2 , \out,0/*~hiCom*/], v,\addAfter);
 
 
 		Pbind(\instrument, \playBuf, \buf,~bassL, \dur, Pseq([64/1],1),\out,~comFuzz2).play(t,quant:1)
+
+
+		Pbind(\instrument, \playBuf, \buf,~cymb,\type,Pseq([
+
+		Pseq(~rythmL,30),Pseq([ \rest],258),
+		Pseq([Pseq(~rythm1,1),Pseq(~rythm2,1),],4),Pseq([Pseq(~rythm3,1),Pseq(~rythm4,1),],4),Pseq(~rythmL,64),
+
+
+		Pseq(~rythmL,1024),
+		Pseq([ \rest],inf),
+
+],1),\dur,Pseq([1/4],inf ),\out,    ~cymbalEq).play(t,quant:1)
+
+
+
+	Pbind(\instrument,\playBuf,	\buf,~snare2,\dur, Pseq([1/2],576 /*TO CHANGE*/),\type,Pseq([\rest,\rest,\note,\rest],inf),\out,~snareEQ,
+		\vlDec,Pseq([
+				Pseq([\note],128),Pseq([\rest],256),Pseq([\note],128),
+		Pseq([\rest],64),],1),
+
+		\vlSub,Pkey(\vlDec) ,\vlSub2,Pkey(\vlDec),
+	\decT,Pseq([ /*Pseq([1],512), */Pseq([1],inf)   ],1)).play(t)
+
+
+	~eq34= Synth(\EQHP96, [\frq, 220 ],~eqGrp);
+~eq34.set(\in, ~snareEQ, \val, 6400, \quant, 8, \gain, (-8), \out , ~toPan2,\frq, 140,\val5,870,\shelf2,1.1,\gain5,(-9),\vol,50);
+
+~pan34=Synth( \pan2,[\in, ~toPan2,\out, 0/*~toKbGate*/], ~stereoGrp);
+
+
+
+
+
+		Pbind(\instrument, \playBuf,\buf,~hat,\dur,Pseq([1/4], inf) ,\vlDec,Pfunc({40.00.rrand(32)}),\vlSub,Pkey(\vlDec), \vlSub2,Pkey(\vlDec),\out,~stereoHat,
+
+		\type, Pseq([
+			Pseq([ \note],256) , Pseq([ \rest],256),  Pseq([ \note],512),
+
+			 Pseq([ \note],1024),
+
+			Pseq([\rest],inf)],1)).play(t,quant:1)
+
+
+~panHat=Synth(\pan2,[\in,~stereoHat,\out,0/*~comFuzz22*/],~stereoGr7);
+
+
+
+
+
+
+
+
+
+v=({Out.ar(~record2,Saw.ar(EnvGen.kr(Env([12.midicps*(432/440),90.midicps*(432/440)],[~hz1beat*32,0],[0,-3]),doneAction: 2)+
+
+	SinOsc.kr(EnvGen.kr(Env([78.midicps*(432/440),90.midicps*(432/440)],[~hz1beat,0],[0,-3])),5)
+
+))}.play(target:x,addAction:\addBefore));
+
+
+
+x=Synth(\stereoO, [\in,~record2 , \out,0/*~hiCom*/]);
+x.set(\spread,1,\center,0,\dlt1,0.3,\dlt2,0.06,\decT,0.3, \mxDel,0.4);
+
+
+s.record(path:"/Users/davidmignot/Music/SuperCollider Recordings/F#/1/rise2.aiff");
+
+
+
+
+v=({Out.ar(~record2,Saw.ar(EnvGen.kr(Env([30.midicps*(432/440),116.midicps*(432/440)],[~hz1beat*32,0],[0,-3]),doneAction: 2)+
+
+	SinOsc.kr(-1.midicps*(432/440)*4,mul: 50)
+
+))}.play(target:x,addAction:\addBefore));
+
+
+
+x=Synth(\stereoO, [\in,~record2 , \out,0/*~hiCom*/]);
+x.set(\spread,1,\center,0,\dlt1,0.04,\dlt2,0.1,\decT,0.3, \mxDel,0.4);
+
+
+s.record(path:"/Users/davidmignot/Music/SuperCollider Recordings/F#/1/rise3.aiff");
+
+
+
+
+v=({Out.ar(~record2,SinOsc.ar(EnvGen.kr(Env([12.midicps*(432/440),78.midicps*(432/440)],[~hz1beat*32,0],[0,-3]),doneAction: 2)+
+
+	SinOsc.kr(-1.midicps*(432/440)*4,mul: 50)
+
+))}.play(target:x,addAction:\addBefore));
+
+
+
+x=Synth(\stereoO, [\in,~record2 , \out,0/*~hiCom*/]);
+x.set(\spread,1,\center,0,\dlt1,0.2,\dlt2,0.2,\decT,0.3, \mxDel,0.4);
+
+
+s.record(path:"/Users/davidmignot/Music/SuperCollider Recordings/F#/1/rise4.aiff");
+
+
+
+v=({Out.ar(~record2,SinOsc.ar(EnvGen.kr(Env([12.midicps*(432/440),78.midicps*(432/440)],[~hz1beat*32,0],[0,-3]),doneAction: 2)+
+
+	SinOsc.kr(-1.midicps*(432/440)*4,mul: 50)
+
+))}.play(target:x,addAction:\addBefore));
+
+
+
+x=Synth(\stereoO, [\in,~record2 , \out,0/*~hiCom*/]);
+x.set(\spread,1,\center,0,\dlt1,0.2,\dlt2,0.2,\decT,0.3, \mxDel,0.4);
+
+
+s.record(path:"/Users/davidmignot/Music/SuperCollider Recordings/F#/1/rise4.aiff");
+
+
+
+	SynthDef(\comb1C, {|out=0, in ,maxDel=0.7744, delayT,decT=6.1952,amp=0.09,tS=1,dur| // reverse for fun was 0.001,0.6)
+		Out.ar(out, BufCombN.ar(~b2.bufnum, In.ar(in,1),/*MouseY.kr(0.6,0.001)*/
+
+			delayT+ MouseX.kr(0.024,0),
+
+			decT ,amp)* EnvGen.kr(Env.step([1,0],[dur,0]),timeScale: t.beatDur,doneAction:2) )}).add;
+
+
+
+o={Out.kr(~bus2,LFNoise0.kr(20.3).range(	Scale.chromatic(\just).degreeToFreq(7.rand, 76.midicps, -22).neg,	Scale.chromatic(\just).degreeToFreq(7.rand, 76.midicps, -22)).neg)}.play;
+
+
+
+SynthDef(\fo,{ Out.kr(~bus2,LFNoise0.kr(	SinOsc.kr(~hz1beat/128,4.6).range(5.15,26)).range(	Scale.chromatic(\just).degreeToFreq(7.rand, 76.midicps, -22).neg,	Scale.chromatic(\just).degreeToFreq(7.rand, 76.midicps, -22)).neg)}).play;
+
+SynthDef(\comb1C, {|out=0, in ,maxDel=0.7744, delayT,decT=(-0.5952),amp=0.1,tS=1,dur| // reverse for fun was 0.001,0.6)
+	Out.ar(out, BufCombN.ar(~b2.bufnum, WhiteNoise.ar(0.3),
+
+		SinOsc.kr(~hz1beat/128,4.6).range(0.024,0)+	In.kr(~bus2) /*LFNoise0.kr(20.6).range(	Scale.chromatic(\just).degreeToFreq(7.rand, 76.midicps, -22),	Scale.chromatic(\just).degreeToFreq(7.rand, 76.midicps, -22).neg)*/  ,
+
+			decT ,amp)!2* EnvGen.kr(Env.step([1,0],[999,0]),timeScale: t.beatDur,doneAction:2) )}).play;
+
+
+s.record(path:"/Users/davidmignot/Music/SuperCollider Recordings/F#/1/rise5.aiff");
+
+~combGrp=Group.new;
+
+
+v=({Out.ar(~record2,Saw.ar(EnvGen.kr(Env([12.midicps*(432/440),42.midicps*(432/440)],[~hz1beat*128,0],[0,-3]),doneAction: 2)+
+
+	SinOsc.kr(-1.midicps*(432/440)*4,mul: 50)
+
+))}.play);
+
+
+
+y=Pbind(\instrument,\comb1C,\in, ~record2,\out,0 ,\delayT,Pfunc({1.00.rand.postln}),/*\group,~combGrp,*/\dur,4).play(t)
+
+
+
+SynthDef(\comb1C, {|out=0, in ,maxDel=0.7744, delayT,decT=(-0.5952),amp=0.5,tS=1,dur| // reverse for fun was 0.001,0.6)
+	Out.ar(out, BufCombN.ar(~b2.bufnum, WhiteNoise.ar(1),
+
+	MouseX.kr(0.024,0)+	/*In.kr(~bus2)*/LFNoise0.kr(20.6).range(	Scale.chromatic(\just).degreeToFreq(7.rand, 76.midicps, -22),	Scale.chromatic(\just).degreeToFreq(7.rand, 76.midicps, -22))  ,
+
+			decT ,amp)* EnvGen.kr(Env.step([1,0],[999,0]),timeScale: t.beatDur,doneAction:2) )}).play;
+
+
+
+
+
+	({	Saw.kr(MouseY.kr(0.24,20.6)
+
+	,-1,-0.4).range(-1,1).lincurve(-1,2,5,-3,-4)}.scope)
+
+
+({Out.ar(~record1, SinOsc.ar(SinOsc.kr(~hz1beat/4,mul: 3).range(6.midicps*(432/440),30.midicps*(432/440)),mul:
+SinOsc.kr(MouseY.kr(1.2,20.6)
+
+		,-1,-0.4).lincurve(-1,2,5,-3,-4).range(1,0)).tanh*0.1)}.play(target:v, addAction:\addBefore))
+
+
+
+v=Synth(\stereoO, [\in,~record1 , \out,0/*~hiCom*/]);
+v.set(\spread,1,\center,0,\dlt1,0.002,\dlt2,0.001,\decT,-0.3, \mxDel,0.4);
+
+
+
+~a1=2
+
+
+s.record(path:"/Users/davidmignot/Music/SuperCollider Recordings/F#/per"+~a1+".aiff",numChannels:2,duration:t.beatDur*8);
+
+~a1++;
+
+
+
+		//next
+
+
+({SinOsc.ar(SinOsc.kr(0.3).range(10,300),SinOsc.kr(200,mul: MouseX.kr(0,100)).range(0.00,100.00))
+	*0.1
+}.play)
+
+
+		//proper crakle
+
+		({Out.ar(~record1,(Saw.ar(MouseY.kr(0,300))+
+	Saw.ar(MouseY.kr(0,270),MouseX.kr(0,0.85))).round(2**(-16))*0.1)
+}.play(target:a,addAction:\addBefore))
+
+
+
+
+a=({
+		Out.ar(~record1S,Splay.ar({
+
+			CombN.ar(
+			In.ar(~record1), 0.3, [MouseX.kr(0.1,001),MouseX.kr(0.12,0008)], 0.5)
+
+	},0,1,0))}.play(target:g,addAction:\addBefore))
+
+
+
+g=({PingPong.ar(~delay6,In.ar(~record1S)!2,MouseY.kr(0.1,0.9))}.play)
+
+
+		({Out.ar(~record1,Saw.ar(SinOsc.kr(0.3).range(10,300),SinOsc.kr(2,mul: MouseX.kr(0,6)).range(0.00,1.00)).round(2**(-16))*0.1)
+}.play(target:a,addAction:\addBefore))
+
+
+
+
+a=({
+		Out.ar(~record1S,Splay.ar({
+
+			CombN.ar(
+			In.ar(~record1), 0.3, [MouseX.kr(0.1,001),MouseX.kr(0.12,0008)], 0.5)
+
+	},0,1,0))}.play(target:g,addAction:\addBefore))
+
+
+
+g=({PingPong.ar(~delay,In.ar(~record1S)!2,MouseY.kr(0.1,0.9))}.play)
+
+
+
+		// s.record(path:"/Users/davidmignot/Music/SuperCollider Recordings/F/#/1/squelch.aiff",numChannels:1);
+	

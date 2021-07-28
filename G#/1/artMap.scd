@@ -14,7 +14,7 @@ s.meter
 ~buf.play
 ~buf=Buffer.read(s,"/Users/davidmignot/Music/SuperCollider Recordings/E/src2.aiff")
 
-s.record(path:"/Users/davidmignot/Music/SuperCollider Recordings/G#/1/src.aiff");
+s.record(path:"/Users/davidmignot/Music/SuperCollider Recordings/F#/1/src.aiff");
 
 (
 ~notes = Array.newClear(128);
@@ -608,7 +608,7 @@ Pbind(\instrument,\percussion,\dur,Pseq([1/4], 2),\atk, 0,\rel,0.04840,\rel2,0.0
 
 	wait(0.16);
 
-	 s.record(path:"/Users/davidmignot/Music/SuperCollider Recordings/G#/1/funkPercX.aiff",numChannels:2,duration:t.beatDur*16)
+	 s.record(path:"/Users/davidmignot/Music/SuperCollider Recordings/F#/1/funkPercX.aiff",numChannels:2,duration:t.beatDur*16)
 
 }).play
 
@@ -629,7 +629,7 @@ Pbind(\instrument,\percussion,\dur,Pseq([1/4], 2),\atk, 0,\rel,0.04840,\rel2,0.0
 ~ste2.free
 
 
- s.record(path:"/Users/davidmignot/Music/SuperCollider Recordings/G#/1funkPerc.aiff",numChannels:2,duration:t.beatDur*16)
+ s.record(path:"/Users/davidmignot/Music/SuperCollider Recordings/F#/1funkPerc.aiff",numChannels:2,duration:t.beatDur*16)
 
 
  ~funkPerc= Buffer.read(s,"/Users/davidmignot/Music/SuperCollider Recordings/E/funkPerc.aiff");
