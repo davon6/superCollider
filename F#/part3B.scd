@@ -9492,6 +9492,11 @@ Pbind(\instrument,\lfoStep, \val, Pfunc({ 72.rrand(83).midicps  }), \dur,Pseq([1
 
 Pbind(\instrument,\fmX,\dur,Pseq([1/4],inf),\freq, Prand([ 87.midicps,108.midicps,  66.midicps, 121.midicps, 118.midicps,  125.midicps,116.midicps],inf),\crv,Pfunc({-6.rrand(-1)}) ).play(t)
 
+
+
+	Pbind(\instrument,\fmX,\dur,Pseq([1/8],inf),\freq, Prand([ 87.midicps,108.midicps,  66.midicps, 121.midicps, 118.midicps,  125.midicps,116.midicps],inf),\crv,Pfunc({-6.rrand(-1)}) ,\type,Pseq([\note,\rest],inf)).play(t)
+
+
 	//here
 Pbind(\instrument,\fmX,\dur,Pseq([1/4],inf),\freq, Prand([ 87.midicps,108.midicps,  66.midicps, 121.midicps, 118.midicps,  125.midicps,116.midicps],inf),
 		\vlSub,Pfunc({0.9.exprand(0.02,1)}),\vlSub2,Pkey(\vlSub),\atkT,Pfunc({0.2.exprand(0.01)}),

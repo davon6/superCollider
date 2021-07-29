@@ -7,7 +7,7 @@ MIDIdef.cc(\onTestT, {|vel, nn, chan, src|[vel, nn, chan, src].postln});
 
 MIDIClient.init
 MIDIIn.connectAll;
-MIDIIn.disconnectthingAll;
+MIDIIn.disconnectAll;
 
 FreqScope.new
 s.meter
@@ -25,7 +25,8 @@ s.record(path:"/Users/davidmignot/Music/SuperCollider Recordings/G#/1/src.aiff")
 ~shapGrp= Group.after(~shiftGrp);
 ~limitGrp= Group.after(~shapGrp);
 ~distoGrp= Group.after(~limitGrp);
-~panGrp= Group.after(~distoGrp);
+~filterGrp= Group.after(~distoGrp);
+~panGrp= Group.after(~filterGrp);
 
 // ~recGrp= Group.after(~distoGrp);
 
@@ -63,9 +64,11 @@ Scale.chromatic(\just).degreeToFreq(7.rand, 76.midicps, -20)
 ~l1 = Synth(\lim,[\in, ~record3,\out,~record4],~limitGrp);
 
 
-h = Synth(\disto,[\in,  ~record4 , \out,~record6,\gain,1],~distoGrp);
+h = Synth(\disto,[\in,  ~record4 , \out,~record5,\gain,1],~distoGrp);
 
-x = Synth(\pan2,[\in,  ~record6 , \out,0/*~outTolimit*/,\gain,1],~panGrp);
+/*k = Synth(\filterModu, [\out,~record6,\in, ~record5, \lFrq,22000, \lFrq2,22000,\hFrq,50,\hFrq2,50,\qfH ,0.7, \qfH2, 0.2,\qlL ,0.6 ,\qlL2 ,0.55 ], ~filterGrp);*/
+
+x = Synth(\pan2,[\in,  ~record5 , \out,0/*~outTolimit*/,\gain,1],~panGrp);
 /*
 // l = Synth(\limiter,[\in, ~outTolimit,\out,0, \gain, 140],~limitGrp);*/
 
@@ -247,11 +250,36 @@ MIDIdef.cc(\fx, { |value|var modFreq = value.linlin(0, 127, 0, 1);
 },ccNum: 1 );*/
 
 
-MIDIdef.cc(\riseShift, { |value|var modFreq = value.linlin(0, 127, 0, 5000);
+/*MIDIdef.cc(\riseShift, { |value|var modFreq = value.linlin(0, 127, 0, 5000);
 
 	~h1.set(\frq, modFreq.round(0.1).postln);
 
-},ccNum: 1 );
+},ccNum: 1 );*/
+
+/*MIDIdef.cc(\fil, { |value|var modFreq = value.linlin(0, 127, 30, 3500);
+
+	 if(modFreq.round(1).postln <50,{k.set(\which,0);"yo".postln},{});
+		if(modFreq.round(1).postln >3410,{k.set(\which,1);"yo2".postln},{});
+
+	// if(modFreq.round(1).postln >1500,{k.set(\which,0);"yo".postln},{k.set(\which,1)});
+		// if(modFreq.round(1).postln 1510,{);"yo2".postln},{});
+
+	k.set(\filMod, modFreq.round(1));
+
+},ccNum: 1 );*/
+
+
+/*MIDIdef.bend(\ben2, { |val, chan, src|
+
+
+	// k.set(\which,  val.linlin(0,16383,0,2).postln);
+
+
+if( val.linlin(0,16383, (-150),1100) <(-120),{k.set(\which,0);"yo".postln},{});
+		if( val.linlin(0,16383,(-150),1100) >1050,{k.set(\which,1);"yo2".postln},{});
+
+	//~notes.set(\mod,modFreq.round(1).postln);
+}, chan:  0);*/
 
 
 
@@ -261,6 +289,28 @@ v.set(\multi, modFreq.round(0.01).postln);
 	/*d.set(\multi, modFreq.round(0.01));*/
 
 },ccNum: 75 ); //is 11*/
+
+MIDIdef.bend(\ben, { |val, chan, src|
+
+
+	k.set(\filMod,  val.linlin(0,16383,(-100),4800)/*postln*/);
+
+
+if( val.linlin(0,16383, (-150),800).postln <(-120),{k.set(\which,0);},{});
+		if( val.linlin(0,16383,(-150),800) >750,{k.set(\which,2);},{});
+
+
+	/*if( val.linlin(0,16383, (-150),1100) ==475.0381493011,{k.set(\which,1);},{});*/
+
+
+	if( val.linlin(0,16383, (-150),800) >325     ,{
+
+		if( val.linlin(0,16383, (-150),800) <476 ,{
+
+			k.set(\which,1)},{});},{});
+
+	//~notes.set(\mod,modFreq.round(1).postln);
+}, chan:  0);
 
 )
 

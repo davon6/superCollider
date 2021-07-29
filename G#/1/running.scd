@@ -1420,7 +1420,7 @@ SynthDef(\volAna,{|in=0|RMS.ar( In.ar(in)).ampdb.round(0.1).poll(label:" db" )})
 
 		SynthDef(\stereoO,{|out=0, in, spread=0, level=1, center=0.0,dlt1=0.3,dlt2=0.4,decT=2, mxDel=1|
 
-		Out.ar(out,Splay.ar({
+		ReplaceOut.ar(out,Splay.ar({
 
 			CombN.ar(
 				In.ar(in, 1), mxDel, [dlt1,dlt2], decT)
@@ -1728,7 +1728,7 @@ SynthDef(\sawModul,{|modu, busMod,hS|Out.kr(busMod, Saw.kr(modu).range(-40,hS))}
 
 		sig = In.ar(in,1);
 
-		lp = Resonz.ar(sig , filFreq2+ filMod ,qf);
+		lp = BLowPass4.ar(sig , filFreq2+ filMod ,qf);
 
 	hp = BHiPass4.ar(sig, filFreq +filMod,qf2)*0.24;
 
@@ -1764,10 +1764,10 @@ SynthDef(\sequ,{|value, dur, in=0, out=0, vlAtk=0, vlDec=1,vlSub=1,vlSub2=1, vlR
 
 	SynthDef(\pan2,{|out=0,in,amp=1|Out.ar(out, Pan2.ar(In.ar(in))*amp)}).add;
 
-	SynthDef(\filterU, {|out=0,in,  hFrq=900,lFrq=300 ,qfH = 0.822379, qlL = 0.504212|Out.ar(out, BLowPass4.ar(   BHiPass4.ar(  In.ar(in,1) , hFrq , qfH), lFrq
+	SynthDef(\filterU, {|out=0,in,  frq=900,lFrq=300 ,qfH = 0.822379, qlL = 0.504212|Out.ar(out, BLowPass4.ar(   BHiPass4.ar(  In.ar(in,1) , frq , qfH), frq
 		/*MouseX.kr(20,22000)*/,qlL )) }).add;
 
-	SynthDef(\filterU, {|out=0,in,  hFrq=900, hFrq2=900,lFrq=300,lFrq2=300 ,qfH = 0.822379, qfH2=0.6,qlL = 0.504212,qlL2=0.4|Out.ar(out,
+/*	SynthDef(\filterU, {|out=0,in,  hFrq=900, hFrq2=900,lFrq=300,lFrq2=300 ,qfH = 0.822379, qfH2=0.6,qlL = 0.504212,qlL2=0.4|Out.ar(out,
 
 	/*BLowPass4.ar(  */ BLowPass4.ar( BLowPass.ar(
 			BHiPass4.ar(  BHiPass4.ar(
@@ -1775,7 +1775,7 @@ SynthDef(\sequ,{|value, dur, in=0, out=0, vlAtk=0, vlDec=1,vlSub=1,vlSub2=1, vlR
 				, hFrq2 , qfH) 	, hFrq , qfH2)
 	, lFrq,qlL ) ,lFrq2 ,qlL2 )
 
-	) }).add;
+	) }).add;*/
 
 
 	SynthDef(\rien,{|dur=1|EnvGen.kr(Env.step([1,0],[ dur,0]),timeScale: t.beatDur,doneAction: 2)}).add;
