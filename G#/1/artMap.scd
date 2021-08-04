@@ -7,7 +7,7 @@ MIDIdef.cc(\onTestT, {|vel, nn, chan, src|[vel, nn, chan, src].postln});
 
 MIDIClient.init
 MIDIIn.connectAll;
-MIDIIn.disconnectthingAll;
+MIDIIn.disconnectAll;
 
 FreqScope.new
 s.meter
@@ -35,7 +35,7 @@ v = Synth( \fmX, [\dur, inf,\stretch, 3.5,\mRatio, 1,\cRatio, 1,\index, 1,\atkE,
 
 ~v =  Synth(\comb1,[ \in, ~record1,\out,~record2   /*~outDisto*/,\amp,1,\maxDel,0.7744,\decT,-0.2 /*was -0*/,\busMod,~seqBus],~combGrp);
 
-	Pbind(\instrument, \sequ,\out, ~seqBus, \value,Pseq([
+Pbindef(\seq,\instrument, \sequ,\out, ~seqBus, \value,Pseq([
 /*Scale.majorPentatonic(\just).degreeToFreq(7.rand, 76.midicps, -22),
 	Scale.majorPentatonic(\just).degreeToFreq(7.rand, 76.midicps, -21),
 	Scale.majorPentatonic(\just).degreeToFreq(7.rand, 76.midicps, -22),
@@ -57,7 +57,6 @@ Scale.chromatic(\just).degreeToFreq(7.rand, 76.midicps, -20)
 ].scramble,inf),\dur,Pxrand([ Pseq([4/1],1),Pseq([1/1],4), Pseq([1/4],16)],inf),\legato, 2,\group,~shapGrp,\tS, 0.39550810372374,).play(t);
 
 
-
  ~h1 = Synth(\shiftX,[\in,~record2,\out ,~record3,\freq,0],~shiftGrp);
 
 ~l1 = Synth(\lim,[\in, ~record3,\out,~record4],~limitGrp);
@@ -68,6 +67,74 @@ h = Synth(\disto,[\in,  ~record4 , \out,~record6,\gain,1],~distoGrp);
 x = Synth(\pan2,[\in,  ~record6 , \out,0/*~outTolimit*/,\gain,1],~panGrp);
 /*
 // l = Synth(\limiter,[\in, ~outTolimit,\out,0, \gain, 140],~limitGrp);*/
+
+
+
+MIDIdef.noteOn(\rcordOn, {|vel, nn, chan, src|
+
+	s.record(path:"/Users/davidmignot/Music/SuperCollider Recordings/G#/1/src"+~count+".aiff",numChannels:1);
+
+},noteNum: 42);
+
+
+MIDIdef.noteOn(\rcordOff, {|vel, nn, chan, src|
+	// [nn].postln;
+
+	// x = Synth(\recLoop,[buf:~buf,\recording,1, \in,0],~recGrp);
+	// s.record;
+
+
+	Routine({
+
+
+
+		s.stopRecording;
+	v.free;~v.free;  ~h1.free;  ~l1.free;  h.free;  x.free;Pbindef(\seq).clear;
+
+		wait(0.5);
+
+		~buf = Buffer.read(s,"/Users/davidmignot/Music/SuperCollider Recordings/G#/src"+~count+".aiff");
+
+		wait(0.5);
+
+		~count=~count+1;
+
+
+		a=({Out.ar(~record1,PlayBuf.ar(1,~buf,loop: 1))}.play);
+
+
+		wait(0.5);
+
+
+		k=Synth(\filterG,[ \in,~record1],a,addAction:\addAfter);
+
+		v=Synth(\stereoO,[\dlt1,0.3,\dlt2,0.4],k,addAction:\addAfter);
+
+
+		wait(0.5);
+
+		MIDIdef.cc(\filWhich ,{ |value|var modFreq = value.linlin(61, 67,0, 3);
+
+
+			k.set(\which, modFreq.round(0.1).postln);
+},ccNum: 114 ); //is 9
+
+
+		MIDIdef.noteOn(\rcordOn, {|vel, nn, chan, src|
+
+
+			"yo".postln
+
+			// s.record(path:"/Users/davidmignot/Music/SuperCollider Recordings/G#/src1.aiff",numChannels:1);
+
+},noteNum: 42);
+
+
+
+	}).play
+	// s.record(path:"/Users/davidmignot/Music/SuperCollider Recordings/G#/src1.aiff",numChannels:1)
+
+},noteNum: 43);//is 8
 
 
 
@@ -128,17 +195,6 @@ MIDIdef.noteOn(\start, {|vel, nn, chan, src|
 
 },noteNum: 36); //button 1
 
-
-MIDIdef.noteOn(\rcord, {|vel, nn, chan, src|
-	[nn].postln;
-
-	// x = Synth(\recLoop,[buf:~buf,\recording,1, \in,0],~recGrp);
-	// s.record;
-
-
-s.record(path:"/Users/davidmignot/Music/SuperCollider Recordings/E/src1.aiff",numChannels:1)
-
-},noteNum: 43);//is 8
 
 
 

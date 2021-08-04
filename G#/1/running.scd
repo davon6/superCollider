@@ -1,3 +1,10 @@
+//Ajouter un push dans le 4x4 et enfin faire onduler le tout
+//PERcu snare with oner sample qui s etent go back to mummy
+
+
+//find a way reverb or ... to extend clap or make new snary, noisy
+
+//maybe bim, boom bum bum bim bing
 
 
 //The Bone Collector (Original Motion Picture Soundtrack)
@@ -7,6 +14,9 @@
 //plus  d'envelopement in and out of the zone
 //scandelaous stabs
 //trompettte papa
+
+//long slide grimacant actif
+//reverbpercu loof puis reverse
 
 
 (
@@ -47,6 +57,8 @@ ServerOptions.outDevices;
 
 	~bpm = 148;
 	~hz1beat = ~bpm * 16/60/32;
+
+	~count=0;
 
 	FreqScope.new;
 	s.meter;
@@ -114,7 +126,7 @@ s.sync;
 	~k = Buffer.alloc(s, s.sampleRate *0.3872,1);
 
 	// ~k = Buffer.alloc(s, s.sampleRate *999,1);
-	~k2 = Buffer.alloc(s, s.sampleRate *1,1);
+	// ~k2 = Buffer.alloc(s, s.sampleRate *1,1);
 
 	~b3 = Buffer.alloc(s, s.sampleRate *5,1);
 	~b4= Buffer.alloc(s, s.sampleRate *5,1);
@@ -711,7 +723,7 @@ freq         )* EnvGen.kr(Env([0,vl,vl,0],[0.055,dur-0.055,0],4),timeScale: tS,d
 
 
 
-	SynthDef(\filter,{|out=0, in, busMod, bus7, which, factor3=1, rqLPF=0.5  freqFil=100, qf =0.5, qf2=0.5 |
+	SynthDef(\filter,{|out=0, in, busMod, bus7, which, factor3=1, rqLPF=0.5  freqFil=100, qf =0.5, qf2=0.5,notch |
 
 		var lp, bp, hp, sig;
 
@@ -723,7 +735,10 @@ freq         )* EnvGen.kr(Env([0,vl,vl,0],[0.055,dur-0.055,0],4),timeScale: tS,d
 
 		hp = BHiPass4.ar(sig, freqFil+ In.kr(busMod, 1), qf2);
 
-		sig = SelectX.ar(which, [lp, bp,hp,sig]);
+
+			notch = Notch.ar(sig, freqFil+ In.kr(busMod, 1), qf2);
+
+		sig = SelectX.ar(which, [lp, bp,hp,notch]);
 
 		Out.ar(out, sig);
 	}).add;
