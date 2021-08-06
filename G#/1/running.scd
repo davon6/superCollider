@@ -393,15 +393,14 @@ s.sync;
 
 
 
-
-		SynthDef(\kick, {
+	SynthDef(\kick, {
 	arg amp=0.2,out=0;
 	var sig, env, envF;
 
 	envF = EnvGen.ar(
 		Env(
 				[97.midicps*(432/440),68.midicps*(432/440),49.midicps*(432/440),8.midicps*(432/440),0,0],
-			[0.00015,t.beatDur/16,t.beatDur*0.45,0],
+			[0.00019,t.beatDur/16,t.beatDur*0.45,0],
 			[30,-2,-2.4]
 		)
 	);
@@ -409,8 +408,8 @@ s.sync;
 	env =
 
 EnvGen.ar(
-		Env([ 0.280 , 0.175,   0.064 ,  0.842,0.442,0],
-			[ 0.004 , 0.002,   0.05  , t.beatDur*0.05 , t.beatDur*0.2  ],[-3.66,5.5,-4.6,-1.2,8]),doneAction:2);
+		Env([ 0.230 , 0.175,   0.064 ,  0.842,0.442,0],
+			[ 0.004 , 0.002,   0.05  , t.beatDur*0.155 , t.beatDur*0.01  ],[-3.66,5.5,-4.6,-1.2,8]),doneAction:2);
 	//-2.6 can be zero
 
 	sig = SinOsc.ar(envF, mul: env);
@@ -420,7 +419,6 @@ EnvGen.ar(
 	Out.ar(out, sig);
 
 }).add;
-
 
 
 
@@ -2085,7 +2083,12 @@ Ppar([
 
 
 
-		Pbind(\instrument, \playBuf, \buf, ~b4, \dur, Pseq([1/4],inf),\amp,1,\type,Pseq([\rest,\note,\note,\note],inf), \decT,/*0.99  */  /*Pseq([1,0.9,0.93,0.96 ],inf)*/  Pseq([1,0.5,0.6,0.7 ],inf)
+		Pbind(\instrument, \playBuf, \buf, ~b4, \dur, Pseq([1/4],inf),\amp,1,\type,Pseq([\rest,\note,\note,\note],inf), \decT,/*0.99  *//* Pseq([1,0.9,0.93,0.96 ],inf)*/ Pseq([1,0.5,0.6,0.7 ],inf)
+
+
+		s
+			/*
+			Pseq([1,0.58,0.68,0.78 ],inf)*/
 
 			/*Pseq([1,0.9,0.94,0.98 ],inf)*/,\start,0,\out,~bassFi,\vlDec,Pseq([0,0.612,1,1],inf),/*\vlSub,Pkey(\vlDec),\vlSub2,Pkey(\vlDec)*/\decC,5),
 
@@ -2100,7 +2103,12 @@ Ppar([
 
 
 ~comp=Synth(\comp, [\ctrl, ~kbus ],~compGrp);
-~comp.set(\thr,0.3 ,\sB, 1.037,\sA, 1/2,\atk ,t.beatDur/16, \rel ,t.beatDur/4, \gain,1,\in, ~comFuzz,\out,~limitBass);
+~comp.set(\thr,0.9 ,\sB, 1.1,\sA, 1/2,\atk ,t.beatDur/64, \rel ,t.beatDur/2, \gain,1,\in, ~comFuzz,\out,~limitBass);
+
+/*
+	~comp.set(\thr,0.3 ,\sB, 1.037,\sA, 1/2,\atk ,t.beatDur/4, \rel ,t.beatDur/16, \gain,1,\in, ~comFuzz,\out,~limitBass);
+	*/
+
 	/*
 	~comp.set(\thr,0.3 ,\sB, 1.037,\sA, 1/2,\atk ,t.beatDur/2048, \rel ,t.beatDur/16, \gain,1,\in, ~comFuzz,\out,~limitBass);*/
 ~limK=Synth(\limitertoMixer,[\c45,1,\in, ~limitKick, \gain,1,\out,~kToPan],~limitGrp);
@@ -2109,7 +2117,7 @@ Ppar([
 	//159
 	~limK.set(\gain,206);
 ~limB=Synth(\limitertoMixer,[\c46,1,\in, ~limitBass, \gain,68,\out,~kToPan],~limitGrp);
-	~limB.set(\gain,150);
+	~limB.set(\gain,168);
 
 
 	~kbPan2 = Synth(\pan2,[ \in,~kToPan,\out,0],~stereoGrp);
