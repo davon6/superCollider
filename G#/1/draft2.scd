@@ -298,7 +298,7 @@ p.set(\spread,1,\center,0,\dlt1,0.05,\dlt2,0.042,\decT,t.beatDur/8, \mxDel,t.bea
 
 	~draft3=Buffer.read(s,"/Users/davidmignot/Music/SuperCollider Recordings/G#/1/draft3.aiff")
 
-	({BHiPass4.ar( PlayBuf.ar(1,~draft3,loop: 1),MouseX.kr(20,8000),0.5)}.play)
+	({BHiPass4.ar( PlayBuf.ar(1,~draft3,loop: 1),MouseX.kr(20,8000),0.33)}.play)
 
 	p=Synth(\stereoO, [\in,0, \out,0/*~hiCom*/],);
 p.set(\spread,1,\center,0,\dlt1,0.05,\dlt2,0.042,\decT,t.beatDur/8, \mxDel,t.beatDur);
@@ -560,7 +560,7 @@ a= ({
 a.set(\dlt1,0.5)
 
 
-s.record(path:"/Users/davidmignot/Music/SuperCollider Recordings/G#/1/leadHp4-2.aiff");
+s.record(path:"/Users/davidmignot/Music/SuperCollider Recordings/G#/1/leadHp4.aiff");
 
 
 
@@ -766,3 +766,20 @@ x=	SynthDef(\co, {|out=0, in ,maxDel=0.7744, delayT,decT=6.1952,amp=0.09,tS=1,du
 	s.record(path:"/Users/davidmignot/Music/SuperCollider Recordings/G#/1/riseBg.aiff");
 
 
+~draft2.play
+
+~draft2=Buffer.read(s,"/Users/davidmignot/Music/SuperCollider Recordings/G#/1/lowLeadSequed.aif")
+
+
+			Pseq([
+		Pbind(\instrument, \playBufS, \buf, ~draft2, \dur, Pseq([4/1],1),\out,~record2,\amp,1,),
+
+
+				Pbind(\instrument, \playBufS, \buf, ~draft2, \dur, Pseq([1/4],inf),\start,Pfunc({~draft2.numFrames/64*(63.rand)}),\out,0/*~record2*/,\amp,1)],4).play(t,quant:1)
+
+
+
+	p=Synth(\stereoO, [\in,0, \out,0/*~hiCom*/],);
+p.set(\spread,1,\center,0,\dlt1,0.05,\dlt2,0.042,\decT,t.beatDur/8, \mxDel,t.beatDur);
+
+		s.record(path:"/Users/davidmignot/Music/SuperCollider Recordings/G#/1/leadLp.aiff");

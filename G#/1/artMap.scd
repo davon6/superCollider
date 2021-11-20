@@ -24,8 +24,12 @@ s.record(path:"/Users/davidmignot/Music/SuperCollider Recordings/F#/1/src.aiff")
 ~shiftGrp = Group.after(~combGrp);
 ~shapGrp= Group.after(~shiftGrp);
 ~limitGrp= Group.after(~shapGrp);
+
+
 ~distoGrp= Group.after(~limitGrp);
-~panGrp= Group.after(~distoGrp);
+
+~gateGrp= Group.after(~distoGrp);
+~panGrp= Group.after(~gateGrp);
 
 // ~recGrp= Group.after(~distoGrp);
 
@@ -59,18 +63,51 @@ Scale.chromatic(\just).degreeToFreq(7.rand, 76.midicps, -20)
 
  ~h1 = Synth(\shiftX,[\in,~record2,\out ,~record3,\freq,0],~shiftGrp);
 
-~l1 = Synth(\lim,[\in, ~record3,\out,~record4],~limitGrp);
+// ~del1= Synth(/*\pingD*/ \del,[\bufnum,~delay ,\in,~record3 ,\out,~record5],~delayGrp);
+
+
+
+~l1 = Synth(\lim,[\in,~record3 ,\out,~record4],~limitGrp);
+
+
 
 
 h = Synth(\disto,[\in,  ~record4 , \out,~record6,\gain,1],~distoGrp);
+
+
+Pbindef(\gato,\instrument, \gate ,\in,~record5   ,\vlDec,1,
+		\dur,/*Pxrand([Pseq([1/4],4),   Pseq([1/4],12), Pseq([1/1],1) ],1)*/Pseq([1/4],inf) ,    \group,~gateGrp, \out,0,\tS, 0.39550810372374,
+		\vlSub,Pfunc({0.9.exprand(0.4,1)}),\vlSub2,Pkey(\vlSub),\atkT,Pfunc({0.10.exprand(0.01)}),
+	\decT,Pfunc({0.6.exprand(0.8,0.3)}),
+	\subsT,Pfunc({0.3.exprand(0.2)}),
+	\relT,Pfunc({0.22.exprand(0.1,1)}),
+	\atckC,Pfunc({4.exprand(1,1)}),
+	\decC,Pfunc({-4.exprand(-0.1)}),
+	\relC,Pfunc({-8.exprand(-2,1)}),\vlAtk ,Pfunc({0.01.exprand(0.001)}),\vlRel,Pkey(\vlAtk)).play(t,quant:1);
+
+
+
 
 x = Synth(\pan2,[\in,  ~record6 , \out,0/*~outTolimit*/,\gain,1],~panGrp);
 /*
 // l = Synth(\limiter,[\in, ~outTolimit,\out,0, \gain, 140],~limitGrp);*/
 
+MIDIdef.noteOn(\gating, {|vel, nn, chan, src|
+	[nn].postln;
+h.set(\out,~record5);
+	Pbindef(\gato, \out,~record6);
+},noteNum: 36); //button 1
 
 
-MIDIdef.noteOn(\rcordOn, {|vel, nn, chan, src|
+
+MIDIdef.noteOn(\gatingOff, {|vel, nn, chan, src|
+	[nn].postln;
+	h.set(\out,~record6);
+	Pbindef(\gato, \out,0);
+},noteNum: 37); //button 2
+
+
+/*MIDIdef.noteOn(\rcordOn, {|vel, nn, chan, src|
 
 	s.record(path:"/Users/davidmignot/Music/SuperCollider Recordings/G#/1/src"+~count+".aiff",numChannels:1);
 
@@ -134,7 +171,7 @@ MIDIdef.noteOn(\rcordOff, {|vel, nn, chan, src|
 	}).play
 	// s.record(path:"/Users/davidmignot/Music/SuperCollider Recordings/G#/src1.aiff",numChannels:1)
 
-},noteNum: 43);//is 8
+},noteNum: 43);//is 8*/
 
 
 
@@ -153,6 +190,8 @@ MIDIdef.noteOff(\offPiana, {arg vel, nn;nn.postln;
 });*/
 
 
+//USELESS
+
 MIDIdef.cc(\fmCt ,{ |value|var modFreq = value.linlin(0, 127,0, 0.8);
 
 	// ~notes.do{arg synth; synth.set(/*\fmCtrl*/\cRatio, modFreq.round(0.01))};
@@ -160,6 +199,19 @@ v.set(\cRatio, modFreq.round(0.01).postln);
 },ccNum: 74 ); //is2
 
 
+
+
+MIDIdef.cc(\delayDelT ,{ |value|var modFreq = value.linlin(61, 67,0, /*0.8*/3);
+
+
+~del1.set(/*\delayTime*/ \delT, modFreq.round(0.01).postln);
+},ccNum: 112 ); //is2
+
+
+MIDIdef.cc(\delayFeedback ,{ |value|var modFreq = value.linlin(61, 67,0, 4/*0.9*/);
+
+~del1.set(/*\feedback*/ \decT, modFreq.round(0.01).postln);
+},ccNum: 114 ); //is2
 
 
 
@@ -188,12 +240,13 @@ MIDIdef.cc(\rteShit, { |value|var modFreq = value.linlin(0, 127, 1, 0);
 
 
 
-MIDIdef.noteOn(\start, {|vel, nn, chan, src|
+/*MIDIdef.noteOn(\start, {|vel, nn, chan, src|
 	[nn].postln;
 /*v.set(\gate,1);*/
  v = Synth( \fmX, [\dur, inf,\stretch, 3.5,\mRatio, 1,\cRatio, 1,\index, 1,\atkE, 0.1,\amp,1,\out,~outFil,],~synthGrp);
 
-},noteNum: 36); //button 1
+},noteNum: 36); //button 1*/
+
 
 
 
@@ -990,14 +1043,14 @@ MIDIdef.cc(\rteShit, { |value|var modFreq = value.linlin(0, 127, 1, 0);
 
 
 
-MIDIdef.noteOn(\start, {|vel, nn, chan, src|
+/*MIDIdef.noteOn(\start, {|vel, nn, chan, src|
 	[nn].postln;
 /*v.set(\gate,1);*/
 /* v = Synth( \fmX, [\dur, inf,\stretch, 3.5,\mRatio, 1,\cRatio, 1,\index, 1,\atkE, 0.1,\amp,1,\out,~outFil,],~synthGrp);*/
 
 		~h1.set(\frq,0);
 
-},noteNum: 36); //button 1
+},noteNum: 36); //button 1*/
 
 
 MIDIdef.noteOn(\rcord, {|vel, nn, chan, src|

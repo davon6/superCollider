@@ -263,7 +263,7 @@ s.sync;
 
 
 	SynthDef(\playBufS ,{|out = 0,start, trig, dur, amp=1,buf, loo=0,impulse=0.001,rte=1
-		vlAtk =0,vlDec=1 ,vlSub=1 ,vlSub2=1,vlRel=0,atkT=0,decT=1,subsT=0,relT=0,atkC=0,decC=0,relC=0,gateSub=0,dA=0|Out.ar(out,PlayBuf.ar(2,buf,rte,trigger:impulse,startPos: start,loop:loo,doneAction: dA)
+		vlAtk =0,vlDec=1 ,vlSub=1 ,vlSub2=1,vlRel=0,atkT=0,decT=1,subsT=0,relT=0,atkC=0,decC=0,relC=0,gateSub=0,dA=0|Out.ar(out,PlayBuf.ar(2,buf,/*rte*/MouseY.kr(0.01,6),trigger:impulse,startPos: start,loop:loo,doneAction: dA)
 
 		* EnvGen.kr(Env([vlAtk,vlDec,vlSub,vlSub2,vlRel],
 			[dur * atkT,dur* decT-(dur*gateSub),dur * subsT,dur *relT],
@@ -386,7 +386,7 @@ s.sync;
 
 	SynthDef(\lfo3,{|out,tS=1| Out.kr(out ,EnvGen.kr(Env([143,0],[0.4,0],-30),timeScale: tS,doneAction: 2))}).add;
 
-SynthDef(\kick, {
+	SynthDef(\kick, {
 	arg amp=0.2,out=0;
 	var sig, env, envF;
 
@@ -394,15 +394,15 @@ SynthDef(\kick, {
 		Env(
 				[109.midicps*(432/440),68.midicps*(432/440),49.midicps*(432/440),8.midicps*(432/440),0,0],
 			[0.0125,t.beatDur/64,t.beatDur*0.7,0],
-			[-48,-2,-2.4]
+			[-8,-2,-2.4]
 		)
 	);
 
 	env =
 
 EnvGen.ar(
-		Env([ 0.760 , 0.155,   0.4 ,  1,0.142,0],
-			[ 0.012 , 0.005,   0.06  , t.beatDur*0.255 , t.beatDur*0.3  ],[-3.66,-5.5,-4.6,-1.2,8]),doneAction:2);
+		Env([ 0.960 , 0.155,   0.4 ,  1,0.14,0],
+			[ 0.012 , 0.005,   0.06  , t.beatDur*0.455 , t.beatDur*0.3  ],[-3.66,-5.5,-4.6,-1.2,8]),doneAction:2);
 	//-2.6 can be zero
 
 	sig = SinOsc.ar(envF, mul: env);
@@ -413,25 +413,25 @@ EnvGen.ar(
 
 }).add;
 
-/*lqst
 
-SynthDef(\kick, {
+/*
+	SynthDef(\kick, {
 	arg amp=0.2,out=0;
 	var sig, env, envF;
 
 	envF = EnvGen.ar(
 		Env(
-				[97.midicps*(432/440),68.midicps*(432/440),49.midicps*(432/440),8.midicps*(432/440),0,0],
-			[0.00125,t.beatDur/32,t.beatDur*0.67,0],
-			[8,-2,-2.4]
+				[109.midicps*(432/440),68.midicps*(432/440),49.midicps*(432/440),8.midicps*(432/440),0,0],
+			[0.0125,t.beatDur/64,t.beatDur*0.7,0],
+			[-8,-2,-2.4]
 		)
 	);
 
 	env =
 
 EnvGen.ar(
-		Env([ 0.960 , 0.055,   0 ,  1,0.142,0],
-			[ 0.012 , 0.0001,   0.06  , t.beatDur*0.255 , t.beatDur*0.3  ],[-3.66,-5.5,-4.6,-1.2,8]),doneAction:2);
+		Env([ 0.960 , 0.155,   0.4 ,  1,0.14,0],
+			[ 0.012 , 0.005,   0.06  , t.beatDur*0.455 , t.beatDur*0.3  ],[-3.66,-5.5,-4.6,-1.2,8]),doneAction:2);
 	//-2.6 can be zero
 
 	sig = SinOsc.ar(envF, mul: env);
@@ -440,7 +440,37 @@ EnvGen.ar(
 	// sig = Pan2.ar(sig);
 	Out.ar(out, sig);
 
-}).add;*/
+}).add;
+
+
+
+SynthDef(\kick, {
+	arg amp=0.2,out=0;
+	var sig, env, envF;
+
+	envF = EnvGen.ar(
+		Env(
+				[109.midicps*(432/440),68.midicps*(432/440),49.midicps*(432/440),8.midicps*(432/440),0,0],
+			[0.0125,t.beatDur/64,t.beatDur*0.7,0],
+			[-8,-2,-2.4]
+		)
+	);
+
+	env =
+
+EnvGen.ar(
+		Env([ 0.960 , 0.155,   0.4 ,  1,0.142,0],
+			[ 0.012 , 0.005,   0.06  , t.beatDur*0.255 , t.beatDur*0.3  ],[-3.66,-5.5,-4.6,-1.2,8]),doneAction:2);
+	//-2.6 can be zero
+
+	sig = SinOsc.ar(envF, mul: env);
+
+	sig = sig * amp.dbamp  ;
+	// sig = Pan2.ar(sig);
+	Out.ar(out, sig);
+
+}).add;
+/
 
 
 
