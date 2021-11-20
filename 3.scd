@@ -1,0 +1,1 @@
+t.beatDur/4
