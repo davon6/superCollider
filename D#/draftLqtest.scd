@@ -841,14 +841,12 @@ SynthDef(\lfo, {|out, dur,ph, val = (~hzQbeat), rL=(-1500),rH=1500, which=0 |var
 	SynthDef(\lfoPerc, {|out, valA,valD,lvl,crv| Out.kr(out,EnvGen.kr(Env.perc(valA,valD,lvl,crv),timeScale:  t.beatDur,doneAction: 2))}).add;
 
 
-SynthDef(\osc, {|out=0,freq=   161.81716430268 /*(52.midicps*(432/440))*/,freq2=610,freq3=610,amp=1,in,gate=1,mul=1,mul2=1,mul3=1,which,clip,skew,pitch,lfoP, melo |var sig, sig2, sig3, env,mod,mod2;
+SynthDef(\osc, {|out=0,freq=   161.81716430268 /*(52.midicps*(432/440))*/,freq2=610,freq3=610,amp=1,in,gate=1,mul=1,mul2=1,mul3=1,which,clip,skew,pitch,lfoP, melo |var sig, sig2, sig3, mod,mod2;
 
-		env = EnvGen.kr(Env.adsr,gate,doneAction: 2);
 
 	mod2 = SinOsc.ar(  In.kr(freq2)/10 ,mul:  In.kr(mul2)/10);
 
 	mod = SinOsc.ar( In.kr(freq2)+ mod2,mul:In.kr(mul2));
-
 
 	sig3 = Squine.ar( freq+In.kr(pitch)+In.kr(lfoP)+In.kr(melo) ,In.kr(clip),In.kr(skew ) + mod);
 
@@ -856,21 +854,20 @@ SynthDef(\osc, {|out=0,freq=   161.81716430268 /*(52.midicps*(432/440))*/,freq2=
 
 
 
-	env = EnvGen.kr(Env.adsr,gate,doneAction: 2);
+
 
 	mod2 = SinOsc.ar(  In.kr(freq3)/10 ,mul:  In.kr(mul3)/10);
 
 	mod = SinOsc.ar( In.kr(freq2)+ mod2,mul:1/*In.kr(mul2)/10*/);
 
-
-	sig2 = Squine.ar( freq+In.kr(pitch)+In.kr(lfoP)+In.kr(melo) ,In.kr(clip),In.kr(skew) + mod2)+mod;
-
+	sig2 = Squine.ar( freq+In.kr(pitch)+In.kr(lfoP)+ In.kr(melo) + mod2,In.kr(clip),In.kr(skew) )+mod;
 
 
 
 
 
-	env = EnvGen.kr(Env.adsr,gate,doneAction: 2);
+
+
 
 	mod2 = Squine.ar(  In.kr(freq3)+In.kr(pitch)+In.kr(lfoP)+In.kr(melo) ,In.kr(clip),In.kr(skew ) ,mul:  1);
 
@@ -878,7 +875,7 @@ SynthDef(\osc, {|out=0,freq=   161.81716430268 /*(52.midicps*(432/440))*/,freq2=
 
 	sig = Squine.ar( freq+In.kr(pitch)+In.kr(lfoP)+In.kr(melo)    ,In.kr(clip),In.kr(skew ) )+mod+mod2;
 
-	Out.ar(out,  LeakDC.ar(Shaper.ar(~tfBuf, Select.ar(In.kr(which),[ sig,sig2,sig3])   )) * amp  *env);
+	Out.ar(out,  LeakDC.ar(Shaper.ar(~tfBuf, Select.ar(In.kr(which),[ sig,sig2*0.62,sig3])   )) * amp );
 
 }).add;
 
@@ -911,6 +908,7 @@ SynthDef(\stereo,{|out=0, in, spread=0, level=1, center=0.0,dlt1=0.3,dlt2=0.4,de
 ~g1=Group.new;
 ~g2=Group.after(~g1);
 ~g3=Group.after(~g2);
+~g4=Group.after(~g3);
 
 
 Ppar([
@@ -1002,7 +1000,7 @@ Pbind(\instrument, \lfoStep, \dur,Pseq([1],inf),\val,Pfunc({1.00.rand}),\group,~
 	\subsT,Pfunc({0.2.exprand(0.1)}),
 	\relT,Pfunc({0.22.exprand(0.1,1)}),
 	\atckC,0,
-	\decC,Pfunc({-4.exprand(-0.1)}),
+	\decC,0/*Pfunc({-4.exprand(-0.1)})*/,
 		\relC,Pfunc({-8.exprand(-2,1)}),\vlAtk ,Pfunc({1.00.exprand(0.01)}),\vlRel,Pfunc({0.1.exprand(0.01)})
 ).play(t);
 
@@ -1021,5 +1019,21 @@ Pbind(\instrument, \lfoStep, \dur,Pseq([1],inf),\val,Pfunc({1.00.rand}),\group,~
 Synth(\stereo,[\spread,~bspread,\center,~bcenter,\dlt1,~bdlt1,\dlt2,~bdlt2,\decT,~bdecT,\in,~bus4A,\which,~bwhichS],~g3);
 
 
+~rev=Synth(\reverbMad2, [\roomsize, 80, \revtime, 4.85, \damping, 0.41, \inputbw, 0.59, \drylevel, -8, \earlylevel, -9, \taillevel, -5 , \in,53  , \out,0],~g4);
 
+
+~rev.set(\in,53)
+
+~rev.set(\in,0)
+
+
+SynthDef(\reverbMad2, {
+		|out=0,in,  roomsize, revtime, damping, inputbw, drylevel, earlylevel,damp,room,taillevel,spread=15|
+
+	var a ,input;
+
+		input =In.ar(in,2);
+
+		a = Resonz.ar(input, 1294.5373184 *   [8,16,32],0.01).sum * 10;
+Out.ar(    out,GVerb.ar(a, roomsize,revtime , damping,inputbw,spread,drylevel.dbamp, earlylevel.dbamp,taillevel.dbamp,roomsize,0.3)+ input)}).add;
 
