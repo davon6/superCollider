@@ -772,6 +772,8 @@ XXXXX 4
 
 
 
+
+
 ~busC1 =Bus.control(s,1);
 ~busC2 =Bus.control(s,1);
 ~busC3 =Bus.control(s,1);
@@ -797,8 +799,15 @@ XXXXX 4
 ~bus2A=Bus.audio(s,1);
 ~bus3A=Bus.audio(s,1);
 ~bus4A=Bus.audio(s,1);
+~bus5A=Bus.audio(s,1);
 
 ~bspread=Bus.control(s);~bcenter=Bus.control(s);~bdlt1=Bus.control(s);~bdlt2=Bus.control(s);~bdecT=Bus.control(s);~bwhichS=Bus.control(s);
+
+
+~bmix=Bus.control(s);~broom=Bus.control(s);~bdamp=Bus.control(s);
+
+
+
 
 
 
@@ -903,6 +912,36 @@ SynthDef(\stereo,{|out=0, in, spread=0, level=1, center=0.0,dlt1=0.3,dlt2=0.4,de
 
 },In.kr(spread),level,In.kr(center))]))}).add;
 
+	SynthDef(\reverb, {
+		|out=0,in,damp,room,mix|
+    Out.ar(    out,
+		 FreeVerb.ar(  In.ar(in,1),
+			In.kr( mix), // mix 0-1
+			In.kr( room), // room 0-1
+			In.kr( damp) // damp 0-1 duh
+        ))}).add;
+
+
+SynthDef(\reverb, {
+		|out=0,in,damp,room,mix, val, quant, gain,frq=100, vol =0.3, val2,quant2, gain2,val3,shelf, gain3,val4,quant3, gain4,val5,quant5, gain5, val6,shelf2, gain6|
+    Out.ar(    out,
+		 FreeVerb.ar(
+
+
+
+
+		HPF.ar(HPF.ar(HPF.ar(HPF.ar(HPF.ar(HPF.ar(HPF.ar(HPF.ar(BLowShelf.ar(	BHiShelf.ar( 	BPeakEQ.ar(
+			BPeakEQ.ar(	BPeakEQ.ar(In.ar(in, 1),val,quant, gain),val2,quant2, gain2),val3,quant3, gain3),val4,shelf, gain4),val5,shelf2, gain5),
+
+		frq),frq),frq),frq),frq),frq),frq),frq)* vol,
+
+
+
+
+			In.kr( mix), // mix 0-1
+			In.kr( room), // room 0-1
+			In.kr( damp) // damp 0-1 duh
+        ))}).add;
 
 
 ~g1=Group.new;
@@ -971,11 +1010,14 @@ Pbind(\instrument, \lfoStep, \dur,Pseq([1],inf),\val,Pfunc({1.00.rand}),\group,~
 
 	Pbind(\instrument, \lfoStep, \dur,Pseq([1],inf),\val,Pfunc({1.00.rand}),\group,~g1,\out,~bspread),
 	Pbind(\instrument, \lfoStep, \dur,Pseq([1],inf),\val,Pfunc({0.6.rrand(-0.6)}),\group,~g1,\out,~bcenter),
-	Pbind(\instrument, \lfoStep, \dur,Pseq([1],inf),\val,Pfunc({0.55.rrand(0.05)}),\group,~g1,\out,~bdlt1),
-	Pbind(\instrument, \lfoStep, \dur,Pseq([1],inf),\val,Pfunc({0.55.rrand(0.05)}),\group,~g1,\out,~bdlt2),
+	Pbind(\instrument, \lfoStep, \dur,Pseq([1],inf),\val,Pfunc({0.4.rrand(0.05)}),\group,~g1,\out,~bdlt1),
+	Pbind(\instrument, \lfoStep, \dur,Pseq([1],inf),\val,Pfunc({0.4.rrand(0.05)}),\group,~g1,\out,~bdlt2),
 	Pbind(\instrument, \lfoStep, \dur,Pseq([1],inf),\val,Pfunc({0.00655.rand(0.012)}),\group,~g1,\out,~bdecT),
-	Pbind(\instrument, \lfoStep, \dur,Pseq([1],inf),\val,Pfunc({2.rand})/*Pwrand([1,0],[1,8].normalizeSum,inf)*/,\group,~g1,\out,~bwhichS)
+	Pbind(\instrument, \lfoStep, \dur,Pseq([1],inf),\val,Pfunc({2.rand})/*Pwrand([1,0],[1,8].normalizeSum,inf)*/,\group,~g1,\out,~bwhichS),
 
+	Pbind(\instrument, \lfoStep, \dur,Pseq([1],inf),\val,Pfunc({0.3.rrand(0.05)}),\group,~g1,\out,~bmix),
+	Pbind(\instrument, \lfoStep, \dur,Pseq([1],inf),\val,Pfunc({0.6.rrand(0.05)}),\group,~g1,\out,~broom),
+	Pbind(\instrument, \lfoStep, \dur,Pseq([1],inf),\val,Pfunc({0.3.rrand(0.05)}),\group,~g1,\out,~bdamp),
 
 
 ],1).play(t);
@@ -990,11 +1032,18 @@ Pbind(\instrument, \lfoStep, \dur,Pseq([1],inf),\val,Pfunc({1.00.rand}),\group,~
 ],~ye,\addAfter);
 
 
+{Out.ar(~bus3A, BHiPass4.ar(In.ar(~bus1A  ),  /*+MouseY.kr(100,2500)*/
+
+	 SinOsc.kr( LFTri.kr( ~hz1beat/4).range(~hz1beat/4,~hz1beat)).range(~hz1beat*64,~hz1beat*1024)
+
+	+In.kr(~busC11)
+
+	,0.3))}.play(target:~v, addAction: \addAfter);
 
 
 
-	Pbind(\instrument, \gate ,\in,  ~bus1A ,\vlDec,1,
-		\dur,Pxrand([Pseq([1/4],4),   Pseq([1/4],16), Pseq([1/1],1),Pseq([2/1],1) ],inf) ,    \group,~g2, \out,~bus3A,\tS, 0.39550810372374,
+	Pbind(\instrument, \gate ,\in,~bus3A   ,\vlDec,1,
+		\dur,Pxrand([Pseq([1/4],4),   Pseq([1/4],16), Pseq([1/1],1),Pseq([2/1],1) ],inf) ,    \group,~g2, \out,~bus4A,\tS, 0.39550810372374,
 		\vlSub,Pfunc({0.7.exprand(0.4,1)}),\vlSub2,Pkey(\vlSub),\atkT,Pfunc({0.14.exprand(0.01)}),
 	\decT,Pfunc({0.6.exprand(0.8,0.3)}),
 	\subsT,Pfunc({0.2.exprand(0.1)}),
@@ -1004,19 +1053,11 @@ Pbind(\instrument, \lfoStep, \dur,Pseq([1],inf),\val,Pfunc({1.00.rand}),\group,~
 		\relC,Pfunc({-8.exprand(-2,1)}),\vlAtk ,Pfunc({1.00.exprand(0.01)}),\vlRel,Pfunc({0.1.exprand(0.01)})
 ).play(t);
 
-{Out.ar(~bus4A, BHiPass4.ar(In.ar(~bus3A),  /*+MouseY.kr(100,2500)*/
 
-	 SinOsc.kr( LFTri.kr( ~hz1beat/4).range(~hz1beat/4,~hz1beat)).range(~hz1beat*64,~hz1beat*1024)
-
-	+In.kr(~busC11)
-
-	,0.3))}.play(target:~g2, addAction: \addAfter);
+Synth(\reverb,[\in,~bus4A,\out,~bus5A,\mix,~bmix,\room,~broom,\damp,~bdamp],~g3,\addAfter);
 
 
-
-
-
-Synth(\stereo,[\spread,~bspread,\center,~bcenter,\dlt1,~bdlt1,\dlt2,~bdlt2,\decT,~bdecT,\in,~bus4A,\which,~bwhichS],~g3);
+Synth(\stereo,[\spread,~bspread,\center,~bcenter,\dlt1,~bdlt1,\dlt2,~bdlt2,\decT,~bdecT,\in,~bus5A,\which,~bwhichS],~g4);
 
 
 ~rev=Synth(\reverbMad2, [\roomsize, 80, \revtime, 4.85, \damping, 0.41, \inputbw, 0.59, \drylevel, -8, \earlylevel, -9, \taillevel, -5 , \in,53  , \out,0],~g4);
