@@ -142,6 +142,7 @@ s.sync;
 	~delay6= Buffer.alloc(s, 48000 * 3, 2);
 	b = Buffer.alloc(s, 44100 * 2, 2);
 	~b2 = Buffer.alloc(s,48000,1);
+		~b3 = Buffer.alloc(s,48000,1);
 	~bufBg = Buffer.alloc(s,s.sampleRate*60,10 );
 	~temp= Buffer.alloc(s,s.sampleRate*2,1);
 
@@ -723,9 +724,22 @@ freq         )* EnvGen.kr(Env([0,vl,vl,0],[0.055,dur-0.055,0],4),timeScale: tS,d
 			[dur * atkT ,dur * decT  -(dur*relSu) /*- In.kr(bus1, 1)*/  , dur * subsT-relSu,dur* relT],
 			[atkC,decC ,0     ,relC]),    //decC- (In.kr(bus2, 1)
 
+		timeScale:  t.beatDur,	doneAction:0);
+		Out.ar(out, env* EnvGen.kr(Env.step([1,0],[dur,0]),timeScale: t.beatDur,doneAction: 2));
+}).add;
+
+
+		SynthDef(\gate,{|in, out=0, vlAtk=0, vlDec=1,vlSub=0, vlRel=0, atkT=0, decT=1, subsT=0, relT=0, atkC=0, decC=0, relC=0, bus1, bus2, dur,relSu=0,vlSub2=0|
+	var env =   In.ar(in, 1) *    EnvGen.kr(Env(
+			[vlAtk,vlDec                  ,vlSub ,vlSub2,vlRel,0],
+			[dur * atkT ,dur * decT  -(dur*relSu) /*- In.kr(bus1, 1)*/  , dur * subsT-relSu,dur* relT],
+			[atkC,decC ,0     ,relC]),    //decC- (In.kr(bus2, 1)
+
 		timeScale:  t.beatDur,	doneAction:2);
 		Out.ar(out, env);
 }).add;
+
+
 
 	SynthDef(\gate3,{|in, out=0, vlAtk=0, vlDec=1,vlSub=1,vlSub2=1 vlRel=0, atkT=0, decT=1, subsT=0, relT=0, atkC=0, decC=0, relC=0, bus1, bus2, dur,relSu=0|
 	var env = In.ar(in, 3) *    EnvGen.kr(Env(

@@ -109,3 +109,27 @@ SynthDef(\ye,{|fc,dur,out,strt,which,val,pol,dec|var sig1,sig2;
 Synth(\stereo,[\spread,~bspread,\center,~bcenter,\dlt1,~bdlt1,\dlt2,~bdlt2,\decT,~bdecT],~g3);
 
 ~bspread=Bus.control(s);~bcenter=Bus.control(s);~bdlt1=Bus.control(s);~bdlt2=Bus.control(s);~bdecT=Bus.control(s);
+
+-> List[ [ 1, 1, 5 ], [ 1, 2, 4 ], [ 1, 3, 3 ], [ 1, 4, 2 ], [ 1, 5, 1 ], [ 2, 1, 4 ], [ 2, 2, 3 ], [ 2, 3, 2 ], [ 2, 4, 1 ], [ 3, 1, 3 ], [ 3, 2, 2 ], [ 3, 3, 1 ], [ 4, 1, 2 ], [ 4, 2, 1 ], [ 5, 1, 1 ] ]
+
+
+SynthDef(\try,{|val|Out.ar(0,SinOsc.ar(100*val,mul: EnvGen.kr(Env.perc,doneAction: 2)))}).add;
+
+
+
+Pbind(\instrument,\try, \val,Pseq([ 1, 1, 5 ,  1, 2, 4 ,  1, 3, 3 ,  1, 4, 2 ,  1, 5, 1   ,   2, 1, 4   ,   2, 2, 3   ,   2, 3, 2   ,   2, 4, 1   ,   3, 1, 3   ,   3, 2, 2   ,   3, 3, 1   ,   4, 1, 2   ,   4, 2, 1   ,   5, 1, 1 ],1),\dur,1).play(t)
+
+
+x=({VerbEF.ar(BLowPass4.ar( Saw.ar(MouseX.kr(40,1200)),SinOsc.kr(~hz1beat).range(50,2600),0.6),
+
+
+	5.5,0.09,2000,6000,0.025
+)!2}.play)
+
+
+
+x=({VerbEF.ar(BLowPass4.ar( Saw.ar(MouseX.kr(40,1200)),SinOsc.kr(~hz1beat).range(50,2600),0.6),
+
+
+	15.5,0.9,2000,6000,0.025
+)!2}.play)

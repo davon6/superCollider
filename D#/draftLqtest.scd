@@ -791,7 +791,7 @@ XXXXX 4
 ~busC11=Bus.control(s,1);
 
 ~seqBus=Bus.control(s,1);
-
+~bus6W=Bus.control(s,1);
 
 ~bmodS=Bus.control(s); ~bf1=Bus.control(s);  ~bmodT =Bus.control(s); ~bf2=Bus.control(s);  ~bmodSa=Bus.control(s);  ~bf3=Bus.control(s);  ~bmodR=Bus.control(s);  ~bfr=Bus.control(s);
 
@@ -800,6 +800,10 @@ XXXXX 4
 ~bus3A=Bus.audio(s,1);
 ~bus4A=Bus.audio(s,1);
 ~bus5A=Bus.audio(s,1);
+~bus6A=Bus.audio(s);
+~bus7A=Bus.audio(s,2);
+~bus8A=Bus.audio(s,2);
+~bus9A=Bus.audio(s,2);
 
 ~bspread=Bus.control(s);~bcenter=Bus.control(s);~bdlt1=Bus.control(s);~bdlt2=Bus.control(s);~bdecT=Bus.control(s);~bwhichS=Bus.control(s);
 
@@ -901,7 +905,7 @@ Out.ar(out,SelectX.ar(In.kr(which),[ BufCombN.ar(~b2.bufnum, In.ar(in,1),
 		+ (LFDNoise0.kr(In.kr(modR).range(0.0008,0.00008)*In.kr(fr)))
 
 
-		,decT ,amp),In.ar(in,1)])  )}).add;
+		,decT ,amp)*0.76,In.ar(in,1)])  )}).add;
 
 SynthDef(\stereo,{|out=0, in, spread=0, level=1, center=0.0,dlt1=0.3,dlt2=0.4,decT=2, mxDel=1,which|
 
@@ -1020,6 +1024,10 @@ Pbind(\instrument, \lfoStep, \dur,Pseq([1],inf),\val,Pfunc({1.00.rand}),\group,~
 	Pbind(\instrument, \lfoStep, \dur,Pseq([1],inf),\val,Pfunc({0.3.rrand(0.05)}),\group,~g1,\out,~bdamp),
 
 
+
+	Pbind(\instrument, \lfoStep, \dur,Pseq([1],inf),\val,Pfunc({2.rand}),\group,~g1,\out,~bus6W)
+
+
 ],1).play(t);
 
 
@@ -1032,13 +1040,22 @@ Pbind(\instrument, \lfoStep, \dur,Pseq([1],inf),\val,Pfunc({1.00.rand}),\group,~
 ],~ye,\addAfter);
 
 
-{Out.ar(~bus3A, BHiPass4.ar(In.ar(~bus1A  ),  /*+MouseY.kr(100,2500)*/
+{Out.ar(~bus3A,
+
+	/*SelectX.ar(In.kr(~bus6W),[*/
+	BHiPass4.ar(In.ar(~bus1A  ),  /*+MouseY.kr(100,2500)*/
 
 	 SinOsc.kr( LFTri.kr( ~hz1beat/4).range(~hz1beat/4,~hz1beat)).range(~hz1beat*64,~hz1beat*1024)
 
 	+In.kr(~busC11)
 
-	,0.3))}.play(target:~v, addAction: \addAfter);
+			,0.3),
+
+	/*	BLowPass4.ar( In.ar(~bus1A  ),SinOsc.kr(~hz1beat).range(50,2600),0.6)*3])*/
+
+
+
+)}.play(target:~v, addAction: \addAfter);
 
 
 
