@@ -46,6 +46,7 @@ new
 
 ~busC26=Bus.control(s,1);
 ~busC27=Bus.control(s,1);
+~busC28=Bus.control(s,1);
 
 ~seqBus=Bus.control(s,1);
 ~bus6W=Bus.control(s,1);
@@ -250,7 +251,7 @@ SynthDef(\lfo, {|out, dur,ph, val = (~hzQbeat), rL=(-1500),rH=1500, which=0 ,wid
 
 
 SynthDef(\osc, {|out=0,freq=  90.816812847401
-/* 42.midicps*(432/440) *//*161.81716430268*/ ,mratio,freq4/*(52.midicps*(432/440))*/,freq2=610,freq3=610,amp=1,in,gate=1,mul=1,mul2=1,mul3=1,which,clip,skew,pitch,lfoP, melo,seed = 123,/* amp=0.2,*/ sustain=1,fmMod,fmMod2,impulse,buf,start,freqMod,freqMod2|var sig, sig2, sig3, sig4,sig5, sig6,mod,mod2,carrier, op1, op2,inX,
+/* 42.midicps*(432/440) *//*161.81716430268*/ ,mratio,freq4/*(52.midicps*(432/440))*/,freq2=610,freq3=610,amp=1,in,gate=1,mul=1,mul2=1,mul3=1,which,clip,skew,pitch,lfoP, melo,seed = 123,/* amp=0.2,*/ sustain=1,fmMod,fmMod2,impulse,buf,start,freqMod,freqMod2,cratio|var sig, sig2, sig3, sig4,sig5, sig6,mod,mod2,carrier, op1, op2,inX,
 	 modX, car;
 
 
@@ -356,13 +357,13 @@ LFPulse.kr(12,0.5).range(0,0.6)
 
 
 
+//DIFFERENT SQUINE ALLEZZZZ
 
+	mod2 = Squine.ar(  In.kr(freqMod2)/10,In.kr(clip),In.kr(skew ) ,mul:  In.kr(freqMod)/10);
 
-	mod2 = Squine.ar(  In.kr(freqMod2)/10,In.kr(clip),In.kr(skew ) ,mul:  In.kr(freqMod)*In.kr(mratio)/10);
+	mod = Squine.ar( In.kr(freqMod2)*In.kr(mratio) +mod2,In.kr(clip),In.kr(skew ),mul:In.kr(freqMod)*In.kr(mratio)/*In.kr(mul2)*/);
 
-	mod = Squine.ar( In.kr(freqMod2) +mod2,In.kr(clip),In.kr(skew ),mul:In.kr(freqMod)*In.kr(mratio)/*In.kr(mul2)*/);
-
-	sig2 = Squine.ar(In.kr(freqMod2) /*freq2*/ + mod  ,In.kr(clip),In.kr(skew )/*+ mod ,*/,mul:  1/*+In.kr(~busC25)/ In.kr(~busC25)*/);
+	sig2 = Squine.ar(In.kr(freqMod2)*In.kr(cratio) /*+ freq2*/+ mod  ,In.kr(clip),In.kr(skew )/*+ mod ,*/,mul:  1/*+In.kr(~busC25)/ In.kr(~busC25)*/);
 
 
 
@@ -697,6 +698,9 @@ Pbind(\instrument, \lfoStep, \dur,Pseq(~dur,inf),\val,Pfunc({1.00.rand}),\group,
 
 	Pbind(\instrument, \lfoStep, \dur,Pseq(~dur,inf),\val,Pfunc({(1/8).rrand( 8)}),\group,~g1,\out,~busC14),
 
+		Pbind(\instrument, \lfoStep, \dur,Pseq(~dur,inf),\val,Pfunc({(1/8).rrand( 8)}),\group,~g1,\out,~busC28),
+
+
 	Pbind(\instrument, \lfoStep, \dur,Pseq(~dur,inf),\val,Pfunc({(1/16).rrand( 4)}),\group,~g1,\out,~busC17),
 
 	// SinOsc.kr(0.6).range(0, 3000)
@@ -722,9 +726,9 @@ Pbind(\instrument, \lfoStep, \dur,Pseq(~dur,inf),\val,Pfunc({1.00.rand}),\group,
 
 	Pbind(\instrument, \lfo, \dur,Pseq(~dur,inf),\val,Pfunc({22.rand}),\group,~g1,\out,~busC22,\which,Pfunc({2.rand}),\rL,Pfunc({(-3000).rand}),\rH,Pfunc({3000.rand}),\width,Pfunc({1.00.rand}),\ph,Pfunc({1.00.rand})),*/
 
-	Pbind(\instrument, \lfoPercBis, \dur,Pseq(~dur,inf),\group,~g1,\out,Prand([~busC23,~busC22,~busC4],inf),\valA,Pfunc({1.00.rand}),\valD,Pfunc({1.00.rand}),\lvl,Pfunc({700.00.rand}),\crv,Pfunc({(-6).rrand(6)})),
+	Pbind(\instrument, \lfoPercBis, \dur,Pseq(~dur,inf),\group,~g1,\out,Prand([~busC23,~busC22/*,~busC4*/],inf),\valA,Pfunc({1.00.rand}),\valD,Pfunc({1.00.rand}),\lvl,Pfunc({700.00.rand}),\crv,Pfunc({(-6).rrand(6)})),
 
-	Pbind(\instrument, \lfo, \dur,Pseq(~dur,inf),\val,Pfunc({12.00.rand}),\group,~g1,\out,Prand([~busC23,~busC22,~busC4],inf),\which,Pfunc({3.rand}),\rL,Pfunc({(-700.00).rand}),\rH,Pfunc({700.00.rand}),\width,Pfunc({1.00.rand}),\ph,Pfunc({1.00.rand})),
+	Pbind(\instrument, \lfo, \dur,Pseq(~dur,inf),\val,Pfunc({12.00.rand}),\group,~g1,\out,Prand([~busC23,~busC22/*,~busC4*/],inf),\which,Pfunc({3.rand}),\rL,Pfunc({(-700.00).rand}),\rH,Pfunc({700.00.rand}),\width,Pfunc({1.00.rand}),\ph,Pfunc({1.00.rand})),
 
 
 //REMOVE DOWN
@@ -791,15 +795,15 @@ b = (75..86);*/
 
 /*a = (30..35.5);
 b = (32.5..43);*/
-/*
+
 a = (30..41);
-b = (45..56);*/
+b = (45..56);
 
 /*a = (15..26);
 b = (30..41);*/
 
-a = (10..21);
-b = (20..31);
+/*a = (10..21);
+b = (20..31);*/
 
 
 // randomly exchange one pitch of array
@@ -815,7 +819,7 @@ q = PSrecur({ |x|
 }, 1, start: [b.scramble[0..4]]);
 
 x = Pbind(\instrument,
-	\lfoStepMelo, \dur,Pxrand([Pseq([1/4],4), Pseq([1/3],6),   Pseq([1/4],16), Pseq([1/1],1),/*,Pseq([2/1],1)*/Pseq([1/1],4) ],inf) ,\group,~g1,\out,~busC4,
+	\lfoStepMelo, \dur,Pxrand([Pseq([1/4],4), Pseq([1/3],6),   Pseq([1/4],16), Pseq([1/1],1),/*,Pseq([2/1],1)*/Pseq([1/1],4) ],inf) ,\group,~g1,\out,Prand([~busC23,~busC22/*,~busC4*/],inf)/*~busC4*/,
 	\midinote, Pseq([p.flatten, q.flatten], inf)
 ).play(t)
 );
@@ -824,7 +828,7 @@ x = Pbind(\instrument,
 /*Pbind(\instrument, \lfoStep, \dur,Pxrand([Pseq([1/4],4),   Pseq([1/4],16), Pseq([1/1],1),/*,Pseq([2/1],1)*/Pseq([1/1],2) ],inf) ,\val,Pfunc({(76.midicps*(432/440)).rand}),\group,~g1,\out,~busC4),*/
 
 
- ~ye= Synth( \osc,[\out,~bus1A,\freq2,~busC4,\mul2,~busC3,\freq3,~busC2,\mul3,~busC3,\which,~busC5,\clip,~busC6,\skew, ~busC7,\pitch, ~busC8,\lfoP,~busC9,\melo,~busC10,\mratio,~busC14,\fmMod,~busC15,\fmMod2,~busC16,\freqMod,~busC22,\freqMod2,~busC23],~g1,addAction: 'addAfter');
+ ~ye= Synth( \osc,[\out,~bus1A,\freq2,~busC4,\mul2,~busC3,\freq3,~busC2,\mul3,~busC3,\which,~busC5,\clip,~busC6,\skew, ~busC7,\pitch, ~busC8,\lfoP,~busC9,\melo,~busC10,\mratio,~busC14,\cratio,~busC28,\fmMod,~busC15,\fmMod2,~busC16,\freqMod,~busC22,\freqMod2,~busC23],~g1,addAction: 'addAfter');
 
 /*~v =  Synth(\comb1,[ \in, ~bus2A,\out,~bus1A   ,\maxDel,0.7744,\decT,(-0.5)
 , \modS,~bmodS , \f1,~bf1 , \modT, ~bmodT, \f2, ~bf2, \modSa,~bmodSa , \f3, ~bf3, \modR, ~bmodR, \fr, ~bfr,
@@ -845,7 +849,7 @@ x = Pbind(\instrument,
 		,11).range((-800),800))]))}.play(target:~ye, addAction: \addAfter));
 
 
-({Out.ar(/*~bus10A*/ ~bus11A,
+({Out.ar(~bus10A/*~bus11A*/,
 
 
 
