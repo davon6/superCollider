@@ -3,12 +3,15 @@ try make use of live gran
 fix flanger/phaser
 new
 (
+
+~leadCre = Buffer.alloc(s, s.sampleRate *  t.beatDur*16);
 ~qAu1= Bus.audio(s,1);
 ~qAu2= Bus.audio(s,1);
 ~qAu3= Bus.audio(s,1);
 
 
-
+~ptrBus2=Bus.audio(s,1);
+~micBus2=Bus.audio(s,1);
 
 ~micBus=  Bus.audio(s,1);
 ~ptrBus=Bus.audio(s,1);
@@ -236,7 +239,7 @@ SynthDef(\tapedly, {
 
 
 
-	Out.ar(SelectX.kr(In.kr(which),[0,~bus8A.index,~bus9A.index]),  In.ar(in, 2));
+	Out.ar( SelectX.kr(In.kr(which),[0,~bus8A.index,~bus9A.index]),  In.ar(in, 2));
 }).add;
 
 
@@ -495,6 +498,8 @@ SynthDef(\stereo,{|out=0, in, spread=0, level=1, center=0.0,dur,atkT=0,crvA=0,tS
 SynthDef(\reverb, {
 		|out=0,in,damp,room,mix, val, quant, gain,frq=100, vol =0.3, val2,quant2, gain2,val3,shelf, gain3,val4,quant3, gain4,val5,quant5, gain5, val6,shelf2, gain6|
     Out.ar(    out,
+
+		// Decimator.ar(
 		 FreeVerb.ar(
 
 
@@ -511,12 +516,46 @@ SynthDef(\reverb, {
 			In.kr( mix), // mix 0-1
 			In.kr( room), // room 0-1
 			In.kr( damp) // damp 0-1 duh
-        ))}).add;
+        )
+		// ,MouseX.kr(100,48000),MouseY.kr(1,24))
+
+
+
+)}).add;
+
+
+SynthDef(\reverb, {
+		|out=0,in,damp,room,mix, val, quant, gain,frq=100, vol =0.3, val2,quant2, gain2,val3,shelf, gain3,val4,quant3, gain4,val5,quant5, gain5, val6,shelf2, gain6,ctrl|
+    Out.ar(    out,
+
+		// Decimator.ar(
+		 FreeVerb.ar(
+
+
+			// In.ar(in, 1),
+
+		HPF.ar(HPF.ar(HPF.ar(HPF.ar(HPF.ar(HPF.ar(HPF.ar(HPF.ar(BLowShelf.ar(	BHiShelf.ar( 	BPeakEQ.ar(
+				BPeakEQ.ar(	BPeakEQ.ar(In.ar(in, 1),val,quant, gain),val2,quant2, /*gain2*/Amplitude.ar(In.ar(ctrl,1)).linlin(0, 0.003, 0, 14)),val3,quant3, gain3),3000/*val4*/,1.3/*shelf*/,Amplitude.ar(In.ar(ctrl,1)).linlin(0, 0.003, 0, -14) /*(-14)*//*gain4*/),val5,shelf2, gain5),
+
+		frq),frq),frq),frq),frq),frq),frq),frq)* vol,
+
+
+
+
+			In.kr( mix), // mix 0-1
+			In.kr( room), // room 0-1
+			In.kr( damp) // damp 0-1 duh
+        )
+		// ,MouseX.kr(100,48000),MouseY.kr(1,24))
+
+
+
+)}).add;
 
 
 
 SynthDef(\reverbStat, {
-		|out=0,in,damp,room,mix, val, quant, gain,frq=100, vol =0.3, val2,quant2, gain2,val3,shelf, gain3,val4,quant3, gain4,val5,quant5, gain5, val6,shelf2, gain6|
+		|out=0,in,damp,room,mix, val, quant, gain,frq=100, vol =0.3, val2,quant2, gain2,val3,shelf, gain3,val4,quant3, gain4,val5,quant5, gain5, val6,shelf2, gain6,ctrl|
     Out.ar(    out,
 		 FreeVerb.ar(
 
@@ -524,7 +563,7 @@ SynthDef(\reverbStat, {
 			// In.ar(in, 1),
 
 		HPF.ar(HPF.ar(HPF.ar(HPF.ar(HPF.ar(HPF.ar(HPF.ar(HPF.ar(BLowShelf.ar(	BHiShelf.ar( 	BPeakEQ.ar(
-				BPeakEQ.ar(	BPeakEQ.ar(In.ar(in, 1),val,quant, gain),val2,quant2, gain2),val3,quant3, gain3),5000/*val4*/,1.3/*shelf*/, (-14)/*gain4*/),val5,shelf2, gain5),
+				BPeakEQ.ar(	BPeakEQ.ar(In.ar(in, 1),val,quant, gain),val2,quant2, gain2),val3,quant3, gain3),2000/*val4*/,1.6/*shelf*/, (-14)/*gain4*/),val5,shelf2,/*Amplitude.kr(In.ar(ctrl,1)).linlin(0, 0.003, 0, 14)*/ gain5),
 
 		frq),frq),frq),frq),frq),frq),frq),frq)* vol,
 
@@ -681,8 +720,13 @@ vps = { |trig, freq, horizontal, vertical|
 ~g11=Group.after(~g10);
 ~g12=Group.after(~g11);
 ~g13=Group.after(~g12);
+~g14=Group.after(~g13);
+~g15=Group.after(~g14);
+~g16=Group.after(~g15);
 // 1800
 Ppar([
+
+	/*
 	Pbind(\instrument, \lfoStep, \dur,Pseq(~dur,inf),\val,Pfunc({/*(76.midicps*(432/440)).rrand(0)*/4000.rrand(20)}),\group,~g1,\out,~busC2),
 Pbind(\instrument, \lfoStep, \dur,Pseq(~dur,inf),\val,Pfunc({4000.rand}),\group,~g1,\out,~busC3),
 
@@ -694,9 +738,7 @@ Pbind(\instrument, \lfoStep, \dur,Pseq(~dur,inf),\val,Pfunc({4000.rand}),\group,
 
 	Pbind(\instrument, \lfoStep, \dur,Pseq(~dur,inf),\val,Pfunc({4.rand}),\group,~g1,\out,~busC5),
 
-	Pbind(\instrument, \lfoStep, \dur,Pseq(~dur,inf),\val,Pfunc({(1.0).rrand(0.2)}),\group,~g1,\out,~busC6),
 
-Pbind(\instrument, \lfoStep, \dur,Pseq(~dur,inf),\val,Pfunc({(1.0).rrand(-1)}),\group,~g1,\out,~busC7),
 
 
 
@@ -726,7 +768,7 @@ Scale.chromatic(\just).degreeToFreq(7.rand, 76.midicps, -20)*/
 
 	}),\dur,Pxrand([ Pseq([1/1],1),Pseq([1/1],4), Pseq([1/4],16)],inf),\group,~g1,\out,~busC10),
 
-
+*/
 
 	Pbind(\instrument, \lfoPerc, \dur,Pxrand([ Pseq([3/1],1),Pseq([1/3],4), Pseq([1/4],16),Pseq([1],1)],inf),\val,Pfunc({(-1.0).rrand(1.0)}),\group,~g1,\out,~busC11,\valA,Pfunc({t.beatDur.rand}),\valD,Pfunc({t.beatDur.rand}),\lvl,Pfunc({(-65).rrand(700)}),\crv,Pfunc({(-6).rrand(6)}),),
 
@@ -772,6 +814,10 @@ Pbind(\instrument, \lfoStep, \dur,Pseq(~dur,inf),\val,Pfunc({1.00.rand}),\group,
 		],1)
 	],inf),*/
 
+	// skew
+Pbind(\instrument, \lfoStep, \dur,Pseq(~dur,inf),\val,Pfunc({(1.0).rrand(0.2)}),\group,~g1,\out,~busC6),
+
+Pbind(\instrument, \lfoStep, \dur,Pseq(~dur,inf),\val,Pfunc({(1.0).rrand(-1)}),\group,~g1,\out,~busC7),
 
 
 
@@ -1082,7 +1128,7 @@ Pbind(\instrument, \gate ,\in,~bus10A   ,\vlDec,1,
 /*({Out.ar(~bus4A,In.ar(~bus10A)*EnvGen.kr(Env([0,1,0],[t.beatDur/3,t.beatDur/3,t.beatDur/3],[5,8,5])))}.play(target:~g3));*/
 
 
-Synth(\reverb,[\in,~bus4A,\out,~bus5A,\mix,~bmix,\room,~broom,\damp,~bdamp],~g4,\addAfter);
+Synth(\reverb,[\in,~bus4A,\out,~bus5A,\mix,~bmix,\room,~broom,\damp,~bdamp,\ctrl,~bus4A],~g4,\addAfter);
 
 
 ~w=Synth(\stereo,[\spread,~bspread,\center,~bcenter,\dlt1,~bdlt1,\str,~bdlt2,\decT,~bdecT,\in,~bus5A,\which,~bwhichS,\out,~bus7A],~g5);
@@ -1112,7 +1158,7 @@ Pwrand([
 Synth(\gate2,[\in,~bus13A ,\which,~busC20],~g6);
 // Pbind(\instrument, \gate2,\group,~g6,\in,0 ,\out,~bus9A,\dur,9).play(t);
 
-x=({Out.ar(~bus15A,Splay.ar( VerbEF.ar(In.ar(~bus9A,2),
+x=({Out.ar(~bus14A/*~bus15A*/,Splay.ar( VerbEF.ar(In.ar(~bus9A,2),
 
 
 	3,0.5,2000,6000,0.025,2.2*In.kr(~busC25)
@@ -1130,9 +1176,9 @@ x=({Out.ar(~bus15A,Splay.ar( VerbEF.ar(In.ar(~bus9A,2),
 
 
  Synth(\limiter,[\in,~bus14A,\out,0,\gain,70],~g8);
- Synth(\limiter,[\in,~bus15A,\out,0,\gain,70],~g8);
-
-
+// Synth(\limiter,[\in,~bus15A,\out,0,\gain,70],~g8);
+/*
+*/
 
 )
 
