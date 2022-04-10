@@ -879,7 +879,7 @@ BBandPass.ar(
 		SelectX.kr( LFNoise1.kr(~hz1beat).range(0,2),[~hz1beat,~hz1beat/4,~hz1beat*4])
 	).range(~hz1beat*32,~hz1beat*1048),
 
-		SinOsc.kr(~hz1beat).range(60,2000)]),0.36,1 )
+		SinOsc.kr(~hz1beat).range(60,2500)]),0.36,1 )
 
 
 		.round(2**(-16))
@@ -897,7 +897,7 @@ Ppar([
 Pbind(\instrument, \lfoStep, \dur,1,\val,Pwrand([0,1],[1,5].normalizeSum,inf),\group,~g1,\out,~busC1),
 
 
-	Pbind(\instrument, \lfoStep, \dur,16,\val,Pfunc({(~hz1beat*16).rrand(~hz1beat)}),\group,~g1,\out,~busC3)],inf).play(t);
+	Pbind(\instrument, \lfoStep, \dur,Pseq([16/1],inf),\val,Pfunc({(~hz1beat*16).rrand(~hz1beat)}),\group,~g1,\out,~busC3)],inf).play(t);
 
 ({
 

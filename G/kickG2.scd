@@ -33,8 +33,8 @@ SynthDef(\kick, {
 	env =
 
 EnvGen.ar(
-		Env([ 0.9 ,   0.315 ,  1,1,0],
-			[ 0.016 ,   0.06  , t.beatDur*0.255 , t.beatDur*0.3  ],[-3.66,-4.6,-1.2,-8]),doneAction:2);
+		Env([ 2 ,   0.0615 ,  2.3,2.3,0],
+			[ 0.016 ,   0.01  , t.beatDur*0.255 , t.beatDur*0.4  ],[1.66,-4.6,-1.2,8]),doneAction:2);
 	//-2.6 can be zero
 
 	sig = SinOsc.ar(envF, mul: env);

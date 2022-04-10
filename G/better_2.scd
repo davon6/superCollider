@@ -161,7 +161,7 @@ Out.kr(out,EnvGen.kr(
 		Env(
 			[index, index*iScale, index],
 			[dur*atk,dur* rel],
-			[ic_atk, ic_rel]
+			[/*ic_atk*/0, 0/*ic_rel*/]
 		),timeScale: t.beatDur,doneAction: 2
 ))}).add;
 
@@ -416,17 +416,47 @@ LFPulse.kr(12,0.5).range(0,0.6)
 	mod = Squine.ar( In.kr(freqMod2)*In.kr(mratio) +mod2,In.kr(clip),In.kr(skew ),mul:In.kr(freqMod)*In.kr(mratio)/*In.kr(mul2)*/);
 
 	sig2 = Squine.ar(In.kr(freqMod2)*In.kr(cratio) /*+ freq2*/+ mod  ,In.kr(clip),In.kr(skew )/*+ mod ,*/,mul:  1/*+In.kr(~busC25)/ In.kr(~busC25)*/);*/
+///stqrted here
 
+	/*mod2 = Squine.ar(  In.kr(freq)/10,In.kr(clip),In.kr(skew ) ,mul:  In.kr(freq)/10* In.kr(iEnv));
 
-mod2 = Squine.ar(  In.kr(freqMod2)/10,In.kr(clip),In.kr(skew ) ,mul:  In.kr(freqMod)/10);
-
-	mod = Squine.ar( In.kr(freqMod2)*In.kr(mratio) +mod2,In.kr(clip),In.kr(skew ),mul:In.kr(freqMod)*In.kr(mratio)/*In.kr(mul2)*/);
-
-	sig2 = Squine.ar(In.kr(freqMod2)*In.kr(cratio) /*+ freq2*/+ mod  ,In.kr(clip),In.kr(skew )/*+ mod ,*/,mul:  1/*+In.kr(~busC25)/ In.kr(~busC25)*/);
-
+	mod = Squine.ar(
 
 
 
+
+
+		(In.kr(freq)*In.kr(mratio) +mod2)%((In.kr(freq)*In.kr(mratio)+mod2)/
+			((In.kr(freq)*In.kr(mratio)+mod2)*In.kr(modulus)))
+
+
+
+
+
+		,In.kr(clip),In.kr(skew ),mul:In.kr(freq)*In.kr(mratio)* In.kr(iEnv));
+
+	sig2 = Squine.ar(In.kr(freq)*In.kr(cratio) /*+ freq2*/+ mod  ,In.kr(clip),In.kr(skew ));*/
+
+
+
+	mod2 = SinOsc.ar(  In.kr(freq)/10,mul:  In.kr(freq)/10* In.kr(iEnv));
+
+	mod = SinOsc.ar(
+
+
+
+
+
+		(In.kr(freq)*In.kr(mratio) +mod2)%((In.kr(freq)*In.kr(mratio)+mod2)/
+			((In.kr(freq)*In.kr(mratio)+mod2)*In.kr(modulus)))
+
+
+
+
+
+	,mul:In.kr(freq)*In.kr(mratio)* In.kr(iEnv));
+
+	sig2 = Squine.ar(In.kr(freq)*In.kr(cratio) /*+ freq2*/+ mod,In.kr(clip),In.kr(skew )  );
 
 
 	Out.ar(out,  LeakDC.ar(Shaper.ar(~tfBuf,sig2
@@ -854,10 +884,18 @@ Pbind(\instrument, \lfoStep, \dur,Pseq(~dur,inf),\val,Pfunc({(1.0).rrand(-1)}),\
 
 
 
-	/*Pbind(\instrument,	\iEnv, \dur,Pseq(~dur,inf),\group,~g1,\out,~busC2,
+	Pbind(\instrument,	\iEnv, \dur,Pseq(~dur,inf),\group,~g1,\out,~busC2,
 
-	\atk,Pfunc({1.00.rand}) , \rel,Pfunc({\dur-\atk}) ,\index,Pfunc({5.00.rand}) ,
-		,\iScale,Pfunc({5.00.rand}) )*/
+	\atk,Pfunc({1.00.rand}) , \rel,Pfunc({1.00.rand}) /*Pfunc({\dur-\atk})*/ ,\index,Pfunc({5.00.rand})
+		,\iScale,Pfunc({5.00.rand}) ),
+
+	Pbind(\instrument, \lfoStep, \dur,Pseq(~dur,inf),\val,Pfunc({0.3.rand}),\group,~g1,\out,~busC3),
+
+
+
+/*	Pbind(\instrument, \lfoStep, \dur,Pseq(~dur,inf),\val,Pfunc({(79.midicps*(432/440)).rand}),\group,~g1,\out,~busC4),*/
+
+
 
 
 
@@ -924,20 +962,13 @@ Pbind(\instrument, \lfoStep, \dur,Pseq(~dur,inf),\val,Pfunc({(1.0).rrand(-1)}),\
 ],1).play(t);
 
 (
-/*a = (60..71);
-b = (75..86);*/
+a = (60..71);
+b = (75..86);
 
-/*a = (30..35.5);
-b = (32.5..43);*/
+/*a = (30..41);
+b = (45..56);*/
 
-a = (30..41);
-b = (45..56);
 
-/*a = (15..26);
-b = (30..41);*/
-
-/*a = (10..21);
-b = (20..31);*/
 
 
 // randomly exchange one pitch of array
@@ -953,7 +984,7 @@ q = PSrecur({ |x|
 }, 1, start: [b.scramble[0..4]]);
 
 x = Pbind(\instrument,
-	\lfoStepMelo, \dur,Pxrand([Pseq([1/4],4), Pseq([1/3],6),   Pseq([1/4],16), Pseq([1/1],1),/*,Pseq([2/1],1)*/Pseq([1/1],4) ],inf) ,\group,~g1,\out,Prand([~busC23,~busC22/*,~busC4*/],inf)/*~busC4*/,
+	\lfoStepMelo, \dur,Pxrand([Pseq([1/4],4),/* Pseq([1/3],6), */  Pseq([1/4],16), Pseq([1/1],1),/*,Pseq([2/1],1)*/Pseq([1/1],4),Pseq([4/1],1),Pseq([4/1],4) ],inf) ,\group,~g1,\out,~busC4,
 	\midinote, Pseq([p.flatten, q.flatten], inf)
 ).play(t)
 );
@@ -1158,9 +1189,9 @@ x=({Out.ar(~bus14A/*~bus15A*/,Splay.ar( VerbEF.ar(In.ar(~bus9A,2),
 
 
 
-/* d = Synth(\tapedly, [\in, ~bus8A, /*\dlytime, 0.333,*/ \fb, 0.5, \wet, 1.0,\decT,(-0.5)
+ d = Synth(\tapedly, [\in, ~bus8A, /*\dlytime, 0.333,*/ \fb, 0.5, \wet, 1.0,\decT,(-0.5)
  , \modS,~bmodS , \f1,~bf1 , \modT, ~bmodT, \f2, ~bf2, \modSa,~bmodSa , \f3, ~bf3, \modR, ~bmodR, \fr, ~bfr,\which,~busC26,\out,~bus14A],~g7);
- d.set(\dlytime, ~busC21, \fb, 0.9,\wet, 1.0,\fc, 5000);*/
+ d.set(\dlytime, ~busC21, \fb, 0.9,\wet, 1.0,\fc, 5000);
 
 
  Synth(\limiter,[\in,~bus14A,\out,0,\gain,70],~g8);
