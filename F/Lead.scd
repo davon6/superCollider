@@ -797,8 +797,8 @@ Synth(\rec, [\ptrIn, ~ptrBus2, \micIn,~bus4A /*~bus1A*//*~micBus2*/, \buf, ~lead
 
 
 		/*~hz1beat*4*/),t.beatDur/ In.kr(~busC5) /*t.beatDur*/,~leadCre.bufnum,rate:
-				1// LFTri.kr(0.08,3).range(0.1,4)
-				,pos: 0.9375
+		LFNoise0.ar(~hz1beat*16).range(0.5,6) /*1*/// LFTri.kr(0.08,3).range(0.1,4)
+		,pos: 0.9375 /*In.kr(~busC9)*/
 )
 
 
@@ -899,11 +899,15 @@ Ppar([
 Pbind(\instrument, \lfoStep, \dur,1,\val,Pwrand([0,1],[1,5].normalizeSum,inf),\group,~g1,\out,~busC1),
 
 
-	Pbind(\instrument, \lfoStep, \dur,Pseq([16/1],inf),\val,Pfunc({(~hz1beat/4).rrand(~hz1beat)}),\group,~g1,\out,~busC3),
+	Pbind(\instrument, \lfoStep, \dur,Pseq([16/1],inf),\val,Pfunc({(~hz1beat/4).rrand(~hz1beat*4)}),\group,~g1,\out,~busC3),
 
 
 	Pbind(\instrument, \lfoStep, \dur,Pseq([16/1],inf),\val,/*Pfunc({t.beatDur.rand})*/
-	Prand([16,4,1],inf),\group,~g1,\out,~busC5)
+	Prand([16,4,1],inf),\group,~g1,\out,~busC5),
+
+	/*Pbind(\instrument, \lfoStep, \dur,Pseq([1/4],inf),\val,Pfunc({0.9375.rrand(0.9999)})
+	,\group,~g1,\out,~busC9)*/
+
 ],inf).play(t);
 
 ({
@@ -917,8 +921,11 @@ Pbind(\instrument, \lfoStep, \dur,1,\val,Pwrand([0,1],[1,5].normalizeSum,inf),\g
 
 	SelectX.ar(In.kr(~busC1),[
 		GrainBuf.ar(1,Impulse.kr(~hz1beat*4),t.beatDur,~f2.bufnum),In.ar(~micBus)])
+
+
+
 ,0.05,/*SinOsc.kr(~hz1beat/4,0.3,0.02,0.02)+*/
-SinOsc.kr(~hz1beat/16,2,0.01,0.01)//good phaser
+SinOsc.kr(~hz1beat/4,2,0.01,0.01)//good phaser
 				,-0.5).round(2**(-16))
 
 	/*)*/
@@ -943,7 +950,7 @@ Pchain(
 
 	Pbind(\instrument, \gate ,\in,~bus16A   ,\vlDec,1,
 			\dur,/*Pxrand([Pseq([1/4],4),   Pseq([1/4],16), */Pseq([1/8],128)/*,Pseq([2/1],1)*//*Pseq([1/1],2) ],inf)*/ ,    \group,~g13, \out,~bus17A,\type,Pseq([\note,\rest],inf),
-		\vlSub,Pfunc({0.7.exprand(0.4,1)}),\vlSub2,Pkey(\vlSub),\atkT,Pfunc({0.14.exprand(0.01)}),
+		\vlSub,Pfunc({0.7.exprand(0.4,1)}),\vlSub2,Pfunc({0.7.exprand(0.4,1)})/*Pkey(\vlSub)*/,\atkT,Pfunc({0.14.exprand(0.01)}),
 	\decT,Pfunc({0.6.exprand(0.8,0.3)}),
 	\subsT,Pfunc({0.2.exprand(0.1)}),
 	\relT,Pfunc({0.22.exprand(0.1,1)}),
@@ -1024,3 +1031,253 @@ Synth(\stereoStat,[\in,~bus18A,\out,~bus19A],~g15);
 ~limit= Synth(\limiter,[\in,~bus19A,\out,0,\gain,80],~g16);
 
 )
+
+///newwww
+
+
+(
+
+Synth(\ptr, [\buf, ~leadCre, \out, ~ptrBus2],~g6);
+Synth(\rec, [\ptrIn, ~ptrBus2, \micIn,~bus4A /*~bus1A*//*~micBus2*/, \buf, ~leadCre],~g7);
+
+
+
+
+
+
+
+	Pchain(
+    ~swingify,
+
+
+
+	Pbind(\instrument, \playBuf,\buf,~leadCre,\rte,1/*Pfunc({1.rrand(1.4)})*/,\impulse,1, \start,19459.45945946,\dur,1/16,\out,~qAu3,\group,~g8,/*\type,*//*Pseq([\note,\rest,\note,\rest,\note,\rest,\note,\rest].scramble,inf)*//*Pseq([\note,\rest],inf)*/),
+	(swingBase: 4.rand, swingAmount: 4.rand, swingThreshold: 1.00.rand)).play(t);
+
+
+
+
+//recolt after filter as well
+({
+
+
+	Out.ar(~micBus,
+
+		// BBandPass.ar(
+
+
+			 In.ar(~qAu3)
+
+			,
+
+
+
+
+/*
+		SelectX.kr(
+			LFNoise0.kr(1).range(0,1)
+			,[SinOsc.kr(
+		SinOsc.kr(0.3).range(0.4,12)
+	).range(20,470)+
+
+		SinOsc.kr(
+
+		SelectX.kr( LFNoise1.kr(~hz1beat).range(0,2),[~hz1beat,~hz1beat/4,~hz1beat*4])
+	).range(~hz1beat*32,~hz1beat*1048),
+
+		SinOsc.kr(~hz1beat).range(100,3000)])
+
+
++
+
+
+
+
+			LFDNoise0.kr(~hz1beat*4).range(-100,600)+
+
+LFNoise1.kr(
+
+		LFNoise0.kr(0.7).range(0.01,19)
+	).range(50,700)+
+	SinOsc.kr(0.3).range(100,3000)
+
+
+			,0.8,1 )*/
+
+
+
+/*	+
+
+		BBandPass.ar(
+
+
+			 In.ar(~qAu3)
+
+			,
+
+
+
+
+
+		SelectX.kr(
+			LFNoise0.kr(1).range(0,1)
+			,[SinOsc.kr(
+		SinOsc.kr(0.3).range(0.4,12)
+	).range(20,470)+
+
+		SinOsc.kr(
+
+		SelectX.kr( LFNoise1.kr(~hz1beat).range(0,2),[~hz1beat,~hz1beat/4,~hz1beat*4])
+	).range(~hz1beat*32,~hz1beat*1048),
+
+		SinOsc.kr(~hz1beat).range(60,2500)]),0.36,1 )
+
+
+		.round(2**(-16))*/
+	)
+
+
+
+}.play(target:~g9));
+
+
+Synth(\ptr, [\buf, ~f2, \out, ~ptrBus],~g10);
+Synth(\rec, [\ptrIn, ~ptrBus, \micIn, ~micBus, \buf, ~f2],~g11);
+
+Ppar([
+Pbind(\instrument, \lfoStep, \dur,1,\val,Pwrand([0,1],[1,5].normalizeSum,inf),\group,~g1,\out,~busC1),
+
+
+	Pbind(\instrument, \lfoStep, \dur,Pseq([16/1],inf),\val,Pfunc({(~hz1beat/4).rrand(~hz1beat*4)}),\group,~g1,\out,~busC3),
+
+
+	Pbind(\instrument, \lfoStep, \dur,Pseq([16/1],inf),\val,/*Pfunc({t.beatDur.rand})*/
+	Prand([16,4,1],inf),\group,~g1,\out,~busC5),
+
+	/*Pbind(\instrument, \lfoStep, \dur,Pseq([1/4],inf),\val,Pfunc({0.9375.rrand(0.9999)})
+	,\group,~g1,\out,~busC9)*/
+
+],inf).play(t);
+
+({
+
+	Out.ar(~bus16A,
+		Compander.ar(	/*Pan2.ar(*/
+
+			// AllpassN.ar(
+
+
+
+	SelectX.ar(In.kr(~busC1),[
+		GrainBuf.ar(1,Impulse.kr(~hz1beat*4),t.beatDur,~f2.bufnum),In.ar(~micBus)])
+
+
+
+/*,0.05,/*SinOsc.kr(~hz1beat/4,0.3,0.02,0.02)+*/
+SinOsc.kr(~hz1beat/4,2,0.01,0.01)//good phaser
+				,-0.5)  .round(2**(-16))*/
+
+	/*)*/
+/*	)*/
+
+
+,
+
+
+	In.ar(0,1),	thresh: 0.02, slopeBelow: 1, slopeAbove: -200,
+			clampTime: 0.1, relaxTime: 0.2)
+			// clampTime: 0.05, relaxTime: 0.05)
+	)
+}.play(target:~g12));
+
+
+Pxrand([
+Pchain(
+    ~swingify,
+
+
+
+	Pbind(\instrument, \gate ,\in,~bus16A   ,\vlDec,1,
+			\dur,/*Pxrand([Pseq([1/4],4),   Pseq([1/4],16), */Pseq([1/8],128)/*,Pseq([2/1],1)*//*Pseq([1/1],2) ],inf)*/ ,    \group,~g13, \out,~bus17A,\type,Pseq([\note,\rest],inf),
+		\vlSub,Pfunc({0.7.exprand(0.4,1)}),\vlSub2,Pfunc({0.7.exprand(0.4,1)})/*Pkey(\vlSub)*/,\atkT,Pfunc({0.14.exprand(0.01)}),
+	\decT,Pfunc({0.6.exprand(0.8,0.3)}),
+	\subsT,Pfunc({0.2.exprand(0.1)}),
+	\relT,Pfunc({0.22.exprand(0.1,1)}),
+	\atckC,0,
+	\decC,Pfunc({(-4).exprand(-0.1)}),
+		\relC,Pfunc({-8.exprand(-2,1)}),\vlAtk ,Pfunc({1.00.exprand(0.01)}),\vlRel,Pfunc({0.1.exprand(0.01)})),
+  (swingBase: 4.00.rand, swingAmount: 2.00.rand, swingThreshold: 1.00.rand)
+	/*	(swingBase: 2, swingAmount: 1, swingThreshold: 0.05)*/)
+,
+
+	Pbind(\instrument, \gate ,\in,~bus16A   ,\group,~g13, \out,~bus17A,\dur,Pseq([16/1],1)),
+
+	Pchain(
+    ~swingify,
+
+
+
+	Pbind(\instrument, \gate ,\in,~bus16A   ,\vlDec,1,
+		\dur,/*Pxrand([Pseq([1/4],4),   Pseq([1/4],16), */Pseq([1/4],64)/*,Pseq([2/1],1)*//*Pseq([1/1],2) ],inf)*/ ,    \group,~g13, \out,~bus17A,
+		\vlSub,Pfunc({0.7.exprand(0.4,1)}),\vlSub2,Pkey(\vlSub),\atkT,Pfunc({0.14.exprand(0.01)}),
+	\decT,Pfunc({0.6.exprand(0.8,0.3)}),
+	\subsT,Pfunc({0.2.exprand(0.1)}),
+	\relT,Pfunc({0.22.exprand(0.1,1)}),
+	\atckC,0,
+	\decC,Pfunc({(-4).exprand(-0.1)}),
+		\relC,Pfunc({-8.exprand(-2,1)}),\vlAtk ,Pfunc({1.00.exprand(0.01)}),\vlRel,Pfunc({0.1.exprand(0.01)})),
+  (swingBase: 4.00.rand, swingAmount: 2.00.rand, swingThreshold: 1.00.rand)
+	/*	(swingBase: 2, swingAmount: 1, swingThreshold: 0.05)*/)
+,
+
+	Pchain(
+    ~swingify,
+
+
+
+	Pbind(\instrument, \gate ,\in,~bus16A   ,\vlDec,1,
+		\dur,/*Pxrand([Pseq([1/4],4),   Pseq([1/4],16), */Pseq([1/4],64)/*,Pseq([2/1],1)*//*Pseq([1/1],2) ],inf)*/ ,    \group,~g13, \out,~bus17A,
+		\vlSub,Pfunc({0.7.exprand(0.4,1)}),\vlSub2,Pkey(\vlSub),\atkT,Pfunc({0.14.exprand(0.01)}),
+	\decT,Pfunc({0.6.exprand(0.8,0.3)}),
+	\subsT,Pfunc({0.2.exprand(0.1)}),
+	\relT,Pfunc({0.22.exprand(0.1,1)}),
+	\atckC,0,
+	\decC,Pfunc({(-4).exprand(-0.1)}),
+		\relC,Pfunc({-8.exprand(-2,1)}),\vlAtk ,Pfunc({1.00.exprand(0.01)}),\vlRel,Pfunc({0.1.exprand(0.01)})),
+  (swingBase: 4.00.rand, swingAmount: 2.00.rand, swingThreshold: 1.00.rand)
+	/*	(swingBase: 2, swingAmount: 1, swingThreshold: 0.05)*/)
+,
+
+
+
+
+
+Pchain(
+    ~swingify,
+
+
+
+	Pbind(\instrument, \gate ,\in,~bus16A   ,\vlDec,1,
+		\dur,/*Pxrand([Pseq([1/4],4),   Pseq([1/4],16), */Pseq([1/4],64)/*,Pseq([2/1],1)*//*Pseq([1/1],2) ],inf)*/ ,    \group,~g13, \out,~bus17A,
+		\vlSub,Pfunc({0.7.exprand(0.4,1)}),\vlSub2,Pkey(\vlSub),\atkT,Pfunc({0.14.exprand(0.01)}),
+	\decT,Pfunc({0.6.exprand(0.8,0.3)}),
+	\subsT,Pfunc({0.2.exprand(0.1)}),
+	\relT,Pfunc({0.22.exprand(0.1,1)}),
+	\atckC,0,
+	\decC,Pfunc({(-4).exprand(-0.1)}),
+		\relC,Pfunc({-8.exprand(-2,1)}),\vlAtk ,Pfunc({1.00.exprand(0.01)}),\vlRel,Pfunc({0.1.exprand(0.01)})),
+  (swingBase: 4.00.rand, swingAmount: 2.00.rand, swingThreshold: 1.00.rand)
+	/* (swingBase: 1, swingAmount: 0.2, swingThreshold: 0.5)*/
+)],inf).play(t);
+
+
+
+~rvy=Synth(\reverbStat,[\in,~bus17A/*~bus16A*/,/*\ctrl,~bus17A,*/\out,~bus18A,\mix,0.26,\room,0.4,\damp,0.6],~g14);
+
+
+Synth(\stereoStat,[\in,~bus18A,\out,0/*~bus19A*/],~g15);
+
+// ~limit= Synth(\limiter,[\in,~bus19A,\out,0,\gain,70],~g16);
+
+)
+

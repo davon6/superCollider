@@ -22,6 +22,35 @@ SynthDef(\kick, {
 				[105.midicps*(432/440),53.midicps*(432/440),
 				41.midicps*(432/440),11.midicps*(432/440)],
 			[t.beatDur/64,t.beatDur/8,t.beatDur/2,t.beatDur*0.695],
+			[-3,0,0,0]
+		)
+);
+
+	env =
+
+EnvGen.ar(
+		Env([ 2 ,   0.0615 ,  2.3,2.3,0],
+		[ t.beatDur*0.085 ,   t.beatDur*0.1255   , t.beatDur*0.255 , t.beatDur*0.1  ],[-1.66,-4.6,-1.2,8]),doneAction:2);
+	//-2.6 can be zero
+
+	sig = SinOsc.ar(envF, mul: env);
+
+	sig = sig * 14 ;
+	// sig = Pan2.ar(sig);
+	Out.ar(out, sig);
+
+}).add;
+
+-------try less ----
+SynthDef(\kick, {
+	arg amp=0.2,out=0;
+	var sig, env, envF;
+
+	envF = EnvGen.ar(
+		Env(
+				[105.midicps*(432/440),53.midicps*(432/440),
+				41.midicps*(432/440),11.midicps*(432/440)],
+			[t.beatDur/64,t.beatDur/8,t.beatDur/2,t.beatDur*0.695],
 			[0,0,0,0]
 		)
 );

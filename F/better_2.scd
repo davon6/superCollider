@@ -5,9 +5,20 @@ new
 (
 
 ~leadCre = Buffer.alloc(s, s.sampleRate *  t.beatDur*16);
+
+
+~buffer=Buffer.read(s,"/Users/davidmignot/Desktop/Bouyaka.wav");
+ ~chords =[[0,1,3,4],[0,1,3,7], [0,2,3,4], [0,5,1,4]];
+
 ~qAu1= Bus.audio(s,1);
 ~qAu2= Bus.audio(s,1);
 ~qAu3= Bus.audio(s,1);
+
+
+/*~bandL= Bus.audio(s,1);
+~bandL2= Bus.audio(s,1);
+~bandM= Bus.audio(s,1);
+~bandH= Bus.audio(s,1);*/
 
 
 ~ptrBus2=Bus.audio(s,1);
@@ -121,6 +132,19 @@ new
 });
 
 
+	SynthDef(\playBuf ,{|out = 0,start, trig, dur, amp=1,buf, loo=0,impulse=0.001,rte=1
+		vlAtk =0,vlDec=1 ,vlSub=1 ,vlSub2=1,vlRel=0,atkT=0,decT=1,subsT=0,relT=0,atkC=0,decC=0,relC=0,gateSub=0,dA=2|Out.ar(out,PlayBuf.ar(1,buf,rte,trigger:impulse,startPos: start,loop:loo,doneAction: dA)
+
+		* EnvGen.kr(Env([vlAtk,vlDec,vlSub,vlSub2,vlRel],
+			[dur * atkT,dur* decT,dur * subsT,dur *relT],
+			[atkC,decC,0,relC]),timeScale: t.beatDur, doneAction:2)* amp
+
+	);}).add;
+
+
+
+
+
 	SynthDef(\flanger1, {arg flangefreq=0.3, fdback=0.3,in,tS=1,dur,out=0,flangMod,ph=0, which;
 
 		var input, effect,phaser;
@@ -217,7 +241,8 @@ SynthDef(\tapedly, {
 	delayed = delayed.tanh;
 	BufWr.ar( LPF.ar( (sig + delayed), fc, mul:fb), local, phR, loop:1);
 	pan = LFNoise1.ar(5);
-	Out.ar(out,SelectX.ar(In.kr(which),[ In.ar(in,2)+
+	Out.ar(out,	Balance.ar(
+		SelectX.ar(0/*In.kr(which)*/,[ In.ar(in,2)+
 
 
 		(BufCombN.ar(~b3.bufnum,
@@ -244,12 +269,12 @@ SynthDef(\tapedly, {
 
 
 
-		* In.kr(gate)*2),
+		* In.kr(gate)*1.6),
 
 				PingPong.ar(~delayX.bufnum, [Mix.ar(In.ar(in,2)),Mix.ar(In.ar(in,2))], 0.3, 0.5, 1),
 
 		delayed*wet
-	]));
+	]),SinOsc.ar(mul: 0.26)));
 }).add;
 
 
@@ -459,14 +484,14 @@ LFPulse.kr(12,0.5).range(0,0.6)
 
 
 
-		In.kr(freq)*In.kr(mratio) +mod2
+		// In.kr(freq)*In.kr(mratio) +mod2
 		/*(In.kr(freq)*In.kr(mratio) +mod2)%((In.kr(freq)*In.kr(mratio)+mod2)/
 			((In.kr(freq)*In.kr(mratio)+mod2)*In.kr(modulus)))*/
 
 
 
 
-		// (In.kr(freq)*In.kr(mratio) +mod2)%In.kr(modulus)
+		(In.kr(freq)*In.kr(mratio) +mod2)%(	(In.kr(freq)*In.kr(mratio) +mod2)*In.kr(modulus))
 
 
 
@@ -476,7 +501,9 @@ LFPulse.kr(12,0.5).range(0,0.6)
 	sig2 = Squine.ar(In.kr(freq)*In.kr(cratio) /*+ freq2*/+ mod,In.kr(clip),In.kr(skew )  );
 
 
-	Out.ar(out,  LeakDC.ar(Shaper.ar(~tfBuf,sig2
+	Out.ar(out,
+		// Balance.ar(
+		LeakDC.ar(Shaper.ar(~tfBuf,sig2
 
 
 		/*Select.ar(In.kr(which),[ sig/*,In.ar(~qAu2)*//*sig2*1.8*/,sig3,sig4,sig5])*/
@@ -485,7 +512,10 @@ LFPulse.kr(12,0.5).range(0,0.6)
 
 
 
-	)) * amp );
+	))
+		// ,SinOsc.ar(mul: 0.1))
+
+		* amp );
 
 
 /*	Out.ar(sig3)*/
@@ -601,7 +631,7 @@ SynthDef(\reverb, {
 			// In.ar(in, 1),
 
 		HPF.ar(HPF.ar(HPF.ar(HPF.ar(HPF.ar(HPF.ar(HPF.ar(HPF.ar(BLowShelf.ar(	BHiShelf.ar( 	BPeakEQ.ar(
-				BPeakEQ.ar(	BPeakEQ.ar(In.ar(in, 1),val,quant, gain),val2,quant2, /*gain2*/Amplitude.ar(In.ar(ctrl,1)).linlin(0, 0.5, 0, 9)),val3,quant3, gain3),3000/*val4*/,1.3/*shelf*/,Amplitude.ar(In.ar(ctrl,1)).linlin(0, 0.5, 0, -7) /*(-14)*//*gain4*/),val5,shelf2, gain5),
+				BPeakEQ.ar(	BPeakEQ.ar(In.ar(in, 1),val,quant, gain),val2,quant2, /*gain2*/Amplitude.ar(In.ar(ctrl,1)).linlin(0, 0.5, 9, 0)),val3,quant3, gain3),3000/*val4*/,1.3/*shelf*/,Amplitude.ar(In.ar(ctrl,1)).linlin(0, 0.5, 0, -7) /*(-14)*//*gain4*/),val5,shelf2, gain5),
 
 		frq),frq),frq),frq),frq),frq),frq),frq)* vol,
 
@@ -620,16 +650,86 @@ SynthDef(\reverb, {
 
 
 
-SynthDef(\reverbStat, {
+SynthDef(\reverb, {
 		|out=0,in,damp,room,mix, val, quant, gain,frq=100, vol =0.3, val2,quant2, gain2,val3,shelf, gain3,val4,quant3, gain4,val5,quant5, gain5, val6,shelf2, gain6,ctrl|
-    Out.ar(    out,
+
+	  var a, b, c, d;
+
+
+	 #a, b, c, d = BandSplitter4.ar(In.ar(in, 1), 100, 800, 1200);
+
+	// Amplitude.kr(a).poll; 0.214062
+
+	// Amplitude.kr(b).poll; 0.143601
+
+	// Amplitude.kr(c).poll;0.38212
+
+
+	// Amplitude.kr(d).poll;0.781636
+
+	// Amplitude.kr(d).poll;
+   Out.ar(    out,
+
+		// Decimator.ar(
 		 FreeVerb.ar(
 
 
 			// In.ar(in, 1),
 
 		HPF.ar(HPF.ar(HPF.ar(HPF.ar(HPF.ar(HPF.ar(HPF.ar(HPF.ar(BLowShelf.ar(	BHiShelf.ar( 	BPeakEQ.ar(
-				BPeakEQ.ar(	BPeakEQ.ar(In.ar(in, 1),val,quant, gain),val2,quant2, gain2),val3,quant3, gain3),2000/*val4*/,1.6/*shelf*/, (-14)/*gain4*/),val5,shelf2,/*Amplitude.kr(In.ar(ctrl,1)).linlin(0, 0.003, 0, 14)*/ gain5),
+				BPeakEQ.ar(	BPeakEQ.ar(In.ar(in, 1),val,quant, gain),900,1.4, /*gain2*/Amplitude.kr(c).linlin(0.15, 0.8, 0, -16)),
+
+				400,1.3,Amplitude.kr(b).linlin(0.15, 0.8, 0, -16)/*gain3*/),
+
+			1300/*val4*/,1.3/*shelf*/,Amplitude.kr(d).linlin(0.15, 0.8, 0, -16) /*(-14)*//*gain4*/),
+			200,1.2,Amplitude.kr(a).linlin(0.15, 0.8, 0, -16)
+			/* gain5*/),
+
+		frq),frq),frq),frq),frq),frq),frq),frq)* vol,
+
+
+
+
+			In.kr( mix), // mix 0-1
+			In.kr( room), // room 0-1
+			In.kr( damp) // damp 0-1 duh
+        )
+
+)}).add;
+
+
+/*  var a, b, c, d;
+    #a, b, c, d = BandSplitter4.ar(Saw.ar(100), 200, 600, 1000);
+	// Select.ar(MouseX.kr(0, 4), [a, b, c, d]);
+
+	Amplitude.kr(a).linlin(0.057934, 0.281179, 20, 0).poll*/
+
+
+
+SynthDef(\reverbStat, {
+		|out=0,in,damp,room,mix, val, quant, gain,frq=100, vol =0.3, val2,quant2, gain2,val3,shelf, gain3,val4,quant3, gain4,val5,quant5, gain5, val6,shelf2, gain6,ctrl|
+
+		  var a, b, c, d;
+
+
+	 #a, b, c, d = BandSplitter4.ar(In.ar(in, 1), 100, 800, 1200);
+
+  Out.ar(    out,
+
+		// Decimator.ar(
+		 FreeVerb.ar(
+
+
+			// In.ar(in, 1),
+
+		HPF.ar(HPF.ar(HPF.ar(HPF.ar(HPF.ar(HPF.ar(HPF.ar(HPF.ar(BLowShelf.ar(	BHiShelf.ar( 	BPeakEQ.ar(
+				BPeakEQ.ar(	BPeakEQ.ar(In.ar(in, 1),val,quant, gain),900,1.4, /*gain2*/Amplitude.kr(c).linlin(0.15, 0.8, 0, -16)),
+
+				400,1.3,Amplitude.kr(b).linlin(0.15, 0.8, 0, -16)/*gain3*/),
+
+			1300/*val4*/,1.3/*shelf*/,Amplitude.kr(d).linlin(0.15, 0.8, 0, -16) /*(-14)*//*gain4*/),
+			200,1.2,Amplitude.kr(a).linlin(0.15, 0.8, 0, -16)
+			/* gain5*/),
 
 		frq),frq),frq),frq),frq),frq),frq),frq)* vol,
 
@@ -655,13 +755,40 @@ SynthDef(\gVerb,{|out,in,roomSize,revT,damp,earlyLvl,dur|Out.ar(out,GVerb.ar(In.
 	EnvGen.kr(Env.step([1,0],[dur,0]),timeScale: t.beatDur,doneAction: 2)
 )}).add;
 
-SynthDef(\fx,{|out,in,roomSize,revT,damp,earlyLvl,dur,delT,which,wild|	var dry, wet, snd, count;
+SynthDef(\fx,{|out,in,roomSize,revT,damp,earlyLvl,dur,delT,which,wild,rate,ratePhaser|	var dry, wet, snd, count,
+
+
+
+ voicedCarrier
+,snd2, numBands, bandFreqs, carrier;
+
+
+
+	numBands = 32;
+	bandFreqs = (0..numBands - 1).linexp(0, numBands - 1, 100, 8000);
+	snd2 =PlayBuf.ar(2, ~buffer, rate,Impulse.kr(0.8));
+	voicedCarrier =In.ar(in,1);
+	carrier = SelectX.ar((ZeroCrossing.ar(snd2).cpsmidi.lag(0.05) > 5000.cpsmidi).lag(0.05), [voicedCarrier, PinkNoise.ar]);
+	snd2 = Amplitude.ar(BPF.ar(snd2, bandFreqs, 0.05), 0.01, 0.05);
+	snd2 = BPF.ar(carrier, bandFreqs, 0.05) * snd2;
+	snd2 = snd2.sum;
+	snd2 = snd2 * 30.dbamp;
+	snd2 = Limiter.ar(snd2);
+
+
+
+
+
+
 	Out.ar(out,
 
 
 		SelectX.ar(which,
 		[
+				snd2,
 			AllpassL.ar(In.ar(in,1),delaytime:delT,decaytime:dur),
+
+
 			GVerb.ar(In.ar(in),roomSize,revT,damp,earlyreflevel: earlyLvl),
 
 
@@ -680,7 +807,18 @@ SynthDef(\fx,{|out,in,roomSize,revT,damp,earlyLvl,dur,delT,which,wild|	var dry, 
 	};
 	LocalOut.ar(wet.sum);
 	snd = (dry +  wet) / sqrt(2);
-	snd = snd * 0.5;
+	snd = snd * 0.5;,
+
+				AllpassN.ar(
+
+
+In.ar(in,1);
+
+
+
+,0.05,/*SinOsc.kr(~hz1beat/4,0.3,0.02,0.02)+*/
+SinOsc.kr(ratePhaser,2,0.01,0.01)//good phaser
+				,-0.5)
 
 
 
@@ -694,7 +832,7 @@ SynthDef(\fx,{|out,in,roomSize,revT,damp,earlyLvl,dur,delT,which,wild|	var dry, 
 	);
 }).add;
 
-
+SynthDef(\lim2,{|out=0,ml=0.1,in|Out.ar(out,Balance.ar(In.ar(in,2),SinOsc.ar(mul: ml)))}).add;
 
 )
 ~dur=[Pseq([1],64),Pseq([8],1),Pseq([1],8),Pseq([8],1),Pseq([1],8),Pseq([8],1),Pseq([1],8),Pseq([8],1),Pseq([1],8)];
@@ -746,17 +884,17 @@ while({~time !=0},{
 
 ~dur.postln;
 
-~dur=[ 3, 2, 3, 3, 3, 1, 1 ]
+// ~dur=[ 3, 2, 3, 3, 3, 1, 1 ]
 
 
-/*~dur=Pseq(~dur.scramble,1);
+~dur=Pseq(~dur.scramble,1);
 
-~dur=[~dur/4,~dur/4,~dur/4,~dur/4,~dur/4,~dur/4,~dur/4,~dur/4,~dur/4,~dur/4,~dur/4,~dur/4,~dur/4,~dur/4,~dur/4,~dur/4,~dur/4,~dur/4,~dur/4,~dur/4,~dur/4,~dur/4,~dur/4,~dur/4,~dur/4,~dur/4,~dur/4,~dur/4,~dur/4,~dur/4,~dur/4,~dur/4,~dur/4,~dur/4,~dur/4,~dur/4,~dur/4,~dur/4,~dur/4,~dur/4,~dur/4,~dur/4,~dur/4,~dur/4,~dur/4,~dur/4,~dur/4,~dur/4,~dur/4,~dur/4,~dur/4,~dur/4,~dur/4,~dur/4,~dur/4,~dur/4,~dur/4,~dur/4,~dur/4,~dur/4,~dur/4,~dur/4,~dur/4,~dur/4,~dur/4,~dur/4,~dur/4,~dur/4,~dur/4,~dur/4,~dur/4,~dur/4,~dur/4,~dur/4,~dur/4,~dur/4,~dur/4,~dur/4,~dur/4,~dur/4,~dur,~dur,~dur,~dur,~dur,~dur,~dur,~dur,~dur,~dur,~dur,~dur,~dur,~dur,~dur,~dur,~dur*4,~dur*4,~dur*4,~dur*4,~dur*16].scramble;*/
+~dur=[~dur/4,~dur/4,~dur/4,~dur/4,~dur/4,~dur/4,~dur/4,~dur/4,~dur/4,~dur/4,~dur/4,~dur/4,~dur/4,~dur/4,~dur/4,~dur/4,~dur/4,~dur/4,~dur/4,~dur/4,~dur/4,~dur/4,~dur/4,~dur/4,~dur/4,~dur/4,~dur/4,~dur/4,~dur/4,~dur/4,~dur/4,~dur/4,~dur/4,~dur/4,~dur/4,~dur/4,~dur/4,~dur/4,~dur/4,~dur/4,~dur/4,~dur/4,~dur/4,~dur/4,~dur/4,~dur/4,~dur/4,~dur/4,~dur/4,~dur/4,~dur/4,~dur/4,~dur/4,~dur/4,~dur/4,~dur/4,~dur/4,~dur/4,~dur/4,~dur/4,~dur/4,~dur/4,~dur/4,~dur/4,~dur/4,~dur/4,~dur/4,~dur/4,~dur/4,~dur/4,~dur/4,~dur/4,~dur/4,~dur/4,~dur/4,~dur/4,~dur/4,~dur/4,~dur/4,~dur/4,~dur,~dur,~dur,~dur,~dur,~dur,~dur,~dur,~dur,~dur,~dur,~dur,~dur,~dur,~dur,~dur,~dur*4,~dur*4,~dur*4,~dur*4,~dur*16].scramble;
 
 )
 
 
-~dur=[~dur/4,~dur/4,~dur/4,~dur/4,~dur/4,~dur/4,~dur/4,~dur/4,~dur/4,~dur/4,~dur/4,~dur/4,~dur/4,~dur/4,~dur/4,~dur/4,~dur/4,~dur/4,~dur/4,~dur/4,~dur/4,~dur/4,~dur/4,~dur/4,~dur/4,~dur/4,~dur/4,~dur/4,~dur/4,~dur/4,~dur/4,~dur/4,~dur/4,~dur/4,~dur/4,~dur/4,~dur/4,~dur/4,~dur/4,~dur/4,~dur/4,~dur/4,~dur/4,~dur/4,~dur/4,~dur/4,~dur/4,~dur/4,~dur/4,~dur/4,~dur/4,~dur/4,~dur/4,~dur/4,~dur/4,~dur/4,~dur/4,~dur/4,~dur/4,~dur/4,~dur/4,~dur/4,~dur/4,~dur/4,~dur/4,~dur/4,~dur/4,~dur/4,~dur/4,~dur/4,~dur/4,~dur/4,~dur/4,~dur/4,~dur/4,~dur/4,~dur/4,~dur/4,~dur/4,~dur/4,~dur,~dur,~dur,~dur,~dur,~dur,~dur,~dur,~dur,~dur,~dur,~dur,~dur,~dur,~dur,~dur/*,~dur*4,~dur*4,~dur*4,~dur*4,~dur*16*/].scramble;
+~dur=[~dur/4,~dur/4,~dur/4,~dur/4,~dur/4,~dur/4,~dur/4,~dur/4,~dur/4,~dur/4,~dur/4,~dur/4,~dur/4,~dur/4,~dur/4,~dur/4,~dur/4,~dur/4,~dur/4,~dur/4,~dur/4,~dur/4,~dur/4,~dur/4,~dur/4,~dur/4,~dur/4,~dur/4,~dur/4,~dur/4,~dur/4,~dur/4,~dur/4,~dur/4,~dur/4,~dur/4,~dur/4,~dur/4,~dur/4,~dur/4,~dur/4,~dur/4,~dur/4,~dur/4,~dur/4,~dur/4,~dur/4,~dur/4,~dur/4,~dur/4,~dur/4,~dur/4,~dur/4,~dur/4,~dur/4,~dur/4,~dur/4,~dur/4,~dur/4,~dur/4,~dur/4,~dur/4,~dur/4,~dur/4,~dur/4,~dur/4,~dur/4,~dur/4,~dur/4,~dur/4,~dur/4,~dur/4,~dur/4,~dur/4,~dur/4,~dur/4,~dur/4,~dur/4,~dur/4,~dur/4,~dur,~dur,~dur,~dur,~dur,~dur,~dur,~dur,~dur,~dur,~dur,~dur,~dur,~dur,~dur,~dur,~dur*4,~dur*4,~dur*4,~dur*4,~dur*16].scramble;
 
 
 ~dur.scramble
@@ -765,8 +903,8 @@ while({~time !=0},{
 ~dur=   [  0.75, 0.5, 0.75, 0.75, 0.75, 0.25, 0.25 ,   0.75, 0.5, 0.75, 0.75, 0.75, 0.25, 0.25 ,   0.75, 0.5, 0.75, 0.75, 0.75, 0.25, 0.25 ,   3, 2, 3, 3, 3, 1, 1 ,   0.75, 0.5, 0.75, 0.75, 0.75, 0.25, 0.25 ,   0.75, 0.5, 0.75, 0.75, 0.75, 0.25, 0.25 ,   0.75, 0.5, 0.75, 0.75, 0.75, 0.25, 0.25 ,   3, 2, 3, 3, 3, 1, 1 ,   0.75, 0.5, 0.75, 0.75, 0.75, 0.25, 0.25 ,   3, 2, 3, 3, 3, 1, 1 ,   0.75, 0.5, 0.75, 0.75, 0.75, 0.25, 0.25].scramble
 
 ~dur =~dur/4
-
-
+~dur=[1000]
+~dur=[inf]
 
 ~dur=[3,2,7,1,3].scramble
 
@@ -938,7 +1076,7 @@ Pbind(\instrument, \lfoStep, \dur,Pseq(~dur,inf),\val,Pfunc({(1.0).rrand(-1)}),\
 	Pbind(\instrument, \lfo,\val,Pfunc({(1/8).rrand( 8)}), \dur,Pseq(~dur,inf),\group,~g1,\out,~busC16,\rL,0,\rH,Pfunc({3000.rand}),\which,Pfunc({3.rand}),\width,Pfunc({1.00.rand}),\ph,Pfunc({1.00.rand})),
 
 
-	Pbind(\instrument, \lfoStep, \dur,Pseq(~dur,inf),\val,Pwrand([0,1,2],[32,2,0.5].normalizeSum,inf),\group,~g1,\out,~busC20),
+	Pbind(\instrument, \lfoStep, \dur,Pseq(~dur,inf),\val,Pwrand([0,1,2],[20 ,0.5,1].normalizeSum,inf),\group,~g1,\out,~busC20),
 
 
 
@@ -963,7 +1101,7 @@ Pbind(\instrument, \lfoStep, \dur,Pseq(~dur,inf),\val,Pfunc({(1.0).rrand(-1)}),\
 
 	//combMod
 
-	Pbind(\instrument, \lfoPercBis, \dur,Pseq(~dur,inf),\group,~g1,\out,~busC8,\valA,Pfunc({1.00.rand}),\valD,Pfunc({1.00.rand}),\lvl,0.001,\crv,Pfunc({(-6).rrand(6)})),
+	Pbind(\instrument, \lfoPercBis, \dur,Pseq(~dur,inf),\group,~g1,\out,~busC8,\valA,Pfunc({1.00.rand}),\valD,Pfunc({1.00.rand}),\lvl,Prand([0.001,0.01,0.00001],inf),\crv,Pfunc({(-6).rrand(6)})),
 
 	Pbind(\instrument, \lfo, \dur,Pseq(~dur,inf),\val,Pfunc({1.00.rand}),\group,~g1,\out,~busC8,\which,Pfunc({3.rand}),\rL,0.000000001,\rH,0.0001,\width,Pfunc({1.00.rand}),\ph,Pfunc({1.00.rand})),
 
@@ -992,7 +1130,7 @@ Pbind(\instrument, \lfoStep, \dur,Pseq(~dur,inf),\val,Pfunc({(1.0).rrand(-1)}),\
 	\atk,Pfunc({1.00.rand}) ,\index,Pfunc({6.00.rand})
 		,\iScale,Pfunc({6.rand}) ,\ic_atk, Pfunc({6.rrand(-6)}),\ic_rel,Pfunc({6.rrand(-6)})),
 
-	Pbind(\instrument, \lfoStep, \dur,Pseq(~dur,inf),\val,/*Pwrand([0,0.3],[50,1].normalizeSum,inf)*/  Pfunc({500000.rand}),\group,~g1,\out,~busC3),
+	Pbind(\instrument, \lfoStep, \dur,Pseq(~dur,inf),\val,Pfunc({1.00.rand})/*Pwrand([500000,0.3],[20,1].normalizeSum,inf)*/  /*Pfunc({500000.rand})*/,\group,~g1,\out,~busC10),
 
 
 
@@ -1032,13 +1170,13 @@ Prand([
 
 	Pbind(\instrument, \gateMod  ,\vlDec,1,
 		\dur,Pxrand([Pseq([1/4],4),   Pseq([1/4],16), Pseq([1/1],1),/*,Pseq([2/1],1)*/Pseq([1/1],2) ],1) ,    \group,~g3, \out,~busC24,
-		\vlSub,Pfunc({0.7.exprand(0.4,1)}),\vlSub2,Pkey(\vlSub),\atkT,Pfunc({0.14.exprand(0.01)}),
+		\vlSub,Pfunc({0.7.exprand(0.4,1)}),\vlSub2,Pfunc({0.7.exprand(0.4,1)})/*Pkey(\vlSub)*/,\atkT,Pfunc({0.14.exprand(0.01)}),
 	\decT,Pfunc({0.6.exprand(0.8,0.3)}),
 	\subsT,Pfunc({0.2.exprand(0.1)}),
 	\relT,Pfunc({0.22.exprand(0.1,1)}),
 	\atckC,0,
 	\decC,Pfunc({(-4).exprand(-0.1)}),
-		\relC,Pfunc({-8.exprand(-2,1)}),\vlAtk ,Pfunc({1.00.exprand(0.01)}),\vlRel,Pfunc({0.1.exprand(0.01)})) ,(swingBase: 4.00.rand, swingAmount: 2.00.rand, swingThreshold: 1.00.rand)
+		\relC,Pfunc({-8.exprand(-2,1)}),\vlAtk ,Pfunc({1.00.exprand(0.01)}),\vlRel,Pfunc({0.1.exprand(0.01)}),\type,Prand([\note,\rest],inf)) ,(swingBase: 4.00.rand, swingAmount: 2.00.rand, swingThreshold: 1.00.rand)
 
 ),
 
@@ -1048,13 +1186,13 @@ Prand([
 
 	Pbind(\instrument, \gateMod  ,\vlDec,1,
 		\dur,Pxrand([Pseq([1/4],4),   Pseq([1/4],16), Pseq([1/1],1),/*,Pseq([2/1],1)*/Pseq([1/1],2) ],1) ,    \group,~g3, \out,~busC24,
-		\vlSub,Pfunc({0.7.exprand(0.4,1)}),\vlSub2,Pkey(\vlSub),\atkT,Pfunc({0.14.exprand(0.01)}),
+		\vlSub,Pfunc({0.7.exprand(0.4,1)}),\vlSub2,Pfunc({0.7.exprand(0.4,1)})/*Pkey(\vlSub)*/,\atkT,Pfunc({0.14.exprand(0.01)}),
 	\decT,Pfunc({0.6.exprand(0.8,0.3)}),
 	\subsT,Pfunc({0.2.exprand(0.1)}),
 	\relT,Pfunc({0.22.exprand(0.1,1)}),
 	\atckC,0,
 	\decC,Pfunc({(-4).exprand(-0.1)}),
-		\relC,Pfunc({-8.exprand(-2,1)}),\vlAtk ,Pfunc({1.00.exprand(0.01)}),\vlRel,Pfunc({0.1.exprand(0.01)})) ,(swingBase: 1.00.rand, swingAmount: 2.00.rand, swingThreshold: 1.00.rand)
+		\relC,Pfunc({-8.exprand(-2,1)}),\vlAtk ,Pfunc({1.00.exprand(0.01)}),\vlRel,Pfunc({0.1.exprand(0.01)}),\type,Prand([\note,\rest],inf)) ,(swingBase: 1.00.rand, swingAmount: 2.00.rand, swingThreshold: 1.00.rand)
 
 )
 	],inf),
@@ -1063,7 +1201,7 @@ Prand([
 	Prand([
 	Pbind(\instrument, \gateMod  ,\vlDec,1,
 		\dur,Pxrand([Pseq([1/4],4),Pseq([1/8],8),   Pseq([1/16],16), /*Pseq([1/1],1),/*,Pseq([2/1],1)*/Pseq([1/1],2) */ ],1) ,    \group,~g3, \out,~busC25,
-		\vlSub,Pfunc({0.7.exprand(0.4,1)}),\vlSub2,Pkey(\vlSub),\atkT,Pfunc({0.14.exprand(0.01)}),
+		\vlSub,Pfunc({0.7.exprand(0.4,1)}),\vlSub2,Pfunc({0.7.exprand(0.4,1)})/*Pkey(\vlSub)*/,\atkT,Pfunc({0.14.exprand(0.01)}),
 	\decT,Pfunc({0.6.exprand(0.8,0.3)}),
 	\subsT,Pfunc({0.2.exprand(0.1)}),
 	\relT,Pfunc({0.22.exprand(0.1,1)}),
@@ -1116,10 +1254,19 @@ q = PSrecur({ |x|
 	x[0]
 }, 1, start: [b.scramble[0..4]]);
 
-x = Pbind(\instrument,
-	\lfoStepMelo, \dur,Pxrand([Pseq([1/4],4),/* Pseq([1/3],6), */  Pseq([1/4],16), Pseq([1/1],1),/*,Pseq([2/1],1)*/Pseq([1/1],4),Pseq([4/1],1),Pseq([4/1],4) ],inf) ,\group,~g1,\out,~busC4,
-	\midinote, Pseq([p.flatten, q.flatten], inf)
-).play(t)
+x = Prand([
+
+
+Pbind(\instrument,
+	\lfoStepMelo, \dur,Pxrand([Pseq([1/4],4),/* Pseq([1/3],6), */  Pseq([1/4],16), Pseq([1/1],1),/*,Pseq([2/1],1)*/Pseq([1/1],4),Pseq([4/1],1),Pseq([4/1],4) ],1) ,\group,~g1,\out,~busC4,
+	\midinote, Pseq([p.flatten, q.flatten], inf),\legato, Pseq([0.25, 1.0,0.75].scramble, inf)
+)
+,
+
+	Pbind(\instrument,
+	\lfoStepMelo, \dur,Pxrand([Pseq([1/4],4),/* Pseq([1/3],6), */  Pseq([1/4],16), Pseq([1/1],1),/*,Pseq([2/1],1)*/Pseq([1/1],4),Pseq([4/1],1),Pseq([4/1],4) ],1) ,\group,~g1,\out,~busC4,
+	\midinote, Pn(Pshuf(~chords+60)),\legato, Pseq([0.25, 1.0,0.75].scramble, inf)
+)],inf).play(t)
 );
 
 
@@ -1128,7 +1275,7 @@ x = Pbind(\instrument,
 
  ~ye= Synth( \osc,[/*\mul2,~busC3,\freq3,~busC2,\mul3,~busC3,\which,~busC5,\pitch, ~busC8,\lfoP,~busC9,\melo,~busC10,*/
 
-	\iEnv,~busC2,\modulus,~busC3,
+	\iEnv,~busC2,\modulus,~busC10,
 	\out,~bus2A/*~bus1A*/,\freq,~busC4,\clip,~busC6,\skew, ~busC7,\mratio,~busC14,\cratio,~busC28,\fmMod,~busC15,\fmMod2,~busC16,\freqMod,~busC22,\freqMod2,~busC23],~g1,addAction: 'addAfter');
 
 /*~v =  Synth(\comb1,[ \in, ~bus2A,\out,~bus1A   ,\maxDel,0.7744,\decT,(-0.5)
@@ -1149,7 +1296,7 @@ x = Pbind(\instrument,
 // Pbind(\instrument,\gVerb ,\out,~bus1A,\in,~bus2A,\roomSize,Pfunc({10.rrand(1)}),\revT,Pfunc({1.rrand(3)}),\damp,Pfunc({0.05.rand}),\earlyLvl,Pfunc({0.2.rand}),\group,~g2,\dur,Pseq(~dur,inf)).play(t);
 
 
-Pbind(\instrument,\fx,\dur,Pseq(~dur,inf),\which,Pfunc({6.rand}),\group,~g2,\out,~bus1A,\in,~bus2A,\roomSize,Pfunc({10.rrand(1)}),\revT,Pfunc({1.rrand(3)}),\damp,Pfunc({0.05.rand}),\earlyLvl,Pfunc({0.2.rand}),\delT,Pfunc({0.9.rand.round(0.01)}),\wild,Pfunc({0.8.rrand(2.3).round(0.01)})).play(t);
+Pbind(\instrument,\fx,\dur,Pseq(~dur,inf),\which,Pfunc({8.rand}),\group,~g2,\out,~bus1A,\in,~bus2A,\roomSize,100/*Pfunc({3.rrand(1)})*/,\revT,Pfunc({5.rrand(8)}),\damp,Pfunc({0.05.rand}),\earlyLvl,Pfunc({0.2.rand}),\delT,Pfunc({0.9.rand.round(0.01)}),\wild,Pfunc({0.8.rrand(2.3).round(0.01)}),\rate,Pfunc({0.6.rrand(3)}),\ratePhaser,Pfunc({(~hz1beat/4).rrand(~hz1beat*4)})).play(t);
 
 /*({
 
@@ -1162,15 +1309,15 @@ Pbind(\instrument,\fx,\dur,Pseq(~dur,inf),\which,Pfunc({6.rand}),\group,~g2,\out
 }.play)*/
 
 
-~fi=({Out.ar(~bus3A,SelectX.ar(In.kr(~busC13),[In.ar(~bus1A),FreqShift.ar(In.ar(~bus1A),
+~fi=({Out.ar(~bus10A/*~bus3A*/,SelectX.ar(In.kr(~busC13),[In.ar(~bus1A).round(2**(-16)),FreqShift.ar(In.ar(~bus1A),
 
 	LFTri.kr(
 
 		LFTri.kr(~hz1beat/256,3).range(~hz1beat/16,~hz1beat)
 
-		,11).range((-800),800))]))}.play(target:~g3));
+		,11).range((-800),800)).round(2**(-16))]))}.play(target:~g3));
 
-
+/*
 ({Out.ar(~bus10A/*~bus11A*/,
 
 
@@ -1217,19 +1364,19 @@ BHiPass4.ar(In.ar(~bus3A  ),
 )}.play(target:~g4));
 
 
-
+*/
 
 
 
 // Synth(\flanger1,[\fdback,0.45,\in,~bus11A,\out,~bus10A,\which,~busC12,\flangefreq,~busC17],~g2,);
-
-
+//gate below
+/*
 
 Pwrand([
 
 	Pbind(\instrument, \gate ,\in,~bus10A   ,\vlDec,1,
 		\dur,Pxrand([Pseq([1/4],4),   Pseq([1/4],16), Pseq([1/1],1),/*,Pseq([2/1],1)*/Pseq([1/1],2) ],1) ,    \group,~g5, \out,~bus4A,
-		\vlSub,Pfunc({0.7.exprand(0.4,1)}),\vlSub2,Pkey(\vlSub),\atkT,Pfunc({0.14.exprand(0.01)}),
+		\vlSub,Pfunc({0.7.exprand(0.4,1)}),\vlSub2,Pfunc({0.7.exprand(0.4,1)})/*Pkey(\vlSub)*/,\atkT,Pfunc({0.14.exprand(0.01)}),
 	\decT,Pfunc({0.6.exprand(0.8,0.3)}),
 	\subsT,Pfunc({0.2.exprand(0.1)}),
 	\relT,Pfunc({0.22.exprand(0.1,1)}),
@@ -1293,7 +1440,7 @@ Pbind(\instrument, \gate ,\in,~bus10A   ,\vlDec,1,
 /*.play(t);*/
 
 
-
+*/
 
 // Pbind(\instrument, \gateX ,\in,~bus10A  , \dur,Pseq(~dur,inf),\group,~g3).play(t);
 
@@ -1301,15 +1448,15 @@ Pbind(\instrument, \gate ,\in,~bus10A   ,\vlDec,1,
 /*({Out.ar(~bus4A,In.ar(~bus10A)*EnvGen.kr(Env([0,1,0],[t.beatDur/3,t.beatDur/3,t.beatDur/3],[5,8,5])))}.play(target:~g3));*/
 
 
-Synth(\reverb,[\in,~bus4A,\out,~bus5A,\mix,~bmix,\room,~broom,\damp,~bdamp,\ctrl,~bus4A],~g6,\addAfter);
+/*Synth(\reverb,[\in,~bus4A,\out,~bus5A,\mix,~bmix,\room,~broom,\damp,~bdamp,\ctrl,~bus4A],~g6,\addAfter);*/
 
 
-~w=Synth(\stereo,[\spread,~bspread,\center,~bcenter,\dlt1,~bdlt1,\str,~bdlt2,\decT,~bdecT,\in,~bus5A,\which,~bwhichS,\out,~bus7A],~g7);
+~w=Synth(\stereo,[\spread,~bspread,\center,~bcenter,\dlt1,~bdlt1,\str,~bdlt2,\decT,~bdecT,\in,/*~bus5A*//*~bus4A*/~bus10A,\which,~bwhichS,\out,~bus7A],~g7);
 
 
 /*({Limiter.ar(In.ar(~bus7A,2),})*/
 
-~gg= Synth(\limiter,[\in,~bus7A,\out,~bus13A,\gain,70],~w,\addAfter);
+// ~gg= Synth(\limiter,[\in,~bus7A,\out,~bus13A,\gain,440],~w,\addAfter);
 
 
 /*
@@ -1328,13 +1475,13 @@ Pwrand([
 
 /*Pbind(\instrument, \gate2,\group,~g6,\in,~bus13A ,\out,~bus8A,\dur,Pseq([1],inf),\out,~busC20).play(t);*/
 
-Synth(\gate2,[\in,~bus13A ,\which,~busC20],~g8);
+Synth(\gate2,[\in,~bus7A/*~bus13A*/ ,\which,~busC20],~g8);
 // Pbind(\instrument, \gate2,\group,~g6,\in,0 ,\out,~bus9A,\dur,9).play(t);
 
-x=({Out.ar(~bus14A/*~bus15A*/,Splay.ar( VerbEF.ar(In.ar(~bus9A,2),
+x=({Out.ar(0/*~bus14A*//*~bus15A*/,Splay.ar( VerbEF.ar(In.ar(~bus9A,2),
 
 
-	4.7,0.5,2000,6000,0.025,2.2*In.kr(~busC25)
+	2.7,0.5,2000,6000,0.025,2.2*In.kr(~busC25)
 )))}.play(target:~g7));
 
 
@@ -1344,11 +1491,12 @@ x=({Out.ar(~bus14A/*~bus15A*/,Splay.ar( VerbEF.ar(In.ar(~bus9A,2),
 
 
  d = Synth(\tapedly, [\in, ~bus8A, /*\dlytime, 0.333,*/ \fb, 0.5, \wet, 1.0,\decT,(-0.5)
- , \modS,~bmodS , \f1,~bf1 , \modT, ~bmodT, \f2, ~bf2, \modSa,~bmodSa , \f3, ~bf3, \modR, ~bmodR, \fr, ~bfr,\which,~busC26,\out,~bus14A,\combMod,~busC8,\gate,~busC24],~g9);
+ , \modS,~bmodS , \f1,~bf1 , \modT, ~bmodT, \f2, ~bf2, \modSa,~bmodSa , \f3, ~bf3, \modR, ~bmodR, \fr, ~bfr,\which,~busC26,\out,0/*~bus14A*/,\combMod,~busC8,\gate,~busC24],~g9);
  d.set(\dlytime, ~busC21, \fb, 0.9,\wet, 1.0,\fc, 5000);
 
 
- Synth(\limiter,[\in,~bus14A,\out,0,\gain,70],~g10);
+// Synth(\limiter,[\in,~bus14A,\out,0,\gain,440],~g10);
+
 // Synth(\limiter,[\in,~bus15A,\out,0,\gain,70],~g8);
 /*
 */
@@ -1488,5 +1636,4 @@ Splay.ar(
 
 
 		,0.5)}.play)
-
 

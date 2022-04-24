@@ -25,6 +25,8 @@ ACHETER UN METRE A PAPA
 popping fire work sqelch
 
 (
+Server.default.options.numWireBufs = 1024;
+
 s.options.memSize = 2097152 ;
 // Server.default.options.numOutputBusChannels = 60;
 Server.default.options.sampleRate =  48000;
@@ -33,6 +35,8 @@ Server.default.options.sampleRate =  48000;
 // s.options.numAudioBusChannels=3000;
 
 Server.default.options.outDevice_("MacBook Air Speakers");
+
+Server.default.options.inDevice_("MacBook Air Microphone");
 )
 
 Server.default.options.outDevice_("External Headphones");
@@ -47,7 +51,7 @@ Server.default.options.outDevice_("BlackHole 2ch");
 Server.default.options.outDevice_("MacBook Air Speakers");
 
 Server.default.options.outDevice_("30108121");
-
+ServerOptions.inDevices;
 ServerOptions.outDevices;
 /*({SinOsc.ar}.play)*/
 
