@@ -27,16 +27,19 @@ popping fire work sqelch
 (
 Server.default.options.numWireBufs = 1024;
 
-s.options.memSize = 2097152 ;
+// s.options.memSize = 2097152 ;
 // Server.default.options.numOutputBusChannels = 60;
 Server.default.options.sampleRate =  48000;
 // Server.default.options.outDevice_("Audient iD14");
 // Server.default.options.outDevice_("CABLE Input (VB-Audio Virtual C");
 // s.options.numAudioBusChannels=3000;
 
-Server.default.options.outDevice_("MacBook Air Speakers");
+// Server.default.options.outDevice_("MacBook Air Speakers");
 
-Server.default.options.inDevice_("MacBook Air Microphone");
+// Server.default.options.inDevice_("MacBook Air Microphone");
+
+Server.default.options.inDevice_("MME : Microsoft Sound Mapper - Input");
+	Server.default.options.outDevice_("CABLE Input (VB-Audio Virtual C");
 )
 
 Server.default.options.outDevice_("External Headphones");
@@ -45,7 +48,7 @@ Server.default.options.outDevice_("BlackHole 2ch","Built-in Output");
 ServerOptions.outDevices
 Server.default.options.outDevice_("BlackHole 2ch");
 
-
+Server.default.options.inDevice_("MME : Microsoft Sound Mapper - Input");
 	Server.default.options.outDevice_("CABLE Input (VB-Audio Virtual C");
 
 Server.default.options.outDevice_("MacBook Air Speakers");

@@ -18,28 +18,24 @@
 //long slide grimacant actif
 //reverbpercu loof puis reverse
 
-DONT FORGET 16 BIT DISTO !!!!!
-
-ACHETER UN METRE A PAPA
-
-popping fire work sqelch
 
 (
-Server.default.options.numWireBufs = 1024;
+Server.killAll;
+Pdef.all.do(_.clear);
+Pbindef.all.do(_.clear);
+Pbind.free;
+Pbindf.free;
+~bass.free;
+Bus.free;
+)
 
+(
 // s.options.memSize = 2097152 ;
 // Server.default.options.numOutputBusChannels = 60;
 Server.default.options.sampleRate =  48000;
 // Server.default.options.outDevice_("Audient iD14");
-// Server.default.options.outDevice_("CABLE Input (VB-Audio Virtual C");
-// s.options.numAudioBusChannels=3000;
-
-// Server.default.options.outDevice_("MacBook Air Speakers");
-
-// Server.default.options.inDevice_("MacBook Air Microphone");
-
-Server.default.options.inDevice_("MME : Microsoft Sound Mapper - Input");
 	Server.default.options.outDevice_("CABLE Input (VB-Audio Virtual C");
+// s.options.numAudioBusChannels=3000;
 )
 
 Server.default.options.outDevice_("External Headphones");
@@ -48,13 +44,13 @@ Server.default.options.outDevice_("BlackHole 2ch","Built-in Output");
 ServerOptions.outDevices
 Server.default.options.outDevice_("BlackHole 2ch");
 
-Server.default.options.inDevice_("MME : Microsoft Sound Mapper - Input");
+
 	Server.default.options.outDevice_("CABLE Input (VB-Audio Virtual C");
 
 Server.default.options.outDevice_("MacBook Air Speakers");
 
 Server.default.options.outDevice_("30108121");
-ServerOptions.inDevices;
+
 ServerOptions.outDevices;
 /*({SinOsc.ar}.play)*/
 
@@ -63,7 +59,7 @@ ServerOptions.outDevices;
 
 	var numSegs;
 
-	~bpm = 147;
+	~bpm = 149;
 	~hz1beat = ~bpm * 16/60/32;
 
 	~count=0;
@@ -81,12 +77,7 @@ ServerOptions.outDevices;
 	t = TempoClock.new(~bpm/60).permanent_(true);
 
 	//necessary for the buffer of the shaper to work
-	// ~tf = Env([-0.8,0,0.8],[1,1],[8,-8]).asSignal(1025);
-
-
-	~tf = Env([~val=1.00.rand,0,~val.neg],[1,1],[~val2=12.rand,~val2.neg]).asSignal(1025);
-
-
+	~tf = Env([-0.8,0,0.8],[1,1],[8,-8]).asSignal(1025);
 	~tf = ~tf.asWavetableNoWrap;
 
 	s.sync;
@@ -100,27 +91,19 @@ ServerOptions.outDevices;
 	numSegs= rrand(1,2).postln;
 
 
-	/*~tf = Env(
+	~tf = Env(
 		(({rrand(0.0,0.01).postln}!(numSegs+1)) * [1,-1]).scramble,
 		{exprand(1,20).postln}!numSegs,
 		{rrand(-20,20).postln}!numSegs
-	).asSignal(1025);*/
-
-
-		~tf = Env(
-		(({rrand(0.0,0.01).postln}!(numSegs+1)) * [1,-1]).scramble,
-	/*	{exprand(1,5).postln}!numSegs,
-		{rrand(-5,5).postln}!numSegs*/
 	).asSignal(1025);
-
 
 
 	~tf = ~tf + (
 		Signal.sineFill(
 			1025,
 			[1,/* 1/4, 1/6,*/ 1/2],
-			{rrand(0,1pi)}!16
-		) /*/ 4*/
+			{rrand(0,2pi)}!16
+		) / 4
 	);
 
 	// ~tf.plot
@@ -164,7 +147,6 @@ s.sync;
 	~delay6= Buffer.alloc(s, 48000 * 3, 2);
 	b = Buffer.alloc(s, 44100 * 2, 2);
 	~b2 = Buffer.alloc(s,48000,1);
-		~b3 = Buffer.alloc(s,48000,1);
 	~bufBg = Buffer.alloc(s,s.sampleRate*60,10 );
 	~temp= Buffer.alloc(s,s.sampleRate*2,1);
 
@@ -441,6 +423,196 @@ EnvGen.ar(
 
 
 
+/*	SynthDef(\kick, {
+	arg amp=0.2,out=0;
+	var sig, env, envF;
+
+	envF = EnvGen.ar(
+		Env(
+				[109.midicps*(432/440),68.midicps*(432/440),49.midicps*(432/440),8.midicps*(432/440),0,0],
+			[0.0125,t.beatDur/64,t.beatDur*0.7,0],
+			[-8,-2,-2.4]
+		)
+	);
+
+	env =
+
+EnvGen.ar(
+		Env([ 0.960 , 0.155,   0.4 ,  1,0.14,0],
+			[ 0.012 , 0.005,   0.06  , t.beatDur*0.455 , t.beatDur*0.3  ],[-3.66,-5.5,-4.6,-1.2,8]),doneAction:2);
+	//-2.6 can be zero
+
+	sig = SinOsc.ar(envF, mul: env);
+
+	sig = sig * amp.dbamp  ;
+	// sig = Pan2.ar(sig);
+	Out.ar(out, sig);
+
+}).add;*/
+
+
+/*
+	SynthDef(\kick, {
+	arg amp=0.2,out=0;
+	var sig, env, envF;
+
+	envF = EnvGen.ar(
+		Env(
+				[109.midicps*(432/440),68.midicps*(432/440),49.midicps*(432/440),8.midicps*(432/440),0,0],
+			[0.0125,t.beatDur/64,t.beatDur*0.7,0],
+			[-8,-2,-2.4]
+		)
+	);
+
+	env =
+
+EnvGen.ar(
+		Env([ 0.960 , 0.155,   0.4 ,  1,0.14,0],
+			[ 0.012 , 0.005,   0.06  , t.beatDur*0.455 , t.beatDur*0.3  ],[-3.66,-5.5,-4.6,-1.2,8]),doneAction:2);
+	//-2.6 can be zero
+
+	sig = SinOsc.ar(envF, mul: env);
+
+	sig = sig * amp.dbamp  ;
+	// sig = Pan2.ar(sig);
+	Out.ar(out, sig);
+
+}).add;
+
+
+
+SynthDef(\kick, {
+	arg amp=0.2,out=0;
+	var sig, env, envF;
+
+	envF = EnvGen.ar(
+		Env(
+				[109.midicps*(432/440),68.midicps*(432/440),49.midicps*(432/440),8.midicps*(432/440),0,0],
+			[0.0125,t.beatDur/64,t.beatDur*0.7,0],
+			[-8,-2,-2.4]
+		)
+	);
+
+	env =
+
+EnvGen.ar(
+		Env([ 0.960 , 0.155,   0.4 ,  1,0.142,0],
+			[ 0.012 , 0.005,   0.06  , t.beatDur*0.255 , t.beatDur*0.3  ],[-3.66,-5.5,-4.6,-1.2,8]),doneAction:2);
+	//-2.6 can be zero
+
+	sig = SinOsc.ar(envF, mul: env);
+
+	sig = sig * amp.dbamp  ;
+	// sig = Pan2.ar(sig);
+	Out.ar(out, sig);
+
+}).add;
+*/
+
+
+
+
+
+
+
+
+	// SynthDef(\kick, {
+	// 	arg amp=0.2,out=0;
+	// 	var sig, env, envF;
+	//
+	// 	envF = EnvGen.ar(
+	// 		Env(
+	// 			[97.midicps*(432/440),68.midicps*(432/440),49.midicps*(432/440),8.midicps*(432/440),0,0],
+	// 			[0.00125,t.beatDur/32,t.beatDur*0.65,0],
+	// 			[8,-2,-2.4]
+	// 		)
+	// 	);
+	//
+	// 	env =
+	//
+	// 	EnvGen.ar(
+	// 		Env([ 0.960 , 0.055,   0 ,  1,0.142,0],
+	// 	[ 0.012 , 0.0001,   0.06  , t.beatDur*0.155 , t.beatDur*0.01  ],[-3.66,-5.5,-4.6,-1.2,8]),doneAction:2);
+	// 	//-2.6 can be zero
+	//
+	// 	sig = SinOsc.ar(envF, mul: env);
+	//
+	// 	sig = sig * amp.dbamp  ;
+	// 	// sig = Pan2.ar(sig);
+	// 	Out.ar(out, sig);
+	//
+	// }).add;
+
+
+
+
+
+
+/*
+SPE
+
+SynthDef(\kick, {
+	arg amp=0.2,out=0;
+	var sig, env, envF;
+
+	envF = EnvGen.ar(
+		Env(
+				[97.midicps*(432/440),68.midicps*(432/440),49.midicps*(432/440),8.midicps*(432/440),0,0],
+			[0.00125,t.beatDur/16,t.beatDur*0.55,0],
+			[8,-2,-2.4]
+		)
+	);
+
+	env =
+
+EnvGen.ar(
+		Env([ 0.960 , 0.055,   0 ,  1,0.142,0],
+			[ 0.012 , 0.0001,   0.06  , t.beatDur*0.155 , t.beatDur*0.01  ],[-3.66,-5.5,-4.6,-1.2,8]),doneAction:2);
+	//-2.6 can be zero
+
+	sig = SinOsc.ar(envF, mul: env);
+
+	sig = sig * amp.dbamp  ;
+	// sig = Pan2.ar(sig);
+	Out.ar(out, sig);
+
+}).add;*/
+
+
+
+
+
+
+
+	/*	SynthDef(\kick, {
+	arg amp=0.2,out=0;
+	var sig, env, envF;
+
+	envF = EnvGen.ar(
+		Env(
+				[97.midicps*(432/440),68.midicps*(432/440),49.midicps*(432/440),8.midicps*(432/440),0,0],
+			[0.00060,t.beatDur/16,t.beatDur*0.45,0],
+			[30,-2,-2.4]
+		)
+	);
+
+	env =
+
+EnvGen.ar(
+		Env([ 0.600 , 0.175,   0.064 ,  0.95,0.212,0],
+			[ 0.005 , 0.002,   0.06  , t.beatDur*0.155 , t.beatDur*0.01  ],[-3.66,-5.5,-4.6,-1.2,8]),doneAction:2);
+	//-2.6 can be zero
+
+	sig = SinOsc.ar(envF, mul: env);
+
+	sig = sig * amp.dbamp  ;
+	// sig = Pan2.ar(sig);
+	Out.ar(out, sig);
+
+}).add;
+*/
+
+
 
 		SynthDef(\bass,{
 		arg freq=41.2, dure=1, amp=0.5,
@@ -592,6 +764,7 @@ EnvGen.ar(
 			LPF.ar(WhiteNoise.ar(env),XLine.kr(valStart,valEnd,durF,doneAction: dA))*/
 
 		HPF.ar(WhiteNoise.ar(env),XLine.kr(valStart,valEnd,durF,doneAction: dA));   	/*,
+
 			BHiPass4.ar(LPF.ar(WhiteNoise.ar(0.03),EnvGen.kr(Env([0,10000],[3],3))),EnvGen.kr(Env([0,10000],[dur],3),timeScale: tS,doneAction:dA2),0.2);
 	]);*/
 
@@ -728,6 +901,159 @@ freq         )* EnvGen.kr(Env([0,vl,vl,0],[0.055,dur-0.055,0],4),timeScale: tS,d
 
 		Out.ar(out, FreqShift.ar(In.ar(in, 1),In.kr(bus  ) )
 			* EnvGen.kr(Env.step([vl,0],[dur,0]),timeScale: t.beatDur,doneAction:2))}).add;
+	//
+	//
+	//
+	// SynthDef(\filter,{|out=0, in, busMod, bus7, which, factor3=1, rqLPF=0.5  freqFil=100, qf =0.5, qf2=0.5,notch |
+	//
+	// 	var lp, bp, hp, sig;
+	//
+	// 	sig = In.ar(in,1);
+	//
+	// 	lp = BLowPass4.ar(sig , freqFil+ In.kr(busMod, 1) ,qf );
+	//
+	// 	bp = BBandPass.ar(sig,freqFil+ In.kr(busMod, 1)  ,qf2);
+	//
+	// 	hp = BHiPass4.ar(sig, freqFil+ In.kr(busMod, 1), qf2);
+	//
+	//
+	// 	notch = Notch.ar(sig, freqFil+ In.kr(busMod, 1), qf2);
+	//
+	// 	sig = SelectX.ar(which, [lp, bp,hp,notch]);
+	//
+	// 	Out.ar(out, sig);
+	// }).add;
+	//
+	// SynthDef(\filterG,{|out=0, in, busMod, bus7, which, factor3=1, rqLPF=0.5  freqFil=10, qf =0.5, qf2=0.5 |
+	//
+	// 	var lp, bp, hp, sig,notch;
+	//
+	// 	sig = In.ar(in,1);
+	//
+	// 	lp = BLowPass4.ar(sig , freqFil+ In.kr(busMod, 1)+ MouseX.kr(40,18000) ,qf );
+	//
+	// 	bp = BBandPass.ar(sig,freqFil+ In.kr(busMod, 1)  + MouseX.kr(40,12000) ,qf2 );
+	//
+	// 	hp = BHiPass4.ar(sig, freqFil+ In.kr(busMod, 1)+ MouseX.kr(40,18000), qf2 );
+	//
+	// 	notch = Notch.ar(sig, freqFil+ MouseX.kr(40,12000) ,qf );
+	//
+	// 	sig = SelectX.ar(which, [lp, bp,hp,notch]);
+	//
+	// 	Out.ar(out, sig);
+	// }).add;
+	//
+	//
+	// SynthDef(\filterGb,{|out=0, in, busMod, bus7, which, factor3=1, rqLPF=0.5  freqFil=10, qf =0.5, qf2=0.5 |
+	//
+	// 	var lp, bp, hp, sig,notch;
+	//
+	// 	sig = In.ar(in,1);
+	//
+	// 	lp = BLowPass4.ar(sig , freqFil+ In.kr(busMod, 1)+ MouseX.kr(40,20000) ,qf );
+	//
+	// 	bp = BBandPass.ar(sig,freqFil+ In.kr(busMod, 1)  + MouseX.kr(40,12000) ,qf2 );
+	//
+	// 	hp = BHiPass4.ar(sig, freqFil+ In.kr(busMod, 1)+ MouseX.kr(40,18000), qf2 + MouseY.kr(0.3,0.8) );
+	//
+	// 	notch = Notch.ar(sig, freqFil+ MouseX.kr(40,12000) ,qf );
+	//
+	// 	sig = SelectX.ar(which, [lp, bp,hp,notch]);
+	//
+	// 	Out.ar(out, sig);
+	// }).add;
+	//
+	//
+	// SynthDef(\filterGT,{|out=0, in, busMod, bus7, which, factor3=1, rqLPF=0.5  freqFil=10, qf =0.5, qf2=0.5 |
+	//
+	// 	var lp, bp, hp, sig,notch;
+	//
+	// 	sig = In.ar(in,1);
+	//
+	// 	lp = BLowPass4.ar(sig , freqFil+ In.kr(busMod, 1)+ MouseX.kr(40,18000) ,qf );
+	//
+	// 	bp = BBandPass.ar(sig,freqFil+ In.kr(busMod, 1)  + MouseX.kr(40,12000) ,qf2 );
+	//
+	// 	hp = BHiPass4.ar(sig, freqFil+ In.kr(busMod, 1)+ MouseX.kr(40,18000), qf2 );
+	//
+	// 	notch = Notch.ar(sig, freqFil+ MouseX.kr(40,12000) ,qf );
+	//
+	// 	sig = SelectX.ar(MouseY.kr(0,3).round(0.01).poll, [lp, bp,hp,notch]);
+	//
+	// 	Out.ar(out, sig);
+	// }).add;
+	//
+	//
+	// SynthDef(\filterGS,{|out=0, in, busMod, bus7, which, factor3=1, rqLPF=0.5  freqFil=10, qf =0.5, qf2=0.5 |
+	//
+	// 	var lp, bp, hp, sig;
+	//
+	// 	sig = In.ar(in,2);
+	//
+	// 	// lp = Resonz.ar(sig , freqFil+ In.kr(busMod, 1)+ MouseX.kr(270,3500) ,qf +In.kr(rqLPF));
+	//
+	// 	lp = BLowPass4.ar(sig , freqFil+ In.kr(busMod, 1)+ MouseX.kr(40,18000) ,qf +In.kr(rqLPF));
+	//
+	// 	bp = BBandPass.ar(sig,freqFil+ In.kr(busMod, 1)  + MouseX.kr(40,12000) ,qf2 );
+	//
+	// 	hp = BHiPass4.ar(sig, freqFil+ In.kr(busMod, 1)+ MouseX.kr(40,18000), qf2 +In.kr(bus7, 1));
+	//
+	// 	sig = SelectX.ar(which, [lp, bp,hp,sig]);
+	//
+	// 	Out.ar(out, sig);
+	// }).add;
+	//
+	// SynthDef(\filterX,{|out=0, in, busMod, bus7, which, factor3=1, rqLPF=0.5 freqFil=0, qf =0, qf2=0,tS=1,dur|
+	//
+	// 	var lp, bp, hp, sig;
+	//
+	// 	sig = In.ar(in,2);
+	//
+	// 	lp = BLowPass4.ar(sig , freqFil+ In.kr(busMod, 1) ,qf +In.kr(rqLPF));
+	//
+	// 	bp = BBandPass.ar(sig,freqFil+ In.kr(busMod, 1)  ,qf2 );
+	//
+	// 	hp = BHiPass4.ar(sig, freqFil+ In.kr(busMod, 1), qf2 +In.kr(bus7, 1));
+	//
+	// 	sig = SelectX.ar(which, [lp, bp,hp,sig]);
+	//
+	// 	Out.ar(out, sig*EnvGen.kr(Env.step([1,0],[dur,0]),timeScale: tS,doneAction:2) );
+	// }).add;
+	//
+	// SynthDef(\filterS,{|out=0, in, busMod, bus7, which, factor3=1, rqLPF=0.5, freqFil=100, qf =0.5, qf2=0.5  |
+	//
+	// 	var lp, bp, hp, sig;
+	//
+	// 	sig = In.ar(in,2);
+	//
+	// 	lp = BLowPass4.ar(sig , freqFil+ In.kr(busMod, 1) ,qf +In.kr(rqLPF));
+	//
+	// 	bp = BBandPass.ar(sig,freqFil+In.kr(busMod, 1)  ,qf2 );
+	//
+	// 	hp = BHiPass4.ar(sig, freqFil+ In.kr(busMod, 1), qf2 +In.kr(bus7, 1));
+	//
+	// 	sig = SelectX.ar(which, [lp, bp,hp,sig]);
+	//
+	// 	Out.ar(out, sig);
+	// }).add;
+	//
+	//
+	// SynthDef(\filter10,{|out=0, in, busMod, bus7, which, factor3=1, rqLPF=0.5, freqFil=100, qf =0.5, qf2=0.5  |
+	//
+	// 	var lp, bp, hp, sig;
+	//
+	// 	sig = In.ar(in,10);
+	//
+	// 	lp = BLowPass4.ar(sig , freqFil+ In.kr(busMod, 1) ,qf +In.kr(rqLPF));
+	//
+	// 	bp = BBandPass.ar(sig,freqFil+In.kr(busMod, 1)  ,qf2 );
+	//
+	// 	hp = BHiPass4.ar(sig, freqFil+ In.kr(busMod, 1), qf2+In.kr(bus7, 1));
+	//
+	// 	sig = SelectX.ar(which, [lp, bp,hp,sig]);
+	//
+	// 	Out.ar(out, sig);
+	// }).add;
 
 
 	SynthDef(\phaser,{|in, out, rate, value, dur maxDlT =0.0968,decT=1,amp=0.4,tS=1,ph=0| Out.ar(out, In.ar(in,1)+ AllpassN.ar(In.ar(in,1) ,maxDlT,SinOsc.kr(value,ph,0.01,0.01),decT)*amp* EnvGen.kr(Env.step([1,0],[dur,0]),timeScale: tS,doneAction: 2)   );}).add;
@@ -746,22 +1072,9 @@ freq         )* EnvGen.kr(Env([0,vl,vl,0],[0.055,dur-0.055,0],4),timeScale: tS,d
 			[dur * atkT ,dur * decT  -(dur*relSu) /*- In.kr(bus1, 1)*/  , dur * subsT-relSu,dur* relT],
 			[atkC,decC ,0     ,relC]),    //decC- (In.kr(bus2, 1)
 
-		timeScale:  t.beatDur,	doneAction:0);
-		Out.ar(out, env* EnvGen.kr(Env.step([1,0],[dur,0]),timeScale: t.beatDur,doneAction: 2));
-}).add;
-
-
-		SynthDef(\gate,{|in, out=0, vlAtk=0, vlDec=1,vlSub=0, vlRel=0, atkT=0, decT=1, subsT=0, relT=0, atkC=0, decC=0, relC=0, bus1, bus2, dur,relSu=0,vlSub2=0|
-	var env =   In.ar(in, 1) *    EnvGen.kr(Env(
-			[vlAtk,vlDec                  ,vlSub ,vlSub2,vlRel,0],
-			[dur * atkT ,dur * decT  -(dur*relSu) /*- In.kr(bus1, 1)*/  , dur * subsT-relSu,dur* relT],
-			[atkC,decC ,0     ,relC]),    //decC- (In.kr(bus2, 1)
-
 		timeScale:  t.beatDur,	doneAction:2);
 		Out.ar(out, env);
 }).add;
-
-
 
 	SynthDef(\gate3,{|in, out=0, vlAtk=0, vlDec=1,vlSub=1,vlSub2=1 vlRel=0, atkT=0, decT=1, subsT=0, relT=0, atkC=0, decC=0, relC=0, bus1, bus2, dur,relSu=0|
 	var env = In.ar(in, 3) *    EnvGen.kr(Env(
@@ -1214,6 +1527,79 @@ SynthDef(\EQHP10, {|out=0, in, val, quant, gain, val2, quant2, gain2 frq=100, vo
 
 	"compression init".postln;
 
+	SynthDef(\limiter, {|in, out = 0,gain=1,vol =1, du =0.01,rel=0.8, atk =0.01 ,thr= 0.001,sB =1,sA= 0.05|
+
+		Out.ar(out , CompanderD.ar(In.ar(in,1),thr, sB ,sA, atk, rel)* gain;)
+	}).add;
+
+
+	SynthDef(\limiterS, {|in, out = 0,gain=1,vol =1, du =0.01,rel=0.8, atk =0.01 ,thr= 0.001,sB =1,sA= 0.05|
+
+		Out.ar(out , CompanderD.ar( In.ar(in,2),thr, sB ,sA, atk, rel)* gain;)
+	}).add;
+
+
+	// Out.ar(0,RMS.ar(sig).ampdb.round(0.1).poll(label:"bass db :")* [0,0,1])
+
+	SynthDef(\limiterStoMixer, {|in, out = 0,gain=1,vol =1, du =0.01,rel=0.8, atk =0.01 ,thr= 0.001,sB =1,sA= 0.05,
+		c1=0,c2=0,c3=0,c4=0,c5=0,c6 =0,c7 =0,c8 =0,c9 =0,c10 =0,c11 =0,c12 =0,c13 =0,c14 =0,c15 =0,c16=0,c17=0,c18=0,c19=0,c20 =0,c21=0,c22=0,c23=0,c24=0,c25=0,c26=0,name,c27=0,c28=0,c29=0,c30=0,c31=0,c32=0,c33=0,c34=0,c35=0,c36=0,c37=0,c38=0,c39=0,c40=0,
+		c41=0,c42=0,c43=0,c44=0,c45=0,c46=0,c47=0,c48=0,c49=0,c50=0,c51=0,c52=0,c53=0,c54=0,c55=0,c56=0,c57=0,c58=0,c59=0,c60=0|
+
+		Out.ar(out , CompanderD.ar( In.ar(in,2),thr, sB ,sA, atk, rel)* gain;);
+
+		Out.ar( 0,  CompanderD.ar( In.ar(in,2),thr, sB ,sA, atk, rel)* gain * [0,0,c2,c3,c4,c5,c6,c7,c8,c9,c10,c11,c12,c13,c14,c15,c16,c17,c18,c19,c20,c21,c22,c23,c24,c25,c26,c27,c28,c29,c30,c31,c32,c33,c34,c35,c36,c37,c38,c39,c40,c41,c42,c43,c44,c45,c46,c47,c48,c49,c50,c51,c52,c53,c54,c55,c56,c57,c58,c59,c60]);
+
+
+	/*	Out.ar(0,RMS.ar(CompanderD.ar( In.ar(in,2),thr, sB ,sA, atk, rel)* gain ).ampdb.round(0.1).poll(label:name.poll)* [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1]);*/
+	}).add;
+
+
+	SynthDef(\limitertoMixer, {|in, out = 0,gain=1,vol =1, du =0.01,rel=0.8, atk =0.01 ,thr= 0.001,sB =1,sA= 0.05,
+		c1=0,c2=0,c3=0,c4=0,c5=0,c6 =0,c7 =0,c8 =0,c9 =0,c10 =0,c11 =0,c12 =0,c13 =0,c14 =0,c15 =0,c16=0,c17=0,c18=0,c19=0,c20 =0,c21=0,c22=0,c23=0,c24=0,c25=0,c26=0,name,c27=0,c28=0,c29=0,c30=0,c31=0,c32=0,c33=0,c34=0,c35=0,c36=0,c37=0,c38=0,c39=0,c40=0,
+		c41=0,c42=0,c43=0,c44=0,c45=0,c46=0,c47=0,c48=0,c49=0,c50=0,c51=0,c52=0,c53=0,c54=0,c55=0,c56=0,c57=0,c58=0,c59=0,c60=0|
+
+		Out.ar(out , CompanderD.ar( In.ar(in,2),thr, sB ,sA, atk, rel)* gain;);
+
+		Out.ar( 0,  CompanderD.ar( In.ar(in,2),thr, sB ,sA, atk, rel)* gain * [0,0,c2,c3,c4,c5,c6,c7,c8,c9,c10,c11,c12,c13,c14,c15,c16,c17,c18,c19,c20,c21,c22,c23,c24,c25,c26,c27,c28,c29,c30,c31,c32,c33,c34,c35,c36,c37,c38,c39,c40,c41,c42,c43,c44,c45,c46,c47,c48,c49,c50,c51,c52,c53,c54,c55,c56,c57,c58,c59,c60]);
+
+	}).add;
+
+
+
+	SynthDef(\limitertoMixerMod, {|in, out = 0,gain=1,vol =1, du =0.01,rel=0.8, atk =0.01 ,thr= 0.001,sB =1,sA= 0.05,
+		c1=0,c2=0,c3=0,c4=0,c5=0,c6 =0,c7 =0,c8 =0,c9 =0,c10 =0,c11 =0,c12 =0,c13 =0,c14 =0,c15 =0,c16=0,c17=0,c18=0,c19=0,c20 =0,c21=0,c22=0,c23=0,c24=0,c25=0,c26=0,name,c27=0,c28=0,c29=0,c30=0,c31=0,c32=0,c33=0,c34=0,c35=0,c36=0,c37=0,c38=0,c39=0,c40=0,
+		c41=0,c42=0,c43=0,c44=0,c45=0,c46=0,c47=0,c48=0,c49=0,c50=0,c51=0,c52=0,c53=0,c54=0,c55=0,c56=0,c57=0,c58=0,c59=0,c60=0,gainMod|
+
+		Out.ar(out , CompanderD.ar( In.ar(in,2),thr, sB ,sA, atk, rel)* (gain * In.ar(gainMod).linlin(0, 0.003, 1, 0).poll ));
+
+		Out.ar( 0,  CompanderD.ar( In.ar(in,2),thr, sB ,sA, atk, rel)* gain * [0,0,c2,c3,c4,c5,c6,c7,c8,c9,c10,c11,c12,c13,c14,c15,c16,c17,c18,c19,c20,c21,c22,c23,c24,c25,c26,c27,c28,c29,c30,c31,c32,c33,c34,c35,c36,c37,c38,c39,c40,c41,c42,c43,c44,c45,c46,c47,c48,c49,c50,c51,c52,c53,c54,c55,c56,c57,c58,c59,c60]);
+
+	}).add;
+
+
+	SynthDef(\limiter10toMixer, {|in, out = 0,gain=1,vol =1, du =0.01,rel=0.8, atk =0.01 ,thr= 0.001,sB =1,sA= 0.05,
+		c1=0,c2=0,c3=0,c4=0,c5=0,c6 =0,c7 =0,c8 =0,c9 =0,c10 =0,c11 =0,c12 =0,c13 =0,c14 =0,c15 =0, c16=0,c17=0,c18=0,c19=0,c20 =0,c21=0,name|
+
+		Out.ar(out , CompanderD.ar( In.ar(in,10),thr, sB ,sA, atk, rel)* gain;);
+
+		Out.ar( 0,  CompanderD.ar( In.ar(in,10),thr, sB ,sA, atk, rel)* gain * [0,0,c2,c3,c4,c5,c6,c7,c8,c9,c10,c11,c12,c13,c14,c15,c16,c17,c18,c19,c20,c21]);
+
+		/*Out.ar(0,RMS.ar(CompanderD.ar( In.ar(in,10),thr, sB ,sA, atk, rel)* gain ).ampdb.round(0.1).poll(label:name.poll)* [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1]);*/
+	}).add;
+
+	SynthDef(\limiter10, {|in, out = 0,gain=1,vol =1, du =0.01,rel=0.8, atk =0.01 ,thr= 0.001,sB =1,sA= 0.05|
+
+		Out.ar(out , CompanderD.ar( In.ar(in,10),thr, sB ,sA, atk, rel)* gain;)
+	}).add;
+
+
+	"limiter init".postln;
+/*.ampdb
+	.dbamp*/
+
+//SynthDef(\volAna,{|in=0|RMS.ar( In.ar(in)).ampdb.round(0.1).poll(label:" db" )}).add;
+
+
 
 	SynthDef(\crusher,{|out=0,in,rte=48000,bts=24|Out.ar(out,Decimator.ar(In.ar(in),rte,bts))}).add;
 
@@ -1241,9 +1627,12 @@ SynthDef(\EQHP10, {|out=0, in, val, quant, gain, val2, quant2, gain2 frq=100, vo
 
 
 	/*SynthDef(\stereoO,{|out=0, in, spread=0, level=1, center=0.0,dlt1=0.3,dlt2=0.4,decT=2, mxDel=1|
+
 		Out.ar(out,Splay.arFill(2,{
+
 			CombN.ar(
 				In.ar(in, 1), mxDel, [dlt1,dlt2], decT)
+
 	},spread,level,center))}).add;*/
 
 
@@ -1260,6 +1649,7 @@ SynthDef(\EQHP10, {|out=0, in, val, quant, gain, val2, quant2, gain2 frq=100, vo
 
 
 /*	SynthDef(\stereo10,{|out=0, in, spread=0, level=1, center=0.0,dur,atkT=0,crvA=0,tS=1|
+
 		Out.ar(out,
 			Splay.arFill(10,
 				{ In.ar(in, 2)}
@@ -1433,6 +1823,7 @@ SynthDef(\sawModul,{|modu, busMod,hS|Out.kr(busMod, Saw.kr(modu).range(-40,hS))}
 }).add;
 
 	/*
+
 	SynthDef(\fmX, {
 		arg freq= 659.26, freq2=200,freq3=200, mRatio=1, cRatio=0,  amp=1.5, sineRate = 0.0000000095262251,  sineRangeLow=0, pitch = 0, phRise= 0 ,out=0, eFreq =0 , phFm=8, bus2,bus3,bus4,busBP,bus6, bus7, bus8, busSR, busSS, busSP, gra=0.5,lvlDec=1,factor=0, factor2 =0 ,factorx=0, factorx2 =0,factorxx=0, factorxx2 =0  /*,vlPE =27.1366666667,vlPE2=0.2,dcPE = 0.129066666667*/, rqLPF =0.5, factor3 =1, decE= 0.1936, dur, gain =50/*, crvEP = (-2)*/,gate=1,pan=0, modu,modu2, multi=0, multi2=0,modux=0,moduxx=0,fmCtrl=1;
 
@@ -1575,6 +1966,7 @@ SynthDef(\sequ,{|value, dur, in=0, out=0, vlAtk=0, vlDec=1,vlSub=1,vlSub2=1, vlR
 		/*MouseX.kr(20,22000)*/,qlL )) }).add;
 
 /*	SynthDef(\filterU, {|out=0,in,  hFrq=900, hFrq2=900,lFrq=300,lFrq2=300 ,qfH = 0.822379, qfH2=0.6,qlL = 0.504212,qlL2=0.4|Out.ar(out,
+
 	/*BLowPass4.ar(  */ BLowPass4.ar( BLowPass.ar(
 			BHiPass4.ar(  BHiPass4.ar(
 				In.ar(in,1)
@@ -1582,6 +1974,23 @@ SynthDef(\sequ,{|value, dur, in=0, out=0, vlAtk=0, vlDec=1,vlSub=1,vlSub2=1, vlR
 	, lFrq,qlL ) ,lFrq2 ,qlL2 )
 
 	) }).add;*/
+
+
+	SynthDef(\rien,{|dur=1|EnvGen.kr(Env.step([1,0],[ dur,0]),timeScale: t.beatDur,doneAction: 2)}).add;
+
+
+
+	SynthDef(\blank,{|out=0,in,dur|
+
+		ReplaceOut.ar(out,In.ar(in,2)   )*EnvGen.kr(Env.step([1,0],[dur,0]),timeScale: t.beatDur,doneAction: 2)}).add;
+
+	SynthDef(\blankF,{|out=0,in,dur,wF=0|
+
+		ReplaceOut.ar(out,
+			Select.ar(wF,
+				[LPF.ar(In.ar(in,2), SinOsc.kr(~hz1beat/64,4.6).range(100,1800)),
+					BHiPass4.ar(In.ar(in,2), SinOsc.kr(~hz1beat/32,4.6).range(1000,4000))])
+				*EnvGen.kr(Env.step([1,0],[dur,0]),timeScale: t.beatDur,doneAction: 2))}).add;
 
 
 
@@ -1638,9 +2047,10 @@ SynthDef(\sequ,{|value, dur, in=0, out=0, vlAtk=0, vlDec=1,vlSub=1,vlSub2=1, vlR
 		Out.ar(out,effect /** EnvGen.kr(Env.step([1,1],[dur,0]),timeScale: tS,doneAction: 2)*/);
 	}).add;
 
-	SynthDef(\lim,{|out=0,ml=0.1,in|Out.ar(out,Balance.ar(In.ar(in),SinOsc.ar(mul: ml)))}).add;
+	SynthDef(\lim,{|out=0,ml=0.1,in|Out.ar(out,Balance2.ar(In.ar(in),SinOsc.ar(mul: ml)))}).add;
 /*
 	SynthDef(\lim2,{|out=0,ml=0.2,in|Out.ar(out,Balance.ar(In.ar(in,2),SinOsc.ar(mul: ml)))}).add;
+
 	SynthDef(\lim10,{|out=0,ml=0.2,in|Out.ar(out,Balance.ar(In.ar(in,10),SinOsc.ar(mul: ml)))}).add;*/
 
 	SynthDef(\tantra,{|out=0,wT=0,in,dur|Out.ar(out,SelectX.ar(wT,[
@@ -1666,18 +2076,90 @@ s.sync;
 )
 
 
+(
+~filterGrp=Group.new;
+~compGrp=Group.after(~filterGrp);
+~limitGrp=Group.after(~compGrp);
+~stereoGrp=Group.after(~limitGrp);
+~recGrp2=Group.after(~stereoGrp);
+Routine({
+
+Ppar([
+	Pseq([Pbindf(~kick,\out,~kbus)],inf),
+		Pbind(\instrument, \shap, \dur,Pseq([1/1],inf),\dA1,2,\out,~bassShapB, \crv, (2)),
+
+
+			Pseq([Pbindf(~kick,\out,~kToPan/*~limitKick*/)],inf),
+
+
+				/*Pbind(\instrument, \playBuf, \buf, ~b4, \dur, Pseq([1/4],inf),\amp,1,\type,Pseq([\rest,\note,\note,\note],inf), \decT,	Pseq([0,0.8,0.86,0.92 ],inf),\start,0,\out,~bassFi)*/
+
+
+
+		Pbind(\instrument, \playBuf, \buf, ~b4, \dur, Pseq([1/4],inf),\amp,1,\type,Pseq([\rest,\note,\note,\note],inf), \decT,/*0.99  *//* Pseq([1,0.9,0.93,0.96 ],inf)*/ Pseq([1,0.5,0.6,0.7 ],inf)
+
+
+
+			/*
+			Pseq([1,0.58,0.68,0.78 ],inf)*/
+
+			/*Pseq([1,0.9,0.94,0.98 ],inf)*/,\start,0,\out,~bassFi,\vlDec,Pseq([0,0.612,1,1],inf),/*\vlSub,Pkey(\vlDec),\vlSub2,Pkey(\vlDec)*/\decC,5),
+
+
+
+
+
+],1).play(t);
+
+
+	~bassFilter= Synth(\filter,[\in, ~bassFi,\out,~comFuzz,\freqFil,4000,\qf,1,\which,0,\busMod,~bassShapB],~filterGrp);
+
+
+~comp=Synth(\comp, [\ctrl, ~kbus ],~compGrp);
+~comp.set(\thr,0.9 ,\sB, 1.1,\sA, 1/2,\atk ,t.beatDur/64, \rel ,t.beatDur/2, \gain,1,\in, ~comFuzz,\out,~limitBass);
+
+/*
+	~comp.set(\thr,0.3 ,\sB, 1.037,\sA, 1/2,\atk ,t.beatDur/4, \rel ,t.beatDur/16, \gain,1,\in, ~comFuzz,\out,~limitBass);
+	*/
+
+	/*
+	~comp.set(\thr,0.3 ,\sB, 1.037,\sA, 1/2,\atk ,t.beatDur/2048, \rel ,t.beatDur/16, \gain,1,\in, ~comFuzz,\out,~limitBass);*/
+~limK=Synth(\limitertoMixer,[\c45,1,\in, ~limitKick, \gain,1,\out,~kToPan],~limitGrp);
+
+	// ~limK.set(\gain,206);
+
+	~limK.set(\gain,285);
+
+
+~limB=Synth(\limitertoMixer,[\c46,1,\in, ~limitBass, \gain,68,\out,~kToPan],~limitGrp);
+	~limB.set(\gain,199);
+
+
+	~kbPan2 = Synth(\pan2,[ \in,~kToPan,\out,0],~stereoGrp);
+
+	wait(0.36);
+
+	// s.record(path:"/Users/davidmignot/Music/SuperCollider Recordings//G#/1/kick.aiff",numChannels:2,duration:t.beatDur*1.3);
+}).play(t,quant:1))
+
+
+Pseq([Pbindf(~kick,\out,~kbus)],inf).play(t,quant:1)
+~limK.free;
+~limB.free;
+~kb1.plot
+~kick.play
+/*~kb1=Buffer.read(s,"/Users/davidmignot/Music/SuperCollider Recordings/E/bacup/kB.aiff")*/
+
+// ~kb1=Buffer.read(s,"/Users/davidmignot/Music/SuperCollider Recordings/kB.aiff")
+~kb1.plot
+~k2.plot
+~b3.plot
+~kb=Pbind(\instrument, \playBufS, \dur,  Pseq([10/1],inf), \tS,  t.beatDur,\buf,~kb1,\loopy,0,\start,1,\vl,1).play(t)
+Pseq([Pbindf(~kick,\out,0)],inf).play(t)
+
 
 ({Pan2.ar(Saw.ar(32.midicps*(432/440),mul: -1,add: -0.4).lincurve(-1,1,-1,1,-7).round(2**(-8)))}.play)
 
 ({Pan2.ar(Saw.ar(28.midicps*(432/440),mul: 1,add: 0.4).lincurve(-1,1,-1,1,7).round(2**(-8)))}.play)
 
-// s.record(path:"/Users/davidmignot/Music/SuperCollider Recordings/E/E2/bass.aiff",numChannels:2,duration:t.beatDur*8)
-
-({Pan2.ar(Saw.ar(30.midicps*(432/440),mul: 1,add: 0.4).lincurve(-1,1,-1,1,7).round(2**(-8)))}.play)
-
-({Pan2.ar(Saw.ar(30.midicps*(432/440),mul: -1,add: 0.4).lincurve(-1,1,-1,1,7).round(2**(-8)))}.play)
-
-
-({Pan2.ar(Saw.ar(31.midicps*(432/440),mul: 1,add: 0.4).lincurve(-1,1,-1,1,7).round(2**(-8)))}.play)
-
-
+s.record(path:"/Users/davidmignot/Music/SuperCollider Recordings/E/E2/bass.aiff",numChannels:2,duration:t.beatDur*8)
