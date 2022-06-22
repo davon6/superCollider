@@ -11,8 +11,156 @@ SynthDef(\lfoSaw, {|out, val, dur, ph =0,gte=(-4)|Out.kr(0,
 Pseq([Pbindf(~kick,\out,~kToPan/*~limitKick*/)],inf).play(t);
 
 	~kbPan2 = Synth(\pan2,[ \in,~kToPan,\out,0],~stereoGrp);
+SynthDef(\kick, {
+	arg amp=0.2,out=0;
+	var sig, env, envF;
+
+	envF = EnvGen.ar(
+		Env(
+				[107.midicps*(432/440),55.midicps*(432/440),
+				43.midicps*(432/440),1.midicps*(432/440)],
+			[t.beatDur/16,t.beatDur/8,t.beatDur/2,t.beatDur/2],
+			[-10,-5,0,0]
+		)
+);
+
+	env =
+EnvGen.ar(
+		Env([0.8, 0.68 ,   0.185 ,  1,0.3,0],
+		[ t.beatDur*0.003, t.beatDur*0.04 ,   t.beatDur*0.9155   , t.beatDur*0.0055 , t.beatDur*0.005  ],[0,-5.66,-13.6,-1.2,8]),doneAction:2);
+	//-2.6 can be zero
+
+	sig = SinOsc.ar(envF, mul: env);
+
+	sig = sig * 1 ;
+	// sig = Pan2.ar(sig);
+	Out.ar(out, sig);
+
+}).add;
 
 
+================
+SynthDef(\kick, {
+	arg amp=0.2,out=0;
+	var sig, env, envF;
+
+	envF = EnvGen.ar(
+		Env(
+				[107.midicps*(432/440),55.midicps*(432/440),
+				43.midicps*(432/440),1.midicps*(432/440)],
+			[t.beatDur/16,t.beatDur/8,t.beatDur/2,t.beatDur/2],
+			[-10,-5,0,0]
+		)
+);
+
+	env =
+EnvGen.ar(
+		Env([0.8, 0.68 ,   0.185 ,  1,0.3,0],
+		[ t.beatDur*0.003, t.beatDur*0.04 ,   t.beatDur*0.9155   , t.beatDur*0.0055 , t.beatDur*0.005  ],[0,-5.66,-13.6,-1.2,8]),doneAction:2);
+	//-2.6 can be zero
+
+	sig = SinOsc.ar(envF, mul: env);
+
+	sig = sig * 1 ;
+	// sig = Pan2.ar(sig);
+	Out.ar(out, sig);
+
+}).add;
+
+
+================
+
+
+SynthDef(\kick, {
+	arg amp=0.2,out=0;
+	var sig, env, envF;
+
+	envF = EnvGen.ar(
+		Env(
+				[107.midicps*(432/440),55.midicps*(432/440),
+				43.midicps*(432/440),1.midicps*(432/440)],
+			[t.beatDur/16,t.beatDur/8,t.beatDur/4,t.beatDur*0.005],
+			[-10,-5,0,0]
+		)
+);
+
+	env =
+EnvGen.ar(
+		Env([1, 1 ,   0.185 ,  1,0.3,0],
+		[ t.beatDur*0.003, t.beatDur*0.025 ,   t.beatDur*0.9155   , t.beatDur*0.0055 , t.beatDur*0.005  ],[0,-5.66,-13.6,-1.2,8]),doneAction:2);
+	//-2.6 can be zero
+
+	sig = SinOsc.ar(envF, mul: env);
+
+	sig = sig * 1 ;
+	// sig = Pan2.ar(sig);
+	Out.ar(out, sig);
+
+}).add;
+
+
+================
+
+SynthDef(\kick, {
+	arg amp=0.2,out=0;
+	var sig, env, envF;
+
+	envF = EnvGen.ar(
+		Env(
+				[107.midicps*(432/440),55.midicps*(432/440),
+				43.midicps*(432/440),13.midicps*(432/440)],
+			[t.beatDur/16,t.beatDur/8,t.beatDur/4,t.beatDur*0.005],
+			[-10,-5,0,0]
+		)
+);
+
+	env =
+EnvGen.ar(
+		Env([1, 1 ,   0.115 ,  1,0.3,0],
+		[ t.beatDur*0.003, t.beatDur*0.025 ,   t.beatDur*0.9155   , t.beatDur*0.0055 , t.beatDur*0.005  ],[0,-5.66,-13.6,-1.2,8]),doneAction:2);
+	//-2.6 can be zero
+
+	sig = SinOsc.ar(envF, mul: env);
+
+	sig = sig * 1 ;
+	// sig = Pan2.ar(sig);
+	Out.ar(out, sig);
+
+}).add;
+
+
+================
+
+
+SynthDef(\kick, {
+	arg amp=0.2,out=0;
+	var sig, env, envF;
+
+	envF = EnvGen.ar(
+		Env(
+				[107.midicps*(432/440),55.midicps*(432/440),
+				43.midicps*(432/440),13.midicps*(432/440)],
+			[t.beatDur/16,t.beatDur/16,t.beatDur/4,t.beatDur*0.005],
+			[-10,-5,0,0]
+		)
+);
+
+	env =
+EnvGen.ar(
+		Env([1, 1 ,   0.275 ,  1,0.3,0],
+		[ t.beatDur*0.003, t.beatDur*0.025 ,   t.beatDur*0.8155   , t.beatDur*0.055 , t.beatDur*0.005  ],[0,-5.66,-10.6,-1.2,8]),doneAction:2);
+	//-2.6 can be zero
+
+	sig = SinOsc.ar(envF, mul: env);
+
+	sig = sig * 1 ;
+	// sig = Pan2.ar(sig);
+	Out.ar(out, sig);
+
+}).add;
+
+
+================
 
 
 SynthDef(\kick, {

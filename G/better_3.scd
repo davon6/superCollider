@@ -498,7 +498,7 @@ LFPulse.kr(12,0.5).range(0,0.6)
 
 		,mul:In.kr(freq)/*%(In.kr(freq)*In.kr(modulus)) */ /**In.kr(mratio)*/* In.kr(iEnv));
 
-	sig2 = Squine.ar(In.kr(freq)/**In.kr(cratio)*/ * In.kr(iEnv2) /*+ mod*/,In.kr(clip),In.kr(skew )  /*,initphase: mod.wrap(0, 4pi)*/);
+	sig2 = Squine.ar(In.kr(freq)/**In.kr(cratio)*/ * In.kr(iEnv2) + mod,In.kr(clip),In.kr(skew )  /*,initphase: mod.wrap(0, 4pi)*/);
 
 	// sig2 = SinOsc.ar(In.kr(freq)* In.kr(iEnv2) + mod);
 	Out.ar(out,
