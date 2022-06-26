@@ -570,7 +570,7 @@ Mix.ar(
 					,decaytime:dur),
 
 
-				GVerb.ar(In.ar(in),roomSize,revT,damp,earlyreflevel: earlyLvl),
+				GVerb.ar(In.ar(in),roomSize,revT,damp,earlyreflevel: earlyLvl)*0.5,
 
 
 		/*	GVerb.ar(AllpassL.ar(In.ar(in,1),delaytime:delT,decaytime:dur),roomSize,revT,damp,earlyreflevel: earlyLvl),
@@ -600,14 +600,14 @@ Mix.ar(
 
 ,0.05,/*SinOsc.kr(~hz1beat/4,0.3,0.02,0.02)+*/
 SinOsc.kr(ratePhaser,2,0.01,0.01)//good phaser
-				,-0.5),
+				,-0.5)*0.5,
 
 
 
 	Decimator.ar(In.ar(in,1),In.kr(rte),In.kr(bits)),
 
 
-				effect,
+				effect*0.5,
 
 
 				FreqShift.ar(In.ar(in,1),
@@ -627,7 +627,7 @@ SinOsc.kr(ratePhaser,2,0.01,0.01)//good phaser
 
 				BufCombN.ar(~b3.bufnum,In.ar(in,1),In.kr(combMod)
 
-			,(-0.5) ,0.1)
+			,(-0.5) ,0.08)
 
 	])
 
@@ -1121,7 +1121,12 @@ Synth(\rec, [\ptrIn, ~ptrBus2, \micIn,~bus11A /*~bus1A*//*~micBus2*/, \buf, ~lea
 
 
 
-Pbind(\instrument,\liveGran,\dur,Pseq(~dur,inf),\group,~g10,\in,~bus11A,\which,Prand([0,1],inf)).play(t)
+Pbind(\instrument,\liveGran,\dur,Pseq(~dur,inf),\group,~g10,\in,~bus11A,\which,Pfunc({3.rand})/*Prand([0,1],inf)*/,
+
+
+	\dlytime, Pfunc({0.1.rrand(0.0000001)}), \fb, 1,\wet, 1.0,\fc, 5000
+
+).play(t)
 
 /*({
 
@@ -1139,8 +1144,32 @@ SynthDef(\liveGran,{|out=0,dur|
 
 //noublie pas de kr rate and move synthdef into right section
 
-	SynthDef(\liveGran,{|out=0,dur,which=0,in,ph=3|
-	~leadCre = Buffer.alloc(s, s.sampleRate *  t.beatDur,2);
+	SynthDef(\liveGran,{|out=0,dur,which=0,in,ph=3,
+
+
+
+			fb=0.6, fc=5000, dlytime=0.125, wet=0.5, pan=0.0|
+	var local, sig, delayed, phi, phR, phP, freq;
+	var tdbh; // time delay between heads (seconds)
+	local = LocalBuf(SampleRate.ir * 3, 1);
+	local.clear; // clear the buffer
+
+	tdbh = 0.125;
+	phi = (2 * tdbh) / BufDur.ir(local);
+	freq = 1.0 / BufDur.ir(local); // frequency to playback the buffer at rate 1
+	freq = (freq * tdbh) / VarLag.kr(dlytime, 2, warp:\linear);
+	phR = LFSaw.ar( freq, phi, 0.5, 0.5)*BufFrames.kr( local );
+	phP = LFSaw.ar( freq, 0.0, 0.5, 0.5)*BufFrames.kr( local );
+
+	sig = Mix.ar(In.ar(in,2));
+	delayed = BufRd.ar(1, local, phP, loop:1);
+	delayed = delayed.tanh;
+	BufWr.ar( LPF.ar( (sig + delayed), fc, mul:fb), local, phR, loop:1);
+	pan = LFNoise1.ar(5);
+
+
+		~leadCre = Buffer.alloc(s, s.sampleRate *  t.beatDur,2);
+
 
 	Out.ar(out,
 
@@ -1155,7 +1184,15 @@ SynthDef(\liveGran,{|out=0,dur|
 				SinOsc.kr(0.8,ph).range(0.1,2)
 
 
-				,Impulse.kr(~hz1beat/4),loop: 1)])
+				,Impulse.kr(~hz1beat/4),loop: 1),
+
+
+
+
+
+
+	 Pan2.ar(delayed*wet, pan)
+		])
 
 
 	*EnvGen.kr(Env.step([1,0],[dur,0]),timeScale: t.beatDur,doneAction: 2))}).add;
