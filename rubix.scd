@@ -417,7 +417,7 @@ Pbindef(\uiu,\rte,~busC2,\dur,Pseq([0.125,0.125,0.125,0.125,0.125,0.125,0.125,0.
 
 
 )
-
+p.stop
 v.stop
 v = Routine {
 
