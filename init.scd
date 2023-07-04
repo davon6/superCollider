@@ -151,6 +151,11 @@ s.sync;
 		sin(x.squared) + cos(x.sqrt).abs;
 	}, 0, 2pi);
 
+
+
+
+
+
 	// ~sig.plot
 
 	~wtx = ~sig.asWavetable;
@@ -1671,7 +1676,7 @@ s.sync;
 	~bassShap = Pbind(\instrument, \shap, \dur,Pseq([1/1],1),\dA1,2,\out,~bassShapB, \tS, 0.39550810372374);
 
 
-});
+
 
 
 ~recordBuses = { |buses, path, recHeaderFormat = "wav", recSampleFormat = "float", recBufSize = 131072, latency = 0.2|
@@ -1741,6 +1746,60 @@ s.sync;
 	recorders.do { |rec| rec.stopRecording };
 };
 
+
+SynthDef(\playBuf ,{|out =0,start, trig, dur, amp=4,buf, loo=0,impulse=0.001,rte=1
+	vlAtk =0,vlDec=1 ,vlSub=1,rte2=0 ,vlSub2=1,vlRel=0,atkT=0,decT=1,subsT=0,relT=0,atkC=0,decC=0,relC=0,gateSub=0,dA=0,impulseMod,envVol,audio1,audio2,audio3,audio4,audio5,record1,record2,record3,record4,record5|
+
+
+
+	Out.ar( record1,PlayBuf.ar(2,audio1,In.kr(rte)+rte2,trigger:Impulse.kr(~hz1beat*(impulse+In.kr(impulseMod))),startPos:/*MouseX.kr(0,15000).poll+*/307200/16* start,loop:1,doneAction: 2)
+
+		*
+
+		In.kr(envVol));
+
+			Out.ar( record2,PlayBuf.ar(2,audio2,In.kr(rte)+rte2,trigger:Impulse.kr(~hz1beat*(impulse+In.kr(impulseMod))),startPos:/*MouseX.kr(0,15000).poll+*/307200/16* start,loop:1,doneAction: 2)
+
+		*
+
+		In.kr(envVol));
+
+
+				Out.ar( record3,PlayBuf.ar(2,audio3,In.kr(rte)+rte2,trigger:Impulse.kr(~hz1beat*(impulse+In.kr(impulseMod))),startPos:/*MouseX.kr(0,15000).poll+*/307200/16* start,loop:1,doneAction: 2)
+
+
+		*
+
+		In.kr(envVol));
+
+
+					Out.ar( record4,PlayBuf.ar(2,audio4,In.kr(rte)+rte2,trigger:Impulse.kr(~hz1beat*(impulse+In.kr(impulseMod))),startPos:/*MouseX.kr(0,15000).poll+*/307200/16* start,loop:1,doneAction: 2)
+
+
+		*
+
+		In.kr(envVol));
+
+						Out.ar( record5,PlayBuf.ar(2,audio5,In.kr(rte)+rte2,trigger:Impulse.kr(~hz1beat*(impulse+In.kr(impulseMod))),startPos:/*MouseX.kr(0,15000).poll+*/307200/16* start,loop:1,doneAction: 2)
+
+
+		*
+
+		In.kr(envVol));
+
+
+
+
+	Out.ar(0,In.ar(record1,2)* EnvGen.kr(Env.step([1,0],[dur,0]),timeScale: t.beatDur, doneAction:2));
+		Out.ar(0,In.ar(record2,2));
+		Out.ar(0,In.ar(record3,2));
+		Out.ar(0,In.ar(record4,2));
+		Out.ar(0,In.ar(record5,2));
+
+
+	}).add;
+
+});
 
 )
 
