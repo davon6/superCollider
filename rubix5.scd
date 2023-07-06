@@ -148,7 +148,7 @@ wt = sig.asWavetable;
 
 	Pbindef(\uiu,
 
-	\impulse,0,\impulseMod,~lfo1,\rte,~lfo3,\rte2,0,
+	\impulse,0,\impulseMod,~lfo1,\rte,Prand([~lfo3,~lfo11,~lfo12],inf),\rte2,0,
 
 	\dur,/*Pseq([2,1,1,1.5,0.5,0.5,0.25,0.25,1],inf)Pfunc({1.20.rand(0.125)})*/
 
@@ -191,7 +191,7 @@ Pbindef(\uiu,\rte,55,\rte2,1,\impulseMod,55,\impulse,0.3)
 ~chg4.free;
 ~controlVolume.free;
 
-
+	/*((4,4),(5,5)).choose*/
 
 ~chg1 = {Out.kr(~lfo6,LFPulse.kr(4).range(~sounds[~choice][4]),~sounds[~choice][4])}.play;
 ~chg2 = {Out.kr(~lfo7,LFPulse.kr(4).range(~sounds[~choice][3]),~sounds[~choice][3])}.play;
@@ -206,8 +206,11 @@ Pbindef(\uiu,\rte,55,\rte2,1,\impulseMod,55,\impulse,0.3)
 
 ~controlPitch.free;
 
-~controlPitch= {Out.kr(~lfo3, Osc.kr(~bufBreath,0.3125).range(1,1))}.play;
-~controlPitch= {Out.kr(~lfo3, Osc.kr(~bufBreath,0.3125/2).range(In.kr(~lfo6),In.kr(~lfo7)))}.play;
+~controlPitchOff= {Out.kr(~lfo11, Osc.kr(~bufBreath,0.3125).range(1,1))}.play;
+~controlPitch= {Out.kr(~lfo3, Osc.kr(~bufBreath,0.3125/4).range(In.kr(~lfo6),In.kr(~lfo7)))}.play;
+
+~controlPitcRise= {Out.kr(~lfo12, Saw.kr(0.3125/16).range(1.4,0.7))}.play;
+
 
 ~controlPitch= {Out.kr(~lfo3, Osc.kr(~bufBreath,0.3125).range(In.kr(~lfo6),In.kr(~lfo7)))}.play;
 ~controlPulse = {Out.kr(~lfo1,Osc.kr(~bufBreath,0.3125).range(In.kr(~lfo8),In.kr(~lfo9)))}.play;
