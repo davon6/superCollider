@@ -8,7 +8,9 @@ Pbindef(\uiu,\instrument,\playBuf,\audio1,~lead1.bufnum,\audio2,~lead2.bufnum,\a
 
 
 (
-~record1 =Bus.audio(s,2);
+   var env,sig,wt;
+
+   ~record1 =Bus.audio(s,2);
 	~record2 =Bus.audio(s,2);
 	~record3 =Bus.audio(s,2);
 	~record4 =Bus.audio(s,2);
@@ -28,18 +30,16 @@ Pbindef(\uiu,\instrument,\playBuf,\audio1,~lead1.bufnum,\audio2,~lead2.bufnum,\a
 ~lfo1 = Bus.control;
 ~lfo2 = Bus.control;
 ~lfo3 = Bus.control;
+~lfo4 = Bus.control;
+~lfo5 = Bus.control;
+~lfo6= Bus.control;
+~lfo7 = Bus.control;
+~lfo8 = Bus.control;
+~lfo9 = Bus.control;
+~lfo10= Bus.control;
 
 
-~busC2 =Bus.control(s,1);
-~busC3 =Bus.control(s,1);
-~busC4=Bus.control(s,1);
-~busC5=Bus.control(s,1);
-~busC6=Bus.control(s,1);
-~busC7=Bus.control(s,1);
-~busC8=Bus.control(s,1);
-~busC9=Bus.control(s,1);
-
-
+~bufBreath=Buffer.alloc(s,2048);
 ~bufCy=Buffer.alloc(s,2048);
 
 ~bufCy2=Buffer.alloc(s,2048);
@@ -48,10 +48,9 @@ Pbindef(\uiu,\instrument,\playBuf,\audio1,~lead1.bufnum,\audio2,~lead2.bufnum,\a
 
 ~bufADSR=Buffer.alloc(s,2048);
 
-)
-(
-var env,sig,wt;
-env =Env([1,0],[0.2,0],curve: -3.4);
+
+
+env =Env([1,0],[0.2,0],curve: 0.rrand(-3.4));
 sig = env.asSignal(1024);
 wt = sig.asWavetable;
 ~bufSw.loadCollection(wt);
@@ -77,6 +76,13 @@ env =Env([1,0,0,1],[0.2,0.2,0.2,0.2],[-1,0,1,5]);
 sig = env.asSignal(1024);
 wt = sig.asWavetable;
 ~bufCy2.loadCollection(wt);
+
+
+env =Env([0,1,0],[0.8,0.1,0],[5,5,0]);
+sig = env.asSignal(1024);
+wt = sig.asWavetable;
+~bufBreath.loadCollection(wt);
+
 
 )
 
@@ -133,11 +139,13 @@ while { ~i < 5 } { i = i + 1; "boing".postln };
 
 
 )
-~sounds=[]
+~sounds=[];
 7.do{~sounds=~sounds.insert(0,((1.00..8).rand).insert(9,0.rrand(16)))}
 ~sounds[4]
 
-
+(2.00..1.00).rand(1.4)
+~sounds=[];
+7.do{~sounds=~sounds.insert(0,((1.00..8).rand).insert(9,0.rrand(16)))}
 
 ~controlVolume.free;
 ~controlPitch.free;
@@ -166,35 +174,60 @@ while { ~i < 5 } { i = i + 1; "boing".postln };
 ~choice =0.rrand(6);
 1.wait;
 
-	// ~controlVolume.free;
-~controlPitch.free;
+	 ~controlVolume.free;
+	// ~controlPitch.free;
 ~controlPulse.free;
 
+//maybe ligher pitch lfo and melody
 
-~controlPitch = {Out.kr(~lfo3, LFTri.kr(~sounds[~choice][0],~sounds[~choice][1]).range(~sounds[~choice][2],~sounds[~choice][3]))}.play;
 
-	// ~controlVolume = {Out.kr(~lfo2,Osc.kr(~bufADSR,~sounds[~choice][4]).range(1,0))}.play;
+/*~controlPitch = {Out.kr(~lfo3, LFTri.kr(~sounds[~choice][0],~sounds[~choice][1]).range(~sounds[~choice][2],~sounds[~choice][3]))}.play;*/
+
+	 ~controlVolume = {Out.kr(~lfo2,Osc.kr(~bufADSR,~sounds[~choice][4]).range(1,0))}.play;
 ~controlPulse = {Out.kr(~lfo1,Osc.kr(~bufADSR,~sounds[~choice][6]).range(~sounds[~choice][7],~sounds[~choice][5]))}.play;
 
-	Pbindef(\uiu,\rte2,0,\type,\note,
-
-	\impulse,0,\impulseMod,~lfo1,\rte,~lfo3,\dur,1,\start,~sounds[~choice][8],\envVol,~lfo2);
 
 1.wait;
 }}
 
+
+//maybe ligher pitch lfo and melody || START WILL BE A LFO flat
+
+
+	Pbindef(\uiu,\rte2,0,
+
+	\impulse,0,\impulseMod,~lfo1,\rte,55,\rte2,1,\dur,Pseq([2,1,1,1.5,0.5,0.5,0.25,0.25,1],inf),\start,Pseq([1,6,8,1,Pfunc({0.rrand(16)}),3,7,Pfunc({0.rrand(16)})],inf),\envVol,/*,\gat,*/Prand([~lfo2,~lfo4,~lfo5],inf),\type,Prand([\note],inf));
+
+~sounds[~choice][8]
 ~trio.play(t)
 ~trio.stop
 
-//send gating to another bus and envelope shape on one other and bring some melody
-~sqr={Out.kr(~lfo2,LFPulse.kr(MouseY.kr(0.4,10),width:  MouseX.kr(1,0.4)).range(1,0))}.play
+(~tuuu={Out.kr(~attempt,LFPulse.kr(1).range(700,600))}.play)
+~attempt=Bus.control
+~attempt.clear
+{SinOsc.ar(In.kr(~attempt),mul: 0.5)}.play
+
+// bring some melody here here here
+~sqr={Out.kr(~lfo4,LFPulse.kr(SinOsc.kr(1.2).range(0.4,10),width: SinOsc.kr(1.4).range(0.5,0)).range(1,0))}.play
 ~sqr.free
 
+~sw={Out.kr(~lfo5,Osc.kr(~bufSw,SinOsc.kr(1.2).range(1.5,6)).range(1,0))}.play
 
-~groo={Out.kr(~lfo3,VOsc.kr(SinOsc.kr(0.02).range(25,26),100).range(3,-0.5))}.play
+	 ~controlVolume = {Out.kr(~lfo2,Osc.kr(~bufADSR,~sounds[~choice][4]).range(1,0))}.play;
+~controlPulse = {Out.kr(~lfo1,Osc.kr(~bufADSR,~sounds[~choice][6]).range(~sounds[~choice][7],~sounds[~choice
+
+//pause here
 
 
 
+
+~flat={Out.kr(~lfo10,LFPulse.kr(00.1).range(1,1))}.play
+~flat.free
+
+~groo={Out.kr(~lfo3,VOsc.kr(SinOsc.kr(0.02).range(25,26),0.3).range(1,-1))}.play
+~groo.free
+//essai gate cube
+{Out.ar(0,LFPulse.ar(60,width:  MouseX.kr(0.5,0)).range(1,0))}.play
 
 //not here
 ~controlPitch = {Out.kr(~lfo3, LFTri.kr(~sound2[0],~sound2[1]).range(~sound2[2],~sound2[3]))}.play;
@@ -215,6 +248,8 @@ while { ~i < 5 } { i = i + 1; "boing".postln };
 ~newCon.stop
 	~sqr={Out.kr(~lfo2,LFPulse.kr(MouseY.kr(0.4,10),width:  MouseX.kr(0.4,1)).range(1,0))}.play
 ~sqr.free
+
+
 
 
 ~tre.free

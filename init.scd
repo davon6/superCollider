@@ -23,7 +23,7 @@ DONT FORGET 16 BIT DISTO !!!!!
 ACHETER UN METRE A PAPA
 
 popping fire work sqelch
-
+s.latency =0.8
 (
 Server.default.options.numWireBufs = 1024;
 
@@ -1748,7 +1748,7 @@ s.sync;
 
 
 SynthDef(\playBuf ,{|out =0,start, trig, dur, amp=4,buf, loo=0,impulse=0.001,rte=1
-	vlAtk =0,vlDec=1 ,vlSub=1,rte2=0 ,vlSub2=1,vlRel=0,atkT=0,decT=1,subsT=0,relT=0,atkC=0,decC=0,relC=0,gateSub=0,dA=0,impulseMod,envVol,audio1,audio2,audio3,audio4,audio5,record1,record2,record3,record4,record5|
+,rte2=0,gat,dA=0,impulseMod,envVol,audio1,audio2,audio3,audio4,audio5,record1,record2,record3,record4,record5|
 
 
 
@@ -1756,21 +1756,20 @@ SynthDef(\playBuf ,{|out =0,start, trig, dur, amp=4,buf, loo=0,impulse=0.001,rte
 
 		*
 
-		In.kr(envVol));
+			In.kr(envVol) );
 
 			Out.ar( record2,PlayBuf.ar(2,audio2,In.kr(rte)+rte2,trigger:Impulse.kr(~hz1beat*(impulse+In.kr(impulseMod))),startPos:/*MouseX.kr(0,15000).poll+*/307200/16* start,loop:1,doneAction: 2)
 
 		*
 
-		In.kr(envVol));
-
+				In.kr(envVol));
 
 				Out.ar( record3,PlayBuf.ar(2,audio3,In.kr(rte)+rte2,trigger:Impulse.kr(~hz1beat*(impulse+In.kr(impulseMod))),startPos:/*MouseX.kr(0,15000).poll+*/307200/16* start,loop:1,doneAction: 2)
 
 
 		*
 
-		In.kr(envVol));
+			In.kr(envVol));
 
 
 					Out.ar( record4,PlayBuf.ar(2,audio4,In.kr(rte)+rte2,trigger:Impulse.kr(~hz1beat*(impulse+In.kr(impulseMod))),startPos:/*MouseX.kr(0,15000).poll+*/307200/16* start,loop:1,doneAction: 2)
@@ -1778,14 +1777,14 @@ SynthDef(\playBuf ,{|out =0,start, trig, dur, amp=4,buf, loo=0,impulse=0.001,rte
 
 		*
 
-		In.kr(envVol));
+			In.kr(envVol)/**In.kr(gat)*/   );
 
 						Out.ar( record5,PlayBuf.ar(2,audio5,In.kr(rte)+rte2,trigger:Impulse.kr(~hz1beat*(impulse+In.kr(impulseMod))),startPos:/*MouseX.kr(0,15000).poll+*/307200/16* start,loop:1,doneAction: 2)
 
 
 		*
 
-		In.kr(envVol));
+			In.kr(envVol));
 
 
 
