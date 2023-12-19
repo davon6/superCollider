@@ -20,6 +20,654 @@ SynthDef(\kick, {
 
 	envF = EnvGen.ar(
 		Env(
+			[117.midicps*(432/440), 105.midicps*(432/440),94.midicps*(432/440),82.midicps*(432/440),64.midicps*(432/440), 52.midicps*(432/440), 28.midicps*(432/440),16.midicps*(432/440)
+				],
+
+
+			[t.beatDur*0.00071, t.beatDur*0.0014,t.beatDur*0.0041,t.beatDur*0.004,/*8*/t.beatDur*0.012,t.beatDur*0.22,t.beatDur*0.6,t.beatDur*0.3],
+
+
+
+			[0,0,0,0,0,-2 ,2,40,0]
+		)
+);
+
+
+	sig = SinOsc.ar(envF, mul: EnvGen.kr(Env.step([1,0],[t.beatDur*0.5,0]),doneAction: 2));
+
+	sig = sig * 0.4 ;
+	// sig = Pan2.ar(sig);
+	Out.ar(out, sig);
+
+}).add;
+SynthDef(\kick, {
+	arg amp=0.2,out=0;
+	var sig, env, envF, ti;
+
+	ti = t.beatDur;
+
+	envF = EnvGen.ar(
+		Env(
+			[117.midicps*(432/440), 105.midicps*(432/440),94.midicps*(432/440),82.midicps*(432/440),64.midicps*(432/440), 52.midicps*(432/440), 28.midicps*(432/440),16.midicps*(432/440)
+				],
+
+
+			[t.beatDur*0.00071, t.beatDur*0.0014,t.beatDur*0.0041,t.beatDur*0.004,/*8*/t.beatDur*0.012,t.beatDur*0.12,t.beatDur*0.6,t.beatDur*0.3],
+
+
+
+			[0,0,0,0,0,-2 ,2,40,0]
+		)
+);
+
+
+	sig = SinOsc.ar(envF, mul: EnvGen.kr(Env.step([1,0],[t.beatDur*0.5,0]),doneAction: 2));
+
+	sig = sig * 0.4 ;
+	// sig = Pan2.ar(sig);
+	Out.ar(out, sig);
+
+}).add;
+
+
+SynthDef(\kick, {
+	arg amp=0.2,out=0;
+	var sig, env, envF, ti;
+
+	ti = t.beatDur;
+
+	envF = EnvGen.ar(
+		Env(
+			[117.midicps*(432/440), 105.midicps*(432/440),94.midicps*(432/440),82.midicps*(432/440),64.midicps*(432/440), 52.midicps*(432/440), 28.midicps*(432/440),16.midicps*(432/440)
+				],
+
+
+			[t.beatDur*0.00051, t.beatDur*0.0014,t.beatDur*0.0041,t.beatDur*0.004,/*8*/t.beatDur*0.012,t.beatDur*0.12,t.beatDur*0.6,t.beatDur*0.3],
+
+
+
+			[0,0,0,0,0,-2 ,2,40,0]
+		)
+);
+
+
+	sig = SinOsc.ar(envF, mul: EnvGen.kr(Env.step([1,0],[t.beatDur*0.5,0]),doneAction: 2));
+
+	sig = sig * 0.4 ;
+	// sig = Pan2.ar(sig);
+	Out.ar(out, sig);
+
+}).add;
+
+
+
+SynthDef(\kick, {
+	arg amp=0.2,out=0;
+	var sig, env, envF, ti;
+
+	ti = t.beatDur;
+
+	envF = EnvGen.ar(
+		Env(
+			[117.midicps*(432/440), 105.midicps*(432/440),94.midicps*(432/440),82.midicps*(432/440),64.midicps*(432/440), 52.midicps*(432/440),40.midicps*(432/440), 28.midicps*(432/440),16.midicps*(432/440)
+				],
+
+
+			[t.beatDur*0.00051, t.beatDur*0.0034,t.beatDur*0.0041,t.beatDur*0.004,/*8*/t.beatDur*0.008,t.beatDur*0.08,t.beatDur*0.1,t.beatDur*0.6,t.beatDur*0.3],
+
+
+
+			[0,0,0,0,0,-2 ,2,6,40,0]
+		)
+);
+
+	sig = SinOsc.ar(envF, mul: EnvGen.kr(Env.step([1,0],[t.beatDur*0.5,0]),doneAction: 2));
+
+	sig = sig * 0.4 ;
+	// sig = Pan2.ar(sig);
+	Out.ar(out, sig);
+
+}).add;
+
+SynthDef(\kick, {
+	arg amp=0.2,out=0;
+	var sig, env, envF, ti;
+
+	ti = t.beatDur;
+
+	envF = EnvGen.ar(
+		Env(
+			[117.midicps*(432/440), 105.midicps*(432/440),94.midicps*(432/440),82.midicps*(432/440),64.midicps*(432/440), 52.midicps*(432/440),40.midicps*(432/440), 28.midicps*(432/440),16.midicps*(432/440)
+				],
+
+
+			[t.beatDur*0.00051, t.beatDur*0.0014,t.beatDur*0.0041,t.beatDur*0.004,/*8*/t.beatDur*0.008,t.beatDur*0.02,t.beatDur*0.02,t.beatDur*0.6,t.beatDur*0.3],
+
+
+
+			[0,0,0,0,0,-2 ,2,6,40,0]
+		)
+);
+
+	sig = SinOsc.ar(envF, mul: EnvGen.kr(Env.step([1,0],[t.beatDur*0.5,0]),doneAction: 2));
+
+	sig = sig * 0.4 ;
+	// sig = Pan2.ar(sig);
+	Out.ar(out, sig);
+
+}).add;
+
+
+
+SynthDef(\kick, {
+	arg amp=0.2,out=0;
+	var sig, env, envF, ti;
+
+	ti = t.beatDur;
+
+	envF = EnvGen.ar(
+		Env(
+			[117.midicps*(432/440), 105.midicps*(432/440),94.midicps*(432/440),82.midicps*(432/440),64.midicps*(432/440), 52.midicps*(432/440), 28.midicps*(432/440),16.midicps*(432/440)
+				],
+
+
+			[t.beatDur*0.00051, t.beatDur*0.0014,t.beatDur*0.0041,t.beatDur*0.004,/*8*/t.beatDur*0.004,t.beatDur*0.12,t.beatDur*0.6,t.beatDur*0.3],
+
+
+
+			[0,0,0,0,0,-2 ,2,40,0]/*[0,0,0,-2,-1,-4.8 ,2,-4]*/
+		)
+);
+/*
+	env =
+EnvGen.kr(
+		Env([0.30,0.9,0.12 ,0.9,0.9  ,0.6                 ,0.1],
+		[ti*0.008,ti*0.03,ti* 0.0005,ti* 0.06, ti*0.6,ti*0.1,
+
+
+				ti*0.001],[-0.5,4,50,9,-3,-1,0]),doneAction:2);*/
+	//-2.6 can be zero
+
+	sig = SinOsc.ar(envF, mul: EnvGen.kr(Env.step([1,0],[t.beatDur*0.5,0]),doneAction: 2));
+
+	sig = sig * 0.4 ;
+	// sig = Pan2.ar(sig);
+	Out.ar(out, sig);
+
+}).add;
+
+
+SynthDef(\kick, {
+	arg amp=0.2,out=0;
+	var sig, env, envF, ti;
+
+	ti = t.beatDur;
+
+	envF = EnvGen.ar(
+		Env(
+			[117.midicps*(432/440), 105.midicps*(432/440),94.midicps*(432/440),82.midicps*(432/440),64.midicps*(432/440), 52.midicps*(432/440), 28.midicps*(432/440),16.midicps*(432/440)
+				],
+
+
+			[t.beatDur*0.0007, t.beatDur*0.0007,t.beatDur*0.0013,t.beatDur*0.004,/*8*/t.beatDur*0.004,t.beatDur*0.12,t.beatDur*0.6,t.beatDur*0.3],
+
+
+
+			[0,0,0,0,0,-2 ,2,40,0]/*[0,0,0,-2,-1,-4.8 ,2,-4]*/
+		)
+);
+
+	env =
+EnvGen.kr(
+		Env([0.30,0.9,0.12 ,0.9,0.9  ,0.6                 ,0.1],
+		[ti*0.008,ti*0.03,ti* 0.0005,ti* 0.06, ti*0.6,ti*0.1,
+
+
+				ti*0.001],[-0.5,4,50,9,-3,-1,0]),doneAction:2);
+	//-2.6 can be zero
+
+	sig = SinOsc.ar(envF, mul: env);
+
+	sig = sig * 0.9 ;
+	// sig = Pan2.ar(sig);
+	Out.ar(out, sig);
+
+}).add;
+
+
+
+
+
+
+
+SynthDef(\kick, {
+	arg amp=0.2,out=0;
+	var sig, env, envF, ti;
+
+	ti = t.beatDur;
+
+	envF = EnvGen.ar(
+		Env(
+			[117.midicps*(432/440), 105.midicps*(432/440),94.midicps*(432/440),82.midicps*(432/440),64.midicps*(432/440), 52.midicps*(432/440), 28.midicps*(432/440),16.midicps*(432/440)
+				],
+
+
+			[t.beatDur*0.0007, t.beatDur*0.0007,t.beatDur*0.0013,t.beatDur*0.004,/*8*/t.beatDur*0.004,t.beatDur*0.12,t.beatDur*0.6,t.beatDur*0.3],
+
+
+
+			[0,0,0,0,0,-2 ,2,40,0]/*[0,0,0,-2,-1,-4.8 ,2,-4]*/
+		)
+);
+
+	env =
+EnvGen.kr(
+		Env([0.30,0.9,0.12 ,0.9,0.9  ,0.6                 ,0.1],
+		[ti*0.008,ti*0.03,ti* 0.0005,ti* 0.06, ti*0.6,ti*0.1,
+
+
+				ti*0.001],[-0.5,4,50,9,-3,-1,0]),doneAction:2);
+	//-2.6 can be zero
+
+	sig = SinOsc.ar(envF, mul: env);
+
+	sig = sig * 0.9 ;
+	// sig = Pan2.ar(sig);
+	Out.ar(out, sig);
+
+}).add;
+
+SynthDef(\kick, {
+	arg amp=0.2,out=0;
+	var sig, env, envF, ti;
+
+	ti = t.beatDur;
+
+	envF = EnvGen.ar(
+		Env(
+			[117.midicps*(432/440), 105.midicps*(432/440),94.midicps*(432/440),82.midicps*(432/440),64.midicps*(432/440), 52.midicps*(432/440), 28.midicps*(432/440),16.midicps*(432/440)
+				],
+
+
+			[t.beatDur*0.0017, t.beatDur*0.003,t.beatDur*0.008,t.beatDur*0.004,/*8*/t.beatDur*0.011,t.beatDur*0.10,t.beatDur*0.6,t.beatDur*0.3],
+
+
+
+			[0,0,0,0,0,-4.8 ,2,40,0]/*[0,0,0,-2,-1,-4.8 ,2,-4]*/
+		)
+);
+
+	env =
+EnvGen.kr(
+		Env([0.30,0.9,0.2 ,0.9,0.9  ,0.6                 ,0.1],
+		[ti*0.008,ti*0.01,ti* 0.0005,ti* 0.06, ti*0.6,ti*0.1,
+
+
+				ti*0.001],[-0.5,-4,50,9,-3,-1,0]),doneAction:2);
+	//-2.6 can be zero
+
+	sig = SinOsc.ar(envF, mul: env);
+
+	sig = sig * 0.9 ;
+	// sig = Pan2.ar(sig);
+	Out.ar(out, sig);
+
+}).add;
+
+
+SynthDef(\kick, {
+	arg amp=0.2,out=0;
+	var sig, env, envF, ti;
+
+	ti = t.beatDur;
+
+	envF = EnvGen.ar(
+		Env(
+			[117.midicps*(432/440), 105.midicps*(432/440),94.midicps*(432/440),82.midicps*(432/440),64.midicps*(432/440), 52.midicps*(432/440), 28.midicps*(432/440),16.midicps*(432/440)
+				],
+
+
+			[t.beatDur*0.0017, t.beatDur*0.003,t.beatDur*0.005,t.beatDur*0.004,/*8*/t.beatDur*0.011,t.beatDur*0.15,t.beatDur*0.6,t.beatDur*0.3],
+
+
+
+			[0,0,0,0,-1,-4.8 ,2,40,0]/*[0,0,0,-2,-1,-4.8 ,2,-4]*/
+		)
+);
+
+	env =
+EnvGen.kr(
+		Env([0.30,0.9,0.2 ,0.9,0.9  ,0.6                 ,0.1],
+		[ti*0.008,ti*0.01,ti* 0.001,ti* 0.06, ti*0.6,ti*0.1,
+
+
+				ti*0.001],[-0.5,-4,50,9,-3,-1,0]),doneAction:2);
+	//-2.6 can be zero
+
+	sig = SinOsc.ar(envF, mul: env);
+
+	sig = sig * 0.9 ;
+	// sig = Pan2.ar(sig);
+	Out.ar(out, sig);
+
+}).add;
+
+
+SynthDef(\kick, {
+	arg amp=0.2,out=0;
+	var sig, env, envF, ti;
+
+	ti = t.beatDur;
+
+	envF = EnvGen.ar(
+		Env(
+			[117.midicps*(432/440), 105.midicps*(432/440),94.midicps*(432/440),82.midicps*(432/440),64.midicps*(432/440), 52.midicps*(432/440), 28.midicps*(432/440),16.midicps*(432/440)
+				],
+
+
+			[t.beatDur*0.0017, t.beatDur*0.003,t.beatDur*0.005,t.beatDur*0.0028,/*8*/t.beatDur*0.018,t.beatDur*0.35,t.beatDur*0.6,t.beatDur*0.3],
+
+
+
+			[0,0,0,0,-1,-4.8 ,2,40,0]/*[0,0,0,-2,-1,-4.8 ,2,-4]*/
+		)
+);
+
+	env =
+EnvGen.kr(
+		Env([0.30,0.9,0.1 ,0.9,0.9  ,0.6                 ,0.1],
+		[ti*0.01,ti*0.006,ti* 0.001,ti* 0.06, ti*0.6,ti*0.1,
+
+
+				ti*0.001],[-0.5,-4,50,9,-3,-1,0]),doneAction:2);
+	//-2.6 can be zero
+
+	sig = SinOsc.ar(envF, mul: env);
+
+	sig = sig * 0.9 ;
+	// sig = Pan2.ar(sig);
+	Out.ar(out, sig);
+
+}).add;
+
+SynthDef(\kick, {
+	arg amp=0.2,out=0;
+	var sig, env, envF, ti;
+
+	ti = t.beatDur;
+
+	envF = EnvGen.ar(
+		Env(
+			[117.midicps*(432/440), 105.midicps*(432/440),94.midicps*(432/440),82.midicps*(432/440),76.midicps*(432/440),64.midicps*(432/440), 52.midicps*(432/440), 28.midicps*(432/440),16.midicps*(432/440)
+				],
+
+
+			[t.beatDur*0.0017, t.beatDur*0.003,t.beatDur*0.005,t.beatDur*0.002,/*8*/t.beatDur*0.016,t.beatDur*0.01,t.beatDur*0.35,t.beatDur*0.6,t.beatDur*0.3],
+
+
+
+			[0,0,0,0,0,-1,-4.8 ,2,40,0]/*[0,0,0,-2,-1,-4.8 ,2,-4]*/
+		)
+);
+
+	env =
+EnvGen.kr(
+		Env([0.30,0.9,0.3 ,0.9,0.9  ,0.6                 ,0.1],
+		[ti*0.01,ti*0.022,ti* 0.001,ti* 0.06, ti*0.6,ti*0.1,
+
+
+				ti*0.001],[-0.5,-4,50,9,-3,-1,0]),doneAction:2);
+	//-2.6 can be zero
+
+	sig = SinOsc.ar(envF, mul: env);
+
+	sig = sig * 0.9 ;
+	// sig = Pan2.ar(sig);
+	Out.ar(out, sig);
+
+}).add;
+
+//HELL YEAH
+SynthDef(\kick, {
+	arg amp=0.2,out=0;
+	var sig, env, envF, ti;
+
+	ti = t.beatDur;
+
+	envF = EnvGen.ar(
+		Env(
+			[117.midicps*(432/440), 105.midicps*(432/440),94.midicps*(432/440),82.midicps*(432/440),76.midicps*(432/440),64.midicps*(432/440), 52.midicps*(432/440), 28.midicps*(432/440),16.midicps*(432/440)
+				],
+
+
+			[t.beatDur*0.0017, t.beatDur*0.003,t.beatDur*0.005,t.beatDur*0.002,/*8*/t.beatDur*0.016,t.beatDur*0.01,t.beatDur*0.35,t.beatDur*0.6,t.beatDur*0.3],
+
+
+
+			[0,0,0,0,0,-1,-4.8 ,2,40,0]/*[0,0,0,-2,-1,-4.8 ,2,-4]*/
+		)
+);
+
+	env =
+EnvGen.kr(
+		Env([0.30,0.9,0.3 ,0.9,0.9  ,0.6                 ,0.1],
+		[ti*0.01,ti*0.03,ti* 0.02,ti* 0.04, ti*0.6,ti*0.1,
+
+
+				ti*0.001],[-0.5,-4,50,9,-3,-1,0]),doneAction:2);
+	//-2.6 can be zero
+
+	sig = SinOsc.ar(envF, mul: env);
+
+	sig = sig * 0.9 ;
+	// sig = Pan2.ar(sig);
+	Out.ar(out, sig);
+
+}).add;
+
+
+SynthDef(\kick, {
+	arg amp=0.2,out=0;
+	var sig, env, envF, ti;
+
+	ti = t.beatDur;
+
+	envF = EnvGen.ar(
+		Env(
+			[117.midicps*(432/440), 105.midicps*(432/440),94.midicps*(432/440),82.midicps*(432/440),76.midicps*(432/440),64.midicps*(432/440), 52.midicps*(432/440), 28.midicps*(432/440),16.midicps*(432/440)
+				],
+
+
+			[t.beatDur*0.0017, t.beatDur*0.003,t.beatDur*0.005,t.beatDur*0.002,/*8*/t.beatDur*0.016,t.beatDur*0.01,t.beatDur*0.35,t.beatDur*0.6,t.beatDur*0.3],
+
+
+
+			[0,0,0,0,0,-1,-4.8 ,2,40,0]/*[0,0,0,-2,-1,-4.8 ,2,-4]*/
+		)
+);
+
+	env =
+EnvGen.kr(
+		Env([0.10,0.9,0.2 ,0.9  ,0.45                 ,0.1],
+		[ti*0.01,ti*0.04,ti* 0.01, ti*0.6,ti*0.1,
+
+
+				ti*0.001],[1.5,-4,9,-3,-1,0]),doneAction:2);
+	//-2.6 can be zero
+
+	sig = SinOsc.ar(envF, mul: env);
+
+	sig = sig * 0.9 ;
+	// sig = Pan2.ar(sig);
+	Out.ar(out, sig);
+
+}).add;
+
+
+
+SynthDef(\kick, {
+	arg amp=0.2,out=0;
+	var sig, env, envF, ti;
+
+	ti = t.beatDur;
+
+	envF = EnvGen.ar(
+		Env(
+			[117.midicps*(432/440), 105.midicps*(432/440),94.midicps*(432/440),82.midicps*(432/440),76.midicps*(432/440),64.midicps*(432/440), 52.midicps*(432/440), 28.midicps*(432/440),16.midicps*(432/440)
+				],
+
+
+			[t.beatDur*0.0017, t.beatDur*0.003,t.beatDur*0.005,t.beatDur*0.002,/*8*/t.beatDur*0.016,t.beatDur*0.01,t.beatDur*0.35,t.beatDur*0.6,t.beatDur*0.3],
+
+
+
+			[0,0,0,0,0,-1,-4.8 ,2,40,0]/*[0,0,0,-2,-1,-4.8 ,2,-4]*/
+		)
+);
+
+	env =
+EnvGen.kr(
+		Env([0.10,0.9,0.2 ,0.9  ,0.60                 ,0.1],
+		[ti*0.01,ti*0.04,ti* 0.01, ti*0.08,ti*0.6,
+
+
+				ti*0.001],[1.5,-4,-9,-3,50,0]),doneAction:2);
+	//-2.6 can be zero
+
+	sig = SinOsc.ar(envF, mul: env);
+
+	sig = sig * 0.9 ;
+	// sig = Pan2.ar(sig);
+	Out.ar(out, sig);
+
+}).add;
+
+
+
+SynthDef(\kick, {
+	arg amp=0.2,out=0;
+	var sig, env, envF, ti;
+
+	ti = t.beatDur;
+
+	envF = EnvGen.ar(
+		Env(
+			[117.midicps*(432/440), 105.midicps*(432/440),94.midicps*(432/440),82.midicps*(432/440),76.midicps*(432/440),64.midicps*(432/440), 52.midicps*(432/440), 28.midicps*(432/440),16.midicps*(432/440)
+				],
+
+
+			[t.beatDur*0.0017, t.beatDur*0.003,t.beatDur*0.005,t.beatDur*0.002,/*8*/t.beatDur*0.016,t.beatDur*0.01,t.beatDur*0.35,t.beatDur*0.6,t.beatDur*0.3],
+
+
+
+			[0,0,0,0,0,-1,-4.8 ,2,40,0]/*[0,0,0,-2,-1,-4.8 ,2,-4]*/
+		)
+);
+
+	env =
+EnvGen.kr(
+		Env([0.10,0.9,0.4 ,0.9  ,0.60                 ,0.1],
+		[ti*0.01,ti*0.04,ti* 0.01, ti*0.08,ti*0.6,
+
+
+				ti*0.001],[1.5,0,-9,-3,50,0]),doneAction:2);
+	//-2.6 can be zero
+
+	sig = SinOsc.ar(envF, mul: env);
+
+	sig = sig * 0.9 ;
+	// sig = Pan2.ar(sig);
+	Out.ar(out, sig);
+
+}).add;
+
+
+
+//AYERE
+SynthDef(\kick, {
+	arg amp=0.2,out=0;
+	var sig, env, envF, ti;
+
+	ti = t.beatDur;
+
+	envF = EnvGen.ar(
+		Env(
+			[117.midicps*(432/440), 105.midicps*(432/440),94.midicps*(432/440),82.midicps*(432/440),76.midicps*(432/440),64.midicps*(432/440), 52.midicps*(432/440), 28.midicps*(432/440),16.midicps*(432/440)
+				],
+
+
+			[t.beatDur*0.0017, t.beatDur*0.003,t.beatDur*0.005,t.beatDur*0.002,/*8*/t.beatDur*0.016,t.beatDur*0.01,t.beatDur*0.35,t.beatDur*0.6,t.beatDur*0.3],
+
+
+
+			[0,0,0,0,0,-1,-4.8 ,2,40,0]/*[0,0,0,-2,-1,-4.8 ,2,-4]*/
+		)
+);
+
+	env =
+EnvGen.kr(
+		Env([0.10,0.9,0.4 ,0.4,0.9  ,0.90                 ,0.3],
+		[ti*0.01,ti*0.04,ti* 0.01, ti*0.0002 ,ti*0.01,ti*0.6,
+
+
+				ti*0.001],[1.5,0,-9,-2,-3,50,0]),doneAction:2);
+	//-2.6 can be zero
+
+	sig = SinOsc.ar(envF, mul: env);
+
+	sig = sig * 0.9 ;
+	// sig = Pan2.ar(sig);
+	Out.ar(out, sig);
+
+}).add;
+
+
+//last good E
+SynthDef(\kick, {
+	arg amp=0.2,out=0;
+	var sig, env, envF, ti;
+
+	ti = t.beatDur;
+
+	envF = EnvGen.ar(
+		Env(
+			[117.midicps*(432/440), 105.midicps*(432/440),94.midicps*(432/440),82.midicps*(432/440),76.midicps*(432/440),64.midicps*(432/440), 52.midicps*(432/440), 28.midicps*(432/440),16.midicps*(432/440)
+				],
+
+
+			[t.beatDur*0.0017, t.beatDur*0.003,t.beatDur*0.005,t.beatDur*0.003,/*8*/t.beatDur*0.005,t.beatDur*0.01,t.beatDur*0.35,t.beatDur*0.6,t.beatDur*0.3],
+
+
+
+			[0,0,0,0,0,-1,-4.8 ,2,40,0]/*[0,0,0,-2,-1,-4.8 ,2,-4]*/
+		)
+);
+
+	env =
+EnvGen.kr(
+		Env([0.10,0.9,0.4 ,0.4,0.9  ,0.90                 ,0.3],
+		[ti*0.01,ti*0.04,ti* 0.01, ti*0.0002 ,ti*0.01,ti*0.6,
+
+
+				ti*0.001],[1.5,0,-9,-2,-3,50,0]),doneAction:2);
+	//-2.6 can be zero
+
+	sig = SinOsc.ar(envF, mul: env);
+
+	sig = sig * 0.9 ;
+	// sig = Pan2.ar(sig);
+	Out.ar(out, sig);
+
+}).add;
+
+SynthDef(\kick, {
+	arg amp=0.2,out=0;
+	var sig, env, envF, ti;
+
+	ti = t.beatDur;
+
+	envF = EnvGen.ar(
+		Env(
 			[117.midicps*(432/440), 105.midicps*(432/440),94.midicps*(432/440),82.midicps*(432/440),76.midicps*(432/440),64.midicps*(432/440), 52.midicps*(432/440), 28.midicps*(432/440),16.midicps*(432/440)
 				],
 
